@@ -1,3 +1,26 @@
+<script type="text/javascript" charset="UTF-8"> 
+  
+function flow() {
+  presetVerse = [
+    [''],                //0
+    [''], //['約伯記', 1, 2],     //1
+    [''], //['撒母耳記上', 12, 2], //2
+    [''], //3
+    [''], //4
+    [''], //5
+    [''], //6
+    [''], //7
+    [''], //8
+    [''], //9
+  ];
+
+  //for (var i=1;i<presetVerse.length;i++) presetVerse[0][0] = presetVerse[0][0] + ' ' + presetVerse[i][0] +''+ presetVerse[i][1] +':'+ presetVerse[i][2];
+    
+}
+
+</script>
+
+
 <script id="創" name="創世記" type="application/json" charset="UTF-8"> {
   "content" : [["創世記"],
   ["",
@@ -32518,9 +32541,13 @@
       ::-webkit-scrollbar {
         display: none;
       }
-      #chapter { border:1px solid blue; }
+      #chapter { 
+        border:0px solid blue; 
+        font-size: 48px;
+        color: white;
+      }
       p { background:#eee; margin:5px; }
-      span { color:red; }
+      span { color:orange; }
     </style>
     </head>   
 <body>
@@ -32531,49 +32558,11 @@
 
 </html>
 
-<script type="text/javascript" charset="UTF-8"> 
-  
-  var fontsize = 48;
-  var FONT = fontsize + "px 標楷體";
-  var FONT_SML = "32px 標楷體";
-
-  function flow() {
-  
-    SONGS = [ [['']],
-              
-              getSong('創'), getSong('出'), getSong('利'), getSong('民'), getSong('申'),
-
-              getSong('書'), getSong('士'), getSong('得'), getSong('撒上'), getSong('撒下'), getSong('王上'), getSong('王下'),
-              getSong('代上'), getSong('代下'), getSong('拉'), getSong('尼'), getSong('斯'),
-
-              getSong('伯'), getSong('詩'), getSong('箴'), getSong('傳'), getSong('歌'),
-              
-              getSong('賽'), getSong('耶'), getSong('哀'), getSong('結'), getSong('但'),
-
-              getSong('何'), getSong('珥'), getSong('摩'), getSong('俄'), getSong('拿'), getSong('彌'),
-              getSong('鴻'), getSong('哈'), getSong('番'), getSong('該'), getSong('亞'), getSong('瑪'),
-          
-              getSong('太'), getSong('可'), getSong('路'), getSong('約'),
-              getSong('徒'),
-
-              getSong('羅'), getSong('林前'), getSong('林後'), getSong('加'), getSong('弗'),
-              getSong('腓'), getSong('西'), getSong('帖前'), getSong('帖後'),
-
-              getSong('提前'), getSong('提後'), getSong('多'), getSong('門'),
-
-              getSong('來'), 
-              getSong('雅'),
-              getSong('彼前'), getSong('彼後'),
-              getSong('約一'), getSong('約二'), getSong('約三'),
-              getSong('猶'),
-
-              getSong('啟')
-              
-            ];
-  }
-</script>
-
 <script type="text/javascript" charset="UTF-8">
+
+var fontsize = 48;
+var FONT = fontsize + "px 標楷體";
+var FONT_SML = "32px 標楷體";
 
 function getSong(jsonid) {
   var json_elm = document.getElementById(jsonid);
@@ -32584,10 +32573,55 @@ function getSong(jsonid) {
   return [['']];
 } 
 
-var SONGS;
+var SONGS = [ [['']],
+              //       1              2             3              4              5
+              getSong('創'), getSong('出'), getSong('利'), getSong('民'), getSong('申'),
+              //       6              7             8              9               10               11              12              13               14              15            16             17
+              getSong('書'), getSong('士'), getSong('得'), getSong('撒上'), getSong('撒下'), getSong('王上'), getSong('王下'), getSong('代上'), getSong('代下'), getSong('拉'), getSong('尼'), getSong('斯'),
+
+              //       18             19            20             21            22
+              getSong('伯'), getSong('詩'), getSong('箴'), getSong('傳'), getSong('歌'),
+              
+              //       23             24            25             26             27
+              getSong('賽'), getSong('耶'), getSong('哀'), getSong('結'), getSong('但'),
+
+              //       28             29            30            31              32            33             34             35            36             37            38             39    
+              getSong('何'), getSong('珥'), getSong('摩'), getSong('俄'), getSong('拿'), getSong('彌'), getSong('鴻'), getSong('哈'), getSong('番'), getSong('該'), getSong('亞'), getSong('瑪'),
+          
+              //       40             41            42             43            44
+              getSong('太'), getSong('可'), getSong('路'), getSong('約'), getSong('徒'),
+
+              //       45             46              47              48             49            50             51             52              53
+              getSong('羅'), getSong('林前'), getSong('林後'), getSong('加'), getSong('弗'), getSong('腓'), getSong('西'), getSong('帖前'), getSong('帖後'),
+              //       54              55              56             57
+              getSong('提前'), getSong('提後'), getSong('多'), getSong('門'),
+
+              //       58             59            60               61              62              63               64              65  
+              getSong('來'), getSong('雅'), getSong('彼前'), getSong('彼後'), getSong('約一'), getSong('約二'), getSong('約三'), getSong('猶'),
+              //       66
+              getSong('啟')
+              
+            ];
+
+var abbr = ['', 
+
+'創', '出', '利', '民', '申',
+'書', '士', '得', '撒上', '撒下', '王上', '王下', '代上', '代下', '拉', '尼', '斯',
+'伯', '詩', '箴', '傳', '歌',
+'賽', '耶', '哀', '結', '但',
+'何', '珥', '摩', '俄', '拿', '彌', '鴻', '哈', '番', '該', '亞', '瑪',
+
+'太', '可', '路', '約', '徒',
+'羅', '林前', '林後', '加', '弗', '腓', '西', '帖前', '帖後',
+'提前', '提後', '多', '門',
+'來', '雅', '彼前', '彼後', '約一', '約二', '約三', '猶',
+'啟'
+
+];
 
 var song;
 var subtitles;
+var presetVerse;
 
 var phase = 0;
 var line = 0;
@@ -32610,6 +32644,28 @@ function init() {
     canvas.height = window.innerHeight;
     ctx = canvas.getContext("2d");
 }
+
+function plaintxtMode() {
+  //removeBtns(); 
+  //canvas.hidden = true;
+  var div = document.createElement('div');
+  div.id = 'chapter';
+  document.body.appendChild(div);
+
+  var len = subtitles[phase].length;
+  var txt = "";
+  for (var i=1;i<subtitles[phase].length;i++) {
+    if (i == line) {
+      txt = ' <span>[' +phase+':'+i+'] '+subtitles[phase][i]+'</span>';
+    } else {
+      txt = ' [' +phase+':'+i+'] '+subtitles[phase][i];
+    }
+    //div.appendChild(_createBtn3(i));
+    div.innerHTML += txt;
+  }
+  //div.insertAdjacentHTML('beforeend', txt);
+}
+
 function _newBtn() {
 
   var button = document.createElement('button');
@@ -32738,6 +32794,10 @@ function removeBtns() {
   if (buttons) {
     document.body.removeChild(buttons);
   }
+  var txt = document.getElementById('chapter');
+  if (txt) {
+    document.body.removeChild(txt);
+  }
   return;
 }
 
@@ -32766,20 +32826,6 @@ function openSelection(type) {
       }
       createBtns3();
       break;
-  }
-}
-
-function plaintxtMode() {
-  removeBtns(); 
-  canvas.hidden = true;
-  var div = document.createElement('div');
-  div.id = 'txt';
-  document.body.appendChild(div);
-
-  var len = subtitles[phase].length;
-  for (var i=1;i<subtitles[phase].length;i++) {
-
-    //div.appendChild(_createBtn3(i));
   }
 }
 
@@ -32832,7 +32878,7 @@ function printTxt(i, j) {
   let ip3 = getNextChapter(ip2, jp2);
   let jp3 = getNextVerse(ip2, jp2);
 
-  let ptxt = i+' : '+j; 
+  let ptxt = abbr[song] + ' ' + i + ' : ' + j;
   let txt = subtitles[i][j];
   
   ctx.textAlign = "left";
@@ -32844,13 +32890,19 @@ function printTxt(i, j) {
   } else if (i != 0 && j == 0) {
     ptxt = '['+subtitles[0][0] + ' ' + i+']';
     txt = "";
+  } 
+  /*
+  else {
+    txt += ' ['+subtitles[0][0] + ']';
   }
+  */
 
   printSideTxt(i_3, j_3, x, y - fontsize * 4, 0.2);
   printSideTxt(i_2, j_2, x, y - fontsize * 3, 0.4);
   printSideTxt(i_1, j_1, x, y - fontsize * 2, 0.6);
 
   _drawSdwtxt(ptxt, px, y);
+  //_drawSdwtxt(subtitles[0][0], px, y + fontsize);
 
   ctx.font = FONT;
 
@@ -32903,43 +32955,6 @@ function _drawtxt(txt, x, y, a) {
 
 }
 
-function printPhase() {  
-
-  ctx.font = FONT;
-  ctx.textAlign = "left";
-  
-  var gap = canvas.height/(subtitles[phase].length + 1);
-
-  for (var i=0;i<subtitles[phase].length;i++) {
-
-    var txt = phase+':'+i+' '+subtitles[phase][i];
-
-    if (i == 0 && phase == 0) 
-      txt = subtitles[phase][i];
-    else if (i == 0)
-      txt = subtitles[0][0] + ' ' +phase;
-
-    var x = 10;//canvas.width/2;
-    var y = (i + 1) * gap;
-
-    //ctx.lineWidth = 4;ctx.strokeStyle = 'black';ctx.strokeText(subtitles[phase][i], x, y);
-
-    ctx.lineWidth = 1;
-    ctx.fillStyle = 'white';
-    ctx.fillText(txt, x, y);
-  
-    
-    if (i == line) {
-      ctx.strokeStyle = 'red';
-      ctx.strokeRect (x, y, 5, 5);
-      //ctx.strokeRect (x, y - fontsize, ctx.measureText(txt).width, fontsize);
-    }
-    
-
-  }
-
-}
-
 function getPreChapter(chapter, verse) {
   if (verse > 0) 
     return chapter;
@@ -32982,7 +32997,16 @@ function keyboard(e) {
       keylock = false;
     }
 
-    if (keylock) return;
+    var jump = 1;
+
+    if (keylock) {
+      if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
+        jump = 10;
+      } else {
+        return;
+      }
+    } 
+      
 
     if (doblank == 1) {
       doblank = 0;
@@ -33015,15 +33039,6 @@ function keyboard(e) {
           }
           break;
       case 83: displayProgress = displayProgress == 1?0:1; break; //'s'
-      case 80: //'p' ppt mode
-          if (animSwh == 0) {
-            mode = mode == 0?1:0;
-          }
-          animSwh = 0;
-          if (mode == 1) {
-            
-          }
-          break; 
       case 72: //'h 
           helpSwitch = helpSwitch == 0?1:0;
           break;
@@ -33031,36 +33046,73 @@ function keyboard(e) {
           openSelection(0);
           break; //'l'
       case 67: //'c' jump to coda last one phase
-        openSelection(1);
+          openSelection(1);
           break;
       case 86: //'v'
-        openSelection(2);
-        break;
+          openSelection(2);
+          break;
       case 38: //'ArrowUp'
-          if (phase > 0) {
-            phase = phase - 1;  
+          if (mode == 1) break;
+          if (phase >= jump) {
+            phase = phase - jump;  
+          } else {
+            phase = 0;
           }
           line = 0;
+          /*
+          if (mode == 1) {
+            removeBtns();
+            canvas.hidden = true;
+            plaintxtMode();
+          }
+          */
           break; 
       case 40: //'ArrowDown':
-          if (phase < subtitles.length -1) {
-            phase = phase + 1;
+          if (mode == 1) break;
+          if (phase == subtitles.length - 1) break;
+          if (phase + jump < subtitles.length) {
+            phase = phase + jump;
+            line = 0;
+          } else {
+            phase = subtitles.length - 1;
             line = 0;
           }
           break;
       case 37: { //'ArrowLeft'
-          let _phase = getPreChapter(phase, line);
-          let _line = getPreVerse(phase, line);
-          phase = _phase;
-          line = _line;
+          if (jump == 1) {
+            let _phase = getPreChapter(phase, line);
+            let _line = getPreVerse(phase, line);
+            phase = _phase;
+            line = _line;
+          } else {
+            line -= jump;
+            if (line < 0) 
+              line = 0;
           }
+          if (mode == 1) {
+            removeBtns();
+            canvas.hidden = true;
+            plaintxtMode();
+          }
+        }
           break; 
         case 39: { //'ArrowRight'
-          let _phase = getNextChapter(phase, line);
-          let _line = getNextVerse(phase, line);
-          phase = _phase == -1?phase:_phase;
-          line = _line == -1?line:_line;
+          if (jump == 1) {
+            let _phase = getNextChapter(phase, line);
+            let _line = getNextVerse(phase, line);
+            phase = _phase == -1?phase:_phase;
+            line = _line == -1?line:_line;
+          } else {
+            line += jump;
+            if (line > subtitles[phase].length -1) 
+              line = subtitles[phase].length -1; 
           }
+          if (mode == 1) {
+            removeBtns();
+            canvas.hidden = true;
+            plaintxtMode();
+          }
+        }
           break;
       
         case 189: //'-'
@@ -33082,6 +33134,71 @@ function keyboard(e) {
         case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
         //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
           var value = e.keyCode - 48;
+          if (value > presetVerse.length -1) break;
+          if (presetVerse[value][0].length == 0) break;
+          for (var i = 0;i<SONGS.length;i++) {
+            if (presetVerse[value][0] == SONGS[i][0][0]) {
+              song = i;
+              subtitles = SONGS[i];//presetVerse[value][0]
+              phase = presetVerse[value][1];
+              line = presetVerse[value][2];
+            }
+          }
+          break;
+        case 81: 
+          presetVerse[1][0] = subtitles[0][0];
+          presetVerse[1][1] = phase;
+          presetVerse[1][2] = line;
+          break;//Q
+        case 87: 
+          presetVerse[2][0] = subtitles[0][0];
+          presetVerse[2][1] = phase;
+          presetVerse[2][2] = line;
+          break;//W
+        case 69:
+          presetVerse[3][0] = subtitles[0][0];
+          presetVerse[3][1] = phase;
+          presetVerse[3][2] = line;
+          break;//E
+        case 82: 
+          presetVerse[4][0] = subtitles[0][0];
+          presetVerse[4][1] = phase;
+          presetVerse[4][2] = line;
+          break;//R
+        case 84: 
+          presetVerse[5][0] = subtitles[0][0];
+          presetVerse[5][1] = phase;
+          presetVerse[5][2] = line;
+          break;//T
+        case 89: 
+          presetVerse[6][0] = subtitles[0][0];
+          presetVerse[6][1] = phase;
+          presetVerse[6][2] = line;
+          break;//Y
+        case 85: 
+          presetVerse[7][0] = subtitles[0][0];
+          presetVerse[7][1] = phase;
+          presetVerse[7][2] = line;
+          break;//U
+        case 73: 
+          presetVerse[8][0] = subtitles[0][0];
+          presetVerse[8][1] = phase;
+          presetVerse[8][2] = line;
+          break;//I
+        case 79: 
+          presetVerse[9][0] = subtitles[0][0];
+          presetVerse[9][1] = phase;
+          presetVerse[9][2] = line;
+          break;//O
+        case 80: //'p' ppt mode
+          presetVerse[0][0] = subtitles[0][0];
+          presetVerse[0][1] = phase;
+          presetVerse[0][2] = line;
+          break; 
+        /*
+        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
+        //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+          var value = e.keyCode - 48;
           if (10 * value < subtitles.length) {
             phase = 10 * value;
             line = 0;
@@ -33096,8 +33213,22 @@ function keyboard(e) {
         case 89: if (subtitles[phase].length > 60)  { line = 60; } break;
         case 85: if (subtitles[phase].length > 70)  { line = 70; } break;
         case 73: if (subtitles[phase].length > 80)  { line = 80; } break;
+        */
         default:
-          //alert(e.key);
+          /*
+          if (animSwh == 0) {
+            mode = mode == 0?1:0;
+          }
+          animSwh = 0;
+          if (mode == 1) {
+            removeBtns();
+            canvas.hidden = true;
+            plaintxtMode();
+          } else {
+            removeBtns();
+            canvas.hidden = false;
+          }
+          */
           break;
     }
 
@@ -33106,24 +33237,22 @@ function keyboard(e) {
 }
 
 function _layer0() {
-  if (mode == 0) {
-    ctx.fillStyle = 'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
+  ctx.fillStyle = 'green';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   if (img) {
       ctx.drawImage(img,0,0, canvas.width, canvas.height);
   }
 }
 
 function _layer1() {
+  printTxt(phase, line);
+  /*
   if (mode == 0) {
     printTxt(phase, line);//if (displayProgress == 1) printChart();
   } else {
     printPhase();
   }
+  */
 }
 
 function _layer2() {
