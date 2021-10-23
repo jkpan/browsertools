@@ -2,7 +2,7 @@
   
 function flow() {
   presetVerse = [
-    [''],                //0
+    [''], //0
     [''], //['約伯記', 1, 2],     //1
     [''], //['撒母耳記上', 12, 2], //2
     [''], //3
@@ -32512,13 +32512,14 @@ function flow() {
   } </script>
   
 <script id="help" name="help" type="application/json" charset="UTF-8"> {
-  "content" : [["方向鍵  '左右'上ㄧ節下ㄧ節  '上下'上ㄧ章下ㄧ章", 
-                "'-'上一卷  '='下一卷", 
-                "'0-9'10章速切  '0QWERTYUI'10節速切", 
-                "'L'選書卷 'C'選章 'V'選節", 
-                "'P'投影片模式 'A'Animation  'B'Blank",
-                "chrome 全螢幕F11(win) ctrl-cmd-F(mac)",
-                "chrome resize% cmd+- (mac)"]]
+  "content" : [["方向鍵  '左右' 上ㄧ節下ㄧ節  '上下' 上ㄧ章下ㄧ章",
+                "'shift左右' 上十節下十節  'shift上下' 上十章下十章", 
+                "'-'上一卷  '='下一卷  'space' 全螢幕", 
+                "'1234567890' 跳至預存  'QWERTYUIOP' 儲存1-0", 
+                "'L' 選卷  'K' 選章  'J' 選節",
+                "'M' 投影片模式 'N' Animation  'B' Blank",
+                "'ASDFG' 舊約分類  'ZXCV' 新約分類"
+                ]]
 } </script>
 <!-- 
   下面不要動!
@@ -32562,7 +32563,8 @@ function flow() {
 
 var fontsize = 48;
 var FONT = fontsize + "px 標楷體";
-var FONT_SML = "32px 標楷體";
+var fontsize_sml = 32;
+var FONT_SML = fontsize_sml + "px 標楷體";
 
 function getSong(jsonid) {
   var json_elm = document.getElementById(jsonid);
@@ -32629,7 +32631,6 @@ var mode = 0;
 var animSwh = 0;
 var animIdx = 0;
 
-var displayProgress = 0;
 var doblank = 0;
 var helpSwitch = 0;
 
@@ -32646,13 +32647,17 @@ function init() {
 }
 
 function plaintxtMode() {
-  //removeBtns(); 
-  //canvas.hidden = true;
+  removeDiv(); 
+  canvas.hidden = true;
   var div = document.createElement('div');
   div.id = 'chapter';
   document.body.appendChild(div);
 
-  var len = subtitles[phase].length;
+  var poetry = false;
+  if (song >= 18 && song <= 22) {
+    poetry = true;
+  }
+
   var txt = "";
   for (var i=1;i<subtitles[phase].length;i++) {
     if (i == line) {
@@ -32661,6 +32666,7 @@ function plaintxtMode() {
       txt = ' [' +phase+':'+i+'] '+subtitles[phase][i];
     }
     //div.appendChild(_createBtn3(i));
+    if (poetry) txt += '<br/>';
     div.innerHTML += txt;
   }
   //div.insertAdjacentHTML('beforeend', txt);
@@ -32672,7 +32678,7 @@ function _newBtn() {
   //button.innerHTML = attr;
   //button.id = 'btn' + idx;
 
-  button.style.width = '172px'; // setting the width to 200px
+  button.style.width = '180px'; // setting the width to 200px
   button.style.height = '75px'; // setting the height to 200px
   button.style.background = 'rgb(0,180,0)'; // setting the background color to teal
   button.style.color = 'green'; // setting the color to white
@@ -32704,7 +32710,7 @@ function _createBtn(idx) {
     song = idx;
     phase = 0;
     line = 0;
-    removeBtns();
+    removeDiv();
     canvas.hidden = false;
     _repaint();
     return false;
@@ -32719,6 +32725,15 @@ function createBtns() {
   document.body.appendChild(div);
 
   for (var i=1;i<=66;i++) {
+
+    if (i == 6) div.insertAdjacentHTML('beforeend', '<br/>');
+    if (i == 18) div.insertAdjacentHTML('beforeend', '<br/>');
+    if (i == 23) div.insertAdjacentHTML('beforeend', '<br/>');
+    if (i == 28) div.insertAdjacentHTML('beforeend', '<br/>');
+    if (i == 40) div.insertAdjacentHTML('beforeend', '<br/>');
+    if (i == 45) div.insertAdjacentHTML('beforeend', '<br/>');
+    if (i == 54) div.insertAdjacentHTML('beforeend', '<br/>');
+    if (i == 58) div.insertAdjacentHTML('beforeend', '<br/>');
     var button = _createBtn(i);
     if (i > 39) {
       button.style.color = 'rgb(0,255,0)'; // setting the color to white
@@ -32737,7 +32752,7 @@ function _createBtn2(idx) {
   button.onclick = function() {
     phase = idx;
     line = 0;
-    removeBtns();
+    removeDiv();
     canvas.hidden = false;
     _repaint();
     return false;
@@ -32767,7 +32782,7 @@ function _createBtn3(idx) {
 
   button.onclick = function() {
     line = idx;
-    removeBtns();
+    removeDiv();
     canvas.hidden = false;
     _repaint();
     return false;
@@ -32789,7 +32804,7 @@ function createBtns3() {
 
 }
 
-function removeBtns() {
+function removeDiv() {
   var buttons = document.getElementById('btns');
   if (buttons) {
     document.body.removeChild(buttons);
@@ -32802,11 +32817,9 @@ function removeBtns() {
 }
 
 function openSelection(type) {
-  removeBtns();
-  if (canvas.hidden) {
-    canvas.hidden = false;
-    return;//canvas show
-  }     
+
+  removeDiv();
+
   canvas.hidden = true;
   switch(type) {
     case 0:
@@ -32837,11 +32850,7 @@ function prepareImage() {
 
 function printSideTxt(i, j, x, y, a) {
 
-  
   let txt = "";
-
-  ctx.font = FONT;
-  ctx.textAlign = "left";
 
   if (i == 0 && j == 0) {
     txt = "";
@@ -32897,12 +32906,20 @@ function printTxt(i, j) {
   }
   */
 
+  ctx.textAlign = "left";
+
+  ctx.font = FONT_SML;
+
   printSideTxt(i_3, j_3, x, y - fontsize * 4, 0.2);
   printSideTxt(i_2, j_2, x, y - fontsize * 3, 0.4);
   printSideTxt(i_1, j_1, x, y - fontsize * 2, 0.6);
 
-  _drawSdwtxt(ptxt, px, y);
-  //_drawSdwtxt(subtitles[0][0], px, y + fontsize);
+  if (ctx.measureText(ptxt).width + px > canvas.width * 0.1 && j > 0) {
+    _drawSdwtxt(abbr[song], px, y);
+    _drawSdwtxt('' + i + ' : ' + j, px, y + fontsize_sml);
+  } else {
+    _drawSdwtxt(ptxt, px, y);
+  }
 
   ctx.font = FONT;
 
@@ -32927,6 +32944,8 @@ function printTxt(i, j) {
   
   }
 
+  ctx.font = FONT_SML;
+
   if (ip3 != -1) printSideTxt(ip3, jp3, x, y + fontsize * 4, 0.2);
   if (ip2 != -1) printSideTxt(ip2, jp2, x, y + fontsize * 3, 0.4);
   if (ip1 != -1) printSideTxt(ip1, jp1, x, y + fontsize * 2, 0.6);
@@ -32934,6 +32953,13 @@ function printTxt(i, j) {
 }
 
 function _drawSdwtxt(txt, x, y) {
+
+  if (doblank == 1) {
+    ctx.fillStyle = 'rgb(0, 220, 0)';
+    ctx.lineWidth = 1;
+    ctx.fillText(txt, x, y);
+    return;
+  }
 
   ctx.strokeStyle = 'black';//'rgb(0, 0, 0, ' + a + ')';
   ctx.lineWidth = 4;
@@ -32947,9 +32973,12 @@ function _drawSdwtxt(txt, x, y) {
 
 function _drawtxt(txt, x, y, a) {
 
-  ctx.font = FONT_SML;
-
   ctx.fillStyle = 'rgb(255, 255, 255, ' + a + ')';
+  
+  if (doblank == 1) {
+    ctx.fillStyle = 'rgb(0, 200, 0)';
+  }
+
   ctx.lineWidth = 1;
   ctx.fillText(txt, x, y);
 
@@ -32990,6 +33019,20 @@ function getNextVerse(chapter, verse) {
   return -1;
 }
 
+function sortjump(start, end) {
+  if (canvas.hidden) return;
+  if (song >= start && song <= end) {
+    song += 1;
+    if (song > end) 
+      song = start;
+  } else {
+    song = start;   
+  }
+  subtitles = SONGS[song];
+  phase = 0;
+  line = 0;
+}
+
 function keyboard(e) {
 
     //alert(e.keyCode);
@@ -33001,20 +33044,26 @@ function keyboard(e) {
 
     if (keylock) {
       if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
-        jump = 10;
+        if (!canvas.hidden)
+          jump = 10;
       } else {
         return;
       }
     } 
       
-
-    if (doblank == 1) {
-      doblank = 0;
-      _repaint();
-      return;
-    }
-    
     switch (e.keyCode) {
+      
+      case 65: sortjump( 1,  5); break;
+      case 83: sortjump( 6, 17); break;
+      case 68: sortjump(18, 22); break;
+      case 70: sortjump(23, 27); break;
+      case 71: sortjump(28, 39); break;
+      
+      case 90: sortjump(40, 44); break;
+      case 88: sortjump(45, 53); break;
+      case 67: sortjump(54, 57); break;
+      case 86: sortjump(58, 66); break;
+
       case 66: //'b'
         doblank = doblank == 0?1:0;
         break;
@@ -33030,45 +33079,56 @@ function keyboard(e) {
         else 
           keyboard({keyCode : 40}); //up
         break;
-      case 65: //'A'
-          if (mode == 1) break;
+      case 77: //'M' ppt mode
+          if (canvas.hidden) {
+              removeDiv();  
+              canvas.hidden = false;
+              mode = 0;
+              break;
+          }
+          if (animSwh == 0) {
+            mode = mode == 0?1:0;
+          }
+          animSwh = 0;
+          if (mode == 1) {
+            removeDiv();
+            canvas.hidden = true;
+            plaintxtMode();
+          }
+        break;
+      case 76://'L' 
+      case 75://'K'
+      case 74://'J'
+          if (canvas.hidden) {
+              removeDiv();  
+              canvas.hidden = false;
+              mode = 0;
+              break;
+          } 
+          if (e.keyCode == 76) openSelection(0); 
+          if (e.keyCode == 75) openSelection(1); 
+          if (e.keyCode == 74) openSelection(2); 
+          break; 
+      case 78: //'N' 動畫切換
+          if (canvas.hidden) break;
           if (animSwh == 0) {
             initAnim(animIdx);
           } else {
             initAnim(-1);
           }
           break;
-      case 83: displayProgress = displayProgress == 1?0:1; break; //'s'
-      case 72: //'h 
-          helpSwitch = helpSwitch == 0?1:0;
-          break;
-      case 76: 
-          openSelection(0);
-          break; //'l'
-      case 67: //'c' jump to coda last one phase
-          openSelection(1);
-          break;
-      case 86: //'v'
-          openSelection(2);
-          break;
+      case 72: helpSwitch = helpSwitch == 0?1:0; break; //'H'
       case 38: //'ArrowUp'
-          if (mode == 1) break;
+          if (canvas.hidden) break;
           if (phase >= jump) {
             phase = phase - jump;  
           } else {
             phase = 0;
           }
           line = 0;
-          /*
-          if (mode == 1) {
-            removeBtns();
-            canvas.hidden = true;
-            plaintxtMode();
-          }
-          */
           break; 
       case 40: //'ArrowDown':
-          if (mode == 1) break;
+          if (canvas.hidden) break;
           if (phase == subtitles.length - 1) break;
           if (phase + jump < subtitles.length) {
             phase = phase + jump;
@@ -33090,7 +33150,7 @@ function keyboard(e) {
               line = 0;
           }
           if (mode == 1) {
-            removeBtns();
+            removeDiv();
             canvas.hidden = true;
             plaintxtMode();
           }
@@ -33108,7 +33168,7 @@ function keyboard(e) {
               line = subtitles[phase].length -1; 
           }
           if (mode == 1) {
-            removeBtns();
+            removeDiv();
             canvas.hidden = true;
             plaintxtMode();
           }
@@ -33116,6 +33176,7 @@ function keyboard(e) {
           break;
       
         case 189: //'-'
+          if (canvas.hidden) break;
           if (song > 0) {
             song = song - 1;
             subtitles = SONGS[song];
@@ -33124,6 +33185,7 @@ function keyboard(e) {
           }
           break;
         case 187: //'='
+          if (canvas.hidden) break;
           if (song < SONGS.length -1) {
             song = song + 1;
             subtitles = SONGS[song];
@@ -33136,13 +33198,19 @@ function keyboard(e) {
           var value = e.keyCode - 48;
           if (value > presetVerse.length -1) break;
           if (presetVerse[value][0].length == 0) break;
-          for (var i = 0;i<SONGS.length;i++) {
+          for (var i = 1;i<SONGS.length;i++) {
             if (presetVerse[value][0] == SONGS[i][0][0]) {
               song = i;
               subtitles = SONGS[i];//presetVerse[value][0]
               phase = presetVerse[value][1];
               line = presetVerse[value][2];
+              break;
             }
+          }
+          if (mode == 1) {
+            removeDiv();
+            canvas.hidden = true;
+            plaintxtMode();
           }
           break;
         case 81: 
@@ -33195,6 +33263,11 @@ function keyboard(e) {
           presetVerse[0][1] = phase;
           presetVerse[0][2] = line;
           break; 
+
+        case 32:
+          canvas.requestFullscreen();
+          break;
+
         /*
         case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
         //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
@@ -33215,20 +33288,7 @@ function keyboard(e) {
         case 73: if (subtitles[phase].length > 80)  { line = 80; } break;
         */
         default:
-          /*
-          if (animSwh == 0) {
-            mode = mode == 0?1:0;
-          }
-          animSwh = 0;
-          if (mode == 1) {
-            removeBtns();
-            canvas.hidden = true;
-            plaintxtMode();
-          } else {
-            removeBtns();
-            canvas.hidden = false;
-          }
-          */
+      
           break;
     }
 
@@ -33246,22 +33306,13 @@ function _layer0() {
 
 function _layer1() {
   printTxt(phase, line);
-  /*
-  if (mode == 0) {
-    printTxt(phase, line);//if (displayProgress == 1) printChart();
-  } else {
-    printPhase();
-  }
-  */
 }
 
 function _layer2() {
   if (helpSwitch == 1) {
     userhelp(); 
   }
-  if (doblank == 1) {
-    blank();
-  }
+  
 }
 
 function _repaint() {
@@ -33290,6 +33341,7 @@ function userhelp() {
   }
 }
 
+/*
 function blank() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (animSwh == 1 || mode == 1) {
@@ -33300,6 +33352,7 @@ function blank() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 }
+*/
 
 init();
 
