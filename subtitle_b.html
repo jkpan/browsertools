@@ -32519,7 +32519,7 @@ function flow() {
                 "'L' 選卷  'K' 選章  'J' 選節",
                 "'M' 投影片模式 'N' Animation  'B' Blank",
                 "shift+'ASDFG' 舊約分類  shift+'ZXCV' 新約分類",
-                "shift+'1234567890' 跳章",
+                "shift+'1234567890' 跳章"
                 ]]
 } </script>
 <!-- 
@@ -32624,7 +32624,6 @@ var abbr = ['',
 
 /*
 var abbr_eng = ['', 
-
 'gen', 'exo', 'lev', 'num', 'deu',
 'jos', 'jug', 'rut', '1sa', '2sa', '1ki', '2ki', '1ch', '2ch', 'ezr', 'neh', 'est',
 'job', 'psm', 'pro', 'ecc', 'son',
@@ -32634,9 +32633,7 @@ var abbr_eng = ['',
 'mat', 'mak', 'luk', 'jhn', 'act',
 'rom', '1co', '2co', 'gal', 'eph', 'phl', 'col', '1ts', '2ts',
 '1ti', '2ti', 'tit', 'phm',
-'heb', 'jas', '1pe', '2pe', '1jn', '2jn', '3jn', 'jud',
-'rev'
-
+'heb', 'jas', '1pe', '2pe', '1jn', '2jn', '3jn', 'jud', 'rev'
 ];
 */
 
@@ -32688,7 +32685,6 @@ function plaintxtMode() {
     } else {
       txt = ' [' +phase+':'+i+'] '+subtitles[phase][i];
     }
-    //div.appendChild(_createBtn3(i));
     if (poetry) txt += '<br/>';
     div.innerHTML += txt;
   }
@@ -32701,7 +32697,7 @@ function _newBtn() {
   //button.innerHTML = attr;
   //button.id = 'btn' + idx;
 
-  button.style.width = '180px'; // setting the width to 200px
+  button.style.width = '200px'; // setting the width to 200px
   button.style.height = '75px'; // setting the height to 200px
   button.style.background = 'rgb(0,180,0)'; // setting the background color to teal
   button.style.color = 'green'; // setting the color to white
@@ -32722,27 +32718,7 @@ function _newBtn() {
   return button;
 }
 
-function _createBtn(idx) {
-
-  var button = _newBtn();//document.createElement('button');
-  
-  button.innerHTML = SONGS[idx][0][0];
-  button.id = 'btn' + idx;
-
-  button.onclick = function() {
-    subtitles = SONGS[idx];
-    song = idx;
-    phase = 0;
-    line = 0;
-    removeDiv();
-    canvas.hidden = false;
-    _repaint();
-    return false;
-  };
-  return button;
-}
-
-function createBtns() {
+function createBtnVolume() {
 
   var div = document.createElement('div');
   div.id = 'btns';
@@ -32758,34 +32734,27 @@ function createBtns() {
     if (i == 45) div.insertAdjacentHTML('beforeend', '<br/>');
     if (i == 54) div.insertAdjacentHTML('beforeend', '<br/>');
     if (i == 58) div.insertAdjacentHTML('beforeend', '<br/>');
-    var button = _createBtn(i);
-    if (i > 39) {
-      button.style.color = 'rgb(0,255,0)'; // setting the color to white
-    }
+
+    var button = _newBtn(); //_createVolume(i);
+    button.innerHTML = SONGS[i][0][0];
+    button.id = 'vol ' + i;
+    button.onclick = function() {
+      let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+      subtitles = SONGS[idx];
+      song = idx;
+      phase = 0;
+      line = 0;
+      removeDiv();
+      createBtnChapter();
+      return false;
+    };
+    if (i > 39) button.style.color = 'rgb(0,255,0)'; // setting the color to white
     div.appendChild(button);
   }
 
 }
 
-function _createBtn2(idx) {
-
-  var button = _newBtn();//document.createElement('button');
-  button.innerHTML = '第'+ idx +'章';
-  button.id = 'btn' + idx;
-
-  button.onclick = function() {
-    phase = idx;
-    line = 0;
-    removeDiv();
-    canvas.hidden = false;
-    _repaint();
-    return false;
-  };
-  //document.body.appendChild(button);
-  return button;
-}
-
-function createBtns2() {
+function createBtnChapter() {
 
   var div = document.createElement('div');
   div.id = 'btns';
@@ -32793,29 +32762,23 @@ function createBtns2() {
 
   var len = subtitles.length;
   for (var i=1;i<=len-1;i++) {
-    div.appendChild(_createBtn2(i));
+    let button = _newBtn();//document.createElement('button');
+    button.innerHTML = '第'+ i +'章';
+    button.id = 'chp ' + i;
+    button.onclick = function() {
+      let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+      phase = idx;
+      line = 0;
+      removeDiv();
+      createBtnVerse();
+      return false;
+    };
+    div.appendChild(button);
   }
 
 }
 
-function _createBtn3(idx) {
-  
-  var button = _newBtn();//document.createElement('button');
-  button.innerHTML = '第'+ idx +'節';
-  button.id = 'btn' + idx;
-
-  button.onclick = function() {
-    line = idx;
-    removeDiv();
-    canvas.hidden = false;
-    _repaint();
-    return false;
-  };
-  //document.body.appendChild(button);
-  return button;
-}
-
-function createBtns3() {
+function createBtnVerse() {
 
   var div = document.createElement('div');
   div.id = 'btns';
@@ -32823,7 +32786,18 @@ function createBtns3() {
 
   var len = subtitles[phase].length;
   for (var i=1;i<=len-1;i++) {
-    div.appendChild(_createBtn3(i));
+    let button = _newBtn();//document.createElement('button');
+    button.innerHTML = '第'+ i +'節';
+    button.id = 'ver ' + i;
+    button.onclick = function() {
+      let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+      line = idx;
+      removeDiv();
+      canvas.hidden = false;
+      _repaint();
+      return false;
+    };
+    div.appendChild(button);
   }
 
 }
@@ -32847,21 +32821,21 @@ function openSelection(type) {
   canvas.hidden = true;
   switch(type) {
     case 0:
-      createBtns();
+      createBtnVolume();
       break;
     case 1:
       if (song == 0) {
         canvas.hidden = false;
         return;
       }
-      createBtns2();
+      createBtnChapter();
       break;
     case 2:
       if (song == 0 || phase == 0) {
         canvas.hidden = false;
         return;
       }
-      createBtns3();
+      createBtnVerse();
       break;
   }
 }
@@ -32894,7 +32868,8 @@ function printTxt(i, j) {
 
   var x = canvas.width * 0.1;
   var y = canvas.height * 0.66;
-
+  if (animSwh == 1) 
+    y = canvas.height * 0.5;
   
   let i_1 = getPreChapter(i, j);
   let j_1 = getPreVerse(i, j);
