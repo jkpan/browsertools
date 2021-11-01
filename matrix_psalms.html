@@ -3557,7 +3557,7 @@ function newParticle_txt(sequence, total) {
         if (i < this.txt.length) {
           let rb = Math.floor(150 * _len/this.idxlen);
           _ctx.fillStyle = 'rgb(' + rb + ',255,' + rb + ',' + (_len/this.idxlen) +')';
-          if (i == this.idx) _ctx.fillStyle = 'rgb(200,255, 200, 1.0)';
+          if (i == this.idx) _ctx.fillStyle = 'rgb(240, 255, 240, 1.0)';
           _ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
         }  
         _len--;
