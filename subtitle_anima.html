@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -873,6 +874,88 @@ function newClock() {
   return p;
 }
 
+/*
+function newParticle_txt(sequence, total) {
+  let p = {
+    x: 0,
+    y: 0,
+  idx: 0,
+  txt: "",
+  size:0,
+  seq:sequence,
+  ttl:total,
+  idxlen:0,
+  elapse:0,
+  gap : 0.1,
+    release: function() {},
+    initial: function (c) {
+      
+
+      let chapter = Math.floor(Math.random() * subtitle.length);
+      let verse = Math.floor(Math.random() * subtitle[chapter].length);
+      this.txt = subtitle[chapter][verse];
+
+      //this.size = Math.floor(10 + (this.seq/this.ttl) * 20);
+      this.size = 20 + 4 * Math.floor(this.seq/5);
+      
+      //console.log(':'+this.size);
+
+      this.x = c.width * Math.random();
+      this.y = Math.random() * c.height/2;
+      this.idxlen = this.txt.length;//10 + 10 * Math.random();
+      this.elapse = 0;
+      this.idx = 0;
+      this.gap = 0.05 + Math.random() * 0.1;
+    },
+    update: function (c, _ctx, dt) {
+      
+      
+
+      /// + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
+      //_ctx.fillRect (200 - 10, 200 - 10, 20, 20);
+      
+      //_ctx.save();
+      
+      _ctx.textAlign = "left";
+      _ctx.font = this.size + "px 標楷體";
+
+      
+
+      //ctx.fillText(this.txt.substr(i, 1), this.x, this.y);
+
+      this.elapse += dt * 0.001;
+      if (this.elapse > this.gap) {
+        this.idx++;
+        if (this.idx - this.idxlen + 1 >= this.txt.length) {
+          this.initial(c);
+          return;
+        }
+        
+        this.elapse = 0;
+      } 
+
+      let _len = this.idxlen;
+      for (var i = this.idx;i>=0;i--) {
+        if (i < 0) {
+          break;
+        }
+        if (i < this.txt.length) {
+          _ctx.fillStyle = 'rgb(0,255, 0, ' + (_len/this.idxlen) +')';
+          if (i == this.idx)
+            _ctx.fillStyle = 'rgb(150,255, 150, 1.0)';
+          _ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
+        }  
+        _len--;
+        if (_len == 0) 
+          break;
+      }
+      
+    }
+  }
+  return p;
+}
+*/
+
 function anim_update(elapse) {
 
   var c = document.getElementById("canvas");
@@ -890,6 +973,7 @@ function anim_update(elapse) {
     particles[i].update(c, ctx, dt);
   }
   window.requestAnimationFrame(anim_update);
+
 }
 
 function initAnim(idx) {
@@ -910,8 +994,6 @@ function initAnim(idx) {
 
   particles.length = 0;
   particles = [];
-
-  //idx = 8;
 
   if (idx == 0) {
     for (var i = 0;i<150;i++) {
@@ -963,8 +1045,14 @@ function initAnim(idx) {
       particles[i] = newParticle_snow();
       particles[i].initial(canvas);
     }
+  }/* 
+  else if (idx == 10) {
+    for (var i = 0;i<30;i++) {
+      particles[i] = newParticle_txt(i, 20);//();
+      particles[i].initial(canvas);
+    }
   }
-
+  */
   if (isinit)
     window.requestAnimationFrame(anim_update);
 }
