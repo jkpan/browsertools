@@ -2674,6 +2674,7 @@ function newParticle_txt(sequence, total) {
   idxlen:0,
   elapse:0,
   gap : 0.1,
+  lev:0,
     release: function() {},
     initial: function (c) {
 
@@ -2687,9 +2688,9 @@ function newParticle_txt(sequence, total) {
       this.size = 20 + 4 * Math.floor(this.seq/5);
       
       
-      let level = Math.floor(this.ttl - this.seq)/5;
-      if (level < 3) {
-        this.x = Math.floor(this.ttl - this.seq)%5 * c.width/5 + 2 * level * c.width/this.ttl;
+      this.lev = Math.floor(this.ttl - this.seq)/5;
+      if (this.lev < 3) {
+        this.x = Math.floor(this.ttl - this.seq)%5 * c.width/5 + 2 * this.lev * c.width/this.ttl;
       } else {
         this.x = c.width * Math.random();
       }
@@ -2697,7 +2698,7 @@ function newParticle_txt(sequence, total) {
       //console.log(':'+this.size);
 
       
-      this.y = 15 + Math.random() * c.height/3;
+      this.y = 10 + Math.random() * c.height/4;
       this.idxlen = Math.max(2, Math.floor(this.txt.length * 0.8));//10 + 10 * Math.random();
       this.elapse = 0;
       this.idx = 0;
@@ -2730,12 +2731,24 @@ function newParticle_txt(sequence, total) {
           let rb = Math.floor(150 * _len/this.idxlen);
           
           if (i == this.idx) {
-            _ctx.strokeStyle = 'red';//'rgb(0, 0, 0, ' + a + ')';
-            _ctx.lineWidth = 4;
-            _ctx.strokeText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
-            _ctx.fillStyle = 'rgb(240, 255, 240, 1.0)';
+            
+            if (this.lev >= 2) {
+              //_ctx.strokeStyle = 'rgb(255, 255, 255, 0.5)';
+              //_ctx.lineWidth = 0;
+              _ctx.fillStyle = 'rgb(255, 255, 255, 0.8)';
+            } else {
+              _ctx.strokeStyle = 'rgb(255, 0, 0, 1.0)';
+              _ctx.lineWidth = 4;
+              _ctx.fillStyle = 'rgb(240, 255, 240, 1.0)';
+              _ctx.strokeText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
+            }      
+            
           } else {
-            _ctx.fillStyle = 'rgb(' + rb + ',255,' + rb + ',' + (_len/this.idxlen) +')';
+            let opa = _len/this.idxlen;
+            if (this.lev >= 2) {
+              opa *= 0.5;
+            }
+            _ctx.fillStyle = 'rgb(' + rb + ',255,' + rb + ',' + opa +')';
           }
             
           _ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
