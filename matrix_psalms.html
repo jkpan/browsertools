@@ -3494,7 +3494,7 @@ function newClock() {
   return p;
 }
 
-function newParticle_txt(sequence, total) {
+function newParticle_txt(sequence) {
   let p = {
     x: 0,
     y: 0,
@@ -3502,7 +3502,6 @@ function newParticle_txt(sequence, total) {
   txt: "",
   size:0,
   seq:sequence,
-  ttl:total,
   idxlen:0,
   elapse:0,
   gap : 0.1,
@@ -3595,6 +3594,8 @@ function initAnim(idx) {
 
   var c = document.getElementById("canvas");
   var ctx = c.getContext("2d");
+
+  //console.log(c.width + ', ' + c.height);
   
   if (particles.length >= 1) {
     for (var i = 0;i<particles.length;i++) {
@@ -3605,8 +3606,16 @@ function initAnim(idx) {
   particles.length = 0;
   particles = [];
 
-  idx = 10;
+  var total = Math.min(35, 15 + 5 * Math.floor(c.width/500));
+  //console.log('total:'+total);
+  for (var i = 0;i<total;i++) {
+      particles[i] = newParticle_txt(i);//();
+      particles[i].initial(canvas);
+  }
 
+  /*
+  idx = 10;
+  
   if (idx == 0) {
     for (var i = 0;i<150;i++) {
       particles[i] = newParticle_casual();
@@ -3663,7 +3672,7 @@ function initAnim(idx) {
       particles[i].initial(canvas);
     }
   }
-
+  */
   if (isinit)
     window.requestAnimationFrame(anim_update);
 }
