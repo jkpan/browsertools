@@ -2660,12 +2660,6 @@ function getSong(jsonid) {
 
 var subtitle = getSong('詩');
 
-function prepareImage() {
-  img = new Image();
-  img.src = imgurl;
-  img.onload = function() {};
-}
-
 function repaint() {
 
   var c = document.getElementById("canvas");
@@ -2683,7 +2677,7 @@ function canvasResize() {
   repaint();
 }
 
-function handleStart(evt) {
+function handleEnd(evt) {
   sequencePick();
 }
 
@@ -2704,8 +2698,8 @@ function mouse(e) {
 }
 
 window.addEventListener('resize', canvasResize);
-window.addEventListener('mousedown', mouse, false);
-document.getElementsByTagName("canvas")[0].addEventListener("touchstart", handleStart, false);
+window.addEventListener('click', mouse, false);
+document.getElementsByTagName("canvas")[0].addEventListener("touchend", handleEnd, false);
 
 
 canvasResize();
@@ -3515,6 +3509,8 @@ function newParticle_txt(sequence, total) {
     release: function() {},
     initial: function (c) {
 
+      //this.txt += String.fromCharCode(Math.floor(65 + Math.random() * 26));
+
       let chapter = Math.floor(Math.random() * subtitle.length);
       let verse = Math.floor(Math.random() * subtitle[chapter].length);
       this.txt = subtitle[chapter][verse];
@@ -3529,7 +3525,7 @@ function newParticle_txt(sequence, total) {
       this.idxlen = Math.max(2, Math.floor(this.txt.length * 0.8));//10 + 10 * Math.random();
       this.elapse = 0;
       this.idx = 0;
-      this.gap = 0.05 + Math.random() * 0.1;
+      this.gap = 0.08 + Math.random() * 0.1;
     },
     update: function (c, _ctx, dt) {
       
