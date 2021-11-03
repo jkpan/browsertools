@@ -64,9 +64,12 @@ function newParticle_txt(sequence, total) {
     },
     update: function (c, _ctx, dt) {
       
-      _ctx.textAlign = "left";
+      if (dt > 1000) dt = 16;
+
       this.size += 0.05 * this.size * dt * 0.001;
       this.y -= this.size * dt * 0.001;
+
+      _ctx.textAlign = "left";
       _ctx.font = this.size + "px 標楷體";
 
       //ctx.fillText(this.txt.substr(i, 1), this.x, this.y);
