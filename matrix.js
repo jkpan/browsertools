@@ -192,7 +192,7 @@ init();
 
 window.addEventListener('resize', doresize);
 window.addEventListener('click', initAnim, false);
-document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
+//document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
 
 initAnim();
 
