@@ -6,10 +6,11 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('如鹿切慕溪水'),
-            getSong('讓我靈自由'),
-            getSong('祂能改變'),
-            getSong('救恩161'),
+            getSong('新歌頌揚20'),
+            getSong('新歌頌揚43'),
+            getSong('新歌頌揚59'),
+            getSong('救恩77'),
+            getSong('救恩125'),
             
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -1917,12 +1918,29 @@ function flow() {
                ["願意來的人 耶穌召他來", "願意來的人 耶穌召他來", "願意來的人 耶穌召他來", "任何人祂都愛"],
                ["耶穌 耶穌 耶穌 耶穌", "醫治心中傷痛", "耶穌 耶穌 耶穌 耶穌", "醫治心中傷痛", "耶穌 耶穌 耶穌 耶穌", "醫治心中傷痛", "祂使你釋放"]]
 } </script>
-<script id="短歌" name="" type="application/json" charset="UTF-8"> {
-  "content" : [["", "短歌"],
-               [""]]
+<script id="短歌82" name="耶穌能解決一切的問題" type="application/json" charset="UTF-8"> {
+  "content" : [["耶穌能解決一切的問題", "短歌82"],
+               ["耶穌能解決一切的問題", "耶穌能安慰一切憂傷", "救主施浸者 最大的醫生", "哦，哈利路亞 耶穌我王"]]
 } </script>
-
+<!--script id="短歌139" name="信心得勝" type="application/json" charset="UTF-8"> {
+  "content" : [["信心得勝", "短歌"],
+               ["信心得勝有餘 信心得勝有餘", "大大的得勝有餘 能勝過全世界"]]
+} </script-->
 <!-- 新歌頌揚 -->
+<script id="新歌頌揚20" name="真是快樂日" type="application/json" charset="UTF-8"> {
+  "content" : [["真是快樂日", "新歌頌揚20"],
+               ["真是快樂日，我稱頌主在每一天", "真是快樂日，活著為我主", "真是快樂日，萬事將更為美好", "天天倚靠我主的應許來生活"]]
+} </script>
+<script id="新歌頌揚43" name="祢是我的一切" type="application/json" charset="UTF-8"> {
+  "content" : [["祢是我的一切", "新歌頌揚43"],
+               ["祢是我的力量 祢是我的幫助", "祢是我唯一尋求的", "祢是我的盾牌 一生我順服祢", "因祢是我所擁有的一切"]]
+} </script>
+<script id="新歌頌揚59" name="常常喜樂" type="application/json" charset="UTF-8"> {
+  "content" : [["常常喜樂", "新歌頌揚59"],
+               ["要凡事謝恩 因這是神的旨意", "要凡事謝恩 因這是神的旨意", "要凡事謝恩 因這是神的旨意", "在基督裡所定旨意"],
+               ["要不住禱告 因這是神的旨意", "要不住禱告 因這是神的旨意", "要不住禱告 因這是神的旨意", "在基督裡所定旨意"],
+               ["要常常喜樂 因這是神的旨意", "要常常喜樂 因這是神的旨意", "要常常喜樂 因這是神的旨意", "在基督裡所定旨意"]]
+} </script>
 <script id="新歌頌揚117" name="真平安" type="application/json" charset="UTF-8"> {
   "content" : [["真平安", "新歌頌揚117"],
                ["真平安　我今賜給你", "真平安是世界不能給", "真平安是世界不能真明白", "真平安　在你心", "真平安　我今賜給你"],
@@ -2310,7 +2328,7 @@ function flow() {
         margin: 0px;
         height: 100%;
         background-color:green;
-        cursor:none;
+        /*cursor:none;*/
       }
       /*
       main {
@@ -2686,16 +2704,37 @@ function keyboard(e) {
         doblank = doblank == 0?1:0;
         break;
       case 33: //'page up'
-        if (mode == 0) 
+        if (mode == 0) {
           keyboard({keyCode : 37}); //left
-        else 
-          keyboard({keyCode : 38}); //down
+        } else { //ppt mode
+          if (phase > 0) { //normal
+            keyboard({keyCode : 38}); //up
+          } else { // top phase jump to previous song
+            if (song > 0) {
+              song--;
+              subtitles = SONGS[song];
+              phase = subtitles.length - 1;
+              line = 0;
+            }
+          }
+        }
         break;
       case 34: //'page down'
-        if (mode == 0) 
+        if (mode == 0) { 
           keyboard({keyCode : 39}); //right
-        else 
-          keyboard({keyCode : 40}); //up
+        } else {
+          if (phase < subtitles.length - 1) {
+            keyboard({keyCode : 40}); //down
+          } else {
+            if (song < SONGS.length - 1) {
+              song++;
+              subtitles = SONGS[song];
+              phase = 0;
+              line = 0;
+            }
+          }
+          
+        }
         break;
       case 65: //'A'
           if (animSwh == 0) {
