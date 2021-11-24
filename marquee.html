@@ -1,0 +1,318 @@
+<script type="text/javascript" charset="UTF-8"> 
+
+var fsize = 64;
+var FONT = fsize + "px 標楷體";
+var speed = 100;
+       
+var subtitle = [ [''],
+    
+[
+"不從惡人的計謀，不站罪人的道路，不坐褻慢人的座位，",
+"惟喜愛耶和華的律法，晝夜思想，這人便為有福！",
+"他要像一棵樹栽在溪水旁，按時候結果子，葉子也不枯乾。凡他所做的盡都順利。",
+"惡人並不是這樣，乃像糠粃被風吹散。",
+"因此，當審判的時候惡人必站立不住；罪人在義人的會中也是如此。",
+"因為耶和華知道義人的道路；惡人的道路卻必滅亡。"
+],
+
+[
+"耶和華是我的牧者，我必不致缺乏。",
+"他使我躺臥在青草地上，領我在可安歇的水邊。",
+"他使我的靈魂甦醒，為自己的名引導我走義路。",
+"我雖然行過死蔭的幽谷，也不怕遭害，因為你與我同在；你的杖，你的竿，都安慰我。",
+"在我敵人面前，你為我擺設筵席；你用油膏了我的頭，使我的福杯滿溢。",
+"我一生一世必有恩惠慈愛隨著我；我且要住在耶和華的殿中，直到永遠。"
+]
+
+];                 
+    
+</script>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+      body {
+        margin: 0px;
+        height: 100%;
+        background-color:green;
+        /*cursor:none;*/
+      }
+      /*
+      main {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      */
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+    </head>   
+<body>
+
+  <canvas id="canvas" width="100" height="100"></canvas>
+
+</body>
+
+</html>
+
+
+<script type="text/javascript" charset="UTF-8">
+
+var canvas;
+var ctx;
+
+function init() {
+    canvas = document.getElementById("canvas");
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx = canvas.getContext("2d");
+}
+
+function newParticle_txt(_p, _idx, xx, yy) {
+  let p = {
+    x: xx,
+    y: yy,
+  idx: 0,
+  txt: "",
+  idxlen:0,
+  elapse:0,
+  p: _p,
+  idx: _idx,
+    release: function() {
+      this.txt = '';
+    },
+
+    initial: function (c) {
+
+      //this.txt += String.fromCharCode(Math.floor(65 + Math.random() * 26));
+
+      //let chapter = 1;
+      //let verse = 0;
+      this.txt = subtitle[this.p][this.idx];
+    
+      this.idxlen = Math.max(2, Math.floor(this.txt.length * 0.8));//10 + 10 * Math.random();
+      this.elapse = 0;
+      this.idx = 0;
+      this.gap = 0.08 + Math.random() * 0.1;
+
+      return this.txt.length;
+
+    },
+    update: function (c, _ctx, dt) {
+    
+      if (this.y < -this.txt.length * fsize)
+        return;
+    
+      //console.log(this.y);
+
+      if (dt > 1000) dt = 16;
+
+      //this.size += 0.05 * this.size * dt * 0.001;
+      this.y -= dt * 0.001 * speed;
+
+      _ctx.textAlign = "left";
+      _ctx.font = FONT;// + "px 標楷體";
+
+      //ctx.fillText(this.txt.substr(i, 1), this.x, this.y);
+
+      /*
+      this.elapse += dt * 0.001;
+      if (this.elapse > this.gap) {
+        this.idx++;
+        if (this.idx - this.idxlen + 1 >= this.txt.length) {
+          this.initial(c);
+          return;
+        }
+      
+        this.elapse = 0;
+      } 
+      */
+      
+      _ctx.strokeStyle = 'black';
+      _ctx.lineWidth = 4;
+        
+      _ctx.fillStyle = 'white';
+
+      for (var i = 0;i<this.txt.length;i++) {
+        let _x = this.x; 
+        let _y = this.y + (i * fsize);
+        if (_y < -fsize) 
+            continue 
+        if (_y > c.height + fsize) 
+            break;
+    
+        _ctx.strokeText(this.txt.substr(i, 1), _x, _y);
+        _ctx.fillText(this.txt.substr(i, 1), _x, _y);
+        //console.log(this.txt.substr(i, 1) + '('+ this.x + ', ' + (this.y + (i * fsize)) + ')');
+      }
+
+      //console.log("repaint");
+
+    }
+  }
+  return p;
+}
+
+function anim_update(elapse) {
+
+  var c = document.getElementById("canvas");
+  var ctx = c.getContext("2d");
+
+  ctx.clearRect(0, 0, c.width, c.height);
+
+  ctx.fillStyle = 'green';
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  let dt = elapse - pre;
+  pre = elapse;
+
+  if (keepGoing == 1) {
+    for (var i = 0;i<particles.length;i++) {
+        particles[i].update(c, ctx, dt);
+    }
+    if (maskimg)
+        ctx.drawImage(maskimg, fsize, 0);
+    
+    //ctx.putImageData(mask, fsize, 0);
+    
+    window.requestAnimationFrame(anim_update);
+  }
+
+}
+
+function initAnim() {
+
+  keepGoing = 0;
+  if (phase == 0) {       
+      return;
+  }
+
+  var c = document.getElementById("canvas");
+  var ctx = c.getContext("2d");
+
+  //console.log(c.width + ', ' + c.height);
+  
+  if (particles.length >= 1) {
+    for (var i = 0;i<particles.length;i++) {
+      particles[i].release();
+    }
+  }
+
+  particles.length = 0;
+  particles = [];
+
+  let xx = fsize;
+  let yy = c.height + fsize;
+  let _idx = 0;
+  var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
+  for (_idx = 0;_idx<total;_idx++) {
+      particles[_idx] = newParticle_txt(phase, _idx,  xx, yy);//();
+      let txtlen = particles[_idx].initial(c);
+      yy += (txtlen + 4) * fsize;
+  }
+
+  keepGoing = 1;
+  window.requestAnimationFrame(anim_update);
+}
+
+function doresize() {
+  init();
+  //initAnim();
+}
+
+var maskimg;
+
+function ledEffect() {
+    //if (mask != null) return;
+    let wid = 64;
+    var mask = ctx.createImageData(wid, canvas.height);
+    var data = mask.data;
+    for (var i = 0; i < data.length; i+=4) {
+        let pix = i/4;
+        let h = Math.floor(pix/wid);
+        let w = pix%wid;
+        if (h%2 == 0 || w %2 == 0) {
+            data[i]     = 0;     // red
+            data[i + 1] = 128; // green
+            data[i + 2] = 0; // blue
+            data[i + 3] = 255;
+        }
+    }
+    //ctx.putImageData(mask, wid, 0);
+    
+    // create a temporary canvas
+    var tempCanvas = document.createElement("canvas");
+    var tempCtx = tempCanvas.getContext("2d");
+
+    // set the temp canvas size == the canvas size
+    tempCanvas.width = wid;
+    tempCanvas.height = canvas.height;
+
+    // put the modified pixels on the temp canvas
+    tempCtx.putImageData(mask, 0, 0);
+
+    // use the tempCanvas.toDataURL to create an img object
+    maskimg = new Image();
+    maskimg.onload = function(){
+        // drawImage the img on the canvas
+        //ctx.drawImage(img,0,0);
+    }
+    maskimg.src = tempCanvas.toDataURL();
+
+}
+
+var phase = 0;
+var keepGoing = 1;
+
+var pre = 0;
+var particles = [];
+var doblank = 0;
+
+function keyboard(e) {
+
+    switch (e.keyCode) {
+        case 66: //'b'
+            ledEffect();
+            doblank = doblank == 0?1:0;
+            break;
+        case 38: //'ArrowUp'
+            speed += 20;
+            break; 
+        case 40: //'ArrowDown':
+            speed -= 20;
+            if (speed < 10) speed = 0;
+            break;
+        case 37: //'ArrowLeft'
+            break; 
+        case 39: //'ArrowRight'
+            break;
+        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57: {
+        //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+            var value = e.keyCode - 48;
+            if (value > subtitle.length - 1)
+                break;
+            if (value == 0) 
+                keepGoing = 0;
+            phase = value;
+            initAnim();
+        }
+          break;
+            
+            
+    }
+
+}
+
+init();
+
+window.addEventListener('resize', doresize);
+//window.addEventListener('click', initAnim, false);
+//document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
+window.addEventListener('keyup', keyboard, false);
+//initAnim();
+
+</script>
