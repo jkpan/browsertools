@@ -1,13 +1,9 @@
 <script type="text/javascript" charset="UTF-8"> 
 
-var fsize = 108;
-var FONT = fsize + "px 標楷體";
-var speed = 100;
-       
 var subtitle = [ [''],
     
 [
-"不從惡人的計謀，不站罪人的道路，不坐褻慢人的座位，",
+"不從惡人的計謀，不站罪人的道路，不坐褻慢人的座位，❤ ❤ ☂ ☂ ",
 "惟喜愛耶和華的律法，晝夜思想，這人便為有福！",
 "他要像一棵樹栽在溪水旁，按時候結果子，葉子也不枯乾。凡他所做的盡都順利。",
 "惡人並不是這樣，乃像糠粃被風吹散。",
@@ -25,7 +21,25 @@ var subtitle = [ [''],
 ]
 
 ];                 
-    
+
+var side = 3;
+var dots = 3;
+var fsize = 102;
+var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
+var speed = 100;
+
+var initDot = 0;
+var jumpLine = (side + dots) * fsize * 4;
+var jumpSide = (side + dots) * 4;
+
+if (dots == 3) {
+  initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
+} else if (dots == 2) {
+  initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
+} else if (dots == 1) {
+  initDot = (side * fsize + side) * 4;//(4 * fsize + 4) * 4;
+}
+
 </script>
 
 <!DOCTYPE html>
@@ -116,10 +130,10 @@ function newParticle_txt(_p, _idx, xx, yy) {
       _ctx.textAlign = "left";
       _ctx.font = FONT;// + "px 標楷體";
       
-      _ctx.strokeStyle = 'red';
+      _ctx.strokeStyle = 'white';
       _ctx.lineWidth = 4;
         
-      _ctx.fillStyle = 'red';
+      _ctx.fillStyle = 'white';
 
       for (var i = 0;i<this.txt.length;i++) {
         let _x = this.x; 
@@ -167,30 +181,35 @@ function anim_update(elapse) {
 
     if (maskimg) {
         ctx.drawImage(maskimg, fsize, 0);
+
         
         let mask = ctx.getImageData(fsize, 0, fsize, c.height);
         var data = mask.data;
         let gapL = fsize * 4;
         let gapP = 4;
         let wid = fsize;
-        for (let i = (4 * fsize + 4) * 4;i < data.length;i+=6 * fsize * 4) {
+        
+        for (let i = initDot;i < data.length;i += jumpLine) {
         
           let pix = i/4;
           let h = Math.floor(pix/wid);
           let w = pix%wid;
         
-          for (let k = i;;k+=6 * 4) {
+          for (let k = i;;k+=jumpSide) {
             let _pix = k/4;
             let _h = Math.floor(_pix/wid);
             let _w = _pix%wid;
             if (_h != h) 
               break;
-            if (data[k] > 100) {
+            if (data[k] > 200) {
                 //中
                 data[k]     = 255;
                 data[k + 1] = 50;
                 data[k + 2] = 50;
                 data[k + 3] = 255;
+
+                if (dots == 1) continue;
+
                 //左
                 data[k - gapP]     = 255;
                 data[k + 1 - gapP] = 50;
@@ -206,6 +225,8 @@ function anim_update(elapse) {
                 data[k + 1 - gapP - gapL] = 50;
                 data[k + 2 - gapP - gapL] = 50;
                 data[k + 3 - gapP - gapL] = 255;
+
+                if (dots == 2) continue;
 
                 //右
                 let idx = k + gapP;
@@ -249,11 +270,15 @@ function anim_update(elapse) {
                   }
                 }
             } else {
+                
                 //中
                 data[k]     = 0;
                 data[k + 1] = 0;
                 data[k + 2] = 0;
                 data[k + 3] = 255;
+
+                if (dots == 1) continue;
+
                 //左
                 data[k - gapP]     = 0;
                 data[k + 1 - gapP] = 0;
@@ -269,6 +294,8 @@ function anim_update(elapse) {
                 data[k + 1 - gapP - gapL] = 0;
                 data[k + 2 - gapP - gapL] = 0;
                 data[k + 3 - gapP - gapL] = 255;
+
+                if (dots == 2) continue;
 
                 //右
                 let idx = k + gapP;
@@ -310,10 +337,12 @@ function anim_update(elapse) {
                     data[k + 3 - gapP + gapL] = 255;
                   }
                 }
+                
             }
           }
       }
       ctx.putImageData(mask, fsize, 0);
+      
     }
     //
     
@@ -360,13 +389,52 @@ function initAnim() {
 function doresize() {
   init();
   //initAnim();
+  if (maskimg != null) {
+    ledEffect();
+  }
 }
+
+function generateMask(w, h, s, d) {
+
+  var mask = ctx.createImageData(w, h);
+  var data = mask.data;
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+
+        let idx = (y * w + x) * 4;
+
+        data[idx + 0] = 40;
+        data[idx + 1] = 40;
+        data[idx + 2] = 40;
+        data[idx + 3] = 255;
+        
+        let _x = x%(s + d);
+        let _y = y%(s + d);
+        if (_x >= s && _y >= s) { //d
+
+          data[idx + 3] = 0;
+        }
+
+    }
+  }
+
+  return mask;
+
+}
+
 
 var maskimg;
 //01 23 45 67
 //00 11 22
 function ledEffect() {
-    //if (mask != null) return;
+  
+  let w = fsize;
+  let h = canvas.height;
+
+  var mask = generateMask(w, h, side, dots);
+  
+    /*
     let wid = fsize;
     var mask = ctx.createImageData(wid, canvas.height);
     var data = mask.data;
@@ -383,6 +451,7 @@ function ledEffect() {
             data[i + 3] = 255;
         }
     }
+    */
     
     /*
     //let gapL = 6 * fsize * 4;
@@ -411,7 +480,7 @@ function ledEffect() {
     var tempCtx = tempCanvas.getContext("2d");
 
     // set the temp canvas size == the canvas size
-    tempCanvas.width = wid;
+    tempCanvas.width = w;
     tempCanvas.height = canvas.height;
 
     // put the modified pixels on the temp canvas
@@ -431,11 +500,23 @@ var pre = 0;
 var particles = [];
 var doblank = 0;
 
+function react() {
+  if (maskimg != null) {
+    ledEffect();
+  }
+}
+
 function keyboard(e) {
 
     switch (e.keyCode) {
+        case 76: //'l'
+            if (maskimg != null) {
+              maskimg = null;
+            } else {
+              ledEffect();
+            }
+            break;
         case 66: //'b'
-            ledEffect();
             doblank = doblank == 0?1:0;
             break;
         case 38: //'ArrowUp'
