@@ -1,6 +1,6 @@
 <script type="text/javascript" charset="UTF-8"> 
 
-var fsize = 64;
+var fsize = 108;
 var FONT = fsize + "px 標楷體";
 var speed = 100;
        
@@ -88,10 +88,6 @@ function newParticle_txt(_p, _idx, xx, yy) {
 
     initial: function (c) {
 
-      //this.txt += String.fromCharCode(Math.floor(65 + Math.random() * 26));
-
-      //let chapter = 1;
-      //let verse = 0;
       this.txt = subtitle[this.p][this.idx];
     
       this.idxlen = Math.max(2, Math.floor(this.txt.length * 0.8));//10 + 10 * Math.random();
@@ -103,10 +99,7 @@ function newParticle_txt(_p, _idx, xx, yy) {
 
     },
     update: function (c, _ctx, dt) {
-    
-      if (this.y < -this.txt.length * fsize)
-        return;
-    
+        
       //console.log(this.y);
 
       if (dt > 1000) dt = 16;
@@ -114,34 +107,25 @@ function newParticle_txt(_p, _idx, xx, yy) {
       //this.size += 0.05 * this.size * dt * 0.001;
       this.y -= dt * 0.001 * speed;
 
+      if (this.y < -this.txt.length * fsize)
+        return;
+
+      if (this.y > c.height + fsize)
+        return;
+
       _ctx.textAlign = "left";
       _ctx.font = FONT;// + "px 標楷體";
-
-      //ctx.fillText(this.txt.substr(i, 1), this.x, this.y);
-
-      /*
-      this.elapse += dt * 0.001;
-      if (this.elapse > this.gap) {
-        this.idx++;
-        if (this.idx - this.idxlen + 1 >= this.txt.length) {
-          this.initial(c);
-          return;
-        }
       
-        this.elapse = 0;
-      } 
-      */
-      
-      _ctx.strokeStyle = 'black';
+      _ctx.strokeStyle = 'red';
       _ctx.lineWidth = 4;
         
-      _ctx.fillStyle = 'white';
+      _ctx.fillStyle = 'red';
 
       for (var i = 0;i<this.txt.length;i++) {
         let _x = this.x; 
         let _y = this.y + (i * fsize);
         if (_y < -fsize) 
-            continue 
+            continue;
         if (_y > c.height + fsize) 
             break;
     
@@ -171,13 +155,167 @@ function anim_update(elapse) {
   pre = elapse;
 
   if (keepGoing == 1) {
+    
+    if (maskimg) {
+      ctx.fillStyle = 'black';
+      ctx.fillRect(fsize - 4, 0, fsize + 8, c.height);
+    }
+    
     for (var i = 0;i<particles.length;i++) {
         particles[i].update(c, ctx, dt);
     }
-    if (maskimg)
+
+    if (maskimg) {
         ctx.drawImage(maskimg, fsize, 0);
-    
-    //ctx.putImageData(mask, fsize, 0);
+        
+        let mask = ctx.getImageData(fsize, 0, fsize, c.height);
+        var data = mask.data;
+        let gapL = fsize * 4;
+        let gapP = 4;
+        let wid = fsize;
+        for (let i = (4 * fsize + 4) * 4;i < data.length;i+=6 * fsize * 4) {
+        
+          let pix = i/4;
+          let h = Math.floor(pix/wid);
+          let w = pix%wid;
+        
+          for (let k = i;;k+=6 * 4) {
+            let _pix = k/4;
+            let _h = Math.floor(_pix/wid);
+            let _w = _pix%wid;
+            if (_h != h) 
+              break;
+            if (data[k] > 100) {
+                //中
+                data[k]     = 255;
+                data[k + 1] = 50;
+                data[k + 2] = 50;
+                data[k + 3] = 255;
+                //左
+                data[k - gapP]     = 255;
+                data[k + 1 - gapP] = 50;
+                data[k + 2 - gapP] = 50;
+                data[k + 3 - gapP] = 255;
+                //上
+                data[k - gapL]     = 255;
+                data[k + 1 - gapL] = 50;
+                data[k + 2 - gapL] = 50;
+                data[k + 3 - gapL] = 255;
+                //左上
+                data[k - gapP - gapL]     = 155;
+                data[k + 1 - gapP - gapL] = 50;
+                data[k + 2 - gapP - gapL] = 50;
+                data[k + 3 - gapP - gapL] = 255;
+
+                //右
+                let idx = k + gapP;
+                let pp = idx/4;
+                let hh = Math.floor(pp/wid);
+                let ww = pp%wid;
+                if (hh == _h) {
+                  //右
+                  data[idx]     = 255;
+                  data[idx + 1] = 50;
+                  data[idx + 2] = 50;
+                  data[idx + 3] = 255;
+                  //右上
+                  data[idx - gapL]     = 155;
+                  data[idx - gapL + 1] = 50;
+                  data[idx - gapL + 2] = 50;
+                  data[idx - gapL + 3] = 255;
+
+                  
+                  idx = k + gapP + gapL;
+                  pp = idx/4;
+                  hh = Math.floor(pp/wid);
+                  ww = pp%wid;
+                  if (idx < data.length) {
+                    //右下
+                    data[idx]     = 155;
+                    data[idx + 1] = 50;
+                    data[idx + 2] = 50;
+                    data[idx + 3] = 255;
+
+                    //下
+                    data[k + gapL]     = 255;
+                    data[k + 1 + gapL] = 50;
+                    data[k + 2 + gapL] = 50;
+                    data[k + 3 + gapL] = 255;
+                    //左下
+                    data[k - gapP + gapL]     = 155;
+                    data[k + 1 - gapP + gapL] = 50;
+                    data[k + 2 - gapP + gapL] = 50;
+                    data[k + 3 - gapP + gapL] = 255;
+                  }
+                }
+            } else {
+                //中
+                data[k]     = 0;
+                data[k + 1] = 0;
+                data[k + 2] = 0;
+                data[k + 3] = 255;
+                //左
+                data[k - gapP]     = 0;
+                data[k + 1 - gapP] = 0;
+                data[k + 2 - gapP] = 0;
+                data[k + 3 - gapP] = 255;
+                //上
+                data[k - gapL]     = 0;
+                data[k + 1 - gapL] = 0;
+                data[k + 2 - gapL] = 0;
+                data[k + 3 - gapL] = 255;
+                //左上
+                data[k - gapP - gapL]     = 0;
+                data[k + 1 - gapP - gapL] = 0;
+                data[k + 2 - gapP - gapL] = 0;
+                data[k + 3 - gapP - gapL] = 255;
+
+                //右
+                let idx = k + gapP;
+                let pp = idx/4;
+                let hh = Math.floor(pp/wid);
+                let ww = pp%wid;
+                if (hh == _h) {
+                  data[idx]     = 0;
+                  data[idx + 1] = 0;
+                  data[idx + 2] = 0;
+                  data[idx + 3] = 255;
+                  //右上
+                  data[idx - gapL]     = 0;
+                  data[idx - gapL + 1] = 0;
+                  data[idx - gapL + 2] = 0;
+                  data[idx - gapL + 3] = 255;
+
+                  
+                  idx = k + gapP + gapL;
+                  pp = idx/4;
+                  hh = Math.floor(pp/wid);
+                  ww = pp%wid;
+                  if (idx < data.length) {
+                    //右下
+                    data[idx]     = 0;
+                    data[idx + 1] = 0;
+                    data[idx + 2] = 0;
+                    data[idx + 3] = 255;
+
+                    //下
+                    data[k + gapL]     = 0;
+                    data[k + 1 + gapL] = 0;
+                    data[k + 2 + gapL] = 0;
+                    data[k + 3 + gapL] = 255;
+                    //左下
+                    data[k - gapP + gapL]     = 0;
+                    data[k + 1 - gapP + gapL] = 0;
+                    data[k + 2 - gapP + gapL] = 0;
+                    data[k + 3 - gapP + gapL] = 255;
+                  }
+                }
+            }
+          }
+      }
+      ctx.putImageData(mask, fsize, 0);
+    }
+    //
     
     window.requestAnimationFrame(anim_update);
   }
@@ -212,7 +350,7 @@ function initAnim() {
   for (_idx = 0;_idx<total;_idx++) {
       particles[_idx] = newParticle_txt(phase, _idx,  xx, yy);//();
       let txtlen = particles[_idx].initial(c);
-      yy += (txtlen + 4) * fsize;
+      yy += (txtlen + 2) * fsize;
   }
 
   keepGoing = 1;
@@ -225,25 +363,49 @@ function doresize() {
 }
 
 var maskimg;
-
+//01 23 45 67
+//00 11 22
 function ledEffect() {
     //if (mask != null) return;
-    let wid = 64;
+    let wid = fsize;
     var mask = ctx.createImageData(wid, canvas.height);
     var data = mask.data;
-    for (var i = 0; i < data.length; i+=4) {
+    for (let i = 0; i < data.length; i+=4) {
         let pix = i/4;
         let h = Math.floor(pix/wid);
         let w = pix%wid;
-        if (h%2 == 0 || w %2 == 0) {
-            data[i]     = 0;     // red
-            data[i + 1] = 128; // green
-            data[i + 2] = 0; // blue
+        //if (h%2 == 0) {
+        //if (h%2 == 0 || w%2 == 0) {
+        if (Math.floor(h/3)%2 == 0 || Math.floor(w/3)%2 == 0) {
+            data[i]     = 30;     // red
+            data[i + 1] = 30; // green
+            data[i + 2] = 30; // blue
             data[i + 3] = 255;
         }
     }
-    //ctx.putImageData(mask, wid, 0);
     
+    /*
+    //let gapL = 6 * fsize * 4;
+    //let gapP = 6 * 4;
+    for (let i = (4 * fsize + 4) * 4;i < data.length;i+=6 * fsize * 4) {
+        
+        let pix = i/4;
+        let h = Math.floor(pix/wid);
+        let w = pix%wid;
+        
+        for (let k = i;;k+=6 * 4) {
+          let _pix = k/4;
+          let _h = Math.floor(_pix/wid);
+          let _w = _pix%wid;
+          if (_h != h) break;
+          data[k]     = 255;
+          data[k + 1] = 0;
+          data[k + 2] = 0;
+          data[k + 3] = 255;
+        }
+    }
+    */
+        
     // create a temporary canvas
     var tempCanvas = document.createElement("canvas");
     var tempCtx = tempCanvas.getContext("2d");
@@ -257,10 +419,7 @@ function ledEffect() {
 
     // use the tempCanvas.toDataURL to create an img object
     maskimg = new Image();
-    maskimg.onload = function(){
-        // drawImage the img on the canvas
-        //ctx.drawImage(img,0,0);
-    }
+    //maskimg.onload = function() {}
     maskimg.src = tempCanvas.toDataURL();
 
 }
@@ -284,7 +443,7 @@ function keyboard(e) {
             break; 
         case 40: //'ArrowDown':
             speed -= 20;
-            if (speed < 10) speed = 0;
+            //if (speed < 10) speed = 0;
             break;
         case 37: //'ArrowLeft'
             break; 
@@ -313,6 +472,9 @@ window.addEventListener('resize', doresize);
 //window.addEventListener('click', initAnim, false);
 //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
 window.addEventListener('keyup', keyboard, false);
-//initAnim();
+
+phase = 1;
+initAnim();
+ledEffect();
 
 </script>
