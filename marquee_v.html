@@ -1,28 +1,13 @@
 <script type="text/javascript" charset="UTF-8"> 
 
-var subtitle = [ [''],
-
-[
-"耶和華是我的牧者，我必不致缺乏。",
-"他使我躺臥在青草地上，領我在可安歇的水邊。",
-"他使我的靈魂甦醒，為自己的名引導我走義路。",
-"我雖然行過死蔭的幽谷，也不怕遭害，因為你與我同在；你的杖，你的竿，都安慰我。",
-"在我敵人面前，你為我擺設筵席；你用油膏了我的頭，使我的福杯滿溢。",
-"我一生一世必有恩惠慈愛隨著我；我且要住在耶和華的殿中，直到永遠。"
-],
-//["U+1F468"],
-['😜😂😍'],
-["✊✌❤☂"]
-//ctx.fillText('😜😂😍', canvas.width / 2, canvas.height / 2)
-
-
-];
+var subtitle = [ [''], 
+                 ['A']];
 
 var fsize = 102;
 var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
-var speed = 100;
+var speed = 200;
 
-var side = 4;
+var side = 3;
 var dots = 3;
 var initDot = 0;
 
@@ -48,6 +33,17 @@ if (dots == 3) {
   initDot = (side * fsize + side) * 4;//(4 * fsize + 4) * 4;
 }
 
+function textGo() {
+  let len = subtitle.length;
+  let value = document.getElementById("txt").value;
+  if (value.length == 0) return;
+  subtitle[len] = [value];
+  phase = len;
+  switch2Marquee();
+  initAnim();
+  ledEffect();
+}
+
 </script>
 
 <!DOCTYPE html>
@@ -58,7 +54,7 @@ if (dots == 3) {
       body {
         margin: 0px;
         height: 100%;
-        background-color:green;
+        background-color:rgb(0, 0, 0);
         /*cursor:none;*/
       }
       /*
@@ -75,7 +71,13 @@ if (dots == 3) {
     </head>   
 <body>
 
-  <canvas id="canvas" width="100" height="100"></canvas>
+  <div id="ui">
+    <br/>
+    <input type="text" id="txt" name="myfield" value="hello"/><br/>
+    <button type="button" id="go" onclick="textGo()">OK</button>
+  </div>
+
+  <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
 
 </body>
 
@@ -92,78 +94,12 @@ function init() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
     ctx = canvas.getContext("2d");
-
-    jumpLine = (side + dots) * canvas.width * 4;
-    jumpSide = (side + dots) * 4;
-
-    if (dots == 3) {
-      initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-    } else if (dots == 2) {
-      initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-    } else if (dots == 1) {
-      initDot = (side * canvas.width + side) * 4;//(4 * fsize + 4) * 4;
-    }
-
-}
-
-function newParticle_txt(_p, _idx, xx, yy) {
-  let p = {
-          x: xx,
-          y: yy,
-        txt: "",
-          p: _p,
-        idx: _idx,
- activeFlag: true,
-    release: function() {
-      this.txt = '';
-    },
-
-    initial: function (c) {
-      this.release();
-      this.txt = subtitle[this.p][this.idx];
-      var _ctx = c.getContext("2d");
-      _ctx.font = FONT;// + "px 標楷體";
-      return _ctx.measureText(this.txt).width;
-    },
-
-    update: function (c, _ctx, dt) {
-        
-      //console.log(this.y);
-      this.activeFlag = true;
-
-      if (dt > 1000) dt = 16;
-
-      this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
-
-      _ctx.textAlign = "left";
-      _ctx.font = FONT;// + "px 標楷體";
-
-      if (this.x < -_ctx.measureText(this.txt).width + 10) {
-        this.activeFlag = false;
-        return;
-      }
-
-      if (this.x > c.width + fsize)
-        return; 
-      
-      _ctx.strokeStyle = 'white';
-      _ctx.lineWidth = 4;
-        
-      _ctx.fillStyle = 'white';
-
-      _ctx.strokeText(this.txt, this.x, this.y-8);
-      _ctx.fillText(this.txt, this.x, this.y-8);
-
-    }
-  }
-  return p;
 }
 
 function newParticle_txt_verticle(_p, _idx, xx, yy) {
   let p = {
           x: xx,
           y: yy,
-        idx: 0,
         txt: "",
           p: _p,
         idx: _idx,
@@ -175,7 +111,6 @@ function newParticle_txt_verticle(_p, _idx, xx, yy) {
     initial: function (c) {
       this.release();
       this.txt = subtitle[this.p][this.idx];
-      this.idx = 0;
       return this.txt.length;
     },
 
@@ -240,9 +175,9 @@ function anim_update(elapse) {
       
       ctx.fillStyle = 'black';
       //verticle
-      //ctx.fillRect(fsize - 4, 0, fsize + 8, canvas.height);
+      ctx.fillRect(fsize - 4, 0, fsize + 8, canvas.height);
 
-      ctx.fillRect(0, 0, canvas.width, fsize + 9);
+      //ctx.fillRect(0, 0, canvas.width, fsize + 9);
     }
     
     for (var i = 0;i<particles.length;i++) {
@@ -250,7 +185,6 @@ function anim_update(elapse) {
     }
 
     //verticle
-    /*
     if (particles[particles.length - 1].activeFlag == false) { //
       let yy = canvas.height + fsize;
       for (var i = 0;i<particles.length;i++) {
@@ -259,8 +193,8 @@ function anim_update(elapse) {
         yy += (txtlen + 2) * fsize;
       }
     }
-    */
-
+  
+    /*
     if (particles[particles.length - 1].activeFlag == false) { //
       let xx = canvas.width;
       for (var i = 0;i<particles.length;i++) {
@@ -269,27 +203,26 @@ function anim_update(elapse) {
         xx += txtlen + 2 * fsize;
       }
     }
-
-    //ctx.fillText('U+1F468 x', canvas.width / 2, canvas.height / 2);
+    */
 
     if (maskimg) {
         
         //verticle
-        //ctx.drawImage(maskimg, fsize, 0);
-        //let mask = ctx.getImageData(fsize, 0, fsize, canvas.height);
+        ctx.drawImage(maskimg, fsize, 0);
+        let mask = ctx.getImageData(fsize, 0, fsize, canvas.height);
         
-        ctx.drawImage(maskimg, 0, 0);
-        let mask = ctx.getImageData(0, 0, canvas.width, fsize);
+        //ctx.drawImage(maskimg, 0, 0);
+        //let mask = ctx.getImageData(0, 0, canvas.width, fsize);
         
         var data = mask.data;
         //verticle
-        //let gapL = fsize * 4;
-        let gapL = canvas.width * 4;
+        let gapL = fsize * 4;
+        //let gapL = canvas.width * 4;
 
         let gapP = 4;
         //verticle
-        //let wid = fsize;
-        let wid = canvas.width;
+        let wid = fsize;
+        //let wid = canvas.width;
 
         let _r = dot_r * Math.random();
         let _g = dot_g * Math.random();
@@ -311,7 +244,7 @@ function anim_update(elapse) {
             let _w = _pix%wid;
             if (_h != h) 
               break;
-              
+            
             _r = data[k];
             _g = data[k+1];
             _b = data[k+2];
@@ -319,7 +252,7 @@ function anim_update(elapse) {
             _rc = data[k];
             _gc = data[k+1];
             _bc = data[k+2];
-        
+            
             if (data[k] > 127 || data[k+1] > 127 || data[k+2] > 127) {
             //if (data[k] > 100) {// + data[k+1] + data[k+2] > 300) {
                 
@@ -359,7 +292,7 @@ function anim_update(elapse) {
                   }
                 }
             } else {
-              
+                
                 setPixColor(data, k, dot_none, dot_none, dot_none);//中
                 
                 if (dots == 1) continue;
@@ -397,8 +330,8 @@ function anim_update(elapse) {
           }
       }
       //verticle
-      //ctx.putImageData(mask, fsize, 0);
-      ctx.putImageData(mask, 0, 0);
+      ctx.putImageData(mask, fsize, 0);
+      //ctx.putImageData(mask, 0, 0);
       
     }
     //
@@ -418,7 +351,7 @@ function setPixColor(data, idx, r, g, b) {
 function initAnim() {
 
   keepGoing = 0;
-  if (phase == 0) {       
+  if (phase == 0) {
       return;
   }
 
@@ -436,17 +369,7 @@ function initAnim() {
   particles.length = 0;
   particles = [];
 
-  let yy = fsize;
-  let xx = c.width + fsize;
-  var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-  for (let _idx = 0;_idx<total;_idx++) {
-      particles[_idx] = newParticle_txt(phase, _idx,  xx, yy);//();
-      let txtlen = particles[_idx].initial(c);
-      xx += (txtlen + fsize);
-  }
-
   //verticle
-  /*
   let xx = fsize;
   let yy = c.height + fsize;
   let _idx = 0;
@@ -456,7 +379,6 @@ function initAnim() {
       let txtlen = particles[_idx].initial(c);
       yy += (txtlen + 2) * fsize;
   }
-  */
 
   keepGoing = 1;
   window.requestAnimationFrame(anim_update);
@@ -481,9 +403,9 @@ function generateMask(w, h, s, d) {
 
         let idx = (y * w + x) * 4;
 
-        data[idx + 0] = 0;
-        data[idx + 1] = 0;
-        data[idx + 2] = 0;
+        data[idx + 0] = 0;//40;
+        data[idx + 1] = 0;//40;
+        data[idx + 2] = 0;//40;
         data[idx + 3] = 255;
         
         let _x = x%(s + d);
@@ -504,12 +426,12 @@ var maskimg;
 
 function ledEffect() {
   
-  let w = canvas.width;
-  let h = fsize;
-
   //verticle
-  //let w = fsize;
-  //let h = canvas.height;
+  let w = fsize;
+  let h = canvas.height;
+
+  //let w = canvas.width;
+  //let h = fsize;
 
   var mask = generateMask(w, h, side, dots);
         
@@ -546,6 +468,8 @@ function react() {
 
 function keyboard(e) {
 
+    if (canvas.hidden) return; 
+
     switch (e.keyCode) {
         case 76: //'l'
             if (maskimg != null) {
@@ -578,11 +502,70 @@ function keyboard(e) {
             phase = value;
             initAnim();
         }
+        break;
+        case 73: //i
+          //inputTxt();
+          if (canvas.hidden == false) {
+            switch2Input();
+          } else {
+            switch2Marquee();
+          }
           break;
             
             
     }
 
+}
+
+/*
+function removeDiv() {
+  var buttons = document.getElementById('btns');
+  if (buttons) {
+    document.body.removeChild(buttons);
+  } 
+  return;
+}
+
+function inputTxt() {
+  
+  canvas.hidden = true;
+  removeDiv();
+  
+  var div = document.createElement('div');
+  div.id = 'btns';  
+  document.body.appendChild(div);
+
+  var input = document.createElement("input");
+  input.type = "text";
+  input.id = 'banner';
+  div.appendChild(input);
+
+  var button = document.createElement('button');
+  button.innerHTML = 'OK';
+  button.id = 'okgo';
+  button.onclick = function() {
+    return false;
+  };
+  div.appendChild(button);
+}
+*/
+
+function switch2Input() {
+  
+  var div = document.getElementById('ui');
+  if (div) {
+    div.hidden = false;
+    canvas.hidden = true;
+  }
+  
+}
+
+function switch2Marquee() {
+  var div = document.getElementById('ui');
+  if (div) {
+    div.hidden = true;
+    canvas.hidden = false;
+  }
 }
 
 init();
@@ -592,8 +575,10 @@ window.addEventListener('resize', doresize);
 //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
 window.addEventListener('keyup', keyboard, false);
 
-phase = 1;
-initAnim();
-ledEffect();
+if (subtitle.length > 1 && subtitle[1].length > 0) {
+  phase = 1;
+  initAnim();
+  ledEffect();
+}
 
 </script>
