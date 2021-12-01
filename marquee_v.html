@@ -3,12 +3,15 @@
 var subtitle = [ [''], 
                  ['A']];
 
-var fsize = 102;
-var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
-var speed = 200;
-
 var side = 3;
 var dots = 3;
+
+var fsize = 96;
+fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
+
+var FONT = (fsize - 4) + "px 標楷體";//黑體-繁";//宋體-繁";
+var speed = 200;
+
 var initDot = 0;
 
 var dot_none = 50;
@@ -35,13 +38,16 @@ if (dots == 3) {
 
 function textGo() {
   let len = subtitle.length;
-  let value = document.getElementById("txt").value;
-  if (value.length == 0) return;
+  let value = document.getElementById("txt").value;//String.fromCodePoint(0x1F604);
+  if (value.length == 0) 
+    return;
   subtitle[len] = [value];
   phase = len;
   switch2Marquee();
+  keepGoing = 0;
   initAnim();
   ledEffect();
+  
 }
 
 </script>
@@ -54,7 +60,8 @@ function textGo() {
       body {
         margin: 0px;
         height: 100%;
-        background-color:rgb(0, 0, 0);
+        background-color:green;
+
         /*cursor:none;*/
       }
       /*
@@ -67,14 +74,28 @@ function textGo() {
       ::-webkit-scrollbar {
         display: none;
       }
+      input[type=text] {
+        width:60%;
+        border:2px solid #aaa;
+        border-radius: 4px;
+        margin: 2% 2%;
+        outline: none;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      input[type=text]:focus {
+        border-color: dodgerblue;
+        box-shadow: 0 0 8px 0 dodgerblue;
+      }
     </style>
     </head>   
 <body>
 
   <div id="ui">
     <br/>
-    <input type="text" id="txt" name="myfield" value="hello"/><br/>
-    <button type="button" id="go" onclick="textGo()">OK</button>
+    <!--p style="font-size:48px">&#x1f604;</p-->
+    <input type="text" id="txt" name="myfield" value="中文測試" placeholder="message"/><br/>
+    <button type="button" id="go" style="margin:2% 2%;width:120px;height:40px;border:2px #ff0000;" onclick="textGo()">OK</button>
   </div>
 
   <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
@@ -98,20 +119,28 @@ function init() {
 
 function newParticle_txt_verticle(_p, _idx, xx, yy) {
   let p = {
-          x: xx,
+          x: xx + 2,
           y: yy,
         txt: "",
           p: _p,
         idx: _idx,
  activeFlag: true,
+      array: [],
     release: function() {
       this.txt = '';
+      this.array = [];
+      this.array.length = 0;
     },
 
     initial: function (c) {
       this.release();
       this.txt = subtitle[this.p][this.idx];
-      return this.txt.length;
+      
+      this.array = Array.from(this.txt);
+
+      //for(let i=0;i<a.length;i++)  console.log(a.length + '-' + i +":"+a[i]);
+      
+      return this.array.length;//this.txt.length;
     },
 
     update: function (c, _ctx, dt) {
@@ -139,6 +168,7 @@ function newParticle_txt_verticle(_p, _idx, xx, yy) {
         
       _ctx.fillStyle = 'white';
 
+      /*
       for (var i = 0;i<this.txt.length;i++) {
         let _x = this.x; 
         let _y = this.y + (i * fsize);
@@ -150,6 +180,18 @@ function newParticle_txt_verticle(_p, _idx, xx, yy) {
         _ctx.strokeText(this.txt.substr(i, 1), _x, _y);
         _ctx.fillText(this.txt.substr(i, 1), _x, _y);
         //console.log(this.txt.substr(i, 1) + '('+ this.x + ', ' + (this.y + (i * fsize)) + ')');
+      }
+      */
+
+      for(let i=0;i<this.array.length;i++) {
+        let _x = this.x; 
+        let _y = this.y + (i * fsize);
+        if (_y < -fsize) 
+            continue;
+        if (_y > c.height + fsize) 
+            break;
+        _ctx.strokeText(this.array[i], _x, _y);
+        _ctx.fillText(this.array[i], _x, _y);
       }
 
       //console.log("repaint");
@@ -337,6 +379,11 @@ function anim_update(elapse) {
     //
     
     window.requestAnimationFrame(anim_update);
+
+  } else {
+    if (phase != 0) {
+      initAnim();
+    }
   }
 
 }
@@ -497,10 +544,14 @@ function keyboard(e) {
             var value = e.keyCode - 48;
             if (value > subtitle.length - 1)
                 break;
-            if (value == 0) 
-                keepGoing = 0;
+            
             phase = value;
-            initAnim();
+            if (keepGoing == 0) {
+              initAnim();
+            } else {
+              keepGoing = 0;
+            }
+
         }
         break;
         case 73: //i
