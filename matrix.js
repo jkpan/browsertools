@@ -24,6 +24,7 @@ function newParticle_txt(sequence, total) {
     y: 0,
   idx: 0,
   txt: "",
+  array: [],
   size:0,
   seq:sequence,
   ttl:total,
@@ -33,13 +34,15 @@ function newParticle_txt(sequence, total) {
   lev:0,
     release: function() {
       this.txt = '';
+      this.array = [];
+      this.array.length = 0;
     },
     initial: function (c) {
 
       //this.txt += String.fromCharCode(Math.floor(65 + Math.random() * 26));
 
-      let chapter = Math.floor(Math.random() * subtitle.length);
-      let verse = Math.floor(Math.random() * subtitle[chapter].length);
+      let chapter = 1 + Math.floor(Math.random() * (subtitle.length - 1));
+      let verse = 1 + Math.floor(Math.random() * (subtitle[chapter].length - 1));
       this.txt = subtitle[chapter][verse];
 
       //this.size = Math.floor(10 + (this.seq/this.ttl) * 20);
@@ -55,12 +58,15 @@ function newParticle_txt(sequence, total) {
       //this.x = this.seq * c.width/this.ttl;
       //console.log(':'+this.size);
 
+      this.array = Array.from(this.txt);
       
       this.y = 10 + Math.random() * c.height/4;
-      this.idxlen = Math.max(2, Math.floor(this.txt.length * 0.8));//10 + 10 * Math.random();
+      this.idxlen = Math.max(2, Math.floor(this.array.length * 0.8));//10 + 10 * Math.random();
       this.elapse = 0;
       this.idx = 0;
       this.gap = 0.08 + Math.random() * 0.1;
+      
+
     },
     update: function (c, _ctx, dt) {
       
@@ -77,7 +83,7 @@ function newParticle_txt(sequence, total) {
       this.elapse += dt * 0.001;
       if (this.elapse > this.gap) {
         this.idx++;
-        if (this.idx - this.idxlen + 1 >= this.txt.length) {
+        if (this.idx - this.idxlen + 1 >= this.array.length) {
           this.initial(c);
           return;
         }
@@ -90,7 +96,7 @@ function newParticle_txt(sequence, total) {
         if (i < 0) {
           break;
         }
-        if (i < this.txt.length) {
+        if (i < this.array.length) {
           let rb = Math.floor(150 * _len/this.idxlen);
           
           if (i == this.idx) {
@@ -103,7 +109,8 @@ function newParticle_txt(sequence, total) {
               _ctx.strokeStyle = 'rgb(255, 0, 0, 1.0)';
               _ctx.lineWidth = 4;
               _ctx.fillStyle = 'rgb(240, 255, 240, 1.0)';
-              _ctx.strokeText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
+              _ctx.strokeText(this.array[i], this.x, this.y + (i * this.size));
+              //_ctx.strokeText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
             }      
             
           } else {
@@ -113,8 +120,8 @@ function newParticle_txt(sequence, total) {
             }
             _ctx.fillStyle = 'rgb(' + rb + ',255,' + rb + ',' + opa +')';
           }
-            
-          _ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
+          _ctx.fillText(this.array[i], this.x, this.y + (i * this.size));  
+          //_ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
         }  
         _len--;
         if (_len == 0) 
@@ -131,7 +138,7 @@ function anim_update(elapse) {
   var c = document.getElementById("canvas");
   var ctx = c.getContext("2d");
 
-  ctx.clearRect(0, 0, c.width, c.height);
+  //ctx.clearRect(0, 0, c.width, c.height);
 
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, c.width, c.height);
