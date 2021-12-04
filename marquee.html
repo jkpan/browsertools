@@ -1,598 +1,644 @@
 <script type="text/javascript" charset="UTF-8"> 
 
-var subtitle = [ [''],
+  var subtitle = [ [''], 
+                   ['中文測試🚘🚖', '2.中試🗿', '3.🗿']];
+  
+  var side = 3;
+  var dots = 3;
+  
+  var fsize = 128;
+  fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
+  
+  var FONT = (fsize - 4) + "px 標楷體";//黑體-繁";//宋體-繁";
+  var speed = 200;
+  
+  var initDot = 0;
+  
+  var dot_none = 40;
+  
+  var dot_rc = 255;
+  var dot_gc = 255;
+  var dot_bc = 255;
+  
+  var dot_r = 255;
+  var dot_g = 255;
+  var dot_b = 255;
+  
+  //verticle
+  var jumpLine = (side + dots) * fsize * 4;
+  var jumpSide = (side + dots) * 4;
+  
+  if (dots == 3) {
+    initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
+  } else if (dots == 2) {
+    initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
+  } else if (dots == 1) {
+    initDot = (side * fsize + side) * 4;//(4 * fsize + 4) * 4;
+  }
+  
+  function textGo() {
+    let len = subtitle.length;
+    let value = document.getElementById("txt").value;//String.fromCodePoint(0x1F604);
+    if (value.length == 0) 
+      return;
+    subtitle[len] = [value];
+    phase = len;
+    switch2Marquee();
+    keepGoing = 0;
+    initAnim();
+    ledEffect();
+    
+  }
+  
+  function emojiGo(emj) {
+    let value = document.getElementById("txt").value;
+    value += emj;
+    document.getElementById("txt").value = value;
+  }
+  
+  
+  </script>
+  
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+      <style>
+        body {
+          margin: 0px;
+          height: 100%;
+          background-color:green;
+  
+          /*cursor:none;*/
+        }
+        /*
+        main {
+          position: fixed;
+          width: 100%;
+          height: 100%;
+        }
+        */
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        input[type=text] {
+          width:60%;
+          border:2px solid #aaa;
+          border-radius: 4px;
+          margin: 2% 2%;
+          outline: none;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+        input[type=text]:focus {
+          border-color: dodgerblue;
+          box-shadow: 0 0 8px 0 dodgerblue;
+        }
+      </style>
+      </head>   
+  <body>
+  
+    <div id="ui" style="margin: 2% 2%;">
+      <br/>
+      <!--p style="font-size:48px">&#x1f604;</p-->
+      <input type="text" id="txt" name="myfield" value="中文測試" placeholder="message"/><br/>
+      <button type="button" id="go" style="margin: 2% 2%;width:120px;height:40px;border:2px #ff0000;" onclick="textGo()">OK</button>
+  
+    </div>
+  
+    <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
+  
+  </body>
+  
+  </html>
+  
+  
+  <script type="text/javascript" charset="UTF-8">
+  
+  var canvas;
+  var ctx;
+  
+  function init() {
+      canvas = document.getElementById("canvas");
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      ctx = canvas.getContext("2d");
 
-[
-"耶和華是我的牧者，我必不致缺乏。",
-"他使我躺臥在青草地上，領我在可安歇的水邊。",
-"他使我的靈魂甦醒，為自己的名引導我走義路。",
-"我雖然行過死蔭的幽谷，也不怕遭害，因為你與我同在；你的杖，你的竿，都安慰我。",
-"在我敵人面前，你為我擺設筵席；你用油膏了我的頭，使我的福杯滿溢。",
-"我一生一世必有恩惠慈愛隨著我；我且要住在耶和華的殿中，直到永遠。"
-],
-//["U+1F468"],
-['😜😂😍'],
-["✊✌❤☂"]
+      jumpLine = (side + dots) * canvas.width * 4;
+      jumpSide = (side + dots) * 4;
 
-
-];
-
-var fsize = 102;
-var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
-var speed = 100;
-
-var side = 4;
-var dots = 3;
-var initDot = 0;
-
-var dot_none = 50;
-
-var dot_rc = 255;
-var dot_gc = 255;
-var dot_bc = 255;
-
-var dot_r = 255;
-var dot_g = 255;
-var dot_b = 255;
-
-//verticle
-var jumpLine = (side + dots) * fsize * 4;
-var jumpSide = (side + dots) * 4;
-
-if (dots == 3) {
-  initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-} else if (dots == 2) {
-  initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-} else if (dots == 1) {
-  initDot = (side * fsize + side) * 4;//(4 * fsize + 4) * 4;
-}
-
-</script>
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <style>
-      body {
-        margin: 0px;
-        height: 100%;
-        background-color:green;
-        /*cursor:none;*/
+      if (dots == 3) {
+        initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
+      } else if (dots == 2) {
+        initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
+      } else if (dots == 1) {
+        initDot = (side * canvas.width + side) * 4;//(4 * fsize + 4) * 4;
       }
+  }
+  
+  function newParticle_txt(_p, _idx, xx, yy) {
+    let p = {
+            x: xx + 2,
+            y: yy,
+          txt: "",
+            p: _p,
+          idx: _idx,
+   activeFlag: true,
+      release: function() {
+        this.txt = '';
+        this.array = [];
+        this.array.length = 0;
+      },
+  
+      initial: function (c) {
+        this.release();
+        this.txt = subtitle[this.p][this.idx];
+
+        this.activeFlag = true;
+        
+        var _ctx = c.getContext("2d");
+        _ctx.font = FONT;// + "px 標楷體";
+        return _ctx.measureText(this.txt).width;
+      },
+  
+      update: function (c, _ctx, dt) {
+          
+        //console.log(this.y);
+        if (!this.activeFlag) return;//= true;
+  
+        if (dt > 1000) dt = 16;
+  
+        this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
+  
+        if (this.x < -_ctx.measureText(this.txt).width + 10) {
+          this.activeFlag = false;
+          return;
+        }
+
+        if (this.x > c.width + fsize)
+          return; 
+
+  
+        _ctx.textAlign = "left";
+        _ctx.font = FONT;// + "px 標楷體";
+        
+        _ctx.strokeStyle = 'white';
+        _ctx.lineWidth = 4;
+          
+        _ctx.fillStyle = 'white';
+
+        _ctx.strokeText(this.txt, this.x, this.y);
+        _ctx.fillText(this.txt, this.x, this.y);
+  
+      }
+    }
+    return p;
+  }
+  
+  function anim_update(elapse) {
+  
+    //ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+    let dt = elapse - pre;
+    pre = elapse;
+  
+    if (keepGoing == 1) {
+      
+      if (maskimg) {
+        
+        //ctx.fillStyle = 'black';
+        //verticle
+        //ctx.fillRect(0, 0, canvas.width, canvas.height);
+        //ctx.fillRect(0, 0, canvas.width, fsize + 9);
+      }
+      
+      for (var i = 0;i<particles.length;i++) {
+          particles[i].update(canvas, ctx, dt);
+      }
+  
       /*
-      main {
-        position: fixed;
-        width: 100%;
-        height: 100%;
+      //verticle
+      if (particles[particles.length - 1].activeFlag == false) { //
+        let yy = canvas.height + fsize;
+        for (var i = 0;i<particles.length;i++) {
+          let txtlen = particles[i].initial(canvas);
+          particles[i].y = yy;
+          yy += (txtlen + 2) * fsize;
+        }
       }
       */
-      ::-webkit-scrollbar {
-        display: none;
-      }
-    </style>
-    </head>   
-<body>
-
-  <canvas id="canvas" width="100" height="100"></canvas>
-
-</body>
-
-</html>
-
-
-<script type="text/javascript" charset="UTF-8">
-
-var canvas;
-var ctx;
-
-function init() {
-    canvas = document.getElementById("canvas");
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    ctx = canvas.getContext("2d");
-
-    jumpLine = (side + dots) * canvas.width * 4;
-    jumpSide = (side + dots) * 4;
-
-    if (dots == 3) {
-      initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-    } else if (dots == 2) {
-      initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-    } else if (dots == 1) {
-      initDot = (side * canvas.width + side) * 4;//(4 * fsize + 4) * 4;
-    }
-
-}
-
-function newParticle_txt(_p, _idx, xx, yy) {
-  let p = {
-          x: xx,
-          y: yy,
-        txt: "",
-          p: _p,
-        idx: _idx,
- activeFlag: true,
-    release: function() {
-      this.txt = '';
-    },
-
-    initial: function (c) {
-      this.release();
-      this.txt = subtitle[this.p][this.idx];
-      var _ctx = c.getContext("2d");
-      _ctx.font = FONT;// + "px 標楷體";
-      return _ctx.measureText(this.txt).width;
-    },
-
-    update: function (c, _ctx, dt) {
-        
-      //console.log(this.y);
-      this.activeFlag = true;
-
-      if (dt > 1000) dt = 16;
-
-      this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
-
-      _ctx.textAlign = "left";
-      _ctx.font = FONT;// + "px 標楷體";
-
-      if (this.x < -_ctx.measureText(this.txt).width + 10) {
-        this.activeFlag = false;
-        return;
-      }
-
-      if (this.x > c.width + fsize)
-        return; 
       
-      _ctx.strokeStyle = 'white';
-      _ctx.lineWidth = 4;
+      if (particles[particles.length - 1].activeFlag == false) { //
+        let xx = canvas.width;
+        for (var i = 0;i<particles.length;i++) {
+          let txtlen = particles[i].initial(canvas);
+          particles[i].x = xx;
+          xx += txtlen + 2 * fsize;
+        }
+      }
+      
+  
+      if (maskimg) {
+          
+          //verticle
+          //ctx.drawImage(maskimg, fsize, 0);
+          //let mask = ctx.getImageData(fsize, 0, fsize, canvas.height);
+          
+          ctx.drawImage(maskimg, 0, 0);
+          let mask = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          
+          var data = mask.data;
+          //verticle
+          //let gapL = fsize * 4;
+          let gapL = canvas.width * 4;
+  
+          let gapP = 4;
+          //verticle
+          //let wid = fsize;
+          let wid = canvas.width;
+  
+          let _r = dot_r * Math.random();
+          let _g = dot_g * Math.random();
+          let _b = dot_b * Math.random();
+  
+          let _rc = dot_rc * Math.random();
+          let _gc = dot_gc * Math.random();
+          let _bc = dot_bc * Math.random();
+                  
+          for (let i = initDot;i < data.length;i += jumpLine) {
+          
+            let pix = i/4;
+            let h = Math.floor(pix/wid);
+            let w = pix%wid;
+          
+            for (let k = i;;k+=jumpSide) {
+              let _pix = k/4;
+              let _h = Math.floor(_pix/wid);
+              let _w = _pix%wid;
+              if (_h != h) 
+                break;
+              
+              _r = data[k];
+              _g = data[k+1];
+              _b = data[k+2];
+  
+              _rc = data[k];
+              _gc = data[k+1];
+              _bc = data[k+2];
+              
+  
+              if ((data[k] > dot_none/2 || data[k+1] > dot_none/2 || data[k+2] > dot_none/2)) {
+              //if (data[k] > 127 || data[k+1] > 127 || data[k+2] > 127) {
+              //if (data[k] > 100) {// + data[k+1] + data[k+2] > 300) {
+                  
+                  setPixColor(data, k, _r, _g, _b);//中
+                  
+                  if (dots == 1) continue;
+  
+                  setPixColor(data, k - gapP, _r, _g, _b);//左
+                  setPixColor(data, k - gapL, _r, _g, _b);//上
+                  setPixColor(data, k - gapP - gapL, _rc, _gc, _bc);//左上
+  
+                  if (dots == 2) continue;
+  
+                  //右
+                  let idx = k + gapP;
+                  let pp = idx/4;
+                  let hh = Math.floor(pp/wid);
+                  let ww = pp%wid;
+                  if (hh == _h) {
+                    //右
+                    setPixColor(data, idx, _r, _g, _b);
+                    //右上
+                    setPixColor(data, idx - gapL, _rc, _gc, _bc);
+                                      
+                    idx = k + gapP + gapL;
+                    pp = idx/4;
+                    hh = Math.floor(pp/wid);
+                    ww = pp%wid;
+                    if (idx < data.length) {
+                      //右下
+                      setPixColor(data, idx, _rc, _gc, _bc);
+                      //下
+                      setPixColor(data, k + gapL, _r, _g, _b);
+                      //左下
+                      setPixColor(data, k - gapP + gapL, _rc, _gc, _bc);
+                      
+                    }
+                  }
+              } else {
+                  
+                  setPixColor(data, k, dot_none, dot_none, dot_none);//中
+                  
+                  if (dots == 1) continue;
+  
+                  setPixColor(data, k - gapP, dot_none, dot_none, dot_none);//左
+                  setPixColor(data, k - gapL, dot_none, dot_none, dot_none);//上
+                  setPixColor(data, k - gapP - gapL, dot_none, dot_none, dot_none);//左上
+                  
+                  if (dots == 2) continue;
+  
+                  
+                  let idx = k + gapP;
+                  let pp = idx/4;
+                  let hh = Math.floor(pp/wid);
+                  let ww = pp%wid;
+                  if (hh == _h) {
+  
+                    setPixColor(data, idx, dot_none, dot_none, dot_none);//右
+                    setPixColor(data, idx - gapL, dot_none, dot_none, dot_none);//右上
+                                    
+                    idx = k + gapP + gapL;
+                    pp = idx/4;
+                    hh = Math.floor(pp/wid);
+                    ww = pp%wid;
+                    if (idx < data.length) {
+                      
+                      setPixColor(data, idx, dot_none, dot_none, dot_none);//右下
+                      setPixColor(data, k + gapL, dot_none, dot_none, dot_none);//下
+                      setPixColor(data, k - gapP + gapL, dot_none, dot_none, dot_none);//左下
+                      
+                    }
+                  }
+                  
+              }
+            }
+        }
+        //verticle
+        //ctx.putImageData(mask, fsize, 0);
+        ctx.putImageData(mask, 0, 0);
         
-      _ctx.fillStyle = 'white';
-
-      _ctx.strokeText(this.txt, this.x, this.y-8);
-      _ctx.fillText(this.txt, this.x, this.y-8);
-
+      }
+      //
+      
+      window.requestAnimationFrame(anim_update);
+  
+    } else {
+      if (phase != 0) {
+        initAnim();
+      }
     }
+  
   }
-  return p;
-}
-
-function newParticle_txt_verticle(_p, _idx, xx, yy) {
-  let p = {
-          x: xx,
-          y: yy,
-        idx: 0,
-        txt: "",
-          p: _p,
-        idx: _idx,
- activeFlag: true,
-    release: function() {
-      this.txt = '';
-    },
-
-    initial: function (c) {
-      this.release();
-      this.txt = subtitle[this.p][this.idx];
-      this.idx = 0;
-      return this.txt.length;
-    },
-
-    update: function (c, _ctx, dt) {
-        
-      //console.log(this.y);
-      this.activeFlag = true;
-
-      if (dt > 1000) dt = 16;
-
-      this.y -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
-
-      if (this.y < -this.txt.length * fsize) {
-        this.activeFlag = false;
-        return;
-      }
-
-      if (this.y > c.height + fsize)
-        return;
-
-      _ctx.textAlign = "left";
-      _ctx.font = FONT;// + "px 標楷體";
-      
-      _ctx.strokeStyle = 'white';
-      _ctx.lineWidth = 4;
-        
-      _ctx.fillStyle = 'white';
-
-      for (var i = 0;i<this.txt.length;i++) {
-        let _x = this.x; 
-        let _y = this.y + (i * fsize);
-        if (_y < -fsize) 
-            continue;
-        if (_y > c.height + fsize) 
-            break;
-    
-        _ctx.strokeText(this.txt.substr(i, 1), _x, _y);
-        _ctx.fillText(this.txt.substr(i, 1), _x, _y);
-        //console.log(this.txt.substr(i, 1) + '('+ this.x + ', ' + (this.y + (i * fsize)) + ')');
-      }
-
-      //console.log("repaint");
-
-    }
+  
+  function setPixColor(data, idx, r, g, b) {
+    data[idx]     = r;
+    data[idx + 1] = g;
+    data[idx + 2] = b;
+    data[idx + 3] = 255;
   }
-  return p;
-}
-
-function anim_update(elapse) {
-
-  //ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = 'green';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  let dt = elapse - pre;
-  pre = elapse;
-
-  if (keepGoing == 1) {
-    
-    if (maskimg) {
-      
-      ctx.fillStyle = 'black';
-      //verticle
-      //ctx.fillRect(fsize - 4, 0, fsize + 8, canvas.height);
-
-      ctx.fillRect(0, 0, canvas.width, fsize + 9);
+  
+  function initAnim() {
+  
+    keepGoing = 0;
+    if (phase == 0) {
+        return;
     }
+  
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
+  
+    //console.log(c.width + ', ' + c.height);
     
-    for (var i = 0;i<particles.length;i++) {
-        particles[i].update(canvas, ctx, dt);
-    }
-
-    //verticle
-    /*
-    if (particles[particles.length - 1].activeFlag == false) { //
-      let yy = canvas.height + fsize;
+    if (particles.length >= 1) {
       for (var i = 0;i<particles.length;i++) {
-        let txtlen = particles[i].initial(canvas);
-        particles[i].y = yy;
-        yy += (txtlen + 2) * fsize;
+        particles[i].release();
       }
+    }
+  
+    particles.length = 0;
+    particles = [];
+  
+    /*
+    //verticle
+    let xx = fsize;
+    let yy = c.height + fsize;
+    let _idx = 0;
+    var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
+    for (_idx = 0;_idx<total;_idx++) {
+        particles[_idx] = newParticle_txt(phase, _idx,  xx, yy);//();
+        let txtlen = particles[_idx].initial(c);
+        yy += (txtlen + 2) * fsize;
     }
     */
 
-    if (particles[particles.length - 1].activeFlag == false) { //
-      let xx = canvas.width;
-      for (var i = 0;i<particles.length;i++) {
-        let txtlen = particles[i].initial(canvas);
-        particles[i].x = xx;
-        xx += txtlen + 2 * fsize;
-      }
-    }
-
-    //ctx.fillText('U+1F468 x', canvas.width / 2, canvas.height / 2);
-
-    if (maskimg) {
-        
-        //verticle
-        //ctx.drawImage(maskimg, fsize, 0);
-        //let mask = ctx.getImageData(fsize, 0, fsize, canvas.height);
-        
-        ctx.drawImage(maskimg, 0, 0);
-        let mask = ctx.getImageData(0, 0, canvas.width, fsize);
-        
-        var data = mask.data;
-        //verticle
-        //let gapL = fsize * 4;
-        let gapL = canvas.width * 4;
-
-        let gapP = 4;
-        //verticle
-        //let wid = fsize;
-        let wid = canvas.width;
-
-        let _r = dot_r * Math.random();
-        let _g = dot_g * Math.random();
-        let _b = dot_b * Math.random();
-
-        let _rc = dot_rc * Math.random();
-        let _gc = dot_gc * Math.random();
-        let _bc = dot_bc * Math.random();
-                
-        for (let i = initDot;i < data.length;i += jumpLine) {
-        
-          let pix = i/4;
-          let h = Math.floor(pix/wid);
-          let w = pix%wid;
-        
-          for (let k = i;;k+=jumpSide) {
-            let _pix = k/4;
-            let _h = Math.floor(_pix/wid);
-            let _w = _pix%wid;
-            if (_h != h) 
-              break;
-              
-            _r = data[k];
-            _g = data[k+1];
-            _b = data[k+2];
-
-            _rc = data[k];
-            _gc = data[k+1];
-            _bc = data[k+2];
-        
-            if (data[k] > 127 || data[k+1] > 127 || data[k+2] > 127) {
-            //if (data[k] > 100) {// + data[k+1] + data[k+2] > 300) {
-                
-                setPixColor(data, k, _r, _g, _b);//中
-                
-                if (dots == 1) continue;
-
-                setPixColor(data, k - gapP, _r, _g, _b);//左
-                setPixColor(data, k - gapL, _r, _g, _b);//上
-                setPixColor(data, k - gapP - gapL, _rc, _gc, _bc);//左上
-
-                if (dots == 2) continue;
-
-                //右
-                let idx = k + gapP;
-                let pp = idx/4;
-                let hh = Math.floor(pp/wid);
-                let ww = pp%wid;
-                if (hh == _h) {
-                  //右
-                  setPixColor(data, idx, _r, _g, _b);
-                  //右上
-                  setPixColor(data, idx - gapL, _rc, _gc, _bc);
-                                    
-                  idx = k + gapP + gapL;
-                  pp = idx/4;
-                  hh = Math.floor(pp/wid);
-                  ww = pp%wid;
-                  if (idx < data.length) {
-                    //右下
-                    setPixColor(data, idx, _rc, _gc, _bc);
-                    //下
-                    setPixColor(data, k + gapL, _r, _g, _b);
-                    //左下
-                    setPixColor(data, k - gapP + gapL, _rc, _gc, _bc);
-                    
-                  }
-                }
-            } else {
-              
-                setPixColor(data, k, dot_none, dot_none, dot_none);//中
-                
-                if (dots == 1) continue;
-
-                setPixColor(data, k - gapP, dot_none, dot_none, dot_none);//左
-                setPixColor(data, k - gapL, dot_none, dot_none, dot_none);//上
-                setPixColor(data, k - gapP - gapL, dot_none, dot_none, dot_none);//左上
-                
-                if (dots == 2) continue;
-
-                
-                let idx = k + gapP;
-                let pp = idx/4;
-                let hh = Math.floor(pp/wid);
-                let ww = pp%wid;
-                if (hh == _h) {
-
-                  setPixColor(data, idx, dot_none, dot_none, dot_none);//右
-                  setPixColor(data, idx - gapL, dot_none, dot_none, dot_none);//右上
-                                  
-                  idx = k + gapP + gapL;
-                  pp = idx/4;
-                  hh = Math.floor(pp/wid);
-                  ww = pp%wid;
-                  if (idx < data.length) {
-                    
-                    setPixColor(data, idx, dot_none, dot_none, dot_none);//右下
-                    setPixColor(data, k + gapL, dot_none, dot_none, dot_none);//下
-                    setPixColor(data, k - gapP + gapL, dot_none, dot_none, dot_none);//左下
-                    
-                  }
-                }
-                
-            }
-          }
-      }
-      //verticle
-      //ctx.putImageData(mask, fsize, 0);
-      ctx.putImageData(mask, 0, 0);
-      
-    }
-    //
-    
-    window.requestAnimationFrame(anim_update);
-  }
-
-}
-
-function setPixColor(data, idx, r, g, b) {
-  data[idx]     = r;
-  data[idx + 1] = g;
-  data[idx + 2] = b;
-  //data[idx + 3] = 255;
-}
-
-function initAnim() {
-
-  keepGoing = 0;
-  if (phase == 0) {       
-      return;
-  }
-
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
-
-  //console.log(c.width + ', ' + c.height);
-  
-  if (particles.length >= 1) {
-    for (var i = 0;i<particles.length;i++) {
-      particles[i].release();
-    }
-  }
-
-  particles.length = 0;
-  particles = [];
-
-  let yy = fsize;
-  let xx = c.width + fsize;
-  var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-  for (let _idx = 0;_idx<total;_idx++) {
+    let yy = c.height/2.0;
+    let xx = c.width + fsize;
+    var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
+    for (let _idx = 0;_idx<total;_idx++) {
       particles[_idx] = newParticle_txt(phase, _idx,  xx, yy);//();
       let txtlen = particles[_idx].initial(c);
       xx += (txtlen + fsize);
+    }
+  
+    keepGoing = 1;
+    window.requestAnimationFrame(anim_update);
+  
   }
-
-  //verticle
-  /*
-  let xx = fsize;
-  let yy = c.height + fsize;
-  let _idx = 0;
-  var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-  for (_idx = 0;_idx<total;_idx++) {
-      particles[_idx] = newParticle_txt_verticle(phase, _idx,  xx, yy);//();
-      let txtlen = particles[_idx].initial(c);
-      yy += (txtlen + 2) * fsize;
-  }
-  */
-
-  keepGoing = 1;
-  window.requestAnimationFrame(anim_update);
-
-}
-
-function doresize() {
-  init();
-  //initAnim();
-  if (maskimg != null) {
-    ledEffect();
-  }
-}
-
-function generateMask(w, h, s, d) {
-
-  var mask = ctx.createImageData(w, h);
-  var data = mask.data;
-
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-
-        let idx = (y * w + x) * 4;
-
-        data[idx + 0] = 0;
-        data[idx + 1] = 0;
-        data[idx + 2] = 0;
-        data[idx + 3] = 255;
-        
-        let _x = x%(s + d);
-        let _y = y%(s + d);
-        if (_x >= s && _y >= s) { //d
-          data[idx + 3] = 0;
-        }
-
+  
+  function doresize() {
+    init();
+    //initAnim();
+    if (maskimg != null) {
+      ledEffect();
     }
   }
-
-  return mask;
-
-}
-
-
-var maskimg;
-
-function ledEffect() {
   
-  let w = canvas.width;
-  let h = fsize;
-
-  //verticle
-  //let w = fsize;
-  //let h = canvas.height;
-
-  var mask = generateMask(w, h, side, dots);
-        
-    // create a temporary canvas
-    var tempCanvas = document.createElement("canvas");
-    var tempCtx = tempCanvas.getContext("2d");
-
-    // set the temp canvas size == the canvas size
-    tempCanvas.width = w;
-    tempCanvas.height = canvas.height;
-
-    // put the modified pixels on the temp canvas
-    tempCtx.putImageData(mask, 0, 0);
-
-    // use the tempCanvas.toDataURL to create an img object
-    maskimg = new Image();
-    //maskimg.onload = function() {}
-    maskimg.src = tempCanvas.toDataURL();
-
-}
-
-var phase = 0;
-var keepGoing = 1;
-
-var pre = 0;
-var particles = [];
-var doblank = 0;
-
-function react() {
-  if (maskimg != null) {
-    ledEffect();
+  function generateMask(w, h, s, d) {
+  
+    var mask = ctx.createImageData(w, h);
+    var data = mask.data;
+  
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+  
+          let idx = (y * w + x) * 4;
+  
+          data[idx + 0] = 0;//40;
+          data[idx + 1] = 0;//40;
+          data[idx + 2] = 0;//40;
+          data[idx + 3] = 255;
+          
+          let _x = x%(s + d);
+          let _y = y%(s + d);
+          if (_x >= s && _y >= s) { //d
+            data[idx + 3] = 0;
+          }
+  
+      }
+    }
+  
+    return mask;
+  
   }
-}
-
-function keyboard(e) {
-
-    switch (e.keyCode) {
-        case 76: //'l'
-            if (maskimg != null) {
-              maskimg = null;
+  
+  
+  var maskimg;
+  
+  function ledEffect() {
+    
+    //verticle
+    //let w = fsize;
+    //let h = canvas.height;
+  
+    let w = canvas.width;
+    let h = canvas.height;
+  
+    var mask = generateMask(w, h, side, dots);
+          
+      // create a temporary canvas
+      var tempCanvas = document.createElement("canvas");
+      var tempCtx = tempCanvas.getContext("2d");
+  
+      // set the temp canvas size == the canvas size
+      tempCanvas.width = w;
+      tempCanvas.height = canvas.height;
+  
+      // put the modified pixels on the temp canvas
+      tempCtx.putImageData(mask, 0, 0);
+  
+      // use the tempCanvas.toDataURL to create an img object
+      maskimg = new Image();
+      //maskimg.onload = function() {}
+      maskimg.src = tempCanvas.toDataURL();
+  
+  }
+  
+  var phase = 0;
+  var keepGoing = 1;
+  
+  var pre = 0;
+  var particles = [];
+  var doblank = 0;
+  
+  function react() {
+    if (maskimg != null) {
+      ledEffect();
+    }
+  }
+  
+  function keyboard(e) {
+  
+      if (canvas.hidden) return; 
+  
+      switch (e.keyCode) {
+          case 76: //'l'
+              if (maskimg != null) {
+                maskimg = null;
+              } else {
+                ledEffect();
+              }
+              break;
+          case 66: //'b'
+              doblank = doblank == 0?1:0;
+              break;
+          case 38: //'ArrowUp'
+              speed += 20;
+              break; 
+          case 40: //'ArrowDown':
+              speed -= 20;
+              //if (speed < 10) speed = 0;
+              break;
+          case 37: //'ArrowLeft'
+              break; 
+          case 39: //'ArrowRight'
+              break;
+          case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57: {
+          //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+              var value = e.keyCode - 48;
+              if (value > subtitle.length - 1)
+                  break;
+              
+              phase = value;
+              if (keepGoing == 0) {
+                initAnim();
+              } else {
+                keepGoing = 0;
+              }
+  
+          }
+          break;
+          case 73: //i
+            //inputTxt();
+            if (canvas.hidden == false) {
+              switch2Input();
             } else {
-              ledEffect();
+              switch2Marquee();
             }
             break;
-        case 66: //'b'
-            doblank = doblank == 0?1:0;
-            break;
-        case 38: //'ArrowUp'
-            speed += 20;
-            break; 
-        case 40: //'ArrowDown':
-            speed -= 20;
-            //if (speed < 10) speed = 0;
-            break;
-        case 37: //'ArrowLeft'
-            break; 
-        case 39: //'ArrowRight'
-            break;
-        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57: {
-        //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-            var value = e.keyCode - 48;
-            if (value > subtitle.length - 1)
-                break;
-            if (value == 0) 
-                keepGoing = 0;
-            phase = value;
-            initAnim();
-        }
-          break;
-            
-            
+              
+              
+      }
+  
+  }
+  
+  
+  function switch2Input() {
+    keepGoing = 0;
+    var div = document.getElementById('ui');
+    if (div) {
+      div.hidden = false;
+      canvas.hidden = true;
     }
-
-}
-
-init();
-
-window.addEventListener('resize', doresize);
-//window.addEventListener('click', initAnim, false);
-//document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
-window.addEventListener('keyup', keyboard, false);
-
-phase = 1;
-initAnim();
-ledEffect();
-
-</script>
+    
+  }
+  
+  function switch2Marquee() {
+    var div = document.getElementById('ui');
+    if (div) {
+      div.hidden = true;
+      canvas.hidden = false;
+    }
+  }
+  
+  init();
+  
+  window.addEventListener('resize', doresize);
+  //window.addEventListener('click', initAnim, false);
+  //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
+  window.addEventListener('keyup', keyboard, false);
+  
+  if (subtitle.length > 1 && subtitle[1].length > 0) {
+    phase = 1;
+    initAnim();
+    ledEffect();
+  }
+  
+  /*
+  function removeDiv() {
+    var buttons = document.getElementById('btns');
+    if (buttons) {
+      document.body.removeChild(buttons);
+    } 
+    return;
+  }
+  
+  function inputTxt() {
+    
+    canvas.hidden = true;
+    removeDiv();
+    
+    var div = document.createElement('div');
+    div.id = 'btns';  
+    document.body.appendChild(div);
+  
+    var input = document.createElement("input");
+    input.type = "text";
+    input.id = 'banner';
+    div.appendChild(input);
+  
+    var button = document.createElement('button');
+    button.innerHTML = 'OK';
+    button.id = 'okgo';
+    button.onclick = function() {
+      return false;
+    };
+    div.appendChild(button);
+  }
+  */
+  
+  </script>
+  

@@ -1,7 +1,7 @@
 <script type="text/javascript" charset="UTF-8"> 
 
 var subtitle = [ [''], 
-                 ['1.中文測試🗿🗿', '2.中試🗿', '3.🗿']];
+                 ['中文測試🚘🚖', '2.中試🗿', '3.🗿']];
 
 var side = 3;
 var dots = 3;
@@ -14,7 +14,7 @@ var speed = 200;
 
 var initDot = 0;
 
-var dot_none = 50;
+var dot_none = 40;
 
 var dot_rc = 255;
 var dot_gc = 255;
@@ -105,9 +105,8 @@ function emojiGo(emj) {
     <button type="button" id="go" style="margin: 2% 2%;width:120px;height:40px;border:2px #ff0000;" onclick="textGo()">OK</button>
     <br/>
     
-    <a onclick="emojiGo('🗿')">🗿</a>
     <a onclick="emojiGo('😀')">😀</a>
-    <a onclick="emojiGo('😁')">😁'</a>
+    <a onclick="emojiGo('😁')">😁</a>
     <a onclick="emojiGo('😆')">😆</a> 
     <a onclick="emojiGo('😅')">😅</a> 
     <a onclick="emojiGo('😂')">😂</a> 
@@ -196,154 +195,876 @@ function emojiGo(emj) {
     <a onclick="emojiGo('🩸')">🩸</a>
 
     <br/>
-<!--
-👶
-👧
-🧒
-👦
-👩
-🧑
-👩‍🦱
-👨‍🦱
-👩‍🦰
-🧑‍🦰
-👨‍🦰
-👱‍♀️
-👱
-👱‍♂️
-👩‍🦳
-👨‍🦳
-🧑‍🦲
-🧔
-👵
-🧓
-👴
-👲
-👳‍♀️
-🧕
-👮‍♂️
-👷‍♂️
-💂‍♂️
-🕵️‍♂️
-👩‍⚕️
-👨‍⚕️
-👨‍🌾
-👨‍🍳
-👨‍🎓
-👩‍🎤
-🧑‍🎤
-👨‍🎤
-👩‍🏫
-🧑‍🏫
-👨‍🏫
-👩‍🏭
-🧑‍🏭
-👨‍🏭
-👩‍💻
-🧑‍💻
-👨‍💻
-👩‍💼
-🧑‍💼
-👨‍💼
-👩‍🔧
-🧑‍🔧
-👨‍🔧
-👩‍🔬
-🧑‍🔬
-👨‍🔬
-👩‍🎨
-🧑‍🎨
-👨‍🎨
-👩‍🚒
-🧑‍🚒
-👨‍🚒
-👩‍✈️
-🧑‍✈️
-👨‍✈️
-👩‍🚀
-🧑‍🚀
-👨‍🚀
-👩‍⚖️
-🧑‍⚖️
-👨‍⚖️
-👰‍♀️
-🤵‍♀️
-🤵‍♂️
-👸
-🤴
-🥷
-🦸‍♀️
-🦹‍♂️
-🤶
-🧙‍♂️
-🧝‍♀️
-🧝
-🧟‍♀️
-🧞‍♀️
-🧜‍♀️
-🧚‍♀️
-👼
-🤰
-🤱
-🧑‍🍼
-🙇‍♀️
-🙇
-💁‍♀️
-💁‍♂️
-🙅‍♀️
-🙅
-🙅‍♂️
-🙆‍♂️
-🙋‍♀️
-🙋
-🙋‍♂️
-🧏‍♀️
-🤦‍♀️
-🤦
-🤦‍♂️
-🤷‍♀️
-🤷
-🤷‍♂️
-🙎‍♀️
-🙍‍♂️
-💇‍♂️
-💆‍♂️
-🧖‍♂️
-💅
-🤳
-💃
-🕺
-👯‍♀️
-🕴
-👩‍🦽
-👩‍🦼
-🚶
-🚶‍♂️
-👨‍🦯
-🧎‍♀️
-🏃‍♀️
-🧍‍♀️
-🧍
-👭
-👨‍👩‍👦
-👨‍👩‍👧
-👨‍👩‍👧‍👦
-👨‍👨‍👦
-👨‍👨‍👧
-👨‍👨‍👧‍👦
-👩‍👩‍👦
-👩‍👩‍👧‍👦
-👨‍👦
-👨‍👧‍👧
-👩‍👦
-👩‍👦‍👦
-👩
-🗣
-👤
-👥
-🫂
--->
+
+    <a onclick="emojiGo('👶')">👶</a>
+    <a onclick="emojiGo('👧')">👧</a>
+    <a onclick="emojiGo('🧒')">🧒</a>
+    <a onclick="emojiGo('👩')">👩</a>
+    <a onclick="emojiGo('🧑')">🧑</a>
+    <a onclick="emojiGo('👲')">👲</a>
+    <a onclick="emojiGo('🧕')">🧕</a>
+    <a onclick="emojiGo('👸')">👸</a>
+    <a onclick="emojiGo('🤴')">🤴</a>
+    <a onclick="emojiGo('🥷')">🥷</a>
+    <a onclick="emojiGo('🤶')">🤶</a>
+    <a onclick="emojiGo('🧝')">🧝</a>
+    <a onclick="emojiGo('👼')">👼</a>
+    <a onclick="emojiGo('🤰')">🤰</a>
+    <a onclick="emojiGo('🤱')">🤱</a>
+    <a onclick="emojiGo('🤷')">🤷</a>
+    <a onclick="emojiGo('💅')">💅</a>
+    <a onclick="emojiGo('🤳')">🤳</a>
+    <a onclick="emojiGo('💃')">💃</a>
+    <a onclick="emojiGo('🕺')">🕺</a>
+    <a onclick="emojiGo('👭')">👭</a>
+    <a onclick="emojiGo('👩')">👩</a>
+    <a onclick="emojiGo('🗣')">🗣</a>
+    <a onclick="emojiGo('👤')">👤</a>
+    <a onclick="emojiGo('👥')">👥</a>
+
 <br/>
+
+    <a onclick="emojiGo('🧳')">🧳</a>
+    <a onclick="emojiGo('🌂')">🌂</a>
+    <a onclick="emojiGo('🧵')">🧵</a>
+    <a onclick="emojiGo('🪡')">🪡</a>
+    <a onclick="emojiGo('🪢')">🪢</a>
+    <a onclick="emojiGo('🧶')">🧶</a>
+    <a onclick="emojiGo('👓')">👓</a>
+    <a onclick="emojiGo('🕶')">🕶</a>
+    <a onclick="emojiGo('🥽')">🥽</a>
+    <a onclick="emojiGo('🥼')">🥼</a>
+    <a onclick="emojiGo('🦺')">🦺</a>
+    <a onclick="emojiGo('👔')">👔</a>
+    <a onclick="emojiGo('👕')">👕</a>
+    <a onclick="emojiGo('👖')">👖</a>
+    <a onclick="emojiGo('🧣')">🧣</a>
+    <a onclick="emojiGo('🧤')">🧤</a>
+    <a onclick="emojiGo('🧥')">🧥</a>
+    <a onclick="emojiGo('🧦')">🧦</a>
+    <a onclick="emojiGo('👗')">👗</a>
+    <a onclick="emojiGo('👘')">👘</a>
+    <a onclick="emojiGo('🥻')">🥻</a>
+    <a onclick="emojiGo('🩴')">🩴</a>
+    <a onclick="emojiGo('🩱')">🩱</a>
+    <a onclick="emojiGo('🩲')">🩲</a>
+    <a onclick="emojiGo('🩳')">🩳</a>
+    <a onclick="emojiGo('👙')">👙</a>
+    <a onclick="emojiGo('👚')">👚</a>
+    <a onclick="emojiGo('👛')">👛</a>
+    <a onclick="emojiGo('👜')">👜</a>
+    <a onclick="emojiGo('👝')">👝</a>
+    <a onclick="emojiGo('🎒')">🎒</a>
+    <a onclick="emojiGo('👞')">👞</a>
+    <a onclick="emojiGo('👟')">👟</a>
+    <a onclick="emojiGo('🥾')">🥾</a>
+    <a onclick="emojiGo('🥿')">🥿</a>
+    <a onclick="emojiGo('👠')">👠</a>
+    <a onclick="emojiGo('👡')">👡</a>
+    <a onclick="emojiGo('🩰')">🩰</a>
+    <a onclick="emojiGo('👢')">👢</a>
+    <a onclick="emojiGo('👑')">👑</a>
+    <a onclick="emojiGo('👒')">👒</a>
+    <a onclick="emojiGo('🎩')">🎩</a>
+    <a onclick="emojiGo('🎓')">🎓</a>
+    <a onclick="emojiGo('🧢')">🧢</a>
+    <a onclick="emojiGo('⛑')">⛑</a>
+    <a onclick="emojiGo('🪖')">🪖</a>
+    <a onclick="emojiGo('💄')">💄</a>
+    <a onclick="emojiGo('💍')">💍</a>
+    <a onclick="emojiGo('💼')">💼</a>
+
+    <br/>
+
+    <a onclick="emojiGo('🐶')">🐶</a>
+    <a onclick="emojiGo('🐱')">🐱</a>
+    <a onclick="emojiGo('🐭')">🐭</a>
+    <a onclick="emojiGo('🐹')">🐹</a>
+    <a onclick="emojiGo('🐰')">🐰</a>
+    <a onclick="emojiGo('🦊')">🦊</a>
+    <a onclick="emojiGo('🐻')">🐻</a>
+    <a onclick="emojiGo('🐼')">🐼</a>
+    <a onclick="emojiGo('🐻‍❄️')">🐻‍❄️</a>
+    <a onclick="emojiGo('🐯')">🐯</a>
+    <a onclick="emojiGo('🦁')">🦁</a>
+    <a onclick="emojiGo('🐮')">🐮</a>
+    <a onclick="emojiGo('🐷')">🐷</a>
+    <a onclick="emojiGo('🐽')">🐽</a>
+    <a onclick="emojiGo('🐸')">🐸</a>
+    <a onclick="emojiGo('🐵')">🐵</a>
+    <a onclick="emojiGo('🙈')">🙈</a>
+    <a onclick="emojiGo('🙉')">🙉</a>
+    <a onclick="emojiGo('🙊')">🙊</a>
+    <a onclick="emojiGo('🐒')">🐒</a>
+    <a onclick="emojiGo('🐔')">🐔</a>
+    <a onclick="emojiGo('🐧')">🐧</a>
+    <a onclick="emojiGo('🐦')">🐦</a>
+    <a onclick="emojiGo('🐤')">🐤</a>
+    <a onclick="emojiGo('🐣')">🐣</a>
+    <a onclick="emojiGo('🐥')">🐥</a>
+    <a onclick="emojiGo('🦆')">🦆</a>
+    <a onclick="emojiGo('🦅')">🦅</a>
+    <a onclick="emojiGo('🦉')">🦉</a>
+    <a onclick="emojiGo('🦇')">🦇</a>
+    <a onclick="emojiGo('🐺')">🐺</a>
+    <a onclick="emojiGo('🐗')">🐗</a>
+    <a onclick="emojiGo('🐴')">🐴</a>
+    <a onclick="emojiGo('🦄')">🦄</a>
+    <a onclick="emojiGo('🐝')">🐝</a>
+    <a onclick="emojiGo('🪱')">🪱</a>
+    <a onclick="emojiGo('🐛')">🐛</a>
+    <a onclick="emojiGo('🦋')">🦋</a>
+    <a onclick="emojiGo('🐌')">🐌</a>
+    <a onclick="emojiGo('🐞')">🐞</a>
+    <a onclick="emojiGo('🐜')">🐜</a>
+    <a onclick="emojiGo('🪰')">🪰</a>
+    <a onclick="emojiGo('🪲')">🪲</a>
+    <a onclick="emojiGo('🪳')">🪳</a>
+    <a onclick="emojiGo('🦟')">🦟</a>
+    <a onclick="emojiGo('🦗')">🦗</a>
+    <a onclick="emojiGo('🕷')">🕷</a>
+    <a onclick="emojiGo('🕸')">🕸</a>
+    <a onclick="emojiGo('🦂')">🦂</a>
+    <a onclick="emojiGo('🐢')">🐢</a>
+    <a onclick="emojiGo('🐍')">🐍</a>
+    <a onclick="emojiGo('🦎')">🦎</a>
+    <a onclick="emojiGo('🦖')">🦖</a>
+    <a onclick="emojiGo('🦕')">🦕</a>
+    <a onclick="emojiGo('🐙')">🐙</a>
+    <a onclick="emojiGo('🦑')">🦑</a>
+    <a onclick="emojiGo('🦐')">🦐</a>
+    <a onclick="emojiGo('🦞')">🦞</a>
+    <a onclick="emojiGo('🦀')">🦀</a>
+    <a onclick="emojiGo('🐡')">🐡</a>
+    <a onclick="emojiGo('🐠')">🐠</a>
+    <a onclick="emojiGo('🐟')">🐟</a>
+    <a onclick="emojiGo('🐬')">🐬</a>
+    <a onclick="emojiGo('🐳')">🐳</a>
+    <a onclick="emojiGo('🐋')">🐋</a>
+    <a onclick="emojiGo('🦈')">🦈</a>
+    <a onclick="emojiGo('🐊')">🐊</a>
+    <a onclick="emojiGo('🐅')">🐅</a>
+    <a onclick="emojiGo('🐆')">🐆</a>
+    <a onclick="emojiGo('🦓')">🦓</a>
+    <a onclick="emojiGo('🦍')">🦍</a>
+    <a onclick="emojiGo('🦧')">🦧</a>
+    <a onclick="emojiGo('🦣')">🦣</a>
+    <a onclick="emojiGo('🐘')">🐘</a>
+    <a onclick="emojiGo('🦛')">🦛</a>
+    <a onclick="emojiGo('🦏')">🦏</a>
+    <a onclick="emojiGo('🐪')">🐪</a>
+    <a onclick="emojiGo('🐫')">🐫</a>
+    <a onclick="emojiGo('🦒')">🦒</a>
+    <a onclick="emojiGo('🦘')">🦘</a>
+    <a onclick="emojiGo('🦬')">🦬</a>
+    <a onclick="emojiGo('🐃')">🐃</a>
+    <a onclick="emojiGo('🐂')">🐂</a>
+    <a onclick="emojiGo('🐄')">🐄</a>
+    <a onclick="emojiGo('🐎')">🐎</a>
+    <a onclick="emojiGo('🐖')">🐖</a>
+    <a onclick="emojiGo('🐏')">🐏</a>
+    <a onclick="emojiGo('🐑')">🐑</a>
+    <a onclick="emojiGo('🦙')">🦙</a>
+    <a onclick="emojiGo('🐐')">🐐</a>
+    <a onclick="emojiGo('🦌')">🦌</a>
+    <a onclick="emojiGo('🐕')">🐕</a>
+    <a onclick="emojiGo('🐩')">🐩</a>
+    <a onclick="emojiGo('🦮')">🦮</a>
+    <a onclick="emojiGo('🐕‍🦺')">🐕‍🦺</a>
+    <a onclick="emojiGo('🐈')">🐈</a>
+    <a onclick="emojiGo('🐈‍⬛')">🐈‍⬛</a>
+    <a onclick="emojiGo('🪶')">🪶</a>
+    <a onclick="emojiGo('🐓')">🐓</a>
+    <a onclick="emojiGo('🦃')">🦃</a>
+    <a onclick="emojiGo('🦤')">🦤</a>
+    <a onclick="emojiGo('🦚')">🦚</a>
+    <a onclick="emojiGo('🦜')">🦜</a>
+    <a onclick="emojiGo('🦢')">🦢</a>
+    <a onclick="emojiGo('🦩')">🦩</a>
+    <a onclick="emojiGo('🕊')">🕊</a>
+    <a onclick="emojiGo('🐇')">🐇</a>
+    <a onclick="emojiGo('🦝')">🦝</a>
+    <a onclick="emojiGo('🦨')">🦨</a>
+    <a onclick="emojiGo('🦡')">🦡</a>
+    <a onclick="emojiGo('🦫')">🦫</a>
+    <a onclick="emojiGo('🦦')">🦦</a>
+    <a onclick="emojiGo('🦥')">🦥</a>
+    <a onclick="emojiGo('🐁')">🐁</a>
+    <a onclick="emojiGo('🐀')">🐀</a>
+    <a onclick="emojiGo('🐿')">🐿</a>
+    <a onclick="emojiGo('🦔')">🦔</a>
+    <a onclick="emojiGo('🐾')">🐾</a>
+    <a onclick="emojiGo('🌵')">🌵</a>
+    <a onclick="emojiGo('🎄')">🎄</a>
+    <a onclick="emojiGo('🌲')">🌲</a>
+    <a onclick="emojiGo('🌳')">🌳</a>
+    <a onclick="emojiGo('🌴')">🌴</a>
+    <a onclick="emojiGo('🪵')">🪵</a>
+    <a onclick="emojiGo('🌱')">🌱</a>
+    <a onclick="emojiGo('🌿')">🌿</a>
+    <a onclick="emojiGo('🍀')">🍀</a>
+    <a onclick="emojiGo('🎍')">🎍</a>
+    <a onclick="emojiGo('🪴')">🪴</a>
+    <a onclick="emojiGo('🎋')">🎋</a>
+    <a onclick="emojiGo('🍃')">🍃</a>
+    <a onclick="emojiGo('🍂')">🍂</a>
+    <a onclick="emojiGo('🍁')">🍁</a>
+    <a onclick="emojiGo('🍄')">🍄</a>
+    <a onclick="emojiGo('🐚')">🐚</a>
+    <a onclick="emojiGo('🪨')">🪨</a>
+    <a onclick="emojiGo('🌾')">🌾</a>
+    <a onclick="emojiGo('💐')">💐</a>
+    <a onclick="emojiGo('🌷')">🌷</a>
+    <a onclick="emojiGo('🌹')">🌹</a>
+    <a onclick="emojiGo('🥀')">🥀</a>
+    <a onclick="emojiGo('🌺')">🌺</a>
+    <a onclick="emojiGo('🌸')">🌸</a>
+    <a onclick="emojiGo('🌼')">🌼</a>
+    <a onclick="emojiGo('🌻')">🌻</a>
+    <a onclick="emojiGo('🌞')">🌞</a>
+    <a onclick="emojiGo('🌝')">🌝</a>
+    <a onclick="emojiGo('🌛')">🌛</a>
+    <a onclick="emojiGo('🌜')">🌜</a>
+    <a onclick="emojiGo('🌚')">🌚</a>
+    <a onclick="emojiGo('🌕')">🌕</a>
+    <a onclick="emojiGo('🌖')">🌖</a>
+    <a onclick="emojiGo('🌗')">🌗</a>
+    <a onclick="emojiGo('🌘')">🌘</a>
+    <a onclick="emojiGo('🌑')">🌑</a>
+    <a onclick="emojiGo('🌒')">🌒</a>
+    <a onclick="emojiGo('🌓')">🌓</a>
+    <a onclick="emojiGo('🌔')">🌔</a>
+    <a onclick="emojiGo('🌙')">🌙</a>
+    <a onclick="emojiGo('🌎')">🌎</a>
+    <a onclick="emojiGo('🌍')">🌍</a>
+    <a onclick="emojiGo('🌏')">🌏</a>
+    <a onclick="emojiGo('🪐')">🪐</a>
+    <a onclick="emojiGo('💫')">💫</a>
+    <a onclick="emojiGo('⭐️')">⭐️</a>
+    <a onclick="emojiGo('🌟')">🌟</a>
+    <a onclick="emojiGo('✨')">✨</a>
+    <a onclick="emojiGo('⚡️')">⚡️</a>
+    <a onclick="emojiGo('💥')">💥</a>
+    <a onclick="emojiGo('🔥')">🔥</a>
+    <a onclick="emojiGo('🌪')">🌪</a>
+    <a onclick="emojiGo('🌈')">🌈</a>
+    <a onclick="emojiGo('🌤')">🌤</a>
+    <a onclick="emojiGo('⛅️')">⛅️</a>
+    <a onclick="emojiGo('🌥')">🌥</a>
+    <a onclick="emojiGo('🌦')">🌦</a>
+    <a onclick="emojiGo('🌧')">🌧</a>
+    <a onclick="emojiGo('⛈')">⛈</a>
+    <a onclick="emojiGo('🌩')">🌩</a>
+    <a onclick="emojiGo('🌨')">🌨</a>
+    <a onclick="emojiGo('💨')">💨</a>
+    <a onclick="emojiGo('💧')">💧</a>
+    <a onclick="emojiGo('💦')">💦</a>
+
+    <br/>
+
+    <a onclick="emojiGo('🍏')">🍏</a>
+    <a onclick="emojiGo('🍎')">🍎</a>
+    <a onclick="emojiGo('🍐')">🍐</a>
+    <a onclick="emojiGo('🍊')">🍊</a>
+    <a onclick="emojiGo('🍋')">🍋</a>
+    <a onclick="emojiGo('🍌')">🍌</a>
+    <a onclick="emojiGo('🍉')">🍉</a>
+    <a onclick="emojiGo('🍇')">🍇</a>
+    <a onclick="emojiGo('🍓')">🍓</a>
+    <a onclick="emojiGo('🫐')">🫐</a>
+    <a onclick="emojiGo('🍈')">🍈</a>
+    <a onclick="emojiGo('🍒')">🍒</a>
+    <a onclick="emojiGo('🍑')">🍑</a>
+    <a onclick="emojiGo('🥭')">🥭</a>
+    <a onclick="emojiGo('🍍')">🍍</a>
+    <a onclick="emojiGo('🥥')">🥥</a>
+    <a onclick="emojiGo('🥝')">🥝</a>
+    <a onclick="emojiGo('🍅')">🍅</a>
+    <a onclick="emojiGo('🍆')">🍆</a>
+    <a onclick="emojiGo('🥑')">🥑</a>
+    <a onclick="emojiGo('🥦')">🥦</a>
+    <a onclick="emojiGo('🥬')">🥬</a>
+    <a onclick="emojiGo('🥒')">🥒</a>
+    <a onclick="emojiGo('🌶')">🌶</a>
+    <a onclick="emojiGo('🫑')">🫑</a>
+    <a onclick="emojiGo('🌽')">🌽</a>
+    <a onclick="emojiGo('🥕')">🥕</a>
+    <a onclick="emojiGo('🫒')">🫒</a>
+    <a onclick="emojiGo('🧄')">🧄</a>
+    <a onclick="emojiGo('🧅')">🧅</a>
+    <a onclick="emojiGo('🥔')">🥔</a>
+    <a onclick="emojiGo('🍠')">🍠</a>
+    <a onclick="emojiGo('🥐')">🥐</a>
+    <a onclick="emojiGo('🥯')">🥯</a>
+    <a onclick="emojiGo('🍞')">🍞</a>
+    <a onclick="emojiGo('🥖')">🥖</a>
+    <a onclick="emojiGo('🥨')">🥨</a>
+    <a onclick="emojiGo('🧀')">🧀</a>
+    <a onclick="emojiGo('🥚')">🥚</a>
+    <a onclick="emojiGo('🍳')">🍳</a>
+    <a onclick="emojiGo('🧈')">🧈</a>
+    <a onclick="emojiGo('🥞')">🥞</a>
+    <a onclick="emojiGo('🧇')">🧇</a>
+    <a onclick="emojiGo('🥓')">🥓</a>
+    <a onclick="emojiGo('🥩')">🥩</a>
+    <a onclick="emojiGo('🍗')">🍗</a>
+    <a onclick="emojiGo('🍖')">🍖</a>
+    <a onclick="emojiGo('🦴')">🦴</a>
+    <a onclick="emojiGo('🌭')">🌭</a>
+    <a onclick="emojiGo('🍔')">🍔</a>
+    <a onclick="emojiGo('🍟')">🍟</a>
+    <a onclick="emojiGo('🍕')">🍕</a>
+    <a onclick="emojiGo('🫓')">🫓</a>
+    <a onclick="emojiGo('🥪')">🥪</a>
+    <a onclick="emojiGo('🥙')">🥙</a>
+    <a onclick="emojiGo('🧆')">🧆</a>
+    <a onclick="emojiGo('🌮')">🌮</a>
+    <a onclick="emojiGo('🌯')">🌯</a>
+    <a onclick="emojiGo('🫔')">🫔</a>
+    <a onclick="emojiGo('🥗')">🥗</a>
+    <a onclick="emojiGo('🥘')">🥘</a>
+    <a onclick="emojiGo('🫕')">🫕</a>
+    <a onclick="emojiGo('🥫')">🥫</a>
+    <a onclick="emojiGo('🍝')">🍝</a>
+    <a onclick="emojiGo('🍜')">🍜</a>
+    <a onclick="emojiGo('🍲')">🍲</a>
+    <a onclick="emojiGo('🍛')">🍛</a>
+    <a onclick="emojiGo('🍣')">🍣</a>
+    <a onclick="emojiGo('🍱')">🍱</a>
+    <a onclick="emojiGo('🥟')">🥟</a>
+    <a onclick="emojiGo('🦪')">🦪</a>
+    <a onclick="emojiGo('🍤')">🍤</a>
+    <a onclick="emojiGo('🍙')">🍙</a>
+    <a onclick="emojiGo('🍚')">🍚</a>
+    <a onclick="emojiGo('🍘')">🍘</a>
+    <a onclick="emojiGo('🍥')">🍥</a>
+    <a onclick="emojiGo('🥠')">🥠</a>
+    <a onclick="emojiGo('🥮')">🥮</a>
+    <a onclick="emojiGo('🍢')">🍢</a>
+    <a onclick="emojiGo('🍡')">🍡</a>
+    <a onclick="emojiGo('🍧')">🍧</a>
+    <a onclick="emojiGo('🍨')">🍨</a>
+    <a onclick="emojiGo('🍦')">🍦</a>
+    <a onclick="emojiGo('🥧')">🥧</a>
+    <a onclick="emojiGo('🧁')">🧁</a>
+    <a onclick="emojiGo('🍰')">🍰</a>
+    <a onclick="emojiGo('🎂')">🎂</a>
+    <a onclick="emojiGo('🍮')">🍮</a>
+    <a onclick="emojiGo('🍭')">🍭</a>
+    <a onclick="emojiGo('🍬')">🍬</a>
+    <a onclick="emojiGo('🍫')">🍫</a>
+    <a onclick="emojiGo('🍿')">🍿</a>
+    <a onclick="emojiGo('🍩')">🍩</a>
+    <a onclick="emojiGo('🍪')">🍪</a>
+    <a onclick="emojiGo('🌰')">🌰</a>
+    <a onclick="emojiGo('🥜')">🥜</a>
+    <a onclick="emojiGo('🍯')">🍯</a>
+    <a onclick="emojiGo('🥛')">🥛</a>
+    <a onclick="emojiGo('🍼')">🍼</a>
+    <a onclick="emojiGo('🫖')">🫖</a>
+    <a onclick="emojiGo('☕️')">☕️</a>
+    <a onclick="emojiGo('🍵')">🍵</a>
+    <a onclick="emojiGo('🧃')">🧃</a>
+    <a onclick="emojiGo('🥤')">🥤</a>
+    <a onclick="emojiGo('🧋')">🧋</a>
+    <a onclick="emojiGo('🍶')">🍶</a>
+    <a onclick="emojiGo('🍺')">🍺</a>
+    <a onclick="emojiGo('🍻')">🍻</a>
+    <a onclick="emojiGo('🥂')">🥂</a>
+    <a onclick="emojiGo('🍷')">🍷</a>
+    <a onclick="emojiGo('🥃')">🥃</a>
+    <a onclick="emojiGo('🍸')">🍸</a>
+    <a onclick="emojiGo('🍹')">🍹</a>
+    <a onclick="emojiGo('🧉')">🧉</a>
+    <a onclick="emojiGo('🍾')">🍾</a>
+    <a onclick="emojiGo('🧊')">🧊</a>
+    <a onclick="emojiGo('🥄')">🥄</a>
+    <a onclick="emojiGo('🍴')">🍴</a>
+    <a onclick="emojiGo('🍽')">🍽</a>
+    <a onclick="emojiGo('🥣')">🥣</a>
+    <a onclick="emojiGo('🥡')">🥡</a>
+    <a onclick="emojiGo('🥢')">🥢</a>
+    <a onclick="emojiGo('🧂')">🧂</a>
+
+    <br/>
+
+    <a onclick="emojiGo('⚽️')">⚽️</a>
+    <a onclick="emojiGo('🏀')">🏀</a>
+    <a onclick="emojiGo('🏈')">🏈</a>
+    <a onclick="emojiGo('⚾️')">⚾️</a>
+    <a onclick="emojiGo('🥎')">🥎</a>
+    <a onclick="emojiGo('🎾')">🎾</a>
+    <a onclick="emojiGo('🏐')">🏐</a>
+    <a onclick="emojiGo('🏉')">🏉</a>
+    <a onclick="emojiGo('🥏')">🥏</a>
+    <a onclick="emojiGo('🎱')">🎱</a>
+    <a onclick="emojiGo('🪀')">🪀</a>
+    <a onclick="emojiGo('🏓')">🏓</a>
+    <a onclick="emojiGo('🏸')">🏸</a>
+    <a onclick="emojiGo('🏒')">🏒</a>
+    <a onclick="emojiGo('🏑')">🏑</a>
+    <a onclick="emojiGo('🥍')">🥍</a>
+    <a onclick="emojiGo('🏏')">🏏</a>
+    <a onclick="emojiGo('🪃')">🪃</a>
+    <a onclick="emojiGo('🥅')">🥅</a>
+    <a onclick="emojiGo('⛳️')">⛳️</a>
+    <a onclick="emojiGo('🪁')">🪁</a>
+    <a onclick="emojiGo('🏹')">🏹</a>
+    <a onclick="emojiGo('🎣')">🎣</a>
+    <a onclick="emojiGo('🤿')">🤿</a>
+    <a onclick="emojiGo('🥊')">🥊</a>
+    <a onclick="emojiGo('🥋')">🥋</a>
+    <a onclick="emojiGo('🎽')">🎽</a>
+    <a onclick="emojiGo('🛹')">🛹</a>
+    <a onclick="emojiGo('🛼')">🛼</a>
+    <a onclick="emojiGo('🛷')">🛷</a>
+    <a onclick="emojiGo('⛸')">⛸</a>
+    <a onclick="emojiGo('🥌')">🥌</a>
+    <a onclick="emojiGo('🎿')">🎿</a>
+    <a onclick="emojiGo('⛷')">⛷</a>
+    <a onclick="emojiGo('🏂')">🏂</a>
+    <a onclick="emojiGo('🪂')">🪂</a>
+    <a onclick="emojiGo('🏋️‍♀️')">🏋️‍♀️</a>
+    <a onclick="emojiGo('🤼‍♀️')">🤼‍♀️</a>
+    <a onclick="emojiGo('🤸‍♀️')">🤸‍♀️</a>
+    <a onclick="emojiGo('⛹️‍♀️')">⛹️‍♀️</a>
+    <a onclick="emojiGo('🤺')">🤺</a>
+    <a onclick="emojiGo('🤾‍♂️')">🤾‍♂️</a>
+    <a onclick="emojiGo('🏌️‍♀️')">🏌️‍♀️</a>
+    <a onclick="emojiGo('🏇')">🏇</a>
+    <a onclick="emojiGo('🏄‍♀️')">🏄‍♀️</a>
+    <a onclick="emojiGo('🏊‍♀️')">🏊‍♀️</a>
+    <a onclick="emojiGo('🏊')">🏊</a>
+    <a onclick="emojiGo('🏊‍♂️')">🏊‍♂️</a>
+    <a onclick="emojiGo('🤽‍♀️')">🤽‍♀️</a>
+    <a onclick="emojiGo('🚣‍♀️')">🚣‍♀️</a>
+    <a onclick="emojiGo('🧗‍♀️')">🧗‍♀️</a>
+    <a onclick="emojiGo('🧗')">🧗</a>
+    <a onclick="emojiGo('🧗‍♂️')">🧗‍♂️</a>
+    <a onclick="emojiGo('🚵‍♀️')">🚵‍♀️</a>
+    <a onclick="emojiGo('🚵')">🚵</a>
+    <a onclick="emojiGo('🚴‍♀️')">🚴‍♀️</a>
+    <a onclick="emojiGo('🚴')">🚴</a>
+    <a onclick="emojiGo('🚴‍♂️')">🚴‍♂️</a>
+    <a onclick="emojiGo('🏆')">🏆</a>
+    <a onclick="emojiGo('🥇')">🥇</a>
+    <a onclick="emojiGo('🥈')">🥈</a>
+    <a onclick="emojiGo('🥉')">🥉</a>
+    <a onclick="emojiGo('🏅')">🏅</a>
+    <a onclick="emojiGo('🎖')">🎖</a>
+    <a onclick="emojiGo('🏵')">🏵</a>
+    <a onclick="emojiGo('🎗')">🎗</a>
+    <a onclick="emojiGo('🎫')">🎫</a>
+    <a onclick="emojiGo('🎟')">🎟</a>
+    <a onclick="emojiGo('🎪')">🎪</a>
+    <a onclick="emojiGo('🤹')">🤹</a>
+    <a onclick="emojiGo('🤹‍♂️')">🤹‍♂️</a>
+    <a onclick="emojiGo('🤹‍♀️')">🤹‍♀️</a>
+    <a onclick="emojiGo('🎭')">🎭</a>
+    <a onclick="emojiGo('🩰')">🩰</a>
+    <a onclick="emojiGo('🎨')">🎨</a>
+    <a onclick="emojiGo('🎬')">🎬</a>
+    <a onclick="emojiGo('🎤')">🎤</a>
+    <a onclick="emojiGo('🎧')">🎧</a>
+    <a onclick="emojiGo('🎼')">🎼</a>
+    <a onclick="emojiGo('🎹')">🎹</a>
+    <a onclick="emojiGo('🥁')">🥁</a>
+    <a onclick="emojiGo('🪘')">🪘</a>
+    <a onclick="emojiGo('🎷')">🎷</a>
+    <a onclick="emojiGo('🎺')">🎺</a>
+    <a onclick="emojiGo('🪗')">🪗</a>
+    <a onclick="emojiGo('🎸')">🎸</a>
+    <a onclick="emojiGo('🪕')">🪕</a>
+    <a onclick="emojiGo('🎻')">🎻</a>
+    <a onclick="emojiGo('🎲')">🎲</a>
+    <a onclick="emojiGo('🎯')">🎯</a>
+    <a onclick="emojiGo('🎳')">🎳</a>
+    <a onclick="emojiGo('🎮')">🎮</a>
+    <a onclick="emojiGo('🎰')">🎰</a>
+    <a onclick="emojiGo('🧩')">🧩</a>
+
+    <br/>
+
+    <a onclick="emojiGo('🚗')">🚗</a>
+    <a onclick="emojiGo('🚕')">🚕</a>
+    <a onclick="emojiGo('🚙')">🚙</a>
+    <a onclick="emojiGo('🚌')">🚌</a>
+    <a onclick="emojiGo('🚎')">🚎</a>
+    <a onclick="emojiGo('🏎')">🏎</a>
+    <a onclick="emojiGo('🚓')">🚓</a>
+    <a onclick="emojiGo('🚑')">🚑</a>
+    <a onclick="emojiGo('🚒')">🚒</a>
+    <a onclick="emojiGo('🚐')">🚐</a>
+    <a onclick="emojiGo('🛻')">🛻</a>
+    <a onclick="emojiGo('🚚')">🚚</a>
+    <a onclick="emojiGo('🚛')">🚛</a>
+    <a onclick="emojiGo('🚜')">🚜</a>
+    <a onclick="emojiGo('🦯')">🦯</a>
+    <a onclick="emojiGo('🦽')">🦽</a>
+    <a onclick="emojiGo('🦼')">🦼</a>
+    <a onclick="emojiGo('🛴')">🛴</a>
+    <a onclick="emojiGo('🚲')">🚲</a>
+    <a onclick="emojiGo('🛵')">🛵</a>
+    <a onclick="emojiGo('🏍')">🏍</a>
+    <a onclick="emojiGo('🛺')">🛺</a>
+    <a onclick="emojiGo('🚨')">🚨</a>
+    <a onclick="emojiGo('🚔')">🚔</a>
+    <a onclick="emojiGo('🚍')">🚍</a>
+    <a onclick="emojiGo('🚘')">🚘</a>
+    <a onclick="emojiGo('🚖')">🚖</a>
+    <a onclick="emojiGo('🚡')">🚡</a>
+    <a onclick="emojiGo('🚠')">🚠</a>
+    <a onclick="emojiGo('🚟')">🚟</a>
+    <a onclick="emojiGo('🚃')">🚃</a>
+    <a onclick="emojiGo('🚋')">🚋</a>
+    <a onclick="emojiGo('🚞')">🚞</a>
+    <a onclick="emojiGo('🚝')">🚝</a>
+    <a onclick="emojiGo('🚄')">🚄</a>
+    <a onclick="emojiGo('🚅')">🚅</a>
+    <a onclick="emojiGo('🚈')">🚈</a>
+    <a onclick="emojiGo('🚂')">🚂</a>
+    <a onclick="emojiGo('🚆')">🚆</a>
+    <a onclick="emojiGo('🚇')">🚇</a>
+    <a onclick="emojiGo('🚊')">🚊</a>
+    <a onclick="emojiGo('🚉')">🚉</a>
+    <a onclick="emojiGo('✈️')">✈️</a>
+    <a onclick="emojiGo('🛫')">🛫</a>
+    <a onclick="emojiGo('🛬')">🛬</a>
+    <a onclick="emojiGo('🛩')">🛩</a>
+    <a onclick="emojiGo('💺')">💺</a>
+    <a onclick="emojiGo('🛰')">🛰</a>
+    <a onclick="emojiGo('🚀')">🚀</a>
+    <a onclick="emojiGo('🛸')">🛸</a>
+    <a onclick="emojiGo('🚁')">🚁</a>
+    <a onclick="emojiGo('🛶')">🛶</a>
+    <a onclick="emojiGo('⛵️')">⛵️</a>
+    <a onclick="emojiGo('🚤')">🚤</a>
+    <a onclick="emojiGo('🛥')">🛥</a>
+    <a onclick="emojiGo('🛳')">🛳</a>
+    <a onclick="emojiGo('⛴')">⛴</a>
+    <a onclick="emojiGo('🚢')">🚢</a>
+    <a onclick="emojiGo('⚓️')">⚓️</a>
+    <a onclick="emojiGo('🪝')">🪝</a>
+    <a onclick="emojiGo('⛽️')">⛽️</a>
+    <a onclick="emojiGo('🚧')">🚧</a>
+    <a onclick="emojiGo('🚦')">🚦</a>
+    <a onclick="emojiGo('🚥')">🚥</a>
+    <a onclick="emojiGo('🚏')">🚏</a>
+    <a onclick="emojiGo('🗺')">🗺</a>
+    <a onclick="emojiGo('🗿')">🗿</a>
+    <a onclick="emojiGo('🗽')">🗽</a>
+    <a onclick="emojiGo('🗼')">🗼</a>
+    <a onclick="emojiGo('🏰')">🏰</a>
+    <a onclick="emojiGo('🏯')">🏯</a>
+    <a onclick="emojiGo('🏟')">🏟</a>
+    <a onclick="emojiGo('🎡')">🎡</a>
+    <a onclick="emojiGo('🎢')">🎢</a>
+    <a onclick="emojiGo('🎠')">🎠</a>
+    <a onclick="emojiGo('⛲️')">⛲️</a>
+    <a onclick="emojiGo('⛱')">⛱</a>
+    <a onclick="emojiGo('🏖')">🏖</a>
+    <a onclick="emojiGo('🏝')">🏝</a>
+    <a onclick="emojiGo('🏜')">🏜</a>
+    <a onclick="emojiGo('🌋')">🌋</a>
+    <a onclick="emojiGo('⛰')">⛰</a>
+    <a onclick="emojiGo('🏔')">🏔</a>
+    <a onclick="emojiGo('🗻')">🗻</a>
+    <a onclick="emojiGo('🏕')">🏕</a>
+    <a onclick="emojiGo('⛺️')">⛺️</a>
+    <a onclick="emojiGo('🛖')">🛖</a>
+    <a onclick="emojiGo('🏠')">🏠</a>
+    <a onclick="emojiGo('🏡')">🏡</a>
+    <a onclick="emojiGo('🏘')">🏘</a>
+    <a onclick="emojiGo('🏚')">🏚</a>
+    <a onclick="emojiGo('🏗')">🏗</a>
+    <a onclick="emojiGo('🏭')">🏭</a>
+    <a onclick="emojiGo('🏢')">🏢</a>
+    <a onclick="emojiGo('🏬')">🏬</a>
+    <a onclick="emojiGo('🏣')">🏣</a>
+    <a onclick="emojiGo('🏤')">🏤</a>
+    <a onclick="emojiGo('🏥')">🏥</a>
+    <a onclick="emojiGo('🏦')">🏦</a>
+    <a onclick="emojiGo('🏨')">🏨</a>
+    <a onclick="emojiGo('🏪')">🏪</a>
+    <a onclick="emojiGo('🏫')">🏫</a>
+    <a onclick="emojiGo('🏩')">🏩</a>
+    <a onclick="emojiGo('💒')">💒</a>
+    <a onclick="emojiGo('🏛')">🏛</a>
+    <a onclick="emojiGo('⛪️')">⛪️</a>
+    <a onclick="emojiGo('🕌')">🕌</a>
+    <a onclick="emojiGo('🕍')">🕍</a>
+    <a onclick="emojiGo('🛕')">🛕</a>
+    <a onclick="emojiGo('🕋')">🕋</a>
+    <a onclick="emojiGo('⛩')">⛩</a>
+    <a onclick="emojiGo('🛤')">🛤</a>
+    <a onclick="emojiGo('🛣')">🛣</a>
+    <a onclick="emojiGo('🗾')">🗾</a>
+    <a onclick="emojiGo('🎑')">🎑</a>
+    <a onclick="emojiGo('🏞')">🏞</a>
+    <a onclick="emojiGo('🌅')">🌅</a>
+    <a onclick="emojiGo('🌄')">🌄</a>
+    <a onclick="emojiGo('🌠')">🌠</a>
+    <a onclick="emojiGo('🎇')">🎇</a>
+    <a onclick="emojiGo('🎆')">🎆</a>
+    <a onclick="emojiGo('🌇')">🌇</a>
+    <a onclick="emojiGo('🌆')">🌆</a>
+    <a onclick="emojiGo('🏙')">🏙</a>
+    <a onclick="emojiGo('🌃')">🌃</a>
+    <a onclick="emojiGo('🌌')">🌌</a>
+    <a onclick="emojiGo('🌉')">🌉</a>
+    <a onclick="emojiGo('🌁')">🌁</a>
+
+    <br/>
+
+    <a onclick="emojiGo('⌚️')">⌚️</a>
+    <a onclick="emojiGo('📱')">📱</a>
+    <a onclick="emojiGo('📲')">📲</a>
+    <a onclick="emojiGo('💻')">💻</a>
+    <a onclick="emojiGo('🖥')">🖥</a>
+    <a onclick="emojiGo('🖨')">🖨</a>
+    <a onclick="emojiGo('🖱')">🖱</a>
+    <a onclick="emojiGo('🖲')">🖲</a>
+    <a onclick="emojiGo('🕹')">🕹</a>
+    <a onclick="emojiGo('🗜')">🗜</a>
+    <a onclick="emojiGo('💽')">💽</a>
+    <a onclick="emojiGo('💾')">💾</a>
+    <a onclick="emojiGo('💿')">💿</a>
+    <a onclick="emojiGo('📀')">📀</a>
+    <a onclick="emojiGo('📼')">📼</a>
+    <a onclick="emojiGo('📷')">📷</a>
+    <a onclick="emojiGo('📸')">📸</a>
+    <a onclick="emojiGo('📹')">📹</a>
+    <a onclick="emojiGo('🎥')">🎥</a>
+    <a onclick="emojiGo('📽')">📽</a>
+    <a onclick="emojiGo('🎞')">🎞</a>
+    <a onclick="emojiGo('📞')">📞</a>
+    <a onclick="emojiGo('📟')">📟</a>
+    <a onclick="emojiGo('📠')">📠</a>
+    <a onclick="emojiGo('📺')">📺</a>
+    <a onclick="emojiGo('📻')">📻</a>
+    <a onclick="emojiGo('🎙')">🎙</a>
+    <a onclick="emojiGo('🎚')">🎚</a>
+    <a onclick="emojiGo('🎛')">🎛</a>
+    <a onclick="emojiGo('🧭')">🧭</a>
+    <a onclick="emojiGo('⏱')">⏱</a>
+    <a onclick="emojiGo('⏲')">⏲</a>
+    <a onclick="emojiGo('⏰')">⏰</a>
+    <a onclick="emojiGo('🕰')">🕰</a>
+    <a onclick="emojiGo('⌛️')">⌛️</a>
+    <a onclick="emojiGo('⏳')">⏳</a>
+    <a onclick="emojiGo('📡')">📡</a>
+    <a onclick="emojiGo('🔋')">🔋</a>
+    <a onclick="emojiGo('🔌')">🔌</a>
+    <a onclick="emojiGo('💡')">💡</a>
+    <a onclick="emojiGo('🔦')">🔦</a>
+    <a onclick="emojiGo('🕯')">🕯</a>
+    <a onclick="emojiGo('🪔')">🪔</a>
+    <a onclick="emojiGo('🧯')">🧯</a>
+    <a onclick="emojiGo('🛢')">🛢</a>
+    <a onclick="emojiGo('💸')">💸</a>
+    <a onclick="emojiGo('💵')">💵</a>
+    <a onclick="emojiGo('💴')">💴</a>
+    <a onclick="emojiGo('💶')">💶</a>
+    <a onclick="emojiGo('💷')">💷</a>
+    <a onclick="emojiGo('🪙')">🪙</a>
+    <a onclick="emojiGo('💰')">💰</a>
+    <a onclick="emojiGo('💳')">💳</a>
+    <a onclick="emojiGo('💎')">💎</a>
+    <a onclick="emojiGo('🪜')">🪜</a>
+    <a onclick="emojiGo('🧰')">🧰</a>
+    <a onclick="emojiGo('🪛')">🪛</a>
+    <a onclick="emojiGo('🔧')">🔧</a>
+    <a onclick="emojiGo('🔨')">🔨</a>
+    <a onclick="emojiGo('🛠')">🛠</a>
+    <a onclick="emojiGo('⛏')">⛏</a>
+    <a onclick="emojiGo('🪚')">🪚</a>
+    <a onclick="emojiGo('🔩')">🔩</a>
+    <a onclick="emojiGo('🪤')">🪤</a>
+    <a onclick="emojiGo('🧱')">🧱</a>
+    <a onclick="emojiGo('⛓')">⛓</a>
+    <a onclick="emojiGo('🧲')">🧲</a>
+    <a onclick="emojiGo('🔫')">🔫</a>
+    <a onclick="emojiGo('💣')">💣</a>
+    <a onclick="emojiGo('🧨')">🧨</a>
+    <a onclick="emojiGo('🪓')">🪓</a>
+    <a onclick="emojiGo('🔪')">🔪</a>
+    <a onclick="emojiGo('🗡')">🗡</a>
+    <a onclick="emojiGo('🛡')">🛡</a>
+    <a onclick="emojiGo('🚬')">🚬</a>
+    <a onclick="emojiGo('🪦')">🪦</a>
+    <a onclick="emojiGo('🏺')">🏺</a>
+    <a onclick="emojiGo('🔮')">🔮</a>
+    <a onclick="emojiGo('📿')">📿</a>
+    <a onclick="emojiGo('🧿')">🧿</a>
+    <a onclick="emojiGo('💈')">💈</a>
+    <a onclick="emojiGo('⚗️')">⚗️</a>
+    <a onclick="emojiGo('🔭')">🔭</a>
+    <a onclick="emojiGo('🔬')">🔬</a>
+    <a onclick="emojiGo('🕳')">🕳</a>
+    <a onclick="emojiGo('🩹')">🩹</a>
+    <a onclick="emojiGo('🩺')">🩺</a>
+    <a onclick="emojiGo('💊')">💊</a>
+    <a onclick="emojiGo('💉')">💉</a>
+    <a onclick="emojiGo('🩸')">🩸</a>
+    <a onclick="emojiGo('🧬')">🧬</a>
+    <a onclick="emojiGo('🦠')">🦠</a>
+    <a onclick="emojiGo('🧫')">🧫</a>
+    <a onclick="emojiGo('🧪')">🧪</a>
+    <a onclick="emojiGo('🌡')">🌡</a>
+    <a onclick="emojiGo('🧹')">🧹</a>
+    <a onclick="emojiGo('🪠')">🪠</a>
+    <a onclick="emojiGo('🧺')">🧺</a>
+    <a onclick="emojiGo('🧻')">🧻</a>
+    <a onclick="emojiGo('🚽')">🚽</a>
+    <a onclick="emojiGo('🚰')">🚰</a>
+    <a onclick="emojiGo('🚿')">🚿</a>
+    <a onclick="emojiGo('🛁')">🛁</a>
+    <a onclick="emojiGo('🛀')">🛀</a>
+    <a onclick="emojiGo('🧼')">🧼</a>
+    <a onclick="emojiGo('🪥')">🪥</a>
+    <a onclick="emojiGo('🪒')">🪒</a>
+    <a onclick="emojiGo('🧽')">🧽</a>
+    <a onclick="emojiGo('🪣')">🪣</a>
+    <a onclick="emojiGo('🧴')">🧴</a>
+    <a onclick="emojiGo('🛎')">🛎</a>
+    <a onclick="emojiGo('🔑')">🔑</a>
+    <a onclick="emojiGo('🗝')">🗝</a>
+    <a onclick="emojiGo('🚪')">🚪</a>
+    <a onclick="emojiGo('🪑')">🪑</a>
+    <a onclick="emojiGo('🛋')">🛋</a>
+    <a onclick="emojiGo('🛏')">🛏</a>
+    <a onclick="emojiGo('🛌')">🛌</a>
+    <a onclick="emojiGo('🧸')">🧸</a>
+    <a onclick="emojiGo('🪆')">🪆</a>
+    <a onclick="emojiGo('🖼')">🖼</a>
+    <a onclick="emojiGo('🪞')">🪞</a>
+    <a onclick="emojiGo('🪟')">🪟</a>
+    <a onclick="emojiGo('🛍')">🛍</a>
+    <a onclick="emojiGo('🛒')">🛒</a>
+    <a onclick="emojiGo('🎁')">🎁</a>
+    <a onclick="emojiGo('🎈')">🎈</a>
+    <a onclick="emojiGo('🎏')">🎏</a>
+    <a onclick="emojiGo('🎀')">🎀</a>
+    <a onclick="emojiGo('🪄')">🪄</a>
+    <a onclick="emojiGo('🪅')">🪅</a>
+    <a onclick="emojiGo('🎊')">🎊</a>
+    <a onclick="emojiGo('🎉')">🎉</a>
+    <a onclick="emojiGo('🎎')">🎎</a>
+    <a onclick="emojiGo('🏮')">🏮</a>
+    <a onclick="emojiGo('🎐')">🎐</a>
+    <a onclick="emojiGo('🧧')">🧧</a>
+    <a onclick="emojiGo('✉️')">✉️</a>
+    <a onclick="emojiGo('📩')">📩</a>
+    <a onclick="emojiGo('📨')">📨</a>
+    <a onclick="emojiGo('📧')">📧</a>
+    <a onclick="emojiGo('💌')">💌</a>
+    <a onclick="emojiGo('📥')">📥</a>
+    <a onclick="emojiGo('📤')">📤</a>
+    <a onclick="emojiGo('📦')">📦</a>
+    <a onclick="emojiGo('🏷')">🏷</a>
+    <a onclick="emojiGo('🪧')">🪧</a>
+    <a onclick="emojiGo('📪')">📪</a>
+    <a onclick="emojiGo('📫')">📫</a>
+    <a onclick="emojiGo('📬')">📬</a>
+    <a onclick="emojiGo('📭')">📭</a>
+    <a onclick="emojiGo('📮')">📮</a>
+    <a onclick="emojiGo('📯')">📯</a>
+    <a onclick="emojiGo('📜')">📜</a>
+    <a onclick="emojiGo('📃')">📃</a>
+    <a onclick="emojiGo('📄')">📄</a>
+    <a onclick="emojiGo('📑')">📑</a>
+    <a onclick="emojiGo('🧾')">🧾</a>
+    <a onclick="emojiGo('📊')">📊</a>
+    <a onclick="emojiGo('📈')">📈</a>
+    <a onclick="emojiGo('📉')">📉</a>
+    <a onclick="emojiGo('🗒')">🗒</a>
+    <a onclick="emojiGo('🗓')">🗓</a>
+    <a onclick="emojiGo('📆')">📆</a>
+    <a onclick="emojiGo('📅')">📅</a>
+    <a onclick="emojiGo('🗑')">🗑</a>
+    <a onclick="emojiGo('📇')">📇</a>
+    <a onclick="emojiGo('🗃')">🗃</a>
+    <a onclick="emojiGo('🗳')">🗳</a>
+    <a onclick="emojiGo('🗄')">🗄</a>
+    <a onclick="emojiGo('📋')">📋</a>
+    <a onclick="emojiGo('📁')">📁</a>
+    <a onclick="emojiGo('📂')">📂</a>
+    <a onclick="emojiGo('🗂')">🗂</a>
+    <a onclick="emojiGo('🗞')">🗞</a>
+    <a onclick="emojiGo('📰')">📰</a>
+    <a onclick="emojiGo('📓')">📓</a>
+    <a onclick="emojiGo('📔')">📔</a>
+    <a onclick="emojiGo('📒')">📒</a>
+    <a onclick="emojiGo('📕')">📕</a>
+    <a onclick="emojiGo('📗')">📗</a>
+    <a onclick="emojiGo('📘')">📘</a>
+    <a onclick="emojiGo('📙')">📙</a>
+    <a onclick="emojiGo('📚')">📚</a>
+    <a onclick="emojiGo('📖')">📖</a>
+    <a onclick="emojiGo('🔖')">🔖</a>
+    <a onclick="emojiGo('🧷')">🧷</a>
+    <a onclick="emojiGo('🔗')">🔗</a>
+    <a onclick="emojiGo('📎')">📎</a>
+    <a onclick="emojiGo('🖇')">🖇</a>
+    <a onclick="emojiGo('📐')">📐</a>
+    <a onclick="emojiGo('📏')">📏</a>
+    <a onclick="emojiGo('🧮')">🧮</a>
+    <a onclick="emojiGo('📌')">📌</a>
+    <a onclick="emojiGo('📍')">📍</a>
+    <a onclick="emojiGo('🖊')">🖊</a>
+    <a onclick="emojiGo('🖋')">🖋</a>
+    <a onclick="emojiGo('✒️')">✒️</a>
+    <a onclick="emojiGo('🖌')">🖌</a>
+    <a onclick="emojiGo('🖍')">🖍</a>
+    <a onclick="emojiGo('📝')">📝</a>
+    <a onclick="emojiGo('🔍')">🔍</a>
+    <a onclick="emojiGo('🔎')">🔎</a>
+    <a onclick="emojiGo('🔏')">🔏</a>
+    <a onclick="emojiGo('🔐')">🔐</a>
+    <a onclick="emojiGo('🔒')">🔒</a>
+    <a onclick="emojiGo('🔓')">🔓</a>
+
+    <br/>
+
+    <a onclick="emojiGo('❤️')">❤️</a>
+    <a onclick="emojiGo('🧡')">🧡</a>
+    <a onclick="emojiGo('💛')">💛</a>
+    <a onclick="emojiGo('💚')">💚</a>
+    <a onclick="emojiGo('💙')">💙</a>
+    <a onclick="emojiGo('💜')">💜</a>
+    <a onclick="emojiGo('🖤')">🖤</a>
+    <a onclick="emojiGo('🤍')">🤍</a>
+    <a onclick="emojiGo('🤎')">🤎</a>
+    <a onclick="emojiGo('💔')">💔</a>
+    <a onclick="emojiGo('💕')">💕</a>
+    <a onclick="emojiGo('💞')">💞</a>
+    <a onclick="emojiGo('💓')">💓</a>
+    <a onclick="emojiGo('💗')">💗</a>
+    <a onclick="emojiGo('💖')">💖</a>
+    <a onclick="emojiGo('💘')">💘</a>
+    <a onclick="emojiGo('💝')">💝</a>
+    <a onclick="emojiGo('🚯')">🚯</a>
+    <a onclick="emojiGo('🚳')">🚳</a>
+    <a onclick="emojiGo('🚱')">🚱</a>
+    <a onclick="emojiGo('🔞')">🔞</a>
+    <a onclick="emojiGo('📵')">📵</a>
+    <a onclick="emojiGo('🚭')">🚭</a>
+    <a onclick="emojiGo('❗️')">❗️</a>
+    <a onclick="emojiGo('❕')">❕</a>
+    <a onclick="emojiGo('❓')">❓</a>
+    <a onclick="emojiGo('❔')">❔</a>
+    <a onclick="emojiGo('🔅')">🔅</a>
+    <a onclick="emojiGo('🔆')">🔆</a>
+    <a onclick="emojiGo('〽️')">〽️</a>
+    <a onclick="emojiGo('🚸')">🚸</a>
+    <a onclick="emojiGo('🔱')">🔱</a>
+    <a onclick="emojiGo('🎵')">🎵</a>
+    <a onclick="emojiGo('🎶')">🎶</a>
+    <a onclick="emojiGo('➕')">➕</a>
+    <a onclick="emojiGo('➖')">➖</a>
+    <a onclick="emojiGo('➗')">➗</a>
+    
+    
 
 
   </div>
@@ -551,7 +1272,8 @@ function anim_update(elapse) {
             _gc = data[k+1];
             _bc = data[k+2];
             
-            if (data[k] > 0 || data[k+1] > 0 || data[k+2] > 0) {
+
+            if ((data[k] > dot_none/2 || data[k+1] > dot_none/2 || data[k+2] > dot_none/2)) {
             //if (data[k] > 127 || data[k+1] > 127 || data[k+2] > 127) {
             //if (data[k] > 100) {// + data[k+1] + data[k+2] > 300) {
                 
@@ -649,7 +1371,7 @@ function setPixColor(data, idx, r, g, b) {
   data[idx]     = r;
   data[idx + 1] = g;
   data[idx + 2] = b;
-  //data[idx + 3] = 255;
+  data[idx + 3] = 255;
 }
 
 function initAnim() {
@@ -827,7 +1549,7 @@ function keyboard(e) {
 
 
 function switch2Input() {
-  
+  keepGoing = 0;
   var div = document.getElementById('ui');
   if (div) {
     div.hidden = false;
