@@ -4,7 +4,9 @@ var subtitle = [ [''],
                  ['中文測試🚘🚖', '2.中試🗿', '3.🗿']];
 
 var side = 3;
-var dots = 3;
+var dots = 4;
+
+var left_gap = 32;
 
 var fsize = 96;
 fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
@@ -15,6 +17,7 @@ var speed = 200;
 var initDot = 0;
 
 var dot_none = 40;
+var criteria = dot_none/2;
 
 var dot_rc = 255;
 var dot_gc = 255;
@@ -28,13 +31,19 @@ var dot_b = 255;
 var jumpLine = (side + dots) * fsize * 4;
 var jumpSide = (side + dots) * 4;
 
-if (dots == 3) {
-  initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-} else if (dots == 2) {
+if (dots == 2 || dots == 3 || dots == 4) {
   initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
 } else if (dots == 1) {
   initDot = (side * fsize + side) * 4;//(4 * fsize + 4) * 4;
+} else if (dots == 5) {
+  initDot = ((side + 2) * fsize + (side + 2)) * 4;
 }
+
+var maskWidth = 100;
+var maskHeight = 100;
+
+var gapL = 0;
+var gapP = 0;
 
 function textGo() {
   let len = subtitle.length;
@@ -1178,6 +1187,10 @@ function newParticle_txt_verticle(_p, _idx, xx, yy) {
   return p;
 }
 
+var _r = dot_r;
+var _g = dot_g;
+var _b = dot_b;// * Math.random();
+
 function anim_update(elapse) {
 
   //ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1188,183 +1201,287 @@ function anim_update(elapse) {
   let dt = elapse - pre;
   pre = elapse;
 
-  if (keepGoing == 1) {
-    
-    if (maskimg) {
-      
-      ctx.fillStyle = 'black';
-      //verticle
-      ctx.fillRect(fsize - 4, 0, fsize + 8, canvas.height);
-
-      //ctx.fillRect(0, 0, canvas.width, fsize + 9);
-    }
-    
-    for (var i = 0;i<particles.length;i++) {
-        particles[i].update(canvas, ctx, dt);
-    }
-
-    //verticle
-    if (particles[particles.length - 1].activeFlag == false) { //
-      let yy = canvas.height + fsize;
-      for (var i = 0;i<particles.length;i++) {
-        let txtlen = particles[i].initial(canvas);
-        particles[i].y = yy;
-        yy += (txtlen + 2) * fsize;
-      }
-    }
-  
-    /*
-    if (particles[particles.length - 1].activeFlag == false) { //
-      let xx = canvas.width;
-      for (var i = 0;i<particles.length;i++) {
-        let txtlen = particles[i].initial(canvas);
-        particles[i].x = xx;
-        xx += txtlen + 2 * fsize;
-      }
-    }
-    */
-
-    if (maskimg) {
-        
-        //verticle
-        ctx.drawImage(maskimg, fsize, 0);
-        let mask = ctx.getImageData(fsize, 0, fsize, canvas.height);
-        
-        //ctx.drawImage(maskimg, 0, 0);
-        //let mask = ctx.getImageData(0, 0, canvas.width, fsize);
-        
-        var data = mask.data;
-        //verticle
-        let gapL = fsize * 4;
-        //let gapL = canvas.width * 4;
-
-        let gapP = 4;
-        //verticle
-        let wid = fsize;
-        //let wid = canvas.width;
-
-        let _r = dot_r * Math.random();
-        let _g = dot_g * Math.random();
-        let _b = dot_b * Math.random();
-
-        let _rc = dot_rc * Math.random();
-        let _gc = dot_gc * Math.random();
-        let _bc = dot_bc * Math.random();
-                
-        for (let i = initDot;i < data.length;i += jumpLine) {
-        
-          let pix = i/4;
-          let h = Math.floor(pix/wid);
-          let w = pix%wid;
-        
-          for (let k = i;;k+=jumpSide) {
-            let _pix = k/4;
-            let _h = Math.floor(_pix/wid);
-            let _w = _pix%wid;
-            if (_h != h) 
-              break;
-            
-            _r = data[k];
-            _g = data[k+1];
-            _b = data[k+2];
-
-            _rc = data[k];
-            _gc = data[k+1];
-            _bc = data[k+2];
-            
-
-            if ((data[k] > dot_none/2 || data[k+1] > dot_none/2 || data[k+2] > dot_none/2)) {
-            //if (data[k] > 127 || data[k+1] > 127 || data[k+2] > 127) {
-            //if (data[k] > 100) {// + data[k+1] + data[k+2] > 300) {
-                
-                setPixColor(data, k, _r, _g, _b);//中
-                
-                if (dots == 1) continue;
-
-                setPixColor(data, k - gapP, _r, _g, _b);//左
-                setPixColor(data, k - gapL, _r, _g, _b);//上
-                setPixColor(data, k - gapP - gapL, _rc, _gc, _bc);//左上
-
-                if (dots == 2) continue;
-
-                //右
-                let idx = k + gapP;
-                let pp = idx/4;
-                let hh = Math.floor(pp/wid);
-                let ww = pp%wid;
-                if (hh == _h) {
-                  //右
-                  setPixColor(data, idx, _r, _g, _b);
-                  //右上
-                  setPixColor(data, idx - gapL, _rc, _gc, _bc);
-                                    
-                  idx = k + gapP + gapL;
-                  pp = idx/4;
-                  hh = Math.floor(pp/wid);
-                  ww = pp%wid;
-                  if (idx < data.length) {
-                    //右下
-                    setPixColor(data, idx, _rc, _gc, _bc);
-                    //下
-                    setPixColor(data, k + gapL, _r, _g, _b);
-                    //左下
-                    setPixColor(data, k - gapP + gapL, _rc, _gc, _bc);
-                    
-                  }
-                }
-            } else {
-                
-                setPixColor(data, k, dot_none, dot_none, dot_none);//中
-                
-                if (dots == 1) continue;
-
-                setPixColor(data, k - gapP, dot_none, dot_none, dot_none);//左
-                setPixColor(data, k - gapL, dot_none, dot_none, dot_none);//上
-                setPixColor(data, k - gapP - gapL, dot_none, dot_none, dot_none);//左上
-                
-                if (dots == 2) continue;
-
-                
-                let idx = k + gapP;
-                let pp = idx/4;
-                let hh = Math.floor(pp/wid);
-                let ww = pp%wid;
-                if (hh == _h) {
-
-                  setPixColor(data, idx, dot_none, dot_none, dot_none);//右
-                  setPixColor(data, idx - gapL, dot_none, dot_none, dot_none);//右上
-                                  
-                  idx = k + gapP + gapL;
-                  pp = idx/4;
-                  hh = Math.floor(pp/wid);
-                  ww = pp%wid;
-                  if (idx < data.length) {
-                    
-                    setPixColor(data, idx, dot_none, dot_none, dot_none);//右下
-                    setPixColor(data, k + gapL, dot_none, dot_none, dot_none);//下
-                    setPixColor(data, k - gapP + gapL, dot_none, dot_none, dot_none);//左下
-                    
-                  }
-                }
-                
-            }
-          }
-      }
-      //verticle
-      ctx.putImageData(mask, fsize, 0);
-      //ctx.putImageData(mask, 0, 0);
-      
-    }
-    //
-    
-    window.requestAnimationFrame(anim_update);
-
-  } else {
+  if (keepGoing != 1) {
     if (phase != 0) {
-      initAnim();
+        initAnim();
+    }
+    return;
+  }
+
+  if (maskimg) {    
+    ctx.fillStyle = 'black';
+    //verticle
+    ctx.fillRect(left_gap - 4, 0, fsize + 8, canvas.height);
+    //ctx.fillRect(0, 0, canvas.width, fsize + 9);
+  }
+    
+  for (var i = 0;i<particles.length;i++) {
+    particles[i].update(canvas, ctx, dt);
+  }
+
+  //verticle
+  if (particles[particles.length - 1].activeFlag == false) { //
+    let yy = canvas.height + fsize;
+    for (var i = 0;i<particles.length;i++) {
+      let txtlen = particles[i].initial(canvas);
+      particles[i].y = yy;
+      yy += (txtlen + 2) * fsize;
     }
   }
 
+
+  if (!maskimg) {
+    window.requestAnimationFrame(anim_update);
+    return;
+  }
+
+  ctx.drawImage(maskimg, left_gap, 0);
+
+  if (dots == 1) {
+      window.requestAnimationFrame(anim_update);
+      return;
+  }
+
+  let mask = ctx.getImageData(left_gap, 0, fsize, canvas.height);
+        
+  //ctx.drawImage(maskimg, 0, 0);
+  //let mask = ctx.getImageData(0, 0, canvas.width, fsize);
+  
+  var data = mask.data;
+
+  //verticle
+  let wid = fsize;
+  //let wid = canvas.widt
+    
+  for (let i = initDot;i < data.length;i += jumpLine) {
+          
+    let pix = i/4;
+    let h = Math.floor(pix/wid);
+    //let w = pix%wi
+    if (h > maskHeight) break;
+    
+    for (let k = i;;k+=jumpSide) {
+    
+      let _pix = k/4;
+      let _h = Math.floor(_pix/wid);
+      let _w = _pix%wid;
+      if (_h != h) break;
+      if (_w > maskWidth) break;
+
+      switch(dots) {
+        case 2:
+          setPix4_2(data, k);
+          break;
+        case 3:
+          setPix4_3(data, k);
+          break;
+        case 4:
+          setPix4_4(data, k);
+          break;
+        case 5:
+          setPix4_5(data, k);
+          break;
+      }
+
+      /*
+      setPixColor(data, k, _r, _g, _b);//中        
+              
+      if (dots == 1) continue;
+    
+      setPixColor(data, k - gapP, _r, _g, _b);//左
+      setPixColor(data, k - gapL, _r, _g, _b);//上
+      setPixColor(data, k - gapP - gapL, _rc, _gc, _bc);//左上
+
+      if (dots == 2) continue;
+              
+      //右
+      setPixColor(data, k + gapP,         _r,  _g,  _b);
+      //右上
+      setPixColor(data, k + gapP - gapL, _rc, _gc, _bc);
+      //右下
+      setPixColor(data, k + gapP + gapL, _rc, _gc, _bc);
+      //下
+      setPixColor(data, k + gapL, _r, _g, _b);
+      //左下
+      setPixColor(data, k - gapP + gapL, _rc, _gc, _bc);
+
+      if (dots == 3) continue;
+
+      let _k = k + gapP + gapL + gapP + gapL;
+      setPixColor(data, _k, _rc, _gc, _bc);
+
+      setPixColor(data, _k - gapL,               _rc, _gc, _bc);
+      setPixColor(data, _k - gapL - gapL,        _rc, _gc, _bc);
+      setPixColor(data, _k - gapL - gapL - gapL, _rc, _gc, _bc);
+
+      setPixColor(data, _k - gapP,               _rc, _gc, _bc);
+      setPixColor(data, _k - gapP - gapP,        _rc, _gc, _bc);
+      setPixColor(data, _k - gapP - gapP - gapP, _rc, _gc, _bc);
+    
+      if (dots == 4) continue;
+    
+      _k = k - gapP - gapL - gapP - gapL;
+      setPixColor(data, _k, _rc, _gc, _bc);
+
+      setPixColor(data, _k + gapL,                      _rc, _gc, _bc);
+      setPixColor(data, _k + gapL + gapL,               _rc, _gc, _bc);
+      setPixColor(data, _k + gapL + gapL + gapL,        _rc, _gc, _bc);
+      setPixColor(data, _k + gapL + gapL + gapL + gapL, _rc, _gc, _bc);
+      setPixColor(data, _k + gapP,                      _rc, _gc, _bc);
+      setPixColor(data, _k + gapP + gapP,               _rc, _gc, _bc);
+      setPixColor(data, _k + gapP + gapP + gapP,        _rc, _gc, _bc);
+      setPixColor(data, _k + gapP + gapP + gapP + gapP, _rc, _gc, _bc);
+      */
+    }
+  }
+
+  //verticle
+  ctx.putImageData(mask, left_gap, 0);
+  
+  window.requestAnimationFrame(anim_update);
+
+}
+
+function setPix4_2(data, k) {
+    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+        _r = data[k];
+        _g = data[k+1];
+        _b = data[k+2];
+    } else {
+        _r = dot_none;
+        _g = dot_none;
+        _b = dot_none;
+    }
+
+    setPixColor(data, k,               _r, _g, _b);//中
+    setPixColor(data, k - gapP,        _r, _g, _b);//左
+    setPixColor(data, k - gapL,        _r, _g, _b);//上
+    setPixColor(data, k - gapP - gapL, _r, _g, _b);//左上
+}
+
+function setPix4_3(data, k) {
+
+    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+        _r = data[k];
+        _g = data[k+1];
+        _b = data[k+2];
+    } else {
+        _r = dot_none;
+        _g = dot_none;
+        _b = dot_none;
+    }
+
+    setPixColor(data, k,               _r, _g, _b);//中
+    setPixColor(data, k - gapP,        _r, _g, _b);//左
+    setPixColor(data, k - gapL,        _r, _g, _b);//上
+    setPixColor(data, k - gapP - gapL, 0, 0, 0);//左上
+
+    //右
+    setPixColor(data, k + gapP,        _r, _g, _b);
+    //右上
+    setPixColor(data, k + gapP - gapL, 0, 0, 0);
+    //右下
+    setPixColor(data, k + gapP + gapL, 0, 0, 0);
+    //下
+    setPixColor(data, k + gapL,        _r, _g, _b);
+    //左下
+    setPixColor(data, k - gapP + gapL, 0, 0, 0);
+}
+
+function setPix4_4(data, k) {
+
+    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+        _r = data[k];
+        _g = data[k+1];
+        _b = data[k+2];
+    } else {
+        _r = dot_none;
+        _g = dot_none;
+        _b = dot_none;
+    }
+
+    setPixColor(data, k,               _r, _g, _b);//中
+    setPixColor(data, k - gapP,        _r, _g, _b);//左
+    setPixColor(data, k - gapL,        _r, _g, _b);//上
+    setPixColor(data, k - gapP - gapL, 0, 0, 0);//左上
+
+    //右
+    setPixColor(data, k + gapP,        _r, _g, _b);
+    //右上
+    setPixColor(data, k + gapP - gapL, _r, _g, _b);
+    //右下
+    setPixColor(data, k + gapP + gapL, _r, _g, _b);
+    //下
+    setPixColor(data, k + gapL,        _r, _g, _b);
+    //左下
+    setPixColor(data, k - gapP + gapL, _r, _g, _b);
+
+
+    let _k = k + gapP + gapL + gapP + gapL;
+    setPixColor(data, _k, 0, 0, 0);
+
+    setPixColor(data, _k - gapL,               _r, _g, _b);
+    setPixColor(data, _k - gapL - gapL,        _r, _g, _b);
+    setPixColor(data, _k - gapL - gapL - gapL, 0, 0, 0);
+
+    setPixColor(data, _k - gapP,               _r, _g, _b);
+    setPixColor(data, _k - gapP - gapP,        _r, _g, _b);
+    setPixColor(data, _k - gapP - gapP - gapP, 0, 0, 0);
+
+}
+
+function setPix4_5(data, k) {
+
+    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+        _r = data[k];
+        _g = data[k+1];
+        _b = data[k+2];
+    } else {
+        _r = dot_none;
+        _g = dot_none;
+        _b = dot_none;
+    }
+
+    setPixColor(data, k,               _r, _g, _b);//中
+    setPixColor(data, k - gapP,        _r, _g, _b);//左
+    setPixColor(data, k - gapL,        _r, _g, _b);//上
+    setPixColor(data, k - gapP - gapL, _r, _g, _b);//左上
+
+    //右
+    setPixColor(data, k + gapP,        _r, _g, _b);
+    //右上
+    setPixColor(data, k + gapP - gapL, _r, _g, _b);
+    //右下
+    setPixColor(data, k + gapP + gapL, _r, _g, _b);
+    //下
+    setPixColor(data, k + gapL,        _r, _g, _b);
+    //左下
+    setPixColor(data, k - gapP + gapL, _r, _g, _b);
+
+
+    let _k = k + gapP + gapL + gapP + gapL;
+    setPixColor(data, _k, 0, 0, 0);
+
+    setPixColor(data, _k - gapL,               _r, _g, _b);
+    setPixColor(data, _k - gapL - gapL,        _r, _g, _b);
+    setPixColor(data, _k - gapL - gapL - gapL, _r, _g, _b);//
+
+    setPixColor(data, _k - gapP,               _r, _g, _b);
+    setPixColor(data, _k - gapP - gapP,        _r, _g, _b);
+    setPixColor(data, _k - gapP - gapP - gapP, _r, _g, _b);
+
+    _k = k - gapP - gapL - gapP - gapL;
+    setPixColor(data, _k, 0, 0, 0);
+
+    setPixColor(data, _k + gapL,                      _r, _g, _b);
+    setPixColor(data, _k + gapL + gapL,               _r, _g, _b);
+    setPixColor(data, _k + gapL + gapL + gapL,        _r, _g, _b);
+    setPixColor(data, _k + gapL + gapL + gapL + gapL, 0, 0, 0);
+
+    setPixColor(data, _k + gapP,                      _r, _g, _b);
+    setPixColor(data, _k + gapP + gapP,               _r, _g, _b);
+    setPixColor(data, _k + gapP + gapP + gapP,        _r, _g, _b);
+    setPixColor(data, _k + gapP + gapP + gapP + gapP, 0, 0, 0);
 }
 
 function setPixColor(data, idx, r, g, b) {
@@ -1396,7 +1513,7 @@ function initAnim() {
   particles = [];
 
   //verticle
-  let xx = fsize;
+  let xx = left_gap;
   let yy = c.height + fsize;
   let _idx = 0;
   var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
@@ -1436,7 +1553,7 @@ function generateMask(w, h, s, d) {
         
         let _x = x%(s + d);
         let _y = y%(s + d);
-        if (_x >= s && _y >= s) { //d
+        if (_x >= s && _y >= s && x < maskWidth && y < maskHeight) { //d
           data[idx + 3] = 0;
         }
 
@@ -1455,6 +1572,12 @@ function ledEffect() {
   //verticle
   let w = fsize;
   let h = canvas.height;
+
+  maskWidth = fsize;//(Math.floor(canvas.width/(side + dots)) - 1) * (side + dots);
+  maskHeight = (Math.floor(canvas.height/(side + dots)) - 1) * (side + dots);
+
+  gapL = fsize * 4;
+  gapP = 4;
 
   //let w = canvas.width;
   //let h = fsize;
@@ -1573,11 +1696,13 @@ window.addEventListener('resize', doresize);
 //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
 window.addEventListener('keyup', keyboard, false);
 
+/*
 if (subtitle.length > 1 && subtitle[1].length > 0) {
   phase = 1;
   initAnim();
   ledEffect();
 }
+*/
 
 /*
 function removeDiv() {

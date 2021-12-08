@@ -1,20 +1,21 @@
 <script type="text/javascript" charset="UTF-8"> 
 
   var subtitle = [ [''], 
-                   ['中文測試🚘🚖', '2.中試🗿', '3.🗿']];
+                   [''],
+                   ['']];
   
-  var side = 3;
-  var dots = 3;
+  var side = 5;
+  var dots = 5;
   
   var fsize = 128;
-  fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
   
-  var FONT = (fsize - 4) + "px 標楷體";//黑體-繁";//宋體-繁";
+  var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
   var speed = 200;
   
   var initDot = 0;
   
   var dot_none = 40;
+  var criteria = dot_none/2;
   
   var dot_rc = 255;
   var dot_gc = 255;
@@ -35,19 +36,35 @@
   } else if (dots == 1) {
     initDot = (side * fsize + side) * 4;//(4 * fsize + 4) * 4;
   }
+
+  var maskWidth = 100;
+  var maskHeight = 100;
+
+  var gapL = 0;
+  var gapP = 0;
   
-  function textGo() {
-    let len = subtitle.length;
-    let value = document.getElementById("txt").value;//String.fromCodePoint(0x1F604);
+  function _textGo(_id, idx) {
+    let value = document.getElementById(_id).value.trim();//String.fromCodePoint(0x1F604);
     if (value.length == 0) 
-      return;
-    subtitle[len] = [value];
-    phase = len;
-    switch2Marquee();
-    keepGoing = 0;
-    initAnim();
-    ledEffect();
+      return false;
     
+    subtitle[idx] = [value];
+    phase = idx;
+    return true;
+  }
+
+  function textGo() {
+    let txt1 = document.getElementById("txt").value.trim();
+    let txt2 = document.getElementById("txt2").value.trim();
+    if (txt1.length + txt2.length > 0) {
+      subtitle[1] = [txt1];
+      subtitle[2] = [txt2];
+      switch2Marquee();
+      keepGoing = 0;
+      initAnim();
+      ledEffect();
+    }
+
   }
   
   function emojiGo(emj) {
@@ -101,9 +118,34 @@
     <div id="ui" style="margin: 2% 2%;">
       <br/>
       <!--p style="font-size:48px">&#x1f604;</p-->
-      <input type="text" id="txt" name="myfield" value="中文測試" placeholder="message"/><br/>
+      <input type="text" id="txt" name="myfield" value="測試1" placeholder="message"/><br/>
+      <input type="text" id="txt2" name="myfield" value="測試2" placeholder="message"/><br/>
       <button type="button" id="go" style="margin: 2% 2%;width:120px;height:40px;border:2px #ff0000;" onclick="textGo()">OK</button>
-  
+      
+      <br/>
+
+    <a onclick="emojiGo('😀')">😀</a><a onclick="emojiGo('😁')">😁</a>
+    <a onclick="emojiGo('😆')">😆</a><a onclick="emojiGo('😅')">😅</a> 
+    <a onclick="emojiGo('😂')">😂</a><a onclick="emojiGo('🤣')">🤣</a> 
+    <a onclick="emojiGo('🥲')">🥲</a><a onclick="emojiGo('😇')">😇</a> 
+    <a onclick="emojiGo('😍')">😍</a><a onclick="emojiGo('😋')">😋</a> 
+    <a onclick="emojiGo('😜')">😜</a><a onclick="emojiGo('😎')">😎</a> 
+    <a onclick="emojiGo('😔')">😔</a><a onclick="emojiGo('😢')">😢</a> 
+    <a onclick="emojiGo('😭')">😭</a><a onclick="emojiGo('😤')">😤</a> 
+    <a onclick="emojiGo('😡')">😡</a><a onclick="emojiGo('😳')">😳</a> 
+    <a onclick="emojiGo('🥶')">🥶</a><a onclick="emojiGo('😱')">😱</a> 
+    <a onclick="emojiGo('😨')">😨</a><a onclick="emojiGo('😵')">😵</a> 
+    <a onclick="emojiGo('🤢')">🤢</a><a onclick="emojiGo('🤮')">🤮</a> 
+    <a onclick="emojiGo('🤧')">🤧</a><a onclick="emojiGo('😷')">😷</a> 
+    <a onclick="emojiGo('🤒')">🤒</a><a onclick="emojiGo('🤕')">🤕</a> 
+    <a onclick="emojiGo('🤑')">🤑</a><a onclick="emojiGo('😈')">😈</a> 
+    <a onclick="emojiGo('👹')">👹</a><a onclick="emojiGo('🤡')">🤡</a> 
+    <a onclick="emojiGo('💩')">💩</a><a onclick="emojiGo('👻')">👻</a> 
+    <a onclick="emojiGo('💀')">💀</a><a onclick="emojiGo('👽')">👽</a> 
+    <a onclick="emojiGo('👾')">👾</a><a onclick="emojiGo('🤖')">🤖</a> 
+
+    <br/>
+
     </div>
   
     <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
@@ -124,9 +166,7 @@
       canvas.height = window.innerHeight;
       ctx = canvas.getContext("2d");
 
-      jumpLine = (side + dots) * canvas.width * 4;
-      jumpSide = (side + dots) * 4;
-
+      /*
       if (dots == 3) {
         initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
       } else if (dots == 2) {
@@ -134,6 +174,32 @@
       } else if (dots == 1) {
         initDot = (side * canvas.width + side) * 4;//(4 * fsize + 4) * 4;
       }
+      */
+      
+      jumpLine = (side + dots) * canvas.width * 4;
+      jumpSide = (side + dots) * 4;
+      fsize = canvas.height/3;
+      FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
+
+      switch(dots) {
+        case 1:
+          initDot = (side * canvas.width + side) * 4;
+          break;
+        case 2:
+        case 3:
+        case 4:
+          initDot = ((side + 1) * canvas.width + (side + 1)) * 4;
+          break;
+        case 5:
+          initDot = ((side + 2) * canvas.width + (side + 2)) * 4;
+          break;
+      }
+
+      gapL = canvas.width * 4;
+      gapP = 4;
+      
+      //fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
+
   }
   
   function newParticle_txt(_p, _idx, xx, yy) {
@@ -194,6 +260,10 @@
     }
     return p;
   }
+
+  var _r = dot_r;// * Math.random();
+  var _g = dot_g;// * Math.random();
+  var _b = dot_b;// * Math.random();
   
   function anim_update(elapse) {
   
@@ -205,185 +275,265 @@
     let dt = elapse - pre;
     pre = elapse;
   
-    if (keepGoing == 1) {
-      
-      if (maskimg) {
-        
-        //ctx.fillStyle = 'black';
-        //verticle
-        //ctx.fillRect(0, 0, canvas.width, canvas.height);
-        //ctx.fillRect(0, 0, canvas.width, fsize + 9);
+    if (keepGoing != 1) {
+      if (phase != 0) {
+        initAnim();
       }
-      
-      for (var i = 0;i<particles.length;i++) {
-          particles[i].update(canvas, ctx, dt);
-      }
-  
-      /*
-      //verticle
-      if (particles[particles.length - 1].activeFlag == false) { //
-        let yy = canvas.height + fsize;
-        for (var i = 0;i<particles.length;i++) {
-          let txtlen = particles[i].initial(canvas);
-          particles[i].y = yy;
-          yy += (txtlen + 2) * fsize;
-        }
-      }
-      */
-      
-      if (particles[particles.length - 1].activeFlag == false) { //
+      return;
+    }
+
+    for (var i = 0;i<particles.length;i++) {
+        particles[i].update(canvas, ctx, dt);
+    }
+
+    if (particles[particles.length - 1].activeFlag == false) { //
         let xx = canvas.width;
         for (var i = 0;i<particles.length;i++) {
           let txtlen = particles[i].initial(canvas);
           particles[i].x = xx;
           xx += txtlen + 2 * fsize;
         }
-      }
-      
-  
-      if (maskimg) {
-          
-          //verticle
-          //ctx.drawImage(maskimg, fsize, 0);
-          //let mask = ctx.getImageData(fsize, 0, fsize, canvas.height);
-          
-          ctx.drawImage(maskimg, 0, 0);
-          let mask = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          
-          var data = mask.data;
-          //verticle
-          //let gapL = fsize * 4;
-          let gapL = canvas.width * 4;
-  
-          let gapP = 4;
-          //verticle
-          //let wid = fsize;
-          let wid = canvas.width;
-  
-          let _r = dot_r * Math.random();
-          let _g = dot_g * Math.random();
-          let _b = dot_b * Math.random();
-  
-          let _rc = dot_rc * Math.random();
-          let _gc = dot_gc * Math.random();
-          let _bc = dot_bc * Math.random();
-                  
-          for (let i = initDot;i < data.length;i += jumpLine) {
-          
-            let pix = i/4;
-            let h = Math.floor(pix/wid);
-            let w = pix%wid;
-          
-            for (let k = i;;k+=jumpSide) {
-              let _pix = k/4;
-              let _h = Math.floor(_pix/wid);
-              let _w = _pix%wid;
-              if (_h != h) 
-                break;
-              
-              _r = data[k];
-              _g = data[k+1];
-              _b = data[k+2];
-  
-              _rc = data[k];
-              _gc = data[k+1];
-              _bc = data[k+2];
-              
-  
-              if ((data[k] > dot_none/2 || data[k+1] > dot_none/2 || data[k+2] > dot_none/2)) {
-              //if (data[k] > 127 || data[k+1] > 127 || data[k+2] > 127) {
-              //if (data[k] > 100) {// + data[k+1] + data[k+2] > 300) {
-                  
-                  setPixColor(data, k, _r, _g, _b);//中
-                  
-                  if (dots == 1) continue;
-  
-                  setPixColor(data, k - gapP, _r, _g, _b);//左
-                  setPixColor(data, k - gapL, _r, _g, _b);//上
-                  setPixColor(data, k - gapP - gapL, _rc, _gc, _bc);//左上
-  
-                  if (dots == 2) continue;
-  
-                  //右
-                  let idx = k + gapP;
-                  let pp = idx/4;
-                  let hh = Math.floor(pp/wid);
-                  let ww = pp%wid;
-                  if (hh == _h) {
-                    //右
-                    setPixColor(data, idx, _r, _g, _b);
-                    //右上
-                    setPixColor(data, idx - gapL, _rc, _gc, _bc);
-                                      
-                    idx = k + gapP + gapL;
-                    pp = idx/4;
-                    hh = Math.floor(pp/wid);
-                    ww = pp%wid;
-                    if (idx < data.length) {
-                      //右下
-                      setPixColor(data, idx, _rc, _gc, _bc);
-                      //下
-                      setPixColor(data, k + gapL, _r, _g, _b);
-                      //左下
-                      setPixColor(data, k - gapP + gapL, _rc, _gc, _bc);
-                      
-                    }
-                  }
-              } else {
-                  
-                  setPixColor(data, k, dot_none, dot_none, dot_none);//中
-                  
-                  if (dots == 1) continue;
-  
-                  setPixColor(data, k - gapP, dot_none, dot_none, dot_none);//左
-                  setPixColor(data, k - gapL, dot_none, dot_none, dot_none);//上
-                  setPixColor(data, k - gapP - gapL, dot_none, dot_none, dot_none);//左上
-                  
-                  if (dots == 2) continue;
-  
-                  
-                  let idx = k + gapP;
-                  let pp = idx/4;
-                  let hh = Math.floor(pp/wid);
-                  let ww = pp%wid;
-                  if (hh == _h) {
-  
-                    setPixColor(data, idx, dot_none, dot_none, dot_none);//右
-                    setPixColor(data, idx - gapL, dot_none, dot_none, dot_none);//右上
-                                    
-                    idx = k + gapP + gapL;
-                    pp = idx/4;
-                    hh = Math.floor(pp/wid);
-                    ww = pp%wid;
-                    if (idx < data.length) {
-                      
-                      setPixColor(data, idx, dot_none, dot_none, dot_none);//右下
-                      setPixColor(data, k + gapL, dot_none, dot_none, dot_none);//下
-                      setPixColor(data, k - gapP + gapL, dot_none, dot_none, dot_none);//左下
-                      
-                    }
-                  }
-                  
-              }
-            }
+    }
+
+    for (var i = 0;i<particles2.length;i++) {
+        particles2[i].update(canvas, ctx, dt);
+    }
+
+    if (particles2[particles2.length - 1].activeFlag == false) { //
+        let xx = canvas.width;
+        for (var i = 0;i<particles2.length;i++) {
+          let txtlen = particles2[i].initial(canvas);
+          particles2[i].x = xx;
+          xx += txtlen + 2 * fsize;
         }
-        //verticle
-        //ctx.putImageData(mask, fsize, 0);
-        ctx.putImageData(mask, 0, 0);
-        
-      }
-      //
+    }
       
+    if (!maskimg) {
       window.requestAnimationFrame(anim_update);
-  
-    } else {
-      if (phase != 0) {
-        initAnim();
-      }
+      return;
     }
   
-  }
+    ctx.drawImage(maskimg, 0, 0);
+
+    if (dots == 1) {
+      window.requestAnimationFrame(anim_update);
+      return;
+    }
+
+    let mask = ctx.getImageData(0, 0, canvas.width, canvas.height);
+     var data = mask.data;
+
+    //verticle
+    //let gapL = fsize * 4;
+    //verticle
+    //let wid = fsize;
+    
+    let wid = canvas.width;
+        
+    for (let i = initDot;i < data.length;i += jumpLine) {
+          
+      //let pix = ;
+      let h = Math.floor((i/4)/wid);
+      //let w = pix%wi
+      //if (h > maskHeight) break;
+
+      for (let k = i;;k+=jumpSide) {
+
+        let _pix = k/4;
+        let _h = Math.floor(_pix/wid);
+        let _w = _pix%wid;
+
+        if (_w > maskWidth) break;
+        if (_h != h) break;
+        
+        if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+
+          _r = data[k];
+          _g = data[k+1];
+          _b = data[k+2]
+
+        } else {
+
+          _r = dot_none;
+          _g = dot_none;
+          _b = dot_none;
+
+        }
+
+        switch(dots) {
+          case 2:
+            setPix4_2(data, k, _r, _g, _b);
+            break;
+          case 3:
+            setPix4_3(data, k, _r, _g, _b);
+            break;
+          case 4:
+            setPix4_4(data, k, _r, _g, _b);
+            break;
+          case 5:
+            setPix4_5(data, k, _r, _g, _b);
+            break;
+        }
+
+        /*
+        setPixColor(data, k, _r, _g, _b);//中
+          
+        //if (dots == 1) continue;
+
+        setPixColor(data, k - gapP, _r, _g, _b);//左
+        setPixColor(data, k - gapL, _r, _g, _b);//上
+        setPixColor(data, k - gapP - gapL, _rc, _gc, _bc);//左上
   
+        if (dots == 2) continue;
+          
+        //右
+        setPixColor(data, k + gapP,         _r,  _g,  _b);
+        //右上
+        setPixColor(data, k + gapP - gapL, _rc, _gc, _bc);
+        //右下
+        setPixColor(data, k + gapP + gapL, _rc, _gc, _bc);
+        //下
+        setPixColor(data, k + gapL, _r, _g, _b);
+        //左下
+        setPixColor(data, k - gapP + gapL, _rc, _gc, _bc);
+
+        if (dots == 3) continue;
+
+        let _k = k + gapP + gapL + gapP + gapL;
+        setPixColor(data, _k, _rc, _gc, _bc);
+
+        setPixColor(data, _k - gapL,               _r, _g, _b);
+        setPixColor(data, _k - gapL - gapL,        _r, _g, _b);
+        setPixColor(data, _k - gapL - gapL - gapL, _rc, _gc, _bc);
+
+        setPixColor(data, _k - gapP,               _r, _g, _b);
+        setPixColor(data, _k - gapP - gapP,        _r, _g, _b);
+        setPixColor(data, _k - gapP - gapP - gapP, _rc, _gc, _bc);
+
+        if (dots == 4) continue;
+
+        _k = k - gapP - gapL - gapP - gapL;
+        setPixColor(data, _k, _rc, _gc, _bc);
+
+        setPixColor(data, _k + gapL,                      _r, _g, _b);
+        setPixColor(data, _k + gapL + gapL,               _r, _g, _b);
+        setPixColor(data, _k + gapL + gapL + gapL,        _r, _g, _b);
+        setPixColor(data, _k + gapL + gapL + gapL + gapL, _rc, _gc, _bc);
+
+        setPixColor(data, _k + gapP,                      _r, _g, _b);
+        setPixColor(data, _k + gapP + gapP,               _r, _g, _b);
+        setPixColor(data, _k + gapP + gapP + gapP,        _r, _g, _b);
+        setPixColor(data, _k + gapP + gapP + gapP + gapP, _rc, _gc, _bc);
+        */
+
+      }
+    }
+      
+    ctx.putImageData(mask, 0, 0);
+    
+    window.requestAnimationFrame(anim_update);
+  
+  }
+
+  function setPix4_2(data, idx, r, g, b) {
+    setPixColor(data, idx,               r, g, b);//中
+    setPixColor(data, idx - gapP,        r, g, b);//左
+    setPixColor(data, idx - gapL,        r, g, b);//上
+    setPixColor(data, idx - gapP - gapL, r, g, b);//左上
+  }
+
+  function setPix4_3(data, idx, r, g, b) {
+    setPixColor(data, idx,               r, g, b);//中
+    setPixColor(data, idx - gapP,        r, g, b);//左
+    setPixColor(data, idx - gapL,        r, g, b);//上
+    setPixColor(data, idx - gapP - gapL, 0, 0, 0);//左上
+
+    //右
+    setPixColor(data, idx + gapP,        r, g, b);
+    //右上
+    setPixColor(data, idx + gapP - gapL, 0, 0, 0);
+    //右下
+    setPixColor(data, idx + gapP + gapL, 0, 0, 0);
+    //下
+    setPixColor(data, idx + gapL,        r, g, b);
+    //左下
+    setPixColor(data, idx - gapP + gapL, 0, 0, 0);
+  }
+
+  function setPix4_4(data, idx, r, g, b) {
+    setPixColor(data, idx,               r, g, b);//中
+    setPixColor(data, idx - gapP,        r, g, b);//左
+    setPixColor(data, idx - gapL,        r, g, b);//上
+    setPixColor(data, idx - gapP - gapL, 0, 0, 0);//左上
+
+    //右
+    setPixColor(data, idx + gapP,        r, g, b);
+    //右上
+    setPixColor(data, idx + gapP - gapL, r, g, b);
+    //右下
+    setPixColor(data, idx + gapP + gapL, r, g, b);
+    //下
+    setPixColor(data, idx + gapL,        r, g, b);
+    //左下
+    setPixColor(data, idx - gapP + gapL, r, g, b);
+
+
+    let _k = idx + gapP + gapL + gapP + gapL;
+    setPixColor(data, _k, 0, 0, 0);
+
+    setPixColor(data, _k - gapL,               r, g, b);
+    setPixColor(data, _k - gapL - gapL,        r, g, b);
+    setPixColor(data, _k - gapL - gapL - gapL, 0, 0, 0);
+
+    setPixColor(data, _k - gapP,               r, g, b);
+    setPixColor(data, _k - gapP - gapP,        r, g, b);
+    setPixColor(data, _k - gapP - gapP - gapP, 0, 0, 0);
+
+  }
+
+  function setPix4_5(data, idx, r, g, b) {
+    setPixColor(data, idx,               r, g, b);//中
+    setPixColor(data, idx - gapP,        r, g, b);//左
+    setPixColor(data, idx - gapL,        r, g, b);//上
+    setPixColor(data, idx - gapP - gapL, r, g, b);//左上
+
+    //右
+    setPixColor(data, idx + gapP,        r, g, b);
+    //右上
+    setPixColor(data, idx + gapP - gapL, r, g, b);
+    //右下
+    setPixColor(data, idx + gapP + gapL, r, g, b);
+    //下
+    setPixColor(data, idx + gapL,        r, g, b);
+    //左下
+    setPixColor(data, idx - gapP + gapL, r, g, b);
+
+
+    let _k = idx + gapP + gapL + gapP + gapL;
+    setPixColor(data, _k, 0, 0, 0);
+
+    setPixColor(data, _k - gapL,               r, g, b);
+    setPixColor(data, _k - gapL - gapL,        r, g, b);
+    setPixColor(data, _k - gapL - gapL - gapL, r, g, b);//
+
+    setPixColor(data, _k - gapP,               r, g, b);
+    setPixColor(data, _k - gapP - gapP,        r, g, b);
+    setPixColor(data, _k - gapP - gapP - gapP, r, g, b);
+
+    _k = idx - gapP - gapL - gapP - gapL;
+    setPixColor(data, _k, 0, 0, 0);
+
+    setPixColor(data, _k + gapL,                      r, g, b);
+    setPixColor(data, _k + gapL + gapL,               r, g, b);
+    setPixColor(data, _k + gapL + gapL + gapL,        r, g, b);
+    setPixColor(data, _k + gapL + gapL + gapL + gapL, 0, 0, 0);
+
+    setPixColor(data, _k + gapP,                      r, g, b);
+    setPixColor(data, _k + gapP + gapP,               r, g, b);
+    setPixColor(data, _k + gapP + gapP + gapP,        r, g, b);
+    setPixColor(data, _k + gapP + gapP + gapP + gapP, 0, 0, 0);
+  }
+
   function setPixColor(data, idx, r, g, b) {
     data[idx]     = r;
     data[idx + 1] = g;
@@ -398,6 +548,10 @@
         return;
     }
   
+    if (subtitle.length == 1) {
+        return;
+    }
+
     var c = document.getElementById("canvas");
     var ctx = c.getContext("2d");
   
@@ -408,10 +562,19 @@
         particles[i].release();
       }
     }
-  
+
     particles.length = 0;
     particles = [];
   
+    if (particles2.length >= 1) {
+      for (var i = 0;i<particles2.length;i++) {
+        particles2[i].release();
+      }
+    }
+
+    particles2.length = 0;
+    particles2 = [];
+
     /*
     //verticle
     let xx = fsize;
@@ -425,14 +588,27 @@
     }
     */
 
-    let yy = c.height/2.0;
+    //for (let _i = 1;_i<subtitle.length;_i++) {}
+
+    let yy = c.height/4.0 + fsize/2;
     let xx = c.width + fsize;
-    var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
+    var total = subtitle[1].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
     for (let _idx = 0;_idx<total;_idx++) {
-      particles[_idx] = newParticle_txt(phase, _idx,  xx, yy);//();
+      particles[_idx] = newParticle_txt(1, _idx,  xx, yy);//();
       let txtlen = particles[_idx].initial(c);
       xx += (txtlen + fsize);
     }
+
+    //if (subtitle.length > 2) {
+      yy = 3.0 * c.height/4.0 + fsize/2;
+      xx = c.width + fsize;
+      total = subtitle[2].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
+      for (let _idx = 0;_idx<total;_idx++) {
+        particles2[_idx] = newParticle_txt(2, _idx,  xx, yy);//();
+        let txtlen = particles2[_idx].initial(c);
+        xx += (txtlen + fsize);
+      }
+    //}
   
     keepGoing = 1;
     window.requestAnimationFrame(anim_update);
@@ -464,7 +640,7 @@
           
           let _x = x%(s + d);
           let _y = y%(s + d);
-          if (_x >= s && _y >= s) { //d
+          if (_x >= s && _y >= s && x < maskWidth && y < maskHeight) { //d
             data[idx + 3] = 0;
           }
   
@@ -484,26 +660,29 @@
     //let w = fsize;
     //let h = canvas.height;
   
-    let w = canvas.width;
-    let h = canvas.height;
+    let w = canvas.width;//maskWidth
+    let h = canvas.height;//maskHeight
+
+    maskWidth = (Math.floor(canvas.width/(side + dots))) * (side + dots);
+    maskHeight = (Math.floor(canvas.height/(side + dots))) * (side + dots);
   
     var mask = generateMask(w, h, side, dots);
           
-      // create a temporary canvas
-      var tempCanvas = document.createElement("canvas");
-      var tempCtx = tempCanvas.getContext("2d");
+    // create a temporary canvas
+    var tempCanvas = document.createElement("canvas");
+    var tempCtx = tempCanvas.getContext("2d");
   
-      // set the temp canvas size == the canvas size
-      tempCanvas.width = w;
-      tempCanvas.height = canvas.height;
+    // set the temp canvas size == the canvas size
+    tempCanvas.width = w;
+    tempCanvas.height = canvas.height;
   
-      // put the modified pixels on the temp canvas
-      tempCtx.putImageData(mask, 0, 0);
+    // put the modified pixels on the temp canvas
+    tempCtx.putImageData(mask, 0, 0);
   
-      // use the tempCanvas.toDataURL to create an img object
-      maskimg = new Image();
-      //maskimg.onload = function() {}
-      maskimg.src = tempCanvas.toDataURL();
+    // use the tempCanvas.toDataURL to create an img object
+    maskimg = new Image();
+    //maskimg.onload = function() {}
+    maskimg.src = tempCanvas.toDataURL();
   
   }
   
@@ -512,13 +691,8 @@
   
   var pre = 0;
   var particles = [];
+  var particles2 = [];
   var doblank = 0;
-  
-  function react() {
-    if (maskimg != null) {
-      ledEffect();
-    }
-  }
   
   function keyboard(e) {
   
