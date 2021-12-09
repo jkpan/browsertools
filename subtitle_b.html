@@ -32866,10 +32866,11 @@ function printSideTxt(i, j, x, y, a) {
 
 function printTxt(i, j) {
 
-  var x = canvas.width * 0.1;
-  var y = canvas.height * 0.66;
+  let x = canvas.width * 0.1;
+  let y = canvas.height * 0.66;
   if (animSwh == 1) 
     y = canvas.height * 0.5;
+  let fixy = y;
   
   let i_1 = getPreChapter(i, j);
   let j_1 = getPreVerse(i, j);
@@ -32913,37 +32914,61 @@ function printTxt(i, j) {
   printSideTxt(i_2, j_2, x, y - fontsize * 3, 0.4);
   printSideTxt(i_1, j_1, x, y - fontsize * 2, 0.6);
 
-  if (ctx.measureText(ptxt).width + px > canvas.width * 0.1 && j > 0) {
-    _drawSdwtxt(abbr[song], px, y);
-    _drawSdwtxt('' + i + ' : ' + j, px, y + fontsize_sml);
-  } else {
-    _drawSdwtxt(ptxt, px, y);
-  }
-
   ctx.font = FONT;
 
   if (ctx.measureText(txt).width > canvas.width * 0.9) {
 
-    do {
+    //console.log((ctx.measureText(txt).width/(canvas.width * 0.9)) + ', ' + Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9)));
+    let row = Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9));
+    if (doblank != 1) {
+      ctx.fillStyle = 'rgb(0,0,0,0.2)';
+      ctx.fillRect (0, y - fontsize, canvas.width, fontsize * (row + 0.5));
+    }
+    
+    let _row = 0;
+
+    do {     
 
       let ratio = canvas.width * 0.9/ctx.measureText(txt).width;
       ratio = Math.floor(txt.length * ratio) - 1;
       var txt_0 = txt.substr(0, ratio);
+
       _drawSdwtxt(txt_0, x, y);
       y += fontsize;
+      _row++;
+      
       txt = txt.substr(ratio, txt.length - txt_0.length);
- 
+
     } while(ctx.measureText(txt).width > canvas.width * 0.9);
+
+    _row++;
+    if (_row > row) {
+      console.log('_row');
+      ctx.fillStyle = 'rgb(0,0,0,0.2)';
+      ctx.fillRect (0, fixy - fontsize + fontsize * (row + 0.5), canvas.width, fontsize);
+    }
 
     _drawSdwtxt(txt, x, y);
     
   } else {
 
+    if (doblank != 1) {
+      ctx.fillStyle = 'rgb(0,0,0,0.2)';
+      ctx.fillRect (0, y - fontsize, canvas.width, fontsize * 2);
+    }
+    
     _drawSdwtxt(txt, x, y);
   
   }
 
   ctx.font = FONT_SML;
+
+  if (ctx.measureText(ptxt).width + px > canvas.width * 0.1 && j > 0) {
+    _drawSdwtxt(abbr[song], px, fixy);
+    _drawSdwtxt('' + i + ' : ' + j, px, fixy + fontsize_sml);
+  } else {
+    _drawSdwtxt(ptxt, px, fixy);
+  } 
 
   if (ip3 != -1) printSideTxt(ip3, jp3, x, y + fontsize * 4, 0.2);
   if (ip2 != -1) printSideTxt(ip2, jp2, x, y + fontsize * 3, 0.4);
