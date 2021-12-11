@@ -992,13 +992,16 @@
   }
 
   function touchThen(evt) {
-    canvas.requestFullscreen();
+    //canvas.requestFullscreen();
+    if (canvas.hidden) 
+      return;
+    switch2Input();
   }
   
   init();
   
   window.addEventListener('resize', doresize);
-  //window.addEventListener('click', initAnim, false);
+  //window.addEventListener('click', touchThen, false);
   //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
   window.addEventListener('keyup', keyboard, false);
   document.getElementsByTagName("canvas")[0].addEventListener("touchstart", touchThen, false);
