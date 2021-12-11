@@ -3,7 +3,7 @@
 function flow() {
   presetVerse = [
     [''], //0
-    [''], //['約伯記', 1, 2],     //1
+    ['約書亞記', 5, 10], //['約伯記', 1, 2],     //1
     [''], //['撒母耳記上', 12, 2], //2
     [''], //3
     [''], //4
@@ -32921,7 +32921,7 @@ function printTxt(i, j) {
     //console.log((ctx.measureText(txt).width/(canvas.width * 0.9)) + ', ' + Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9)));
     let row = Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9));
     if (doblank != 1) {
-      ctx.fillStyle = 'rgb(0,0,0,0.2)';
+      ctx.fillStyle = 'rgb(0, 0, 200, 0.3)';
       ctx.fillRect (0, y - fontsize, canvas.width, fontsize * (row + 0.5));
     }
     
@@ -32943,8 +32943,7 @@ function printTxt(i, j) {
 
     _row++;
     if (_row > row) {
-      console.log('_row');
-      ctx.fillStyle = 'rgb(0,0,0,0.2)';
+      ctx.fillStyle = 'rgb(0, 0, 200, 0.3)';
       ctx.fillRect (0, fixy - fontsize + fontsize * (row + 0.5), canvas.width, fontsize);
     }
 
@@ -32953,7 +32952,7 @@ function printTxt(i, j) {
   } else {
 
     if (doblank != 1) {
-      ctx.fillStyle = 'rgb(0,0,0,0.2)';
+      ctx.fillStyle = 'rgb(0, 0, 200, 0.3)';
       ctx.fillRect (0, y - fontsize, canvas.width, fontsize * 2);
     }
     

@@ -4,10 +4,11 @@
                    [''],
                    ['']];
   
-  var side = 5;
-  var dots = 7;
+  var side = 2;
+  var dots = 5;
   
   var fsize = 128;
+  var fontFamily = "標楷體";
   
   var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
   var speed = 160;
@@ -64,7 +65,6 @@
       initAnim();
       ledEffect();
     }
-
   }
   
   function emojiGo(emj) {
@@ -155,7 +155,7 @@
   </html>
   
   
-  <script type="text/javascript" charset="UTF-8">
+<script type="text/javascript" charset="UTF-8">
   
   var canvas;
   var ctx;
@@ -178,8 +178,7 @@
       
       jumpLine = (side + dots) * canvas.width * 4;
       jumpSide = (side + dots) * 4;
-      fsize = canvas.height/3;
-      FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
+      FONT = fsize + "px " + fontFamily;//黑體-繁";//宋體-繁";
 
       switch(dots) {
         case 1:
@@ -206,33 +205,26 @@
 
   }
   
-  function newParticle_txt(_p, _idx, xx, yy) {
+  function newParticle_txt(_txt, xx, yy) {
     let p = {
-            x: xx + 2,
+            x: xx,
             y: yy,
-          txt: "",
-            p: _p,
-          idx: _idx,
+          txt: _txt,
    activeFlag: true,
       release: function() {
         this.txt = '';
-        this.array = [];
-        this.array.length = 0;
       },
-  
       initial: function (c) {
-        this.release();
-        this.txt = subtitle[this.p][this.idx];
-
+        //this.release();
+        //this.txt = subtitle[this.p][this.idx];
         this.activeFlag = true;
-        
         var _ctx = c.getContext("2d");
         _ctx.font = FONT;// + "px 標楷體";
         return _ctx.measureText(this.txt).width;
       },
   
       update: function (c, _ctx, dt) {
-          
+        
         //console.log(this.y);
         if (!this.activeFlag) return;//= true;
   
@@ -278,6 +270,8 @@
   
     let dt = elapse - pre;
     pre = elapse;
+
+    //if (Math.floor(Math.random() * 10) == 5) console.log(dt);
   
     if (keepGoing != 1) {
       if (phase != 0) {
@@ -286,10 +280,19 @@
       return;
     }
 
-    for (var i = 0;i<particles.length;i++) {
-        particles[i].update(canvas, ctx, dt);
+    for (var i = 0;i<particlesBG.length;i++) {
+      particlesBG[i].update(canvas, ctx, dt);
     }
 
+    for (var i = 0;i<particles.length;i++) {
+        particles[i].update(canvas, ctx, dt);
+        if (particles[i].activeFlag == false) {
+          particles[i].initial(canvas);
+          particles[i].x = canvas.width;
+        }
+    }
+
+    /*
     if (particles[particles.length - 1].activeFlag == false) { //
         let xx = canvas.width;
         for (var i = 0;i<particles.length;i++) {
@@ -298,20 +301,8 @@
           xx += txtlen + 2 * fsize;
         }
     }
-
-    for (var i = 0;i<particles2.length;i++) {
-        particles2[i].update(canvas, ctx, dt);
-    }
-
-    if (particles2[particles2.length - 1].activeFlag == false) { //
-        let xx = canvas.width;
-        for (var i = 0;i<particles2.length;i++) {
-          let txtlen = particles2[i].initial(canvas);
-          particles2[i].x = xx;
-          xx += txtlen + 2 * fsize;
-        }
-    }
-      
+    */
+     
     if (!maskimg) {
       window.requestAnimationFrame(anim_update);
       return;
@@ -362,6 +353,7 @@
             break;
           case 5:
             setPix4_5(data, k);
+            break;
           case 6:
             setPix4_6(data, k);  
             break;
@@ -502,7 +494,23 @@
         _b = dot_none;
     }
     
+    let _k = k - 2 * gapP - 2 * gapL;
+    for (let i = 0;i<5;i++) {
+      for (let j = 0;j<5;j++) {
+        setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+      }
+    }
 
+    setPixColor(data, _k, 0, 0, 0);
+      
+    setPixColor(data, _k + 4 * gapL, 0, 0, 0);
+      
+    setPixColor(data, _k + 4 * gapP, 0, 0, 0);
+      
+    setPixColor(data, _k + 4 * gapL + 4 * gapP, 0, 0, 0);
+      
+
+    /*
     setPixColor(data, k,               _r, _g, _b);//中
     setPixColor(data, k - gapP,        _r, _g, _b);//左
     setPixColor(data, k - gapL,        _r, _g, _b);//上
@@ -543,6 +551,7 @@
     setPixColor(data, _k + gapP + gapP,               _r, _g, _b);
     setPixColor(data, _k + gapP + gapP + gapP,        _r, _g, _b);
     setPixColor(data, _k + gapP + gapP + gapP + gapP, 0, 0, 0);
+    */
   }
 
   function setPix4_6(data, k) {
@@ -673,12 +682,12 @@
       setPixColor(data, _k + 6 * gapL + gapP, _r/2, _g/2, _b/2);
 
     setPixColor(data, _k + 6 * gapP, 0, 0, 0);
-      setPixColor(data, _k + 5 * gapP, 0, 0, 0);
-      setPixColor(data, _k + 6 * gapP + gapL, 0, 0, 0);
+      setPixColor(data, _k + 5 * gapP, _r/2, _g/2, _b/2);
+      setPixColor(data, _k + 6 * gapP + gapL, _r/2, _g/2, _b/2);
 
     setPixColor(data, _k + 6 * gapL + 6 * gapP, 0, 0, 0);
-      setPixColor(data, _k + 5 * gapL + 6 * gapP, 0, 0, 0);
-      setPixColor(data, _k + 6 * gapL + 5 * gapP, 0, 0, 0);
+      setPixColor(data, _k + 5 * gapL + 6 * gapP, _r/2, _g/2, _b/2);
+      setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2);
   }
 
   function setPixColor(data, idx, r, g, b) {
@@ -691,9 +700,8 @@
   function initAnim() {
   
     keepGoing = 0;
-    if (phase == 0) {
-        return;
-    }
+
+    //if (phase == 0) return;
   
     if (subtitle.length == 1) {
         return;
@@ -713,15 +721,6 @@
     particles.length = 0;
     particles = [];
   
-    if (particles2.length >= 1) {
-      for (var i = 0;i<particles2.length;i++) {
-        particles2[i].release();
-      }
-    }
-
-    particles2.length = 0;
-    particles2 = [];
-
     /*
     //verticle
     let xx = fsize;
@@ -737,26 +736,102 @@
 
     //for (let _i = 1;_i<subtitle.length;_i++) {}
 
-    let yy = c.height/4.0 + fsize/2;
-    let xx = c.width + fsize;
-    var total = subtitle[1].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-    for (let _idx = 0;_idx<total;_idx++) {
-      particles[_idx] = newParticle_txt(1, _idx,  xx, yy);//();
-      let txtlen = particles[_idx].initial(c);
-      xx += (txtlen + fsize);
+    //let yy = c.height/4.0 + fsize/2;
+    
+    fsize = canvas.height/3;
+
+    let xx = c.width;
+    //var total = subtitle[1].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
+    particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height - fsize/10);//();
+    particles[0].initial(c);
+    if (subtitle[2][0].length > 0) {
+      particles[1] = newParticle_txt(subtitle[2][0], xx, 0.5 * c.height + fsize + fsize/10);//();
+      particles[1].initial(c);
+    } else {
+      fsize = canvas.height/2;
+      particles[0].y = 0.5 * c.height + fsize/2;
     }
 
-    //if (subtitle.length > 2) {
-      yy = 3.0 * c.height/4.0 + fsize/2;
-      xx = c.width + fsize;
-      total = subtitle[2].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-      for (let _idx = 0;_idx<total;_idx++) {
-        particles2[_idx] = newParticle_txt(2, _idx,  xx, yy);//();
-        let txtlen = particles2[_idx].initial(c);
-        xx += (txtlen + fsize);
+    FONT = fsize + "px " + fontFamily;
+
+    if (particlesBG.length >= 1) {
+      for (var i = 0;i<particlesBG.length;i++) {
+        particlesBG[i].release();
       }
-    //}
-  
+    }
+
+    particlesBG.length = 0;
+    particlesBG = [];
+
+    for (var i = 0;i<150;i++) {
+      if (Math.random() > 0.5)  
+        particlesBG[i] = newParticle_in();
+      else 
+        particlesBG[i] = newParticle_out();
+      particlesBG[i].initial(canvas);
+    }
+    
+    /*
+    for (var i = 0;i<150;i++) {
+      particlesBG[i] = newParticle_casual();
+      particlesBG[i].initial(canvas);
+    }
+    */
+    /*
+    for (var i = 0;i<150;i++) {
+      particlesBG[i] = newParticle_in();
+      particlesBG[i].initial(canvas);
+    }
+    */
+    /*
+    for (var i = 0;i<150;i++) {
+      particlesBG[i] = newParticle_out();
+      particlesBG[i].initial(canvas);
+    }
+    */
+    /*
+    for (var i = 0;i<150;i++) {
+      particles[i] = newParticle_ring();
+      particles[i].initial(canvas);
+    }
+    */
+    /*
+    for (var i = 0;i<150;i++) {
+      particles[i] = newParticle_snow();
+      particles[i].initial(canvas);
+    }
+    */
+    /*
+    for (var i = 0;i<3;i++) {
+      particlesBG[i] = newParticle_firework();
+      particlesBG[i].initial(canvas);
+    }
+    */
+    /*
+    for (var i = 0;i<20;i++) {
+      particles[i] = newParticle_rect();
+      particles[i].initial(canvas);
+    }
+    */
+    /*
+    particlesBG[0] = newParticle_skylight_background();
+    for (var i = 1;i<100;i++) {
+      particlesBG[i] = newParticle_skylight();//newParticle_snow();
+      particlesBG[i].initial(canvas);
+    }
+    */
+    /*
+    particles[0] = newParticle_sunrise_background();
+    for (var i = 1;i<100;i++) {
+      particles[i] = newParticle_sunrise();//();
+      particles[i].initial(canvas);
+    }
+    */
+    /*
+    particles[0] = newClock();
+    particles[0].initial(canvas);
+    */
+
     keepGoing = 1;
     window.requestAnimationFrame(anim_update);
   
@@ -838,7 +913,7 @@
   
   var pre = 0;
   var particles = [];
-  var particles2 = [];
+  var particlesBG = [];
   var doblank = 0;
   
   function keyboard(e) {
@@ -890,7 +965,8 @@
               switch2Marquee();
             }
             break;
-              
+          case 32: canvas.requestFullscreen(); break;
+
               
       }
   
@@ -914,6 +990,10 @@
       canvas.hidden = false;
     }
   }
+
+  function touchThen(evt) {
+    canvas.requestFullscreen();
+  }
   
   init();
   
@@ -921,12 +1001,17 @@
   //window.addEventListener('click', initAnim, false);
   //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
   window.addEventListener('keyup', keyboard, false);
-  
+  document.getElementsByTagName("canvas")[0].addEventListener("touchstart", touchThen, false);
+
+  /*
   if (subtitle.length > 1 && subtitle[1].length > 0) {
     phase = 1;
     initAnim();
     ledEffect();
   }
+  */
+
+  //
   
   /*
   function removeDiv() {
@@ -961,5 +1046,806 @@
   }
   */
   
-  </script>
+</script>
   
+<script type="text/javascript" charset="UTF-8">
+
+  function newParticle_casual() {
+    let p = {
+      x: 0,
+      y: 0,
+      v:100,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      dir:0,
+      release: function() { },
+      initial: function (c) {
+        
+        let short = Math.min(c.width, c.height);
+        let range = short * 0.4 + (Math.random() * short * 0.1) * (Math.random() >0.5?1:-1);
+        let angle = Math.random() * 360 * Math.PI/180;
+        this.x = c.width/2 + range * Math.cos(angle);
+        this.y = c.height/2 + range * Math.sin(angle);
+        this.v = 30 + Math.random() * 30; 
+        this.R = 100 + 155 * Math.random();
+        this.G = 100 + 155 * Math.random();
+        this.B = 100 + 155 * Math.random();
+        this.A = Math.random();//0.5 + Math.random()/2.0;
+        this.radius = 10 + Math.random() * 10;
+        this.dir = Math.random() * 360 * Math.PI/180;
+  
+      },
+      update: function (c, _ctx, dt) {
+  
+        this.x = this.x + this.v * dt * 0.001 * Math.cos(this.dir);
+        this.y = this.y + this.v * dt * 0.001 * Math.sin(this.dir);
+        //ctx.save();
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
+        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+        _ctx.beginPath();
+        _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        
+        //ctx.restore();
+        
+        this.A = this.A - 0.3 * dt * 0.001;
+        if (this.A < 0.01) {
+          this.initial(c);
+          this.A = 0.5 + Math.random()/2.0;
+          //this.A = 0.5 + Math.random()/2.0;
+        }
+        //console.log(this.y + ', ' + this.x + ':' + dt);
+      }
+    }
+    return p;
+  }
+  
+  function newParticle_in() {
+    let p = {
+      x_stt: 0,
+      y_stt: 0,
+      x_end: 0,
+      y_end: 0,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      t:0,
+      elapse:0,
+      release: function() { },
+      easein:function(_t) {
+        return _t * _t * _t;
+      },
+      easeout:function(_t) {
+        return -_t * _t + 2 * _t;
+      },
+      initial: function (c) {
+        
+        let short = Math.min(c.width, c.height);
+        let long = Math.max(c.width, c.height) * 0.5;
+        let range = (Math.random() * short * 0.1);
+        let dir = Math.random() * 360 * Math.PI/180;
+        
+        this.x_stt = c.width/2 + range * Math.cos(dir);
+        this.y_stt = c.height/2 + range * Math.sin(dir);
+        
+        this.x_end = c.width/2 + long * Math.cos(dir);
+        this.y_end = c.height/2 + long * Math.sin(dir);
+        
+        this.R = 100 + 155 * Math.random();
+        this.G = 100 + 155 * Math.random();
+        this.B = 100 + 155 * Math.random();
+        this.A = 1.0;//0.5 + Math.random()/2.0;
+  
+        this.radius = 20 + Math.random() * 50;
+        this.elapse = 1.0 + 4.0 * (70 - this.radius) /70;
+        this.t = 0;
+  
+      },
+      update: function (c, _ctx, dt) {
+  
+        this.t += dt/1000.0;
+        let ein = this.easein(this.t/this.elapse);
+        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
+        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
+        this.A = 1.0 + (0-1.0) * ein;
+        let r = 0.0 + (this.radius - 0) * ein;
+        if (r < 0)
+          r = this.radius;
+        //ctx.save();
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
+        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+        _ctx.beginPath();
+        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        if (this.t > this.elapse) {
+          this.initial(c);
+        }
+      }
+    }
+    return p;
+  }
+  
+  function newParticle_out() {
+    let p = {
+      x_stt: 0,
+      y_stt: 0,
+      x_end: 0,
+      y_end: 0,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      t:0,
+      elapse:0,
+      release: function() { },
+      easein:function(_t) {
+        return _t * _t * _t;
+      },
+      easeout:function(_t) {
+        return -_t * _t + 2 * _t;
+      },
+      initial: function (c) {
+        
+        let short = Math.min(c.width, c.height);
+        let long = Math.max(c.width, c.height) * 0.5;
+        let range = (Math.random() * short * 0.1);
+        let dir = Math.random() * 360 * Math.PI/180;
+        
+        this.x_end = c.width/2 + range * Math.cos(dir);
+        this.y_end = c.height/2 + range * Math.sin(dir);
+        
+        this.x_stt = c.width/2 + long * Math.cos(dir);
+        this.y_stt = c.height/2 + long * Math.sin(dir);
+        
+        this.R = 100 + 155 * Math.random();
+        this.G = 100 + 155 * Math.random();
+        this.B = 100 + 155 * Math.random();
+        this.A = 1.0;//0.5 + Math.random()/2.0;
+  
+        this.radius = 20 + Math.random() * 50;
+        this.elapse = 1.0 + 4.0 * (70 - this.radius) /70;
+        this.t = 0;
+  
+      },
+      update: function (c, _ctx, dt) {
+  
+        this.t += dt/1000.0;
+        let ein = this.easeout(this.t/this.elapse);
+        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
+        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
+        this.A = 0 + (1.0 - 0) * ein;
+        let r = this.radius + (0 - this.radius) * ein;
+        if (r < 0)
+          r = this.radius;
+        //ctx.save();
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
+        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+        _ctx.beginPath();
+        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        if (this.t > this.elapse) {
+          this.initial(c);
+        }
+      }
+    }
+    return p;
+  }
+  
+  function newParticle_ring() {
+    let p = {
+      type:  0,
+      x_stt: 0,
+      y_stt: 0,
+      x_end: 0,
+      y_end: 0,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      t:0,
+      elapse:0,
+      release: function() { },
+      easein:function(_t) {
+        return _t * _t * _t;
+      },
+      easeout:function(_t) {
+        return -_t * _t + 2 * _t;
+      },
+      initial: function (c) {
+        
+        let short = Math.min(c.width, c.height);
+        let long = Math.max(c.width, c.height) * 0.5;
+        let range = (Math.random() * short * 0.1);
+        let dir = Math.random() * 360 * Math.PI/180;
+        
+        if (this.type == 0) {
+          this.x_stt = c.width/2 + (short * 0.05 + range) * Math.cos(dir);
+          this.y_stt = c.height/2 + (short * 0.05 + range) * Math.sin(dir);
+        
+          this.x_end = c.width/2 + long * Math.cos(dir);
+          this.y_end = c.height/2 + long * Math.sin(dir);  
+          
+        } else {
+  
+          this.x_end = c.width/2 + (short * 0.05 + range) * Math.cos(dir);
+          this.y_end = c.height/2 + (short * 0.05 + range) * Math.sin(dir);
+        
+          this.x_stt = c.width/2 + long * Math.cos(dir);
+          this.y_stt = c.height/2 + long * Math.sin(dir);
+        }
+        
+        this.R = 100 + 155 * Math.random();
+        this.G = 100 + 155 * Math.random();
+        this.B = 100 + 155 * Math.random();
+        this.A = 1.0;//0.5 + Math.random()/2.0;
+  
+        this.radius = 20 + Math.random() * 50;
+        this.elapse = 1.0;//1.0 + 4.0 * (70 - this.radius) /70;
+        this.t = 0;
+  
+      },
+      update: function (c, _ctx, dt) {
+  
+        this.t += dt/1000.0;
+        let ein = this.type == 0?this.easein(this.t/this.elapse):this.easeout(this.t/this.elapse);
+        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
+        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
+        if (this.type == 0)
+          this.A = 1.0 + (0-1.0) * ein;
+        else 
+          this.A = 0.0 + (1.0 - 0) * ein;
+        let r = 0.0 + (this.radius - 0) * ein;
+        if (this.type == 1)
+          r = this.radius + (0 - this.radius) * ein;
+        if (r < 0) r = 0;
+        //ctx.save();
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
+        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+        _ctx.beginPath();
+        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        
+        if (this.t > this.elapse) {
+          this.type = this.type == 0?1:0;
+          this.initial(c);
+        }
+  
+      }
+    }
+    return p;
+  }
+  
+  function newParticle_firework_particle() {
+    let p = {
+      x_stt: 0,
+      y_stt: 0,
+      x_end: 0,
+      y_end: 0,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      t:0,
+      elapse:0,
+      easein:function(_t) {
+        return _t * _t * _t;
+      },
+      easeout:function(_t) {
+        return -_t * _t + 2 * _t;
+      },
+      easeinout:function(_t) {
+        //console.log('sin('+ _t * Math.PI+(') = '+Math.sin(_t * Math.PI)));
+        return Math.sin(_t * Math.PI);
+      },
+      release: function() { },
+      colorDis: function(idx) {
+        let r0 = 155 * Math.random();
+        let r1 = 155 * Math.random();
+        let rc0 = 200 + 55 * Math.random();
+        let rc1 = 200 + 55 * Math.random();
+        switch(idx) {
+          case 0: this.R = rc0; this.G =  r0; this.B =  r1;  break;
+          case 1: this.R =  r0; this.G = rc0; this.B =  r1;  break;
+          case 2: this.R =  r0; this.G =  r1; this.B = rc0;  break;
+          case 3: this.R =  r0; this.G = rc0; this.B = rc1;  break;
+          case 4: this.R = rc0; this.G =  r0; this.B = rc1;  break;
+          case 5: this.R = rc0; this.G = rc1; this.B =  r0;  break;
+        }
+      },
+      initial: function (c, _x, _y, _range, _elapse, idx) {
+        
+        let r0 = Math.random();
+        while (Math.random() > r0/2.0) r0 = Math.random();
+        let range = r0 * _range;
+  
+        let dir = Math.random() * 360 * Math.PI/180;
+        
+        this.x_stt = _x;// + (short * 0.05 + range) * Math.cos(dir);
+        this.y_stt = _y;//c.height/2;// + (short * 0.05 + range) * Math.sin(dir);
+        
+        this.x_end = this.x_stt + range * Math.cos(dir);
+        this.y_end = this.y_stt + range * Math.sin(dir);
+        
+        this.colorDis(idx);
+        
+        this.A = 1.0;//0.5 + Math.random()/2.0;
+        
+        this.radius = 6 + 4 * (1- range/_range);// + Math.random() * 50;
+        this.elapse = _elapse;
+        this.t = 0;
+  
+      },
+      update: function (c, _ctx, dt) {
+  
+        this.t += dt/1000.0;
+        let eout = this.easeout(this.t/this.elapse);
+        let x = this.x_stt + (this.x_end - this.x_stt) * eout;
+        let y = this.y_stt + (this.y_end - this.y_stt) * eout;
+        //console.log('t:' + this.t/this.elapse);
+        this.A = this.easeinout(this.t/this.elapse);
+        let r = 0.0 + (this.radius - 0) * eout;
+        if (r < 0) r = 0;
+        //ctx.save();
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
+        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+        _ctx.beginPath();
+        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        
+        if (this.t > this.elapse) {
+          this.t = this.elapse;
+        }
+      }
+    }
+    return p;
+  }
+  
+  function newParticle_firework() {
+    let p = {
+      particles:[],
+      
+      t:0,
+      elapse:0,
+      initial: function (c) {
+        
+        let x = c.width * (0.2 + Math.random() * 0.6);// + (short * 0.05 + range) * Math.cos(dir);
+        let y = c.height * (0.2 + Math.random() * 0.6);
+        let range = c.width * 0.2 * (0.5 + Math.random()/2.0);
+  
+        this.elapse = 0.7 + Math.random()/2.0;//1.0 + 4.0 * (70 - this.radius) /70;
+        this.t = 0;
+  
+        if (this.particles.length < 1) {
+          for (var i = 0;i<80;i++) {
+            this.particles[i] = newParticle_firework_particle();
+          }
+        }
+  
+        let idx = Math.floor(Math.random() * 6);
+        
+        for (var i = 0;i<this.particles.length;i++) {
+          this.particles[i].initial(c, x, y, range, this.elapse, idx);
+        }
+  
+      },
+      release: function() {
+        this.particles.length = 0;
+        this.particles = [];
+      },
+      update: function (c, _ctx, dt) {
+  
+        this.t += dt/1000.0;
+  
+        for (var i = 0;i<this.particles.length;i++) {
+          this.particles[i].update(c, _ctx, dt);
+        }
+  
+        if (this.t > this.elapse) {
+          this.initial(c);
+        }
+      }
+    }
+    return p;
+  }
+  
+  function newParticle_rect() {
+    let p = {
+      x: 0,
+      y: 0,
+      v: 0,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      release: function() { },
+      initial: function (c) {
+                    
+        this.x = c.width * (0.2 + Math.random() * 0.6);
+        this.y = c.height * (0.5 + Math.random() * 0.5);
+        this.v = 0.2 + Math.random() * 0.5; 
+        this.R = 155 * Math.random();
+        this.G = 155 * Math.random();
+        this.B = 155 * Math.random();
+        this.A = 0.5 + Math.random() * 0.2;
+        this.radius = 150 + Math.random() * 150;
+  
+      },
+      update: function (c, _ctx, dt) {
+        
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
+        _ctx.fillRect (this.x - this.radius * 0.7, this.y - this.radius/2.0, this.radius * 1.4, this.radius);
+        
+        
+        this.A = this.A - this.v * dt * 0.001;
+        if (this.A < 0.01) {
+          this.initial(c);
+        }
+        //console.log(this.y + ', ' + this.x + ':' + dt);
+      }
+    }
+    return p;
+  }
+  
+  function newClock() {
+    let p = {
+      release: function() { },
+      initial: function (c) { },
+      update: function (c, _ctx, dt) {
+        
+        var x = c.width/2.0;
+        var y = c.height/2.0;
+        var len = c.height/5.0;
+  
+        var date = new Date();
+  
+        //var n = d.getTime();
+        //_ctx.font = "64px Arial";
+        //_ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,20)"
+        //if (Math.random() > 0.5) _ctx.fillText(h + ':' + min +':' + s, this.x, this.y);
+  
+        let h = date.getHours() % 12;
+        let min = date.getMinutes();
+        let s = date.getSeconds();
+        let ms = date.getMilliseconds();
+  
+        _ctx.strokeStyle = "rgb(100, 100, 100)";
+        _ctx.lineWidth = 16;
+        _ctx.beginPath();
+        _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
+        _ctx.stroke();
+  
+        _ctx.fillStyle = "rgb(100, 100, 100)";
+        for (let i = 0;i<12;i++) {
+          let angle = (90 - i * 360.0/12.0) * Math.PI/180;
+          let dx = 2 * len * Math.cos(angle);
+          let dy = -2 * len * Math.sin(angle);
+          _ctx.beginPath();
+          _ctx.arc(x + dx, y + dy, len/10, 0, 2 * Math.PI, true);
+          _ctx.fill();
+        }
+  
+        _ctx.lineCap = "round";
+  
+        /*
+         * HOUR
+         */
+        let angle = (90 - (h + min/60.0) * 360.0/12.0) * Math.PI/180;
+        let dx = 0.8 * len * Math.cos(angle);
+        let dy = -0.8 * len * Math.sin(angle);
+        
+        _ctx.beginPath();
+        _ctx.moveTo(x, y);
+        _ctx.lineTo(x + dx, y + dy);
+        _ctx.lineWidth = 40;
+        _ctx.strokeStyle = "rgb(0, 0, 150)";
+        _ctx.stroke();
+        
+        /*
+         * MINUTE
+         */
+        angle = (90 - (min + s/60.0) * 360.0/60.0) * Math.PI/180;
+        dx = 1.5 * len * Math.cos(angle);
+        dy = -1.5 * len * Math.sin(angle);
+  
+        _ctx.beginPath();
+        _ctx.moveTo(x, y);
+        _ctx.lineTo(x + dx, y + dy);
+        _ctx.lineWidth = 20;
+        _ctx.strokeStyle =  "rgb(120, 120, 0)";
+        _ctx.stroke();
+        
+        /*
+         * SECOND
+         */
+        //var gap = Math.floor(ms/(1000/10));
+        //console.log(gap);
+        //angle = (90 - (s + gap/10) * 360.0/60.0) * Math.PI/180;
+        angle = (90 - (s + ms/1000.0) * 360.0/60.0) * Math.PI/180;
+        dx = 1.7 * len * Math.cos(angle);
+        dy = -1.7 * len * Math.sin(angle);
+  
+        _ctx.beginPath();
+        _ctx.moveTo(x, y);
+        _ctx.lineTo(x + dx, y + dy);
+        _ctx.lineWidth = 10;
+        _ctx.strokeStyle = "rgb(120, 0, 0)";
+        _ctx.stroke();
+  
+        
+        _ctx.beginPath();
+        _ctx.fillStyle = "rgb(120, 0, 0)";
+        _ctx.arc(x, y, 20, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        
+      }
+    }
+    return p;
+  }
+  
+  function newParticle_snow() {
+    let p = {
+      x: 0,
+      y: 0,
+      v: 100,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      release: function() { },
+      initial: function (c) {
+        
+        let short = Math.min(c.width, c.height);
+        let range = short * 0.4 + (Math.random() * short * 0.1) * (Math.random() >0.5?1:-1);
+        let angle = Math.random() * 360 * Math.PI/180;
+        this.x = c.width * (0.1 + Math.random() * 0.8);// + range * Math.cos(angle);
+        this.y = -Math.random() * c.height * 0.2;
+        let gray = 100 + 100 * Math.random();
+        this.R = gray;
+        this.G = gray;
+        this.B = gray;
+        this.A = 0.4 + Math.random() * 0.6;//0.3 - 1.0 
+        this.radius = 0.02 * c.width * ((1 - this.A) + 0.1); //0.7 - 0
+        this.v = 20 * this.radius;
+  
+      },
+      update: function (c, _ctx, dt) {
+  
+        this.x = this.x + (-0.15 + Math.random() * 0.3) * dt;
+        this.y = this.y + 0.001 * this.v * dt;
+        //ctx.save();
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
+        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+        _ctx.beginPath();
+        _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        
+  
+        //ctx.restore();
+        this.A = this.A - dt * 0.0002;
+  
+        if (this.A < 0.01) {
+          this.initial(c);
+        }
+      }
+    }
+    return p;
+  }
+  
+  /*
+   * Skylight
+   */
+  function newParticle_skylight_background() {
+    let p = {
+      initial: function (c) { },
+      release: function() { },
+      update: function (c, _ctx, dt) {
+  
+        var grd = _ctx.createLinearGradient(0, 0, c.width, c.height);
+        grd.addColorStop(0, 'rgb(200, 128, 0,1.0)');
+        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
+  
+        // Fill with gradient
+        _ctx.fillStyle = grd;
+        _ctx.fillRect(0, 0, c.width, c.height);
+      }
+    };
+    return p
+  }
+  
+  function newParticle_skylight() {
+    let p = {
+      x_stt: 0,
+      y_stt: 0,
+      x_end: 0,
+      y_end: 0,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      t:0,
+      elapse:0,
+      background: function() {
+  
+      },
+      release: function() { },
+      easein:function(_t) {
+        return _t * _t * _t;
+      },
+      easeout:function(_t) {
+        return -_t * _t + 2 * _t;
+      },
+      initial: function (c) {
+        
+        let short = Math.min(c.width, c.height);
+        let long = Math.max(c.width, c.height);
+        let range = (Math.random() * short * 0.1);
+        let dir = (10 + Math.random() * 70) * Math.PI/180;
+        
+        this.x_stt = -2 * range + range * Math.cos(dir);
+        this.y_stt = -2 * range + range * Math.sin(dir);
+        
+        this.x_end = -range + long * Math.cos(dir);
+        this.y_end = -range + long * Math.sin(dir);
+        
+        this.R = 200 + 55 * Math.random();
+        this.G = 50 + 100 * Math.random();
+        this.B = 0;
+        this.A = 1.0;//0.5 + Math.random()/2.0;
+  
+        this.radius = 10 + Math.random() * 10;
+        this.elapse = 10 + (1-this.radius/20) * 10.0;
+        this.t = Math.random() * this.elapse ;
+  
+      },
+      update: function (c, _ctx, dt) {
+  
+        if (dt > 1000) dt = 16;
+  
+        this.t += dt/1000.0;
+        let ein = this.t/this.elapse;
+        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
+        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
+        this.A = 1.0 + (0-1.0) * ein;
+        let r = this.radius/2 * (1 + ein);
+        //if (r < 0) r = this.radius;
+        //ctx.save();
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
+        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+        _ctx.beginPath();
+        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        if (this.t > this.elapse) {
+          this.initial(c);
+          this.t = 0;
+        }
+      }
+    }
+    return p;
+  }
+  
+  /*
+   * Sunrise
+   */
+   function newParticle_sunrise_background() {
+    let p = {
+      initial: function (c) { },
+      release: function() { },
+      update: function (c, _ctx, dt) {
+  
+        var grd = _ctx.createLinearGradient(0, c.height/2, 0, 0);
+        grd.addColorStop(0, 'rgb(255, 128, 0,1.0)');
+        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
+  
+        // Fill with gradient
+        _ctx.fillStyle = grd;
+        _ctx.fillRect(0, 0, c.width, c.height/2);
+  
+        grd = _ctx.createLinearGradient(0, c.height/2, 0, c.height);
+        grd.addColorStop(0, 'rgb(255, 128, 0,1.0)');
+        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
+  
+        // Fill with gradient
+        _ctx.fillStyle = grd;
+        _ctx.fillRect(0, c.height/2 -1, c.width, c.height);
+  
+      }
+    };
+    return p
+  }
+  
+  function newParticle_sunrise() {
+    let p = {
+      x_stt: 0,
+      y_stt: 0,
+      x_end: 0,
+      y_end: 0,
+      R: 0,
+      G: 0,
+      B: 0,
+      A: 0,
+      radius:10,
+      t:0,
+      elapse:0,
+      release: function() { },
+      easein:function(_t) {
+        return _t * _t * _t;
+      },
+      easeout:function(_t) {
+        return -_t * _t + 2 * _t;
+      },
+      initial: function (c) {
+      
+        this.x_stt = c.width * (0.2 + Math.random() * 0.6);
+        if (Math.random() > 0.5) {
+  
+          this.y_stt = c.height/2 + (Math.random() * c.height * 0.01);
+  
+          this.x_end = -c.width * 0.2 + c.width * 1.4 * this.x_stt/c.width;
+          this.y_end = this.y_stt + c.height * 0.2;
+  
+          if (Math.random > 0.4) {
+            this.y_end = tthis.y_stt;
+          }
+  
+        } else {
+  
+          this.y_stt = c.height/2 - (Math.random() * c.height * 0.01);
+  
+          this.x_end = -c.width * 0.2 + c.width * 1.4 * this.x_stt/c.width;
+          this.y_end = this.y_stt - c.height * 0.2;
+  
+          if (Math.random > 0.4) {
+            this.y_end = tthis.y_stt;
+          }
+  
+        }
+        
+      
+        this.R = 255;
+        this.G = 128;
+        this.B = 0;
+        this.A = 1.0;//0.5 + Math.random()/2.0;
+  
+        this.radius = 1 + Math.random() * 2;
+        this.elapse = 1 + Math.random() * 2;//1.0 + 4.0 * (70 - this.radius) /70;
+        this.t = 0;
+  
+      },
+      update: function (c, _ctx, dt) {
+  
+        if (dt > 1000) dt = 16;
+  
+        this.t += dt/1000.0;
+        let ein = this.easein(this.t/this.elapse);
+        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
+        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
+        this.A = 1.0 + (0 - 1.0) * ein;
+        this.radius = this.radius + 0.002 * dt;
+        //if (this.radius < 0) this.radius = 0;
+        //ctx.save();
+        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
+        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+        _ctx.beginPath();
+        _ctx.arc(x, y, this.radius, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        if (this.t > this.elapse) {
+          this.initial(c);
+          this.elapse = 3 + Math.random();
+        }
+      }
+    }
+    return p;
+  }
+  
+</script>
