@@ -32567,6 +32567,8 @@ var FONT = fontsize + "px 標楷體";
 var fontsize_sml = 32;
 var FONT_SML = fontsize_sml + "px 標楷體";
 
+var hlightStyle = "rgb(100, 100, 100, 0.5)";
+
 function getSong(jsonid) {
   var json_elm = document.getElementById(jsonid);
   if (json_elm) {
@@ -32921,7 +32923,7 @@ function printTxt(i, j) {
     //console.log((ctx.measureText(txt).width/(canvas.width * 0.9)) + ', ' + Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9)));
     let row = Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9));
     if (doblank != 1) {
-      ctx.fillStyle = 'rgb(0, 0, 200, 0.3)';
+      ctx.fillStyle = hlightStyle;
       ctx.fillRect (0, y - fontsize, canvas.width, fontsize * (row + 0.5));
     }
     
@@ -32943,7 +32945,7 @@ function printTxt(i, j) {
 
     _row++;
     if (_row > row) {
-      ctx.fillStyle = 'rgb(0, 0, 200, 0.3)';
+      ctx.fillStyle = hlightStyle;
       ctx.fillRect (0, fixy - fontsize + fontsize * (row + 0.5), canvas.width, fontsize);
     }
 
@@ -32952,7 +32954,7 @@ function printTxt(i, j) {
   } else {
 
     if (doblank != 1) {
-      ctx.fillStyle = 'rgb(0, 0, 200, 0.3)';
+      ctx.fillStyle = hlightStyle;
       ctx.fillRect (0, y - fontsize, canvas.width, fontsize * 2);
     }
     
