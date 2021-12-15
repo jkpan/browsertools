@@ -80,12 +80,13 @@
   <!DOCTYPE html>
   <html>
     <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" charset="UTF-8"/>
+      <!--meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8"-->
       <style>
         body {
           margin: 0px;
           height: 100%;
-          background-color:green;
+          background-color:black;
   
           /*cursor:none;*/
         }
@@ -112,6 +113,24 @@
           border-color: dodgerblue;
           box-shadow: 0 0 8px 0 dodgerblue;
         }
+        select {
+          border:2px solid #aaa;
+          border-radius: 4px;
+          margin: 2% 2%;
+          outline: none;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+        
+          /*
+        canvas {
+              padding-left: 0;
+              padding-right: 0;
+              margin-left: 0;
+              margin-right: 0;
+              display: block;
+        }
+          */
       </style>
       </head>   
   <body>
@@ -119,7 +138,7 @@
     <div id="ui" style="margin: 2% 2%;">
       <br/>
       <!--p style="font-size:48px">&#x1f604;</p-->
-      <input type="text" id="txt" name="myfield" value="測試1" placeholder="message"/><br/>
+      <input type="text" id="txt" name="myfield" value="Animation" placeholder="message"/><br/>
       <input type="text" id="txt2" name="myfield" value="測試2" placeholder="message"/><br/>
       <button type="button" id="go" style="margin: 2% 2%;width:120px;height:40px;border:2px #ff0000;" onclick="textGo()">OK</button>
       
@@ -146,6 +165,35 @@
     <a onclick="emojiGo('👾')">👾</a><a onclick="emojiGo('🤖')">🤖</a> 
 
     <br/>
+
+    <br/>
+    
+    <label style="color:#ff0000;">Gap</label>
+    <select name="gap" id="gap">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <label style="color:#ff0000;">LED Size</label>
+    <select name="Lsize" id="Lsize">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+    </select>
+
+    <!--img generateMask(w, h, s, d) /-->
 
     </div>
   
@@ -765,6 +813,7 @@
     particlesBG.length = 0;
     particlesBG = [];
 
+    /*
     for (var i = 0;i<150;i++) {
       if (Math.random() > 0.5)  
         particlesBG[i] = newParticle_in();
@@ -772,6 +821,7 @@
         particlesBG[i] = newParticle_out();
       particlesBG[i].initial(canvas);
     }
+     */
     
     /*
     for (var i = 0;i<150;i++) {
@@ -793,16 +843,16 @@
     */
     /*
     for (var i = 0;i<150;i++) {
-      particles[i] = newParticle_ring();
-      particles[i].initial(canvas);
+      particlesBG[i] = newParticle_ring();
+      particlesBG[i].initial(canvas);
     }
     */
-    /*
+    
     for (var i = 0;i<150;i++) {
-      particles[i] = newParticle_snow();
-      particles[i].initial(canvas);
+      particlesBG[i] = newParticle_snow();
+      particlesBG[i].initial(canvas);
     }
-    */
+    
     /*
     for (var i = 0;i<3;i++) {
       particlesBG[i] = newParticle_firework();
@@ -830,21 +880,13 @@
     }
     */
     /*
-    particles[0] = newClock();
-    particles[0].initial(canvas);
+    particlesBG[0] = newClock();
+    particlesBG[0].initial(canvas);
     */
 
     keepGoing = 1;
     window.requestAnimationFrame(anim_update);
   
-  }
-  
-  function doresize() {
-    init();
-    //initAnim();
-    if (maskimg != null) {
-      ledEffect();
-    }
   }
   
   function generateMask(w, h, s, d) {
@@ -917,6 +959,14 @@
   var particles = [];
   var particlesBG = [];
   var doblank = 0;
+
+  function ledSwitch() {
+    if (maskimg != null) {
+        maskimg = null;
+    } else {
+        ledEffect();
+    }
+  }
   
   function keyboard(e) {
   
@@ -924,11 +974,7 @@
   
       switch (e.keyCode) {
           case 76: //'l'
-              if (maskimg != null) {
-                maskimg = null;
-              } else {
-                ledEffect();
-              }
+              ledSwitch();
               break;
           case 66: //'b'
               doblank = doblank == 0?1:0;
@@ -993,20 +1039,59 @@
     }
   }
 
-  function touchThen(evt) {
-    //canvas.requestFullscreen();
-    if (canvas.hidden) 
-      return;
-    switch2Input();
+
+  function getTouchPos(canvasDom, touchEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return { x: touchEvent.touches[0].clientX - rect.left,
+             y: touchEvent.touches[0].clientY - rect.top};
   }
-  
+
   init();
-  
-  window.addEventListener('resize', doresize);
+  window.addEventListener('keyup', keyboard, false);
+  window.addEventListener('resize', function() {
+    init(); //initAnim();
+    if (maskimg != null) {
+      ledEffect();
+    }
+  });
+
+  document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
+          //canvas.requestFullscreen();
+
+          if (canvas.hidden) return;
+
+          evt.preventDefault();
+          var touches = getTouchPos(canvas, evt);
+
+          if (touches.x > canvas.width/2 && touches.y > canvas.height/2) { //右下
+              switch2Input();
+              return;
+          }
+          if (touches.x < canvas.width/2 && touches.y > canvas.height/2) { //左下
+
+          }
+          if (touches.x > canvas.width/2 && touches.y < canvas.height/2) { //右上
+              ledSwitch();
+          }
+          if (touches.x < canvas.width/2 && touches.y < canvas.height/2) { //左上
+
+          }
+
+        });
+
   //window.addEventListener('click', touchThen, false);
   //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
-  window.addEventListener('keyup', keyboard, false);
-  document.getElementsByTagName("canvas")[0].addEventListener("touchstart", touchThen, false);
+                         /*
+  document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
+
+
+    if (canvas.hidden) return;
+    alert('(' + evt.x + ', ' + evt.y + ')');
+
+
+  }, false);
+                         */
+  //window.addEventListener('resize', );
 
   /*
   if (subtitle.length > 1 && subtitle[1].length > 0) {
@@ -1052,6 +1137,32 @@
   */
   
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 <script type="text/javascript" charset="UTF-8">
 
@@ -1534,7 +1645,7 @@
           let dx = 2 * len * Math.cos(angle);
           let dy = -2 * len * Math.sin(angle);
           _ctx.beginPath();
-          _ctx.arc(x + dx, y + dy, len/10, 0, 2 * Math.PI, true);
+          _ctx.arc(x + dx, y + dy, len/5, 0, 2 * Math.PI, true);
           _ctx.fill();
         }
   
