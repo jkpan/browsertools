@@ -4,18 +4,18 @@
                    [''],
                    ['']];
   
-  var side = 2;
-  var dots = 5;
+  var side = 3;
+  var dots = 7;
   
   var fsize = 128;
   var fontFamily = "標楷體";
   
   var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
-  var speed = 160;
+  var speed = 80;
   
   var initDot = 0;
   
-  var dot_none = 40;
+  var dot_none = 33;
   var criteria = dot_none * 2 / 3;//dot_none/2;
   
   var dot_rc = 255;
@@ -60,6 +60,19 @@
     if (txt1.length + txt2.length > 0) {
       subtitle[1] = [txt1];
       subtitle[2] = [txt2];
+      
+      
+      var sel_gap = document.getElementById('Gap');
+      var sel_lsize = document.getElementById('Lsize');
+      var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
+      var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
+
+      side = gap;
+      dots = lsz;
+
+      var slider = document.getElementById('speed');
+      speed = parseInt(slider.value, 10);
+      
       switch2Marquee();
       //keepGoing = 0;
       init();
@@ -74,6 +87,43 @@
     document.getElementById("txt").value = value;
   }
   
+  function selOption() {
+
+    var sel_gap = document.getElementById('Gap');
+    for(var i = 0, j = sel_gap.options.length; i < j; ++i) {
+        if (parseInt(sel_gap.options[i].value, 10)  === side) {
+          sel_gap.selectedIndex = i;
+          break;
+        }
+    }
+    var sel_lsize = document.getElementById('Lsize');
+    for(var i = 0, j = sel_lsize.options.length; i < j; ++i) {
+        if (parseInt(sel_lsize.options[i].value, 10)  === dots) {
+          sel_lsize.selectedIndex = i;
+          break;
+        }
+    }
+    
+    selLegend();
+    sliderSync();
+    
+  }
+
+  function selLegend() {
+  
+    var sel_gap = document.getElementById('Gap');
+    var sel_lsize = document.getElementById('Lsize');
+    var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
+    var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
+  
+    generateLegend(gap, lsz);
+
+  }
+
+  function sliderSync() {
+    var slider = document.getElementById('speed');
+    slider.value = speed;
+  }
   
   </script>
   
@@ -121,7 +171,17 @@
           padding: 8px;
           box-sizing: border-box;
         }
-        
+        .slider {
+          -webkit-appearance: none;  /* Override default CSS styles */
+          appearance: none;
+          width: 100%; /* Full-width */
+          height: 25px; /* Specified height */
+          background: #d3d3d3; /* Grey background */
+          outline: none; /* Remove outline */
+          opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+          -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+          transition: opacity .2s;
+        }
           /*
         canvas {
               padding-left: 0;
@@ -131,6 +191,24 @@
               display: block;
         }
           */
+          input[type=range]::-webkit-slider-runnable-track {
+            width: 300px;
+            height: 5px;
+            background: #ddd;
+            border: none;
+            border-radius: 3px;
+          }
+
+          input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            border: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: goldenrod;
+            margin-top: -4px;
+          }
+
       </style>
       </head>   
   <body>
@@ -138,38 +216,40 @@
     <div id="ui" style="margin: 2% 2%;">
       <br/>
       <!--p style="font-size:48px">&#x1f604;</p-->
-      <input type="text" id="txt" name="myfield" value="Animation" placeholder="message"/><br/>
-      <input type="text" id="txt2" name="myfield" value="測試2" placeholder="message"/><br/>
+      <input type="text" id="txt" name="myfield" value="歡迎🐻" placeholder="message"/><br/>
+      <input type="text" id="txt2" name="myfield" value="Hello🌏" placeholder="message"/><br/>
+    
+      <br/>
+
+      <label for="favcolor" style="color:#ff0000;size: 48px;">Text color</label>
+      <input type="color" id="favcolor" name="favcolor" value="#ffffff">
+
+      <br/>
+
       <button type="button" id="go" style="margin: 2% 2%;width:120px;height:40px;border:2px #ff0000;" onclick="textGo()">OK</button>
       
       <br/>
 
-    <a onclick="emojiGo('😀')">😀</a><a onclick="emojiGo('😁')">😁</a>
-    <a onclick="emojiGo('😆')">😆</a><a onclick="emojiGo('😅')">😅</a> 
-    <a onclick="emojiGo('😂')">😂</a><a onclick="emojiGo('🤣')">🤣</a> 
-    <a onclick="emojiGo('🥲')">🥲</a><a onclick="emojiGo('😇')">😇</a> 
+    <a onclick="emojiGo('😀')">😀</a><a onclick="emojiGo('😆')">😆</a>
+    <a onclick="emojiGo('😅')">😅</a><a onclick="emojiGo('😂')">😂</a>
+    <a onclick="emojiGo('🤣')">🤣</a><a onclick="emojiGo('🥲')">🥲</a>
     <a onclick="emojiGo('😍')">😍</a><a onclick="emojiGo('😋')">😋</a> 
     <a onclick="emojiGo('😜')">😜</a><a onclick="emojiGo('😎')">😎</a> 
     <a onclick="emojiGo('😔')">😔</a><a onclick="emojiGo('😢')">😢</a> 
-    <a onclick="emojiGo('😭')">😭</a><a onclick="emojiGo('😤')">😤</a> 
-    <a onclick="emojiGo('😡')">😡</a><a onclick="emojiGo('😳')">😳</a> 
-    <a onclick="emojiGo('🥶')">🥶</a><a onclick="emojiGo('😱')">😱</a> 
+    <a onclick="emojiGo('😭')">😭</a><a onclick="emojiGo('😡')">😡</a>
+    <a onclick="emojiGo('😳')">😳</a><a onclick="emojiGo('😱')">😱</a> 
     <a onclick="emojiGo('😨')">😨</a><a onclick="emojiGo('😵')">😵</a> 
     <a onclick="emojiGo('🤢')">🤢</a><a onclick="emojiGo('🤮')">🤮</a> 
     <a onclick="emojiGo('🤧')">🤧</a><a onclick="emojiGo('😷')">😷</a> 
     <a onclick="emojiGo('🤒')">🤒</a><a onclick="emojiGo('🤕')">🤕</a> 
-    <a onclick="emojiGo('🤑')">🤑</a><a onclick="emojiGo('😈')">😈</a> 
-    <a onclick="emojiGo('👹')">👹</a><a onclick="emojiGo('🤡')">🤡</a> 
     <a onclick="emojiGo('💩')">💩</a><a onclick="emojiGo('👻')">👻</a> 
     <a onclick="emojiGo('💀')">💀</a><a onclick="emojiGo('👽')">👽</a> 
-    <a onclick="emojiGo('👾')">👾</a><a onclick="emojiGo('🤖')">🤖</a> 
+    <a onclick="emojiGo('🤖')">🤖</a> 
 
     <br/>
-
-    <br/>
-    
-    <label style="color:#ff0000;">Gap</label>
-    <select name="gap" id="gap">
+  
+    <label style="color:#ff0000;size: 48px;">Gap</label>
+    <select name="Gap" id="Gap" onchange="selLegend()">
       <option value="0">0</option>
       <option value="1">1</option>
       <option value="2">2</option>
@@ -182,8 +262,8 @@
       <option value="9">9</option>
       <option value="10">10</option>
     </select>
-    <label style="color:#ff0000;">LED Size</label>
-    <select name="Lsize" id="Lsize">
+    <label style="color:#ff0000;size: 48px;">LED Size</label>
+    <select name="Lsize" id="Lsize" onchange="selLegend()">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -193,8 +273,14 @@
       <option value="7">7</option>
     </select>
 
-    <!--img generateMask(w, h, s, d) /-->
+    <br/>
 
+    <img id="legend" />
+    
+    <br/>
+
+    <input type="range" min="20" max="400" step="20" value="120" id="speed" onchange=""/>
+  
     </div>
   
     <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
@@ -205,7 +291,8 @@
   
   
 <script type="text/javascript" charset="UTF-8">
-  
+
+
   var canvas;
   var ctx;
   
@@ -253,43 +340,90 @@
       //fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
 
   }
+
   
+  function newParticle_swingtxt(_txt, xx, yy) {
+    let p = {
+            x: xx,
+            y: yy,
+          txt: _txt,
+         step: 0,
+          len:0,
+      release: function() {
+        this.txt = '';
+      },
+      sinoutin: function(t) { // 0-1  15 * sinoutin(recoil_t * 1.0/8.0);
+        return  Math.sin(t * Math.PI);//- (t-1) * (t-1) +1 ;
+      },
+      stepValue: function(peroidSec, range, dt) { //(float &_step, float peroidSec, float range, float dt) {
+        this.step += dt/peroidSec;
+        if (this.step > 1.0) {
+          this.step = 0.0;
+        }
+        return this.sinoutin(this.step) * range;
+      },
+      initial: function (c) {
+        this.step = 0;
+        var _ctx = c.getContext("2d");
+        _ctx.font = FONT;// + "px 標楷體";
+        this.len = _ctx.measureText(this.txt).width;
+        return this.len;
+      },
+  
+      update: function (c, _ctx, dt) {
+         
+        if (dt > 1000) dt = 16;
+        
+        dt *= 0.001;
+
+        this.x = this.stepValue(5.0, (c.width - this.len), dt);
+
+        //this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
+  
+        _ctx.textAlign = "left";
+        _ctx.font = FONT;// + "px 標楷體";
+        
+        _ctx.strokeStyle = 'white';
+        _ctx.lineWidth = 4;
+          
+        _ctx.fillStyle = 'white';
+
+        _ctx.strokeText(this.txt, this.x, this.y);
+        _ctx.fillText(this.txt, this.x, this.y);
+  
+      }
+    }
+    return p;
+  }
+  
+
   function newParticle_txt(_txt, xx, yy) {
     let p = {
             x: xx,
             y: yy,
           txt: _txt,
-   activeFlag: true,
       release: function() {
         this.txt = '';
       },
       initial: function (c) {
         //this.release();
         //this.txt = subtitle[this.p][this.idx];
-        this.activeFlag = true;
         var _ctx = c.getContext("2d");
         _ctx.font = FONT;// + "px 標楷體";
         return _ctx.measureText(this.txt).width;
       },
   
       update: function (c, _ctx, dt) {
-        
-        //console.log(this.y);
-        if (!this.activeFlag) return;//= true;
-  
+         
         if (dt > 1000) dt = 16;
   
         this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
-  
+         
         if (this.x < -_ctx.measureText(this.txt).width + 10) {
-          this.activeFlag = false;
+          this.x = c.width;
           return;
         }
-
-        if (this.x > c.width + fsize)
-          return; 
-
-  
+          
         _ctx.textAlign = "left";
         _ctx.font = FONT;// + "px 標楷體";
         
@@ -339,10 +473,12 @@
 
     for (var i = 0;i<particles.length;i++) {
         particles[i].update(canvas, ctx, dt);
+        /*
         if (particles[i].activeFlag == false) {
           particles[i].initial(canvas);
           particles[i].x = canvas.width;
         }
+        */
     }
 
     /*
@@ -561,50 +697,7 @@
     setPixColor(data, _k + 4 * gapP, 0, 0, 0);
       
     setPixColor(data, _k + 4 * gapL + 4 * gapP, 0, 0, 0);
-      
-
-    /*
-    setPixColor(data, k,               _r, _g, _b);//中
-    setPixColor(data, k - gapP,        _r, _g, _b);//左
-    setPixColor(data, k - gapL,        _r, _g, _b);//上
-    setPixColor(data, k - gapP - gapL, _r, _g, _b);//左上
-
-    //右
-    setPixColor(data, k + gapP,        _r, _g, _b);
-    //右上
-    setPixColor(data, k + gapP - gapL, _r, _g, _b);
-    //右下
-    setPixColor(data, k + gapP + gapL, _r, _g, _b);
-    //下
-    setPixColor(data, k + gapL,        _r, _g, _b);
-    //左下
-    setPixColor(data, k - gapP + gapL, _r, _g, _b);
-
-
-    let _k = k + gapP + gapL + gapP + gapL;
-    setPixColor(data, _k, 0, 0, 0);
-
-    setPixColor(data, _k - gapL,               _r, _g, _b);
-    setPixColor(data, _k - gapL - gapL,        _r, _g, _b);
-    setPixColor(data, _k - gapL - gapL - gapL, _r, _g, _b);//
-
-    setPixColor(data, _k - gapP,               _r, _g, _b);
-    setPixColor(data, _k - gapP - gapP,        _r, _g, _b);
-    setPixColor(data, _k - gapP - gapP - gapP, _r, _g, _b);
-
-    _k = k - gapP - gapL - gapP - gapL;
-    setPixColor(data, _k, 0, 0, 0);
-
-    setPixColor(data, _k + gapL,                      _r, _g, _b);
-    setPixColor(data, _k + gapL + gapL,               _r, _g, _b);
-    setPixColor(data, _k + gapL + gapL + gapL,        _r, _g, _b);
-    setPixColor(data, _k + gapL + gapL + gapL + gapL, 0, 0, 0);
-
-    setPixColor(data, _k + gapP,                      _r, _g, _b);
-    setPixColor(data, _k + gapP + gapP,               _r, _g, _b);
-    setPixColor(data, _k + gapP + gapP + gapP,        _r, _g, _b);
-    setPixColor(data, _k + gapP + gapP + gapP + gapP, 0, 0, 0);
-    */
+    
   }
 
   function setPix4_6(data, k) {
@@ -630,64 +723,22 @@
         _g = dot_none;
         _b = dot_none;
     }
+
+    let _k = k - 2 * gapP - 2 * gapL;
+    for (let i = 0;i<6;i++) {
+      for (let j = 0;j<6;j++) {
+        setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+      }
+    }
+
+    setPixColor(data, _k, 0, 0, 0);
+    
+    setPixColor(data, _k + 5 * gapL, 0, 0, 0);
+    
+    setPixColor(data, _k + 5 * gapP, 0, 0, 0);
+    
+    setPixColor(data, _k + 5 * gapL + 5 * gapP, 0, 0, 0);
   
-    setPixColor(data, k,               _r, _g, _b);//中
-    setPixColor(data, k - gapP,        _r, _g, _b);//左
-    setPixColor(data, k - gapL,        _r, _g, _b);//上
-    setPixColor(data, k - gapP - gapL, _r, _g, _b);//左上
-
-    //右
-    setPixColor(data, k + gapP,        _r, _g, _b);
-    //右上
-    setPixColor(data, k + gapP - gapL, _r, _g, _b);
-    //右下
-    setPixColor(data, k + gapP + gapL, _r, _g, _b);
-    //下
-    setPixColor(data, k + gapL,        _r, _g, _b);
-    //左下
-    setPixColor(data, k - gapP + gapL, _r, _g, _b);
-
-
-    let _k = k + gapP + gapL + gapP + gapL;
-    setPixColor(data, _k, _r, _g, _b);
-
-    setPixColor(data, _k - gapL,     _r, _g, _b);
-    setPixColor(data, _k - 2 * gapL, _r, _g, _b);
-    setPixColor(data, _k - 3 * gapL, _r, _g, _b);//
-
-    setPixColor(data, _k - gapP,     _r, _g, _b);
-    setPixColor(data, _k - 2 * gapP, _r, _g, _b);
-    setPixColor(data, _k - 3 * gapP, _r, _g, _b);
-
-    _k = k - gapP - gapL - gapP - gapL;
-    setPixColor(data, _k, 0, 0, 0);
-
-    setPixColor(data, _k + gapL,     _r, _g, _b);
-    setPixColor(data, _k + 2 * gapL, _r, _g, _b);
-    setPixColor(data, _k + 3 * gapL, _r, _g, _b);
-    setPixColor(data, _k + 4 * gapL, _r, _g, _b);
-
-    setPixColor(data, _k + gapP,     _r, _g, _b);
-    setPixColor(data, _k + 2 * gapP, _r, _g, _b);
-    setPixColor(data, _k + 3 * gapP, _r, _g, _b);
-    setPixColor(data, _k + 4 * gapP, _r, _g, _b);
-
-    //
-    _k = k + 3 * gapP + 3 * gapL;
-    setPixColor(data, _k, 0, 0, 0);
-
-    setPixColor(data, _k - gapL,     _r, _g, _b);
-    setPixColor(data, _k - 2 * gapL, _r, _g, _b);
-    setPixColor(data, _k - 3 * gapL, _r, _g, _b);
-    setPixColor(data, _k - 4 * gapL, _r, _g, _b);
-    setPixColor(data, _k - 5 * gapL, 0, 0, 0);
-
-    setPixColor(data, _k - gapP,      _r, _g, _b);
-    setPixColor(data, _k - 2 * gapP,  _r, _g, _b);
-    setPixColor(data, _k - 3 * gapP,  _r, _g, _b);
-    setPixColor(data, _k - 4 * gapP, _r, _g, _b);
-    setPixColor(data, _k - 5 * gapP, 0, 0, 0);
-
   }
 
   function setPix4_7(data, k) {
@@ -789,21 +840,22 @@
     //let yy = c.height/4.0 + fsize/2;
     
     fsize = canvas.height/3;
-
+    FONT = fsize + "px " + fontFamily;
     let xx = c.width;
+
     //var total = subtitle[1].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-    particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height - fsize/10);//();
-    particles[0].initial(c);
     if (subtitle[2][0].length > 0) {
+      particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height - fsize/10);//();
+      particles[0].initial(c);
       particles[1] = newParticle_txt(subtitle[2][0], xx, 0.5 * c.height + fsize + fsize/10);//();
       particles[1].initial(c);
     } else {
       fsize = canvas.height/2;
-      particles[0].y = 0.5 * c.height + fsize/2;
+      FONT = fsize + "px " + fontFamily;
+      particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height + fsize/3);//();
+      particles[0].initial(c);
     }
-
-    FONT = fsize + "px " + fontFamily;
-
+    
     if (particlesBG.length >= 1) {
       for (var i = 0;i<particlesBG.length;i++) {
         particlesBG[i].release();
@@ -847,11 +899,12 @@
       particlesBG[i].initial(canvas);
     }
     */
-    
+    /*
     for (var i = 0;i<150;i++) {
       particlesBG[i] = newParticle_snow();
       particlesBG[i].initial(canvas);
     }
+    */
     
     /*
     for (var i = 0;i<3;i++) {
@@ -866,20 +919,6 @@
     }
     */
     /*
-    particlesBG[0] = newParticle_skylight_background();
-    for (var i = 1;i<100;i++) {
-      particlesBG[i] = newParticle_skylight();//newParticle_snow();
-      particlesBG[i].initial(canvas);
-    }
-    */
-    /*
-    particles[0] = newParticle_sunrise_background();
-    for (var i = 1;i<100;i++) {
-      particles[i] = newParticle_sunrise();//();
-      particles[i].initial(canvas);
-    }
-    */
-    /*
     particlesBG[0] = newClock();
     particlesBG[0].initial(canvas);
     */
@@ -887,6 +926,106 @@
     keepGoing = 1;
     window.requestAnimationFrame(anim_update);
   
+  }
+
+  function generateLegend(s, d) {
+  
+    let w = 160;
+    let h = 100;
+
+    let _maskWidth = (Math.floor(w/(s + d))) * (s + d);
+    let _maskHeight = (Math.floor(h/(s + d))) * (s + d);
+     
+    var mask = ctx.createImageData(w, h);
+    var data = mask.data;
+  
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+  
+          let idx = (y * w + x) * 4;
+  
+          data[idx + 0] = 0;//40;
+          data[idx + 1] = 0;//40;
+          data[idx + 2] = 0;//40;
+          data[idx + 3] = 255;
+          
+          let _x = x%(s + d);
+          let _y = y%(s + d);
+
+          if (_x >= s && _y >= s && x < _maskWidth && y < _maskHeight) { //d
+
+            let c = s + Math.floor(d/2.0);
+            if (d%2 == 0) {
+              c = s + d/2.0 - 0.5;
+            }
+
+            let len = Math.sqrt((_x - c)*(_x - c) +(_y - c)*(_y - c));
+            let r = Math.floor(d/2.0);
+
+            data[idx + 0] = dot_none * 2;//40;
+            data[idx + 1] = dot_none * 2;//40;
+            data[idx + 2] = dot_none * 2;//40;
+
+            switch(d) {
+              case 3:
+              case 4:
+              case 5:
+                if (len <= r) {
+                  data[idx + 3] = 255;
+                } else {
+                  data[idx + 3] = 128;//255 * (1- 2 * Math.abs(len - r)/r);
+                }
+                break;
+              case 6:
+                if (len <= r * 0.9) {
+                  data[idx + 3] = 255;
+                } else {
+                  data[idx + 3] = 255 * (1- 5 * Math.abs(len - r)/r);
+                }
+                break;
+              case 7:
+               if (len <= r) {
+                  data[idx + 3] = 255;
+                } else {
+                  data[idx + 3] = 255 * (1- 2 * Math.abs(len - r)/r);
+                }
+                break;
+                break;
+            }
+
+            
+            /*
+            if (d == 3) {
+              
+            } else if (d == 4 || d == 5 || d == 6) {
+              
+            } else if (d == 7) {
+              
+            }
+            */
+          }
+      }
+    }
+    ///////
+
+
+    // create a temporary canvas
+    var tempCanvas = document.createElement("canvas");
+    var tempCtx = tempCanvas.getContext("2d");
+  
+    // set the temp canvas size == the canvas size
+    tempCanvas.width = w;
+    tempCanvas.height = h;
+  
+    // put the modified pixels on the temp canvas
+    tempCtx.putImageData(mask, 0, 0);
+  
+    var img = document.getElementById('legend');
+
+    //console.log(tempCanvas.toDataURL());
+
+    img.src = tempCanvas.toDataURL();
+
   }
   
   function generateMask(w, h, s, d) {
@@ -917,7 +1056,6 @@
   
   }
   
-  
   var maskimg;
   
   function ledEffect() {
@@ -929,8 +1067,8 @@
     let w = canvas.width;//maskWidth
     let h = canvas.height;//maskHeight
 
-    maskWidth = (Math.floor(canvas.width/(side + dots))) * (side + dots);
-    maskHeight = (Math.floor(canvas.height/(side + dots))) * (side + dots);
+    maskWidth = (Math.floor(w/(side + dots))) * (side + dots);
+    maskHeight = (Math.floor(h/(side + dots))) * (side + dots);
   
     var mask = generateMask(w, h, side, dots);
           
@@ -940,7 +1078,7 @@
   
     // set the temp canvas size == the canvas size
     tempCanvas.width = w;
-    tempCanvas.height = canvas.height;
+    tempCanvas.height = h;
   
     // put the modified pixels on the temp canvas
     tempCtx.putImageData(mask, 0, 0);
@@ -1022,6 +1160,8 @@
   
   
   function switch2Input() {
+    selOption();
+    sliderSync();
     keepGoing = 0;
     var div = document.getElementById('ui');
     if (div) {
@@ -1047,6 +1187,8 @@
   }
 
   init();
+  switch2Input();
+
   window.addEventListener('keyup', keyboard, false);
   window.addEventListener('resize', function() {
     init(); //initAnim();
@@ -1079,89 +1221,7 @@
 
         });
 
-  //window.addEventListener('click', touchThen, false);
-  //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
-                         /*
-  document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
-
-
-    if (canvas.hidden) return;
-    alert('(' + evt.x + ', ' + evt.y + ')');
-
-
-  }, false);
-                         */
-  //window.addEventListener('resize', );
-
-  /*
-  if (subtitle.length > 1 && subtitle[1].length > 0) {
-    phase = 1;
-    initAnim();
-    ledEffect();
-  }
-  */
-
-  //
-  
-  /*
-  function removeDiv() {
-    var buttons = document.getElementById('btns');
-    if (buttons) {
-      document.body.removeChild(buttons);
-    } 
-    return;
-  }
-  
-  function inputTxt() {
-    
-    canvas.hidden = true;
-    removeDiv();
-    
-    var div = document.createElement('div');
-    div.id = 'btns';  
-    document.body.appendChild(div);
-  
-    var input = document.createElement("input");
-    input.type = "text";
-    input.id = 'banner';
-    div.appendChild(input);
-  
-    var button = document.createElement('button');
-    button.innerHTML = 'OK';
-    button.id = 'okgo';
-    button.onclick = function() {
-      return false;
-    };
-    div.appendChild(button);
-  }
-  */
-  
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   
 <script type="text/javascript" charset="UTF-8">
@@ -1243,7 +1303,7 @@
         
         let short = Math.min(c.width, c.height);
         let long = Math.max(c.width, c.height) * 0.5;
-        let range = (Math.random() * short * 0.1);
+        let range = Math.random() * short * 0.1;
         let dir = Math.random() * 360 * Math.PI/180;
         
         this.x_stt = c.width/2 + range * Math.cos(dir);
@@ -1316,8 +1376,8 @@
         this.x_end = c.width/2 + range * Math.cos(dir);
         this.y_end = c.height/2 + range * Math.sin(dir);
         
-        this.x_stt = c.width/2 + long * Math.cos(dir);
-        this.y_stt = c.height/2 + long * Math.sin(dir);
+        this.x_stt = c.width/2;// + long * Math.cos(dir);
+        this.y_stt = c.height/2;// + long * Math.sin(dir);
         
         this.R = 100 + 155 * Math.random();
         this.G = 100 + 155 * Math.random();
@@ -1751,213 +1811,6 @@
   
         if (this.A < 0.01) {
           this.initial(c);
-        }
-      }
-    }
-    return p;
-  }
-  
-  /*
-   * Skylight
-   */
-  function newParticle_skylight_background() {
-    let p = {
-      initial: function (c) { },
-      release: function() { },
-      update: function (c, _ctx, dt) {
-  
-        var grd = _ctx.createLinearGradient(0, 0, c.width, c.height);
-        grd.addColorStop(0, 'rgb(200, 128, 0,1.0)');
-        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
-  
-        // Fill with gradient
-        _ctx.fillStyle = grd;
-        _ctx.fillRect(0, 0, c.width, c.height);
-      }
-    };
-    return p
-  }
-  
-  function newParticle_skylight() {
-    let p = {
-      x_stt: 0,
-      y_stt: 0,
-      x_end: 0,
-      y_end: 0,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      t:0,
-      elapse:0,
-      background: function() {
-  
-      },
-      release: function() { },
-      easein:function(_t) {
-        return _t * _t * _t;
-      },
-      easeout:function(_t) {
-        return -_t * _t + 2 * _t;
-      },
-      initial: function (c) {
-        
-        let short = Math.min(c.width, c.height);
-        let long = Math.max(c.width, c.height);
-        let range = (Math.random() * short * 0.1);
-        let dir = (10 + Math.random() * 70) * Math.PI/180;
-        
-        this.x_stt = -2 * range + range * Math.cos(dir);
-        this.y_stt = -2 * range + range * Math.sin(dir);
-        
-        this.x_end = -range + long * Math.cos(dir);
-        this.y_end = -range + long * Math.sin(dir);
-        
-        this.R = 200 + 55 * Math.random();
-        this.G = 50 + 100 * Math.random();
-        this.B = 0;
-        this.A = 1.0;//0.5 + Math.random()/2.0;
-  
-        this.radius = 10 + Math.random() * 10;
-        this.elapse = 10 + (1-this.radius/20) * 10.0;
-        this.t = Math.random() * this.elapse ;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        if (dt > 1000) dt = 16;
-  
-        this.t += dt/1000.0;
-        let ein = this.t/this.elapse;
-        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
-        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
-        this.A = 1.0 + (0-1.0) * ein;
-        let r = this.radius/2 * (1 + ein);
-        //if (r < 0) r = this.radius;
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        if (this.t > this.elapse) {
-          this.initial(c);
-          this.t = 0;
-        }
-      }
-    }
-    return p;
-  }
-  
-  /*
-   * Sunrise
-   */
-   function newParticle_sunrise_background() {
-    let p = {
-      initial: function (c) { },
-      release: function() { },
-      update: function (c, _ctx, dt) {
-  
-        var grd = _ctx.createLinearGradient(0, c.height/2, 0, 0);
-        grd.addColorStop(0, 'rgb(255, 128, 0,1.0)');
-        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
-  
-        // Fill with gradient
-        _ctx.fillStyle = grd;
-        _ctx.fillRect(0, 0, c.width, c.height/2);
-  
-        grd = _ctx.createLinearGradient(0, c.height/2, 0, c.height);
-        grd.addColorStop(0, 'rgb(255, 128, 0,1.0)');
-        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
-  
-        // Fill with gradient
-        _ctx.fillStyle = grd;
-        _ctx.fillRect(0, c.height/2 -1, c.width, c.height);
-  
-      }
-    };
-    return p
-  }
-  
-  function newParticle_sunrise() {
-    let p = {
-      x_stt: 0,
-      y_stt: 0,
-      x_end: 0,
-      y_end: 0,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      t:0,
-      elapse:0,
-      release: function() { },
-      easein:function(_t) {
-        return _t * _t * _t;
-      },
-      easeout:function(_t) {
-        return -_t * _t + 2 * _t;
-      },
-      initial: function (c) {
-      
-        this.x_stt = c.width * (0.2 + Math.random() * 0.6);
-        if (Math.random() > 0.5) {
-  
-          this.y_stt = c.height/2 + (Math.random() * c.height * 0.01);
-  
-          this.x_end = -c.width * 0.2 + c.width * 1.4 * this.x_stt/c.width;
-          this.y_end = this.y_stt + c.height * 0.2;
-  
-          if (Math.random > 0.4) {
-            this.y_end = tthis.y_stt;
-          }
-  
-        } else {
-  
-          this.y_stt = c.height/2 - (Math.random() * c.height * 0.01);
-  
-          this.x_end = -c.width * 0.2 + c.width * 1.4 * this.x_stt/c.width;
-          this.y_end = this.y_stt - c.height * 0.2;
-  
-          if (Math.random > 0.4) {
-            this.y_end = tthis.y_stt;
-          }
-  
-        }
-        
-      
-        this.R = 255;
-        this.G = 128;
-        this.B = 0;
-        this.A = 1.0;//0.5 + Math.random()/2.0;
-  
-        this.radius = 1 + Math.random() * 2;
-        this.elapse = 1 + Math.random() * 2;//1.0 + 4.0 * (70 - this.radius) /70;
-        this.t = 0;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        if (dt > 1000) dt = 16;
-  
-        this.t += dt/1000.0;
-        let ein = this.easein(this.t/this.elapse);
-        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
-        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
-        this.A = 1.0 + (0 - 1.0) * ein;
-        this.radius = this.radius + 0.002 * dt;
-        //if (this.radius < 0) this.radius = 0;
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(x, y, this.radius, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        if (this.t > this.elapse) {
-          this.initial(c);
-          this.elapse = 3 + Math.random();
         }
       }
     }

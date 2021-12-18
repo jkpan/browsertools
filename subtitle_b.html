@@ -17,10 +17,14 @@ function flow() {
 
 var fontsize = 48;
 var FONT = fontsize + "px 標楷體";
+
 var fontsize_sml = 32;
 var FONT_SML = fontsize_sml + "px 標楷體";
 
-var hlightStyle = "rgb(255, 255, 255, 0.3)";
+var fontsize_sml_sml = 24;
+var FONT_SML_SML = fontsize_sml_sml + "px 標楷體";
+
+var hlightStyle = "rgb(255, 255, 255, 0.5)";
 
 </script>
 
@@ -32550,10 +32554,10 @@ var hlightStyle = "rgb(255, 255, 255, 0.3)";
       #chapter { 
         border:0px solid blue; 
         font-size: 48px;
-        color: white;
+        color: lightgray;
       }
       p { background:#eee; margin:5px; }
-      span { color:orange; }
+      span { color:yellow; }
     </style>
     </head>   
 <body>
@@ -32941,7 +32945,8 @@ function printTxt(i, j) {
     } while(ctx.measureText(txt).width > canvas.width * 0.9);
 
     _row++;
-    if (_row > row) {
+    
+    if (_row > row && doblank != 1) {
       ctx.fillStyle = hlightStyle;
       ctx.fillRect (0, fixy - fontsize + fontsize * (row + 0.5), canvas.width, fontsize);
     }
@@ -32963,7 +32968,7 @@ function printTxt(i, j) {
 
   if (ctx.measureText(ptxt).width + px > canvas.width * 0.1 && j > 0) {
     _drawSdwtxt(abbr[song], px, fixy);
-    _drawSdwtxt('' + i + ' : ' + j, px, fixy + fontsize_sml);
+    _drawSdwtxt('' + i + ':' + j, px, fixy + fontsize_sml);
   } else {
     _drawSdwtxt(ptxt, px, fixy);
   } 
