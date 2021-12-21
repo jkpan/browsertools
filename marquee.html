@@ -1,31 +1,35 @@
+<!--script type="text/javascript" src="led.js"></script-->
+
 <script type="text/javascript" charset="UTF-8"> 
 
   var subtitle = [ [''], 
                    [''],
                    ['']];
   
-  var side = 3;
-  var dots = 7;
   
   var fsize = 128;
   var fontFamily = "標楷體";
   
   var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
-  var speed = 80;
-  
+  var speed = 160;
+  var speed1 = 160;
+
+  var side = 3;
+  var dots = 7;
+
   var initDot = 0;
-  
   var dot_none = 33;
-  var criteria = dot_none * 2 / 3;//dot_none/2;
+  var criteria = dot_none;// * 2 / 3;//dot_none/2;
   
-  var dot_rc = 255;
-  var dot_gc = 255;
-  var dot_bc = 255;
-  
-  var dot_r = 255;
-  var dot_g = 255;
-  var dot_b = 255;
-  
+  var _r = 0;//dot_r;// * Math.random();
+  var _g = 0;//dot_g;// * Math.random();
+  var _b = 0;//dot_b;// * Math.random();
+
+  var animIdx = 0;
+
+  var color_0 = '#ffffff';
+  var color_1 = '#ffffff';
+
   //verticle
   var jumpLine = (side + dots) * fsize * 4;
   var jumpSide = (side + dots) * 4;
@@ -73,11 +77,30 @@
       var slider = document.getElementById('speed');
       speed = parseInt(slider.value, 10);
       
+      var sel_anim = document.getElementById('anim');
+      animIdx = parseInt(sel_gap.options[sel_anim.options.selectedIndex].value, 10);
+
+      color_0 = document.getElementById('txtc_0').value;
+      color_1 = document.getElementById('txtc_1').value;
+      
+      /*
+      var sel_anim = document.getElementById('anim');
+      for(var i = 0; i < sel_anim.options.length; ++i) {
+        if (parseInt(sel_anim.options[i].value, 10)  === animIdx) {
+          sel_anim.selectedIndex = i;
+          break;
+        }
+      }
+      */
+
       switch2Marquee();
       //keepGoing = 0;
       init();
       initAnim();
       ledEffect();
+
+
+
     }
   }
   
@@ -87,7 +110,7 @@
     document.getElementById("txt").value = value;
   }
   
-  function selOption() {
+  function sync2ui() { //selOption() {
 
     var sel_gap = document.getElementById('Gap');
     for(var i = 0, j = sel_gap.options.length; i < j; ++i) {
@@ -103,13 +126,18 @@
           break;
         }
     }
+
+    var slider = document.getElementById('speed');
+    slider.value = speed;
+    slider = document.getElementById('speed1');
+    slider.value = speed1;
     
-    selLegend();
-    sliderSync();
+    showLEDLegend();
+     
     
   }
 
-  function selLegend() {
+  function showLEDLegend() {
   
     var sel_gap = document.getElementById('Gap');
     var sel_lsize = document.getElementById('Lsize');
@@ -118,11 +146,6 @@
   
     generateLegend(gap, lsz);
 
-  }
-
-  function sliderSync() {
-    var slider = document.getElementById('speed');
-    slider.value = speed;
   }
   
   </script>
@@ -209,28 +232,118 @@
             margin-top: -4px;
           }
 
+          
+          .column {
+            float: left;
+            width: 50%;
+          }
+          .row:after {
+            content: "";
+            display: table;
+            clear: both;
+          }
+          /*
+          .row {
+            display: flex;
+          }
+
+          .column {
+            flex: 50%;
+          }
+          */
       </style>
       </head>   
   <body>
+
+    <div class="row" id="ui" style="margin: 2% 2%;">
+      <br/>
+      <div class="column" style="background-color:#555555;">
+
+        <br/>
+
+        <input type="text" id="txt" name="myfield" value="歡迎🐻" placeholder="message"/>
+        
+        <br/>
+        
+          <label style="color:#ff0000;size: 48px;">Color</label>
+          <input type="color" id="txtc_0" value="#ffffff">
+          
+          <label style="color:#ff0000;size: 48px;">Speed</label>
+          <input type="range" min="20" max="400" step="20" value="120" id="speed" onchange=""/>
+              
+        <br/>
+        <hr/>
+
+        <input type="text" id="txt2" name="myfield" value="Hello🌏" placeholder="message"/>
+        
+        <br/>
+
+          <label style="color:#ff0000;size: 48px;">Color</label>
+          <input type="color" id="txtc_1" value="#ffffff">
+
+          <label style="color:#ff0000;size: 48px;">Speed</label>
+          <input type="range" min="20" max="400" step="20" value="120" id="speed1" onchange=""/>
+          
+        <br/>
+        <hr/>
+
+        <label style="color:#ff0000;size: 48px;">Animation background</label>
+        <select name="anim" id="anim">
+          <option value="0" selected>none</option>
+          <option value="1">ring</option>
+          <option value="2">in</option>
+          <option value="3">out</option>
+          <option value="4">inout</option>
+          <option value="5">doughnut</option>
+          <option value="6">snow</option>
+          <option value="7">firework</option>
+          <option value="8">clock</option>
+        </select>
+
+        <br/>
+        <hr/>
+
+        <label style="color:#ff0000;size: 48px;">Gap</label>
+        <select name="Gap" id="Gap" onchange="showLEDLegend()">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+
+        <label style="color:#ff0000;size: 48px;">LED Size</label>
+        <select name="Lsize" id="Lsize" onchange="showLEDLegend()">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+
+        <br/>
+
+        <div style="background-color:#000000;">  <img id="legend" /> </div>     
+            
+      </div>
+      <div class="column" style="background-color:#fa5252;">
+        <button type="button" id="go" style="margin: 2% 2%;width:50%;height:40px;border:2px #ff0000;" onclick="textGo()">Ok Go</button>
+      </div>
+    </div>
   
-    <div id="ui" style="margin: 2% 2%;">
-      <br/>
-      <!--p style="font-size:48px">&#x1f604;</p-->
-      <input type="text" id="txt" name="myfield" value="歡迎🐻" placeholder="message"/><br/>
-      <input type="text" id="txt2" name="myfield" value="Hello🌏" placeholder="message"/><br/>
-    
-      <br/>
-
-      <label for="favcolor" style="color:#ff0000;size: 48px;">Text color</label>
-      <input type="color" id="favcolor" name="favcolor" value="#ffffff">
-
-      <br/>
-
-      <button type="button" id="go" style="margin: 2% 2%;width:120px;height:40px;border:2px #ff0000;" onclick="textGo()">OK</button>
+  
       
-      <br/>
+      
 
-    <a onclick="emojiGo('😀')">😀</a><a onclick="emojiGo('😆')">😆</a>
+    <!--a onclick="emojiGo('😀')">😀</a><a onclick="emojiGo('😆')">😆</a>
     <a onclick="emojiGo('😅')">😅</a><a onclick="emojiGo('😂')">😂</a>
     <a onclick="emojiGo('🤣')">🤣</a><a onclick="emojiGo('🥲')">🥲</a>
     <a onclick="emojiGo('😍')">😍</a><a onclick="emojiGo('😋')">😋</a> 
@@ -244,44 +357,8 @@
     <a onclick="emojiGo('🤒')">🤒</a><a onclick="emojiGo('🤕')">🤕</a> 
     <a onclick="emojiGo('💩')">💩</a><a onclick="emojiGo('👻')">👻</a> 
     <a onclick="emojiGo('💀')">💀</a><a onclick="emojiGo('👽')">👽</a> 
-    <a onclick="emojiGo('🤖')">🤖</a> 
-
-    <br/>
+    <a onclick="emojiGo('🤖')">🤖</a--> 
   
-    <label style="color:#ff0000;size: 48px;">Gap</label>
-    <select name="Gap" id="Gap" onchange="selLegend()">
-      <option value="0">0</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-    </select>
-    <label style="color:#ff0000;size: 48px;">LED Size</label>
-    <select name="Lsize" id="Lsize" onchange="selLegend()">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-    </select>
-
-    <br/>
-
-    <img id="legend" />
-    
-    <br/>
-
-    <input type="range" min="20" max="400" step="20" value="120" id="speed" onchange=""/>
-  
-    </div>
   
     <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
   
@@ -349,6 +426,7 @@
           txt: _txt,
          step: 0,
           len:0,
+        color:'#ffffff',
       release: function() {
         this.txt = '';
       },
@@ -383,10 +461,10 @@
         _ctx.textAlign = "left";
         _ctx.font = FONT;// + "px 標楷體";
         
-        _ctx.strokeStyle = 'white';
+        _ctx.strokeStyle = this.color;//'white';
         _ctx.lineWidth = 4;
           
-        _ctx.fillStyle = 'white';
+        _ctx.fillStyle = this.color;//'white';
 
         _ctx.strokeText(this.txt, this.x, this.y);
         _ctx.fillText(this.txt, this.x, this.y);
@@ -402,6 +480,7 @@
             x: xx,
             y: yy,
           txt: _txt,
+        color:'#ffffff',
       release: function() {
         this.txt = '';
       },
@@ -427,10 +506,10 @@
         _ctx.textAlign = "left";
         _ctx.font = FONT;// + "px 標楷體";
         
-        _ctx.strokeStyle = 'white';
+        _ctx.strokeStyle = this.color;//color_0;//'white';
         _ctx.lineWidth = 4;
           
-        _ctx.fillStyle = 'white';
+        _ctx.fillStyle = this.color;//color_0;//'white';
 
         _ctx.strokeText(this.txt, this.x, this.y);
         _ctx.fillText(this.txt, this.x, this.y);
@@ -439,10 +518,6 @@
     }
     return p;
   }
-
-  var _r = dot_r;// * Math.random();
-  var _g = dot_g;// * Math.random();
-  var _b = dot_b;// * Math.random();
   
   function anim_update(elapse) {
   
@@ -822,21 +897,7 @@
     particles.length = 0;
     particles = [];
   
-    /*
-    //verticle
-    let xx = fsize;
-    let yy = c.height + fsize;
-    let _idx = 0;
-    var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-    for (_idx = 0;_idx<total;_idx++) {
-        particles[_idx] = newParticle_txt(phase, _idx,  xx, yy);//();
-        let txtlen = particles[_idx].initial(c);
-        yy += (txtlen + 2) * fsize;
-    }
-    */
-
     //for (let _i = 1;_i<subtitle.length;_i++) {}
-
     //let yy = c.height/4.0 + fsize/2;
     
     fsize = canvas.height/3;
@@ -847,13 +908,16 @@
     if (subtitle[2][0].length > 0) {
       particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height - fsize/10);//();
       particles[0].initial(c);
+      particles[0].color = color_0;
       particles[1] = newParticle_txt(subtitle[2][0], xx, 0.5 * c.height + fsize + fsize/10);//();
       particles[1].initial(c);
+      particles[1].color = color_1;
     } else {
       fsize = canvas.height/2;
       FONT = fsize + "px " + fontFamily;
       particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height + fsize/3);//();
       particles[0].initial(c);
+      particles[0].color = color_0;
     }
     
     if (particlesBG.length >= 1) {
@@ -865,63 +929,59 @@
     particlesBG.length = 0;
     particlesBG = [];
 
-    /*
-    for (var i = 0;i<150;i++) {
-      if (Math.random() > 0.5)  
-        particlesBG[i] = newParticle_in();
-      else 
-        particlesBG[i] = newParticle_out();
-      particlesBG[i].initial(canvas);
+    switch (animIdx) {
+      case 0:break;
+      case 1:
+        for (var i = 0;i<150;i++) {
+          particlesBG[i] = newParticle_casual();
+          particlesBG[i].initial(canvas);
+        }
+        break;
+      case 2:
+        for (var i = 0;i<150;i++) {
+          particlesBG[i] = newParticle_in();
+          particlesBG[i].initial(canvas);
+        }
+        break;
+      case 3:
+        for (var i = 0;i<150;i++) {
+          particlesBG[i] = newParticle_out();
+          particlesBG[i].initial(canvas);
+        }
+        break;
+      case 4:
+        for (var i = 0;i<150;i++) {
+          if (Math.random() > 0.5)  
+            particlesBG[i] = newParticle_in();
+          else 
+            particlesBG[i] = newParticle_out();
+          particlesBG[i].initial(canvas);
+        }
+        break;
+      case 5:
+        for (var i = 0;i<150;i++) {
+          particlesBG[i] = newParticle_ring();
+          particlesBG[i].initial(canvas);
+        }
+        break;
+      case 6:
+        for (var i = 0;i<150;i++) {
+          particlesBG[i] = newParticle_snow();
+          particlesBG[i].initial(canvas);
+        }
+        break;
+      case 7:
+        for (var i = 0;i<3;i++) {
+          particlesBG[i] = newParticle_firework();
+          particlesBG[i].initial(canvas);
+        }
+        break;
+      case 8:
+        particlesBG[0] = newClock();
+        particlesBG[0].initial(canvas);
+        break;
+        
     }
-     */
-    
-    /*
-    for (var i = 0;i<150;i++) {
-      particlesBG[i] = newParticle_casual();
-      particlesBG[i].initial(canvas);
-    }
-    */
-    /*
-    for (var i = 0;i<150;i++) {
-      particlesBG[i] = newParticle_in();
-      particlesBG[i].initial(canvas);
-    }
-    */
-    /*
-    for (var i = 0;i<150;i++) {
-      particlesBG[i] = newParticle_out();
-      particlesBG[i].initial(canvas);
-    }
-    */
-    /*
-    for (var i = 0;i<150;i++) {
-      particlesBG[i] = newParticle_ring();
-      particlesBG[i].initial(canvas);
-    }
-    */
-    /*
-    for (var i = 0;i<150;i++) {
-      particlesBG[i] = newParticle_snow();
-      particlesBG[i].initial(canvas);
-    }
-    */
-    
-    /*
-    for (var i = 0;i<3;i++) {
-      particlesBG[i] = newParticle_firework();
-      particlesBG[i].initial(canvas);
-    }
-    */
-    /*
-    for (var i = 0;i<20;i++) {
-      particles[i] = newParticle_rect();
-      particles[i].initial(canvas);
-    }
-    */
-    /*
-    particlesBG[0] = newClock();
-    particlesBG[0].initial(canvas);
-    */
 
     keepGoing = 1;
     window.requestAnimationFrame(anim_update);
@@ -1160,8 +1220,7 @@
   
   
   function switch2Input() {
-    selOption();
-    sliderSync();
+    sync2ui();
     keepGoing = 0;
     var div = document.getElementById('ui');
     if (div) {
@@ -1376,8 +1435,8 @@
         this.x_end = c.width/2 + range * Math.cos(dir);
         this.y_end = c.height/2 + range * Math.sin(dir);
         
-        this.x_stt = c.width/2;// + long * Math.cos(dir);
-        this.y_stt = c.height/2;// + long * Math.sin(dir);
+        this.x_stt = c.width/2 + long * Math.cos(dir);
+        this.y_stt = c.height/2 + long * Math.sin(dir);
         
         this.R = 100 + 155 * Math.random();
         this.G = 100 + 155 * Math.random();
@@ -1627,45 +1686,6 @@
         if (this.t > this.elapse) {
           this.initial(c);
         }
-      }
-    }
-    return p;
-  }
-  
-  function newParticle_rect() {
-    let p = {
-      x: 0,
-      y: 0,
-      v: 0,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      release: function() { },
-      initial: function (c) {
-                    
-        this.x = c.width * (0.2 + Math.random() * 0.6);
-        this.y = c.height * (0.5 + Math.random() * 0.5);
-        this.v = 0.2 + Math.random() * 0.5; 
-        this.R = 155 * Math.random();
-        this.G = 155 * Math.random();
-        this.B = 155 * Math.random();
-        this.A = 0.5 + Math.random() * 0.2;
-        this.radius = 150 + Math.random() * 150;
-  
-      },
-      update: function (c, _ctx, dt) {
-        
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
-        _ctx.fillRect (this.x - this.radius * 0.7, this.y - this.radius/2.0, this.radius * 1.4, this.radius);
-        
-        
-        this.A = this.A - this.v * dt * 0.001;
-        if (this.A < 0.01) {
-          this.initial(c);
-        }
-        //console.log(this.y + ', ' + this.x + ':' + dt);
       }
     }
     return p;
