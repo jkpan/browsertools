@@ -1,0 +1,176 @@
+<script type="text/javascript" src="led.js"></script>
+<script type="text/javascript" charset="UTF-8"> 
+
+function emojiGo(emj) {
+    let value = document.getElementById("txt").value;
+    value += emj;
+    document.getElementById("txt").value = value;
+}
+
+function showLEDLegend() {
+  
+    var sel_gap = document.getElementById('Gap');
+    var sel_lsize = document.getElementById('Lsize');
+    var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
+    var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
+  
+    var size = parseInt(document.getElementById('banner_size').value, 10)
+    //var text = document.getElementById('banner_text').value;
+    let text = document.getElementById("txt").value.trim();
+
+    if (text.length == 0) 
+      return;
+
+    //generateLegend(gap, lsz);
+    getLEDBanner(text, size, gap, lsz);
+
+}
+
+function getLEDBanner(txt, fontsize, _s, _d) {
+
+  maskimg = null;
+
+  //let fontsize = 128;
+  let _font = fontsize + "px Arial"; 
+
+  side = _s;
+  dots = _d;
+
+  var tempCanvas = document.createElement("canvas");
+  var tempCtx = tempCanvas.getContext("2d");
+
+  tempCtx.font = _font;
+  let fw = Math.ceil(tempCtx.measureText(txt).width) + 4;
+  let fh = fontsize * 1.2;
+
+  // set the temp canvas size == the canvas size
+  tempCanvas.width = fw;
+  tempCanvas.height = fh;
+
+  //tempCtx = tempCanvas.getContext("2d");
+  tempCtx.font = _font;
+
+  //tempCtx.font = ctx.font;//fontsize + "px Arial";
+
+  //maskimg
+  initLED(0, 0, fw, fh);
+  newLEDMask();
+  
+  tempCtx.fillStyle = 'black';
+  tempCtx.fillRect(0, 0, fw, fh);
+
+  tempCtx.textAlign = "left";
+  
+
+  tempCtx.fillStyle = 'yellow';
+  tempCtx.strokeStyle = 'yellow';
+  tempCtx.lineWidth = 4;
+
+  tempCtx.strokeText(txt, 2, fontsize); // + '('+ _s +','+ _d +')'
+  tempCtx.fillText(txt, 2, fontsize);
+
+  maskimg.onload = function() {
+    //console.log('mask generated 0! ' + maskimg.width + ', ' + maskimg.height);
+    ledAction(tempCanvas, tempCtx);
+    var img = document.getElementById('legend');
+    img.src = tempCanvas.toDataURL();
+    
+  }
+
+}
+
+</script>
+  
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <style>
+        body {
+          margin: 0px;
+          height: 100%;
+          background-color:rgb(55, 55, 55);
+        }
+        input[type=text] {
+          width:60%;
+          border:2px solid #aaa;
+          border-radius: 4px;
+          margin: 2% 2%;
+          outline: none;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+        input[type=text]:focus {
+          border-color: dodgerblue;
+          box-shadow: 0 0 8px 0 dodgerblue;
+        }
+        select {
+          border:2px solid #aaa;
+          border-radius: 4px;
+          margin: 2% 2%;
+          outline: none;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+          
+      </style>
+      </head>   
+  <body>
+    
+    <div style="margin: 2% 2%;">  
+      <input id="banner_size" type="hidden" value="128" />
+      <img id="legend" />
+      <br/>
+      <input type="text" id="txt" name="myfield" value="😎" placeholder=""/>
+    
+
+    <br/>
+
+    <label style="color:#ff0000;size: 48px;">LED Size</label>
+      <select name="Lsize" id="Lsize" onchange="showLEDLegend()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+      </select> 
+    <label style="color:#ff0000;size: 48px;">Gap</label>
+      <select name="Gap" id="Gap" onchange="showLEDLegend()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+      </select>
+    
+      <br/>
+      
+      
+      <a onclick="emojiGo('😀')">😀</a><a onclick="emojiGo('😆')">😆</a>
+      <a onclick="emojiGo('😅')">😅</a><a onclick="emojiGo('😂')">😂</a>
+      <a onclick="emojiGo('🤣')">🤣</a><a onclick="emojiGo('🥲')">🥲</a>
+      <a onclick="emojiGo('😍')">😍</a><a onclick="emojiGo('😋')">😋</a> 
+    <a onclick="emojiGo('😜')">😜</a><a onclick="emojiGo('😎')">😎</a> 
+    <a onclick="emojiGo('😔')">😔</a><a onclick="emojiGo('😢')">😢</a> 
+    <a onclick="emojiGo('😭')">😭</a><a onclick="emojiGo('😡')">😡</a>
+    <a onclick="emojiGo('😳')">😳</a><a onclick="emojiGo('😱')">😱</a> 
+    <a onclick="emojiGo('😨')">😨</a><a onclick="emojiGo('😵')">😵</a> 
+    <a onclick="emojiGo('🤢')">🤢</a><a onclick="emojiGo('🤮')">🤮</a> 
+    <a onclick="emojiGo('🤧')">🤧</a><a onclick="emojiGo('😷')">😷</a> 
+    <a onclick="emojiGo('🤒')">🤒</a><a onclick="emojiGo('🤕')">🤕</a> 
+    <a onclick="emojiGo('💩')">💩</a><a onclick="emojiGo('👻')">👻</a> 
+    <a onclick="emojiGo('💀')">💀</a><a onclick="emojiGo('👽')">👽</a> 
+    <a onclick="emojiGo('🤖')">🤖</a> 
+  
+      <br/>
+      <button type="button" id="go" style="margin: 2% 2%;width:50%;height:40px;border:2px #ff0000;" onclick="showLEDLegend()">Generate</button>
+      <br/>
+    </div>
+
+  </body>
+  
+  </html>
+  

@@ -32879,16 +32879,16 @@ function printTxt(i, j) {
   let j_1 = getPreVerse(i, j);
   let i_2 = getPreChapter(i_1, j_1);
   let j_2 = getPreVerse(i_1, j_1);
-  let i_3 = getPreChapter(i_2, j_2);
-  let j_3 = getPreVerse(i_2, j_2);
+  //let i_3 = getPreChapter(i_2, j_2);
+  //let j_3 = getPreVerse(i_2, j_2);
   
   
   let ip1 = getNextChapter(i, j);
   let jp1 = getNextVerse(i, j);
   let ip2 = getNextChapter(ip1, jp1);
   let jp2 = getNextVerse(ip1, jp1);
-  let ip3 = getNextChapter(ip2, jp2);
-  let jp3 = getNextVerse(ip2, jp2);
+  //let ip3 = getNextChapter(ip2, jp2);
+  //let jp3 = getNextVerse(ip2, jp2);
 
   let ptxt = abbr[song] + ' ' + i + ':' + j;
   let txt = subtitles[i][j];
@@ -32913,7 +32913,7 @@ function printTxt(i, j) {
 
   ctx.font = FONT_SML;
 
-  printSideTxt(i_3, j_3, x, y - fontsize * 4, 0.2);
+  //printSideTxt(i_3, j_3, x, y - fontsize * 4, 0.2);
   printSideTxt(i_2, j_2, x, y - fontsize * 3, 0.4);
   printSideTxt(i_1, j_1, x, y - fontsize * 2, 0.6);
 
@@ -32973,7 +32973,7 @@ function printTxt(i, j) {
     _drawSdwtxt(ptxt, px, fixy);
   } 
 
-  if (ip3 != -1) printSideTxt(ip3, jp3, x, y + fontsize * 4, 0.2);
+  //if (ip3 != -1) printSideTxt(ip3, jp3, x, y + fontsize * 4, 0.2);
   if (ip2 != -1) printSideTxt(ip2, jp2, x, y + fontsize * 3, 0.4);
   if (ip1 != -1) printSideTxt(ip1, jp1, x, y + fontsize * 2, 0.6);
 

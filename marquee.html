@@ -1,12 +1,10 @@
-<!--script type="text/javascript" src="led.js"></script-->
-
+<script type="text/javascript" src="led.js"></script>
 <script type="text/javascript" charset="UTF-8"> 
 
   var subtitle = [ [''], 
                    [''],
                    ['']];
-  
-  
+    
   var fsize = 128;
   var fontFamily = "標楷體";
   
@@ -14,41 +12,13 @@
   var speed = 160;
   var speed1 = 160;
 
-  var side = 3;
-  var dots = 7;
-
-  var initDot = 0;
-  var dot_none = 33;
-  var criteria = dot_none;// * 2 / 3;//dot_none/2;
-  
-  var _r = 0;//dot_r;// * Math.random();
-  var _g = 0;//dot_g;// * Math.random();
-  var _b = 0;//dot_b;// * Math.random();
-
   var animIdx = 0;
 
   var color_0 = '#ffffff';
   var color_1 = '#ffffff';
 
-  //verticle
-  var jumpLine = (side + dots) * fsize * 4;
-  var jumpSide = (side + dots) * 4;
-  
-  if (dots == 3) {
-    initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-  } else if (dots == 2) {
-    initDot = ((side + 1) * fsize + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-  } else if (dots == 1) {
-    initDot = (side * fsize + side) * 4;//(4 * fsize + 4) * 4;
-  }
-
-  var maskWidth = 100;
-  var maskHeight = 100;
-
-  var gapL = 0;
-  var gapP = 0;
-  
   function _textGo(_id, idx) {
+
     let value = document.getElementById(_id).value.trim();//String.fromCodePoint(0x1F604);
     if (value.length == 0) 
       return false;
@@ -56,6 +26,7 @@
     subtitle[idx] = [value];
     phase = idx;
     return true;
+
   }
 
   function textGo() {
@@ -64,7 +35,6 @@
     if (txt1.length + txt2.length > 0) {
       subtitle[1] = [txt1];
       subtitle[2] = [txt2];
-      
       
       var sel_gap = document.getElementById('Gap');
       var sel_lsize = document.getElementById('Lsize');
@@ -78,7 +48,7 @@
       speed = parseInt(slider.value, 10);
       
       var sel_anim = document.getElementById('anim');
-      animIdx = parseInt(sel_gap.options[sel_anim.options.selectedIndex].value, 10);
+      animIdx = parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
 
       color_0 = document.getElementById('txtc_0').value;
       color_1 = document.getElementById('txtc_1').value;
@@ -94,12 +64,9 @@
       */
 
       switch2Marquee();
-      //keepGoing = 0;
+      
       init();
       initAnim();
-      ledEffect();
-
-
 
     }
   }
@@ -144,16 +111,74 @@
     var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
     var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
   
-    generateLegend(gap, lsz);
+    var size = parseInt(document.getElementById('banner_size').value, 10)
+    var text = document.getElementById('banner_text').value;
+    
+    
+    //generateLegend(gap, lsz);
+    getLEDBanner(text, size, gap, lsz);
 
   }
+
+function getLEDBanner(txt, fontsize, _s, _d) {
+
+  maskimg = null;
+
+  //let fontsize = 128;
+  let _font = fontsize + "px Arial"; 
+
+  side = _s;
+  dots = _d;
+
+  var tempCanvas = document.createElement("canvas");
+  var tempCtx = tempCanvas.getContext("2d");
+
+  tempCtx.font = _font;
+  let fw = Math.ceil(tempCtx.measureText(txt).width) + 4;
+  let fh = fontsize * 1.2;
+
+  // set the temp canvas size == the canvas size
+  tempCanvas.width = fw;
+  tempCanvas.height = fh;
+
+  //tempCtx = tempCanvas.getContext("2d");
+  tempCtx.font = _font;
+
+  //tempCtx.font = ctx.font;//fontsize + "px Arial";
+
+  //maskimg
+  initLED(0, 0, fw, fh);
+  newLEDMask();
   
-  </script>
+  tempCtx.fillStyle = 'black';
+  tempCtx.fillRect(0, 0, fw, fh);
+
+  tempCtx.textAlign = "left";
+  
+
+  tempCtx.fillStyle = 'yellow';
+  tempCtx.strokeStyle = 'yellow';
+  tempCtx.lineWidth = 4;
+
+  tempCtx.strokeText(txt, 2, fontsize); // + '('+ _s +','+ _d +')'
+  tempCtx.fillText(txt, 2, fontsize);
+
+  maskimg.onload = function() {
+    //console.log('mask generated 0! ' + maskimg.width + ', ' + maskimg.height);
+    ledAction(tempCanvas, tempCtx);
+    var img = document.getElementById('legend');
+    img.src = tempCanvas.toDataURL();
+    
+  }
+
+}
+
+</script>
   
   <!DOCTYPE html>
   <html>
     <head>
-      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" charset="UTF-8"/>
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
       <!--meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8"-->
       <style>
         body {
@@ -255,7 +280,36 @@
       </head>   
   <body>
 
+    
     <div class="row" id="ui" style="margin: 2% 2%;">
+      <div style="background-color:#000000;">  
+        <input id="banner_size" type="hidden" value="96" />
+        <input id="banner_text" type="hidden" value="LED-Board😎" />
+        <img id="legend" />
+      </div>
+      <label style="color:#ff0000;size: 48px;">LED Size</label>
+        <select name="Lsize" id="Lsize" onchange="showLEDLegend()">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select> 
+      <label style="color:#ff0000;size: 48px;">Gap</label>
+        <select name="Gap" id="Gap" onchange="showLEDLegend()">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+
+        
+
       <br/>
       <div class="column" style="background-color:#555555;">
 
@@ -300,42 +354,11 @@
           <option value="8">clock</option>
         </select>
 
-        <br/>
-        <hr/>
-
-        <label style="color:#ff0000;size: 48px;">Gap</label>
-        <select name="Gap" id="Gap" onchange="showLEDLegend()">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select>
-
-        <label style="color:#ff0000;size: 48px;">LED Size</label>
-        <select name="Lsize" id="Lsize" onchange="showLEDLegend()">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-        </select>
-
-        <br/>
-
-        <div style="background-color:#000000;">  <img id="legend" /> </div>     
+        <br/>        
             
       </div>
       <div class="column" style="background-color:#fa5252;">
-        <button type="button" id="go" style="margin: 2% 2%;width:50%;height:40px;border:2px #ff0000;" onclick="textGo()">Ok Go</button>
+        <button type="button" id="go" style="margin: 2% 2%;width:50%;height:40px;border:2px #ff0000;" onclick="textGo()">START</button>
       </div>
     </div>
   
@@ -372,49 +395,20 @@
 
   var canvas;
   var ctx;
-  
+
+  function initCanvas() {
+    canvas = document.getElementById("canvas");
+    canvas.width  = window.outerWidth;
+    canvas.height = window.outerHeight;
+    ctx = canvas.getContext("2d");
+  }
+
   function init() {
-      canvas = document.getElementById("canvas");
-      canvas.width  = window.outerWidth;
-      canvas.height = window.outerHeight;
-      ctx = canvas.getContext("2d");
 
-      /*
-      if (dots == 3) {
-        initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-      } else if (dots == 2) {
-        initDot = ((side + 1) * canvas.width + (side + 1)) * 4;//(4 * fsize + 4) * 4;
-      } else if (dots == 1) {
-        initDot = (side * canvas.width + side) * 4;//(4 * fsize + 4) * 4;
-      }
-      */
-      
-      jumpLine = (side + dots) * canvas.width * 4;
-      jumpSide = (side + dots) * 4;
-      FONT = fsize + "px " + fontFamily;//黑體-繁";//宋體-繁";
+    initCanvas();
 
-      switch(dots) {
-        case 1:
-          initDot = (side * canvas.width + side) * 4;
-          break;
-        case 2:
-        case 3:
-        case 4:
-          initDot = ((side + 1) * canvas.width + (side + 1)) * 4;
-          break;
-        case 5:
-        case 6:
-          initDot = ((side + 2) * canvas.width + (side + 2)) * 4;
-          break;
-        case 7:
-          initDot = ((side + 3) * canvas.width + (side + 3)) * 4;
-          break;
-      }
-
-      gapL = canvas.width * 4;
-      gapP = 4;
-      
-      //fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
+    initLED(0, 0, canvas.width, canvas.height);
+    newLEDMask();
 
   }
 
@@ -528,360 +522,39 @@
   
     let dt = elapse - pre;
     pre = elapse;
-
-    //ctx.fillStyle = 'white';
-    //ctx.font = "16px Arial";
-    //ctx.fillText(':'+dt, 32, 32);
-
-    //if (Math.floor(Math.random() * 10) == 5) console.log(dt);
   
+    /*
     if (keepGoing != 1) {
-      if (phase != 0) {
-        initAnim();
-      }
+      initAnim();
       return;
     }
+    */
 
     for (var i = 0;i<particlesBG.length;i++) {
       particlesBG[i].update(canvas, ctx, dt);
     }
 
     for (var i = 0;i<particles.length;i++) {
-        particles[i].update(canvas, ctx, dt);
-        /*
-        if (particles[i].activeFlag == false) {
-          particles[i].initial(canvas);
-          particles[i].x = canvas.width;
-        }
-        */
+      particles[i].update(canvas, ctx, dt);
     }
-
-    /*
-    if (particles[particles.length - 1].activeFlag == false) { //
-        let xx = canvas.width;
-        for (var i = 0;i<particles.length;i++) {
-          let txtlen = particles[i].initial(canvas);
-          particles[i].x = xx;
-          xx += txtlen + 2 * fsize;
-        }
-    }
-    */
      
-    if (!maskimg) {
+    if (keepLEDGoing == 1) {
+      ledAction(canvas, ctx);
+    }
+    
+    if (keepGoing == 1) {
       window.requestAnimationFrame(anim_update);
-      return;
+      //console.log("requestAnimationFrame update " + elapse);
     }
   
-    ctx.drawImage(maskimg, 0, 0);
-
-    if (dots == 1) {
-      window.requestAnimationFrame(anim_update);
-      return;
-    }
-
-    let mask = ctx.getImageData(0, 0, canvas.width, canvas.height);
-     var data = mask.data;
-
-    //verticle
-    //let gapL = fsize * 4;
-    //verticle
-    //let wid = fsize;
-    
-    let wid = canvas.width;
-        
-    for (let i = initDot;i < data.length;i += jumpLine) {
-          
-      //let pix = ;
-      let h = Math.floor((i/4)/wid);
-      //let w = pix%wi
-      //if (h > maskHeight) break;
-
-      for (let k = i;;k+=jumpSide) {
-
-        let _pix = k/4;
-        let _h = Math.floor(_pix/wid);
-        let _w = _pix%wid;
-
-        if (_w > maskWidth) break;
-        if (_h != h) break;
-        
-        switch(dots) {
-          case 2:
-            setPix4_2(data, k);
-            break;
-          case 3:
-            setPix4_3(data, k);
-            break;
-          case 4:
-            setPix4_4(data, k);
-            break;
-          case 5:
-            setPix4_5(data, k);
-            break;
-          case 6:
-            setPix4_6(data, k);  
-            break;
-          case 7:
-            setPix4_7(data, k);  
-            break;
-        }
-
-      }
-    }
-      
-    ctx.putImageData(mask, 0, 0);
-    
-    window.requestAnimationFrame(anim_update);
-  
-  }
-
-  function setPix4_2(data, k) {
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else {
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-
-    setPixColor(data, k,               _r, _g, _b);//中
-    setPixColor(data, k - gapP,        _r, _g, _b);//左
-    setPixColor(data, k - gapL,        _r, _g, _b);//上
-    setPixColor(data, k - gapP - gapL, _r, _g, _b);//左上
-  }
-
-  function setPix4_3(data, k) {
-
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else {
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-
-    setPixColor(data, k,               _r, _g, _b);//中
-    setPixColor(data, k - gapP,        _r, _g, _b);//左
-    setPixColor(data, k - gapL,        _r, _g, _b);//上
-    setPixColor(data, k - gapP - gapL, _r/2, _g/2, _b/2);//左上
-
-    //右
-    setPixColor(data, k + gapP,        _r, _g, _b);
-    //右上
-    setPixColor(data, k + gapP - gapL, _r/2, _g/2, _b/2);
-    //右下
-    setPixColor(data, k + gapP + gapL, _r/2, _g/2, _b/2);
-    //下
-    setPixColor(data, k + gapL,        _r, _g, _b);
-    //左下
-    setPixColor(data, k - gapP + gapL, _r/2, _g/2, _b/2);
-
-  }
-
-  function setPix4_4(data, k) {   
-
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else if ((data[k + gapL + gapP] > criteria || data[k + gapL + gapP + 1] > criteria || data[k + gapL + gapP + 2] > criteria)) {
-        _r = data[k + gapL + gapP];
-        _g = data[k + gapL + gapP + 1];
-        _b = data[k + gapL + gapP + 2];
-    } else {
-        
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-
-    setPixColor(data, k,               _r, _g, _b);//中
-    setPixColor(data, k - gapP,        _r, _g, _b);//左
-    setPixColor(data, k - gapL,        _r, _g, _b);//上
-    setPixColor(data, k - gapP - gapL, 0, 0, 0);//左上
-
-    //右
-    setPixColor(data, k + gapP,        _r, _g, _b);
-    //右上
-    setPixColor(data, k + gapP - gapL, _r, _g, _b);
-    //右下
-    setPixColor(data, k + gapP + gapL, _r, _g, _b);
-    //下
-    setPixColor(data, k + gapL,        _r, _g, _b);
-    //左下
-    setPixColor(data, k - gapP + gapL, _r, _g, _b);
-
-
-    let _k = k + gapP + gapL + gapP + gapL;
-    setPixColor(data, _k, 0, 0, 0);
-
-    setPixColor(data, _k - gapL,               _r, _g, _b);
-    setPixColor(data, _k - gapL - gapL,        _r, _g, _b);
-    setPixColor(data, _k - gapL - gapL - gapL, 0, 0, 0);
-
-    setPixColor(data, _k - gapP,               _r, _g, _b);
-    setPixColor(data, _k - gapP - gapP,        _r, _g, _b);
-    setPixColor(data, _k - gapP - gapP - gapP, 0, 0, 0);
-
-  }
-
-  function setPix4_5(data, k) {
-    
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
-        _r = data[k + gapP];
-        _g = data[k + gapP + 1];
-        _b = data[k + gapP + 2];
-    } else if ((data[k - gapP] > criteria || data[k - gapP + 1] > criteria || data[k - gapP + 2] > criteria)) {
-        _r = data[k - gapP];
-        _g = data[k - gapP + 1];
-        _b = data[k - gapP + 2];
-    } else if ((data[k - gapL] > criteria || data[k - gapL + 1] > criteria || data[k - gapL + 2] > criteria)) {
-        _r = data[k - gapL];
-        _g = data[k - gapL + 1];
-        _b = data[k - gapL + 2];
-    } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
-        _r = data[k + gapL];
-        _g = data[k + gapL + 1];
-        _b = data[k + gapL + 2];
-    } else {
-        
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-    
-    let _k = k - 2 * gapP - 2 * gapL;
-    for (let i = 0;i<5;i++) {
-      for (let j = 0;j<5;j++) {
-        setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
-      }
-    }
-
-    setPixColor(data, _k, 0, 0, 0);
-      
-    setPixColor(data, _k + 4 * gapL, 0, 0, 0);
-      
-    setPixColor(data, _k + 4 * gapP, 0, 0, 0);
-      
-    setPixColor(data, _k + 4 * gapL + 4 * gapP, 0, 0, 0);
-    
-  }
-
-  function setPix4_6(data, k) {
-    
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
-        _r = data[k + gapP];
-        _g = data[k + gapP + 1];
-        _b = data[k + gapP + 2];
-    } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
-        _r = data[k + gapL];
-        _g = data[k + gapL + 1];
-        _b = data[k + gapL + 2];
-    } else if ((data[k + gapL + gapP] > criteria || data[k + gapL + gapP + 1] > criteria || data[k + gapL + gapP + 2] > criteria)) {
-        _r = data[k + gapL + gapP];
-        _g = data[k + gapL + gapP + 1];
-        _b = data[k + gapL + gapP + 2];
-    } else {
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-
-    let _k = k - 2 * gapP - 2 * gapL;
-    for (let i = 0;i<6;i++) {
-      for (let j = 0;j<6;j++) {
-        setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
-      }
-    }
-
-    setPixColor(data, _k, 0, 0, 0);
-    
-    setPixColor(data, _k + 5 * gapL, 0, 0, 0);
-    
-    setPixColor(data, _k + 5 * gapP, 0, 0, 0);
-    
-    setPixColor(data, _k + 5 * gapL + 5 * gapP, 0, 0, 0);
-  
-  }
-
-  function setPix4_7(data, k) {
-    
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
-        _r = data[k + gapP];
-        _g = data[k + gapP + 1];
-        _b = data[k + gapP + 2];
-    } else if ((data[k - gapP] > criteria || data[k - gapP + 1] > criteria || data[k - gapP + 2] > criteria)) {
-        _r = data[k - gapP];
-        _g = data[k - gapP + 1];
-        _b = data[k - gapP + 2];
-    } else if ((data[k - gapL] > criteria || data[k - gapL + 1] > criteria || data[k - gapL + 2] > criteria)) {
-        _r = data[k - gapL];
-        _g = data[k - gapL + 1];
-        _b = data[k - gapL + 2];
-    } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
-        _r = data[k + gapL];
-        _g = data[k + gapL + 1];
-        _b = data[k + gapL + 2];
-    } else {
-        
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-
-    let _k = k - 3 * gapP - 3 * gapL;
-    for (let i = 0;i<7;i++) {
-      for (let j = 0;j<7;j++) {
-        setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
-      }
-    }
-
-    setPixColor(data, _k, 0, 0, 0);
-      setPixColor(data, _k + gapL, _r/2, _g/2, _b/2);
-      setPixColor(data, _k + gapP, _r/2, _g/2, _b/2);
-
-    setPixColor(data, _k + 6 * gapL, 0, 0, 0);
-      setPixColor(data, _k + 5 * gapL, _r/2, _g/2, _b/2);
-      setPixColor(data, _k + 6 * gapL + gapP, _r/2, _g/2, _b/2);
-
-    setPixColor(data, _k + 6 * gapP, 0, 0, 0);
-      setPixColor(data, _k + 5 * gapP, _r/2, _g/2, _b/2);
-      setPixColor(data, _k + 6 * gapP + gapL, _r/2, _g/2, _b/2);
-
-    setPixColor(data, _k + 6 * gapL + 6 * gapP, 0, 0, 0);
-      setPixColor(data, _k + 5 * gapL + 6 * gapP, _r/2, _g/2, _b/2);
-      setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2);
-  }
-
-  function setPixColor(data, idx, r, g, b) {
-    data[idx]     = r;
-    data[idx + 1] = g;
-    data[idx + 2] = b;
-    data[idx + 3] = 255;
   }
   
   function initAnim() {
   
     keepGoing = 0;
 
-    //if (phase == 0) return;
-    if (subtitle.length == 1) return;
+    if (subtitle.length == 1) 
+      return;
 
     var c = document.getElementById("canvas");
     var ctx = c.getContext("2d");
@@ -988,170 +661,9 @@
   
   }
 
-  function generateLegend(s, d) {
-  
-    let w = 160;
-    let h = 100;
-
-    let _maskWidth = (Math.floor(w/(s + d))) * (s + d);
-    let _maskHeight = (Math.floor(h/(s + d))) * (s + d);
-     
-    var mask = ctx.createImageData(w, h);
-    var data = mask.data;
-  
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x++) {
-  
-          let idx = (y * w + x) * 4;
-  
-          data[idx + 0] = 0;//40;
-          data[idx + 1] = 0;//40;
-          data[idx + 2] = 0;//40;
-          data[idx + 3] = 255;
-          
-          let _x = x%(s + d);
-          let _y = y%(s + d);
-
-          if (_x >= s && _y >= s && x < _maskWidth && y < _maskHeight) { //d
-
-            let c = s + Math.floor(d/2.0);
-            if (d%2 == 0) {
-              c = s + d/2.0 - 0.5;
-            }
-
-            let len = Math.sqrt((_x - c)*(_x - c) +(_y - c)*(_y - c));
-            let r = Math.floor(d/2.0);
-
-            data[idx + 0] = dot_none * 2;//40;
-            data[idx + 1] = dot_none * 2;//40;
-            data[idx + 2] = dot_none * 2;//40;
-
-            switch(d) {
-              case 3:
-              case 4:
-              case 5:
-                if (len <= r) {
-                  data[idx + 3] = 255;
-                } else {
-                  data[idx + 3] = 128;//255 * (1- 2 * Math.abs(len - r)/r);
-                }
-                break;
-              case 6:
-                if (len <= r * 0.9) {
-                  data[idx + 3] = 255;
-                } else {
-                  data[idx + 3] = 255 * (1- 5 * Math.abs(len - r)/r);
-                }
-                break;
-              case 7:
-               if (len <= r) {
-                  data[idx + 3] = 255;
-                } else {
-                  data[idx + 3] = 255 * (1- 2 * Math.abs(len - r)/r);
-                }
-                break;
-                break;
-            }
-
-            
-            /*
-            if (d == 3) {
-              
-            } else if (d == 4 || d == 5 || d == 6) {
-              
-            } else if (d == 7) {
-              
-            }
-            */
-          }
-      }
-    }
-    ///////
-
-
-    // create a temporary canvas
-    var tempCanvas = document.createElement("canvas");
-    var tempCtx = tempCanvas.getContext("2d");
-  
-    // set the temp canvas size == the canvas size
-    tempCanvas.width = w;
-    tempCanvas.height = h;
-  
-    // put the modified pixels on the temp canvas
-    tempCtx.putImageData(mask, 0, 0);
-  
-    var img = document.getElementById('legend');
-
-    //console.log(tempCanvas.toDataURL());
-
-    img.src = tempCanvas.toDataURL();
-
-  }
-  
-  function generateMask(w, h, s, d) {
-  
-    var mask = ctx.createImageData(w, h);
-    var data = mask.data;
-  
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x++) {
-  
-          let idx = (y * w + x) * 4;
-  
-          data[idx + 0] = 0;//40;
-          data[idx + 1] = 0;//40;
-          data[idx + 2] = 0;//40;
-          data[idx + 3] = 255;
-          
-          let _x = x%(s + d);
-          let _y = y%(s + d);
-          if (_x >= s && _y >= s && x < maskWidth && y < maskHeight) { //d
-            data[idx + 3] = 0;
-          }
-  
-      }
-    }
-  
-    return mask;
-  
-  }
-  
-  var maskimg;
-  
-  function ledEffect() {
-    
-    //verticle
-    //let w = fsize;
-    //let h = canvas.height;
-  
-    let w = canvas.width;//maskWidth
-    let h = canvas.height;//maskHeight
-
-    maskWidth = (Math.floor(w/(side + dots))) * (side + dots);
-    maskHeight = (Math.floor(h/(side + dots))) * (side + dots);
-  
-    var mask = generateMask(w, h, side, dots);
-          
-    // create a temporary canvas
-    var tempCanvas = document.createElement("canvas");
-    var tempCtx = tempCanvas.getContext("2d");
-  
-    // set the temp canvas size == the canvas size
-    tempCanvas.width = w;
-    tempCanvas.height = h;
-  
-    // put the modified pixels on the temp canvas
-    tempCtx.putImageData(mask, 0, 0);
-  
-    // use the tempCanvas.toDataURL to create an img object
-    maskimg = new Image();
-    //maskimg.onload = function() {}
-    maskimg.src = tempCanvas.toDataURL();
-  
-  }
-  
   var phase = 0;
   var keepGoing = 1;
+  var keepLEDGoing = 1;
   
   var pre = 0;
   var particles = [];
@@ -1159,11 +671,7 @@
   var doblank = 0;
 
   function ledSwitch() {
-    if (maskimg != null) {
-        maskimg = null;
-    } else {
-        ledEffect();
-    }
+    keepLEDGoing = keepLEDGoing == 0?1:0;
   }
   
   function keyboard(e) {
@@ -1188,21 +696,6 @@
               break; 
           case 39: //'ArrowRight'
               break;
-          case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57: {
-          //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-              var value = e.keyCode - 48;
-              if (value > subtitle.length - 1)
-                  break;
-              
-              phase = value;
-              if (keepGoing == 0) {
-                initAnim();
-              } else {
-                keepGoing = 0;
-              }
-  
-          }
-          break;
           case 73: //i
             //inputTxt();
             if (canvas.hidden == false) {
@@ -1220,8 +713,10 @@
   
   
   function switch2Input() {
-    sync2ui();
+    
     keepGoing = 0;
+
+    sync2ui();
     var div = document.getElementById('ui');
     if (div) {
       div.hidden = false;
@@ -1245,15 +740,14 @@
              y: touchEvent.touches[0].clientY - rect.top};
   }
 
-  init();
+  initCanvas();
   switch2Input();
 
   window.addEventListener('keyup', keyboard, false);
   window.addEventListener('resize', function() {
-    init(); //initAnim();
-    if (maskimg != null) {
-      ledEffect();
-    }
+    if (canvas.hidden) 
+      return;
+    init();
   });
 
   document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
@@ -1282,559 +776,4 @@
 
 </script>
 
-  
-<script type="text/javascript" charset="UTF-8">
-
-  function newParticle_casual() {
-    let p = {
-      x: 0,
-      y: 0,
-      v:100,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      dir:0,
-      release: function() { },
-      initial: function (c) {
-        
-        let short = Math.min(c.width, c.height);
-        let range = short * 0.4 + (Math.random() * short * 0.1) * (Math.random() >0.5?1:-1);
-        let angle = Math.random() * 360 * Math.PI/180;
-        this.x = c.width/2 + range * Math.cos(angle);
-        this.y = c.height/2 + range * Math.sin(angle);
-        this.v = 30 + Math.random() * 30; 
-        this.R = 100 + 155 * Math.random();
-        this.G = 100 + 155 * Math.random();
-        this.B = 100 + 155 * Math.random();
-        this.A = Math.random();//0.5 + Math.random()/2.0;
-        this.radius = 10 + Math.random() * 10;
-        this.dir = Math.random() * 360 * Math.PI/180;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.x = this.x + this.v * dt * 0.001 * Math.cos(this.dir);
-        this.y = this.y + this.v * dt * 0.001 * Math.sin(this.dir);
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        
-        //ctx.restore();
-        
-        this.A = this.A - 0.3 * dt * 0.001;
-        if (this.A < 0.01) {
-          this.initial(c);
-          this.A = 0.5 + Math.random()/2.0;
-          //this.A = 0.5 + Math.random()/2.0;
-        }
-        //console.log(this.y + ', ' + this.x + ':' + dt);
-      }
-    }
-    return p;
-  }
-  
-  function newParticle_in() {
-    let p = {
-      x_stt: 0,
-      y_stt: 0,
-      x_end: 0,
-      y_end: 0,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      t:0,
-      elapse:0,
-      release: function() { },
-      easein:function(_t) {
-        return _t * _t * _t;
-      },
-      easeout:function(_t) {
-        return -_t * _t + 2 * _t;
-      },
-      initial: function (c) {
-        
-        let short = Math.min(c.width, c.height);
-        let long = Math.max(c.width, c.height) * 0.5;
-        let range = Math.random() * short * 0.1;
-        let dir = Math.random() * 360 * Math.PI/180;
-        
-        this.x_stt = c.width/2 + range * Math.cos(dir);
-        this.y_stt = c.height/2 + range * Math.sin(dir);
-        
-        this.x_end = c.width/2 + long * Math.cos(dir);
-        this.y_end = c.height/2 + long * Math.sin(dir);
-        
-        this.R = 100 + 155 * Math.random();
-        this.G = 100 + 155 * Math.random();
-        this.B = 100 + 155 * Math.random();
-        this.A = 1.0;//0.5 + Math.random()/2.0;
-  
-        this.radius = 20 + Math.random() * 50;
-        this.elapse = 1.0 + 4.0 * (70 - this.radius) /70;
-        this.t = 0;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.t += dt/1000.0;
-        let ein = this.easein(this.t/this.elapse);
-        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
-        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
-        this.A = 1.0 + (0-1.0) * ein;
-        let r = 0.0 + (this.radius - 0) * ein;
-        if (r < 0)
-          r = this.radius;
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        if (this.t > this.elapse) {
-          this.initial(c);
-        }
-      }
-    }
-    return p;
-  }
-  
-  function newParticle_out() {
-    let p = {
-      x_stt: 0,
-      y_stt: 0,
-      x_end: 0,
-      y_end: 0,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      t:0,
-      elapse:0,
-      release: function() { },
-      easein:function(_t) {
-        return _t * _t * _t;
-      },
-      easeout:function(_t) {
-        return -_t * _t + 2 * _t;
-      },
-      initial: function (c) {
-        
-        let short = Math.min(c.width, c.height);
-        let long = Math.max(c.width, c.height) * 0.5;
-        let range = (Math.random() * short * 0.1);
-        let dir = Math.random() * 360 * Math.PI/180;
-        
-        this.x_end = c.width/2 + range * Math.cos(dir);
-        this.y_end = c.height/2 + range * Math.sin(dir);
-        
-        this.x_stt = c.width/2 + long * Math.cos(dir);
-        this.y_stt = c.height/2 + long * Math.sin(dir);
-        
-        this.R = 100 + 155 * Math.random();
-        this.G = 100 + 155 * Math.random();
-        this.B = 100 + 155 * Math.random();
-        this.A = 1.0;//0.5 + Math.random()/2.0;
-  
-        this.radius = 20 + Math.random() * 50;
-        this.elapse = 1.0 + 4.0 * (70 - this.radius) /70;
-        this.t = 0;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.t += dt/1000.0;
-        let ein = this.easeout(this.t/this.elapse);
-        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
-        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
-        this.A = 0 + (1.0 - 0) * ein;
-        let r = this.radius + (0 - this.radius) * ein;
-        if (r < 0)
-          r = this.radius;
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        if (this.t > this.elapse) {
-          this.initial(c);
-        }
-      }
-    }
-    return p;
-  }
-  
-  function newParticle_ring() {
-    let p = {
-      type:  0,
-      x_stt: 0,
-      y_stt: 0,
-      x_end: 0,
-      y_end: 0,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      t:0,
-      elapse:0,
-      release: function() { },
-      easein:function(_t) {
-        return _t * _t * _t;
-      },
-      easeout:function(_t) {
-        return -_t * _t + 2 * _t;
-      },
-      initial: function (c) {
-        
-        let short = Math.min(c.width, c.height);
-        let long = Math.max(c.width, c.height) * 0.5;
-        let range = (Math.random() * short * 0.1);
-        let dir = Math.random() * 360 * Math.PI/180;
-        
-        if (this.type == 0) {
-          this.x_stt = c.width/2 + (short * 0.05 + range) * Math.cos(dir);
-          this.y_stt = c.height/2 + (short * 0.05 + range) * Math.sin(dir);
-        
-          this.x_end = c.width/2 + long * Math.cos(dir);
-          this.y_end = c.height/2 + long * Math.sin(dir);  
-          
-        } else {
-  
-          this.x_end = c.width/2 + (short * 0.05 + range) * Math.cos(dir);
-          this.y_end = c.height/2 + (short * 0.05 + range) * Math.sin(dir);
-        
-          this.x_stt = c.width/2 + long * Math.cos(dir);
-          this.y_stt = c.height/2 + long * Math.sin(dir);
-        }
-        
-        this.R = 100 + 155 * Math.random();
-        this.G = 100 + 155 * Math.random();
-        this.B = 100 + 155 * Math.random();
-        this.A = 1.0;//0.5 + Math.random()/2.0;
-  
-        this.radius = 20 + Math.random() * 50;
-        this.elapse = 1.0;//1.0 + 4.0 * (70 - this.radius) /70;
-        this.t = 0;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.t += dt/1000.0;
-        let ein = this.type == 0?this.easein(this.t/this.elapse):this.easeout(this.t/this.elapse);
-        let x = this.x_stt + (this.x_end - this.x_stt) * ein;
-        let y = this.y_stt + (this.y_end - this.y_stt) * ein;
-        if (this.type == 0)
-          this.A = 1.0 + (0-1.0) * ein;
-        else 
-          this.A = 0.0 + (1.0 - 0) * ein;
-        let r = 0.0 + (this.radius - 0) * ein;
-        if (this.type == 1)
-          r = this.radius + (0 - this.radius) * ein;
-        if (r < 0) r = 0;
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        
-        if (this.t > this.elapse) {
-          this.type = this.type == 0?1:0;
-          this.initial(c);
-        }
-  
-      }
-    }
-    return p;
-  }
-  
-  function newParticle_firework_particle() {
-    let p = {
-      x_stt: 0,
-      y_stt: 0,
-      x_end: 0,
-      y_end: 0,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      t:0,
-      elapse:0,
-      easein:function(_t) {
-        return _t * _t * _t;
-      },
-      easeout:function(_t) {
-        return -_t * _t + 2 * _t;
-      },
-      easeinout:function(_t) {
-        //console.log('sin('+ _t * Math.PI+(') = '+Math.sin(_t * Math.PI)));
-        return Math.sin(_t * Math.PI);
-      },
-      release: function() { },
-      colorDis: function(idx) {
-        let r0 = 155 * Math.random();
-        let r1 = 155 * Math.random();
-        let rc0 = 200 + 55 * Math.random();
-        let rc1 = 200 + 55 * Math.random();
-        switch(idx) {
-          case 0: this.R = rc0; this.G =  r0; this.B =  r1;  break;
-          case 1: this.R =  r0; this.G = rc0; this.B =  r1;  break;
-          case 2: this.R =  r0; this.G =  r1; this.B = rc0;  break;
-          case 3: this.R =  r0; this.G = rc0; this.B = rc1;  break;
-          case 4: this.R = rc0; this.G =  r0; this.B = rc1;  break;
-          case 5: this.R = rc0; this.G = rc1; this.B =  r0;  break;
-        }
-      },
-      initial: function (c, _x, _y, _range, _elapse, idx) {
-        
-        let r0 = Math.random();
-        while (Math.random() > r0/2.0) r0 = Math.random();
-        let range = r0 * _range;
-  
-        let dir = Math.random() * 360 * Math.PI/180;
-        
-        this.x_stt = _x;// + (short * 0.05 + range) * Math.cos(dir);
-        this.y_stt = _y;//c.height/2;// + (short * 0.05 + range) * Math.sin(dir);
-        
-        this.x_end = this.x_stt + range * Math.cos(dir);
-        this.y_end = this.y_stt + range * Math.sin(dir);
-        
-        this.colorDis(idx);
-        
-        this.A = 1.0;//0.5 + Math.random()/2.0;
-        
-        this.radius = 6 + 4 * (1- range/_range);// + Math.random() * 50;
-        this.elapse = _elapse;
-        this.t = 0;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.t += dt/1000.0;
-        let eout = this.easeout(this.t/this.elapse);
-        let x = this.x_stt + (this.x_end - this.x_stt) * eout;
-        let y = this.y_stt + (this.y_end - this.y_stt) * eout;
-        //console.log('t:' + this.t/this.elapse);
-        this.A = this.easeinout(this.t/this.elapse);
-        let r = 0.0 + (this.radius - 0) * eout;
-        if (r < 0) r = 0;
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        
-        if (this.t > this.elapse) {
-          this.t = this.elapse;
-        }
-      }
-    }
-    return p;
-  }
-  
-  function newParticle_firework() {
-    let p = {
-      particles:[],
-      
-      t:0,
-      elapse:0,
-      initial: function (c) {
-        
-        let x = c.width * (0.2 + Math.random() * 0.6);// + (short * 0.05 + range) * Math.cos(dir);
-        let y = c.height * (0.2 + Math.random() * 0.6);
-        let range = c.width * 0.2 * (0.5 + Math.random()/2.0);
-  
-        this.elapse = 0.7 + Math.random()/2.0;//1.0 + 4.0 * (70 - this.radius) /70;
-        this.t = 0;
-  
-        if (this.particles.length < 1) {
-          for (var i = 0;i<80;i++) {
-            this.particles[i] = newParticle_firework_particle();
-          }
-        }
-  
-        let idx = Math.floor(Math.random() * 6);
-        
-        for (var i = 0;i<this.particles.length;i++) {
-          this.particles[i].initial(c, x, y, range, this.elapse, idx);
-        }
-  
-      },
-      release: function() {
-        this.particles.length = 0;
-        this.particles = [];
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.t += dt/1000.0;
-  
-        for (var i = 0;i<this.particles.length;i++) {
-          this.particles[i].update(c, _ctx, dt);
-        }
-  
-        if (this.t > this.elapse) {
-          this.initial(c);
-        }
-      }
-    }
-    return p;
-  }
-  
-  function newClock() {
-    let p = {
-      release: function() { },
-      initial: function (c) { },
-      update: function (c, _ctx, dt) {
-        
-        var x = c.width/2.0;
-        var y = c.height/2.0;
-        var len = c.height/5.0;
-  
-        var date = new Date();
-  
-        //var n = d.getTime();
-        //_ctx.font = "64px Arial";
-        //_ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,20)"
-        //if (Math.random() > 0.5) _ctx.fillText(h + ':' + min +':' + s, this.x, this.y);
-  
-        let h = date.getHours() % 12;
-        let min = date.getMinutes();
-        let s = date.getSeconds();
-        let ms = date.getMilliseconds();
-  
-        _ctx.strokeStyle = "rgb(100, 100, 100)";
-        _ctx.lineWidth = 16;
-        _ctx.beginPath();
-        _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
-        _ctx.stroke();
-  
-        _ctx.fillStyle = "rgb(100, 100, 100)";
-        for (let i = 0;i<12;i++) {
-          let angle = (90 - i * 360.0/12.0) * Math.PI/180;
-          let dx = 2 * len * Math.cos(angle);
-          let dy = -2 * len * Math.sin(angle);
-          _ctx.beginPath();
-          _ctx.arc(x + dx, y + dy, len/5, 0, 2 * Math.PI, true);
-          _ctx.fill();
-        }
-  
-        _ctx.lineCap = "round";
-  
-        /*
-         * HOUR
-         */
-        let angle = (90 - (h + min/60.0) * 360.0/12.0) * Math.PI/180;
-        let dx = 0.8 * len * Math.cos(angle);
-        let dy = -0.8 * len * Math.sin(angle);
-        
-        _ctx.beginPath();
-        _ctx.moveTo(x, y);
-        _ctx.lineTo(x + dx, y + dy);
-        _ctx.lineWidth = 40;
-        _ctx.strokeStyle = "rgb(0, 0, 150)";
-        _ctx.stroke();
-        
-        /*
-         * MINUTE
-         */
-        angle = (90 - (min + s/60.0) * 360.0/60.0) * Math.PI/180;
-        dx = 1.5 * len * Math.cos(angle);
-        dy = -1.5 * len * Math.sin(angle);
-  
-        _ctx.beginPath();
-        _ctx.moveTo(x, y);
-        _ctx.lineTo(x + dx, y + dy);
-        _ctx.lineWidth = 20;
-        _ctx.strokeStyle =  "rgb(120, 120, 0)";
-        _ctx.stroke();
-        
-        /*
-         * SECOND
-         */
-        //var gap = Math.floor(ms/(1000/10));
-        //console.log(gap);
-        //angle = (90 - (s + gap/10) * 360.0/60.0) * Math.PI/180;
-        angle = (90 - (s + ms/1000.0) * 360.0/60.0) * Math.PI/180;
-        dx = 1.7 * len * Math.cos(angle);
-        dy = -1.7 * len * Math.sin(angle);
-  
-        _ctx.beginPath();
-        _ctx.moveTo(x, y);
-        _ctx.lineTo(x + dx, y + dy);
-        _ctx.lineWidth = 10;
-        _ctx.strokeStyle = "rgb(120, 0, 0)";
-        _ctx.stroke();
-  
-        
-        _ctx.beginPath();
-        _ctx.fillStyle = "rgb(120, 0, 0)";
-        _ctx.arc(x, y, 20, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        
-      }
-    }
-    return p;
-  }
-  
-  function newParticle_snow() {
-    let p = {
-      x: 0,
-      y: 0,
-      v: 100,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      release: function() { },
-      initial: function (c) {
-        
-        let short = Math.min(c.width, c.height);
-        let range = short * 0.4 + (Math.random() * short * 0.1) * (Math.random() >0.5?1:-1);
-        let angle = Math.random() * 360 * Math.PI/180;
-        this.x = c.width * (0.1 + Math.random() * 0.8);// + range * Math.cos(angle);
-        this.y = -Math.random() * c.height * 0.2;
-        let gray = 100 + 100 * Math.random();
-        this.R = gray;
-        this.G = gray;
-        this.B = gray;
-        this.A = 0.4 + Math.random() * 0.6;//0.3 - 1.0 
-        this.radius = 0.02 * c.width * ((1 - this.A) + 0.1); //0.7 - 0
-        this.v = 20 * this.radius;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.x = this.x + (-0.15 + Math.random() * 0.3) * dt;
-        this.y = this.y + 0.001 * this.v * dt;
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        
-  
-        //ctx.restore();
-        this.A = this.A - dt * 0.0002;
-  
-        if (this.A < 0.01) {
-          this.initial(c);
-        }
-      }
-    }
-    return p;
-  }
-  
-</script>
+<script type="text/javascript" src="marquee_anim.js" charset="UTF-8"></script>
