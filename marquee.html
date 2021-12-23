@@ -763,7 +763,8 @@ function getLEDBanner(txt, fontsize, _s, _d) {
               return;
           }
           if (touches.x < canvas.width/2 && touches.y > canvas.height/2) { //左下
-
+              canvas.requestFullscreen();
+              return;
           }
           if (touches.x > canvas.width/2 && touches.y < canvas.height/2) { //右上
               ledSwitch();

@@ -26,8 +26,8 @@ var mheight;
 
 function initLED(x, y, w, h) {
 
-  posx = 0;
-  posy = 0;
+  posx = x;
+  posy = y;
 
   mwidth = w;
   mheight = h;
@@ -418,7 +418,7 @@ function ledAction(_canvas, _ctx) {
       }
     }
   }
-  _ctx.putImageData(mask, 0, 0);
+  _ctx.putImageData(mask, posx, posy);
 }
 
 /*
