@@ -519,12 +519,12 @@ function newParticle_snow() {
       let angle = Math.random() * 360 * Math.PI/180;
       this.x = c.width * (0.1 + Math.random() * 0.8);// + range * Math.cos(angle);
       this.y = -Math.random() * c.height * 0.2;
-      let gray = 100 + 100 * Math.random();
+      let gray = 128 + 100 * Math.random();
       this.R = gray;
       this.G = gray;
       this.B = gray;
-      this.A = 0.4 + Math.random() * 0.6;//0.3 - 1.0 
-      this.radius = 0.02 * c.width * ((1 - this.A) + 0.1); //0.7 - 0
+      this.A = 0.6 + Math.random() * 0.4;//0.3 - 1.0 
+      this.radius = 0.03 * c.width * ((1 - this.A) + 0.1); //0.7 - 0
       this.v = 20 * this.radius;
 
     },

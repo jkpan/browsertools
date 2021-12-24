@@ -17,6 +17,9 @@
   var color_0 = '#ffffff';
   var color_1 = '#ffffff';
 
+  var swing = 0;
+  var swing1 = 0;
+
   function _textGo(_id, idx) {
 
     let value = document.getElementById(_id).value.trim();//String.fromCodePoint(0x1F604);
@@ -46,6 +49,8 @@
 
       var slider = document.getElementById('speed');
       speed = parseInt(slider.value, 10);
+      var slider1 = document.getElementById('speed1');
+      speed1 = parseInt(slider1.value, 10);
       
       var sel_anim = document.getElementById('anim');
       animIdx = parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
@@ -53,6 +58,18 @@
       color_0 = document.getElementById('txtc_0').value;
       color_1 = document.getElementById('txtc_1').value;
       
+      if (document.getElementById("swing").checked) {
+        swing = 1;
+      } else {
+        swing = 0;
+      }
+
+      if (document.getElementById("swing1").checked) {
+        swing1 = 1;
+      } else {
+        swing1 = 0;
+      }
+
       /*
       var sel_anim = document.getElementById('anim');
       for(var i = 0; i < sel_anim.options.length; ++i) {
@@ -315,7 +332,7 @@ function getLEDBanner(txt, fontsize, _s, _d) {
 
         <br/>
 
-        <input type="text" id="txt" name="myfield" value="歡迎🐻" placeholder="message"/>
+        <input type="text" id="txt" name="myfield" value="🎉Merry Christmas🎄" placeholder="message"/>
         
         <br/>
         
@@ -324,11 +341,14 @@ function getLEDBanner(txt, fontsize, _s, _d) {
           
           <label style="color:#ff0000;size: 48px;">Speed</label>
           <input type="range" min="20" max="400" step="20" value="120" id="speed" onchange=""/>
-              
+
+          <input type="checkbox" id="swing" value="0" checked>
+          <label for="cbox1" style="color:#ff0000;size: 48px;">Swing</label>
+        
         <br/>
         <hr/>
 
-        <input type="text" id="txt2" name="myfield" value="Hello🌏" placeholder="message"/>
+        <input type="text" id="txt2" name="myfield" value="⛪️台北市中心神召會🔔" placeholder="message"/> <!--Hello🌏-->
         
         <br/>
 
@@ -337,6 +357,9 @@ function getLEDBanner(txt, fontsize, _s, _d) {
 
           <label style="color:#ff0000;size: 48px;">Speed</label>
           <input type="range" min="20" max="400" step="20" value="120" id="speed1" onchange=""/>
+
+          <input type="checkbox" id="swing1" value="0" checked>
+          <label for="cbox1" style="color:#ff0000;size: 48px;">Swing</label>
           
         <br/>
         <hr/>
@@ -349,7 +372,7 @@ function getLEDBanner(txt, fontsize, _s, _d) {
           <option value="3">out</option>
           <option value="4">inout</option>
           <option value="5">doughnut</option>
-          <option value="6">snow</option>
+          <option value="6" selected>snow</option>
           <option value="7">firework</option>
           <option value="8">clock</option>
         </select>
@@ -357,8 +380,8 @@ function getLEDBanner(txt, fontsize, _s, _d) {
         <br/>        
             
       </div>
-      <div class="column" style="background-color:#fa5252;">
-        <button type="button" id="go" style="margin: 2% 2%;width:50%;height:40px;border:2px #ff0000;" onclick="textGo()">START</button>
+      <div class="column">
+        <button type="button" id="go" style="font-size: 24px;background-color:#fa5252;margin: 2% 2%;width:40%;height:100px;border:2px #ff0000;" onclick="textGo()">START</button>
       </div>
     </div>
   
@@ -421,11 +444,13 @@ function getLEDBanner(txt, fontsize, _s, _d) {
          step: 0,
           len:0,
         color:'#ffffff',
+        speed:4.0,
       release: function() {
         this.txt = '';
       },
       sinoutin: function(t) { // 0-1  15 * sinoutin(recoil_t * 1.0/8.0);
-        return  Math.sin(t * Math.PI);//- (t-1) * (t-1) +1 ;
+        if (t < 0.5) return 2 * t;
+        return  -2 * t + 2;//Math.sin(t * Math.PI);//- (t-1) * (t-1) +1 ;
       },
       stepValue: function(peroidSec, range, dt) { //(float &_step, float peroidSec, float range, float dt) {
         this.step += dt/peroidSec;
@@ -448,7 +473,7 @@ function getLEDBanner(txt, fontsize, _s, _d) {
         
         dt *= 0.001;
 
-        this.x = this.stepValue(5.0, (c.width - this.len), dt);
+        this.x = (c.width - this.len) - this.stepValue(this.speed, (c.width - this.len), dt);
 
         //this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
   
@@ -475,6 +500,7 @@ function getLEDBanner(txt, fontsize, _s, _d) {
             y: yy,
           txt: _txt,
         color:'#ffffff',
+        speed:160,
       release: function() {
         this.txt = '';
       },
@@ -490,7 +516,7 @@ function getLEDBanner(txt, fontsize, _s, _d) {
          
         if (dt > 1000) dt = 16;
   
-        this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
+        this.x -= dt * 0.001 * this.speed;//dt * 0.001 * (dots + side) * 2;
          
         if (this.x < -_ctx.measureText(this.txt).width + 10) {
           this.x = c.width;
@@ -579,16 +605,37 @@ function getLEDBanner(txt, fontsize, _s, _d) {
 
     //var total = subtitle[1].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
     if (subtitle[2][0].length > 0) {
-      particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height - fsize/10);//();
+      if (swing == 0) {
+        particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height - fsize/5);//();
+        particles[0].speed = speed;
+      } else {
+        particles[0] = newParticle_swingtxt(subtitle[1][0], xx, 0.5 * c.height - fsize/5);//();
+        particles[0].speed = 7 - speed/100.0;
+      }
       particles[0].initial(c);
       particles[0].color = color_0;
-      particles[1] = newParticle_txt(subtitle[2][0], xx, 0.5 * c.height + fsize + fsize/10);//();
+      if (swing1 == 0) {
+        particles[1] = newParticle_txt(subtitle[2][0], xx, 0.5 * c.height + fsize);//();
+        particles[1].speed = speed1;
+      } else {
+        particles[1] = newParticle_swingtxt(subtitle[2][0], xx, 0.5 * c.height + fsize);//();
+        particles[1].speed = 7 - speed1/100.0;
+      }
+      
       particles[1].initial(c);
       particles[1].color = color_1;
+
     } else {
       fsize = canvas.height/2;
       FONT = fsize + "px " + fontFamily;
-      particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height + fsize/3);//();
+      if (swing == 0) {
+        particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height + fsize/3);//();
+        particles[0].speed = speed;
+      } else {
+        particles[0] = newParticle_swingtxt(subtitle[1][0], xx, 0.5 * c.height + fsize/3);//();
+        particles[0].speed = 7 - speed/100.0;;
+      }
+
       particles[0].initial(c);
       particles[0].color = color_0;
     }

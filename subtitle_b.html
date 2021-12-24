@@ -32554,10 +32554,10 @@ var hlightStyle = "rgb(255, 255, 255, 0.5)";
       #chapter { 
         border:0px solid blue; 
         font-size: 48px;
-        color: lightgray;
+        color: rgb(180, 180, 180);
       }
-      p { background:#eee; margin:5px; }
-      span { color:yellow; }
+      /*p { background:rgb(20, 20, 20); margin:5px; }*/
+      span { color:rgb(255, 255, 255); }
     </style>
     </head>   
 <body>
@@ -32867,6 +32867,14 @@ function printSideTxt(i, j, x, y, a) {
 
 }
 
+function drawHlight(yy, hh) {
+  if (doblank != 1 && phase >= 1) {
+      ctx.fillStyle = hlightStyle;
+      ctx.fillRect (0, yy, canvas.width, hh);
+      //ctx.fillRect (0, y - fontsize, canvas.width, fontsize * (row + 0.5));
+  }
+}
+
 function printTxt(i, j) {
 
   let x = canvas.width * 0.1;
@@ -32923,10 +32931,8 @@ function printTxt(i, j) {
 
     //console.log((ctx.measureText(txt).width/(canvas.width * 0.9)) + ', ' + Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9)));
     let row = Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9));
-    if (doblank != 1) {
-      ctx.fillStyle = hlightStyle;
-      ctx.fillRect (0, y - fontsize, canvas.width, fontsize * (row + 0.5));
-    }
+    
+    drawHlight(y - fontsize, fontsize * (row + 0.5));
     
     let _row = 0;
 
@@ -32946,20 +32952,16 @@ function printTxt(i, j) {
 
     _row++;
     
-    if (_row > row && doblank != 1) {
-      ctx.fillStyle = hlightStyle;
-      ctx.fillRect (0, fixy - fontsize + fontsize * (row + 0.5), canvas.width, fontsize);
+    if (_row > row) {
+      drawHlight(fixy - fontsize + fontsize * (row + 0.5), fontsize);
     }
 
     _drawSdwtxt(txt, x, y);
     
   } else {
 
-    if (doblank != 1) {
-      ctx.fillStyle = hlightStyle;
-      ctx.fillRect (0, y - fontsize, canvas.width, fontsize * 2);
-    }
-    
+    drawHlight(y - fontsize, fontsize * 2);
+   
     _drawSdwtxt(txt, x, y);
   
   }
