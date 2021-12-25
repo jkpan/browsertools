@@ -550,3 +550,30 @@ function newParticle_snow() {
   }
   return p;
 }
+
+function newFlashBG(_color) {
+  let p = {
+    color: _color,
+   elapse: 0,
+    release: function() { },
+    initial: function (c) {
+      this.elapse = 0;
+    },
+    update: function (c, _ctx, dt) {
+      dt *= 0.001;
+      this.elapse += dt;
+      if (this.elapse < 0.2) {
+        if (this.elapse < 0.1) {
+          _ctx.fillStyle = 'black';
+        } else {
+          _ctx.fillStyle = this.color;
+        }
+      } else {
+        this.elapse = 0;
+        _ctx.fillStyle = 'black';
+      }
+      _ctx.fillRect(0, 0, c.width, c.height);
+    }
+  }
+  return p;
+}

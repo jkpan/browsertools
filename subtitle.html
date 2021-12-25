@@ -12,6 +12,9 @@ function flow() {
             getSong('愛的真諦'),
             getSong('祝你聖誕快樂'),
             
+            getSong('報佳音'),
+            getSong('救恩273'),
+
             getSong('主禱文'),
             getSong('使徒信經'),
             getSong('救恩300'),
@@ -2398,6 +2401,10 @@ function flow() {
                ["我們祝你聖誕快樂", "我們祝你聖誕快樂", "我們祝你聖誕快樂", "祝你新年快樂"],
                ["把主愛傳到每一個地方", "把耶穌的祝福給需要的人"]]
 } </script>
+<script id="報佳音" name="報佳音" type="application/json" charset="UTF-8"> {
+  "content" : [["報佳音", ""],
+               ["報佳音 天上賜下平安", "報佳音 賜給我們和平君", "新生王 嬰孩已出生", "報佳音 喜悅歸予人"]]
+} </script>
 <!-- 
   詩歌歌詞區 End cursor:none;
     -->
@@ -2620,7 +2627,7 @@ function printTxt(i, j) {
   ctx.font = FONT;
   ctx.textAlign = "center";
   var x = canvas.width/2;
-  var y = animSwh == 1?canvas.height/2:canvas.height - 100;
+  var y = canvas.height - 100;//animSwh == 1?canvas.height/2:canvas.height - 100;
 
   if (i == 0 && txt.length > 0) {
     txt = '['+txt+']';
@@ -2996,6 +3003,15 @@ function userhelp() {
 }
 
 function blank() {
+  /*
+  if (mode == 0) {
+    
+    ctx.fillStyle = 'green'; //"rgb(0,0,255)"
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+  */
+  animSwh = 0;
   if (animSwh == 1 || mode == 1) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'black'; //"rgb(0,0,255)"
@@ -3059,7 +3075,12 @@ function anim_update(elapse) {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = 'black';
+  if (mode == 0) {
+    ctx.fillStyle = 'green';
+  } else {
+    ctx.fillStyle = 'black';
+  }
+  
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (img) {
@@ -3124,7 +3145,7 @@ function initAnim(idx) {
       particles[i].initial(canvas);
     }
   } else if (idx == 4) {
-    for (var i = 0;i<150;i++) {
+    for (var i = 0;i<100;i++) {
       particles[i] = newParticle_snow();
       particles[i].initial(canvas);
     }
@@ -3724,11 +3745,11 @@ function newParticle_snow() {
       let angle = Math.random() * 360 * Math.PI/180;
       this.x = c.width * (0.1 + Math.random() * 0.8);// + range * Math.cos(angle);
       this.y = -Math.random() * c.height * 0.2;
-      let gray = 100 + 100 * Math.random();
+      let gray = 155 + 100 * Math.random();
       this.R = gray;
       this.G = gray;
       this.B = gray;
-      this.A = 0.4 + Math.random() * 0.6;//0.3 - 1.0 
+      this.A = 0.5 + Math.random() * 0.5;//0.3 - 1.0 
       this.radius = 0.02 * c.width * ((1 - this.A) + 0.1); //0.7 - 0
       this.v = 20 * this.radius;
 
