@@ -316,6 +316,7 @@ function getLEDBanner(txt, fontsize, _s, _d) {
         </select> 
       <label style="color:#ff0000;size: 48px;">Gap</label>
         <select name="Gap" id="Gap" onchange="showLEDLegend()">
+          <option value="0">0</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -556,8 +557,8 @@ function getLEDBanner(txt, fontsize, _s, _d) {
     }
     */
 
-    for (var i = 0;i<particlesBG.length;i++) {
-      particlesBG[i].update(canvas, ctx, dt);
+    for (var i = 0;i<particlesAnim.length;i++) {
+      particlesAnim[i].update(canvas, ctx, dt);
     }
 
     for (var i = 0;i<particles.length;i++) {
@@ -640,65 +641,65 @@ function getLEDBanner(txt, fontsize, _s, _d) {
       particles[0].color = color_0;
     }
     
-    if (particlesBG.length >= 1) {
-      for (var i = 0;i<particlesBG.length;i++) {
-        particlesBG[i].release();
+    if (particlesAnim.length >= 1) {
+      for (var i = 0;i<particlesAnim.length;i++) {
+        particlesAnim[i].release();
       }
     }
 
-    particlesBG.length = 0;
-    particlesBG = [];
+    particlesAnim.length = 0;
+    particlesAnim = [];
 
     switch (animIdx) {
       case 0:break;
       case 1:
         for (var i = 0;i<150;i++) {
-          particlesBG[i] = newParticle_casual();
-          particlesBG[i].initial(canvas);
+          particlesAnim[i] = newParticle_casual();
+          particlesAnim[i].initial(canvas);
         }
         break;
       case 2:
         for (var i = 0;i<150;i++) {
-          particlesBG[i] = newParticle_in();
-          particlesBG[i].initial(canvas);
+          particlesAnim[i] = newParticle_in();
+          particlesAnim[i].initial(canvas);
         }
         break;
       case 3:
         for (var i = 0;i<150;i++) {
-          particlesBG[i] = newParticle_out();
-          particlesBG[i].initial(canvas);
+          particlesAnim[i] = newParticle_out();
+          particlesAnim[i].initial(canvas);
         }
         break;
       case 4:
         for (var i = 0;i<150;i++) {
           if (Math.random() > 0.5)  
-            particlesBG[i] = newParticle_in();
+            particlesAnim[i] = newParticle_in();
           else 
-            particlesBG[i] = newParticle_out();
-          particlesBG[i].initial(canvas);
+            particlesAnim[i] = newParticle_out();
+          particlesAnim[i].initial(canvas);
         }
         break;
       case 5:
         for (var i = 0;i<150;i++) {
-          particlesBG[i] = newParticle_ring();
-          particlesBG[i].initial(canvas);
+          particlesAnim[i] = newParticle_ring();
+          particlesAnim[i].initial(canvas);
         }
         break;
       case 6:
         for (var i = 0;i<150;i++) {
-          particlesBG[i] = newParticle_snow();
-          particlesBG[i].initial(canvas);
+          particlesAnim[i] = newParticle_snow();
+          particlesAnim[i].initial(canvas);
         }
         break;
       case 7:
         for (var i = 0;i<3;i++) {
-          particlesBG[i] = newParticle_firework();
-          particlesBG[i].initial(canvas);
+          particlesAnim[i] = newParticle_firework();
+          particlesAnim[i].initial(canvas);
         }
         break;
       case 8:
-        particlesBG[0] = newClock();
-        particlesBG[0].initial(canvas);
+        particlesAnim[0] = newClock();
+        particlesAnim[0].initial(canvas);
         break;
         
     }
@@ -714,7 +715,9 @@ function getLEDBanner(txt, fontsize, _s, _d) {
   
   var pre = 0;
   var particles = [];
-  var particlesBG = [];
+  var particlesAnim = [];
+  var backEffect;
+
   var doblank = 0;
 
   function ledSwitch() {

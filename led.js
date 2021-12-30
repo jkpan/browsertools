@@ -89,6 +89,16 @@ function setPix4_2(data, k) {
         _g = dot_none;
         _b = dot_none;
     }
+
+    if (side == 0) {
+      let _k = k - gapP - gapL;
+      for (let i = 0;i<3;i++) {
+        for (let j = 0;j<3;j++) {
+          setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+        }
+      }
+      return;
+    }
     
     setPixColor(data, k,               _r, _g, _b);//中
     setPixColor(data, k - gapP,        _r, _g, _b);//左
@@ -123,6 +133,16 @@ function setPix4_2(data, k) {
         _r = dot_none;
         _g = dot_none;
         _b = dot_none;
+    }
+
+    if (side == 0) {
+      let _k = k - gapP - gapL;
+      for (let i = 0;i<4;i++) {
+        for (let j = 0;j<4;j++) {
+          setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+        }
+      }
+      return;
     }
 
     setPixColor(data, k,               _r, _g, _b);//中
@@ -191,6 +211,8 @@ function setPix4_2(data, k) {
       }
     }
 
+    if (side == 0) return;
+
     setPixColor(data, _k, 0, 0, 0);
       
     setPixColor(data, _k + 4 * gapL, 0, 0, 0);
@@ -231,6 +253,8 @@ function setPix4_6(data, k) {
       setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
     }
   }
+
+  if (side == 0) return;
 
   setPixColor(data, _k, 0, 0, 0);
   
@@ -278,6 +302,8 @@ function setPix4_7(data, k) {
       setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
     }
   }
+
+  if (side == 0) return;
 
   setPixColor(data, _k, 0, 0, 0);
     setPixColor(data, _k + gapL, _r/2, _g/2, _b/2);
@@ -420,93 +446,3 @@ function ledAction(_canvas, _ctx) {
   }
   _ctx.putImageData(mask, posx, posy);
 }
-
-/*
-function generateLegend(s, d) {
-  
-  let w = 160;
-  let h = 100;
-
-  let _maskWidth = (Math.floor(w/(s + d))) * (s + d);
-  let _maskHeight = (Math.floor(h/(s + d))) * (s + d);
-   
-  var mask = ctx.createImageData(w, h);
-  var data = mask.data;
-
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-
-        let idx = (y * w + x) * 4;
-
-        data[idx + 0] = 0;//40;
-        data[idx + 1] = 0;//40;
-        data[idx + 2] = 0;//40;
-        data[idx + 3] = 255;
-        
-        let _x = x%(s + d);
-        let _y = y%(s + d);
-
-        if (_x >= s && _y >= s && x < _maskWidth && y < _maskHeight) { //d
-
-          let c = s + Math.floor(d/2.0);
-          if (d%2 == 0) {
-            c = s + d/2.0 - 0.5;
-          }
-
-          let len = Math.sqrt((_x - c)*(_x - c) +(_y - c)*(_y - c));
-          let r = Math.floor(d/2.0);
-
-          data[idx + 0] = dot_none * 2;//40;
-          data[idx + 1] = dot_none * 2;//40;
-          data[idx + 2] = dot_none * 2;//40;
-
-          switch(d) {
-            case 3:
-            case 4:
-            case 5:
-              if (len <= r) {
-                data[idx + 3] = 255;
-              } else {
-                data[idx + 3] = 128;//255 * (1- 2 * Math.abs(len - r)/r);
-              }
-              break;
-            case 6:
-              if (len <= r * 0.9) {
-                data[idx + 3] = 255;
-              } else {
-                data[idx + 3] = 255 * (1- 5 * Math.abs(len - r)/r);
-              }
-              break;
-            case 7:
-             if (len <= r) {
-                data[idx + 3] = 255;
-              } else {
-                data[idx + 3] = 255 * (1- 2 * Math.abs(len - r)/r);
-              }
-              break;
-              break;
-          }
-        }
-    }
-  }
-  ///////
-
-  // create a temporary canvas
-  var tempCanvas = document.createElement("canvas");
-  var tempCtx = tempCanvas.getContext("2d");
-
-  // set the temp canvas size == the canvas size
-  tempCanvas.width = w;
-  tempCanvas.height = h;
-
-  // put the modified pixels on the temp canvas
-  tempCtx.putImageData(mask, 0, 0);
-
-  var img = document.getElementById('legend');
-
-  //console.log(tempCanvas.toDataURL());
-
-  img.src = tempCanvas.toDataURL();
-
-}
-*/
