@@ -33216,7 +33216,7 @@ function keyboard(e) {
           if (e.keyCode == 75) openSelection(1); 
           if (e.keyCode == 74) openSelection(2); 
           break; 
-      case 78: //'N' 動畫切換
+      case 65: //78: //'N' 動畫切換
           if (canvas.hidden) break;
           if (animSwh == 0) {
             initAnim(animIdx);
@@ -33281,6 +33281,14 @@ function keyboard(e) {
             line = 0;
           }
           break;
+        /*
+        case 48:
+            song = 0;
+            subtitles = SONGS[song];
+            phase = 0;
+            line = 0;
+          break;
+        */
         case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
         //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
           var value = e.keyCode - 48;
@@ -33500,6 +33508,14 @@ function anim_update(elapse) {
     particles[i].update(canvas, ctx, dt);
   }
 
+  if (doblank == 1) {
+    if (animSwh == 1) 
+      window.requestAnimationFrame(anim_update);
+    else
+      _repaint();
+    return;
+  }
+
   _layer1();
   _layer2();
   _layerui();
@@ -33525,12 +33541,19 @@ function initAnim(idx) {
   particles = [];
 
   if (idx < 0) {
-    animIdx = (animIdx + 1)%10;
+    animIdx = (animIdx + 1)%2;//10;
     idx = animIdx;
   }
 
-  //idx = 7;
+  if (idx == 1) {
+    particles[0] = newClock();
+    particles[0].initial(canvas);
+  } else {
+    particles[0] = newBlank();
+    particles[0].initial(canvas);
+  }
 
+  /*
   if (idx == 0) {
     for (var i = 0;i<150;i++) {
       particles[i] = newParticle_casual();
@@ -33582,6 +33605,7 @@ function initAnim(idx) {
     particles[0] = newClock();
     particles[0].initial(canvas);
   } 
+  */
 
   if (animSwh == 0) {
     animSwh = 1;
@@ -34072,9 +34096,14 @@ function newClock() {
         let dx = 2 * len * Math.cos(angle);
         let dy = -2 * len * Math.sin(angle);
         _ctx.beginPath();
-        _ctx.arc(x + dx, y + dy, len/10, 0, 2 * Math.PI, true);
+        _ctx.arc(x + dx, y + dy, len/12, 0, 2 * Math.PI, true);
         _ctx.fill();
       }
+
+      _ctx.textAlign = 'center';
+      _ctx.fillStyle = "rgb(100, 100, 20)";
+      _ctx.font = '48px Arial';
+      _ctx.fillText(date.toLocaleString(), c.width/2.0, c.height * 0.5 + 70);
 
       _ctx.lineCap = "round";
 
@@ -34386,6 +34415,19 @@ function newParticle_sunrise() {
         this.initial(c);
         this.elapse = 3 + Math.random();
       }
+    }
+  }
+  return p;
+}
+
+function newBlank() {
+  let p = {
+    release: function() { },
+    initial: function (c) {
+
+    },
+    update: function (c, _ctx, dt) {
+
     }
   }
   return p;
