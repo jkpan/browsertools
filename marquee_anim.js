@@ -551,10 +551,11 @@ function newParticle_snow() {
   return p;
 }
 
-function newFlashBG(_color) {
+function newFlashBG(_color, flashpsec) {
   let p = {
     color: _color,
    elapse: 0,
+    fpsec:flashpsec,
     release: function() { },
     initial: function (c) {
       this.elapse = 0;
@@ -562,15 +563,20 @@ function newFlashBG(_color) {
     update: function (c, _ctx, dt) {
       dt *= 0.001;
       this.elapse += dt;
-      if (this.elapse < 0.2) {
-        if (this.elapse < 0.1) {
-          _ctx.fillStyle = 'black';
-        } else {
-          _ctx.fillStyle = this.color;
-        }
+      if (this.fpsec == 0) {
+        _ctx.fillStyle = this.color;
       } else {
-        this.elapse = 0;
-        _ctx.fillStyle = 'black';
+        let t = 1.0/this.fpsec;
+        if (this.elapse < t) {
+          if (this.elapse < t/2.0) {
+            _ctx.fillStyle = 'black';
+          } else {
+            _ctx.fillStyle = this.color;
+          }
+        } else {
+          this.elapse = 0;
+          _ctx.fillStyle = 'black';
+        }
       }
       _ctx.fillRect(0, 0, c.width, c.height);
     }

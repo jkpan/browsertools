@@ -6,20 +6,12 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('救恩213'),//數你福氣
-            getSong('救恩104'),//站在神的應許上
-            getSong('救恩214'),//主恩典更顯多
-            getSong('救恩160'),//深而更深
-            getSong('救恩146'),//更高處
-            
-
-            /*
             getSong('讚美之泉24'),
             getSong('聖靈請祢來充滿我心'),
             getSong('一粒麥子'),
             getSong('讚美之泉49'),
             getSong('救恩1'),
-            */
+            
 
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -2958,7 +2950,8 @@ function keyboard(e) {
           mode = 0;
           removeBtns();
           canvas.hidden = false;
-          animSwh = 0;   
+          animSwh = 0;
+          animIdx = 0;
           doblank = 0;
           helpSwitch = 0;
           displayProgress = 0;
@@ -3147,72 +3140,64 @@ function initAnim(idx) {
   particles = [];
 
   if (idx < 0) {
-    animIdx = (animIdx + 1)%2;//10;
+    animIdx = (animIdx + 1)%11;
     idx = animIdx;
   }
 
-  if (idx == 1) {
-    particles[0] = newClock();
-    particles[0].initial(canvas);
-  } else {
+  if (idx == 0) {
     particles[0] = newBlank();
     particles[0].initial(canvas);
-  }
-
-  /*
-
-  if (idx == 0) {
+  } else if (idx == 1) {
     for (var i = 0;i<150;i++) {
       particles[i] = newParticle_casual();
       particles[i].initial(canvas);
     }
-  } else if (idx == 1) {
+  } else if (idx == 2) {
     for (var i = 0;i<150;i++) {
       particles[i] = newParticle_in();
       particles[i].initial(canvas);
     }
-  } else if (idx == 2) {
+  } else if (idx == 3) {
     for (var i = 0;i<150;i++) {
       particles[i] = newParticle_out();
       particles[i].initial(canvas);
     }
-  } else if (idx == 3) {
+  } else if (idx == 4) {
     for (var i = 0;i<150;i++) {
       particles[i] = newParticle_ring();
       particles[i].initial(canvas);
     }
-  } else if (idx == 4) {
+  } else if (idx == 5) {
     for (var i = 0;i<100;i++) {
       particles[i] = newParticle_snow();
       particles[i].initial(canvas);
     }
-  } else if (idx == 5) {
+  } else if (idx == 6) {
     for (var i = 0;i<3;i++) {
       particles[i] = newParticle_firework();
       particles[i].initial(canvas);
     }
-  } else if (idx == 6) {
+  } else if (idx == 7) {
     for (var i = 0;i<20;i++) {
       particles[i] = newParticle_rect();
       particles[i].initial(canvas);
     }
-  } else if (idx == 7) {
+  } else if (idx == 8) {
     particles[0] = newParticle_skylight_background();
     for (var i = 1;i<100;i++) {
       particles[i] = newParticle_skylight();//newParticle_snow();
       particles[i].initial(canvas);
     }
-  } else if (idx == 8) {
+  } else if (idx == 9) {
     particles[0] = newParticle_sunrise_background();
     for (var i = 1;i<100;i++) {
       particles[i] = newParticle_sunrise();//();
       particles[i].initial(canvas);
     }
-  } else if (idx == 9) {
+  } else if (idx == 10) {
     particles[0] = newClock();
     particles[0].initial(canvas);
-  } 
-*/
+  }
 
   if (animSwh == 0) {
     animSwh = 1;
@@ -3691,6 +3676,7 @@ function newClock() {
       let s = date.getSeconds();
       let ms = date.getMilliseconds();
 
+
       _ctx.strokeStyle = "rgb(100, 100, 100)";
       _ctx.lineWidth = 16;
       _ctx.beginPath();
@@ -3707,10 +3693,12 @@ function newClock() {
         _ctx.fill();
       }
 
+      /*
       _ctx.textAlign = 'center';
       _ctx.fillStyle = "rgb(100, 100, 20)";
       _ctx.font = '48px Arial';
       _ctx.fillText(date.toLocaleString(), c.width/2.0, c.height * 0.5 + 70);
+      */
 
       _ctx.lineCap = "round";
 

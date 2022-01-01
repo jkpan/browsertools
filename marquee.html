@@ -11,11 +11,14 @@
   var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
   var speed = 160;
   var speed1 = 160;
+  var speed_backflash = 0;
 
   var animIdx = 0;
+  var bgIdx = 0;
 
   var color_0 = '#ffffff';
   var color_1 = '#ffffff';
+  var color_b = '#ffffff';
 
   var swing = 0;
   var swing1 = 0;
@@ -51,12 +54,21 @@
       speed = parseInt(slider.value, 10);
       var slider1 = document.getElementById('speed1');
       speed1 = parseInt(slider1.value, 10);
+
+      var slider_back = document.getElementById('back_speed');
+      speed_backflash = parseInt(slider_back.value, 10);
+
       
       var sel_anim = document.getElementById('anim');
       animIdx = parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
+      
+      var sel_back = document.getElementById('backlight');
+      bgIdx = parseInt(sel_back.options[sel_back.options.selectedIndex].value, 10);
 
       color_0 = document.getElementById('txtc_0').value;
       color_1 = document.getElementById('txtc_1').value;
+      color_b = document.getElementById('back_color').value;
+
       
       if (document.getElementById("swing").checked) {
         swing = 1;
@@ -365,7 +377,7 @@ function getLEDBanner(txt, fontsize, _s, _d) {
         <br/>
         <hr/>
 
-        <label style="color:#ff0000;size: 48px;">Animation background</label>
+        <label style="color:#ff0000;size: 48px;">Animation</label>
         <select name="anim" id="anim">
           <option value="0" selected>none</option>
           <option value="1">ring</option>
@@ -378,7 +390,19 @@ function getLEDBanner(txt, fontsize, _s, _d) {
           <option value="8">clock</option>
         </select>
 
-        <br/>        
+        <br/>
+        <hr/>
+        
+        <label style="color:#ff0000;size: 48px;">Background</label>
+        <select name="backlight" id="backlight">
+          <option value="0" selected>none</option>
+          <option value="1">flash</option>
+        </select>
+        <label style="color:#ff0000;size: 48px;">Color</label>
+        <input type="color" id="back_color" value="#ffffff">
+
+        <label style="color:#ff0000;size: 48px;">Flash/sec</label>
+        <input type="range" min="0" max="10" step="1" value="0" id="back_speed" onchange=""/>
             
       </div>
       <div class="column">
@@ -557,6 +581,9 @@ function getLEDBanner(txt, fontsize, _s, _d) {
     }
     */
 
+    if (backEffect)
+      backEffect.update(canvas, ctx, dt);
+
     for (var i = 0;i<particlesAnim.length;i++) {
       particlesAnim[i].update(canvas, ctx, dt);
     }
@@ -702,6 +729,21 @@ function getLEDBanner(txt, fontsize, _s, _d) {
         particlesAnim[0].initial(canvas);
         break;
         
+    }
+
+    if (backEffect) backEffect.release();
+    backEffect = null;
+
+    //bgIdx = 1;
+    switch(bgIdx) {
+      case 0:
+        break;
+      case 1:
+        backEffect = newFlashBG(color_b, speed_backflash);
+        backEffect.initial(canvas);
+        break;
+      default:
+        break;
     }
 
     keepGoing = 1;
