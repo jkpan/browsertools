@@ -23,6 +23,7 @@
   var swing = 0;
   var swing1 = 0;
 
+/*
   function _textGo(_id, idx) {
 
     let value = document.getElementById(_id).value.trim();//String.fromCodePoint(0x1F604);
@@ -34,70 +35,60 @@
     return true;
 
   }
+*/
 
   function textGo() {
+
+    var sel_gap = document.getElementById('Gap');
+    var sel_lsize = document.getElementById('Lsize');
+    var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
+    var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
+
+    side = gap;
+    dots = lsz;
+
     let txt1 = document.getElementById("txt").value.trim();
-    let txt2 = document.getElementById("txt2").value.trim();
-    if (txt1.length + txt2.length > 0) {
-      subtitle[1] = [txt1];
-      subtitle[2] = [txt2];
-      
-      var sel_gap = document.getElementById('Gap');
-      var sel_lsize = document.getElementById('Lsize');
-      var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
-      var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
-
-      side = gap;
-      dots = lsz;
-
-      var slider = document.getElementById('speed');
-      speed = parseInt(slider.value, 10);
-      var slider1 = document.getElementById('speed1');
-      speed1 = parseInt(slider1.value, 10);
-
-      var slider_back = document.getElementById('back_speed');
-      speed_backflash = parseInt(slider_back.value, 10);
-
-      
-      var sel_anim = document.getElementById('anim');
-      animIdx = parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
-      
-      var sel_back = document.getElementById('backlight');
-      bgIdx = parseInt(sel_back.options[sel_back.options.selectedIndex].value, 10);
-
-      color_0 = document.getElementById('txtc_0').value;
-      color_1 = document.getElementById('txtc_1').value;
-      color_b = document.getElementById('back_color').value;
-
-      
-      if (document.getElementById("swing").checked) {
-        swing = 1;
-      } else {
-        swing = 0;
-      }
-
-      if (document.getElementById("swing1").checked) {
-        swing1 = 1;
-      } else {
-        swing1 = 0;
-      }
-
-      /*
-      var sel_anim = document.getElementById('anim');
-      for(var i = 0; i < sel_anim.options.length; ++i) {
-        if (parseInt(sel_anim.options[i].value, 10)  === animIdx) {
-          sel_anim.selectedIndex = i;
-          break;
+    var slider = document.getElementById('speed');
+        speed = parseInt(slider.value, 10);
+        color_0 = document.getElementById('txtc_0').value;
+        if (document.getElementById("swing").checked) {
+          swing = 1;
+        } else {
+          swing = 0;
         }
-      }
-      */
 
-      switch2Marquee();
+    let txt2 = document.getElementById("txt2").value.trim();
+    var slider1 = document.getElementById('speed1');
+        speed1 = parseInt(slider1.value, 10);
+        color_1 = document.getElementById('txtc_1').value;
+        if (document.getElementById("swing1").checked) {
+          swing1 = 1;
+        } else {
+          swing1 = 0;
+        }
+
+    var sel_anim = document.getElementById('anim');
+    animIdx = parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
       
-      init();
-      initAnim();
+    var sel_back = document.getElementById('backlight');
+    bgIdx = parseInt(sel_back.options[sel_back.options.selectedIndex].value, 10);
+    var slider_back = document.getElementById('back_speed');
+        speed_backflash = parseInt(slider_back.value, 10);
+        color_b = document.getElementById('back_color').value;
 
+    subtitle[1] = [txt1];
+    subtitle[2] = [txt2];
+
+    if (txt1.length + txt2.length == 0 && animIdx == 0 && bgIdx == 0) {
+      alert("Empty Action!");
+      return;
     }
+
+    switch2Marquee();
+      
+    init();
+    initAnim();
+
   }
   
   function emojiGo(emj) {

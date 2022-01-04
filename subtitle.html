@@ -1,6 +1,9 @@
 <script type="text/javascript" charset="UTF-8"> 
 
-var FONT = "100px 標楷體";
+var fontsize = 100;
+var fontFamily = "標楷體";
+var FONT = fontsize + "px " + fontFamily;
+
 
 function flow() {
 
@@ -2502,6 +2505,10 @@ function init() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
     ctx = canvas.getContext("2d");
+
+    fontsize = canvas.height/10;
+    FONT = fontsize + "px " + fontFamily;
+
     //canvas.style.caretColor = "red";
 }
 
@@ -2648,7 +2655,7 @@ function printTxt(i, j) {
   ctx.font = FONT;
   ctx.textAlign = "center";
   var x = canvas.width/2;
-  var y = canvas.height - 100;//animSwh == 1?canvas.height/2:canvas.height - 100;
+  var y = canvas.height - fontsize;//animSwh == 1?canvas.height/2:canvas.height - 100;
 
   if (i == 0 && txt.length > 0) {
     txt = '['+txt+']';
@@ -2795,14 +2802,31 @@ function printPhaseChart() {
 
 }
 
+function combineKey(e) {
+  
+  switch (e.keyCode) {
+    case 32:
+      history.back();
+      break;
+  }
+
+}
+
 function keyboard(e) {
 
+    
     //alert(e.keyCode);
     if (e.keyCode == 16 || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
       keylock = false;
+      _repaint();
+      return;
     }
-
-    if (keylock) return;
+    
+    if (keylock) {
+      if (!canvas.hidden)
+        combineKey(e);
+      return;
+    }
 
     /*
     if (doblank == 1) {

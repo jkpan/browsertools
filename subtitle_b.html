@@ -15,14 +15,15 @@ function flow() {
   ];    
 }
 
+var fontFamily = "標楷體";
 var fontsize = 48;
-var FONT = fontsize + "px 標楷體";
+var FONT = fontsize + "px " + fontFamily;
 
 var fontsize_sml = 32;
-var FONT_SML = fontsize_sml + "px 標楷體";
+var FONT_SML = fontsize_sml + "px " + fontFamily;
 
 var fontsize_sml_sml = 24;
-var FONT_SML_SML = fontsize_sml_sml + "px 標楷體";
+var FONT_SML_SML = fontsize_sml_sml + "px " + fontFamily;
 
 var hlightStyle = "rgb(255, 255, 255, 0.5)";
 
@@ -32667,6 +32668,16 @@ function init() {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
     ctx = canvas.getContext("2d");
+
+    fontsize = canvas.height/20;//48;
+    FONT = fontsize + "px " + fontFamily;
+
+    fontsize_sml = Math.ceil(fontsize * 0.66);//32;
+    FONT_SML = fontsize_sml + "px " + fontFamily;
+
+    fontsize_sml_sml = Math.ceil(fontsize * 0.5);;
+    FONT_SML_SML = fontsize_sml_sml + "px " + fontFamily;
+
 }
 
 function plaintxtMode() {
