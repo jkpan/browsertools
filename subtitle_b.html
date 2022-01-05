@@ -15,6 +15,7 @@ function flow() {
   ];    
 }
 
+var fontfactor = 20.0;
 var fontFamily = "標楷體";
 var fontsize = 48;
 var FONT = fontsize + "px " + fontFamily;
@@ -32669,7 +32670,7 @@ function init() {
     canvas.height = window.innerHeight;
     ctx = canvas.getContext("2d");
 
-    fontsize = canvas.height/20;//48;
+    fontsize = Math.ceil(canvas.height/fontfactor);//48;
     FONT = fontsize + "px " + fontFamily;
 
     fontsize_sml = Math.ceil(fontsize * 0.66);//32;
@@ -33015,7 +33016,7 @@ function _drawSdwtxt(txt, x, y) {
   }
 
   ctx.strokeStyle = 'black';//'rgb(0, 0, 0, ' + a + ')';
-  ctx.lineWidth = 4;
+  ctx.lineWidth = Math.ceil(fontsize/10.0);
   ctx.strokeText(txt, x, y);
 
   ctx.fillStyle = 'white';//'rgb(255, 255, 255, ' + a + ')';
@@ -33159,6 +33160,21 @@ function combineKey(e) {
           line += jump;
           if (line > subtitles[phase].length -1) 
               line = subtitles[phase].length -1; 
+          break;
+      case 32:
+          history.back();
+          return;
+      case 189: //'-'
+          fontfactor += 0.5;
+          if (fontfactor > 30) 
+            fontfactor = 30;
+          init();
+          break;
+      case 187: //'='
+          fontfactor -= 0.5;
+          if (fontfactor < 10) 
+            fontfactor = 10.0;
+          init();
           break;
       default:
         break;

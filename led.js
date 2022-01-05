@@ -24,6 +24,8 @@ var posy;
 var mwidth;
 var mheight;
 
+var makeRound = true;
+
 function initLED(x, y, w, h) {
 
   posx = x;
@@ -90,7 +92,7 @@ function setPix4_2(data, k) {
         _b = dot_none;
     }
 
-    if (side == 0) {
+    if (side == 0 || !makeRound) {
       let _k = k - gapP - gapL;
       for (let i = 0;i<3;i++) {
         for (let j = 0;j<3;j++) {
@@ -135,7 +137,7 @@ function setPix4_2(data, k) {
         _b = dot_none;
     }
 
-    if (side == 0) {
+    if (side == 0 || !makeRound) {
       let _k = k - gapP - gapL;
       for (let i = 0;i<4;i++) {
         for (let j = 0;j<4;j++) {
@@ -211,7 +213,7 @@ function setPix4_2(data, k) {
       }
     }
 
-    if (side == 0) return;
+    if (side == 0 || !makeRound) return;
 
     setPixColor(data, _k, 0, 0, 0);
       
@@ -254,7 +256,7 @@ function setPix4_6(data, k) {
     }
   }
 
-  if (side == 0) return;
+  if (side == 0 || !makeRound) return;
 
   setPixColor(data, _k, 0, 0, 0);
   
@@ -303,7 +305,7 @@ function setPix4_7(data, k) {
     }
   }
 
-  if (side == 0) return;
+  if (side == 0 || !makeRound) return;
 
   setPixColor(data, _k, 0, 0, 0);
     setPixColor(data, _k + gapL, _r/2, _g/2, _b/2);

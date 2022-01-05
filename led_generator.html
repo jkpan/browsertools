@@ -20,6 +20,8 @@ function showLEDLegend() {
     var sel_fsz = document.getElementById('fsize');
     var fsz = parseInt(document.getElementById('fsize').value, 10);
 
+    makeRound = document.getElementById("round").checked;
+
     //var text = document.getElementById('banner_text').value;
     let text = document.getElementById("txt").value.trim();
 
@@ -228,6 +230,9 @@ function processImg() {
         <option value="7">7</option>
       </select>
       
+      <input type="checkbox" id="round" value="0" onchange="showLEDLegend()" checked>
+      <label for="cbox1" style="color:#ff0000;size: 48px;">Round</label>
+
       <br/>
 
       <button type="button" id="go" style="margin: 2% 2%;width:30%;height:40px;border:2px #ff0000;" onclick="showLEDLegend()">Generate by text</button>
