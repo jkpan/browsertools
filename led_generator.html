@@ -84,7 +84,8 @@ function getLEDBanner(txt, fontsize, _s, _d) {
 
   maskimg.onload = function() {
     //console.log('mask generated 0! ' + maskimg.width + ', ' + maskimg.height);
-    ledAction(tempCanvas, tempCtx);
+    //ledAction(tempCanvas, tempCtx);
+    ledAction4Still(tempCanvas, tempCtx);
     var img = document.getElementById('legend');
     img.src = tempCanvas.toDataURL();
     
@@ -95,6 +96,9 @@ function getLEDBanner(txt, fontsize, _s, _d) {
 function processImg() {
 
   if (uploadImage == null) return;
+
+  document.getElementById("txt").value = "";
+  
 
   var sel_gap = document.getElementById('Gap');
   var sel_lsize = document.getElementById('Lsize');
@@ -132,7 +136,8 @@ function processImg() {
 
   maskimg.onload = function() {
     //console.log('mask generated 0! ' + maskimg.width + ', ' + maskimg.height);
-    ledAction(tempCanvas, tempCtx);
+    //ledAction(tempCanvas, tempCtx);
+    ledAction4Still(tempCanvas, tempCtx);
     var img = document.getElementById('legend');
     img.src = tempCanvas.toDataURL();
     
@@ -942,7 +947,7 @@ function processImg() {
         var img = new Image();
         img.onload = function() {
           uploadImage = img;
-          //processImg();
+          processImg();
         }
         img.src = e.target.result;
       }
