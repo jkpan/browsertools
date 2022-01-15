@@ -27,7 +27,7 @@ public class ReadParse {
             
             String line = null;
 
-            int count = 0;
+            //int count = 0;
             do {
                 line = br.readLine();
                 if (line != null) {
