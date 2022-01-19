@@ -32892,17 +32892,17 @@ function printTxt(i, j) {
 
   if (animSwh == 0) {
     ctx.fillStyle = 'rgb(0, 200, 0)';
-    ctx.font = '12px Arial';
+    ctx.font = fontsize_sml_sml + 'px Arial';
     for (let idx=1;idx<=presetVerse.length;idx++) {
       if (presetVerse[idx%10][0].length == 0)
         continue; 
-      ctx.fillText('['+idx+']'+presetVerse[idx%10][0]+''+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], 
-                   (idx-1) * canvas.width/presetVerse.length, 
-                   fontsize_sml);
+      let xx = 4 + (idx-1) * canvas.width/presetVerse.length;
+      ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, fontsize_sml);
+      ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fontsize_sml * 2);
     }
+    
   } 
   
-
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.66;
   if (animSwh == 1) 

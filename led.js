@@ -523,9 +523,16 @@ function computeAverage(data, idx, _size) {
     }
   }
 
+  /*
+  __r = Math.min(255, __r/(_size * _size * 0.9));
+  __g = Math.min(255, __g/(_size * _size * 0.9));
+  __b = Math.min(255, __b/(_size * _size * 0.9));
+  */
+  
   __r = __r/(_size * _size);
   __g = __g/(_size * _size);
   __b = __b/(_size * _size);
+  
 
   if ((__r < criteria && __g < criteria && __b < criteria)) {
     __r = dot_none;
