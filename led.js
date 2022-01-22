@@ -514,6 +514,13 @@ function computeAverage(data, idx, _size) {
   let __g = 0;
   let __b = 0;
 
+  /*
+  if (_size > 2) {
+    _size -= 2;
+    idx += gapP + gapL;
+  }
+  */
+
   for (let i = 0;i<_size;i++) {
     for (let j = 0;j<_size;j++) {
       let __idx = idx + i * gapP + j * gapL;
@@ -534,7 +541,7 @@ function computeAverage(data, idx, _size) {
   __b = __b/(_size * _size);
   
 
-  if ((__r < criteria && __g < criteria && __b < criteria)) {
+  if (side > 0 && (__r < criteria && __g < criteria && __b < criteria)) {
     __r = dot_none;
     __g = dot_none;
     __b = dot_none;

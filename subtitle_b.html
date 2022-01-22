@@ -33448,13 +33448,14 @@ function _layerui() {
   ctx.font = FONT;
   let x = 20;
   let y = canvas.height - 20;
+  ctx.font = fontsize_sml + 'px Arial';
   for (let i=uisel_start;i<=uisel_end;i++) {
     if (i == song)
       ctx.fillStyle = 'rgb(0,255,0)';
     else 
       ctx.fillStyle = 'rgb(0,180,0)';
     ctx.fillText(SONGS[i][0][0], x, y);
-    y -= fontsize * 1.5;
+    y -= fontsize_sml * 1.5;
   }
 }
 
@@ -33472,7 +33473,7 @@ function userhelp() {
   ctx.fillStyle = 'green'; //"rgb(0,0,255)"//ctx.fillRect(0, 0, c.width, c.height);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = fontsize + "px Arial";
+  ctx.font = fontsize_sml + "px Arial";
   ctx.textAlign = "left";
 
   let gap = canvas.height/(helps[0].length + 1);
