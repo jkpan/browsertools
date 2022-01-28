@@ -113,10 +113,13 @@ function processImg() {
   //tempCtx.font = _font;
   let fw = uploadImage.width;// Math.ceil(tempCtx.measureText(txt).width) + 4;
   let fh = uploadImage.height;
+  
+  let cw = (Math.floor(fw/(side + dots))) * (side + dots);
+  let ch = (Math.floor(fh/(side + dots))) * (side + dots);
 
   // set the temp canvas size == the canvas size
-  tempCanvas.width = fw;
-  tempCanvas.height = fh;
+  tempCanvas.width = cw;
+  tempCanvas.height = ch;
 
   var tempCtx = tempCanvas.getContext("2d");
 
@@ -138,8 +141,17 @@ function processImg() {
     //console.log('mask generated 0! ' + maskimg.width + ', ' + maskimg.height);
     //ledAction(tempCanvas, tempCtx);
     ledAction4Still(tempCanvas, tempCtx);
+      /*
+      var _canvas = document.createElement("canvas");
+      _canvas.width = tempCanvas.width/2;
+      _canvas.height = tempCanvas.height/2;
+      var _ctx = _canvas.getContext("2d");
+      _ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width/2, tempCanvas.height/2);
+      */
     var img = document.getElementById('legend');
-    img.src = tempCanvas.toDataURL();
+    img.src = 
+    //_canvas.toDataURL();
+    tempCanvas.toDataURL();
     
   }
 

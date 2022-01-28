@@ -1,7 +1,10 @@
 <script type="text/javascript" charset="UTF-8"> 
 
 var fontsize = 100;
-var fontFamily = "標楷體";//"隸變-繁";//"華康瘦金體";//
+var fontFamily = 
+"標楷體";
+//"隸變-繁";
+//"華康瘦金體";
 var FONT = fontsize + "px " + fontFamily;
 var fontfactor = 10.0;
 
@@ -9,13 +12,11 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('救恩96'),
-            getSong('救恩154'),
-            getSong('救恩165'),
-            getSong('救恩150'),
-            getSong('讚美之泉32'),
             
-            getSong('救恩103'),
+            getSong('讚美之泉52'),
+            getSong('其他27'),
+            getSong('其他28'),
+            getSong('救恩235'),
             
 
             getSong('主禱文'),
@@ -36,7 +37,7 @@ function flow() {
                 "'QWERTYUI'1-8段  'O'第0段  'C'最後一段", 
                 "'P'投影片模式  'L'臨時加選歌", 
                 "'S'Show progress  'A'Animation  'B'Blank",
-                "Font Size 'shift+-'"]]
+                "shift+- 字大小"]]
 } </script>
 <script id="主禱文" name="主禱文" type="application/json" charset="UTF-8"> {
   "content" : [["主禱文"],
@@ -1874,6 +1875,11 @@ function flow() {
   "content" : [["讚美 讚美", "短歌1"],
                ["讚美 讚美", "讚美主在早晨 讚美主在中午", "讚美 讚美", "讚美主在夕陽下"]]
 } </script>
+<script id="短歌2" name="祂是榮耀的主" type="application/json" charset="UTF-8"> {
+  "content" : [["祂是榮耀的主", "短歌2"],
+               ["祂是榮耀的主", "祂是自有永有的", "祂是阿拉法俄梅戞", "祂是首先和末後"], 
+               ["祂名為和平君", "極奇妙又完全", "永在的父也是祂", "從永遠到永遠"]]
+} </script>
 <script id="短歌5" name="祂是主" type="application/json" charset="UTF-8"> {
   "content" : [["祂是主", "短歌5"],
                ["祂是主 祂是主", "因從死裡復活所以祂是主", "人人都屈膝 眾口舌同承認", "耶穌基督為主"]]
@@ -1916,10 +1922,22 @@ function flow() {
   "content" : [["湧流入我心", "短歌31"],
                ["湧流入我心 湧流入我心", "聖靈阿 湧流入我心", "安息真完全 當我坐在主前", "聖靈阿 湧流入我心"]]
 } </script>
+<script id="短歌32" name="懇求永生神的靈" type="application/json" charset="UTF-8"> {
+  "content" : [["懇求永生神的靈", "短歌32"],
+               ["懇求永生神的靈降在我身上", "懇求永生神的靈降在我身上", "破碎 鎔化 搏造 充滿", "懇求永生神的靈降在我身上"]]
+} </script>
+<script id="短歌34" name="是真" type="application/json" charset="UTF-8"> {
+  "content" : [["是真", "短歌34"],
+               ["是真 是真 我知是真", "這五旬節的福分", "阿 我知 我知 是真"]]
+} </script>
 <script id="短歌36" name="依靠主的靈" type="application/json" charset="UTF-8"> {
   "content" : [["依靠主的靈", "短歌36"],
                ["不靠人 只靠神", "依靠主的靈作工成事", "不靠人 只靠神", "依靠主的靈作工"],
                ["有聖靈與我同在", "有聖靈與我同在", "有聖靈與我同在", "甚麼困難都挪開"]]
+} </script>
+<script id="短歌40" name="主血大有能" type="application/json" charset="UTF-8"> {
+  "content" : [["主血大有能", "短歌40"],
+               ["大有能 能 奇妙工之能", "羔羊血 常得勝", "大有能 能 奇妙工之能", "羔羊寶貴血常得勝"]]
 } </script>
 <script id="短歌43" name="等候主的人" type="application/json" charset="UTF-8"> {
   "content" : [["等候主的人", "短歌43"],
@@ -1928,6 +1946,15 @@ function flow() {
 <script id="短歌45" name="因此要喜樂" type="application/json" charset="UTF-8"> {
   "content" : [["因此要喜樂", "短歌45"],
                ["所以你們必然從救恩", "的泉源中歡然取水", "在那一日你們要稱謝神"]]
+} </script>
+<script id="短歌47" name="金銀都沒有" type="application/json" charset="UTF-8"> {
+  "content" : [["金銀都沒有", "短歌47"],
+               ["金銀我統統沒有", "只把我所有的給你", "我奉耶穌基督的名", "叫你如今起來行走"],
+               ["他就走著又跳著又讚美神", "走著又跳著又讚美神", "我奉耶穌基督的名", "叫你如今起來行走"]]
+} </script>
+<script id="短歌53" name="應許為我" type="application/json" charset="UTF-8"> {
+  "content" : [["應許為我", "短歌53"],
+               ["經上應許每一句為我", "每一章與每一節全為我", "神的恩典神的愛真多", "經上應許每一句為我"]]
 } </script>
 <script id="短歌55" name="耶穌醫治心中傷痛" type="application/json" charset="UTF-8"> {
   "content" : [["耶穌醫治心中傷痛", "短歌"],
@@ -1938,18 +1965,85 @@ function flow() {
   "content" : [["轉你眼向主耶穌", "短歌71"],
                ["轉你眼向主耶穌","只看祂的奇妙面容", "那屬地的事都要消失掉", "在祂恩典的榮光之中"]]
 } </script>
+<script id="短歌72" name="向前走" type="application/json" charset="UTF-8"> {
+  "content" : [["向前走", "短歌72"],
+               ["向前走阿 努力向前走", "大家手攜手", "向前走阿 努力向前走", "前進莫回頭"],
+               ["手扶著犁向後看的人", "不配進神國", "向前走阿 努力向前走", "前進莫回頭"]]
+} </script>
 <script id="短歌82" name="耶穌能解決一切的問題" type="application/json" charset="UTF-8"> {
   "content" : [["耶穌能解決一切的問題", "短歌82"],
                ["耶穌能解決一切的問題", "耶穌能安慰一切憂傷", "救主施浸者 最大的醫生", "哦，哈利路亞 耶穌我王"]]
+} </script>
+<script id="短歌84" name="一切都無所謂" type="application/json" charset="UTF-8"> {
+  "content" : [["一切都無所謂", "短歌84"],
+               ["一切都無所謂", "只要有耶穌", "重擔我不再背", "當我見主"],
+               ["一眼得見祂面", "我苦要變為甜", "故此我奔向前", "直到見主"]]
+} </script>
+<script id="短歌92" name="保守我" type="application/json" charset="UTF-8"> {
+  "content" : [["保守我", "短歌92"],
+               ["保守我 主耶穌 保守我", "保守我 主耶穌 保守我", "前有路途我當跑", "前有爭戰我當到", "加我力 服事祢 永不息"]]
+} </script>
+<script id="短歌94" name="除了耶穌以外" type="application/json" charset="UTF-8"> {
+  "content" : [["除了耶穌以外", "短歌94"],
+               ["除了耶穌以外 除了耶穌以外", "沒有別的救法 沒有別的救法", "因為在天下人間 因為在天下人間", "沒有賜下別名 可以靠著得救"]]
+} </script>
+<script id="短歌97" name="我真快樂" type="application/json" charset="UTF-8"> {
+  "content" : [["我真快樂", "短歌97"],
+               ["我真快樂 因耶穌常同在", "祂把我的擔子全挪開", "我要歌唱 唱我主的愛", "祂把我的擔子全挪開"],
+               ["前我心中愁苦 因我滿有罪", "耶穌把我罪除去了住在內", "今我快樂 因耶穌常同在", "祂把我的擔子全挪開"]]
+} </script>
+<script id="短歌98" name="誰都應當認識祂" type="application/json" charset="UTF-8"> {
+  "content" : [["誰都應當認識祂", "短歌98"],
+               ["誰都應當認識祂", "誰都應當認識祂", "誰都應當認識祂", "耶穌我主"],
+               ["主是明亮亮的辰星", "主是谷中百合花", "主的佳美超乎萬人", "誰都應當認識祂"]]
+} </script>
+<script id="短歌99" name="輥去了" type="application/json" charset="UTF-8"> {
+  "content" : [["輥去了", "短歌99"],
+               ["輥去了 輥去了 輥去了", "一切擔子從我心輥去了", "輥去了 輥去了 輥去了", "一切擔子從我心輥去了"],
+               ["十字架 除我罪", "潔無瑕 真美 (哈利路亞)", "輥去了 輥去了 輥去了", "一切擔子從我心輥去了"]]
+} </script>
+<script id="短歌104" name="基督使者團歌" type="application/json" charset="UTF-8"> {
+  "content" : [["基督使者團歌", "短歌104"],
+               ["我們是基督使者團員", "是神所愛 是神所召", "要獻上自己 照神的旨意", "為主而活 為主傳道"],
+               ["願我的一切都歸耶穌", "讓祂的手來領我路", "向前舉足進 到處傳福音", "直等到萬民全歸主"]]
+} </script>
+<script id="短歌105" name="拍你掌" type="application/json" charset="UTF-8"> {
+  "content" : [["拍你掌", "短歌105"],
+               ["你若正向天堂前進 拍你掌", "你若罪已蒙主免盡 拍你掌"],
+               ["請用指頭指天堂", "再用手招呼近傍", "如果主能滿你望 拍你掌"],
+               ["拍你掌 拍你掌", "你若樂於作主門徒 拍你掌"]]
+} </script>
+<script id="短歌114" name="何其樂 我有分屬耶穌" type="application/json" charset="UTF-8"> {
+  "content" : [["何其樂 我有分屬耶穌", "短歌114"],
+               ["何其樂我有分屬耶穌", "何其樂我有分屬耶穌", "何其樂我有分屬耶穌", "哈利路亞 讚美主"],
+               ["讚美主 阿們 阿們", "讚美主 阿們 阿們", "讚美主 阿們 阿們", "讚美主 阿們 阿們", 
+                "讚美主 阿們 阿們", "讚美主 阿們 阿們", "哈利路亞 讚美主"]]
 } </script>
 <script id="短歌116" name="現在我屬於耶穌" type="application/json" charset="UTF-8"> {
   "content" : [["現在我屬於耶穌", "短歌116"],
                ["現在我屬於耶穌","耶穌也屬於我", "不單是地上在一起", "永遠在天同活"]]
 } </script>
-<!--script id="短歌139" name="信心得勝" type="application/json" charset="UTF-8"> {
-  "content" : [["信心得勝", "短歌"],
+<script id="短歌124" name="樂在我心" type="application/json" charset="UTF-8"> {
+  "content" : [["樂在我心", "短歌124"],
+               ["今我有樂 樂 樂 樂", "樂在我心 樂在我心 樂在我心", "今我有樂 樂 樂 樂", "樂在我心 樂在我心 阿們"]]
+} </script>
+<script id="短歌139" name="信心得勝" type="application/json" charset="UTF-8"> {
+  "content" : [["信心得勝", "短歌139"],
                ["信心得勝有餘 信心得勝有餘", "大大的得勝有餘 能勝過全世界"]]
-} </script-->
+} </script>
+<script id="短歌150" name="釋放我的靈" type="application/json" charset="UTF-8"> {
+  "content" : [["釋放我的靈", "短歌150"],
+               ["釋放我的靈使我能敬拜祢", "釋放我的靈使我能讚美祢", "綑綁全除盡 讓祢的靈運行", "釋放我的靈為敬拜祢"]]
+} </script>
+<script id="短歌165" name="耶穌真復活" type="application/json" charset="UTF-8"> {
+  "content" : [["耶穌真復活", "短歌165"],
+               ["耶穌真復活 耶穌真復活", "祂流的血已救贖我", "祂賜的能力保守我", "祂在我心 我何其樂", "主耶穌真復活"]]
+} </script>
+<script id="短歌171" name="歡迎歌" type="application/json" charset="UTF-8"> {
+  "content" : [["歡迎歌", "短歌171"],
+               ["我們歡迎你 真歡迎你", "在主裡誠心歡迎", "哈利路亞 我們歡迎你", "真歡迎你 在主裡誠心歡迎"]]
+} </script>
+
 <!-- 新歌頌揚 -->
 <script id="新歌頌揚20" name="真是快樂日" type="application/json" charset="UTF-8"> {
   "content" : [["真是快樂日", "新歌頌揚20"],
@@ -2333,16 +2427,20 @@ function flow() {
                ["帶我進入你的同在", "我不滿足只停留現在", "帶我進入你的同在", "我心渴慕你永恆的愛"],
                ["願你的榮耀從天降下來", "燃燒每顆愛慕你的心", "願你的榮耀從天降下來", "充滿這地 與我們相遇"]]
 } </script>
-
+<script id="讚美之泉52" name="這是耶和華所定日子" type="application/json" charset="UTF-8"> {
+  "content" : [["這是耶和華所定日子", "讚美之泉"],
+               ["這是耶和華所定日子", "神的兒女當歡呼喜樂", "耶和華已戰勝仇敵 戰勝仇敵", "全地大聲歡呼"],
+               ["耶和華是我力量 我心中一切的盼望", "耶和華是我的詩歌 又是我的拯救", "神子民行走全地 報好消息宣告祢的名", "高舉得勝的旌旗 我們稱謝祢", "祢是我神"]]
+} </script>
 <!-- others -->
-<script id="主是我力量" name="主是我力量" type="application/json" charset="UTF-8"> {
+<script id="其他1" name="主是我力量" type="application/json" charset="UTF-8"> {
   "content" : [["主是我力量", ""],
                ["主是我力量我的力量 主是患難中力量", "主是我幫助我幫助 主是隨時幫助"],
                ["主是避難所我避難所 主是堅固避難所", "主是我力量 我幫助 惟主是避難所"],
                ["大地雖會改變 高山雖會搖動", "大海翻騰 大浪戰抖 但我們也不害怕", "喂哦 喂哦 喂哦 喂哦", "喂哦 喂哦 喂哦 喂哦"]]
 } </script>
 
-<script id="我知誰掌管明天" name="我知誰掌管明天" type="application/json" charset="UTF-8"> {
+<script id="其他2" name="我知誰掌管明天" type="application/json" charset="UTF-8"> {
   "content" : [["我知誰掌管明天", ""],
                ["我不知明日將如何 每時刻安然度過", "我不求明天的陽光 因明天或轉陰暗", "我不為將來而憂慮 因我知主所應許", "今天我必與主同行 祂深知前途光景"],
                ["許多事明天將臨到 許多事難以明瞭", "但我知主掌握明天 祂必要領我向前"],
@@ -2350,36 +2448,36 @@ function flow() {
                ["許多事明天將臨到 許多事難以明瞭", "但我知主掌握明天 祂必要領我向前"]
 ]
 } </script>
-<script id="一生跟隨你" name="一生跟隨你" type="application/json" charset="UTF-8"> {
+<script id="其他3" name="一生跟隨你" type="application/json" charset="UTF-8"> {
   "content" : [["一生跟隨你", ""],
                ["求賜給我清潔的心 緊緊跟隨你", "我渴慕更深愛你 因你已先愛我"],
                ["跟隨你的腳步 活出你對我呼召", "每一天帶領我 更多親近你"],
                ["我願這一生更像你 求與我同行", "喔主！引導我生命 賜給我甜美的靈", "能合乎你心意 一生跟隨你"],
                ["我唯一渴慕 依偎你同在"]]
 } </script>
-<script id="以利亞的日子" name="以利亞的日子" type="application/json" charset="UTF-8"> {
+<script id="其他4" name="以利亞的日子" type="application/json" charset="UTF-8"> {
   "content" : [["以利亞的日子", ""],
                ["這是以利亞的日子 齊宣揚我主的話語", "哦這是祢僕人的日子 摩西公義今正被顯明", "哦雖然這苦難的日子 充滿飢荒黑暗刀劍", "而我們仍要在這曠野 呼喊", "預備耶和華的道路"],
                ["看祂降臨 駕著天上雲", "閃耀如烈日 號筒聲吹響", "揚起祢聲 這是恩典的禧年", "救贖恩典從錫安山而來"],
                ["這是以西結的日子 枯乾的骸骨正復活", "哦這是祢僕人的日子 大衛重新建造讚美殿", "哦這是大收割的日子 看哪莊稼已發白", "哦我們是你葡萄園的工人", "齊宣揚我主的話語"],
                ["看祂降臨 駕著天上雲", "閃耀如烈日 號筒聲吹響", "揚起祢聲 這是恩典的禧年", "救贖恩典從錫安山而來"]]
 } </script>
-<script id="最真實的我" name="最真實的我" type="application/json" charset="UTF-8"> {
+<script id="其他5" name="最真實的我" type="application/json" charset="UTF-8"> {
   "content" : [["最真實的我", ""],
                ["祢全然的愛我 最真實的我", "祢全然接納我 即或我軟弱", "生命中的每一步 有祢豐盛恩典", "使我更靠近祢"],
                ["祢全然的愛我 緊緊擁抱我", "祢全然接納我 永不離開我", "生命中的每一步 有祢豐盛恩典", "使我更靠近祢"],
                ["我只想要 藏在祢翅膀蔭下", "渴求能更多 停留在祢同在", "生命最大的盼望", "就在祢恩典之中", "祢就站立在我的身旁"]]
 } </script>
-<script id="惟有祢" name="惟有祢" type="application/json" charset="UTF-8"> {
+<script id="其他6" name="惟有祢" type="application/json" charset="UTF-8"> {
   "content" : [["惟有祢", ""],
                ["惟有祢，惟有祢", "惟有祢是我所愛", "惟有祢 哦主 我王", "我願能更認識祢", "我全心 我全人都向祢深深敬拜", "聖潔 聖潔 尊貴 尊貴之主", "我愛祢 耶穌"]]
 } </script>
-<script id="主我高舉祢的名" name="主我高舉祢的名" type="application/json" charset="UTF-8"> {
+<script id="其他7" name="主我高舉祢的名" type="application/json" charset="UTF-8"> {
   "content" : [["主我高舉祢的名", ""],
                ["主我高舉祢的名 主我深愛稱頌祢", "我真歡喜祢同在 我真歡喜祢救贖我"],
                ["祢從天上降世間 指引我路", "在世間被釘十架 我罪得贖", "從十架到墳墓 從墳墓升回天", "主我高舉祢的名"]]
 } </script>
-<script id="點名時候" name="點名時候" type="application/json" charset="UTF-8"> {
+<script id="其他8" name="點名時候" type="application/json" charset="UTF-8"> {
   "content" : [["點名時候", ""],
                ["主耶穌再臨那日", "必要高聲吹起號筒", "那永遠光明清白華麗早晨", "凡世上得救的人必在那邊一同相會", "在那邊點名我亦必在其中。"],
                ["在那邊點名的時候", "在那邊點名的時候", "在那邊點名的時候", "在那邊點名我亦必在其中"], 
@@ -2388,107 +2486,123 @@ function flow() {
                ["故我們應當從早到晚", "爲主殷勤作工", "歡喜傳揚主耶穌奇妙恩功", "我救主所派職分已盡在祂面前無愧", "在那邊點名我亦必在其中"], 
                ["在那邊點名的時候", "在那邊點名的時候", "在那邊點名的時候", "在那邊點名我亦必在其中"]]
 } </script>
-<script id="主愛滋潤我心" name="主愛滋潤我心" type="application/json" charset="UTF-8"> {
+<script id="其他9" name="主愛滋潤我心" type="application/json" charset="UTF-8"> {
   "content" : [["主愛滋潤我心", ""],
                ["我曾經追求世界的歡樂", "希望能夠得到滿足", "那一天當我遇見耶穌", "我發現自己的虛空"],
                ["但主的愛是何等甘甜", "滋潤我乾渴的心田", "使我甘心跟隨祂的引導", "在十架的路上奔跑"],
                ["我前面道路有耶穌陪伴", "心中常有喜樂平安", "生活中即使遇見困難", "主耶穌賜給我力量"],
                ["但主的愛是何等甘甜", "滋潤我乾渴的心田", "使我甘心跟隨祂的引導", "在十架的路上奔跑"]]
 } </script>
-<script id="神的良善榮美" name="神的良善榮美" type="application/json" charset="UTF-8"> {
+<script id="其他10" name="神的良善榮美" type="application/json" charset="UTF-8"> {
   "content" : [["神的良善榮美", ""],
                ["我深愛祢 祢的憐憫永不改變", "每一天 祢的恩手扶持我", "清晨當我睜開雙眼 直到我躺臥", "我要歌唱 神的良善榮美"],
                ["一生信實對我顧念", "一生美好待我到永遠", "我一切所有生命氣息", "我要歌唱 祢的良善榮美"],
                ["祢的聲音 領我經過水火試煉", "黑暗中 如此親近我的靈", "祢是我的天父 祢是我良友", "一生活在神的良善榮美"],
                ["祢良善永看顧我 永伴隨我生命", "祢良善永看顧我 永伴隨我生命", "當我降服祢 我獻上生命 所有全屬於祢", "祢良善永看顧我 永伴隨我生命"]]
 } </script>
-<script id="如鹿切慕溪水" name="如鹿切慕溪水" type="application/json" charset="UTF-8"> {
+<script id="其他11" name="如鹿切慕溪水" type="application/json" charset="UTF-8"> {
   "content" : [["如鹿切慕溪水", ""],
                ["神啊 我的心切慕你 如鹿切慕溪水", "唯有你是我心所愛 我渴慕來敬拜你"],
                ["你是我的力量盾牌 我靈單單降服於你", "唯有你是我心所愛 我渴慕來敬拜你"]]
 } </script>
-<script id="讓我靈自由" name="讓我靈自由" type="application/json" charset="UTF-8"> {
+<script id="其他12" name="讓我靈自由" type="application/json" charset="UTF-8"> {
   "content" : [["讓我靈自由", ""],
                ["讓我靈自由 使我能敬拜祢", "讓我靈自由 使我能讚美祢", "讓重擔卸下 讓救恩流暢", "讓我靈自由 來敬拜祢"]]
 } </script>
-<script id="祂能改變" name="祂能改變" type="application/json" charset="UTF-8"> {
+<script id="其他13" name="祂能改變" type="application/json" charset="UTF-8"> {
   "content" : [["祂能改變", ""],
                ["讓我們同心敬拜創造天地的主", "讓我們齊聲頌揚全能的神", "用大信心來讚美主的慈愛常存", "祂要醫治 祂要拯救 釋放被擄的人"],
                ["祂能改變 改變 使水變成酒", "祂能改變 改變 化苦為甘甜", "當我們心未感覺 眼未看見之前", "祂已開始 祂已運行 祂正在成全"]]
 } </script>
-<script id="活出愛" name="活出愛" type="application/json" charset="UTF-8"> {
+<script id="其他14" name="活出愛" type="application/json" charset="UTF-8"> {
   "content" : [["活出愛", ""],
                ["有一份愛 從天而來", "比山高 比海深", "測不透 摸不著 卻看得見", "因為有你 因為有我", "甘心給 用心愛", "把心中這一份愛 活出來"],
                ["耶穌的愛 激勵我", "敞開我的生命", "讓自己成為別人祝福"],
                ["耶穌的愛 點燃我", "心中熊熊愛火", "我們一起向世界活出愛", "我們一起向世界活出愛"]]
 } </script>
-<script id="起來榮耀" name="起來榮耀" type="application/json" charset="UTF-8"> {
+<script id="其他15" name="起來榮耀" type="application/json" charset="UTF-8"> {
   "content" : [["起來榮耀", ""],
                ["起來榮耀 榮耀 榮耀我主耶穌", "起來榮耀 榮耀 榮耀我主耶穌", "讓我們榮耀 榮耀 榮耀 榮耀", "榮耀主耶穌", "讓我們榮耀 榮耀 榮耀 榮耀主"],
                ["祢是大君王 勝過黑暗死亡", "洗淨心靈憂傷 帶來喜悅平安", "祢是全能神 掌管世上萬有", "除去罪惡捆綁 賜給我新的生命"]]
 } </script>
-<script id="愛的真諦" name="愛的真諦" type="application/json" charset="UTF-8"> {
+<script id="其他16" name="愛的真諦" type="application/json" charset="UTF-8"> {
   "content" : [["愛的真諦", ""],
                ["愛是恆久忍耐 又有恩慈", "愛是不嫉妒", "愛是不自誇 不張狂", "不做害羞的事"],
                ["不求自己的益處", "不輕易發怒", "不計算別人的惡", "不喜歡不義只喜歡真理"],
                ["凡事包容 凡事相信", "凡事盼望", "凡事忍耐 凡事要忍耐", "愛是永不止息"]]
 } </script>
-<script id="祝你聖誕快樂" name="祝你聖誕快樂" type="application/json" charset="UTF-8"> {
+<script id="其他17" name="祝你聖誕快樂" type="application/json" charset="UTF-8"> {
   "content" : [["祝你聖誕快樂", ""],
                ["我們祝你聖誕快樂", "我們祝你聖誕快樂", "我們祝你聖誕快樂", "祝你新年快樂"],
                ["把主愛傳到每一個地方", "把耶穌的祝福給需要的人"]]
 } </script>
-<script id="報佳音" name="報佳音" type="application/json" charset="UTF-8"> {
+<script id="其他18" name="報佳音" type="application/json" charset="UTF-8"> {
   "content" : [["報佳音", ""],
                ["報佳音 天上賜下平安", "報佳音 賜給我們和平君", "新生王 嬰孩已出生", "報佳音 喜悅歸予人"]]
 } </script>
-<script id="耶穌他愛你 所以有聖誕節" name="耶穌他愛你 所以有聖誕節" type="application/json" charset="UTF-8"> {
+<script id="其他19" name="耶穌他愛你 所以有聖誕節" type="application/json" charset="UTF-8"> {
   "content" : [["耶穌他愛你 所以有聖誕節", ""],
   ["耶穌他愛你 所以他願意", "從天上為你降生小小馬槽裡", "耶穌他愛你 所以他願意", "為我們帶來盼望平安的消息", "耶穌他愛你 所以他願意", "代替你我的罪獻上他自己", "耶穌他愛你 所以有聖誕節", "他要把愛的禮物送給你"],
   ["叮叮噹 叮叮噹 鈴聲多響亮", "你看他呀不避風霜 面容多麼慈祥", "叮叮噹 叮叮噹 鈴聲多響亮", "他給我們帶來幸福 大家喜洋洋"]]
 } </script>
-<script id="聖靈請祢來充滿我心" name="聖靈請祢來充滿我心" type="application/json" charset="UTF-8"> {
+<script id="其他20" name="聖靈請祢來充滿我心" type="application/json" charset="UTF-8"> {
   "content" : [["聖靈請祢來充滿我心", ""],
                ["聖靈請祢來充滿我心", "我需要祢恩膏 充滿我靈", "聖靈啊我好愛祢", "我的靈讓祢牽引", "而每一天我要更深愛祢"],
                ["我要追求祢主", "我將生命獻給祢", "牽引我更親近祢", "祢大能更新我靈", "無人能與祢相比", "主我仰望祢的榮面", "我敬拜祢在靈與真理裡"]]
 } </script>
-<script id="一粒麥子" name="一粒麥子" type="application/json" charset="UTF-8"> {
+<script id="其他21" name="一粒麥子" type="application/json" charset="UTF-8"> {
   "content" : [["一粒麥子", ""],
                ["一粒麥子 它若不落在地裡死了", "不論過了多少時候 它仍舊是它自己", "它若願意 讓自己被掩埋被用盡", "就必結出許多子粒 經歷生命的奇蹟"],
                ["主 我願意 主 我願意", "讓自己像種子落在地裡", "失喪生命必反得生命"],
                ["主 我願意 主 我願意", "放下自以為應得的權利", "在我身上成就祢旨意"],
                ["呼召如此崇高 種子何等渺小", "定睛標竿直跑 必見神的榮耀"]]
 } </script>
-<script id="來高聲唱" name="來高聲唱" type="application/json" charset="UTF-8"> {
+<script id="其他22" name="來高聲唱" type="application/json" charset="UTF-8"> {
   "content" : [["來高聲唱", ""],
                ["來高聲唱 來高聲唱", "讓我們來讚美尊崇大君王", "來高聲唱 來高聲唱", "讓我們來讚美尊崇大君王"],
                ["惟有祂配得讚美因祂是主", "昔在今在快來君王", "萬膝要跪拜萬口都要承認", "祂是主耶穌祂是主耶穌", "祂是主耶穌基督"]]
 } </script>
-<script id="笑看風浪" name="笑看風浪" type="application/json" charset="UTF-8"> {
+<script id="其他23" name="笑看風浪" type="application/json" charset="UTF-8"> {
   "content" : [["笑看風浪", ""],
                ["我知道自己有多渺小", "眼前的風浪有多麼高", "但在我裡面的主耶穌", "大過風和浪"],
                ["人生的風浪像歌利亞", "但我有信心像大衛王", "靠著那加給我力量的", "我笑看風和浪"],
                ["因為天上地下的權柄", "都在耶穌基督的手裡", "祂平靜風浪祂戰勝仇敵", "我靠祂得勝利"],
                ["因為萬膝都向祂跪拜", "祂是至高全能的主宰", "風浪奪不走祂賜的安息", "我靠祂得勝利"]]
 } </script>
-<script id="我以禱告來到你跟前" name="我以禱告來到你跟前" type="application/json" charset="UTF-8"> {
+<script id="其他24" name="我以禱告來到你跟前" type="application/json" charset="UTF-8"> {
   "content" : [["我以禱告來到你跟前", ""],
                ["我以禱告來到你跟前", "我要尋求你", "我要站在破口之中", "在那裡我尋求你"],
                ["每一次我禱告 我搖動你的手", "禱告做的事 我的手不能做", "每一次我禱告 大山被挪移", "道路被鋪平 使列國歸向你"],
                ["主我是軟弱及無助", "你卻是我的力量", "以你親切的手引導我", "那就是我的得勝"],
                ["每一次我禱告 我搖動你的手", "禱告做的事 我的手不能做", "每一次我禱告 大山被挪移", "道路被鋪平 使列國歸向你"]]
 } </script>
-<script id="親眼看見祢" name="親眼看見祢" type="application/json" charset="UTF-8"> {
+<script id="其他25" name="親眼看見祢" type="application/json" charset="UTF-8"> {
   "content" : [["親眼看見祢", ""],
                ["有祢我生命不一樣", "有祢我生命再燃亮", "有祢我不害怕困難", "有祢我有滿足的喜樂"],
                ["我在深處裡求告祢", "祢在天上聽我禱告", "祢是我堅固避難所", "我讚美祢直到永遠"], 
                ["太陽還存 月亮還在", "人要敬畏祢直到萬代", "我從前風聞有祢", "現在我親眼看見祢"]]
 } </script>
-<script id="祢坐著為王" name="祢坐著為王" type="application/json" charset="UTF-8"> {
+<script id="其他26" name="祢坐著為王" type="application/json" charset="UTF-8"> {
   "content" : [["祢坐著為王", ""],
                ["主耶和華 滿有憐憫和恩典", "我投靠在祢翅膀蔭下", "當我回轉 一宿雖然有哭泣", "早晨必歡呼喜樂"],
                ["祢坐著為王到永永遠遠", "雖洪水翻騰 我堅定仰望你", "你坐著為王 垂聽我呼求", "使我靈甦醒 有復活的生命"]]
 } </script>
+<script id="其他27" name="恩典已降臨" type="application/json" charset="UTF-8"> {
+  "content" : [["恩典已降臨", ""],
+               ["將軟弱變為剛強 貧窮成為富足", "瞎眼得看見 哀哭變為跳舞", "一切山窪都填滿 崎嶇成為平原", 
+                "在神裡面充滿無限可能", "你的能力覆庇我 戰勝試煉和艱難", "我相信你的恩典完全夠我用"],
+               ["神的恩典已降臨", "喜樂充滿我們中間", "在恩典深處 重擔都變為輕省", 
+                "神的恩典已降臨", "喜樂充滿我們中間", "倚靠全能神 沒有難成就的事"]]
+} </script>
+<script id="其他28" name="當我抬頭仰望" type="application/json" charset="UTF-8"> {
+  "content" : [["當我抬頭仰望", ""],
+               ["人算什麼 祢竟顧念他", "世人算什麼 祢竟眷顧他", "祢賜下 榮耀尊貴作為他冠冕", "使地上萬物 都俯伏在他面前"],
+               ["我算什麼 祢竟顧念我", "我沒做什麼 祢卻垂憐我", "當我未 出生以前 祢已 先愛我", "為了我  打造專屬的 人生路"],
+               ["當我抬頭仰望祢手造的天", "深知祢 多麼愛我遠超過一切", "患難困苦 死蔭幽谷", "也無法 將我 與祢的愛隔絕"],
+               ["當我放下自己垂靠祢懷裡", "我的靈 雀躍歡欣不停讚美祢", "耶穌基督 我的救主", "祢的寶血 贖回了我的生命 耶穌"],
+               ["不再悲傷 不再徬徨", "祢的愛 擁抱我 遮蓋了一切", "我深知道 世上所有", "都無法 將我與 祢的愛隔絕"]]
+} </script>
+
 <!-- 
   詩歌歌詞區 End cursor:none;
     -->
@@ -2645,14 +2759,12 @@ function createBtns() {
       //var button = document.createElement('button');
       let idx = _prefix+i;
       btn = _createBtn(_prefix+i, attr);
-      btn.style.background = 'teal'; // setting the background color to teal
-      btn.style.color = 'white'; // setting the color to white
     } else {
       btn = _createEmptyBtn();
       btn.id = 'btn' + _prefix + i;
-      btn.style.background = 'teal'; // setting the background color to teal
-      btn.style.color = 'white'; // setting the color to white
     }
+    btn.style.background = 'teal'; // setting the background color to teal
+    btn.style.color = 'white'; // setting the color to white
     div.appendChild(btn);
   }
 
@@ -2661,21 +2773,41 @@ function createBtns() {
   _prefix = '讚美之泉';
 
   for (var i=1;i<=140;i++) {
-    var exist = document.getElementById('讚美之泉'+i);
+    var exist = document.getElementById(_prefix+i);
     if (exist) {
       var attr = exist.getAttribute("name");
       if (!attr) attr = ''; 
       //var button = document.createElement('button');
       let idx = _prefix+i;
       btn = _createBtn(_prefix+i, attr);
-      btn.style.background = 'yellow'; // setting the background color to teal
-      btn.style.color = 'red'; // setting the color to white
     } else {
       btn = _createEmptyBtn();
       btn.id = 'btn' + _prefix + i;
-      btn.style.background = 'yellow'; // setting the background color to teal
-      btn.style.color = 'red'; // setting the color to white
     }
+    btn.style.background = 'yellow'; // setting the background color to teal
+    btn.style.color = 'red'; // setting the color to white
+    div.appendChild(btn);
+  }
+
+  div.insertAdjacentHTML('beforeend', '<br/>');
+
+  _prefix = '其他';
+
+  for (var i=1;i<=50;i++) {
+    var exist = document.getElementById(_prefix+i);
+    if (exist) {
+      var attr = exist.getAttribute("name");
+      if (!attr) attr = ''; 
+      //var button = document.createElement('button');
+      let idx = _prefix+i;
+      btn = _createBtn(_prefix+i, attr);
+    } else {
+      btn = _createEmptyBtn();
+      btn.id = 'btn' + _prefix + i;
+    }
+    btn.style.background = 'gray'; // setting the background color to teal
+    btn.style.color = 'white'; // setting the color to white
+    
     div.appendChild(btn);
   }
 
@@ -2886,7 +3018,7 @@ function keyboard(e) {
 
     
     //alert(e.keyCode);
-    if (e.keyCode == 16 || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+    if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
       keylock = false;
       _repaint();
       return;
@@ -3148,7 +3280,7 @@ var keylock = false;
 window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function(e) {
 
-  if (e.keyCode == 16 || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = true;
   }
 

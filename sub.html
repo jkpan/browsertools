@@ -1,0 +1,131 @@
+<script type="text/javascript" charset="UTF-8"> 
+
+var workingColor = "rgb(0,128, 0)";
+var leftColor = "rgb(0,220, 0)";//document.getElementById('ui_wrapper').style.backgroundColor;
+
+function switchFunction(idx) {
+  
+    //document.getElementById('content_txt').style.backgroundColor = workingColor;
+    //document.getElementById('content_txt2').style.backgroundColor = workingColor;
+    
+    //document.getElementById('btn_txt').style.backgroundColor = leftColor;
+    //document.getElementById('btn_txt2').style.backgroundColor = leftColor;
+    
+    document.getElementById('content_txt').hidden = true;
+    document.getElementById('content_txt2').hidden = true;
+    
+  
+    switch(idx) {
+      case 1:
+        //document.getElementById('content_txt').style.color = workingColor;
+        //document.getElementById('btn_txt').style.backgroundColor = workingColor;
+        document.getElementById('content_txt').hidden = false;
+        break;
+      case 2:
+        //document.getElementById('btn_txt2').style.backgroundColor = workingColor;
+        document.getElementById('content_txt2').hidden = false;
+        break;
+    }
+  }
+  
+</script>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        body {
+          margin: 0px;
+          height: 100%;
+          width: 100%;
+          background-color: green;
+          /*cursor:none;*/
+        }
+        #parent{
+            display: flex;
+            border: 1px solid #000;
+            height: 100vh;
+            width: 100%;
+        }
+        #LeftCol{
+            flex-grow: 1;
+            border: 1px solid green;
+
+            resize: horizontal;
+            overflow: auto;
+        }
+        #RightCol{
+            flex-grow: 1;
+            border: 1px solid red;
+            resize: horizontal;
+            overflow: auto;
+        }
+        .wrapper {
+            display: grid;
+            grid-template-columns: 1fr, 1fr;
+            grid-template-rows: 1fr, 1fr;
+            height: 100%;
+            /*
+            grid-gap: 1px;
+            background-color: #aaaa00;
+            box-shadow: rgb(0, 200, 0) 0px 0px;
+            */
+      }
+      .txt1 {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .txt2 {
+        grid-column: 1;
+        grid-row: 2;
+        /*border-radius: 10px;*/
+      }
+      .content {
+        grid-column: 2/100;
+        grid-row: 1/100;
+        background-color: transparent;
+        font-size: 24px;
+        /*margin:1% 1%;*/
+        /*border-radius: 10px;*/
+      }
+      .button {
+            font-size: 24px;
+            background-color:transparent;
+            color: #00ff00;
+            width:100%;
+            height:100%;
+            border: none;
+            vertical-align: middle;
+          }
+        </style>
+    </head> 
+<body>
+    <div class="wrapper" id="ui_wrapper">
+        <div class="txt1" id="btn_txt">
+          <button type="button" id="go" class="button" onclick="switchFunction(1)">.</button>
+        </div>
+        <div class="txt2" id="btn_txt2">
+          <button type="button" id="go" class="button" onclick="switchFunction(2)">..</button>
+        </div>
+        
+        <div class="content" id="content_txt">
+
+            <iframe frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
+
+        </div>
+
+        <div class="content" id="content_txt2">
+
+            <iframe frameborder="0" width="100%" height="100%" align="right" src="subtitle_b.html"></iframe>
+
+        </div>
+</body>
+</html>
+<!--frameset class="frame" cols="*,*">
+<frame class="frame" src="subtitle.html">
+<frame class="frame" src="subtitle_b.html">
+</frameset-->
+<!--div id="parent">
+    <div id="LeftCol"><iframe frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe></div>
+    <div id="RightCol"><iframe frameborder="0" width="100%" height="100%" align="right" src="subtitle_b.html"></iframe> </div>
+</div-->

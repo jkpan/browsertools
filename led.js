@@ -505,14 +505,45 @@ function ledAction4Still(_canvas, _ctx) {
       }
     }
   }
-  _ctx.putImageData(mask, posx, posy);
+  _ctx.putImageData(mask, posx, posy);//, 0, 0, maskimg.width/2, maskimg.height/2);
 }
+
+function gray(coloramount) {
+  let _c = (_r + _g + _g + _b)/4;
+  let block = Math.ceil(255/coloramount);
+  _c = Math.floor(_c/block) * block;
+  _r = _c;
+  _g = _c;
+  _b = _c;
+}
+
+function reduceColor(coloramount) {
+  let block = Math.ceil(255/coloramount);
+  _r = Math.floor(_r/block) * block * 2/3;
+  _g = Math.floor(_g/block) * block * 2/3;
+  _b = Math.floor(_b/block) * block * 2/3;
+}
+
+function contrast(coloramount) {
+  let block = Math.ceil(255/coloramount);
+
+  _r = Math.floor(_r/block) * block;
+  _g = Math.floor(_g/block) * block;
+  _b = Math.floor(_b/block) * block;
+
+}
+
+function filter() {
+  //reduceColor(10);
+  //gray(16);
+}
+
 
 function computeAverage(data, idx, _size) {
   
-  let __r = 0;
-  let __g = 0;
-  let __b = 0;
+  _r = 0;
+  _g = 0;
+  _b = 0;
 
   /*
   if (_size > 2) {
@@ -524,11 +555,11 @@ function computeAverage(data, idx, _size) {
   for (let i = 0;i<_size;i++) {
     for (let j = 0;j<_size;j++) {
       let __idx = idx + i * gapP + j * gapL;
-      __r += data[__idx];
-      __g += data[__idx+1];
-      __b += data[__idx+2];
+      _r += data[__idx];
+      _g += data[__idx+1];
+      _b += data[__idx+2];
     }
-  }
+  }  
 
   /*
   __r = Math.min(255, __r/(_size * _size * 0.9));
@@ -536,21 +567,22 @@ function computeAverage(data, idx, _size) {
   __b = Math.min(255, __b/(_size * _size * 0.9));
   */
   
-  __r = __r/(_size * _size);
-  __g = __g/(_size * _size);
-  __b = __b/(_size * _size);
-  
+  _r = _r/(_size * _size);
+  _g = _g/(_size * _size);
+  _b = _b/(_size * _size);
 
-  if (side > 0 && (__r < criteria && __g < criteria && __b < criteria)) {
-    __r = dot_none;
-    __g = dot_none;
-    __b = dot_none;
+  filter();
+
+  if (side > 0 && (_r < criteria && _g < criteria && _b < criteria)) {
+    _r = dot_none;
+    _g = dot_none;
+    _b = dot_none;
   }
 
   for (let i = 0;i<_size;i++) {
     for (let j = 0;j<_size;j++) {
       let __idx = idx + i * gapP + j * gapL;
-      setPixColor(data, __idx, __r, __g, __b);
+      setPixColor(data, __idx, _r, _g, _b);
     }
   }
 
