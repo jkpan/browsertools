@@ -704,7 +704,7 @@ function newParticle_firework() {
       
       let x = c.width * (0.2 + Math.random() * 0.6);// + (short * 0.05 + range) * Math.cos(dir);
       let y = c.height * (0.2 + Math.random() * 0.6);
-      let range = c.width * 0.2 * (0.5 + Math.random()/2.0);
+      let range = Math.max(c.width, c.height) * 0.2 * (0.5 + Math.random()/2.0);
 
       this.elapse = 0.7 + Math.random()/2.0;//1.0 + 4.0 * (70 - this.radius) /70;
       this.t = 0;

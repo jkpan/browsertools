@@ -12,12 +12,14 @@ function flow() {
 
   SONGS = [ [['']],
 
-            
-            getSong('讚美之泉52'),
-            getSong('其他27'),
-            getSong('其他28'),
-            getSong('救恩235'),
-            
+            getSong('救恩1'),  
+            getSong('其他29'),      
+            getSong('讚美之泉53'),
+
+            getSong('其他14'),
+            getSong('其他30'),
+
+            getSong('新歌頌揚212'),
 
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -2078,6 +2080,11 @@ function flow() {
                ["耶穌正在這裡 祂同在 滿有榮耀", "呼召祂的百姓 近前來", "耶穌正在這裡 祂同在 滿有榮耀", "呼召祂的百姓 近前來"],
                ["主耶穌 請祢來 主聖靈 來運行", "主耶穌 我們仰望祢", "主耶穌 請祢來 主聖靈 來運行", "主耶穌 我們仰望祢"]]
 } </script>
+<script id="新歌頌揚212" name="更新我心意" type="application/json" charset="UTF-8"> {
+  "content" : [["更新我心意", "新歌頌揚212"], 
+               ["更新我心意 使我能像你", "更新我心意 使我能像你"],
+               ["主 你是陶匠 我是泥土", "模我 塑造我 是我的懇求"]]
+} </script>
 <script id="新歌頌揚221" name="讓我們以頌讚為祭" type="application/json" charset="UTF-8"> {
   "content" : [["讓我們以頌讚為祭", "新歌頌揚221"],
                ["讓我們以頌讚為祭來獻給神", "讓我們以頌讚為祭來獻給神"], 
@@ -2432,6 +2439,12 @@ function flow() {
                ["這是耶和華所定日子", "神的兒女當歡呼喜樂", "耶和華已戰勝仇敵 戰勝仇敵", "全地大聲歡呼"],
                ["耶和華是我力量 我心中一切的盼望", "耶和華是我的詩歌 又是我的拯救", "神子民行走全地 報好消息宣告祢的名", "高舉得勝的旌旗 我們稱謝祢", "祢是我神"]]
 } </script>
+<script id="讚美之泉53" name="賜福與你" type="application/json" charset="UTF-8"> {
+  "content" : [["賜福與你", "讚美之泉"],
+               ["願主的恩惠慈愛與你同在", "願主的靈 時時圍繞", "恩典降下 賜福與你", "平安喜樂天天充滿你"],
+               ["賜福與你 賜福與你", "平安喜樂天天充滿你", "賜福與你 賜福與你", "平安喜樂天天充滿你"]]
+} </script>
+
 <!-- others -->
 <script id="其他1" name="主是我力量" type="application/json" charset="UTF-8"> {
   "content" : [["主是我力量", ""],
@@ -2602,7 +2615,17 @@ function flow() {
                ["當我放下自己垂靠祢懷裡", "我的靈 雀躍歡欣不停讚美祢", "耶穌基督 我的救主", "祢的寶血 贖回了我的生命 耶穌"],
                ["不再悲傷 不再徬徨", "祢的愛 擁抱我 遮蓋了一切", "我深知道 世上所有", "都無法 將我與 祢的愛隔絕"]]
 } </script>
-
+<script id="其他29" name="靠著耶穌得勝" type="application/json" charset="UTF-8"> {
+  "content" : [["靠著耶穌得勝", ""],
+               ["在你愛裡我要宣告", "軟弱已得改變", "在你愛裡我要宣告 你是王", "在你愛裡我要宣告", "我不必罪中打轉", "是你帶領著我得勝"],
+               ["靠著耶穌得勝", "靠著耶穌得勝", "終此生要靠著主愛去得勝", "靠著耶穌得勝", "靠著耶穌得勝", "不必驚怕挫敗 確知主恩更廣闊", "是你帶領著我得勝"]]
+} </script>
+<script id="其他30" name="主我要讚美祢" type="application/json" charset="UTF-8"> {
+  "content" : [["主我要讚美祢", ""],
+               ["主 我要讚美祢 盡心盡意", "我要傳揚祢", "奇妙大全能歸榮耀主聖名"],
+               ["主 我要讚美祢 盡心盡意", "從祢要找到人生的喜樂", "哈利路亞"],
+               ["主 我真正愛祢 盡心盡意", "從祢要找到人生的喜樂", "哈利路亞"]]
+} </script>
 <!-- 
   詩歌歌詞區 End cursor:none;
     -->
@@ -3803,7 +3826,7 @@ function newParticle_firework() {
       
       let x = c.width * (0.2 + Math.random() * 0.6);// + (short * 0.05 + range) * Math.cos(dir);
       let y = c.height * (0.2 + Math.random() * 0.6);
-      let range = c.width * 0.2 * (0.5 + Math.random()/2.0);
+      let range = Math.max(c.width, c.height) * 0.2 * (0.5 + Math.random()/2.0);
 
       this.elapse = 0.7 + Math.random()/2.0;//1.0 + 4.0 * (70 - this.radius) /70;
       this.t = 0;
