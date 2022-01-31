@@ -1,0 +1,647 @@
+<script type="text/javascript" src="led.js" charset="UTF-8"></script>
+<script type="text/javascript" src="marquee_anim.js" charset="UTF-8"></script>
+<script type="text/javascript" src="ledmarquee.js" charset="UTF-8"></script>
+<script type="text/javascript" charset="UTF-8"> 
+
+  function textGo() {
+
+    var sel_gap = document.getElementById('Gap');
+    var sel_lsize = document.getElementById('Lsize');
+    var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
+    var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
+
+    side = gap;
+    dots = lsz;
+    
+    makeRound = document.getElementById("round").checked;
+
+    let txt1 = document.getElementById("txt").value.trim();
+    var slider = document.getElementById('speed');
+        speed = parseInt(slider.value, 10);
+        color_0 = document.getElementById('txtc_0').value;
+        if (document.getElementById("swing").checked) {
+          swing = 1;
+        } else {
+          swing = 0;
+        }
+
+    let txt2 = document.getElementById("txt2").value.trim();
+    var slider1 = document.getElementById('speed1');
+        speed1 = parseInt(slider1.value, 10);
+        color_1 = document.getElementById('txtc_1').value;
+        if (document.getElementById("swing1").checked) {
+          swing1 = 1;
+        } else {
+          swing1 = 0;
+        }
+
+    var sel_anim = document.getElementById('anim');
+    animIdx = parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
+      
+    bgIdx = document.getElementById("backlight").checked?1:0;
+
+    //var sel_back = document.getElementById('backlight');
+    //bgIdx = parseInt(sel_back.options[sel_back.options.selectedIndex].value, 10);
+    var slider_back = document.getElementById('back_speed');
+        speed_backflash = parseInt(slider_back.value, 10);
+        color_b = document.getElementById('back_color').value;
+
+    subtitle[1] = [txt1];
+    subtitle[2] = [txt2];
+
+    if (txt1.length + txt2.length == 0 && animIdx == 0 && bgIdx == 0) {
+      alert("Empty Action!");
+      return;
+    }
+
+    switch2Marquee();
+      
+    init();
+    initAnim();
+ 
+    window.scroll(0, 0);
+
+  }
+  
+  function emojiGo(emj) {
+    let value = document.getElementById("txt").value;
+    value += emj;
+    document.getElementById("txt").value = value;
+  }
+  
+  function sync2ui() { //selOption() {
+
+    var sel_gap = document.getElementById('Gap');
+    for(var i = 0, j = sel_gap.options.length; i < j; ++i) {
+        if (parseInt(sel_gap.options[i].value, 10)  === side) {
+          sel_gap.selectedIndex = i;
+          break;
+        }
+    }
+    var sel_lsize = document.getElementById('Lsize');
+    for(var i = 0, j = sel_lsize.options.length; i < j; ++i) {
+        if (parseInt(sel_lsize.options[i].value, 10)  === dots) {
+          sel_lsize.selectedIndex = i;
+          break;
+        }
+    }
+
+    var slider = document.getElementById('speed');
+    slider.value = speed;
+    slider = document.getElementById('speed1');
+    slider.value = speed1;
+    
+    showLEDLegend();
+     
+    
+  }
+
+  function showLEDLegend() {
+  
+    var sel_gap = document.getElementById('Gap');
+    var sel_lsize = document.getElementById('Lsize');
+    var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
+    var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
+  
+    var size = parseInt(document.getElementById('banner_size').value, 10)
+    var text = document.getElementById('banner_text').value;
+    
+    makeRound = document.getElementById("round").checked;
+    
+    //generateLegend(gap, lsz);
+    getLEDBanner(text, size, gap, lsz);
+
+  }
+
+function getLEDBanner(txt, fontsize, _s, _d) {
+
+  maskimg = null;
+
+  //let fontsize = 128;
+  let _font = fontsize + "px Arial"; 
+
+  side = _s;
+  dots = _d;
+
+  var tempCanvas = document.createElement("canvas");
+  var tempCtx = tempCanvas.getContext("2d");
+
+  tempCtx.font = _font;
+  let fw = Math.ceil(tempCtx.measureText(txt).width) + 4;
+  let fh = fontsize * 1.2;
+
+  // set the temp canvas size == the canvas size
+  tempCanvas.width = fw;
+  tempCanvas.height = fh;
+
+  //tempCtx = tempCanvas.getContext("2d");
+  tempCtx.font = _font;
+
+  //tempCtx.font = ctx.font;//fontsize + "px Arial";
+
+  //maskimg
+  initLED(0, 0, fw, fh);
+  newLEDMask();
+  
+  tempCtx.fillStyle = 'black';
+  tempCtx.fillRect(0, 0, fw, fh);
+
+  tempCtx.textAlign = "left";
+  
+
+  tempCtx.fillStyle = 'yellow';
+  tempCtx.strokeStyle = 'yellow';
+  tempCtx.lineWidth = 4;
+
+  tempCtx.strokeText(txt, 2, fontsize); // + '('+ _s +','+ _d +')'
+  tempCtx.fillText(txt, 2, fontsize);
+
+  maskimg.onload = function() {
+    //console.log('mask generated 0! ' + maskimg.width + ', ' + maskimg.height);
+    ledAction4Still(tempCanvas, tempCtx);
+    var img = document.getElementById('legend');
+    img.src = tempCanvas.toDataURL();
+    
+  }
+
+}
+
+function backLightAction() {
+  if (document.getElementById("backlight").checked) {
+    //document.getElementById('back_speed').hidden = false;
+    //document.getElementById('back_color').hidden = false;
+    document.getElementById('back_options').hidden = false;
+  } else {
+    //document.getElementById('back_speed').hidden = true;
+    //document.getElementById('back_color').hidden = true;
+    document.getElementById('back_options').hidden = true;
+  }
+}
+
+var workingColor = "#aaaaaa";
+var leftColor = "#555555";//document.getElementById('ui_wrapper').style.backgroundColor;
+
+function switchFunction(idx) {
+
+  backLightAction();
+
+  document.getElementById('content_txt').style.backgroundColor = workingColor;
+  document.getElementById('content_txt2').style.backgroundColor = workingColor;
+  document.getElementById('content_anim').style.backgroundColor = workingColor;
+  document.getElementById('content_bg').style.backgroundColor = workingColor;
+
+  document.getElementById('btn_txt').style.backgroundColor = leftColor;
+  document.getElementById('btn_txt2').style.backgroundColor = leftColor;
+  document.getElementById('btn_anim').style.backgroundColor = leftColor;
+  document.getElementById('btn_bg').style.backgroundColor = leftColor;
+
+  document.getElementById('content_txt').hidden = true;
+  document.getElementById('content_txt2').hidden = true;
+  document.getElementById('content_anim').hidden = true;
+  document.getElementById('content_bg').hidden = true;
+
+  switch(idx) {
+    case 1:
+      document.getElementById('content_txt').style.color = workingColor;
+      document.getElementById('btn_txt').style.backgroundColor = workingColor;
+      document.getElementById('content_txt').hidden = false;
+      break;
+    case 2:
+      document.getElementById('btn_txt2').style.backgroundColor = workingColor;
+      document.getElementById('content_txt2').hidden = false;
+      break;
+    case 3:
+      document.getElementById('btn_anim').style.backgroundColor = workingColor;
+      document.getElementById('content_anim').hidden = false;
+      break;
+    case 4:
+      document.getElementById('btn_bg').style.backgroundColor = workingColor;
+      document.getElementById('content_bg').hidden = false;
+      break;
+  }
+}
+
+</script>
+
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+      <!--meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8"-->
+      <style>
+        body {
+          margin: 0px;
+          height: 100%;
+          background-color:rgb(0, 0, 0);
+          /*cursor:none;*/
+        }
+        main {
+          position: fixed;
+          width: 100%;
+          height: 100%;
+        }
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        input[type=text] {
+          width:80%;
+          height: 50px;
+          border:2px solid #f00;
+          border-radius: 5px;
+          margin: 2% 2%;
+          outline: none;
+          padding: 4px;
+          font-size: 32px;
+          box-sizing: border-box;
+        }
+        input[type=text]:focus {
+          border-color: dodgerblue;
+          box-shadow: 0 0 8px 0 dodgerblue;
+        }
+        /*
+        canvas {
+              padding-left: 0;
+              padding-right: 0;
+              margin-left: 0;
+              margin-right: 0;
+              display: block;
+        }
+          */
+          input[type=range] {
+            width: 40%;
+            height: 40px;
+            background: #ddd;
+            border: none;
+            border-radius: 3px;
+            vertical-align: middle;
+            margin: 2% 2%;
+          }
+
+          .select {
+            font-size: 28px;
+            height: 40px;
+            border: none;
+            border-radius: 3px;
+            vertical-align: middle;
+            margin: 2% 2%;
+
+          }
+
+          input.largerColorSel {
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+            margin: 2% 2%;
+          }
+
+          input.largerCheckbox {
+            width: 40px;
+            height: 40px;
+            vertical-align: middle;
+            margin: 2% 2%;
+          }
+
+          .label {
+            color:#ffffff;
+            font-size: 24px;
+            vertical-align: middle;
+          }
+
+          .button {
+            font-size: 24px;
+            background-color:transparent;
+            color: #ffffff;
+            width:100%;
+            height:100%;
+            border: none;
+            vertical-align: middle;
+          }
+      .head {
+        display: grid;
+        grid-template-columns: 2fr, 1fr;
+        grid-template-rows: 1fr, 1fr;
+      }
+      .banner {
+        grid-column: 1;
+        grid-row: 1;
+        width: 100%;
+        height: 100%;
+      }
+      .go {
+        grid-column: 2;
+        grid-row: 1;
+        width: 100%;
+        height: 100%;
+      }
+      .wrapper {
+        display: grid;
+        grid-template-columns: 1fr, 5fr;
+        grid-template-rows: 1fr, 1fr, 1fr, 1fr;
+        border-radius: 10px;
+        grid-auto-rows: minmax(50px, auto);
+        /*
+            grid-gap: 1px;
+            background-color: #aaaa00;
+            box-shadow: rgb(0, 200, 0) 0px 0px;
+        */
+      }
+      .txt1 {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .txt2 {
+        grid-column: 1;
+        grid-row: 2;
+        /*border-radius: 10px;*/
+      }
+      .anim {
+        grid-column: 1;
+        grid-row: 3;
+        /*border-radius: 10px;*/
+      }
+      .bgeft {
+        grid-column: 1;
+        grid-row: 4;
+        /*border-radius: 10px;*/
+      }
+      .content {
+        grid-column: 2/10;
+        grid-row: 1/10;
+        background-color: transparent;
+        font-size: 24px;
+        /*margin:1% 1%;*/
+        /*border-radius: 10px;*/
+      }
+      </style>
+      </head>   
+  <body>
+
+    <input id="banner_size" type="hidden" value="72" />
+    <input id="banner_text" type="hidden" value="LED-Board😎" />
+
+    <div id="ui" style="margin: 1% 1%;">
+
+      <div class="head">
+        <div class="banner"><img id="legend"/></div>
+        <div class="go"><button type="button" id="go" class="button" style="font-size: 24px;background-color:#fa5252;width:100%;height:100%" onclick="textGo()">START</button></div>
+      </div>
+
+      <div style="background-color:#000000;">          
+        
+        <label class="label">LED Size</label>
+        <select class="select" name="Lsize" id="Lsize" onchange="showLEDLegend()">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select> 
+        <label class="label">Gap</label>
+        <select class="select" name="Gap" id="Gap" onchange="showLEDLegend()">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+        <input type="checkbox" id="round" value="0" onchange="showLEDLegend()" class="largerCheckbox" checked>
+        <label for="cbox1" class="label">Round</label>
+      </div>
+      
+      
+
+      <div class="wrapper" id="ui_wrapper">
+        <div class="txt1" id="btn_txt">
+          <button type="button" id="go" class="button" onclick="switchFunction(1)">1st Message</button>
+        </div>
+        <div class="txt2" id="btn_txt2">
+          <button type="button" id="go" class="button" onclick="switchFunction(2)">2nd Message</button>
+        </div>
+        <div class="anim" id="btn_anim">
+          <button type="button" id="go" class="button" onclick="switchFunction(3)">Animation</button>
+        </div>
+        <div class="bgeft" id="btn_bg">
+          <button type="button" id="go" class="button" onclick="switchFunction(4)">Background</button>
+        </div>
+
+        <div class="content" id="content_txt">
+
+          <input type="text" id="txt" name="myfield" value="Hello!😎" placeholder="message"/>
+          <br/>
+          
+          <input type="color" id="txtc_0" value="#ffffff" class="largerColorSel">
+          <label class="label">Color</label>
+          <br/>
+          
+          <input type="range" min="20" max="400" step="20" value="120" id="speed" onchange=""/>
+          <label class="label">Speed</label>
+          <br/>
+          
+          <input type="checkbox" id="swing" value="0" class="largerCheckbox" checked>
+          <label for="cbox1" class="label">Swing</label>
+
+        </div>
+
+        <div class="content" id="content_txt2">
+
+          <input type="text" id="txt2" name="myfield" value="" placeholder="message"/>
+          <br/>
+          
+          <input type="color" id="txtc_1" value="#ffffff" class="largerColorSel">
+          <label class="label">Color</label>
+          <br/>
+          
+          <input type="range" min="20" max="400" step="20" value="120" id="speed1" onchange=""/>
+          <label class="label">Speed</label>
+          <br/>
+          
+          <input type="checkbox" id="swing1" value="0" class="largerCheckbox" checked>
+          <label for="cbox1" class="label">Swing</label>
+
+        </div>
+
+        <div class="content" id="content_anim">
+          <select class="select" name="anim" id="anim">
+            <option value="0" selected>none</option>
+            <option value="1">ring</option>
+            <option value="2">in</option>
+            <option value="3">out</option>
+            <option value="4">inout</option>
+            <option value="5">doughnut</option>
+            <option value="6">snow</option>
+            <option value="7">firework</option>
+            <option value="8">clock</option>
+          </select>
+          <br/>
+          
+          <label class="label"></label>
+          <br/>
+          
+          <label class="label"></label>
+          <br/>
+          
+          <label class="label"></label>
+        </div>
+
+        <div class="content" id="content_bg">
+
+          <input type="checkbox" id="backlight" value="0" class="largerCheckbox" onchange="backLightAction()"/>
+          <label class="label">BackLight</label>
+          <br/>
+          
+          <div id="back_options">
+          <input type="color" id="back_color" value="#ffffff" class="largerColorSel"/>
+          <label class="label">Color</label>
+          <br/>
+          <!--select name="backlight" id="backlight">
+            <option value="0" selected>none</option>
+            <option value="1">flash</option>
+          </select-->
+          
+          <input type="range" min="0" max="10" step="1" value="0" id="back_speed" onchange=""/>
+          <label class="label">Flash/sec</label>
+          <br/>
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+  
+    <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
+  
+</body>
+  
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+
+function ledSwitch() {
+    keepLEDGoing = keepLEDGoing == 0?1:0;
+  }
+  
+  function keyboard(e) {
+  
+      if (canvas.hidden) return; 
+  
+      switch (e.keyCode) {
+          case 76: //'l'
+              ledSwitch();
+              break;
+          case 66: //'b'
+              doblank = doblank == 0?1:0;
+              break;
+          case 38: //'ArrowUp'
+              speed += 20;
+              break; 
+          case 40: //'ArrowDown':
+              speed -= 20;
+              //if (speed < 10) speed = 0;
+              break;
+          case 37: //'ArrowLeft'
+              break; 
+          case 39: //'ArrowRight'
+              break;
+          case 73: //i
+            //inputTxt();
+            if (canvas.hidden == false) {
+              switch2Input();
+            } else {
+              switch2Marquee();
+            }
+            break;
+          case 32: canvas.requestFullscreen(); break;
+
+              
+      }
+  
+  }
+  
+  function switch2Input() {
+    
+    keepGoing = 0;
+
+    sync2ui();
+    var div = document.getElementById('ui');
+    if (div) {
+      div.hidden = false;
+      canvas.hidden = true;
+    }
+    
+  }
+  
+  function switch2Marquee() {
+    var div = document.getElementById('ui');
+    if (div) {
+      div.hidden = true;
+      canvas.hidden = false;
+    }
+  }
+
+
+function getTouchPos(canvasDom, touchEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return { x: touchEvent.touches[0].clientX - rect.left,
+             y: touchEvent.touches[0].clientY - rect.top};
+}
+
+function initCanvas() {
+    canvas = document.getElementById("canvas");
+    canvas.width  = window.outerWidth;// Width;
+    canvas.height = window.outerHeight;//window.outerHeight;
+    ctx = canvas.getContext("2d");
+}
+
+function init() {
+    initCanvas();
+
+    initLED(0, 0, canvas.width, canvas.height);
+    newLEDMask();
+}
+
+window.addEventListener('keyup', keyboard, false);
+window.addEventListener('resize', function() {
+    if (canvas.hidden) 
+      return;
+    init();
+});
+
+document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
+          //canvas.requestFullscreen();
+
+          if (canvas.hidden) return;
+
+          evt.preventDefault();
+          var touches = getTouchPos(canvas, evt);
+
+          if (touches.x > canvas.width/2 && touches.y > canvas.height/2) { //右下
+              switch2Input();
+              return;
+          }
+          if (touches.x < canvas.width/2 && touches.y > canvas.height/2) { //左下
+              canvas.requestFullscreen();
+              return;
+          }
+          if (touches.x > canvas.width/2 && touches.y < canvas.height/2) { //右上
+              ledSwitch();
+          }
+          if (touches.x < canvas.width/2 && touches.y < canvas.height/2) { //左上
+
+          }
+
+});
+
+initCanvas();
+switch2Input();
+switchFunction(1);
+
+</script>
+

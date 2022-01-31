@@ -1,0 +1,73 @@
+<script type="text/javascript" src="led.js" charset="UTF-8"></script>
+<script type="text/javascript" src="marquee_anim.js" charset="UTF-8"></script>
+<script type="text/javascript" src="ledmarquee.js" charset="UTF-8"></script>
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+      <style>
+        body {
+          margin: 0px;
+          height: 100%;
+          background-color:rgb(0, 0, 0);
+          /*cursor:none;*/
+        }
+    </style>
+    </head>
+<body>
+  
+    <canvas id="canvas" width="100" height="100"></canvas>
+  
+</body>
+  
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+  
+function initCanvas() {
+    canvas = document.getElementById("canvas");
+    canvas.width  = window.outerWidth;// Width;
+    canvas.height = window.outerHeight;//window.outerHeight;
+    ctx = canvas.getContext("2d");
+}
+
+function init() {
+    initCanvas();
+
+    initLED(0, 0, canvas.width, canvas.height);
+    newLEDMask();
+}
+
+function _initData() {
+
+    side = 3;
+    dots = 7;
+    
+    makeRound = true;
+
+    swing = 1;
+    swing1 = 0;
+
+    speed = 200;
+    color_0 = "rgb(255, 0, 0)";
+        
+    speed1 = 300;
+    color_1 = "rgb(255, 255, 0)";
+
+    animIdx = 3;//parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
+    bgIdx = 0;
+
+    subtitle[1] = ["😎新年快樂🐯"];
+    subtitle[2] = ["從歲首到年終，耶和華─你神的眼目時常看顧那地 申11:12"];
+      
+    init();
+    initAnim();
+ 
+    window.scroll(0, 0);
+}
+
+_initData();
+
+</script>
+
+
