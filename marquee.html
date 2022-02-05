@@ -595,8 +595,8 @@ function getTouchPos(canvasDom, touchEvent) {
 
 function initCanvas() {
     canvas = document.getElementById("canvas");
-    canvas.width  = window.outerWidth;// Width;
-    canvas.height = window.outerHeight;//window.outerHeight;
+    canvas.width  = window.innerWidth;// Width;
+    canvas.height = window.innerHeight;//window.outerHeight;
     ctx = canvas.getContext("2d");
 }
 

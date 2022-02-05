@@ -776,8 +776,8 @@ var ctx;
 
 function initCanvas() {
     canvas = document.getElementById("canvas");
-    canvas.width  = window.outerWidth;
-    canvas.height = window.outerHeight;
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
     ctx = canvas.getContext("2d");
 }
 
