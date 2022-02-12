@@ -355,7 +355,7 @@
       }
       </style>
       </head>   
-  <body>
+<body>
 
     <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
 
@@ -375,7 +375,7 @@
       </div>
       
       <div class="ledoption">          
-        <label class="label">LED Size</label>
+        <label class="label"> LED Size</label>
         <select class="select" name="Lsize" id="Lsize" onchange="showLEDLegend()">
           <option value="1">1</option>
           <option value="2">2</option>
@@ -398,7 +398,7 @@
         </select>
         <input type="checkbox" id="round" value="0" onchange="showLEDLegend()" class="largerCheckbox" checked />
         <label for="cbox1" class="label">Round</label>
-      </div>
+      </div>  <!--LED options-->
 
       <div class="txt1" id="btn_txt">
         <button type="button" class="button" onclick="switchFunction(1)">1st Message</button>
@@ -429,7 +429,7 @@
         <input type="checkbox" id="swing" value="0" class="largerCheckbox" checked />
         <label for="cbox1" class="label">Swing</label>
 
-      </div>
+      </div> <!--content-->
 
       <div class="content" id="content_txt2">
   
@@ -447,7 +447,7 @@
         <input type="checkbox" id="swing1" value="0" class="largerCheckbox" checked />
         <label for="cbox1" class="label">Swing</label>
 
-      </div>
+      </div> <!--content-->
 
       <div class="content" id="content_anim">
         <select class="select" name="anim" id="anim">
@@ -461,7 +461,7 @@
           <option value="7">firework</option>
           <option value="8">clock</option>
         </select>
-      </div>
+      </div> <!--content-->
 
       <div class="content" id="content_bg">
   
@@ -470,7 +470,7 @@
         <br/>
         
         <div id="back_options">
-            <input type="color" id="back_color" value="#ffffff" class="largerColorSel"/>
+            <input type="color" id="back_color" value="#000000" class="largerColorSel"/>
             <label class="label">Color</label>
             <br/> 
             <input type="range" min="0" max="10" step="1" value="0" id="back_speed" onchange="" />
@@ -481,7 +481,7 @@
 
     </div> <!--uiall-->
       
-    </div>
+    </div> <!--ui-->
 
 </body>
   

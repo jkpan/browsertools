@@ -1,10 +1,8 @@
 <script type="text/javascript" charset="UTF-8"> 
 
 var fontsize = 100;
-var fontFamily = 
-"標楷體";
-//"隸變-繁";
-//"華康瘦金體";
+var fontFamily = "標楷體";
+
 var FONT = fontsize + "px " + fontFamily;
 var fontfactor = 10.0;
 
@@ -12,16 +10,11 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('救恩243'),
-            getSong('讚美之泉59'),
-            getSong('讚美之泉56'),
-            
-            /*
             getSong('新歌頌揚221'),  
             getSong('讚美之泉57'),
             getSong('讚美之泉58'),
             getSong('其他30'),
-            */
+            
             
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -33,6 +26,9 @@ function flow() {
   //"chrome 全螢幕F11(win) ctrl-cmd-F(mac)",
                 
 }
+
+const COLORS_CK = ["rgb(0, 80, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
+
 </script>
 
 <script id="help" name="help" type="application/json" charset="UTF-8"> {
@@ -203,10 +199,10 @@ function flow() {
 } </script>
 <script id="救恩25" name="站起為耶穌" type="application/json" charset="UTF-8"> {
   "content" : [["站起為耶穌", "救恩25"],
-               ["站起 站起為耶穌", "爾十字架精兵", "高舉祂君王旌旗", "同步向前勿停", "得勝利再得勝利", "祂領全軍而上", "不久眾仇敵毀滅", "主基督真作王"], 
-               ["站起 站起為耶穌", "快服從號筒聲", "開發到前方作戰", "出全力衝上陣", "大丈夫服事救主", "不怕那敵人多", "越危險越放膽量", "以勇氣勝群魔"],
-               ["站起 站起為耶穌", "惟主大能是倚", "血肉之膀臂無用", "爾休想靠自己", "當穿上福音盔甲", "多儆醒禱告主", "任何處盡你責任", "雖危險也要去"], 
-               ["站起 站起為耶穌", "這戰事不會長", "雖今日殺聲震天", "到明日凱歌響", "得勝的基督精兵", "有生命冠冕戴", "又必與榮耀君王", "登寶座常同在"]]
+               ["站起 站起為耶穌 爾十字架精兵", "高舉祂君王旌旗 同步向前勿停", "得勝利再得勝利 祂領全軍而上", "不久眾仇敵毀滅 主基督真作王"], 
+               ["站起 站起為耶穌 快服從號筒聲", "開發到前方作戰 出全力衝上陣", "大丈夫服事救主 不怕那敵人多", "越危險越放膽量 以勇氣勝群魔"],
+               ["站起 站起為耶穌 惟主大能是倚", "血肉之膀臂無用 爾休想靠自己", "當穿上福音盔甲 多儆醒禱告主", "任何處盡你責任 雖危險也要去"], 
+               ["站起 站起為耶穌 這戰事不會長", "雖今日殺聲震天 到明日凱歌響", "得勝的基督精兵 有生命冠冕戴", "又必與榮耀君王 登寶座常同在"]]
 } </script>
 <script id="救恩26" name="向前得勝" type="application/json" charset="UTF-8"> {
   "content" : [["向前得勝", "救恩26"],
@@ -2502,6 +2498,12 @@ function flow() {
                ["無論是住在 美麗的高山", "或是躺臥在 陰暗的幽谷", "當你抬起頭 你將會發現", "主已為你我而預備"],
                ["雲上太陽它總不改變", "雖然小雨灑在臉上", "雲上太陽它總不改變", "哈 它不改變"]]
 } </script>
+<script id="讚美之泉60" name="我願觸動祢心弦" type="application/json" charset="UTF-8"> {
+  "content" : [["我願觸動祢心弦", "讚美之泉"],
+               ["每當我來到主祢寶座前", "我心我靈向祢俯伏敬拜", "再次將主權交託全能神", "懇求祢心意向我顯明"],
+               ["我願觸動祢心弦 全心討祢喜悅", "我要舉起雙手 降服於祢", "貼近祢的胸懷"], 
+               ["我願觸動祢心弦 全心討祢喜悅", "我主我的神 求奪我心意", "完全屬於祢"]]
+} </script>
 <!-- others -->
 <script id="其他1" name="主是我力量" type="application/json" charset="UTF-8"> {
   "content" : [["主是我力量", "-"],
@@ -2801,89 +2803,53 @@ function _createBtn(idtxt, attr) {
   return button;
 }
 
+function _songBtn(id) {
+  var exist = document.getElementById(id);
+  var btn;
+  if (exist) {
+      var attr = exist.getAttribute("name");
+      if (!attr) attr = ''; 
+      btn = _createBtn(id, attr);
+  } else {
+      btn = _createEmptyBtn();
+  }
+  return btn;
+}
+
 function createBtns() {
 
   var div = document.createElement('div');
   div.id = 'btns';
   document.body.appendChild(div);
 
-  var btn;
-
   let count = 0;
   for (var i=1;i<=300;i++) {
-    var exist = document.getElementById(PREFIX+i);
-    if (exist) {
-      count++;
-      var attr = exist.getAttribute("name");
-      if (!attr) attr = ''; 
-      //var button = document.createElement('button');
-      let idx = PREFIX+i;
-      btn = _createBtn(PREFIX+i, attr);
-    } else {
-      btn = _createEmptyBtn();
-      btn.id = 'btn' + PREFIX + i;
-    }
-    div.appendChild(btn);
+    div.appendChild(_songBtn("救恩"+i));
   }
 
-  div.insertAdjacentHTML('beforeend', '<br/>');
-  //alert(':' + count);
-  var _prefix = '短歌';
-
+  div.insertAdjacentHTML('beforeend', '<p></p>');
+  
   for (var i=1;i<=174;i++) {
-    var exist = document.getElementById(_prefix+i);
-    if (exist) {
-      var attr = exist.getAttribute("name");
-      if (!attr) attr = ''; 
-      //var button = document.createElement('button');
-      let idx = _prefix+i;
-      btn = _createBtn(_prefix+i, attr);
-    } else {
-      btn = _createEmptyBtn();
-      btn.id = 'btn' + _prefix + i;
-    }
+    var btn = _songBtn("短歌"+i);
     btn.style.background = 'teal'; // setting the background color to teal
     btn.style.color = 'white'; // setting the color to white
     div.appendChild(btn);
   }
 
-  div.insertAdjacentHTML('beforeend', '<br/>');
+  div.insertAdjacentHTML('beforeend', '<p></p>');
 
-  _prefix = '讚美之泉';
-
+  
   for (var i=1;i<=140;i++) {
-    var exist = document.getElementById(_prefix+i);
-    if (exist) {
-      var attr = exist.getAttribute("name");
-      if (!attr) attr = ''; 
-      //var button = document.createElement('button');
-      let idx = _prefix+i;
-      btn = _createBtn(_prefix+i, attr);
-    } else {
-      btn = _createEmptyBtn();
-      btn.id = 'btn' + _prefix + i;
-    }
+    var btn = _songBtn("讚美之泉"+i);
     btn.style.background = 'yellow'; // setting the background color to teal
     btn.style.color = 'red'; // setting the color to white
     div.appendChild(btn);
   }
 
-  div.insertAdjacentHTML('beforeend', '<br/>');
-
-  _prefix = '其他';
+  div.insertAdjacentHTML('beforeend', '<p></p>');
 
   for (var i=1;i<=50;i++) {
-    var exist = document.getElementById(_prefix+i);
-    if (exist) {
-      var attr = exist.getAttribute("name");
-      if (!attr) attr = ''; 
-      //var button = document.createElement('button');
-      let idx = _prefix+i;
-      btn = _createBtn(_prefix+i, attr);
-    } else {
-      btn = _createEmptyBtn();
-      btn.id = 'btn' + _prefix + i;
-    }
+    var btn = _songBtn("其他"+i);
     btn.style.background = 'gray'; // setting the background color to teal
     btn.style.color = 'white'; // setting the color to white
     
@@ -2931,7 +2897,7 @@ function printTxt(i, j) {
   }
 
   if (doblank == 1 || (i == 0 && animSwh == 0)) {
-    ctx.fillStyle = "rgb(0,180,0)";
+    ctx.fillStyle = COLORS_CK[2];//"rgb(0,180,0)";
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
     return;
@@ -2965,9 +2931,9 @@ function printFullChart() {
       txt += tmp;
     }
     if (i%2 == 0) {
-      ctx.fillStyle = "rgb(0,160,0)";
+      ctx.fillStyle = COLORS_CK[2];//"rgb(0,160,0)";
     } else {
-      ctx.fillStyle = "rgb(0,200,0)";
+      ctx.fillStyle = COLORS_CK[3];//"rgb(0,200,0)";
     }
     ctx.fillText(txt, margin, margin + i * fsize);
   }
@@ -2995,9 +2961,9 @@ function printChart() {
   var _step = 0;
   for (var i = 1;i <subtitles.length;i++) {
     if (i%2 == 0) {
-      ctx.fillStyle = "rgb(0,115,0)";
+      ctx.fillStyle = COLORS_CK[0];//"rgb(0,115,0)";
     } else {
-      ctx.fillStyle = "rgb(0,160,0)";
+      ctx.fillStyle = COLORS_CK[2];//"rgb(0,160,0)";
     }
     ctx.fillRect (_step * gap, y, subtitles[i].length * gap, _h);
     _step += subtitles[i].length;
@@ -3009,13 +2975,13 @@ function printChart() {
   }
 
   ctx.lineWidth = 3;
-  ctx.strokeStyle = 'green';
+  ctx.strokeStyle = COLORS_CK[1];//'green';
   
   for (var i = 0;i < all;i++) {
     ctx.strokeRect (i * gap, y, gap, _h);
   }
 
-  ctx.strokeStyle = "rgb(0,220,0)";
+  ctx.strokeStyle = COLORS_CK[3];//"rgb(0,220,0)";
   ctx.strokeRect (idx * gap, y, gap, _h);
 
 }
@@ -3274,7 +3240,7 @@ function keyboard(e) {
 
 function _layer0() {
   if (mode == 0) {
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   } else {
     ctx.fillStyle = 'blue';
@@ -3313,7 +3279,7 @@ function userhelp() {
   
   let helps = getSong('help');
     
-  ctx.fillStyle = 'green'; //"rgb(0,0,255)"//ctx.fillRect(0, 0, c.width, c.height);
+  ctx.fillStyle = COLORS_CK[1];//'green'; //"rgb(0,0,255)"//ctx.fillRect(0, 0, c.width, c.height);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.font = fontsize/2 + "px Arial";
@@ -3324,7 +3290,7 @@ function userhelp() {
     let x = 20;
     let y = (i + 1) * gap;
     ctx.lineWidth = 1;
-    ctx.fillStyle = 'rgb(0,180,0)';
+    ctx.fillStyle = COLORS_CK[2];
     ctx.fillText(helps[0][i], x, y);
   }
 }
@@ -3403,7 +3369,7 @@ function anim_update(elapse) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (mode == 0) {
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = COLORS_CK[1];//'green';
   } else {
     ctx.fillStyle = 'black';
   }

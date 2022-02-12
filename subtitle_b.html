@@ -27,6 +27,9 @@
   var FONT_SML_SML = fontsize_sml_sml + "px " + fontFamily;
   
   var hlightStyle = "rgb(255, 255, 255, 0.5)";
+
+  const COLORS_CK = ["rgb(0, 80, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
+  //const COLORS_CK = ["rgb(80, 0, 0)", "rgb(128,0,  0)", "rgb(180,0,  0)", "rgb(255,0,0)"];
   
 </script>
 
@@ -32892,7 +32895,7 @@ function drawHlight(yy, hh) {
 function printTxt(i, j) {
 
   if (animSwh == 0) {
-    ctx.fillStyle = 'rgb(0, 200, 0)';
+    ctx.fillStyle = COLORS_CK[2];//'rgb(0, 200, 0)';
     ctx.font = fontsize_sml_sml + 'px Arial';
     for (let idx=1;idx<=presetVerse.length;idx++) {
       if (presetVerse[idx%10][0].length == 0)
@@ -33014,7 +33017,7 @@ function printTxt(i, j) {
 function _drawSdwtxt(txt, x, y) {
 
   if (doblank == 1) {
-    ctx.fillStyle = 'rgb(0, 220, 0)';
+    ctx.fillStyle =  COLORS_CK[3];//'rgb(0, 220, 0)';
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
     return;
@@ -33035,7 +33038,7 @@ function _drawtxt(txt, x, y, a) {
   ctx.fillStyle = 'rgb(255, 255, 255, ' + a + ')';
   
   if (doblank == 1) {
-    ctx.fillStyle = 'rgb(0, 200, 0)';
+    ctx.fillStyle = COLORS_CK[2];//'rgb(0, 200, 0)';
   }
 
   ctx.lineWidth = 1;
@@ -33426,7 +33429,7 @@ function keyboard(e) {
 }
 
 function _layer0() {
-  ctx.fillStyle = 'green';
+  ctx.fillStyle = COLORS_CK[1];//'green';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   if (img) {
       ctx.drawImage(img,0,0, canvas.width, canvas.height);
@@ -33445,7 +33448,7 @@ function _layer2() {
 
 function _layerui() {
   if (uisel == 0) return;
-  ctx.fillStyle = 'green';
+  ctx.fillStyle = COLORS_CK[1];//'green';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.lineWidth = 1;
   ctx.font = FONT;
@@ -33454,9 +33457,9 @@ function _layerui() {
   ctx.font = fontsize_sml + 'px Arial';
   for (let i=uisel_start;i<=uisel_end;i++) {
     if (i == song)
-      ctx.fillStyle = 'rgb(0,255,0)';
+      ctx.fillStyle = COLORS_CK[3];//'rgb(0,255,0)';
     else 
-      ctx.fillStyle = 'rgb(0,180,0)';
+      ctx.fillStyle = COLORS_CK[2];//'rgb(0,180,0)';
     ctx.fillText(SONGS[i][0][0], x, y);
     y -= fontsize_sml * 1.5;
   }
@@ -33484,7 +33487,7 @@ function userhelp() {
     let x = 20;
     let y = (i + 1) * gap;
     ctx.lineWidth = 1;
-    ctx.fillStyle = 'rgb(0,180,0)';
+    ctx.fillStyle = COLORS_CK[2];//'rgb(0,180,0)';
     ctx.fillText(helps[0][i], x, y);
   }
 }
