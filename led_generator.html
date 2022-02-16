@@ -190,7 +190,9 @@ function processImg() {
           padding: 8px;
           box-sizing: border-box;
         }
-          
+        .effect {
+          filter: invert(100%); /* blur(1px) ;*/
+        }
       </style>
       </head>   
   <body onload="showLEDLegend()">
@@ -258,8 +260,7 @@ function processImg() {
       <br/>
 
       <input type="file" id="img" /> 
-      <button type="button" id="imgo" style="margin: 2% 2%;width:30%;height:40px;border:2px #ff0000;" onclick="processImg()">Generate by image</button>
-
+      <button type="button" id="imgo" style="margin: 2% 2%;width:30%;height:40px;border:2px #ff0000;" onclick="processImg()">Generate by image</button>   
 
       <br/>
       <br/>
@@ -948,6 +949,11 @@ function processImg() {
               document.getElementById('img');
   // 當使用者修改內容(選擇檔案)
   input.addEventListener('change', function (event) {
+    /*
+    var obj = document.getElementById('imgobj');
+    uploadImage = obj;
+    processImg();
+    */
     var files = event.target.files;
     var file;
     if (files && files.length > 0) {
