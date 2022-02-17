@@ -10,10 +10,11 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('新歌頌揚221'),  
-            getSong('讚美之泉57'),
-            getSong('讚美之泉58'),
-            getSong('其他30'),
+            getSong('救恩144'),  
+            getSong('讚美之泉36'),
+            getSong('讚美之泉17'),
+            getSong('其他31'),
+            getSong('讚美之泉11'),
             
             
             getSong('主禱文'),
@@ -2684,6 +2685,13 @@ const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"
                ["哦主 求你堅固我信心 我的力量", "使我得以勇敢向前行", "因我知道有時我仍會軟弱", "求你帶領我 使我不會再退縮"],
                ["我需要有你在我生命中", "好讓我一生能學你的樣式", "使我能成為你所喜悅的兒女", "使我的生命能夠彰顯你榮耀"]]
 } </script>
+<script id="其他31" name="領我到你寶血裡" type="application/json" charset="UTF-8"> {
+  "content" : [["領我到你寶血裡", "-"],
+               ["耶穌求你進入我的心", "用你大能的寶血遮蓋我", "開啓我心靈 得著我生命", "在你寶血裡 我就得潔淨"],
+               ["耶穌求你進入我的心", "用你大能的寶血釋放我", "進入你同在 領受你大愛", "在你寶血裡 我獻上敬拜"],
+               ["領我到你寶血裡面", "所有罪惡必得赦免", "更新我生命 在你愛的寶血裡面"],
+               ["領我到你寶血裡面", "領受豐盛奇妙恩典", "更新我生命 在你愛的寶血裡面"]]
+} </script>
 <!-- 
   詩歌歌詞區 End cursor:none;
     -->
@@ -2767,13 +2775,13 @@ function init() {
 
 function _createEmptyBtn() {
   var button = document.createElement('button');
-  button.innerHTML = ' <br/> ';
+  //button.innerHTML = ' <br/> ';
   button.style.width = '172px'; // setting the width to 200px
   button.style.height = '25px'; // setting the height to 200px
   //button.style.background = 'teal'; // setting the background color to teal
   //button.style.color = 'white'; // setting the color to white
   button.style.fontSize = '16px'; // setting the font size to 20px
-  document.body.appendChild(button);
+  //document.body.appendChild(button);
   return button;
 }
 
@@ -2843,7 +2851,21 @@ function createBtns() {
     var btn = _songBtn("讚美之泉"+i);
     btn.style.background = 'yellow'; // setting the background color to teal
     btn.style.color = 'red'; // setting the color to white
-    div.appendChild(btn);
+    if (btn.innerHTML.length > 0) {
+      div.appendChild(btn);
+    }
+  }
+
+  div.insertAdjacentHTML('beforeend', '<p></p>');
+
+  for (var i=1;i<=400;i++) {
+    var btn = _songBtn("新歌頌揚"+i);
+    btn.style.background = 'white'; // setting the background color to teal
+    btn.style.color = 'black'; // setting the color to white
+  
+    if (btn.innerHTML.length > 0) {
+      div.appendChild(btn);
+    }
   }
 
   div.insertAdjacentHTML('beforeend', '<p></p>');
@@ -2852,8 +2874,9 @@ function createBtns() {
     var btn = _songBtn("其他"+i);
     btn.style.background = 'gray'; // setting the background color to teal
     btn.style.color = 'white'; // setting the color to white
-    
-    div.appendChild(btn);
+    if (btn.innerHTML.length > 0) {
+      div.appendChild(btn);
+    }
   }
 
 }
