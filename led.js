@@ -519,22 +519,13 @@ function gray(coloramount) {
 
 function reduceColor(coloramount) {
   let block = Math.ceil(255/coloramount);
-  _r = Math.floor(_r/block) * block;
-  _g = Math.floor(_g/block) * block;
-  _b = Math.floor(_b/block) * block;
-}
-
-function contrast(coloramount) {
-  let block = Math.ceil(255/coloramount);
-
-  _r = Math.floor(_r/block) * block;
-  _g = Math.floor(_g/block) * block;
-  _b = Math.floor(_b/block) * block;
-
+  _r = Math.floor(_r/block) * block * (3/4);
+  _g = Math.floor(_g/block) * block * (3/4);
+  _b = Math.floor(_b/block) * block * (3/4);
 }
 
 function filter() {
-  //reduceColor(10);
+  //reduceColor(8);
   //gray(16);
 }
 
