@@ -10,13 +10,13 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('救恩144'),  
-            getSong('讚美之泉36'),
-            getSong('讚美之泉17'),
-            getSong('其他31'),
-            getSong('讚美之泉11'),
+            //getSong('救恩144'),  
+            //getSong('讚美之泉36'),
+            //getSong('讚美之泉17'),
+            //getSong('其他31'),
+            //getSong('讚美之泉11'),
             
-            getSong('救恩106'),  
+            //getSong('救恩106'),  
             
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -30,6 +30,8 @@ function flow() {
 }
 
 const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
+const COLOR_PPT = 'blue';
+const COLOR_PPT_SML = 'rgb(0, 50, 0)';
 
 </script>
 
@@ -3047,16 +3049,29 @@ function printPhaseChart() {
 
   for (var i = 1;i <subtitles.length;i++) {
     if (i%2 == 0) {
-      ctx.fillStyle = "rgb(0,0,128)";
+      if (mode == 1) {
+        ctx.fillStyle = "rgb(0,0,128)";
+      } else {
+        ctx.fillStyle = "rgb(50,50,50, 0.5)";
+      }
     } else {
-      ctx.fillStyle = "rgb(0,0,200)";
+      if (mode == 1) {
+        ctx.fillStyle = "rgb(0,0,200)";
+      } else {
+        ctx.fillStyle = "rgb(100,100,100, 0.5)";
+      }
     }
     ctx.fillRect((i-1) * gap, y, gap, _h);
   }
 
   ctx.lineWidth = 3;
 
-  ctx.strokeStyle = "rgb(100,100,200)";
+  if (mode == 1) {
+    ctx.strokeStyle = "rgb(100,100,200)";
+  } else {
+    ctx.strokeStyle = "rgb(150,150,150, 0.5)";
+  }
+
   ctx.strokeRect ((phase-1) * gap, y, gap, _h); 
 
 }
@@ -3146,6 +3161,8 @@ function keyboard(e) {
         }
         break;
       case 65: //'A'
+          if (mode > 1) 
+            break;
           if (animSwh == 0) {
             initAnim(animIdx);
           } else {
@@ -3159,7 +3176,7 @@ function keyboard(e) {
           break;
       case 80:
           if (animSwh == 0) {
-            mode = mode == 0?1:0;
+            mode = (mode+1)%3;
           }
           animSwh = 0;
           break; //'p' ppt mode
@@ -3266,8 +3283,11 @@ function _layer0() {
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.fillStyle = 'blue';
+  } else if (mode == 1) {
+    ctx.fillStyle = COLOR_PPT;//'blue';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  } else if (mode == 2) {
+    ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
   if (img) {
@@ -3279,10 +3299,36 @@ function _layer1() {
   if (mode == 0) {
     if (displayProgress == 1) printChart();
     printTxt(phase, line);
-  } else {
+  } else if (mode == 1) {
     if (displayProgress == 1) printPhaseChart();
     printPhase();
+  } else if (mode == 2) {
+
+    /*
+    a	c	e
+    b	d	f
+    0	0	1
+    ctx.transform(a,b,c,d,e,f);
+    ctx.resetTransform
+    */
+
+    if (doblank == 1) return;
+    
+    let _scale = 0.4;
+    let _gap = canvas.width/40;
+
+    ctx.transform(_scale, 0, 0, _scale, _gap, (1-_scale) * canvas.height - _gap);
+
+    ctx.fillStyle = COLOR_PPT_SML;//'rgb(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    printPhase();
+    if (displayProgress == 1) 
+      printPhaseChart();
+
+    ctx.resetTransform();
+
   }
+
 }
 
 function _layer2() {
@@ -3333,7 +3379,9 @@ function blank() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'black'; //"rgb(0,0,255)"
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    return;
   }
+
   /* 
   else {
     ctx.fillStyle = 'green'; //"rgb(0,0,255)"

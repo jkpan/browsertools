@@ -519,9 +519,9 @@ function gray(coloramount) {
 
 function reduceColor(coloramount) {
   let block = Math.ceil(255/coloramount);
-  _r = Math.floor(_r/block) * block * (3/4);
-  _g = Math.floor(_g/block) * block * (3/4);
-  _b = Math.floor(_b/block) * block * (3/4);
+  _r = Math.floor(_r/block) * block;// * (3/4);
+  _g = Math.floor(_g/block) * block;// * (3/4);
+  _b = Math.floor(_b/block) * block;// * (3/4);
 }
 
 function filter() {
