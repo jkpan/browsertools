@@ -508,7 +508,7 @@ function ledAction4Still(_canvas, _ctx) {
   _ctx.putImageData(mask, posx, posy);//, 0, 0, maskimg.width/2, maskimg.height/2);
 }
 
-function gray(coloramount) {
+function filter_gray(coloramount) {
   let _c = (_r + _g + _g + _b)/4;
   let block = Math.ceil(255/coloramount);
   _c = Math.floor(_c/block) * block;
@@ -517,7 +517,7 @@ function gray(coloramount) {
   _b = _c;
 }
 
-function reduceColor(coloramount) {
+function filter_reduceColor(coloramount) {
   let block = Math.ceil(255/coloramount);
   _r = Math.floor(_r/block) * block;// * (3/4);
   _g = Math.floor(_g/block) * block;// * (3/4);
@@ -525,8 +525,8 @@ function reduceColor(coloramount) {
 }
 
 function filter() {
-  //reduceColor(8);
-  //gray(16);
+  //filter_reduceColor(8);
+  //filter_gray(16);
 }
 
 
