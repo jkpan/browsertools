@@ -18,6 +18,9 @@ function flow() {
             getSong('短歌135'), //愛拉起我
             getSong('救恩233'), //自耶穌一進入我心
 
+            getSong('救恩239'),
+            getSong('讚美之泉21'),
+
             // 3/2
             //getSong('其他6'),    //惟有祢
             //getSong('讚美之泉2'), //聖靈的江河
@@ -3069,7 +3072,7 @@ function printPhase() {
   for (var i=0;i<subtitles[phase].length;i++) {
 
     var x = canvas.width/2;
-    var y = (i + 1) * gap;
+    var y = (i + 1) * gap + fontsize/2;
 
     //ctx.lineWidth = 4;ctx.strokeStyle = 'black';ctx.strokeText(subtitles[phase][i], x, y);
 
