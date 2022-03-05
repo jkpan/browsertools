@@ -1,22 +1,16 @@
-<script type="text/javascript" charset="UTF-8"> 
-
-var fontsize = 100;
-var fontFamily = "標楷體";
-
-var FONT = fontsize + "px " + fontFamily;
-var fontfactor = 10.0;
+<script type="text/javascript" charset="UTF-8">
 
 function flow() {
 
   SONGS = [ [['']],
 
             // 3/6
+            getSong('其他34'),
             getSong('救恩227'),
             getSong('讚美之泉61'),//有一位神
             getSong('其他33'),//我要歌頌你聖名
             getSong('新歌頌揚116'),//我們要舉起雙手
           
-
             getSong('主禱文'),
             getSong('使徒信經'),
             getSong('救恩300'),
@@ -27,6 +21,12 @@ function flow() {
   //"chrome 全螢幕F11(win) ctrl-cmd-F(mac)",
                 
 }
+
+var fontsize = 100;
+var fontFamily = "標楷體";
+
+var FONT = fontsize + "px " + fontFamily;
+var fontfactor = 10.0;
 
 const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
 const COLOR_PPT = 'blue';
@@ -2005,7 +2005,7 @@ const COLOR_PPT_SML = 'rgb(0, 60, 0)';
 } </script>
 <script id="短歌82" name="耶穌能解決一切的問題" type="application/json" charset="UTF-8"> {
   "content" : [["耶穌能解決一切的問題", "短歌82"],
-               ["耶穌能解決一切的問題", "耶穌能安慰一切憂傷", "救主施浸者 最大的醫生", "哦，哈利路亞 耶穌我王"]]
+               ["耶穌能解決一切的問題", "耶穌能安慰一切憂傷", "救主施浸者 最大的醫生", "哦 哈利路亞 耶穌我王"]]
 } </script>
 <script id="短歌84" name="一切都無所謂" type="application/json" charset="UTF-8"> {
   "content" : [["一切都無所謂", "短歌84"],
@@ -2103,7 +2103,7 @@ const COLOR_PPT_SML = 'rgb(0, 60, 0)';
 <!-- 新歌頌揚 -->
 <script id="新歌頌揚20" name="真是快樂日" type="application/json" charset="UTF-8"> {
   "content" : [["真是快樂日", "新歌頌揚20"],
-               ["真是快樂日，我稱頌主在每一天", "真是快樂日，活著為我主", "真是快樂日，萬事將更為美好", "天天倚靠我主的應許來生活"]]
+               ["真是快樂日 我稱頌主在每一天", "真是快樂日 活著為我主", "真是快樂日 萬事將更為美好", "天天倚靠我主的應許來生活"]]
 } </script>
 <script id="新歌頌揚43" name="祢是我的一切" type="application/json" charset="UTF-8"> {
   "content" : [["祢是我的一切", "新歌頌揚43"],
@@ -2743,7 +2743,7 @@ const COLOR_PPT_SML = 'rgb(0, 60, 0)';
   "content" : [["只要相信", "-"],
                ["只要相信 主的應許", "再高的山峰 也能挪移", "只要順服 向前邁進", "再深的海洋也能分開成乾地"],
                ["耶和華的膀臂從未縮短", "在上帝豈有難成的事", "仰望祂的榮光不致羞愧", "等候祂必然歡呼讚美"],
-               ["雖未看見 仍能相信", "因主的慈愛 永不更改", "雖不明白 仍要順服", "因主已掌權，祂是全能的主宰"],
+               ["雖未看見 仍能相信", "因主的慈愛 永不更改", "雖不明白 仍要順服", "因主已掌權 祂是全能的主宰"],
                ["耶和華的膀臂從未縮短", "在上帝豈有難成的事", "仰望祂的榮光不致羞愧", "等候祂必然歡呼讚美"]]
 } </script>
 <script id="其他33" name="我要歌頌你聖名" type="application/json" charset="UTF-8"> {
@@ -2751,7 +2751,12 @@ const COLOR_PPT_SML = 'rgb(0, 60, 0)';
                ["我要歌頌你聖名 哦主", "歌頌你聖名 哦主", "因為你聖名至高配得讚美"],
                ["我要榮耀你聖名 哦主", "榮耀你聖名 哦主", "因為你聖名至高配得讚美"]]
 } </script>
-
+<script id="其他34" name="求祢開啟我心眼" type="application/json" charset="UTF-8"> {
+  "content" : [["求祢開啟我心眼", "-"],
+               ["Holy Holy Holy  Holy Holy Holy", "Holy Holy Holy 我要看見祢"],
+               ["主求祢開啟我心眼", "求祢開啟我的心", "我要看見祢 我要看見祢"], 
+               ["要看見祢已被高舉", "彰顯在祢榮耀的光中", "澆灌祢愛和能力", "我們唱Holy Holy Holy"]]
+} </script>
 
 <!-- 
   詩歌歌詞區 End cursor:none;
@@ -3327,7 +3332,6 @@ function keyboard(e) {
           displayProgress = 0;
           break;
         case 32: canvas.requestFullscreen(); break;
-
         default:
           //alert(e.key);
           break;

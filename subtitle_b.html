@@ -15,7 +15,7 @@
     ];
   }
   
-  var fontfactor = 20.0;
+  var fontfactor = 15.0;
   var fontFamily = "標楷體";
   var fontsize = 48;
   var FONT = fontsize + "px " + fontFamily;
@@ -32876,7 +32876,6 @@ function drawHlight(yy, hh) {
   if (doblank != 1 && phase >= 1) {
       ctx.fillStyle = hlightStyle;
       ctx.fillRect (0, yy, canvas.width, hh);
-      //ctx.fillRect (0, y - fontsize, canvas.width, fontsize * (row + 0.5));
   }
 }
 
@@ -32896,9 +32895,9 @@ function printTxt(i, j) {
   } 
   
   let x = canvas.width * 0.1;
-  let y = canvas.height * 0.66;
+  let y = canvas.height * 0.6;
   if (animSwh == 1) 
-    y = canvas.height * 0.5;
+    y = canvas.height * 0.45;
   let fixy = y;
   
   let i_1 = getPreChapter(i, j);
@@ -32941,27 +32940,64 @@ function printTxt(i, j) {
   ctx.font = FONT_SML;
 
   //printSideTxt(i_3, j_3, x, y - fontsize * 4, 0.2);
-  printSideTxt(i_2, j_2, x, y - fontsize * 3, 0.4);
-  printSideTxt(i_1, j_1, x, y - fontsize * 2, 0.6);
+  printSideTxt(i_2, j_2, x, y - fontsize_sml * 2, 0.4);
+  printSideTxt(i_1, j_1, x, y - fontsize_sml, 0.6);
 
   ctx.font = FONT;
 
+  let substrings = [];
+  let idx = 0;
+
+  do {
+    if (ctx.measureText(txt).width > canvas.width * 0.9) {
+      let ratio = canvas.width * 0.9/ctx.measureText(txt).width;
+      ratio = Math.floor(txt.length * ratio) - 1;
+      let txt_0 = txt.substr(0, ratio);
+      txt = txt.substr(ratio, txt.length - txt_0.length);
+      substrings[idx] = txt_0;
+      idx++;
+      if (idx > 20) break;
+    } else {
+      substrings[idx] = txt;
+      break;
+    }
+  } while(true);
+
+  let rectH = substrings.length * fontsize + fontsize * 0.5;//Math.max(fixy + fontsize_sml * 1.2 - y, substrings.length * fontsize + fontsize * 0.4);
+  drawHlight(y, rectH);
+  for (let i=0;i<substrings.length;i++) {
+    y += fontsize;
+    _drawSdwtxt(substrings[i], x, y);
+  }
+
+  ctx.font = FONT_SML;
+
+  if (ctx.measureText(ptxt).width + px > canvas.width * 0.1 && j > 0) {
+    _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
+    _drawSdwtxt('' + i + ':' + j, px, fixy + fontsize_sml * 2);
+  } else {
+    _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
+  }
+
+  /*
   if (ctx.measureText(txt).width > canvas.width * 0.9) {
 
     //console.log((ctx.measureText(txt).width/(canvas.width * 0.9)) + ', ' + Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9)));
     let row = Math.ceil(ctx.measureText(txt).width/(canvas.width * 0.9));
     
-    drawHlight(y - fontsize, fontsize * (row + 0.5));
+    //drawHlight(y - fontsize, fontsize * (row + 0.5));
     
     let _row = 0;
 
-    do {     
+    do {
 
       let ratio = canvas.width * 0.9/ctx.measureText(txt).width;
       ratio = Math.floor(txt.length * ratio) - 1;
       var txt_0 = txt.substr(0, ratio);
 
+      drawHlight(y, -fontsize);
       _drawSdwtxt(txt_0, x, y);
+
       y += fontsize;
       _row++;
       
@@ -32974,31 +33010,26 @@ function printTxt(i, j) {
     _row++;
     
     if (_row > row) {
-      drawHlight(fixy - fontsize + fontsize * (row + 0.5), fontsize);
+      //drawHlight(fixy - fontsize + fontsize * (row + 0.5), fontsize);
     }
 
+    drawHlight(y, -fontsize);
     _drawSdwtxt(txt, x, y);
     
   } else {
 
-    drawHlight(y - fontsize, fontsize * 2);
-   
+    //drawHlight(y - fontsize, fontsize * 2);
+    drawHlight(y, -fontsize);
     _drawSdwtxt(txt, x, y);
   
   }
+  */
 
   ctx.font = FONT_SML;
 
-  if (ctx.measureText(ptxt).width + px > canvas.width * 0.1 && j > 0) {
-    _drawSdwtxt(abbr[song], px, fixy);
-    _drawSdwtxt('' + i + ':' + j, px, fixy + fontsize_sml);
-  } else {
-    _drawSdwtxt(ptxt, px, fixy);
-  } 
-
+  if (ip1 != -1) printSideTxt(ip1, jp1, x, fixy + rectH + fontsize_sml * 2, 0.6);
+  if (ip2 != -1) printSideTxt(ip2, jp2, x, fixy + rectH + fontsize_sml * 3, 0.4);
   //if (ip3 != -1) printSideTxt(ip3, jp3, x, y + fontsize * 4, 0.2);
-  if (ip2 != -1) printSideTxt(ip2, jp2, x, y + fontsize * 3, 0.4);
-  if (ip1 != -1) printSideTxt(ip1, jp1, x, y + fontsize * 2, 0.6);
 
 }
 
@@ -33395,8 +33426,7 @@ function keyboard(e) {
           presetVerse[0][1] = phase;
           presetVerse[0][2] = line;
           break; 
-
-        //case 32: canvas.requestFullscreen(); break;
+        case 32: canvas.requestFullscreen(); break;
         case 27: //'escape' case 13: //'enter'
           mode = 0;
           removeDiv();
