@@ -38,9 +38,9 @@
                 "'-'上一卷  '='下一卷", 
                 "'1234567890' 跳至預存  'QWERTYUIOP' 儲存1-0", 
                 "'L' 選卷  'K' 選章  'J' 選節",
-                "'M' 投影片模式 'A' Animation  'B' Blank",
-                "shift+'ASDFG' 舊約分類  shift+'ZXCV' 新約分類",
-                "shift+'1234567890' 選章",
+                "'A' Animation  'B' Blank",
+                "shift'ASDFG' 舊約分類  shift'ZXCV' 新約分類",
+                "shift'1234567890' 選章",
                 "'shift左右' 上十節下十節  'shift上下' 上十章下十章",
                 "shift+- 字大小"
                 ]]
@@ -33427,7 +33427,8 @@ function keyboard(e) {
           presetVerse[0][2] = line;
           break; 
         case 32: canvas.requestFullscreen(); break;
-        case 27: //'escape' case 13: //'enter'
+        case 13: //'enter' 
+        case 27: //'escape'
           mode = 0;
           removeDiv();
           canvas.hidden = false;

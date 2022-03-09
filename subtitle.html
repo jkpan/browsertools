@@ -4,13 +4,7 @@ function flow() {
 
   SONGS = [ [['']],
 
-            // 3/6
-            getSong('其他34'),
-            getSong('救恩227'),
-            getSong('讚美之泉61'),//有一位神
-            getSong('其他33'),//我要歌頌你聖名
-            getSong('新歌頌揚116'),//我們要舉起雙手
-          
+              
             getSong('主禱文'),
             getSong('使徒信經'),
             getSong('救恩300'),
@@ -3321,7 +3315,8 @@ function keyboard(e) {
         case 85: if (subtitles.length > 7) { phase = 7; line = 0; } break;
         case 73: if (subtitles.length > 8) { phase = 8; line = 0; } break;
 
-        case 27: //'escape' case 13: //'enter'
+        case 13: //'enter' 
+        case 27: //'escape'
           mode = 0;
           removeBtns();
           canvas.hidden = false;
