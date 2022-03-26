@@ -4,34 +4,23 @@ function flow() {
 
   SONGS = [ [['']],
 
-          getSong('救恩172'),
-          getSong('救恩198'),
-          getSong('其他36'),
-          getSong('讚美之泉65'),
-          getSong('讚美之泉64'),
+          getSong('新歌頌揚221'),
+          getSong('新歌頌揚324'),
+          getSong('其他31'),
+          getSong('讚美之泉1'),
+          getSong('其他8'),
 
-          getSong('救恩96'),
+          getSong('救恩138'),
 
             getSong('主禱文'),
             getSong('使徒信經'),
             getSong('救恩300'),
 
-          ];
-
-  //for (var i=1;i<SONGS.length;i++)  SONGS[0][0][i-1] = i + '. ' + SONGS[i][0][0];
-  //"chrome 全螢幕F11(win) ctrl-cmd-F(mac)",
-                
+          ];                
 }
 
-var fontsize = 100;
+
 var fontFamily = "標楷體";
-
-var FONT = fontsize + "px " + fontFamily;
-var fontfactor = 10.0;
-
-const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
-const COLOR_PPT = 'blue';
-const COLOR_PPT_SML = 'rgb(0, 60, 0)';
 
 </script>
 
@@ -2084,6 +2073,10 @@ const COLOR_PPT_SML = 'rgb(0, 60, 0)';
   "content" : [["愛拉起我", "短歌135"],
                ["愛拉起我", "愛拉起我", "當我呼救絕望", "愛拉起我"]]
 } </script>
+<script id="短歌138" name="正𤏸在我的心" type="application/json" charset="UTF-8"> {
+  "content" : [["正𤏸在我的心", "短歌138"],
+               ["正𤏸在我的心", "正𤏸在我的心", "屬天的愛如火正𤏸在我的心", "主給我祂的靈", "願榮耀歸主名", "屬天的愛如火正𤏸在我的心"]]
+} </script>
 <script id="短歌139" name="信心得勝" type="application/json" charset="UTF-8"> {
   "content" : [["信心得勝", "短歌139"],
                ["信心得勝有餘 信心得勝有餘", "大大的得勝有餘 能勝過全世界"]]
@@ -2592,7 +2585,6 @@ const COLOR_PPT_SML = 'rgb(0, 60, 0)';
                ["主是避難所我避難所 主是堅固避難所", "主是我力量 我幫助 惟主是避難所"],
                ["大地雖會改變 高山雖會搖動", "大海翻騰 大浪戰抖 但我們也不害怕", "喂哦 喂哦 喂哦 喂哦", "喂哦 喂哦 喂哦 喂哦"]]
 } </script>
-
 <script id="其他2" name="我知誰掌管明天" type="application/json" charset="UTF-8"> {
   "content" : [["我知誰掌管明天", "-"],
                ["我不知明日將如何 每時刻安然度過", "我不求明天的陽光 因明天或轉陰暗", "我不為將來而憂慮 因我知主所應許", "今天我必與主同行 祂深知前途光景"],
@@ -2839,6 +2831,14 @@ const COLOR_PPT_SML = 'rgb(0, 60, 0)';
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+var fontsize = 100;
+var FONT = fontsize + "px " + fontFamily;
+var fontfactor = 10.0;
+
+const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
+const COLOR_PPT = 'blue';
+const COLOR_PPT_SML = 'rgb(0, 60, 0)';
 
 function getSong(jsonid) {
   var json_elm = document.getElementById(jsonid);
