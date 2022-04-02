@@ -4,17 +4,13 @@ function flow() {
 
   SONGS = [ [['']],
 
-          getSong('救恩106'),
-          getSong('短歌47'),
-          getSong('救恩25'),
-
-          /*
           getSong('其他38'),
           getSong('讚美之泉47'),
-          getSong('其他37'),
           getSong('讚美之泉66'),
           getSong('救恩207'),
-            */
+          getSong('其他37'),
+
+          getSong('讚美之泉32'),
                    
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -23,6 +19,13 @@ function flow() {
           ];                
 }
 
+var PREFIX = [
+  ['救恩', 300, true],
+  ['短歌', 174, true],
+  ['讚美之泉', 200, false],
+  ['新歌頌揚', 400, false],
+  ['其他', 100, false],
+];
 
 var fontFamily = "標楷體";
 
@@ -2370,8 +2373,8 @@ var fontFamily = "標楷體";
                ["我生命中最渴望的一件事", "切慕祢 單單尋求祢", "用我全心全意 用我全力愛祢", "敬拜祢讓祢榮耀充滿全地"],
                ["深深愛祢 耶穌 深深愛祢 耶穌", "我愛祢超越生命中一切", "深深愛祢 耶穌 深深愛祢 耶穌", "哦 我愛祢 耶穌"]]
 } </script>
-<script id="讚美之泉32" name="我的心 你要稱頌耶和華" type="application/json" charset="UTF-8"> {
-  "content" : [["我的心 你要稱頌耶和華", "讚美之泉"],
+<script id="讚美之泉32" name="我的心你要稱頌耶和華" type="application/json" charset="UTF-8"> {
+  "content" : [["我的心你要稱頌耶和華", "讚美之泉"],
                ["我的心 你要稱頌耶和華", "不可忘記祂的恩惠", "祂赦免你一切過犯罪孽", "醫治你疾病復原"],
                ["我的心 你要稱頌耶和華", "不可忘記祂的恩惠", "祂以仁愛慈悲為你冠冕", "為受屈的人伸冤"],
                ["天離地有何等的高", "祂的慈愛也何等的深", "東離西有多麼的遠", "祂使我的過犯也離我多遠"],
@@ -2842,6 +2845,9 @@ var fontFamily = "標楷體";
       ::-webkit-scrollbar {
         display: none;
       }
+      hr {
+        border: 4px solid #00ff00;
+      }
     </style>
     </head>   
 <body>
@@ -2872,8 +2878,6 @@ function getSong(jsonid) {
 } 
 
 var SONGS;
-
-var PREFIX = '救恩';
 
 var song;
 var subtitles;
@@ -2924,8 +2928,8 @@ function _createBtn(idtxt, attr) {
 
   button.style.width = '172px'; // setting the width to 200px
   button.style.height = '75px'; // setting the height to 200px
-  //button.style.background = 'teal'; // setting the background color to teal
-  //button.style.color = 'white'; // setting the color to white
+  //button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
+  //button.style.color = 'rgb(0,255,0)'; // setting the color to white
   button.style.fontSize = '16px'; // setting the font size to 20px
 
   button.onclick = function() {
@@ -2962,6 +2966,27 @@ function createBtns() {
   div.id = 'btns';
   document.body.appendChild(div);
 
+  for (let pf = 0;pf<PREFIX.length;pf++) {
+    for (var i=1;i<=PREFIX[pf][1];i++) {
+      var btn = _songBtn(PREFIX[pf][0]+i);
+      if (pf%2 == 0) {
+        btn.style.background = COLORS_CK[0]; // setting the background color to teal
+        btn.style.color = COLORS_CK[3];
+        btn.style.borderColor = COLORS_CK[2];
+      } else {
+        btn.style.background = COLORS_CK[1]; // setting the background color to teal
+        btn.style.color = COLORS_CK[3];
+        btn.style.borderColor = COLORS_CK[2];
+      }
+      if (btn.innerHTML.length > 0 || PREFIX[pf][2]) {
+        div.appendChild(btn);
+      }
+    }
+    div.insertAdjacentHTML('beforeend', '<p></p>');
+    //div.insertAdjacentHTML('beforeend', '<hr>');
+  }
+
+  /*
   let count = 0;
   for (var i=1;i<=300;i++) {
     div.appendChild(_songBtn("救恩"+i));
@@ -3010,6 +3035,7 @@ function createBtns() {
       div.appendChild(btn);
     }
   }
+  */
 
 }
 
