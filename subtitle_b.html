@@ -16,7 +16,7 @@
   }
   
   var fontfactor = 15.0;
-  var fontFamily = "標楷體";
+  var fontFamily = "Noto Serif TC";//"Noto Serif TC";//"標楷體";
   var fontsize = 48;
   var FONT = fontsize + "px " + fontFamily;
   
@@ -32555,6 +32555,9 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200&display=swap" rel="stylesheet">
     <style>
       body {
         margin: 0px;
@@ -33416,7 +33419,7 @@ function keyboard(e) {
           presetVerse[0][1] = phase;
           presetVerse[0][2] = line;
           break; 
-        case 32: canvas.requestFullscreen(); break;
+        //case 32: canvas.requestFullscreen(); break;
         case 13: //'enter' 
         case 27: //'escape'
           mode = 0;

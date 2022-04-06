@@ -4,6 +4,7 @@ function flow() {
 
   SONGS = [ [['']],
 
+          /*
           getSong('其他38'),
           getSong('讚美之泉47'),
           getSong('讚美之泉66'),
@@ -11,7 +12,8 @@ function flow() {
           getSong('其他37'),
 
           getSong('讚美之泉32'),
-                   
+          */
+
             getSong('主禱文'),
             getSong('使徒信經'),
             getSong('救恩300'),
@@ -27,7 +29,7 @@ var PREFIX = [
   ['其他', 100, false],
 ];
 
-var fontFamily = "標楷體";
+var fontFamily = "Noto Serif TC";//"標楷體";
 
 </script>
 
@@ -2830,6 +2832,9 @@ var fontFamily = "標楷體";
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200&display=swap" rel="stylesheet">
     <style>
       body {
         margin: 0px;
@@ -3424,7 +3429,7 @@ function keyboard(e) {
           helpSwitch = 0;
           displayProgress = 0;
           break;
-        case 32: canvas.requestFullscreen(); break;
+        //case 32: canvas.requestFullscreen(); break;
         default:
           //alert(e.key);
           break;
