@@ -4,10 +4,11 @@ function flow() {
 
   SONGS = [ [['']],
   
-          getSong('救恩210'),
-          getSong('救恩182'),
-          getSong('救恩134'),
-          getSong('救恩206'),
+          getSong('讚美之泉7'),
+          getSong('讚美之泉69'),
+          getSong('讚美之泉70'),
+          getSong('讚美之泉21'),
+          getSong('救恩160'),
 
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -2003,6 +2004,10 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
                ["向前走阿 努力向前走", "大家手攜手", "向前走阿 努力向前走", "前進莫回頭"],
                ["手扶著犁向後看的人", "不配進神國", "向前走阿 努力向前走", "前進莫回頭"]]
 } </script>
+<script id="短歌75" name="榮耀的釋放" type="application/json" charset="UTF-8"> {
+  "content" : [["榮耀的釋放", "短歌75"],
+               ["榮耀的釋放 奇妙的釋放", "我再無罪惡束縛綑綁", "榮耀釋放者是流血羔羊", "從今到永遠使我釋放"]]
+} </script>
 <script id="短歌81" name="得勝靠耶穌" type="application/json" charset="UTF-8"> {
   "content" : [["得勝靠耶穌", "短歌81"],
                ["得勝得勝靠耶穌", "我救主到永遠", "祂找我到贖我", "用祂的寶貴血"],
@@ -2629,6 +2634,18 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
                ["主耶穌 祢永遠如此深愛著我", "十架上釘痕的手告訴我 祢永不放棄我", "主耶穌 祢永遠如此深愛著我", "不論是生命或死亡", "困苦患難逼迫", "都不能叫我與祢愛隔絕"],
                ["何等長闊 何等高深", "天離地多高 祢愛多浩大", "無法測透 永遠無盡頭", "我要張開雙手來領受"]]
 } </script>
+<script id="讚美之泉69" name="十字架" type="application/json" charset="UTF-8"> {
+  "content" : [["十字架", "讚美之泉"],
+               ["耶穌背負十架 為我擔當過犯", "毫無保留為我捨命在十架上", "祢受鞭傷　我得醫治", "祢受刑罰　我得自由釋放"],
+               ["十字架 十字架 耶穌以愛覆蓋我", "十字架 十字架 祢寶血為我流下", "十字架 十字架 我得救贖的記號", "十字架 十字架 是我永遠的榮耀"],
+               ["十字架 十字架 永是我的榮耀", "我眾罪都洗清潔 唯靠耶穌寶血"]]
+} </script>
+<script id="讚美之泉70" name="緊緊抓住祢" type="application/json" charset="UTF-8"> {
+  "content" : [["緊緊抓住祢", "讚美之泉"],
+               ["我無助的時候 祢給我力量", "我害怕的時候 祢緊緊抱住我", "當我覺得我不行 祢告訴我可以", "祢就是那最愛我的主"],
+               ["我緊緊抓住祢 我永遠不放手", "我看到祢獨生子 為我釘死在十架上", "我緊緊抓住祢 我永遠不放手", "是祢醫治了我 是祢從未離開過我"],
+               ["我已看到我的未來", "充滿信心和盼望"]]
+} </script>
 <!-- others -->
 <script id="其他1" name="主是我力量" type="application/json" charset="UTF-8"> {
   "content" : [["主是我力量", "-"],
@@ -3044,57 +3061,6 @@ function createBtns() {
     //div.insertAdjacentHTML('beforeend', '<hr>');
   }
 
-  /*
-  let count = 0;
-  for (var i=1;i<=300;i++) {
-    div.appendChild(_songBtn("救恩"+i));
-  }
-
-  div.insertAdjacentHTML('beforeend', '<p></p>');
-  
-  for (var i=1;i<=174;i++) {
-    var btn = _songBtn("短歌"+i);
-    btn.style.background = 'teal'; // setting the background color to teal
-    btn.style.color = 'white'; // setting the color to white
-    div.appendChild(btn);
-  }
-
-  div.insertAdjacentHTML('beforeend', '<p></p>');
-
-  
-  for (var i=1;i<=140;i++) {
-    var btn = _songBtn("讚美之泉"+i);
-    btn.style.background = 'yellow'; // setting the background color to teal
-    btn.style.color = 'red'; // setting the color to white
-    if (btn.innerHTML.length > 0) {
-      div.appendChild(btn);
-    }
-  }
-
-  div.insertAdjacentHTML('beforeend', '<p></p>');
-
-  for (var i=1;i<=400;i++) {
-    var btn = _songBtn("新歌頌揚"+i);
-    btn.style.background = 'white'; // setting the background color to teal
-    btn.style.color = 'black'; // setting the color to white
-  
-    if (btn.innerHTML.length > 0) {
-      div.appendChild(btn);
-    }
-  }
-
-  div.insertAdjacentHTML('beforeend', '<p></p>');
-
-  for (var i=1;i<=50;i++) {
-    var btn = _songBtn("其他"+i);
-    btn.style.background = 'gray'; // setting the background color to teal
-    btn.style.color = 'white'; // setting the color to white
-    if (btn.innerHTML.length > 0) {
-      div.appendChild(btn);
-    }
-  }
-  */
-
 }
 
 function removeBtns() {
@@ -3249,6 +3215,13 @@ function printPhase() {
     }
 
   }
+
+  if (phase > 0) {
+    ctx.fillStyle = 'yellow';
+    ctx.font = fontsize/3 + "px Arial";
+    ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', x, fontsize/2);
+  }
+  
 
 }
 

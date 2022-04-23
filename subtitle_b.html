@@ -32777,7 +32777,11 @@ function createBtnVolume() {
     };
     if (i > 39) 
       button.style.color = color_pointer[3];//'rgb(0,255,0)'; // setting the color to white
-    div.appendChild(button);
+    
+      div.appendChild(button);
+
+    if (i == 39) 
+      div.insertAdjacentHTML('beforeend', '<br/>');
   }
 
 }
@@ -32998,9 +33002,17 @@ function printTxt(i, j) {
 
   ctx.font = FONT_SML;
 
+  /*
   if (ctx.measureText(ptxt).width + px > canvas.width * 0.1 && j > 0) {
     _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
     _drawSdwtxt('' + i + ':' + j, px, fixy + fontsize_sml * 2);
+  } else {
+    _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
+  }
+  */
+  if (j > 0) {
+    _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
+    _drawSdwtxt(i + ':' + j, px, fixy + fontsize_sml * 2);
   } else {
     _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
   }
@@ -33179,8 +33191,8 @@ function combineKey(e) {
           break;
       case 187: //'='
           fontfactor -= 0.5;
-          if (fontfactor < 10) 
-            fontfactor = 10.0;
+          if (fontfactor < 8) 
+            fontfactor = 8.0;
           init();
           break;
       default:
