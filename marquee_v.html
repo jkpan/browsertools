@@ -9,7 +9,7 @@ var left_gap = 32;
 var fsize = 128;
 fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
 
-var FONT = (fsize - 4) + "px 標楷體";//黑體-繁";//宋體-繁";
+var FONT = (fsize - 4) + "px cwTeXKai";//"px 黑體-繁";//宋體-繁"; "px 標楷體";
 var speed = 160;
 
 function textGo() {
@@ -44,6 +44,7 @@ function emojiGo(emj) {
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <style>
+      @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
       body {
         margin: 0px;
         height: 100%;
