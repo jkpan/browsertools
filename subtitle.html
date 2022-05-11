@@ -147,7 +147,7 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
                ["耶穌我主 必來作王", "日光所照 四海四方", "千禧年國 直到地極", "統治萬民 而服眾敵"],
                ["禱告勿停 向主而獻", "讚美不絕 作祂榮冕", "晨祭之時 其聖善名", "上升於天 如香之馨"],
                ["耶穌作王 眾民得福", "罪囚之徒 鬆鍊跳出", "勞苦之人 有真安息", "貧窮之輩 蒙恩得益"],
-               ["受造羣生 上拜我王", "各獻其心 萬口同唱", "天使再降 高歌頌神", "大地歡呼 以應阿們"]]
+               ["受造群生 上拜我王", "各獻其心 萬口同唱", "天使再降 高歌頌神", "大地歡呼 以應阿們"]]
 } </script>
 <script id="救恩14" name="我真是愛耶穌" type="application/json" charset="UTF-8"> {
   "content" : [["我真是愛耶穌", "救恩14"],
@@ -1076,7 +1076,7 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
                ["到那化外之地", "我要去我要到", "直等萬國的民", "救主恩全知曉"],
                ["主既呼召我去 最最困苦之境", "我願放棄一切所有", "聽憑世人的口笑我糊塗作夢", "我惟基督之喜悅是求"],
                ["到那化外之地", "我要去我要到", "直等萬國的民", "救主恩全知曉"],
-               ["耶穌另外有羊 必須帶領同來", "他們也當來聽從我主", "主今差遣我去處處招聚其民", "惟要合成一羣歸一牧"],
+               ["耶穌另外有羊 必須帶領同來", "他們也當來聽從我主", "主今差遣我去處處招聚其民", "惟要合成一群歸一牧"],
                ["到那化外之地", "我要去我要到", "直等萬國的民", "救主恩全知曉"]]
 } </script>
 <script id="救恩" name="" type="application/json" charset="UTF-8"> {
@@ -4182,13 +4182,13 @@ function printPhaseChart() {
 
   for (var i = 1;i <subtitles.length;i++) {
     if (i%2 == 0) {
-      if (mode == 1) {
+      if (mode == 2) {
         ctx.fillStyle = "rgb(0,0,128)";
       } else {
         ctx.fillStyle = "rgb(50,50,50, 0.5)";
       }
     } else {
-      if (mode == 1) {
+      if (mode == 2) {
         ctx.fillStyle = "rgb(0,0,200)";
       } else {
         ctx.fillStyle = "rgb(100,100,100, 0.5)";
@@ -4199,7 +4199,7 @@ function printPhaseChart() {
 
   ctx.lineWidth = 3;
 
-  if (mode == 1) {
+  if (mode == 2) {
     ctx.strokeStyle = "rgb(100,100,200)";
   } else {
     ctx.strokeStyle = "rgb(150,150,150, 0.5)";
@@ -4294,7 +4294,7 @@ function keyboard(e) {
         }
         break;
       case 65: //'A'
-          if (mode > 1) 
+          if (mode == 1) 
             break;
           if (animSwh == 0) {
             initAnim(animIdx);
@@ -4417,12 +4417,12 @@ function _layer0() {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   } else if (mode == 1) {
-    ctx.fillStyle = COLOR_PPT;//'blue';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else if (mode == 2) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
+  } else if (mode == 2) {
+    ctx.fillStyle = COLOR_PPT;//'blue';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  } 
   if (img) {
       ctx.drawImage(img,0,0, canvas.width, canvas.height);
   }
@@ -4433,9 +4433,6 @@ function _layer1() {
     if (displayProgress == 1) printChart();
     printTxt(phase, line);
   } else if (mode == 1) {
-    if (displayProgress == 1) printPhaseChart();
-    printPhase();
-  } else if (mode == 2) {
 
     /*
     a	c	e
@@ -4463,6 +4460,9 @@ function _layer1() {
 
     ctx.resetTransform();
 
+  } else if (mode == 2) {
+    if (displayProgress == 1) printPhaseChart();
+    printPhase();
   }
 
 }
@@ -4511,7 +4511,7 @@ function blank() {
   }
   */
   animSwh = 0;
-  if (animSwh == 1 || mode == 1) {
+  if (animSwh == 1 || mode == 2) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'black'; //"rgb(0,0,255)"
     ctx.fillRect(0, 0, canvas.width, canvas.height);
