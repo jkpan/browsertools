@@ -4,11 +4,16 @@ function flow() {
 
   SONGS = [ [['']],
   
-          getSong('新歌頌揚324'),
-          getSong('救恩105'),
-          getSong('救恩221'),
-          getSong('讚美之泉40'),
+      getSong('救恩102'),
+      getSong('救恩105'),
+      getSong('救恩119'),
 
+          getSong('新歌頌揚150'),
+          getSong('讚美之泉2'),
+          getSong('新歌頌揚148'),
+          getSong('讚美之泉29'),
+          getSong('救恩106'),
+          
             getSong('主禱文'),
             getSong('使徒信經'),
             getSong('救恩300'),
@@ -3045,6 +3050,14 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
                ["現在活著的不再是我", "乃是基督活著", "現在活著的不再是我", "乃是基督活著"],
                ["祂活 祂活", "基督在我裡面活", "現在活著的不再是我", "乃是基督活著"]]
 } </script>
+<script id="新歌頌揚148" name="榮耀歸祂" type="application/json" charset="UTF-8"> {
+  "content" : [["榮耀歸祂", "新歌頌揚148"],
+               ["榮耀歸祂 尊榮歸祂", "祂是萬王之王", "揚聲歡唱 高聲頌揚", "讚美歸於主耶穌"]]
+} </script>
+<script id="新歌頌揚150" name="聖殿充滿讚美" type="application/json" charset="UTF-8"> {
+  "content" : [["聖殿充滿讚美", "新歌頌揚150"],
+               ["聖殿充滿讚美 我心充滿平安", "喜樂與榮光 祂奇妙的賜給我", "頌讚耶穌的名 赦我罪賜自由", "讓聖殿充滿讚美 使聖靈居住我心"]]
+} </script>
 <script id="新歌頌揚152" name="揚聲歌唱" type="application/json" charset="UTF-8"> {
   "content" : [["揚聲歌唱", "新歌頌揚152"],
                ["揚聲歌唱 來稱頌主聖名", "高舉雙手 因你慈愛無限", "懇求聖靈 每天來充滿我", "使我終日歡呼述說讚美"],
@@ -4447,7 +4460,7 @@ function _layer1() {
     if (doblank == 1) return;
     
     let _scale = 0.5;
-    let _gap = canvas.width/40;
+    let _gap = 0; //canvas.width/100;
 
     ctx.transform(_scale, 0, 0, _scale, _gap, (1-_scale) * canvas.height - _gap);
 
