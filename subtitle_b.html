@@ -49,12 +49,12 @@
   "content" : [["'左右' 上ㄧ節下ㄧ節  '上下' 上ㄧ章下ㄧ章",
                 "'-'上一卷  '='下一卷", 
                 "'1234567890' 跳至預存  'QWERTYUIOP' 儲存1-0", 
-                "'L' 選卷  'K' 選章  'J' 選節",
-                "'A' PPT mode  'B' Blank  'M' Copy mode",
+                "'L' 選卷  'K' 選章  'J' 選節", 
+                "'A' 換顏色  'B' Blank  'C' 複製目前章節到剪貼簿 'M'文字模式",
                 "shift'ASDFG' 舊約分類  shift'ZXCV' 新約分類",
                 "shift'1234567890' 選章",
                 "'shift左右' 上十節下十節  'shift上下' 上十章下十章",
-                "shift+- 字大小"
+                "shift+- 字大小  'esc' 跳回預設樣式"
                 ]]
 } </script>
 
@@ -33201,38 +33201,45 @@ function combineKey(e) {
   _repaint();
 }
 
-function keyboard(e) {
+function copyToClickBoard() {
+    var content = subtitles[phase][line];//document.getElementById('textArea').innerHTML;
+    if (phase > 0 && line > 0) {
+      //content = '['+abbr[song] + ' ' + phase + ':' + line + '] ' + content;
+      content = '['+subtitles[0][0] + ' ' + phase + ':' + line + '] ' + content;
+    }
+    navigator.clipboard.writeText(content)
+        .then(() => {
+        //console.log("Text copied to clipboard...")
+    }).catch(err => {
+        console.log('Something went wrong', err);
+    });
+ 
+}
+
+function keyboard(e) { //key up
 
     //alert(e.keyCode);
-    if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
-      keylock = false;
+
+    if (e.keyCode == 16) { //} || e.keyCode == 17) { //key up release lock
+      keylock = 0;
       uisel = 0;
       _repaint();
       return;
     }
 
-    if (keylock) {
+    if (keylock == 1) {
       if (!canvas.hidden)
         combineKey(e);
       return;
     }
-      
+
+    //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
+          
     switch (e.keyCode) {
-      /*
-      case 65: sortjump( 1,  5); break;
-      case 83: sortjump( 6, 17); break;
-      case 68: sortjump(18, 22); break;
-      case 70: sortjump(23, 27); break;
-      case 71: sortjump(28, 39); break;
-      
-      case 90: sortjump(40, 44); break;
-      case 88: sortjump(45, 53); break;
-      case 67: sortjump(54, 57); break;
-      case 86: sortjump(58, 66); break;
-      */
       case 66: //'b'
         doblank = doblank == 0?1:0;
         break;
+      case 67: copyToClickBoard(); break; // 'c' copy
       case 33: //'page up'
         if (mode == 0) 
           keyboard({keyCode : 37}); //left
@@ -33252,6 +33259,7 @@ function keyboard(e) {
               mode = 0;
               break;
           }
+          if (song == 0 || phase == 0) break;
           if (animSwh == 0) {
             mode = mode == 0?1:0;
           }
@@ -33435,6 +33443,12 @@ function keyboard(e) {
         //case 32: canvas.requestFullscreen(); break;
         case 13: //'enter' 
         case 27: //'escape'
+          if (song == 0) {
+            song = 1;
+            subtitles = SONGS[song];
+            phase = 0;
+            line = 0;
+          }
           mode = 0;
           removeDiv();
           canvas.hidden = false;
@@ -33445,7 +33459,6 @@ function keyboard(e) {
           uisel = 0;
           break;
         default:
-      
           break;
     }
 
@@ -33535,18 +33548,19 @@ function blank() {
 
 init();
 
-var keylock = false;
+var keylock = 0;
 
 window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function(e) {
 
+  //if (e.keyCode == 17) keylock = 2;
+  
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
-    keylock = true;
-    //phase = 0; line = 0;
+    keylock = 1;
     _repaint();
   }
 
-}, false);
+}, true);
 window.addEventListener('resize', function() {
   init();
   _repaint();
