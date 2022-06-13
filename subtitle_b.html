@@ -33216,6 +33216,15 @@ function copyToClickBoard() {
  
 }
 
+function jumpTo1() {
+  if (song == 0) {
+      song = 1;
+      subtitles = SONGS[song];
+      phase = 0;
+      line = 0;
+  }
+}
+
 function keyboard(e) { //key up
 
     //alert(e.keyCode);
@@ -33253,6 +33262,7 @@ function keyboard(e) { //key up
           keyboard({keyCode : 40}); //up
         break;
       case 77: //'M' ppt mode
+          helpSwitch = 0;
           if (canvas.hidden) {
               removeDiv();  
               canvas.hidden = false;
@@ -33273,10 +33283,12 @@ function keyboard(e) { //key up
       case 76://'L' 
       case 75://'K'
       case 74://'J'
+          helpSwitch = 0;
           if (canvas.hidden) {
               removeDiv();  
               canvas.hidden = false;
               mode = 0;
+              jumpTo1();
               break;
           } 
           if (e.keyCode == 76) openSelection(0); 
@@ -33305,19 +33317,29 @@ function keyboard(e) { //key up
           
           break;
         
-      case 72: helpSwitch = helpSwitch == 0?1:0; break; //'H'
+      case 72: //'H'
+          if (canvas.hidden) {
+              removeDiv();  
+              canvas.hidden = false;
+              jumpTo1();
+          }
+          helpSwitch = helpSwitch == 0?1:0;
+          break; 
       case 38: //'ArrowUp'
           if (canvas.hidden) break;
+          helpSwitch = 0;
           if (phase > 0) phase--; else  phase = 0;
           line = 0;
           break; 
       case 40: //'ArrowDown':
           if (canvas.hidden) break;
+          helpSwitch = 0;
           if (phase == subtitles.length - 1) break;
           phase++;
           line = 0;
           break;
       case 37: { //'ArrowLeft'
+          helpSwitch = 0;
           let _phase = getPreChapter(phase, line);
           let _line = getPreVerse(phase, line);
           phase = _phase;
@@ -33331,6 +33353,7 @@ function keyboard(e) { //key up
         }
           break; 
       case 39: { //'ArrowRight'
+          helpSwitch = 0;
           let _phase = getNextChapter(phase, line);
           let _line = getNextVerse(phase, line);
           phase = _phase == -1?phase:_phase;
@@ -33443,12 +33466,7 @@ function keyboard(e) { //key up
         //case 32: canvas.requestFullscreen(); break;
         case 13: //'enter' 
         case 27: //'escape'
-          if (song == 0) {
-            song = 1;
-            subtitles = SONGS[song];
-            phase = 0;
-            line = 0;
-          }
+          jumpTo1();
           mode = 0;
           removeDiv();
           canvas.hidden = false;
