@@ -114,10 +114,12 @@ function newParticle_txt(sequence, total) {
             }      
             
           } else {
+
             let opa = _len/this.idxlen;
             if (this.lev >= 2) {
               opa *= 0.5;
             }
+            //if (opa > 0.05)
             _ctx.fillStyle = 'rgb(' + rb + ',255,' + rb + ',' + opa +')';
           }
           _ctx.fillText(this.array[i], this.x, this.y + (i * this.size));  
