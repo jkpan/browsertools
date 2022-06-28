@@ -1,6 +1,8 @@
 var side = 2;
 var dots = 3;
 
+var pixFunc;
+
 var dot_none = 33;
 var criteria = dot_none;// * 2 / 3;//dot_none/2;
 
@@ -58,7 +60,26 @@ function initLED(x, y, w, h) {
   gapL = w * 4;
   gapP = 4;
 
-
+  switch(dots) {
+    case 2:
+      pixFunc = setPix4Still_2;
+      break;
+    case 3:
+      pixFunc = setPix4Still_3;
+      break;
+    case 4:
+      pixFunc = setPix4Still_4;
+      break;
+    case 5:
+      pixFunc = setPix4Still_5;
+      break;
+    case 6:
+      pixFunc = setPix4Still_6;  
+      break;
+    case 7:
+      pixFunc = setPix4Still_7;  
+      break;
+  }
 
 }
 
@@ -455,7 +476,6 @@ function ledAction(_canvas, _ctx) {
 function ledAction4Still(_canvas, _ctx) {
 
   if (!maskimg) {
-    //console.log('maskimg not ready');
     return;
   }
 
@@ -469,7 +489,7 @@ function ledAction4Still(_canvas, _ctx) {
   var data = mask.data;
 
   let wid = mwidth;
-  
+
   for (let i = initDot;i < data.length;i += jumpLine) {
     
     let h = Math.floor((i/4)/wid);
@@ -483,29 +503,10 @@ function ledAction4Still(_canvas, _ctx) {
       if (_w > maskWidth) break;
       if (_h != h) break;
   
-      switch(dots) {
-        case 2:
-          setPix4Still_2(data, k);
-          break;
-        case 3:
-          setPix4Still_3(data, k);
-          break;
-        case 4:
-          setPix4Still_4(data, k);
-          break;
-        case 5:
-          setPix4Still_5(data, k);
-          break;
-        case 6:
-          setPix4Still_6(data, k);  
-          break;
-        case 7:
-          setPix4Still_7(data, k);  
-          break;
-      }
+      pixFunc(data, k);
     }
   }
-  _ctx.putImageData(mask, posx, posy);//, 0, 0, maskimg.width/2, maskimg.height/2);
+  _ctx.putImageData(mask, posx, posy);
 }
 
 function filter_gray(coloramount) {

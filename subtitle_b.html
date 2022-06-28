@@ -3,7 +3,7 @@
   function flow() {
     presetVerse = [
       [''], //0
-      ['詩篇', 118, 1], //['約伯記', 1, 2],     //1
+      [''], //['約伯記', 1, 2],     //1
       [''], //['撒母耳記上', 12, 2], //2
       [''], //3
       [''], //4
@@ -32905,9 +32905,14 @@ function drawHlight(yy, hh) {
   }
 }
 
+function printMainTxt(transY, txt) {
+
+}
+
 function printTxt(i, j) {
 
-  if (animSwh == 0) {
+  
+  if (animSwh == 0) { //print saved versus
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
     let fs = Math.min(fontsize_sml_sml, 24);
     ctx.font = fs + 'px Arial';
@@ -32918,8 +32923,8 @@ function printTxt(i, j) {
       ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, fs);
       ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs * 2);
     }
-    
   } 
+  
   
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.6;
@@ -32952,18 +32957,14 @@ function printTxt(i, j) {
   
 
   if (i == 0 && j == 0) {
-    ptxt = "";
+    txt = subtitles[0][0];
+    ptxt = '';
   } else if (i != 0 && j == 0) {
     //ptxt = '['+subtitles[0][0] + ' ' + i+']';
     ptxt = '['+subtitles[i][j] + ']';
     txt = "";
   } 
-  /*
-  else {
-    txt += ' ['+subtitles[0][0] + ']';
-  }
-  */
-
+  
   ctx.textAlign = "left";
 
   ctx.font = FONT_SML_SML;
@@ -32972,49 +32973,47 @@ function printTxt(i, j) {
   ctx.font = FONT_SML;
   printSideTxt(i_1, j_1, x, y - fontsize_sml * 0.5, 0.7);
 
-  ctx.font = FONT;
-
   let substrings = [];
   let idx = 0;
 
-  do {
-    if (ctx.measureText(txt).width > canvas.width * 0.9) {
-      let ratio = canvas.width * 0.9/ctx.measureText(txt).width;
-      ratio = Math.floor(txt.length * ratio) - 1;
-      let txt_0 = txt.substr(0, ratio);
-      txt = txt.substr(ratio, txt.length - txt_0.length);
-      substrings[idx] = txt_0;
-      idx++;
-      if (idx > 20) break;
-    } else {
-      substrings[idx] = txt;
-      break;
+  let rectH = 0;
+
+  if (j > 0 || i == 0) {
+    ptxt = i + ':' + j + ' ';
+    ctx.font = FONT_SML;
+    let frontGap = Math.max(0.1, ctx.measureText(ptxt).width/canvas.width);
+    ctx.font = FONT;
+    do {
+      if (ctx.measureText(txt).width > canvas.width * (1-frontGap)) {
+        let ratio = canvas.width * (1-frontGap)/ctx.measureText(txt).width;
+        ratio = Math.floor(txt.length * ratio) - 1;
+        let txt_0 = txt.substr(0, ratio);
+        txt = txt.substr(ratio, txt.length - txt_0.length);
+        substrings[idx] = txt_0;
+        idx++;
+        if (idx > 20) break;
+      } else {
+        substrings[idx] = txt;
+        break;
+      }
+    } while(true);
+    rectH = substrings.length * fontsize + fontsize * 0.5;
+    drawHlight(y, rectH);
+    x = canvas.width * frontGap;
+    for (let i=0;i<substrings.length;i++) {
+      y += fontsize;
+      _drawSdwtxt(substrings[i], x, y);
     }
-  } while(true);
+    if (i > 0) {
+      ctx.font = FONT_SML;
+      _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
+      _drawSdwtxt(ptxt, px, fixy + fontsize_sml * 2);
+    }
 
-  let rectH = substrings.length * fontsize + fontsize * 0.5;//Math.max(fixy + fontsize_sml * 1.2 - y, substrings.length * fontsize + fontsize * 0.4);
-  drawHlight(y, rectH);
-  for (let i=0;i<substrings.length;i++) {
-    y += fontsize;
-    _drawSdwtxt(substrings[i], x, y);
-  }
-
-  ctx.font = FONT_SML;
-
-  /*
-  if (ctx.measureText(ptxt).width + px > canvas.width * 0.1 && j > 0) {
-    _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
-    _drawSdwtxt('' + i + ':' + j, px, fixy + fontsize_sml * 2);
   } else {
+    ctx.font = FONT_SML;
     _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
-  }
-  */
- 
-  if (j > 0) {
-    _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
-    _drawSdwtxt(i + ':' + j, px, fixy + fontsize_sml * 2);
-  } else {
-    _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
+    rectH = fontsize;//substrings.length * fontsize + fontsize * 0.5;
   }
 
   ctx.font = FONT_SML;
