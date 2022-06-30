@@ -3,20 +3,12 @@
 function flow() {
 
   SONGS = [ [['']],
-            
-            /*
+
             getSong('讚美之泉55'),
             getSong('讚美之泉24'),
             getSong('讚美之泉6'),
             getSong('讚美之泉42'),
-            getSong('救恩179'),
-            */
-
-            getSong('救恩181'),
-            getSong('短歌55'),
-            getSong('讚美之泉32'),
-            getSong('新歌頌揚118'),
-            
+            getSong('救恩179'), 
 
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -3079,6 +3071,11 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
   "content" : [["我們到你面前", "新歌頌揚118"],
                ["主 我們到你面前", "不倚靠所行之善", "靠你恩典 只靠你恩典", "主 我們到你面前"]]
 } </script>
+<script id="新歌頌揚129" name="掌管我心" type="application/json" charset="UTF-8"> {
+  "content" : [["掌管我心", "新歌頌揚129"],
+               ["來吹進我心 來吹進我心", "慈悲聖靈吹進我心", "在主的腳前 奉獻我心志", "慈悲聖靈 吹進我心"],
+               ["求掌管我心 求掌管我心", "慈悲聖靈掌管我心", "在主的腳前 我完全安息", "慈悲聖靈 掌管我心"]]
+} </script>
 <script id="新歌頌揚130" name="基督在我裡面活" type="application/json" charset="UTF-8"> {
   "content" : [["基督在我裡面活", "新歌頌揚130"],
                ["現在活著的不再是我", "乃是基督活著", "現在活著的不再是我", "乃是基督活著"],
@@ -4621,6 +4618,7 @@ function _layer1() {
     b	d	f
     0	0	1
     ctx.transform(a,b,c,d,e,f);
+                  xscale, 0 yscale, xoffset, yoffset
     ctx.resetTransform
     */
 
@@ -4632,9 +4630,12 @@ function _layer1() {
     let _scale = 0.5;
     let _gap = 0; //canvas.width/100;
 
-    ctx.transform(_scale, 0, 
-                  0,      _scale, 
-                  _gap, (1-_scale) * canvas.height - _gap);
+    ctx.transform(_scale, 
+                  0, 
+                          0,      
+                          _scale, 
+                                    _gap, 
+                                    (1-_scale) * canvas.height - _gap);
 
     ctx.fillStyle = COLOR_PPT_SML;//'rgb(0, 0, 0, 0.5)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);

@@ -32905,12 +32905,61 @@ function drawHlight(yy, hh) {
   }
 }
 
-function printMainTxt(transY, txt) {
-
+function getTxtArray(txt, wRatio) {
+  let substrings = [];
+  let idx = 0;
+  do {
+      if (ctx.measureText(txt).width > canvas.width * wRatio) {
+        let ratio = canvas.width * wRatio/ctx.measureText(txt).width;
+        ratio = Math.floor(txt.length * ratio) - 1;
+        let txt_0 = txt.substr(0, ratio);
+        txt = txt.substr(ratio, txt.length - txt_0.length);
+        substrings[idx] = txt_0;
+        idx++;
+        if (idx > 20) break;
+      } else {
+        substrings[idx] = txt;
+        break;
+      }
+    } while(true);
+    
+  return substrings;
 }
 
-function printTxt(i, j) {
+function drawTxtAbove(transY, versus, txt, a, type) {
+  
+  ctx.font = FONT_SML;
+  
+  let substrings = getTxtArray(txt, 0.9);
+  
+  if (type == 0)
+    transY -= (substrings.length * fontsize_sml + fontsize_sml * 0.2);
+  
+  ctx.transform(1,0,0,1,0,transY);
 
+    ctx.textBaseline = 'top';//'middle';//'top';//'bottom';
+    let x = canvas.width * 0.1;
+    let y = 0;
+    ctx.font = FONT_SML_SML;
+    if (versus > 0) 
+      _drawtxt(''+versus, fontsize_sml, y, a);
+    else 
+      substrings[0] = '[' + substrings[0] + ']';
+    ctx.font = FONT_SML;
+    for (let i=0;i<substrings.length;i++) {
+      _drawtxt(substrings[i], x, y, a);
+      y += fontsize_sml;
+    }
+
+  ctx.resetTransform();
+
+  if (type == 1)
+    transY += (substrings.length * fontsize_sml + fontsize_sml * 0.2);
+
+  return transY;
+}
+
+function printMain(i, j) {
   
   if (animSwh == 0) { //print saved versus
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
@@ -32928,11 +32977,14 @@ function printTxt(i, j) {
   
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.6;
+      
   if (animSwh == 1) 
     y = canvas.height * 0.45;
   if (color_selection > 0)
     y = canvas.height * 0.45;
   let fixy = y;
+
+  //ctx.strokeRect(x, fixy, 10, 10);
   
   let i_1 = getPreChapter(i, j);
   let j_1 = getPreVerse(i, j);
@@ -32966,37 +33018,36 @@ function printTxt(i, j) {
   } 
   
   ctx.textAlign = "left";
+  ctx.textBaseline = 'alphabetic';
 
-  ctx.font = FONT_SML_SML;
-  printSideTxt(i_3, j_3, x, y - fontsize_sml * 2.5, 0.3);
-  printSideTxt(i_2, j_2, x, y - fontsize_sml * 1.5, 0.5);
-  ctx.font = FONT_SML;
-  printSideTxt(i_1, j_1, x, y - fontsize_sml * 0.5, 0.7);
+  if (color_selection == 0) {
+    ctx.font = FONT_SML_SML;
+    printSideTxt(i_3, j_3, x, y - fontsize_sml * 2.5, 0.3);
+    printSideTxt(i_2, j_2, x, y - fontsize_sml * 1.5, 0.5);
+    ctx.font = FONT_SML;
+    printSideTxt(i_1, j_1, x, y - fontsize_sml * 0.5, 0.7);
+  } else {
+    let transY =  y - fontsize_sml * 0.5;
+    if (i_1 > 0) transY = drawTxtAbove(transY, j_1, subtitles[i_1][j_1], 0.8, 0);
+    if (i_2 > 0) transY = drawTxtAbove(transY, j_2, subtitles[i_2][j_2], 0.6, 0);
+    if (i_3 > 0) transY = drawTxtAbove(transY, j_3, subtitles[i_3][j_3], 0.4, 0);
+  }
 
-  let substrings = [];
-  let idx = 0;
+  ctx.textBaseline = 'alphabetic';
 
   let rectH = 0;
 
-  if (j > 0 || i == 0) {
+  if (i == 0) {
+    ctx.font = FONT;
+    y += fontsize;
+    _drawSdwtxt(txt, x, y);
+    rectH = 1.5 * fontsize;
+  } else if (j > 0) {
     ptxt = i + ':' + j + ' ';
     ctx.font = FONT_SML;
     let frontGap = Math.max(0.1, ctx.measureText(ptxt).width/canvas.width);
     ctx.font = FONT;
-    do {
-      if (ctx.measureText(txt).width > canvas.width * (1-frontGap)) {
-        let ratio = canvas.width * (1-frontGap)/ctx.measureText(txt).width;
-        ratio = Math.floor(txt.length * ratio) - 1;
-        let txt_0 = txt.substr(0, ratio);
-        txt = txt.substr(ratio, txt.length - txt_0.length);
-        substrings[idx] = txt_0;
-        idx++;
-        if (idx > 20) break;
-      } else {
-        substrings[idx] = txt;
-        break;
-      }
-    } while(true);
+    let substrings = getTxtArray(txt, 1.0 - frontGap);
     rectH = substrings.length * fontsize + fontsize * 0.5;
     drawHlight(y, rectH);
     x = canvas.width * frontGap;
@@ -33004,23 +33055,31 @@ function printTxt(i, j) {
       y += fontsize;
       _drawSdwtxt(substrings[i], x, y);
     }
-    if (i > 0) {
-      ctx.font = FONT_SML;
-      _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
-      _drawSdwtxt(ptxt, px, fixy + fontsize_sml * 2);
-    }
-
+    
+    ctx.font = FONT_SML;
+    _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
+    _drawSdwtxt(ptxt, px, fixy + fontsize_sml * 2);
+  
   } else {
     ctx.font = FONT_SML;
     _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
     rectH = fontsize;//substrings.length * fontsize + fontsize * 0.5;
   }
 
-  ctx.font = FONT_SML;
-  if (ip1 != -1) printSideTxt(ip1, jp1, x, fixy + rectH + fontsize_sml * 1, 0.7);
-  ctx.font = FONT_SML_SML;
-  if (ip2 != -1) printSideTxt(ip2, jp2, x, fixy + rectH + fontsize_sml * 2, 0.5);
-  if (ip3 != -1) printSideTxt(ip3, jp3, x, fixy + rectH + fontsize_sml * 3, 0.3);
+  if (color_selection == 0) {
+    ctx.font = FONT_SML;
+    if (ip1 != -1) printSideTxt(ip1, jp1, x, fixy + rectH + fontsize_sml * 1, 0.7);
+    ctx.font = FONT_SML_SML;
+    if (ip2 != -1) printSideTxt(ip2, jp2, x, fixy + rectH + fontsize_sml * 2, 0.5);
+    if (ip3 != -1) printSideTxt(ip3, jp3, x, fixy + rectH + fontsize_sml * 3, 0.3);
+  } else {
+    let transY = fixy + rectH + fontsize_sml * 0.5;
+    if (ip1 != -1) transY = drawTxtAbove(transY, jp1, subtitles[ip1][jp1], 0.8, 1);
+    if (ip2 != -1) transY = drawTxtAbove(transY, jp2, subtitles[ip2][jp2], 0.6, 1);
+    if (ip3 != -1) transY = drawTxtAbove(transY, jp3, subtitles[ip3][jp3], 0.4, 1);
+  }
+
+  ctx.textBaseline = 'alphabetic';
 
 }
 
@@ -33295,7 +33354,8 @@ function keyboard(e) { //key up
           if (e.keyCode == 74) openSelection(2); 
           break; 
       case 65: //a
-          //if (canvas.hidden) break;
+          
+          if (canvas.hidden) break;
           color_selection = (color_selection + 1 )%3;
           if (color_selection == 0) {
             bgcolor_pointer = bgStyle;
@@ -33311,7 +33371,9 @@ function keyboard(e) { //key up
             hlight_pointer = hlightStyle_blue;
           }        
           
+          
           //if (canvas.hidden) break;
+          //initAnim(1);
           //if (animSwh == 0) initAnim(animIdx);  else initAnim(-1);
           
           break;
@@ -33492,7 +33554,7 @@ function _layer0() {
 }
 
 function _layer1() {
-  printTxt(phase, line);
+  printMain(phase, line);
 }
 
 function _layer2() {
