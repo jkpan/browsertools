@@ -32960,20 +32960,7 @@ function drawTxtAbove(transY, versus, txt, a, type) {
 }
 
 function printMain(i, j) {
-  
-  if (animSwh == 0) { //print saved versus
-    ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
-    let fs = Math.min(fontsize_sml_sml, 24);
-    ctx.font = fs + 'px Arial';
-    for (let idx = 1;idx <= presetVerse.length;idx++) {
-      if (presetVerse[idx%10][0].length == 0)
-        continue;
-      let xx = 4 + (idx-1) * canvas.width/presetVerse.length;
-      ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, fs);
-      ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs * 2);
-    }
-  } 
-  
+    
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.6;
       
@@ -32987,7 +32974,6 @@ function printMain(i, j) {
 
   ctx.textAlign = "left";
   var px = 10;
-  //ctx.strokeRect(x, fixy, 10, 10);
   
   if (i == 0 && j == 0) {
     txt = subtitles[0][0];
@@ -33082,6 +33068,22 @@ function printMain(i, j) {
       if (transY > canvas.height) break;
     }
   }
+
+  if (animSwh == 0) { //print saved versus
+    ctx.textBaseline = 'top';
+    let fs = Math.min(fontsize_sml_sml, 24);
+    ctx.font = (fs-2) + 'px Arial';
+    ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
+    ctx.fillRect(0, 0, canvas.width, fs * 2);
+    ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
+    for (let idx = 1;idx <= presetVerse.length;idx++) {
+      if (presetVerse[idx%10][0].length == 0)
+        continue;
+      let xx = 4 + (idx-1) * canvas.width/presetVerse.length;
+      ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, 0);
+      ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs);
+    }
+  } 
 
   ctx.textBaseline = 'alphabetic';
 
