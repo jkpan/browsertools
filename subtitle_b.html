@@ -32752,14 +32752,14 @@ function createBtnVolume() {
 
   for (var i=1;i<=66;i++) {
 
-    if (i == 6) div.insertAdjacentHTML('beforeend', '<br/>');
-    if (i == 18) div.insertAdjacentHTML('beforeend', '<br/>');
-    if (i == 23) div.insertAdjacentHTML('beforeend', '<br/>');
-    if (i == 28) div.insertAdjacentHTML('beforeend', '<br/>');
-    if (i == 40) div.insertAdjacentHTML('beforeend', '<br/>');
-    if (i == 45) div.insertAdjacentHTML('beforeend', '<br/>');
-    if (i == 54) div.insertAdjacentHTML('beforeend', '<br/>');
-    if (i == 58) div.insertAdjacentHTML('beforeend', '<br/>');
+    if (i == 6) div.insertAdjacentHTML('beforeend',  '<hr size="1" color="green">');
+    if (i == 18) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
+    if (i == 23) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
+    if (i == 28) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
+    if (i == 40) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
+    if (i == 45) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
+    if (i == 54) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
+    if (i == 58) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
 
     var button = _newBtn(); //_createVolume(i);
     button.innerHTML = SONGS[i][0][0];
@@ -32974,65 +32974,57 @@ function printMain(i, j) {
     }
   } 
   
-  
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.6;
       
-  if (animSwh == 1) 
-    y = canvas.height * 0.45;
+  //if (animSwh == 1) y = canvas.height * 0.4;
   if (color_selection > 0)
-    y = canvas.height * 0.45;
+    y = canvas.height * 0.4;
   let fixy = y;
-
-  //ctx.strokeRect(x, fixy, 10, 10);
-  
-  let i_1 = getPreChapter(i, j);
-  let j_1 = getPreVerse(i, j);
-  let i_2 = getPreChapter(i_1, j_1);
-  let j_2 = getPreVerse(i_1, j_1);
-  let i_3 = getPreChapter(i_2, j_2);
-  let j_3 = getPreVerse(i_2, j_2);
-  
-  
-  let ip1 = getNextChapter(i, j);
-  let jp1 = getNextVerse(i, j);
-  let ip2 = getNextChapter(ip1, jp1);
-  let jp2 = getNextVerse(ip1, jp1);
-  let ip3 = getNextChapter(ip2, jp2);
-  let jp3 = getNextVerse(ip2, jp2);
 
   let ptxt = abbr[song] + ' ' + i + ':' + j;
   let txt = subtitles[i][j];
-  
+
   ctx.textAlign = "left";
   var px = 10;
+  //ctx.strokeRect(x, fixy, 10, 10);
   
-
   if (i == 0 && j == 0) {
     txt = subtitles[0][0];
     ptxt = '';
   } else if (i != 0 && j == 0) {
-    //ptxt = '['+subtitles[0][0] + ' ' + i+']';
     ptxt = '['+subtitles[i][j] + ']';
     txt = "";
   } 
   
   ctx.textAlign = "left";
   ctx.textBaseline = 'alphabetic';
-
+ 
   if (color_selection == 0) {
-    ctx.font = FONT_SML_SML;
-    printSideTxt(i_3, j_3, x, y - fontsize_sml * 2.5, 0.3);
-    printSideTxt(i_2, j_2, x, y - fontsize_sml * 1.5, 0.5);
+    let i_x = i;
+    let j_x = j;
     ctx.font = FONT_SML;
-    printSideTxt(i_1, j_1, x, y - fontsize_sml * 0.5, 0.7);
+    for (let _i = 1;_i<=2;_i++) {
+      let _i_x = getPreChapter(i_x, j_x);
+      j_x = getPreVerse(i_x, j_x);
+      i_x = _i_x;
+      if (_i > 1) 
+        ctx.font = FONT_SML_SML;
+      printSideTxt(i_x, j_x, x, y - fontsize_sml * (_i - 0.5), 1.0 - 0.3 * _i);
+    }
   } else {
+    let i_x = i;
+    let j_x = j;
     let transY =  y - fontsize_sml * 0.5;
-    if (i_1 > 0) transY = drawTxtAbove(transY, j_1, subtitles[i_1][j_1], 0.8, 0);
-    if (i_2 > 0) transY = drawTxtAbove(transY, j_2, subtitles[i_2][j_2], 0.6, 0);
-    if (i_3 > 0) transY = drawTxtAbove(transY, j_3, subtitles[i_3][j_3], 0.4, 0);
+    for (let _i = 1;_i<=10;_i++) {
+      let _i_x = getPreChapter(i_x, j_x);
+      j_x = getPreVerse(i_x, j_x);
+      i_x = _i_x;
+      if (i_x > 0) transY = drawTxtAbove(transY, j_x, subtitles[i_x][j_x], 1.0 - 0.1 * _i, 0);
+      if (transY < 0) break;
+    }
   }
-
+  
   ctx.textBaseline = 'alphabetic';
 
   let rectH = 0;
@@ -33067,16 +33059,28 @@ function printMain(i, j) {
   }
 
   if (color_selection == 0) {
+    let i_x = i;
+    let j_x = j;
     ctx.font = FONT_SML;
-    if (ip1 != -1) printSideTxt(ip1, jp1, x, fixy + rectH + fontsize_sml * 1, 0.7);
-    ctx.font = FONT_SML_SML;
-    if (ip2 != -1) printSideTxt(ip2, jp2, x, fixy + rectH + fontsize_sml * 2, 0.5);
-    if (ip3 != -1) printSideTxt(ip3, jp3, x, fixy + rectH + fontsize_sml * 3, 0.3);
+    for (let _i = 1;_i<=2;_i++) {
+      let _i_x = getNextChapter(i_x, j_x);
+      j_x = getNextVerse(i_x, j_x);
+      i_x = _i_x;
+      if (_i > 1) 
+        ctx.font = FONT_SML_SML;
+      if (i_x != -1) printSideTxt(i_x, j_x, x, fixy + rectH + fontsize_sml * _i, 1.0 - 0.3 * _i);
+    }
   } else {
-    let transY = fixy + rectH + fontsize_sml * 0.5;
-    if (ip1 != -1) transY = drawTxtAbove(transY, jp1, subtitles[ip1][jp1], 0.8, 1);
-    if (ip2 != -1) transY = drawTxtAbove(transY, jp2, subtitles[ip2][jp2], 0.6, 1);
-    if (ip3 != -1) transY = drawTxtAbove(transY, jp3, subtitles[ip3][jp3], 0.4, 1);
+    let i_x = i;
+    let j_x = j;
+    let transY =  fixy + rectH + fontsize_sml * 0.5;
+    for (let _i = 1;_i<=10;_i++) {
+      let _i_x = getNextChapter(i_x, j_x);
+      j_x = getNextVerse(i_x, j_x);
+      i_x = _i_x;
+      if (i_x != -1) transY = drawTxtAbove(transY, j_x, subtitles[i_x][j_x], 1.0 - 0.1 * _i, 1);
+      if (transY > canvas.height) break;
+    }
   }
 
   ctx.textBaseline = 'alphabetic';
@@ -33781,5 +33785,53 @@ function newParticle_casual() {
   }
   return p;
 }
+
+/*
+let i_1 = getPreChapter(i, j);
+  let j_1 = getPreVerse(i, j);
+  let i_2 = getPreChapter(i_1, j_1);
+  let j_2 = getPreVerse(i_1, j_1);
+  let i_3 = getPreChapter(i_2, j_2);
+  let j_3 = getPreVerse(i_2, j_2);
+  let i_4 = getPreChapter(i_3, j_3);
+  let j_4 = getPreVerse(i_3, j_3);
+
+  let ip1 = getNextChapter(i, j);
+  let jp1 = getNextVerse(i, j);
+  let ip2 = getNextChapter(ip1, jp1);
+  let jp2 = getNextVerse(ip1, jp1);
+  let ip3 = getNextChapter(ip2, jp2);
+  let jp3 = getNextVerse(ip2, jp2);
+  let ip4 = getNextChapter(ip3, jp3);
+  let jp4 = getNextVerse(ip3, jp3); 
+
+  if (color_selection == 0) {
+    ctx.font = FONT_SML_SML;
+    printSideTxt(i_3, j_3, x, y - fontsize_sml * 2.5, 0.3);
+    printSideTxt(i_2, j_2, x, y - fontsize_sml * 1.5, 0.5);
+    ctx.font = FONT_SML;
+    printSideTxt(i_1, j_1, x, y - fontsize_sml * 0.5, 0.7);
+  } else {
+    let transY =  y - fontsize_sml * 0.5;
+    if (i_1 > 0) transY = drawTxtAbove(transY, j_1, subtitles[i_1][j_1], 0.8, 0);
+    if (i_2 > 0) transY = drawTxtAbove(transY, j_2, subtitles[i_2][j_2], 0.6, 0);
+    if (i_3 > 0) transY = drawTxtAbove(transY, j_3, subtitles[i_3][j_3], 0.4, 0);
+    if (i_4 > 0) transY = drawTxtAbove(transY, j_4, subtitles[i_4][j_4], 0.2, 0);
+  }
+
+  if (color_selection == 0) {
+    ctx.font = FONT_SML;
+    if (ip1 != -1) printSideTxt(ip1, jp1, x, fixy + rectH + fontsize_sml * 1, 0.7);
+    ctx.font = FONT_SML_SML;
+    if (ip2 != -1) printSideTxt(ip2, jp2, x, fixy + rectH + fontsize_sml * 2, 0.5);
+    if (ip3 != -1) printSideTxt(ip3, jp3, x, fixy + rectH + fontsize_sml * 3, 0.3);
+  } else {
+    let transY = fixy + rectH + fontsize_sml * 0.5;
+    if (ip1 != -1) transY = drawTxtAbove(transY, jp1, subtitles[ip1][jp1], 0.8, 1);
+    if (ip2 != -1) transY = drawTxtAbove(transY, jp2, subtitles[ip2][jp2], 0.6, 1);
+    if (ip3 != -1) transY = drawTxtAbove(transY, jp3, subtitles[ip3][jp3], 0.4, 1);
+    if (ip4 != -1) transY = drawTxtAbove(transY, jp4, subtitles[ip4][jp4], 0.2, 1);
+  }
+  */
 
 </script>
