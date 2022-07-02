@@ -32996,8 +32996,7 @@ function printMain(i, j) {
       j_x = getPreVerse(i_x, j_x);
       i_x = _i_x;
       if (color_selection == 0) {
-        if (_i > 1) 
-        ctx.font = FONT_SML_SML;
+        if (_i > 1) ctx.font = FONT_SML_SML;
         printSideTxt(i_x, j_x, x, y - fontsize_sml * (_i - 0.5), Math.max(0.1, 1.0 - 0.3 * _i));
         if (_i == 2) break;
       } else {
@@ -33018,23 +33017,25 @@ function printMain(i, j) {
     _drawSdwtxt(txt, x, y);
     rectH = 1.5 * fontsize;
   } else if (j > 0) {
-    ptxt = i + ':' + j + ' ';
-    ctx.font = FONT_SML;
-    let frontGap = Math.max(0.1, ctx.measureText(ptxt).width/canvas.width);
-    ctx.font = FONT;
-    let substrings = getTxtArray(txt, 1.0 - frontGap);
-    rectH = substrings.length * fontsize + fontsize * 0.5;
-    drawHlight(y, rectH);
-    x = canvas.width * frontGap;
-    for (let i=0;i<substrings.length;i++) {
-      y += fontsize;
-      _drawSdwtxt(substrings[i], x, y);
+    if (doblank != 1 || color_selection == 0) {
+      ptxt = i + ':' + j + ' ';
+      ctx.font = FONT_SML;
+      let frontGap = Math.max(0.1, ctx.measureText(ptxt).width/canvas.width);
+      ctx.font = FONT;
+      let substrings = getTxtArray(txt, 1.0 - frontGap);
+      rectH = substrings.length * fontsize + fontsize * 0.5;
+      drawHlight(y, rectH);
+      x = canvas.width * frontGap;
+      for (let i=0;i<substrings.length;i++) {
+        y += fontsize;
+        _drawSdwtxt(substrings[i], x, y);
+      }
+      ctx.font = FONT_SML;
+      _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
+      _drawSdwtxt(ptxt, px, fixy + fontsize_sml * 2);
+    } else {
+      rectH = drawTxtAbove(y, j, subtitles[i][j], 1.0, 1) - y;
     }
-    
-    ctx.font = FONT_SML;
-    _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
-    _drawSdwtxt(ptxt, px, fixy + fontsize_sml * 2);
-  
   } else {
     ctx.font = FONT_SML;
     _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
@@ -33069,6 +33070,8 @@ function printMain(i, j) {
     ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
     ctx.fillRect(0, 0, canvas.width, fs * 2);
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
+    if (color_selection > 0) 
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
     for (let idx = 1;idx <= presetVerse.length;idx++) {
       if (presetVerse[idx%10][0].length == 0)
         continue;
@@ -33084,7 +33087,7 @@ function printMain(i, j) {
 
 function _drawSdwtxt(txt, x, y) {
 
-  if (doblank == 1) {
+  if (doblank == 1 && color_selection == 0) {
     ctx.fillStyle =  color_pointer[3];//'rgb(0, 220, 0)';
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
@@ -33105,7 +33108,7 @@ function _drawtxt(txt, x, y, a) {
 
   ctx.fillStyle = 'rgb(255, 255, 255, ' + a + ')';
   
-  if (doblank == 1) {
+  if (doblank == 1 && color_selection == 0) {
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
   }
 
