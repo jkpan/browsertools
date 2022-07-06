@@ -1,10 +1,12 @@
 <script type="text/javascript" charset="UTF-8"> 
 
   function flow() {
+
     presetVerse = [
+
       [''], //0
-      [''], //['約伯記', 1, 2],     //1
-      [''], //['撒母耳記上', 12, 2], //2
+      [''], //1
+      [''], //2
       [''], //3
       [''], //4
       [''], //5
@@ -12,7 +14,25 @@
       [''], //7
       [''], //8
       [''], //9
+
     ];
+
+    /*
+    presetVerse = [
+
+      ['', 0, 0], //0
+      ['創世記', 0, 0], //1
+      ['約書亞記', 0, 0], //['約伯記', 1, 2],     //2
+      ['約伯記', 0, 0], //['撒母耳記上', 12, 2], //3
+      ['以賽亞書', 0, 0], //4
+      ['何西阿書', 0, 0], //5
+      ['馬太福音', 0, 0], //6
+      ['羅馬書', 0, 0], //7
+      ['提摩太前書', 0, 0], //8
+      ['希伯來書', 0, 0], //9
+      
+    ];
+    */
   }
   
   var fontfactor = 15.0;
@@ -32583,8 +32603,9 @@
     </head>   
 <body>
 
+  <!--input id="speech" type="text" x-webkit-speech /-->
   <canvas id="canvas" width="100" height="100"></canvas>
-
+  
 </body>
 
 </html>
@@ -32987,6 +33008,12 @@ function printMain(i, j) {
   ctx.textBaseline = 'alphabetic';
  
   {
+
+    //let i_1 = getPreChapter(i, j);
+    //let j_1 = getPreVerse(i, j);
+    //let i_2 = getPreChapter(i_1, j_1);
+    //let j_2 = getPreVerse(i_1, j_1);
+  
     let i_x = i;
     let j_x = j;
     ctx.font = FONT_SML;
@@ -33783,53 +33810,5 @@ function newParticle_casual() {
   }
   return p;
 }
-
-/*
-let i_1 = getPreChapter(i, j);
-  let j_1 = getPreVerse(i, j);
-  let i_2 = getPreChapter(i_1, j_1);
-  let j_2 = getPreVerse(i_1, j_1);
-  let i_3 = getPreChapter(i_2, j_2);
-  let j_3 = getPreVerse(i_2, j_2);
-  let i_4 = getPreChapter(i_3, j_3);
-  let j_4 = getPreVerse(i_3, j_3);
-
-  let ip1 = getNextChapter(i, j);
-  let jp1 = getNextVerse(i, j);
-  let ip2 = getNextChapter(ip1, jp1);
-  let jp2 = getNextVerse(ip1, jp1);
-  let ip3 = getNextChapter(ip2, jp2);
-  let jp3 = getNextVerse(ip2, jp2);
-  let ip4 = getNextChapter(ip3, jp3);
-  let jp4 = getNextVerse(ip3, jp3); 
-
-  if (color_selection == 0) {
-    ctx.font = FONT_SML_SML;
-    printSideTxt(i_3, j_3, x, y - fontsize_sml * 2.5, 0.3);
-    printSideTxt(i_2, j_2, x, y - fontsize_sml * 1.5, 0.5);
-    ctx.font = FONT_SML;
-    printSideTxt(i_1, j_1, x, y - fontsize_sml * 0.5, 0.7);
-  } else {
-    let transY =  y - fontsize_sml * 0.5;
-    if (i_1 > 0) transY = drawTxtAbove(transY, j_1, subtitles[i_1][j_1], 0.8, 0);
-    if (i_2 > 0) transY = drawTxtAbove(transY, j_2, subtitles[i_2][j_2], 0.6, 0);
-    if (i_3 > 0) transY = drawTxtAbove(transY, j_3, subtitles[i_3][j_3], 0.4, 0);
-    if (i_4 > 0) transY = drawTxtAbove(transY, j_4, subtitles[i_4][j_4], 0.2, 0);
-  }
-
-  if (color_selection == 0) {
-    ctx.font = FONT_SML;
-    if (ip1 != -1) printSideTxt(ip1, jp1, x, fixy + rectH + fontsize_sml * 1, 0.7);
-    ctx.font = FONT_SML_SML;
-    if (ip2 != -1) printSideTxt(ip2, jp2, x, fixy + rectH + fontsize_sml * 2, 0.5);
-    if (ip3 != -1) printSideTxt(ip3, jp3, x, fixy + rectH + fontsize_sml * 3, 0.3);
-  } else {
-    let transY = fixy + rectH + fontsize_sml * 0.5;
-    if (ip1 != -1) transY = drawTxtAbove(transY, jp1, subtitles[ip1][jp1], 0.8, 1);
-    if (ip2 != -1) transY = drawTxtAbove(transY, jp2, subtitles[ip2][jp2], 0.6, 1);
-    if (ip3 != -1) transY = drawTxtAbove(transY, jp3, subtitles[ip3][jp3], 0.4, 1);
-    if (ip4 != -1) transY = drawTxtAbove(transY, jp4, subtitles[ip4][jp4], 0.2, 1);
-  }
-  */
 
 </script>
