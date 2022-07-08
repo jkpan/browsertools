@@ -32773,14 +32773,14 @@ function createBtnVolume() {
 
   for (var i=1;i<=66;i++) {
 
-    if (i == 6) div.insertAdjacentHTML('beforeend',  '<hr size="1" color="green">');
-    if (i == 18) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
-    if (i == 23) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
-    if (i == 28) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
-    if (i == 40) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
-    if (i == 45) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
-    if (i == 54) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
-    if (i == 58) div.insertAdjacentHTML('beforeend', '<hr size="1" color="green">');
+    if (i == 6) div.insertAdjacentHTML('beforeend',  '<br/><br/>');
+    if (i == 18) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+    if (i == 23) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+    if (i == 28) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+    if (i == 40) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+    if (i == 45) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+    if (i == 54) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+    if (i == 58) div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
     var button = _newBtn(); //_createVolume(i);
     button.innerHTML = SONGS[i][0][0];
@@ -33093,16 +33093,20 @@ function printMain(i, j) {
   if (animSwh == 0) { //print saved versus
     ctx.textBaseline = 'top';
     let fs = Math.min(fontsize_sml_sml, 24);
-    ctx.font = (fs-4) + 'px Arial';
     ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
     ctx.fillRect(0, 0, canvas.width, fs * 2);
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
+
     if (color_selection > 0) 
       ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
+    ctx.font = (fs * 1.5) + 'px Arial';
+    ctx.fillText(subtitles[0][0], 4, 2);
+    let gap = ctx.measureText(subtitles[0][0]).width + 20;
+    ctx.font = (fs-4) + 'px Arial';
     for (let idx = 1;idx <= presetVerse.length;idx++) {
       if (presetVerse[idx%10][0].length == 0)
         continue;
-      let xx = 4 + (idx-1) * canvas.width/presetVerse.length;
+      let xx = gap + (idx-1) * (canvas.width - gap)/presetVerse.length;
       ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, 2);
       ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs-1);
     }

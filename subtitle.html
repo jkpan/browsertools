@@ -4,11 +4,17 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('救恩4'),
-            getSong('救恩102'),
-            getSong('救恩106'),
-            getSong('讚美之泉32'),
-             
+            getSong('救恩177'),
+            getSong('救恩221'),
+            getSong('其他47'),
+            getSong('救恩248'),
+            
+
+            getSong('救恩12'),
+            getSong('救恩47'),
+            getSong('救恩204'),
+            getSong('救恩207'),
+            getSong('其他53'),        
 
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -24,6 +30,14 @@ var PREFIX = [
   ['新歌頌揚', 400, false],
   ['其他', 100, false],
 ];
+
+var fontsize = 100;
+var FONT = fontsize + "px " + fontFamily;
+var fontfactor = 10.0;
+
+const COLORS_CK = ["rgb(0, 110, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
+const COLOR_PPT = 'blue';
+const COLOR_PPT_SML = 'rgb(0, 70, 0)';
 
 var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
 
@@ -1377,9 +1391,16 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
                ["我有何可慮 我有何可懼", "靠在永久膀臂上", "平安滿我懷 因有主同在", "靠在永久膀臂上"], 
                ["倚靠 倚靠", "安全之至 有主在旁", "倚靠 倚靠", "靠在永久膀臂上"]]
 } </script>
-<script id="救恩" name="" type="application/json" charset="UTF-8"> {
-  "content" : [["", "救恩"],
-               ["", "", "", ""]]
+<script id="救恩177" name="靠近十字架" type="application/json" charset="UTF-8"> {
+  "content" : [["靠近十字架", "救恩177"],
+               ["我願靠近十字架", "因有寶貴泉源", "流到各各他山下", "成為醫治淵源"],
+               ["十字架 十字架", "我要時常誇頌", "直到渡過約但河", "安息永遠家中"],
+               ["我ㄧ靠近十字架", "惟有俯伏戰兢", "明亮早晨星發光", "賜我恩惠安靜"],
+               ["十字架 十字架", "我要時常誇頌", "直到渡過約但河", "安息永遠家中"],
+               ["我要靠近十字架", "認識架上苦主", "願祢天天幫助我", "走這十架路途"],
+               ["十字架 十字架", "我要時常誇頌", "直到渡過約但河", "安息永遠家中"],
+               ["我必靠近十字架", "儆醒等候盼望", "直到上那黃金岸", "見主面在岸旁"],
+               ["十字架 十字架", "我要時常誇頌", "直到渡過約但河", "安息永遠家中"]]
 } </script>   
 <script id="救恩178" name="我靠耶穌" type="application/json" charset="UTF-8"> {
   "content" : [["我靠耶穌", "救恩178"],
@@ -4004,6 +4025,15 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
                ["基督我全所有 救恩喜樂在於你", "這盼望永不止息 天堂是我家", "暴風雨中 我靈歌唱", "與你同行 榮耀歸給上帝"],
                ["我已經決定 要跟隨耶穌", "永不回頭 永不回頭", "十架在前面 世界在背後", "永不回頭 永不回頭"]]
 } </script>
+<script id="其他53" name="更加甘甜" type="application/json" charset="UTF-8"> {
+  "content" : [["更加甘甜"],
+               ["我心感覺與主耶穌每日更加親近", "祂比黎明燦爛金色榮光更加明艷", "祂就是我所追求的一切幻想美夢", "祂一天比一天更加美麗 芬芳 甘甜"],
+               ["一半 也猜想不到 金色海岸那邊", "那日我主比以前更加美麗 更甘甜"],
+               ["當我遠遠見主祂的榮光向我照耀", "祂比晨星更明亮 比百合花更鮮艷", "祂使我渴慕的心靈得著滋潤滿足", "祂一天比一天更加美麗 芬芳 甘甜"],
+               ["一半 也猜想不到 金色海岸那邊", "那日我主比以前更加美麗 更甘甜"],
+               ["我心雖有時沉重 祂卻帶來甘甜愛", "當我挫敗而喪氣 祂卻擁我入祂懷", "祂如此擔我重負 我心怎不將祂戀", "祂一天比一天更加美麗 芬芳 甘甜"],
+               ["一半 也猜想不到 金色海岸那邊", "那日我主比以前更加美麗 更甘甜"]]
+} </script>
 <script id="其他" name="" type="application/json" charset="UTF-8"> {
   "content" : [[""],
                ["", "", "", ""]]
@@ -4052,14 +4082,6 @@ var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
 </html>
 
 <script type="text/javascript" charset="UTF-8">
-
-var fontsize = 100;
-var FONT = fontsize + "px " + fontFamily;
-var fontfactor = 10.0;
-
-const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
-const COLOR_PPT = 'blue';
-const COLOR_PPT_SML = 'rgb(0, 70, 0)';
 
 function getSong(jsonid) {
   var json_elm = document.getElementById(jsonid);
