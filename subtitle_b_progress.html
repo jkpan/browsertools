@@ -36,7 +36,7 @@
   }
   
   var fontfactor = 15.0;
-  var fontFamily = "cwTeXKai";//"Noto Serif TC";//"Noto Serif TC";//"標楷體";
+  var fontFamily = "Arial";//"標楷體";//"Noto Serif TC";//"cwTeXKai";//"Noto Serif TC";//"Noto Serif TC";//"標楷體";
   var fontsize = 48;
   var FONT = fontsize + "px " + fontFamily;
   
@@ -32988,25 +32988,15 @@ function verseobj() {
     }, 
 
     preDraw: function(progress) {
-
+    
       if (progress < 0) {
         this.fs = this.targetFs;
       } else {
-        /*
-        if (this.targetFs > this.fs) {
-          this.fs = this.fs + 1;
-        } else if (this.targetFs < this.fs) {
-          this.fs = this.fs - 1;
-        }
-        */
         this.fs = this.fs + (this.targetFs - this.fs) * progress;
         if (this.level == 0) 
           this.transY = this.transY + (this.targetTransY - this.transY) * progress;
-        //if (this.level == 0) console.log(this.targetFs+' ###### '+ this.fs);
-      }    
-
-      //console.log('(' + this.volume + ', ' + this.chapter + ', ' + this.verse + ')');
-      
+      }
+    
       if (this.volume <= 0 || this.chapter < 0 || this.verse < 0) return 0;
        
       let txt = '';
@@ -33056,6 +33046,8 @@ function verseobj() {
 
       if (!this.substrings) return;
 
+      ctx.textBaseline = 'top';
+
       if (this.level == 0) {
         ctx.transform(1,0,0,1,0,this.targetTransY);
         //draw hilight rectangle
@@ -33071,7 +33063,7 @@ function verseobj() {
       }
         
       ctx.transform(1,0,0,1,0,this.transY);
-      ctx.textBaseline = 'top';
+      
       if (this.level == 0) {
 
           ctx.font = this.fs + "px " + fontFamily;
@@ -33099,8 +33091,7 @@ function verseobj() {
   return obj;
 }
 
-var animTotal = 30;
-//var preElapse = -1;
+var animTotal = 20;
 var animElapse = 0;
 function verse_update(elapse) {
 
@@ -33157,12 +33148,22 @@ function operateQuene() {
     break;
   }
 
+  let sel = -1;
   for (let i = 0;i<queue.length;i++) {
     let obj = queue[i];
     obj.setLevel(1);
     if (obj.chapter == phase && obj.verse == line) {
       obj.setLevel(0);
+      sel = i;
+      //if (color_selection == 0 && i >= 2) queue[i-2].setLevel(2);
     }
+  }
+
+  if (color_selection == 0) {
+    if (sel >= 2)
+      queue[sel - 2].setLevel(2);
+    if (queue.length > sel + 2)
+      queue[sel + 2].setLevel(2);
   }
 
   if (animElapse > 0) {
@@ -33184,6 +33185,8 @@ var queue = [];
 
 function render(progress) {
 
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
   ctx.fillStyle = bgcolor_pointer;//'green';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -33254,8 +33257,7 @@ function render(progress) {
   } 
 
   //printMain(phase, line);
-  
-  //ctx.textBaseline = 'alphabetic';
+  ctx.textBaseline = 'alphabetic';
 
 }
 
@@ -33267,7 +33269,7 @@ function printMain(chapter, verse) {
   let i = chapter;
   let j = verse;
 
-  let amount = color_selection == 0?2:5;
+  let amount = color_selection == 0?2:8;
 
   for (let k = 1;k<=amount;k++) {
 
@@ -33305,8 +33307,6 @@ function printMain(chapter, verse) {
   }
 
   render(-1);
-
-  //verse_update(-1);
 
 }
 
