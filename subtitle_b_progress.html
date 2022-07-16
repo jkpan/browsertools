@@ -36,7 +36,7 @@
   }
   
   var fontfactor = 15.0;
-  var fontFamily = "Arial";//"標楷體";//"Noto Serif TC";//"cwTeXKai";//"Noto Serif TC";//"Noto Serif TC";//"標楷體";
+  var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"標楷體";//"Noto Serif TC";
   var fontsize = 48;
   var FONT = fontsize + "px " + fontFamily;
   
@@ -32956,7 +32956,7 @@ function verseobj() {
     frontxt: '',
     level: 0,
     
-    transY: 0,
+    transY: -100,
     fs: 0,
     opacity: 1.0,
     
@@ -32985,16 +32985,26 @@ function verseobj() {
     targetTransY: 0,
     setTargetTransY: function(_transY) {
       this.targetTransY = _transY;
+      if (this.transY < -50) {
+        this.transY = this.targetTransY;
+      }
     }, 
 
     preDraw: function(progress) {
     
-      if (progress < 0) {
+      let fs = this.fs;
+
+      if (progress == -1) {
         this.fs = this.targetFs;
+        this.transY = this.targetTransY;
+        fs = this.fs;
+      } if (progress == -2) { 
+        fs = this.targetFs;
       } else {
         this.fs = this.fs + (this.targetFs - this.fs) * progress;
-        if (this.level == 0) 
-          this.transY = this.transY + (this.targetTransY - this.transY) * progress;
+        fs = this.fs;
+        //if (this.level == 0) 
+        this.transY = this.transY + (this.targetTransY - this.transY) * progress;
       }
     
       if (this.volume <= 0 || this.chapter < 0 || this.verse < 0) return 0;
@@ -33005,10 +33015,8 @@ function verseobj() {
       if (this.chapter == 0) {   //print volume only
         if (this.level == 0)
           txt = subtitles[0][0];
-        this.frontxt = '';
       } else if (this.verse == 0) { //print volume with chapter
         txt = '[' + subtitles[this.chapter][0] + ']';
-        this.frontxt = '';
       } else {                     //normal verse
         txt = subtitles[this.chapter][this.verse];
         this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':
@@ -33019,7 +33027,7 @@ function verseobj() {
         this.wratio = 0.9;
         this.opacity = 1.0;
         if (this.chapter > 0 && this.verse > 0) {
-          ctx.font = (this.fs * 0.7) + "px " + fontFamily;//FONT_SML;
+          ctx.font = (fs * 0.7) + "px " + fontFamily;//FONT_SML;
           let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width/canvas.width);
           this.wratio = 1.0 - frontGap;
         }
@@ -33027,21 +33035,23 @@ function verseobj() {
         this.wratio = 0.9;
         this.opacity = 0.7;
       } else if (this.level == 2) {
-        ctx.font = FONT_SML_SML;
         this.wratio = 0.9;
         this.opacity = 0.3;
       }
 
-      ctx.font = this.fs + "px " + fontFamily;
+      ctx.font = fs + "px " + fontFamily;
 
+      this.substrings.length = 0;
+      this.substrings = [];
       this.substrings = getTxtArray(txt, this.wratio);
 
       //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
 
-      return this.level == 0? this.substrings.length * this.fs + fontsize * 0.5:
-                              this.substrings.length * this.fs + this.fs * 0.2;
+      return this.level == 0? this.substrings.length * fs + fs * 0.5:
+                              this.substrings.length * fs + fs * 0.2;
              
     },
+
     draw: function() {
 
       if (!this.substrings) return;
@@ -33050,32 +33060,30 @@ function verseobj() {
 
       if (this.level == 0) {
         ctx.transform(1,0,0,1,0,this.targetTransY);
-        //draw hilight rectangle
-        let rectH = this.substrings.length * this.fs + this.fs * 0.5;
-        drawHlight(0, rectH);
-        //draw chapter verse
-        if (this.chapter > 0 && this.verse > 0) {
+          //draw hilight rectangle
+          let rectH = this.substrings.length * this.fs + this.fs * 0.5;
+          drawHlight(0, rectH);
+          //draw chapter verse
+          if (this.chapter > 0 && this.verse > 0) {
             ctx.font = (this.targetFs * 0.7) + "px " + fontFamily;//FONT_SML;
             _drawSdwtxt(' '+abbr[this.volume], 0, 4);
-            _drawSdwtxt(this.frontxt, 0, 4 + (this.fs * 0.7));
-        }
+            _drawSdwtxt(this.frontxt, 0, 4 + (this.targetFs * 0.7));
+          }
         ctx.resetTransform();
       }
         
       ctx.transform(1,0,0,1,0,this.transY);
       
-      if (this.level == 0) {
+        ctx.font = this.fs + "px " + fontFamily;
+        let x = canvas.width * (1 - this.wratio);
 
-          ctx.font = this.fs + "px " + fontFamily;
-          let x = canvas.width * (1 - this.wratio);
+        if (this.level == 0) {
           let y = this.fs * 0.25;
           for (let i=0;i<this.substrings.length;i++) {
             _drawSdwtxt(this.substrings[i], x, y);
             y += this.fs;
           }
-      } else {
-          ctx.font = this.fs + "px " + fontFamily;
-          let x = canvas.width * (1 - this.wratio);
+        } else {
           let y = 0;//fontsize * 0.25;
           for (let i=0;i<this.substrings.length;i++) {
             _drawtxt(this.substrings[i], x, y, this.opacity);
@@ -33083,7 +33091,8 @@ function verseobj() {
           }
           ctx.font = this.fs * 0.7 + "px " + fontFamily;
           _drawtxt(' '+this.frontxt, 0, 0, this.opacity);
-      }
+        }
+
       ctx.resetTransform();    
 
     }
@@ -33091,7 +33100,7 @@ function verseobj() {
   return obj;
 }
 
-var animTotal = 20;
+var animTotal = 30;
 var animElapse = 0;
 function verse_update(elapse) {
 
@@ -33199,33 +33208,55 @@ function render(progress) {
   
   let offY = fixy;
 
+  /////
   for (let i = 0;i<queue.length;i++) {
     let obj = queue[i];
     if (obj.chapter == phase && obj.verse == line) {
+
       obj.setTargetTransY(offY);
-      if (progress < 0) {
-        obj.transY = offY;
-      } else {
-        offY = obj.transY;
-      }
-      //obj.transY = offY;
-      offY += obj.preDraw(progress);
-      obj.draw();
+      offY += obj.preDraw(-2);
       offY += fontsize_sml_sml/2.0;
+      
       for (let k = i + 1;k<queue.length;k++) {
         let o = queue[k];
-        o.transY = offY;
-        offY += o.preDraw(progress);
-        o.draw();
-        if (offY > canvas.height) break;
+        o.setTargetTransY(offY);
+        offY += o.preDraw(-2);
       }
       
-      offY = obj.transY;
+      offY = fixy;
       for (let k = i - 1;k >= 0;k--) {
         let o = queue[k];
-        offY -= o.preDraw(progress);
-        o.transY = offY;
-        if (offY < 0) break;
+        offY -= o.preDraw(-2);
+        o.setTargetTransY(offY);
+      }
+      
+      break;
+    }
+    
+  }
+  /////
+
+  for (let i = 0;i<queue.length;i++) {
+    let obj = queue[i];
+    if (obj.chapter == phase && obj.verse == line) {
+      
+      obj.preDraw(progress);
+      obj.draw();
+      
+      for (let k = i + 1;k<queue.length;k++) {
+        let o = queue[k];
+        //o.transY = offY;
+        o.preDraw(progress);
+        o.draw();
+        if (o.transY > canvas.height) break;
+      }
+      
+      //offY = obj.transY;
+      for (let k = i - 1;k >= 0;k--) {
+        let o = queue[k];
+        o.preDraw(progress);
+        //o.transY = offY;
+        if (o.transY <= 0) break;
         o.draw();
       }
       
@@ -33309,177 +33340,6 @@ function printMain(chapter, verse) {
   render(-1);
 
 }
-
-/*
-function drawTxtAbove(transY, versus, txt, a, type) {
-  
-  ctx.font = FONT_SML;
-  
-  let substrings = getTxtArray(txt, 0.9);
-  
-  if (type == 0)
-    transY -= (substrings.length * fontsize_sml + fontsize_sml * 0.2);
-  
-  ctx.transform(1,0,0,1,0,transY);
-
-    ctx.textBaseline = 'top';//'middle';//'top';//'bottom';
-    let x = canvas.width * 0.1;
-    let y = 0;
-    ctx.font = FONT_SML_SML;
-    if (versus > 0) 
-      _drawtxt(''+versus, fontsize_sml, y, a);
-    else 
-      substrings[0] = '[' + substrings[0] + ']';
-    ctx.font = FONT_SML;
-    for (let i=0;i<substrings.length;i++) {
-      _drawtxt(substrings[i], x, y, a);
-      y += fontsize_sml;
-    }
-
-  ctx.resetTransform();
-
-  if (type == 1)
-    transY += (substrings.length * fontsize_sml + fontsize_sml * 0.2);
-
-  return transY;
-}
-
-function printMain(i, j) {
-    
-  let x = canvas.width * 0.1;
-  let y = canvas.height * 0.6;
-      
-  //if (animSwh == 1) y = canvas.height * 0.4;
-  if (color_selection > 0)
-    y = canvas.height * 0.4;
-  let fixy = y;
-
-  let ptxt = abbr[song] + ' ' + i + ':' + j;
-  let txt = subtitles[i][j];
-
-  ctx.textAlign = "left";
-  var px = 10;
-  
-  if (i == 0 && j == 0) {
-    txt = subtitles[0][0];
-    ptxt = '';
-  } else if (i != 0 && j == 0) {
-    ptxt = '['+subtitles[i][j] + ']';
-    txt = "";
-  } 
-
-  //let i_1 = getPreChapter(i, j);
-  //let j_1 = getPreVerse(i, j);
-  //let i_2 = getPreChapter(i_1, j_1);
-  //let j_2 = getPreVerse(i_1, j_1);
-
-  ctx.textAlign = "left";
-  ctx.textBaseline = 'alphabetic';
- 
-  {
-  
-    let i_x = i;
-    let j_x = j;
-    ctx.font = FONT_SML;
-    let transY =  y - fontsize_sml * 0.5;
-    for (let _i = 1;_i<=10;_i++) {
-      let _i_x = getPreChapter(i_x, j_x);
-      j_x = getPreVerse(i_x, j_x);
-      i_x = _i_x;
-      if (color_selection == 0) {
-        if (_i > 1) ctx.font = FONT_SML_SML;
-        printSideTxt(i_x, j_x, x, y - fontsize_sml * (_i - 0.5), Math.max(0.1, 1.0 - 0.3 * _i));
-        if (_i == 2) break;
-      } else {
-        if (i_x > 0) transY = drawTxtAbove(transY, j_x, subtitles[i_x][j_x], Math.max(0.05, 1.0 - 0.1 * _i), 0);
-        if (transY < 0) break;
-      }
-    }
-
-  }
-  
-  ctx.textBaseline = 'alphabetic';
-
-  let rectH = 0;
-
-  if (i == 0) {
-    ctx.font = FONT;
-    y += fontsize;
-    _drawSdwtxt(txt, x, y);
-    rectH = 1.5 * fontsize;
-  } else if (j > 0) {
-    if (doblank != 1 || color_selection == 0) {
-      ptxt = i + ':' + j + ' ';
-      ctx.font = FONT_SML;
-      let frontGap = Math.max(0.1, ctx.measureText(ptxt).width/canvas.width);
-      ctx.font = FONT;
-      let substrings = getTxtArray(txt, 1.0 - frontGap);
-      rectH = substrings.length * fontsize + fontsize * 0.5;
-      drawHlight(y, rectH);
-      x = canvas.width * frontGap;
-      for (let i=0;i<substrings.length;i++) {
-        y += fontsize;
-        _drawSdwtxt(substrings[i], x, y);
-      }
-      ctx.font = FONT_SML;
-      _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
-      _drawSdwtxt(ptxt, px, fixy + fontsize_sml * 2);
-    } else {
-      rectH = drawTxtAbove(y, j, subtitles[i][j], 1.0, 1) - y;
-    }
-  } else {
-    ctx.font = FONT_SML;
-    _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
-    rectH = fontsize;//substrings.length * fontsize + fontsize * 0.5;
-  }
-
-  {
-    let i_x = i;
-    let j_x = j;
-    ctx.font = FONT_SML;
-    let transY =  fixy + rectH + fontsize_sml * 0.5;
-    for (let _i = 1;_i<=10;_i++) {
-      let _i_x = getNextChapter(i_x, j_x);
-      j_x = getNextVerse(i_x, j_x);
-      i_x = _i_x;
-
-      if (color_selection == 0) {
-        if (_i > 1) ctx.font = FONT_SML_SML;
-        if (i_x != -1) printSideTxt(i_x, j_x, x, fixy + rectH + fontsize_sml * _i,  Math.max(0.1, 1.0 - 0.3 * _i));
-        if (_i == 2) break;
-      } else {
-        if (i_x != -1) transY = drawTxtAbove(transY, j_x, subtitles[i_x][j_x], Math.max(0.05, 1.0 - 0.1 * _i), 1);
-        if (transY > canvas.height) break;
-      }
-    }
-  }
-
-  if (animSwh == 0) { //print saved versus
-    ctx.textBaseline = 'top';
-    let fs = Math.min(fontsize_sml_sml, 24);
-    ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
-    ctx.fillRect(0, 0, canvas.width, fs * 2);
-    ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
-
-    if (color_selection > 0) 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
-    ctx.font = (fs * 1.5) + 'px Arial';
-    ctx.fillText(subtitles[0][0], 4, 2);
-    let gap = ctx.measureText(subtitles[0][0]).width + 20;
-    ctx.font = (fs-4) + 'px Arial';
-    for (let idx = 1;idx <= presetVerse.length;idx++) {
-      if (presetVerse[idx%10][0].length == 0)
-        continue;
-      let xx = gap + (idx-1) * (canvas.width - gap)/presetVerse.length;
-      ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, 2);
-      ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs-1);
-    }
-  } 
-
-  ctx.textBaseline = 'alphabetic';
-
-}
-*/
 
 function _drawSdwtxt(txt, x, y) {
 
