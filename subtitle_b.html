@@ -36,7 +36,7 @@
   }
   
   var fontfactor = 15.0;
-  var fontFamily = "cwTeXKai";//"Noto Serif TC";//"Noto Serif TC";//"標楷體";
+  var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"標楷體";//"Noto Serif TC";
   var fontsize = 48;
   var FONT = fontsize + "px " + fontFamily;
   
@@ -32914,7 +32914,6 @@ function printSideTxt(i, j, x, y, a) {
     _drawtxt('   ' + j, 10, y, a);
   }
 
-
   _drawtxt(txt, x, y, a);
 
 }
@@ -32947,147 +32946,328 @@ function getTxtArray(txt, wRatio) {
   return substrings;
 }
 
-function drawTxtAbove(transY, versus, txt, a, type) {
-  
-  ctx.font = FONT_SML;
-  
-  let substrings = getTxtArray(txt, 0.9);
-  
-  if (type == 0)
-    transY -= (substrings.length * fontsize_sml + fontsize_sml * 0.2);
-  
-  ctx.transform(1,0,0,1,0,transY);
+function verseobj() {
+  let obj = {
+    volume: 0,
+    chapter: 0,
+    verse: 0,
+    wratio: 0.9,
+    substrings: [],
+    frontxt: '',
+    level: 0,
+    
+    transY: -100,
+    fs: 0,
+    opacity: 1.0,
+    
+    //targetsize: fontsize,
+          
+    initial: function(volume, c, v, level) {
+      this.volume = volume;
+      this.chapter = c;
+      this.verse = v;
+      this.setLevel(level);
+      this.fs = this.targetFs;
+    },
 
-    ctx.textBaseline = 'top';//'middle';//'top';//'bottom';
-    let x = canvas.width * 0.1;
-    let y = 0;
-    ctx.font = FONT_SML_SML;
-    if (versus > 0) 
-      _drawtxt(''+versus, fontsize_sml, y, a);
-    else 
-      substrings[0] = '[' + substrings[0] + ']';
-    ctx.font = FONT_SML;
-    for (let i=0;i<substrings.length;i++) {
-      _drawtxt(substrings[i], x, y, a);
-      y += fontsize_sml;
+    targetRect:0,
+    targetFs: 0,
+
+    setLevel: function(level) {
+      this.level = level;
+      if (this.level == 0)
+        this.targetFs = fontsize;
+      else if (this.level == 1)
+        this.targetFs = fontsize_sml;
+      else if (this.level == 2)
+        this.targetFs = fontsize_sml_sml;
+    },
+
+    targetTransY: 0,
+    setTargetTransY: function(_transY) {
+      this.targetTransY = _transY;
+      if (this.transY < -50) {
+        this.transY = this.targetTransY;
+      }
+    }, 
+
+    preDraw: function(progress) {
+    
+      let fs = this.fs;
+
+      if (progress == -1) {
+        this.fs = this.targetFs;
+        this.transY = this.targetTransY;
+        fs = this.fs;
+      } if (progress == -2) { 
+        fs = this.targetFs;
+      } else {
+        this.fs = this.fs + (this.targetFs - this.fs) * progress;
+        fs = this.fs;
+        //if (this.level == 0) 
+        this.transY = this.transY + (this.targetTransY - this.transY) * progress;
+      }
+    
+      if (this.volume <= 0 || this.chapter < 0 || this.verse < 0) return 0;
+       
+      let txt = '';
+      this.frontxt = '';
+
+      if (this.chapter == 0) {   //print volume only
+        if (this.level == 0)
+          txt = subtitles[0][0];
+      } else if (this.verse == 0) { //print volume with chapter
+        txt = '[' + subtitles[this.chapter][0] + ']';
+      } else {                     //normal verse
+        txt = subtitles[this.chapter][this.verse];
+        this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':
+                                  ' ' + this.verse + ' ';
+      }
+
+      if (this.level == 0) {
+        this.wratio = 0.9;
+        this.opacity = 1.0;
+        if (this.chapter > 0 && this.verse > 0) {
+          ctx.font = (fs * 0.7) + "px " + fontFamily;//FONT_SML;
+          let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width/canvas.width);
+          this.wratio = 1.0 - frontGap;
+        }
+      } else if (this.level == 1) {
+        this.wratio = 0.9;
+        this.opacity = 0.8;
+      } else if (this.level == 2) {
+        this.wratio = 0.9;
+        this.opacity = 0.5;
+      }
+
+      ctx.font = fs + "px " + fontFamily;
+
+      this.substrings.length = 0;
+      this.substrings = [];
+      this.substrings = getTxtArray(txt, this.wratio);
+
+      if (progress < 0) {
+        this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+      }
+
+      //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
+
+      return this.level == 0? this.substrings.length * fs + fs * 0.5:
+                              this.substrings.length * fs + fs * 0.2;
+             
+    },
+
+    draw: function() {
+
+      if (!this.substrings) return;
+
+      ctx.textBaseline = 'top';
+
+      if (this.level == 0) {
+        ctx.transform(1,0,0,1,0,this.targetTransY);
+          //draw hilight rectangle
+          //let rectH = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+          drawHlight(0, this.targetRect);//rectH);
+          //draw chapter verse
+          if (this.chapter > 0 && this.verse > 0) {
+            ctx.font = (this.targetFs * 0.7) + "px " + fontFamily;//FONT_SML;
+            _drawSdwtxt(' '+abbr[this.volume], 0, 4);
+            _drawSdwtxt(this.frontxt, 0, 4 + (this.targetFs * 0.7));
+          }
+        ctx.resetTransform();
+      }
+        
+      ctx.transform(1,0,0,1,0,this.transY);
+      
+        ctx.font = this.fs + "px " + fontFamily;
+        let x = canvas.width * (1 - this.wratio);
+
+        if (this.level == 0) {
+          let y = this.fs * 0.25;
+          for (let i=0;i<this.substrings.length;i++) {
+            _drawSdwtxt(this.substrings[i], x, y);
+            y += this.fs;
+          }
+        } else {
+          let y = 0;//fontsize * 0.25;
+          for (let i=0;i<this.substrings.length;i++) {
+            _drawtxt(this.substrings[i], x, y, this.opacity);
+            y += this.fs;
+          }
+          ctx.font = this.fs * 0.7 + "px " + fontFamily;
+          _drawtxt(' '+this.frontxt, 0, 0, this.opacity);
+        }
+
+      ctx.resetTransform();    
+
     }
-
-  ctx.resetTransform();
-
-  if (type == 1)
-    transY += (substrings.length * fontsize_sml + fontsize_sml * 0.2);
-
-  return transY;
+  }
+  return obj;
 }
 
-function printMain(i, j) {
+var animTotal = 30;
+var animElapse = 0;
+function verse_update(elapse) {
+
+  render(animElapse/animTotal);
+  //console.log(elapse + ' : ' + animElapse/animTotal);
+  
+  if (animElapse < animTotal) {
+    animElapse++;
+    window.requestAnimationFrame(verse_update);
+  } else {
+    animElapse = 0;
+  }
+}
+
+function getQueuePre() {
+  if (queue.length == 0) return null;
+  let obj = queue[0];
+  let c = getPreChapter(obj.chapter, obj.verse);
+  let v = getPreVerse(obj.chapter, obj.verse);
+  obj = verseobj();
+  obj.initial(song, c, v, 1);
+  return obj;
+}
+
+function getQueueNext() {
+  if (queue.length == 0) return null;
+  let obj = queue[queue.length -1];
+  let c = getNextChapter(obj.chapter, obj.verse);
+  let v = getNextVerse(obj.chapter, obj.verse);
+  obj = verseobj();
+  obj.initial(song, c, v, 1);
+  return obj;
+}
+
+function operateQuene() {
+  
+  if (queue.length == 0) {
+    queueType = 0;
+  }
+
+  //push 往後加 shift 從頭砍
+  //unshift 往前加 pop 從後砍 
+  switch (queueType) {
+    case 0: 
+      printMain(phase, line); 
+      return;
+    case 1: //move next
+      queue.shift();
+      queue.push(getQueueNext());
+    break;
+    case 2: //move previous
+      queue.unshift(getQueuePre());
+      queue.pop();
+    break;
+  }
+
+  let sel = -1;
+  for (let i = 0;i<queue.length;i++) {
+    let obj = queue[i];
+    obj.setLevel(1);
+    if (obj.chapter == phase && obj.verse == line) {
+      obj.setLevel(0);
+      sel = i;
+      //if (color_selection == 0 && i >= 2) queue[i-2].setLevel(2);
+    }
+  }
+
+  if (color_selection == 0) {
+    if (sel >= 2)
+      queue[sel - 2].setLevel(2);
+    if (queue.length > sel + 2)
+      queue[sel + 2].setLevel(2);
+  }
+
+  if (animElapse > 0) {
+    animElapse = 0;
+    //printMain(phase, line);
+    window.requestAnimationFrame(verse_update);
+  } else {
+    //animElapse = 0;
+    window.requestAnimationFrame(verse_update);
+  }
+  
     
+  queueType = 0;
+
+}
+
+var queueType;
+var queue = [];
+
+function render(progress) {
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  ctx.fillStyle = bgcolor_pointer;//'green';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.6;
       
-  //if (animSwh == 1) y = canvas.height * 0.4;
   if (color_selection > 0)
     y = canvas.height * 0.4;
   let fixy = y;
-
-  let ptxt = abbr[song] + ' ' + i + ':' + j;
-  let txt = subtitles[i][j];
-
-  ctx.textAlign = "left";
-  var px = 10;
   
-  if (i == 0 && j == 0) {
-    txt = subtitles[0][0];
-    ptxt = '';
-  } else if (i != 0 && j == 0) {
-    ptxt = '['+subtitles[i][j] + ']';
-    txt = "";
-  } 
-  
-  ctx.textAlign = "left";
-  ctx.textBaseline = 'alphabetic';
- 
-  {
+  let offY = fixy;
 
-    //let i_1 = getPreChapter(i, j);
-    //let j_1 = getPreVerse(i, j);
-    //let i_2 = getPreChapter(i_1, j_1);
-    //let j_2 = getPreVerse(i_1, j_1);
-  
-    let i_x = i;
-    let j_x = j;
-    ctx.font = FONT_SML;
-    let transY =  y - fontsize_sml * 0.5;
-    for (let _i = 1;_i<=10;_i++) {
-      let _i_x = getPreChapter(i_x, j_x);
-      j_x = getPreVerse(i_x, j_x);
-      i_x = _i_x;
-      if (color_selection == 0) {
-        if (_i > 1) ctx.font = FONT_SML_SML;
-        printSideTxt(i_x, j_x, x, y - fontsize_sml * (_i - 0.5), Math.max(0.1, 1.0 - 0.3 * _i));
-        if (_i == 2) break;
-      } else {
-        if (i_x > 0) transY = drawTxtAbove(transY, j_x, subtitles[i_x][j_x], Math.max(0.05, 1.0 - 0.1 * _i), 0);
-        if (transY < 0) break;
+  /////
+  for (let i = 0;i<queue.length;i++) {
+    let obj = queue[i];
+    if (obj.chapter == phase && obj.verse == line) {
+
+      obj.setTargetTransY(offY);
+      offY += obj.preDraw(-2);
+      offY += fontsize_sml_sml/2.0;
+      
+      for (let k = i + 1;k<queue.length;k++) {
+        let o = queue[k];
+        o.setTargetTransY(offY);
+        offY += o.preDraw(-2);
       }
+      
+      offY = fixy;
+      for (let k = i - 1;k >= 0;k--) {
+        let o = queue[k];
+        offY -= o.preDraw(-2);
+        o.setTargetTransY(offY);
+      }
+      
+      break;
     }
-
+    
   }
-  
-  ctx.textBaseline = 'alphabetic';
+  /////
 
-  let rectH = 0;
-
-  if (i == 0) {
-    ctx.font = FONT;
-    y += fontsize;
-    _drawSdwtxt(txt, x, y);
-    rectH = 1.5 * fontsize;
-  } else if (j > 0) {
-    if (doblank != 1 || color_selection == 0) {
-      ptxt = i + ':' + j + ' ';
-      ctx.font = FONT_SML;
-      let frontGap = Math.max(0.1, ctx.measureText(ptxt).width/canvas.width);
-      ctx.font = FONT;
-      let substrings = getTxtArray(txt, 1.0 - frontGap);
-      rectH = substrings.length * fontsize + fontsize * 0.5;
-      drawHlight(y, rectH);
-      x = canvas.width * frontGap;
-      for (let i=0;i<substrings.length;i++) {
-        y += fontsize;
-        _drawSdwtxt(substrings[i], x, y);
+  for (let i = 0;i<queue.length;i++) {
+    let obj = queue[i];
+    if (obj.chapter == phase && obj.verse == line) {
+      
+      obj.preDraw(progress);
+      obj.draw();
+      
+      for (let k = i + 1;k<queue.length;k++) {
+        let o = queue[k];
+        //o.transY = offY;
+        o.preDraw(progress);
+        o.draw();
+        if (o.transY > canvas.height) break;
       }
-      ctx.font = FONT_SML;
-      _drawSdwtxt(abbr[song], px, fixy + fontsize_sml);
-      _drawSdwtxt(ptxt, px, fixy + fontsize_sml * 2);
-    } else {
-      rectH = drawTxtAbove(y, j, subtitles[i][j], 1.0, 1) - y;
-    }
-  } else {
-    ctx.font = FONT_SML;
-    _drawSdwtxt(ptxt, px, fixy + fontsize_sml);
-    rectH = fontsize;//substrings.length * fontsize + fontsize * 0.5;
-  }
-
-  {
-    let i_x = i;
-    let j_x = j;
-    ctx.font = FONT_SML;
-    let transY =  fixy + rectH + fontsize_sml * 0.5;
-    for (let _i = 1;_i<=10;_i++) {
-      let _i_x = getNextChapter(i_x, j_x);
-      j_x = getNextVerse(i_x, j_x);
-      i_x = _i_x;
-
-      if (color_selection == 0) {
-        if (_i > 1) ctx.font = FONT_SML_SML;
-        if (i_x != -1) printSideTxt(i_x, j_x, x, fixy + rectH + fontsize_sml * _i,  Math.max(0.1, 1.0 - 0.3 * _i));
-        if (_i == 2) break;
-      } else {
-        if (i_x != -1) transY = drawTxtAbove(transY, j_x, subtitles[i_x][j_x], Math.max(0.05, 1.0 - 0.1 * _i), 1);
-        if (transY > canvas.height) break;
+      
+      //offY = obj.transY;
+      for (let k = i - 1;k >= 0;k--) {
+        let o = queue[k];
+        o.preDraw(progress);
+        //o.transY = offY;
+        if (o.transY <= 0) break;
+        o.draw();
       }
+      
+      break;
     }
+    
   }
 
   if (animSwh == 0) { //print saved versus
@@ -33112,7 +33292,57 @@ function printMain(i, j) {
     }
   } 
 
+  //printMain(phase, line);
   ctx.textBaseline = 'alphabetic';
+
+}
+
+function printMain(chapter, verse) {
+
+  queue.length = 0;
+  queue = [];
+
+  let i = chapter;
+  let j = verse;
+
+  let amount = color_selection == 0?2:8;
+
+  for (let k = 1;k<=amount;k++) {
+
+      let _i = getPreChapter(i, j);
+      j = getPreVerse(i, j);
+      i = _i;
+
+      let obj = verseobj();
+      if (color_selection == 0 && k == amount) {
+        obj.initial(song, i, j, 2);
+      } else {
+        obj.initial(song, i, j, 1);
+      }
+      queue.unshift(obj);
+  }
+
+  let obj = verseobj();
+  obj.initial(song, chapter, verse, 0);
+  queue.push(obj);
+
+  i = chapter;
+  j = verse;
+  for (let k = 1;k <= amount;k++) {
+      let _i = getNextChapter(i, j);
+      j = getNextVerse(i, j);
+      i = _i;
+
+      let obj = verseobj();
+      if (color_selection == 0 && k == amount) {
+        obj.initial(song, i, j, 2);
+      } else {
+        obj.initial(song, i, j, 1);
+      }
+      queue.push(obj);      
+  }
+
+  render(-1);
 
 }
 
@@ -33149,11 +33379,12 @@ function _drawtxt(txt, x, y, a) {
 }
 
 function getPreChapter(chapter, verse) {
+  if (chapter <= 0) return -1;
   if (verse > 0) 
     return chapter;
-  if (chapter > 0)
-    return chapter - 1;
-  return 0;
+  //if (chapter > 0)
+  return chapter - 1;
+  //return 0;
 }
 
 function getPreVerse(chapter, verse) {
@@ -33243,7 +33474,7 @@ function combineKey(e) {
       case 38: //'ArrowUp'
           if (canvas.hidden) break;
           if (phase >= jump) {
-            phase = phase - jump;  
+            phase = phase - jump;
           } else {
             phase = 0;
           }
@@ -33422,7 +33653,10 @@ function keyboard(e) { //key up
       case 38: //'ArrowUp'
           if (canvas.hidden) break;
           helpSwitch = 0;
-          if (phase > 0) phase--; else  phase = 0;
+          if (phase > 0) 
+            phase--; 
+          else  
+            phase = 0;
           line = 0;
           break; 
       case 40: //'ArrowDown':
@@ -33433,31 +33667,49 @@ function keyboard(e) { //key up
           line = 0;
           break;
       case 37: { //'ArrowLeft'
+          
           helpSwitch = 0;
           let _phase = getPreChapter(phase, line);
           let _line = getPreVerse(phase, line);
-          phase = _phase;
-          line = _line;
+          if (_phase >= 0 && (phase != _phase || line != _line)) {
+            phase = _phase;
+            line = _line;
+            if (mode == 0 && queue.length > 0) {
+              queueType = 2;
+              operateQuene();
+              return;
+            }
+          }
           
           if (mode == 1) {
             removeDiv();
             canvas.hidden = true;
             plaintxtMode();
           }
+
         }
           break; 
       case 39: { //'ArrowRight'
           helpSwitch = 0;
           let _phase = getNextChapter(phase, line);
           let _line = getNextVerse(phase, line);
-          phase = _phase == -1?phase:_phase;
-          line = _line == -1?line:_line;
+          
+          if (_phase >=0 && (phase != _phase || line != _line)) {
+            phase = _phase;
+            line  = _line;
+            if (mode == 0 && queue.length > 0) {
+              queueType = 1;
+              operateQuene();
+              return;
+            }
+          }
           
           if (mode == 1) {
             removeDiv();
             canvas.hidden = true;
             plaintxtMode();
           }
+
         }
           break;
       
@@ -33603,16 +33855,12 @@ function _layerui() {
   ctx.lineWidth = 1;
   ctx.font = FONT;
   let x = fontsize_sml;
-  let y = canvas.height - 20;
+  let y = canvas.height - fontsize_sml;
   ctx.font = fontsize_sml + 'px Arial';
+  ctx.textBaseline = 'top';//'bottom';
   for (let i=uisel_start;i<=uisel_end;i++) {
-    if (i == song) {
-      ctx.fillStyle = color_pointer[3];
-      ctx.fillText(SONGS[i][0][0], x - fontsize_sml/2 , y);
-    } else {
-      ctx.fillStyle = color_pointer[2];
-      ctx.fillText(SONGS[i][0][0], x, y);
-    }
+    ctx.fillStyle = color_pointer[(i == song?3:2)];
+    ctx.fillText(SONGS[i][0][0], x - (i == song?fontsize_sml/2:0) , y);
     y -= fontsize_sml * 1.5;
   }
 }
