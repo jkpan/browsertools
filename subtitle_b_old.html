@@ -33137,7 +33137,7 @@ function _drawSdwtxt(txt, x, y) {
 
 function _drawtxt(txt, x, y, a) {
 
-  ctx.fillStyle = 'rgb(255, 255, 255, ' + a + ')';
+  ctx.fillStyle = 'rgba(255, 255, 255, ' + a + ')';
   
   if (doblank == 1 && color_selection == 0) {
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
@@ -33795,7 +33795,7 @@ function newParticle_casual() {
       this.x = this.x + this.v * dt * 0.001 * Math.cos(this.dir);
       this.y = this.y + this.v * dt * 0.001 * Math.sin(this.dir);
       //ctx.save();
-      _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
+      _ctx.fillStyle = 'rgba(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,200)";
       //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
       _ctx.beginPath();
       _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);

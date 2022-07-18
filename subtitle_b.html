@@ -36,7 +36,7 @@
   }
   
   var fontfactor = 15.0;
-  var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"標楷體";//"Noto Serif TC";
+  var fontFamily = "Arial";//"cwTeXKai";//'華康瘦金體';//"標楷體";//"Noto Serif TC";
   var fontsize = 48;
   var FONT = fontsize + "px " + fontFamily;
   
@@ -50,18 +50,38 @@
   var bgStyle = 'green';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)";
   var hlightStyle = 'rgb(0, 60, 0)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
+  
+  //strokeStyle = 'black';//'rgb(0, 0, 0, ' + a + ')';
+  //ctx.fillStyle
+
 
   var bgStyle_blue = 'blue';
   var hlightStyle_blue = 'rgb(0, 0, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_blue = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
+  
   var bgStyle_black = 'black';
   var hlightStyle_black = 'rgb(80, 80, 80)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-  const COLORS_black = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];;//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
+  const COLORS_black = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
+  
 
+  var bgStyle_white = 'white';
+  var hlightStyle_white = 'rgb(180, 180, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  const COLORS_white = ["rgb(255, 255, 255)", "rgb(180, 180, 180)", "rgb(120, 128, 128)", "rgb(80, 80, 80)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
+  
+  var txt_strokeStyle = 'black';
+  var txt_fillStyle = 'rgba(255, 255, 255, '; 
+
+  var txt_strokeStyle_white = 'rgb(255,255,255)';
+  var txt_fillStyle_white = 'rgba(0, 0, 0, '; 
+
+  /////
   var bgcolor_pointer = bgStyle;
   var color_pointer = COLORS_CK;
   var hlight_pointer = hlightStyle;
+
+  var txt_fill = txt_fillStyle;
+  var txt_stroke = txt_strokeStyle; 
 
 </script>
 
@@ -32718,7 +32738,7 @@ function init() {
     fontsize_sml = Math.ceil(fontsize * 0.66);//32;
     FONT_SML = fontsize_sml + "px " + fontFamily;
 
-    fontsize_sml_sml = Math.ceil(fontsize * 0.5);;
+    fontsize_sml_sml = Math.ceil(fontsize * 0.5);
     FONT_SML_SML = fontsize_sml_sml + "px " + fontFamily;
 
 }
@@ -33278,7 +33298,7 @@ function render(progress) {
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
 
     if (color_selection > 0) 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
+      ctx.fillStyle = 'rgba(155, 155, 155, 0.66)';
     ctx.font = (fs * 1.5) + 'px Arial';
     ctx.fillText(subtitles[0][0], 4, 2);
     let gap = ctx.measureText(subtitles[0][0]).width + 20;
@@ -33294,6 +33314,9 @@ function render(progress) {
 
   //printMain(phase, line);
   ctx.textBaseline = 'alphabetic';
+
+  _layer2();
+  _layerui();
 
 }
 
@@ -33349,28 +33372,30 @@ function printMain(chapter, verse) {
 function _drawSdwtxt(txt, x, y) {
 
   if (doblank == 1 && color_selection == 0) {
-    ctx.fillStyle =  color_pointer[3];//'rgb(0, 220, 0)';
+    ctx.fillStyle = color_pointer[3];//'rgb(0, 220, 0)';
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
     return;
   }
 
-  ctx.strokeStyle = 'black';//'rgb(0, 0, 0, ' + a + ')';
-  ctx.lineWidth = Math.ceil(fontsize/10.0);
-  ctx.strokeText(txt, x, y);
+  if (doblank == 0) {
+    ctx.strokeStyle = txt_stroke;//'black';//'rgb(0, 0, 0, ' + a + ')';
+    ctx.lineWidth = Math.ceil(fontsize/10.0);
+    ctx.strokeText(txt, x, y);
+  }
 
-  ctx.fillStyle = 'white';//'rgb(255, 255, 255, ' + a + ')';
+  ctx.fillStyle = txt_fill + 1.0 + ')';//'white';//'rgb(255, 255, 255, ' + a + ')';
   ctx.lineWidth = 1;
   ctx.fillText(txt, x, y);
 
 }
 
 function _drawtxt(txt, x, y, a) {
-
-  ctx.fillStyle = 'rgb(255, 255, 255, ' + a + ')';
-  
+    
   if (doblank == 1 && color_selection == 0) {
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
+  } else {
+    ctx.fillStyle = txt_fill + a + ')';
   }
 
   ctx.lineWidth = 1;
@@ -33620,20 +33645,34 @@ function keyboard(e) { //key up
       case 65: //a
           
           if (canvas.hidden) break;
-          color_selection = (color_selection + 1 )%3;
+          color_selection = (color_selection + 1 )%4;
           if (color_selection == 0) {
             bgcolor_pointer = bgStyle;
             color_pointer = COLORS_CK;
             hlight_pointer = hlightStyle;
+
+            txt_fill = txt_fillStyle;
+            txt_stroke = txt_strokeStyle; 
+
           } else if (color_selection == 1) {
             bgcolor_pointer = bgStyle_black;
             color_pointer = COLORS_black;
             hlight_pointer = hlightStyle_black;
-          } if (color_selection == 2) { 
+            txt_fill = txt_fillStyle;
+            txt_stroke = txt_strokeStyle; 
+          } else if (color_selection == 2) { 
             bgcolor_pointer = bgStyle_blue;
             color_pointer = COLORS_blue;
             hlight_pointer = hlightStyle_blue;
-          }        
+            txt_fill = txt_fillStyle;
+            txt_stroke = txt_strokeStyle; 
+          } if (color_selection == 3) { 
+            bgcolor_pointer = bgStyle_white;
+            color_pointer = COLORS_white;
+            hlight_pointer = hlightStyle_white;
+            txt_fill = txt_fillStyle_white;
+            txt_stroke = txt_strokeStyle_white; 
+          }      
           
           
           //if (canvas.hidden) break;
@@ -33866,6 +33905,8 @@ function _layerui() {
 }
 
 function _repaint() {
+  //ctx.globalCompositeOperation='difference';
+  //ctx.filter = 'invert(1)';
   _layer0();
   _layer1();
   _layer2();
