@@ -76,7 +76,9 @@ function newParticle_txt(sequence, total) {
       this.y -= this.size * dt * 0.001;
 
       _ctx.textAlign = "left";
-      _ctx.font = this.size + "px 標楷體";
+
+      var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"Noto Serif TC";//"標楷體";
+      _ctx.font = this.size + "px "+ fontFamily;
 
       //ctx.fillText(this.txt.substr(i, 1), this.x, this.y);
 

@@ -83,266 +83,6 @@ function initLED(x, y, w, h) {
 
 }
 
-function setPix4_2(data, k) {
-
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else {
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-
-    setPixColor(data, k,               _r, _g, _b);//中
-    setPixColor(data, k - gapP,        _r, _g, _b);//左
-    setPixColor(data, k - gapL,        _r, _g, _b);//上
-    setPixColor(data, k - gapP - gapL, _r, _g, _b);//左上
-  }
-
-  function setPix4_3(data, k) {
-
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else {
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-
-    if (side == 0 || !makeRound) {
-      let _k = k - gapP - gapL;
-      for (let i = 0;i<3;i++) {
-        for (let j = 0;j<3;j++) {
-          setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
-        }
-      }
-      return;
-    }
-    
-    setPixColor(data, k,               _r, _g, _b);//中
-    setPixColor(data, k - gapP,        _r, _g, _b);//左
-    setPixColor(data, k - gapL,        _r, _g, _b);//上
-    setPixColor(data, k - gapP - gapL, _r * 2/3, _g * 2/3, _b * 2/3);//左上
-
-    //右
-    setPixColor(data, k + gapP,        _r, _g, _b);
-    //右上
-    setPixColor(data, k + gapP - gapL, _r * 2/3, _g * 2/3, _b * 2/3);
-    //右下
-    setPixColor(data, k + gapP + gapL, _r * 2/3, _g * 2/3, _b * 2/3);
-    //下
-    setPixColor(data, k + gapL,        _r, _g, _b);
-    //左下
-    setPixColor(data, k - gapP + gapL, _r * 2/3, _g * 2/3, _b * 2/3);
-
-  }
-
-  function setPix4_4(data, k) {   
-
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else if ((data[k + gapL + gapP] > criteria || data[k + gapL + gapP + 1] > criteria || data[k + gapL + gapP + 2] > criteria)) {
-        _r = data[k + gapL + gapP];
-        _g = data[k + gapL + gapP + 1];
-        _b = data[k + gapL + gapP + 2];
-    } else {
-        
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-
-    if (side == 0 || !makeRound) {
-      let _k = k - gapP - gapL;
-      for (let i = 0;i<4;i++) {
-        for (let j = 0;j<4;j++) {
-          setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
-        }
-      }
-      return;
-    }
-
-    setPixColor(data, k,               _r, _g, _b);//中
-    setPixColor(data, k - gapP,        _r, _g, _b);//左
-    setPixColor(data, k - gapL,        _r, _g, _b);//上
-    setPixColor(data, k - gapP - gapL, 0, 0, 0);//左上
-
-    //右
-    setPixColor(data, k + gapP,        _r, _g, _b);
-    //右上
-    setPixColor(data, k + gapP - gapL, _r, _g, _b);
-    //右下
-    setPixColor(data, k + gapP + gapL, _r, _g, _b);
-    //下
-    setPixColor(data, k + gapL,        _r, _g, _b);
-    //左下
-    setPixColor(data, k - gapP + gapL, _r, _g, _b);
-
-
-    let _k = k + gapP + gapL + gapP + gapL;
-    setPixColor(data, _k, 0, 0, 0);
-
-    setPixColor(data, _k - gapL,               _r, _g, _b);
-    setPixColor(data, _k - gapL - gapL,        _r, _g, _b);
-    setPixColor(data, _k - gapL - gapL - gapL, 0, 0, 0);
-
-    setPixColor(data, _k - gapP,               _r, _g, _b);
-    setPixColor(data, _k - gapP - gapP,        _r, _g, _b);
-    setPixColor(data, _k - gapP - gapP - gapP, 0, 0, 0);
-
-  }
-
-  function setPix4_5(data, k) {
-    
-    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-        _r = data[k];
-        _g = data[k+1];
-        _b = data[k+2];
-    } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
-        _r = data[k + gapP];
-        _g = data[k + gapP + 1];
-        _b = data[k + gapP + 2];
-    } else if ((data[k - gapP] > criteria || data[k - gapP + 1] > criteria || data[k - gapP + 2] > criteria)) {
-        _r = data[k - gapP];
-        _g = data[k - gapP + 1];
-        _b = data[k - gapP + 2];
-    } else if ((data[k - gapL] > criteria || data[k - gapL + 1] > criteria || data[k - gapL + 2] > criteria)) {
-        _r = data[k - gapL];
-        _g = data[k - gapL + 1];
-        _b = data[k - gapL + 2];
-    } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
-        _r = data[k + gapL];
-        _g = data[k + gapL + 1];
-        _b = data[k + gapL + 2];
-    } else {
-        
-        _r = dot_none;
-        _g = dot_none;
-        _b = dot_none;
-    }
-    
-    let _k = k - 2 * gapP - 2 * gapL;
-    for (let i = 0;i<5;i++) {
-      for (let j = 0;j<5;j++) {
-        setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
-      }
-    }
-
-    if (side == 0 || !makeRound) return;
-
-    setPixColor(data, _k, 0, 0, 0);
-      
-    setPixColor(data, _k + 4 * gapL, 0, 0, 0);
-      
-    setPixColor(data, _k + 4 * gapP, 0, 0, 0);
-      
-    setPixColor(data, _k + 4 * gapL + 4 * gapP, 0, 0, 0);
-    
-  }
-
-function setPix4_6(data, k) {
-  
-  if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-      _r = data[k];
-      _g = data[k+1];
-      _b = data[k+2];
-  } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
-      _r = data[k + gapP];
-      _g = data[k + gapP + 1];
-      _b = data[k + gapP + 2];
-  } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
-      _r = data[k + gapL];
-      _g = data[k + gapL + 1];
-      _b = data[k + gapL + 2];
-  } else if ((data[k + gapL + gapP] > criteria || data[k + gapL + gapP + 1] > criteria || data[k + gapL + gapP + 2] > criteria)) {
-      _r = data[k + gapL + gapP];
-      _g = data[k + gapL + gapP + 1];
-      _b = data[k + gapL + gapP + 2];
-  } else {
-      _r = dot_none;
-      _g = dot_none;
-      _b = dot_none;
-  }
-
-  let _k = k - 2 * gapP - 2 * gapL;
-  for (let i = 0;i<6;i++) {
-    for (let j = 0;j<6;j++) {
-      setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
-    }
-  }
-
-  if (side == 0 || !makeRound) return;
-
-  setPixColor(data, _k, 0, 0, 0);
-  
-  setPixColor(data, _k + 5 * gapL, 0, 0, 0);
-  
-  setPixColor(data, _k + 5 * gapP, 0, 0, 0);
-  
-  setPixColor(data, _k + 5 * gapL + 5 * gapP, 0, 0, 0);
-
-}
-
-function setPix4_7(data, k) {
-  
-  if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
-      _r = data[k];
-      _g = data[k+1];
-      _b = data[k+2];
-  } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
-      _r = data[k + gapP];
-      _g = data[k + gapP + 1];
-      _b = data[k + gapP + 2];
-  } else if ((data[k - gapP] > criteria || data[k - gapP + 1] > criteria || data[k - gapP + 2] > criteria)) {
-      _r = data[k - gapP];
-      _g = data[k - gapP + 1];
-      _b = data[k - gapP + 2];
-  } else if ((data[k - gapL] > criteria || data[k - gapL + 1] > criteria || data[k - gapL + 2] > criteria)) {
-      _r = data[k - gapL];
-      _g = data[k - gapL + 1];
-      _b = data[k - gapL + 2];
-  } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
-      _r = data[k + gapL];
-      _g = data[k + gapL + 1];
-      _b = data[k + gapL + 2];
-  } else {
-      
-      _r = dot_none;
-      _g = dot_none;
-      _b = dot_none;
-  }
-
-  let _k = k - 3 * gapP - 3 * gapL;
-
-  for (let i = 0;i<7;i++) {
-    for (let j = 0;j<7;j++) {
-      setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
-    }
-  }
-
-  if (side == 0 || !makeRound) return;
-
-  setPixColor(data, _k, 0, 0, 0);
-    setPixColor(data, _k + gapL, _r/2, _g/2, _b/2);
-    setPixColor(data, _k + gapP, _r/2, _g/2, _b/2);
-  setPixColor(data, _k + 6 * gapL, 0, 0, 0);
-    setPixColor(data, _k + 5 * gapL, _r/2, _g/2, _b/2);
-    setPixColor(data, _k + 6 * gapL + gapP, _r/2, _g/2, _b/2);
-  setPixColor(data, _k + 6 * gapP, 0, 0, 0);
-    setPixColor(data, _k + 5 * gapP, _r/2, _g/2, _b/2);
-    setPixColor(data, _k + 6 * gapP + gapL, _r/2, _g/2, _b/2);
-  setPixColor(data, _k + 6 * gapL + 6 * gapP, 0, 0, 0);
-    setPixColor(data, _k + 5 * gapL + 6 * gapP, _r/2, _g/2, _b/2);
-    setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2);
-
-}
-
 function setPixColor(data, idx, r, g, b) {
   data[idx]     = r;
   data[idx + 1] = g;
@@ -683,3 +423,267 @@ function setPix4Still_7(data, k) {
     setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2);
 
 }
+
+
+/*
+
+function setPix4_2(data, k) {
+
+    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+        _r = data[k];
+        _g = data[k+1];
+        _b = data[k+2];
+    } else {
+        _r = dot_none;
+        _g = dot_none;
+        _b = dot_none;
+    }
+
+    setPixColor(data, k,               _r, _g, _b);//中
+    setPixColor(data, k - gapP,        _r, _g, _b);//左
+    setPixColor(data, k - gapL,        _r, _g, _b);//上
+    setPixColor(data, k - gapP - gapL, _r, _g, _b);//左上
+  }
+
+  function setPix4_3(data, k) {
+
+    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+        _r = data[k];
+        _g = data[k+1];
+        _b = data[k+2];
+    } else {
+        _r = dot_none;
+        _g = dot_none;
+        _b = dot_none;
+    }
+
+    if (side == 0 || !makeRound) {
+      let _k = k - gapP - gapL;
+      for (let i = 0;i<3;i++) {
+        for (let j = 0;j<3;j++) {
+          setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+        }
+      }
+      return;
+    }
+    
+    setPixColor(data, k,               _r, _g, _b);//中
+    setPixColor(data, k - gapP,        _r, _g, _b);//左
+    setPixColor(data, k - gapL,        _r, _g, _b);//上
+    setPixColor(data, k - gapP - gapL, _r * 2/3, _g * 2/3, _b * 2/3);//左上
+
+    //右
+    setPixColor(data, k + gapP,        _r, _g, _b);
+    //右上
+    setPixColor(data, k + gapP - gapL, _r * 2/3, _g * 2/3, _b * 2/3);
+    //右下
+    setPixColor(data, k + gapP + gapL, _r * 2/3, _g * 2/3, _b * 2/3);
+    //下
+    setPixColor(data, k + gapL,        _r, _g, _b);
+    //左下
+    setPixColor(data, k - gapP + gapL, _r * 2/3, _g * 2/3, _b * 2/3);
+
+  }
+
+  function setPix4_4(data, k) {   
+
+    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+        _r = data[k];
+        _g = data[k+1];
+        _b = data[k+2];
+    } else if ((data[k + gapL + gapP] > criteria || data[k + gapL + gapP + 1] > criteria || data[k + gapL + gapP + 2] > criteria)) {
+        _r = data[k + gapL + gapP];
+        _g = data[k + gapL + gapP + 1];
+        _b = data[k + gapL + gapP + 2];
+    } else {
+        
+        _r = dot_none;
+        _g = dot_none;
+        _b = dot_none;
+    }
+
+    if (side == 0 || !makeRound) {
+      let _k = k - gapP - gapL;
+      for (let i = 0;i<4;i++) {
+        for (let j = 0;j<4;j++) {
+          setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+        }
+      }
+      return;
+    }
+
+    setPixColor(data, k,               _r, _g, _b);//中
+    setPixColor(data, k - gapP,        _r, _g, _b);//左
+    setPixColor(data, k - gapL,        _r, _g, _b);//上
+    setPixColor(data, k - gapP - gapL, 0, 0, 0);//左上
+
+    //右
+    setPixColor(data, k + gapP,        _r, _g, _b);
+    //右上
+    setPixColor(data, k + gapP - gapL, _r, _g, _b);
+    //右下
+    setPixColor(data, k + gapP + gapL, _r, _g, _b);
+    //下
+    setPixColor(data, k + gapL,        _r, _g, _b);
+    //左下
+    setPixColor(data, k - gapP + gapL, _r, _g, _b);
+
+
+    let _k = k + gapP + gapL + gapP + gapL;
+    setPixColor(data, _k, 0, 0, 0);
+
+    setPixColor(data, _k - gapL,               _r, _g, _b);
+    setPixColor(data, _k - gapL - gapL,        _r, _g, _b);
+    setPixColor(data, _k - gapL - gapL - gapL, 0, 0, 0);
+
+    setPixColor(data, _k - gapP,               _r, _g, _b);
+    setPixColor(data, _k - gapP - gapP,        _r, _g, _b);
+    setPixColor(data, _k - gapP - gapP - gapP, 0, 0, 0);
+
+  }
+
+  function setPix4_5(data, k) {
+    
+    if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+        _r = data[k];
+        _g = data[k+1];
+        _b = data[k+2];
+    } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
+        _r = data[k + gapP];
+        _g = data[k + gapP + 1];
+        _b = data[k + gapP + 2];
+    } else if ((data[k - gapP] > criteria || data[k - gapP + 1] > criteria || data[k - gapP + 2] > criteria)) {
+        _r = data[k - gapP];
+        _g = data[k - gapP + 1];
+        _b = data[k - gapP + 2];
+    } else if ((data[k - gapL] > criteria || data[k - gapL + 1] > criteria || data[k - gapL + 2] > criteria)) {
+        _r = data[k - gapL];
+        _g = data[k - gapL + 1];
+        _b = data[k - gapL + 2];
+    } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
+        _r = data[k + gapL];
+        _g = data[k + gapL + 1];
+        _b = data[k + gapL + 2];
+    } else {
+        
+        _r = dot_none;
+        _g = dot_none;
+        _b = dot_none;
+    }
+    
+    let _k = k - 2 * gapP - 2 * gapL;
+    for (let i = 0;i<5;i++) {
+      for (let j = 0;j<5;j++) {
+        setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+      }
+    }
+
+    if (side == 0 || !makeRound) return;
+
+    setPixColor(data, _k, 0, 0, 0);
+      
+    setPixColor(data, _k + 4 * gapL, 0, 0, 0);
+      
+    setPixColor(data, _k + 4 * gapP, 0, 0, 0);
+      
+    setPixColor(data, _k + 4 * gapL + 4 * gapP, 0, 0, 0);
+    
+  }
+
+function setPix4_6(data, k) {
+  
+  if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+      _r = data[k];
+      _g = data[k+1];
+      _b = data[k+2];
+  } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
+      _r = data[k + gapP];
+      _g = data[k + gapP + 1];
+      _b = data[k + gapP + 2];
+  } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
+      _r = data[k + gapL];
+      _g = data[k + gapL + 1];
+      _b = data[k + gapL + 2];
+  } else if ((data[k + gapL + gapP] > criteria || data[k + gapL + gapP + 1] > criteria || data[k + gapL + gapP + 2] > criteria)) {
+      _r = data[k + gapL + gapP];
+      _g = data[k + gapL + gapP + 1];
+      _b = data[k + gapL + gapP + 2];
+  } else {
+      _r = dot_none;
+      _g = dot_none;
+      _b = dot_none;
+  }
+
+  let _k = k - 2 * gapP - 2 * gapL;
+  for (let i = 0;i<6;i++) {
+    for (let j = 0;j<6;j++) {
+      setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+    }
+  }
+
+  if (side == 0 || !makeRound) return;
+
+  setPixColor(data, _k, 0, 0, 0);
+  
+  setPixColor(data, _k + 5 * gapL, 0, 0, 0);
+  
+  setPixColor(data, _k + 5 * gapP, 0, 0, 0);
+  
+  setPixColor(data, _k + 5 * gapL + 5 * gapP, 0, 0, 0);
+
+}
+
+function setPix4_7(data, k) {
+  
+  if ((data[k] > criteria || data[k+1] > criteria || data[k+2] > criteria)) {
+      _r = data[k];
+      _g = data[k+1];
+      _b = data[k+2];
+  } else if ((data[k + gapP] > criteria || data[k + gapP + 1] > criteria || data[k + gapP + 2] > criteria)) {
+      _r = data[k + gapP];
+      _g = data[k + gapP + 1];
+      _b = data[k + gapP + 2];
+  } else if ((data[k - gapP] > criteria || data[k - gapP + 1] > criteria || data[k - gapP + 2] > criteria)) {
+      _r = data[k - gapP];
+      _g = data[k - gapP + 1];
+      _b = data[k - gapP + 2];
+  } else if ((data[k - gapL] > criteria || data[k - gapL + 1] > criteria || data[k - gapL + 2] > criteria)) {
+      _r = data[k - gapL];
+      _g = data[k - gapL + 1];
+      _b = data[k - gapL + 2];
+  } else if ((data[k + gapL] > criteria || data[k + gapL + 1] > criteria || data[k + gapL + 2] > criteria)) {
+      _r = data[k + gapL];
+      _g = data[k + gapL + 1];
+      _b = data[k + gapL + 2];
+  } else {
+      
+      _r = dot_none;
+      _g = dot_none;
+      _b = dot_none;
+  }
+
+  let _k = k - 3 * gapP - 3 * gapL;
+
+  for (let i = 0;i<7;i++) {
+    for (let j = 0;j<7;j++) {
+      setPixColor(data, _k + i * gapP + j * gapL, _r, _g, _b);
+    }
+  }
+
+  if (side == 0 || !makeRound) return;
+
+  setPixColor(data, _k, 0, 0, 0);
+    setPixColor(data, _k + gapL, _r/2, _g/2, _b/2);
+    setPixColor(data, _k + gapP, _r/2, _g/2, _b/2);
+  setPixColor(data, _k + 6 * gapL, 0, 0, 0);
+    setPixColor(data, _k + 5 * gapL, _r/2, _g/2, _b/2);
+    setPixColor(data, _k + 6 * gapL + gapP, _r/2, _g/2, _b/2);
+  setPixColor(data, _k + 6 * gapP, 0, 0, 0);
+    setPixColor(data, _k + 5 * gapP, _r/2, _g/2, _b/2);
+    setPixColor(data, _k + 6 * gapP + gapL, _r/2, _g/2, _b/2);
+  setPixColor(data, _k + 6 * gapL + 6 * gapP, 0, 0, 0);
+    setPixColor(data, _k + 5 * gapL + 6 * gapP, _r/2, _g/2, _b/2);
+    setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2);
+
+}
+*/

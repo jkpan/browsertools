@@ -33899,6 +33899,11 @@ function _layerui() {
   ctx.textBaseline = 'top';//'bottom';
   for (let i=uisel_start;i<=uisel_end;i++) {
     ctx.fillStyle = color_pointer[(i == song?3:2)];
+    if (i == song) {
+      ctx.strokeStyle = color_pointer[2];
+      ctx.lineWidth = Math.ceil(fontsize/4.0);
+      ctx.strokeText(SONGS[i][0][0], x - (i == song?fontsize_sml/2:0) , y);      
+    }
     ctx.fillText(SONGS[i][0][0], x - (i == song?fontsize_sml/2:0) , y);
     y -= fontsize_sml * 1.5;
   }
