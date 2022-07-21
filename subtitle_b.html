@@ -36,7 +36,12 @@
   }
   
   var fontfactor = 15.0;
-  var fontFamily = "Arial";//"cwTeXKai";//'華康瘦金體';//"標楷體";//"Noto Serif TC";
+  var fontFamily = "Monospace";
+                   //"Arial";
+                   //"cwTeXKai";
+                   //'華康瘦金體';
+                   //"標楷體";
+                   //"Noto Serif TC";
   var fontsize = 48;
   var FONT = fontsize + "px " + fontFamily;
   
@@ -33599,14 +33604,10 @@ function keyboard(e) { //key up
       case 33: //'page up'
         if (mode == 0) 
           keyboard({keyCode : 37}); //left
-        else 
-          keyboard({keyCode : 38}); //down
         break;
       case 34: //'page down'
         if (mode == 0) 
           keyboard({keyCode : 39}); //right
-        else 
-          keyboard({keyCode : 40}); //up
         break;
       case 77: //'M' ppt mode
           helpSwitch = 0;
@@ -33971,6 +33972,66 @@ window.addEventListener('resize', function() {
   init();
   _repaint();
 });
+window.addEventListener('wheel',function (event){
+  //only vertical scroll
+  
+  console.log('wheel:' + event.deltaY);  
+  if (event.deltaY > 4) {
+    keyboard({keyCode : 39}); //right
+  } else if (event.deltaY < -4) {
+    keyboard({keyCode : 37}); //left
+  }
+
+});
+
+//canvas.addEventListener("click", function(evt) {
+//document.getElementsByTagName("canvas")[0]
+canvas.addEventListener("touchstart", function(evt) {
+    
+    evt.preventDefault();
+    var touches = getTouchPos(canvas, evt);
+    let gw = Math.floor(touches.x/(canvas.width/3.0));
+    let gh = Math.floor(touches.y/(canvas.height/3.0));
+    
+    //let gw = Math.floor(evt.pageX/(canvas.width/3.0));
+    //let gh = Math.floor(evt.pageY/(canvas.height/3.0));
+    //console.log('(' + evt.pageX + ', ' + evt.pageY + ')');
+    //console.log('(' + gw + ', ' + gh + ')');
+
+    //font size decrease
+    if (gw == 0 && gh == 0) {
+      fontfactor += 0.5;
+      if (fontfactor > 30) 
+        fontfactor = 30;
+      init();
+      _repaint();
+    }
+    //select volume 
+    if (gw == 1 && gh == 0) keyboard({keyCode : 76});
+    //font size increase
+    if (gw == 2 && gh == 0) {
+      fontfactor -= 0.5;
+      if (fontfactor < 8) 
+        fontfactor = 8.0;
+      init();
+      _repaint();
+    }
+
+    //preious volume
+    if (gw == 0 && gh == 1) keyboard({keyCode : 189});
+    //up
+    if (gw == 1 && gh == 1) keyboard({keyCode : 38});
+    //next volume
+    if (gw == 2 && gh == 1) keyboard({keyCode : 187});
+    //left
+    if (gw == 0 && gh == 2) keyboard({keyCode : 37});
+    //down
+    if (gw == 1 && gh == 2) keyboard({keyCode : 40});
+    //right
+    if (gw == 2 && gh == 2) keyboard({keyCode : 39});
+    
+});
+//}, false);
 
 flow();
 
