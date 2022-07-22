@@ -33046,7 +33046,7 @@ function verseobj() {
       } else {                     //normal verse
         txt = subtitles[this.chapter][this.verse];
         this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':
-                                  ' ' + this.verse + ' ';
+                                       ' ' + this.verse;
       }
 
       if (this.level == 0) {
@@ -33120,7 +33120,7 @@ function verseobj() {
             y += this.fs;
           }
           ctx.font = this.fs * 0.7 + "px " + fontFamily;
-          _drawtxt(' '+this.frontxt, 0, 0, this.opacity);
+          _drawtxt(this.frontxt, 0, 0, this.opacity);
         }
 
       ctx.resetTransform();    
@@ -33224,10 +33224,7 @@ var queue = [];
 
 function render(progress) {
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  ctx.fillStyle = bgcolor_pointer;//'green';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  _layer0();
 
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.6;
@@ -33536,9 +33533,11 @@ function combineKey(e) {
           history.back();
           return;
       case 189: //'-'
+          helpSwitch = 0;
           downsizeFS();
           break;
       case 187: //'='
+          helpSwitch = 0;
           enlargeFS();
           break;
       default:
@@ -33652,7 +33651,7 @@ function keyboard(e) { //key up
           if (e.keyCode == 74) openSelection(2); 
           break; 
       case 65: //a
-          
+          helpSwitch = 0;
           if (canvas.hidden) break;
           color_selection = (color_selection + 1 )%4;
           if (color_selection == 0) {
@@ -33762,8 +33761,9 @@ function keyboard(e) { //key up
           break;
       
         case 189: //'-'
+          helpSwitch = 0;
           if (canvas.hidden) break;
-          if (song > 0) {
+          if (song > 1) {
             song = song - 1;
             subtitles = SONGS[song];
             phase = 0;
@@ -33771,6 +33771,7 @@ function keyboard(e) { //key up
           }
           break;
         case 187: //'='
+          helpSwitch = 0;
           if (canvas.hidden) break;
           if (song < SONGS.length -1) {
             song = song + 1;
@@ -33886,6 +33887,65 @@ function _layer0() {
   }
 }
 
+function _phoneUi() {
+  /*
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = color_pointer[2];
+  ctx.beginPath();
+    ctx.moveTo(0, canvas.height * 0.33);
+    ctx.lineTo(canvas.width, canvas.height * 0.33);
+    ctx.stroke();
+
+    ctx.moveTo(0, canvas.height * 0.66);
+    ctx.lineTo(canvas.width, canvas.height * 0.66);
+    ctx.stroke();
+
+    ctx.moveTo(canvas.width * 0.33, 0);
+    ctx.lineTo(canvas.width * 0.33, canvas.height);
+    ctx.stroke();
+
+    ctx.moveTo(canvas.width * 0.66, 0);
+    ctx.lineTo(canvas.width * 0.66, canvas.height);
+    ctx.stroke();
+
+    ctx.moveTo(canvas.width * 0.33, canvas.height/6.0);
+    ctx.lineTo(canvas.width * 0.66, canvas.height/6.0);
+    ctx.stroke();
+
+  ctx.closePath();
+  */
+  
+  ctx.fillStyle = bgcolor_pointer;//'green';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.textAlign = "center";
+
+  ui_rectFill(0, 0, canvas.width * 0.33, canvas.height * 0.33, '字小');
+  ui_rectFill(canvas.width * 0.33,               0, canvas.width * 0.33, canvas.height/6, '選經文');
+  ui_rectFill(canvas.width * 0.33, canvas.height/6, canvas.width * 0.33, canvas.height/6, '換顏色');
+  ui_rectFill(canvas.width * 0.66, 0, canvas.width * 0.33, canvas.height * 0.33, '字大');
+
+  ui_rectFill(0, canvas.height * 0.33, canvas.width * 0.33, canvas.height * 0.33, '上一卷');
+  ui_rectFill(canvas.width * 0.33, canvas.height * 0.33, canvas.width * 0.33, canvas.height * 0.33, '上一章');
+  ui_rectFill(canvas.width * 0.66, canvas.height * 0.33, canvas.width * 0.33, canvas.height * 0.33, '下一卷');
+
+  ui_rectFill(0, canvas.height * 0.66, canvas.width * 0.33, canvas.height * 0.33, '上一節');
+  ui_rectFill(canvas.width * 0.33, canvas.height * 0.66, canvas.width * 0.33, canvas.height * 0.33, '下一章');
+  ui_rectFill(canvas.width * 0.66, canvas.height * 0.66, canvas.width * 0.33, canvas.height * 0.33, '下一節');
+
+  ctx.textAlign = "left";
+}
+
+function ui_rectFill(x, y, w, h, des) {
+  ctx.fillStyle = color_pointer[2];
+  ctx.fillRect(x + w * 0.05, y + h * 0.05, w * 0.9, h * 0.9);
+  ctx.fillStyle = color_pointer[0];
+  ctx.font = fontsize_sml+'px '+fontFamily;
+  ctx.fillText(des, x + w/2, y + h/2);
+  //ctx.strokeStyle = color_pointer[3];
+  //ctx.strokeRect(x, y, w, h);
+}
+
 function _layer1() {
   printMain(phase, line);
 }
@@ -33894,9 +33954,13 @@ function _layer2() {
   if (helpSwitch == 1) {
     userhelp(); 
   }
+  if (helpSwitch == 2) {
+    _phoneUi();
+  }
 }
 
 function _layerui() {
+  
   if (uisel == 0) return;
   ctx.fillStyle = bgcolor_pointer;//'green';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -33982,8 +34046,6 @@ window.addEventListener('resize', function() {
 });
 window.addEventListener('wheel',function (event){
   //only vertical scroll
-  
-  console.log('wheel:' + event.deltaY);  
   if (event.deltaY > 4) {
     keyboard({keyCode : 39}); //right
   } else if (event.deltaY < -4) {
@@ -34008,7 +34070,13 @@ canvas.addEventListener("touchstart", function(evt) {
 
     //font size decrease
     if (gw == 0 && gh == 0) {
+      if (touches.y < fontsize_sml) {
+        helpSwitch = helpSwitch > 0?0:2;
+        _repaint();
+        return;
+      }
       combineKey({keyCode : 189});
+      return;
     }
     //select volume 
     if (gw == 1 && gh == 0) {
@@ -34017,11 +34085,13 @@ canvas.addEventListener("touchstart", function(evt) {
         keyboard({keyCode : 76});
        else 
         keyboard({keyCode : 65});
+      return;
     }
 
     //font size increase
     if (gw == 2 && gh == 0) {
       combineKey({keyCode : 187});
+      return;
     }
 
     //preious volume
