@@ -33536,21 +33536,29 @@ function combineKey(e) {
           history.back();
           return;
       case 189: //'-'
-          fontfactor += 0.5;
-          if (fontfactor > 30) 
-            fontfactor = 30;
-          init();
+          downsizeFS();
           break;
       case 187: //'='
-          fontfactor -= 0.5;
-          if (fontfactor < 8) 
-            fontfactor = 8.0;
-          init();
+          enlargeFS();
           break;
       default:
         break;
   }
   _repaint();
+}
+
+function enlargeFS() {
+  fontfactor -= 0.5;
+  if (fontfactor < 8) 
+    fontfactor = 8.0;
+  init();
+}
+
+function downsizeFS() {
+  fontfactor += 0.5;
+  if (fontfactor > 30) 
+    fontfactor = 30;
+  init();
 }
 
 function copyToClickBoard() {
@@ -33984,6 +33992,11 @@ window.addEventListener('wheel',function (event){
 
 });
 
+function getTouchPos(canvasDom, touchEvent) {
+  var rect = canvasDom.getBoundingClientRect();
+  return { x: touchEvent.touches[0].clientX - rect.left,
+           y: touchEvent.touches[0].clientY - rect.top};
+}
 //canvas.addEventListener("click", function(evt) {
 //document.getElementsByTagName("canvas")[0]
 canvas.addEventListener("touchstart", function(evt) {
@@ -33992,29 +34005,23 @@ canvas.addEventListener("touchstart", function(evt) {
     var touches = getTouchPos(canvas, evt);
     let gw = Math.floor(touches.x/(canvas.width/3.0));
     let gh = Math.floor(touches.y/(canvas.height/3.0));
-    
-    //let gw = Math.floor(evt.pageX/(canvas.width/3.0));
-    //let gh = Math.floor(evt.pageY/(canvas.height/3.0));
-    //console.log('(' + evt.pageX + ', ' + evt.pageY + ')');
-    //console.log('(' + gw + ', ' + gh + ')');
 
     //font size decrease
     if (gw == 0 && gh == 0) {
-      fontfactor += 0.5;
-      if (fontfactor > 30) 
-        fontfactor = 30;
-      init();
-      _repaint();
+      combineKey({keyCode : 189});
     }
     //select volume 
-    if (gw == 1 && gh == 0) keyboard({keyCode : 76});
+    if (gw == 1 && gh == 0) {
+      let _gh = Math.floor(touches.y/(canvas.height/6.0));
+      if (_gh == 0) 
+        keyboard({keyCode : 76});
+       else 
+        keyboard({keyCode : 65});
+    }
+
     //font size increase
     if (gw == 2 && gh == 0) {
-      fontfactor -= 0.5;
-      if (fontfactor < 8) 
-        fontfactor = 8.0;
-      init();
-      _repaint();
+      combineKey({keyCode : 187});
     }
 
     //preious volume
