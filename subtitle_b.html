@@ -33170,7 +33170,7 @@ function getQueueNext() {
   return obj;
 }
 
-function operateQuene() {
+function operateQuene(doanim) {
   
   if (queue.length == 0) {
     queueType = 0;
@@ -33210,8 +33210,12 @@ function operateQuene() {
       queue[sel + 2].setLevel(2);
   }
 
-  animElapse = 0;
-  window.requestAnimationFrame(verse_update);
+  if (doanim > 0) {
+    animElapse = 0;
+    window.requestAnimationFrame(verse_update);
+  } else {
+    render(-1);
+  }
     
   queueType = 0;
 
@@ -33606,14 +33610,6 @@ function keyboard(e) { //key up
         doblank = doblank == 0?1:0;
         break;
       case 67: copyToClickBoard(); break; // 'c' copy
-      case 33: //'page up'
-        if (mode == 0) 
-          keyboard({keyCode : 37}); //left
-        break;
-      case 34: //'page down'
-        if (mode == 0) 
-          keyboard({keyCode : 39}); //right
-        break;
       case 77: //'M' ppt mode
           helpSwitch = 0;
           if (canvas.hidden) {
@@ -33711,6 +33707,8 @@ function keyboard(e) { //key up
           phase++;
           line = 0;
           break;
+          //////
+      case 33: //'page up'
       case 37: { //'ArrowLeft'
           
           helpSwitch = 0;
@@ -33721,7 +33719,7 @@ function keyboard(e) { //key up
             line = _line;
             if (mode == 0 && queue.length > 0) {
               queueType = 2;
-              operateQuene();
+              operateQuene(e.keyCode == 37?1:0);
               return;
             }
           }
@@ -33733,7 +33731,8 @@ function keyboard(e) { //key up
           }
 
         }
-          break; 
+          break;
+      case 34: //'page down' 
       case 39: { //'ArrowRight'
           helpSwitch = 0;
           let _phase = getNextChapter(phase, line);
@@ -33744,7 +33743,7 @@ function keyboard(e) { //key up
             line  = _line;
             if (mode == 0 && queue.length > 0) {
               queueType = 1;
-              operateQuene();
+              operateQuene(e.keyCode == 39?1:0);
               return;
             }
           }
