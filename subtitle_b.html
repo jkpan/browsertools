@@ -32777,7 +32777,10 @@ function _newBtn() {
 
   var button = document.createElement('button');
 
-  button.style.width = '200px'; // setting the width to 200px
+  if (canvas.width > canvas.height)
+    button.style.width = '200px'; // setting the width to 200px
+  else
+    button.style.width = '100px';
   button.style.height = '75px'; // setting the height to 200px
   button.style.background = color_pointer[2];//'rgb(0,180,0)'; // setting the background color to teal
   button.style.color = bgcolor_pointer;//color_pointer[1];// 'green'; // setting the color to white
@@ -34066,6 +34069,9 @@ canvas.addEventListener("touchend", function(evt) { //touchend
     let gw = Math.floor(touches.x/(canvas.width/3.0));
     let gh = Math.floor(touches.y/(canvas.height/4.0));
 
+    if (touchMoveState != 0) return;
+
+    
     if (touches.y < fontsize_sml && touchPY < fontsize_sml) {
       helpSwitch = helpSwitch > 0?0:2;
       _repaint();
@@ -34120,17 +34126,19 @@ canvas.addEventListener("touchend", function(evt) { //touchend
 
     
     //left
-    if (touchMoveState == 0 && gw == 0 && (gh == 2 || gh == 3)) {
+    if (gw == 0 && (gh == 2 || gh == 3)) {
       keyboard({keyCode : 37});
       return;
     }    
     //right
-    if (touchMoveState == 0 && gw == 2 && (gh == 2 || gh == 3)) {
+    if (gw == 2 && (gh == 2 || gh == 3)) {
       keyboard({keyCode : 39});
       return;
     }
 
 }, false);
+
+const touchOffset = 5;
 
 canvas.addEventListener("touchmove", function(evt) {
   evt.preventDefault();
@@ -34146,12 +34154,12 @@ canvas.addEventListener("touchmove", function(evt) {
 
   if (_gw == 0 && gw == 0) {
     if ((_gh == 2 || _gh == 3) && (gh == 2 || gh == 3)) {
-      if (dy > 10) {//往下 
-        keyboard({keyCode : 37});
+      if (dy >= touchOffset) {//往下 
+        keyboard({keyCode : 33});
         touchMoveState = 1;
       }
-      if (dy < -10) {//往下
-        keyboard({keyCode : 39});
+      if (dy <= -touchOffset) {//往下
+        keyboard({keyCode : 34});
         touchMoveState = 1;
       }
     }
@@ -34159,12 +34167,12 @@ canvas.addEventListener("touchmove", function(evt) {
 
   if (_gw == 2 && gw == 2) {
     if ((_gh == 2 || _gh == 3) && (gh == 2 || gh == 3)) {
-      if (dy > 10) {//往下
-        keyboard({keyCode : 37});
+      if (dy >= touchOffset) {//往下
+        keyboard({keyCode : 33});
         touchMoveState = 1;
       } 
-      if (dy < -10) {//往下
-        keyboard({keyCode : 39});
+      if (dy <= -touchOffset) {//往下
+        keyboard({keyCode : 34});
         touchMoveState = 1;
       }
     }
