@@ -32956,7 +32956,7 @@ function getTxtArray(txt, wRatio) {
   do {
       if (ctx.measureText(txt).width > canvas.width * wRatio) {
         let ratio = canvas.width * wRatio/ctx.measureText(txt).width;
-        ratio = Math.floor(txt.length * ratio) - 1;
+        ratio = Math.ceil(txt.length * ratio) - 1;
         let txt_0 = txt.substr(0, ratio);
         txt = txt.substr(ratio, txt.length - txt_0.length);
         substrings[idx] = txt_0;
@@ -33077,9 +33077,11 @@ function verseobj() {
 
       //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
 
-      return this.level == 0? this.substrings.length * fs + fs * 0.5:
-                              this.substrings.length * fs + fs * 0.2;
-             
+      if (color_selection == 0) 
+        return this.level == 0? this.substrings.length * fs + fs * 0.5:
+                                this.substrings.length * fs + fs * 0.2;
+      else 
+        return this.substrings.length * fs + fs * 0.5;
     },
 
     draw: function() {
@@ -33205,15 +33207,8 @@ function operateQuene() {
       queue[sel + 2].setLevel(2);
   }
 
-  if (animElapse > 0) {
-    animElapse = 0;
-    //printMain(phase, line);
-    window.requestAnimationFrame(verse_update);
-  } else {
-    //animElapse = 0;
-    window.requestAnimationFrame(verse_update);
-  }
-  
+  animElapse = 0;
+  window.requestAnimationFrame(verse_update);
     
   queueType = 0;
 
@@ -33892,46 +33887,31 @@ function _phoneUi() {
   ctx.lineWidth = 2;
   ctx.strokeStyle = color_pointer[2];
   ctx.beginPath();
-    ctx.moveTo(0, canvas.height * 0.33);
-    ctx.lineTo(canvas.width, canvas.height * 0.33);
-    ctx.stroke();
-
-    ctx.moveTo(0, canvas.height * 0.66);
-    ctx.lineTo(canvas.width, canvas.height * 0.66);
-    ctx.stroke();
-
-    ctx.moveTo(canvas.width * 0.33, 0);
-    ctx.lineTo(canvas.width * 0.33, canvas.height);
-    ctx.stroke();
-
-    ctx.moveTo(canvas.width * 0.66, 0);
-    ctx.lineTo(canvas.width * 0.66, canvas.height);
-    ctx.stroke();
-
     ctx.moveTo(canvas.width * 0.33, canvas.height/6.0);
     ctx.lineTo(canvas.width * 0.66, canvas.height/6.0);
     ctx.stroke();
-
   ctx.closePath();
   */
-  
+ 
   ctx.fillStyle = bgcolor_pointer;//'green';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.textAlign = "center";
 
-  ui_rectFill(0, 0, canvas.width * 0.33, canvas.height * 0.33, '字小');
-  ui_rectFill(canvas.width * 0.33,               0, canvas.width * 0.33, canvas.height/6, '選經文');
-  ui_rectFill(canvas.width * 0.33, canvas.height/6, canvas.width * 0.33, canvas.height/6, '換顏色');
-  ui_rectFill(canvas.width * 0.66, 0, canvas.width * 0.33, canvas.height * 0.33, '字大');
+  ui_rectFill(0,                   0, canvas.width * 0.33, canvas.height * 0.25, '字小');
+  ui_rectFill(canvas.width * 0.33, 0, canvas.width * 0.33, canvas.height * 0.25, '換顏色');
+  ui_rectFill(canvas.width * 0.66, 0, canvas.width * 0.33, canvas.height * 0.25, '字大');
 
-  ui_rectFill(0, canvas.height * 0.33, canvas.width * 0.33, canvas.height * 0.33, '上一卷');
-  ui_rectFill(canvas.width * 0.33, canvas.height * 0.33, canvas.width * 0.33, canvas.height * 0.33, '上一章');
-  ui_rectFill(canvas.width * 0.66, canvas.height * 0.33, canvas.width * 0.33, canvas.height * 0.33, '下一卷');
+  ui_rectFill(0,                   canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '上一卷');
+  ui_rectFill(canvas.width * 0.33, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '選經文');
+  ui_rectFill(canvas.width * 0.66, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '下一卷');
 
-  ui_rectFill(0, canvas.height * 0.66, canvas.width * 0.33, canvas.height * 0.33, '上一節');
-  ui_rectFill(canvas.width * 0.33, canvas.height * 0.66, canvas.width * 0.33, canvas.height * 0.33, '下一章');
-  ui_rectFill(canvas.width * 0.66, canvas.height * 0.66, canvas.width * 0.33, canvas.height * 0.33, '下一節');
+  ui_rectFill(canvas.width * 0.33, canvas.height * 0.5,  canvas.width * 0.33, canvas.height * 0.25, '上一章');
+  ui_rectFill(canvas.width * 0.33, canvas.height * 0.75, canvas.width * 0.33, canvas.height * 0.25, '下一章');
+  
+
+  ui_rectFill(0,                   canvas.height * 0.5, canvas.width * 0.33, canvas.height * 0.5, '上一節');
+  ui_rectFill(canvas.width * 0.66, canvas.height * 0.5, canvas.width * 0.33, canvas.height * 0.5, '下一節');
 
   ctx.textAlign = "left";
 }
@@ -33953,8 +33933,7 @@ function _layer1() {
 function _layer2() {
   if (helpSwitch == 1) {
     userhelp(); 
-  }
-  if (helpSwitch == 2) {
+  } else if (helpSwitch == 2) {
     _phoneUi();
   }
 }
@@ -34061,54 +34040,140 @@ function getTouchPos(canvasDom, touchEvent) {
 }
 //canvas.addEventListener("click", function(evt) {
 //document.getElementsByTagName("canvas")[0]
+var touchPX;
+var touchPY;
+var touchMoveState = 0;
+
 canvas.addEventListener("touchstart", function(evt) {
+    evt.preventDefault();
+    //var touches = {x:evt.changedTouches[0].clientX, y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
+    touchPX = evt.changedTouches[0].clientX;//touches.x;
+    touchPY = evt.changedTouches[0].clientY;//touches.y;
+    touchMoveState = 0;
+}, false);
+
+canvas.addEventListener("touchend", function(evt) { //touchend
     
     evt.preventDefault();
-    var touches = getTouchPos(canvas, evt);
+    var touches = {x:evt.changedTouches[0].clientX, 
+                   y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
+    //console.log(touches);
+    //return;
+    //var touches = getTouchPos(canvas, evt);
+    let _gw = Math.floor(touchPX/(canvas.width/3.0));
+    let _gh = Math.floor(touchPY/(canvas.height/4.0));
+    
     let gw = Math.floor(touches.x/(canvas.width/3.0));
-    let gh = Math.floor(touches.y/(canvas.height/3.0));
+    let gh = Math.floor(touches.y/(canvas.height/4.0));
+
+    if (touches.y < fontsize_sml && touchPY < fontsize_sml) {
+      helpSwitch = helpSwitch > 0?0:2;
+      _repaint();
+      return;
+    }
+
+    if (_gw != gw || _gh != gh) return;
 
     //font size decrease
     if (gw == 0 && gh == 0) {
-      if (touches.y < fontsize_sml) {
-        helpSwitch = helpSwitch > 0?0:2;
-        _repaint();
-        return;
-      }
       combineKey({keyCode : 189});
       return;
     }
-    //select volume 
+    //color change
     if (gw == 1 && gh == 0) {
-      let _gh = Math.floor(touches.y/(canvas.height/6.0));
-      if (_gh == 0) 
-        keyboard({keyCode : 76});
-       else 
-        keyboard({keyCode : 65});
+      keyboard({keyCode : 65});
       return;
     }
-
     //font size increase
     if (gw == 2 && gh == 0) {
       combineKey({keyCode : 187});
       return;
     }
-
-    //preious volume
-    if (gw == 0 && gh == 1) keyboard({keyCode : 189});
-    //up
-    if (gw == 1 && gh == 1) keyboard({keyCode : 38});
-    //next volume
-    if (gw == 2 && gh == 1) keyboard({keyCode : 187});
-    //left
-    if (gw == 0 && gh == 2) keyboard({keyCode : 37});
-    //down
-    if (gw == 1 && gh == 2) keyboard({keyCode : 40});
-    //right
-    if (gw == 2 && gh == 2) keyboard({keyCode : 39});
     
-});
-//}, false);
+    //preious volume
+    if (gw == 0 && gh == 1) {
+      keyboard({keyCode : 189});
+      return;
+    }
+    //select volume 
+    if (gw == 1 && gh == 1) {
+      keyboard({keyCode : 76});
+      return;
+    }
+    //next volume
+    if (gw == 2 && gh == 1) {
+      keyboard({keyCode : 187});
+      return;
+    }
+
+    
+    //up
+    if (gw == 1 && gh == 2) {
+      keyboard({keyCode : 38});
+      return;
+    }
+    //down
+    if (gw == 1 && gh == 3) { 
+      keyboard({keyCode : 40});
+      return;
+    }
+
+    
+    //left
+    if (touchMoveState == 0 && gw == 0 && (gh == 2 || gh == 3)) {
+      keyboard({keyCode : 37});
+      return;
+    }    
+    //right
+    if (touchMoveState == 0 && gw == 2 && (gh == 2 || gh == 3)) {
+      keyboard({keyCode : 39});
+      return;
+    }
+
+}, false);
+
+canvas.addEventListener("touchmove", function(evt) {
+  evt.preventDefault();
+  var touch = evt.touches[0];
+  
+  let _gw = Math.floor(touchPX/(canvas.width/3.0));
+  let _gh = Math.floor(touchPY/(canvas.height/4.0));
+    
+  let gw = Math.floor(touch.clientX/(canvas.width/3.0));
+  let gh = Math.floor(touch.clientY/(canvas.height/4.0));
+
+  let dy = touch.clientY - touchPY;
+
+  if (_gw == 0 && gw == 0) {
+    if ((_gh == 2 || _gh == 3) && (gh == 2 || gh == 3)) {
+      if (dy > 10) {//往下 
+        keyboard({keyCode : 37});
+        touchMoveState = 1;
+      }
+      if (dy < -10) {//往下
+        keyboard({keyCode : 39});
+        touchMoveState = 1;
+      }
+    }
+  }
+
+  if (_gw == 2 && gw == 2) {
+    if ((_gh == 2 || _gh == 3) && (gh == 2 || gh == 3)) {
+      if (dy > 10) {//往下
+        keyboard({keyCode : 37});
+        touchMoveState = 1;
+      } 
+      if (dy < -10) {//往下
+        keyboard({keyCode : 39});
+        touchMoveState = 1;
+      }
+    }
+  }
+
+  touchPX = touch.clientX;
+  touchPY = touch.clientY;
+
+}, false);
 
 flow();
 
