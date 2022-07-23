@@ -33281,12 +33281,14 @@ function render(progress) {
       }
       
       //offY = obj.transY;
+      offY = fixy; 
       for (let k = i - 1;k >= 0;k--) {
         let o = queue[k];
         o.preDraw(progress);
-        //o.transY = offY;
-        if (o.transY <= 0) break;
+        //if (o.transY <= 0) break;
         o.draw();
+        if (offY <= 0) break;
+        offY = o.transY;
       }
       
       break;
