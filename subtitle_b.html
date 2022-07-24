@@ -34030,9 +34030,9 @@ window.addEventListener('resize', function() {
 window.addEventListener('wheel',function (event){
   //only vertical scroll
   if (event.deltaY > 4) {
-    keyboard({keyCode : 39}); //right
+    keyboard({keyCode : 34}); //right
   } else if (event.deltaY < -4) {
-    keyboard({keyCode : 37}); //left
+    keyboard({keyCode : 33}); //left
   }
 
 });
@@ -34145,38 +34145,15 @@ canvas.addEventListener("touchmove", function(evt) {
   evt.preventDefault();
   var touch = evt.touches[0];
   
-  let _gw = Math.floor(touchPX/(canvas.width/3.0));
-  let _gh = Math.floor(touchPY/(canvas.height/4.0));
-    
-  let gw = Math.floor(touch.clientX/(canvas.width/3.0));
-  let gh = Math.floor(touch.clientY/(canvas.height/4.0));
-
   let dy = touch.clientY - touchPY;
 
-  if (_gw == 0 && gw == 0) {
-    if ((_gh == 2 || _gh == 3) && (gh == 2 || gh == 3)) {
-      if (dy >= touchOffset) {//往下 
+  if (dy >= touchOffset) {//往下 
         keyboard({keyCode : 33});
         touchMoveState = 1;
-      }
-      if (dy <= -touchOffset) {//往下
-        keyboard({keyCode : 34});
-        touchMoveState = 1;
-      }
-    }
   }
-
-  if (_gw == 2 && gw == 2) {
-    if ((_gh == 2 || _gh == 3) && (gh == 2 || gh == 3)) {
-      if (dy >= touchOffset) {//往下
-        keyboard({keyCode : 33});
-        touchMoveState = 1;
-      } 
-      if (dy <= -touchOffset) {//往下
+  if (dy <= -touchOffset) {//往下
         keyboard({keyCode : 34});
         touchMoveState = 1;
-      }
-    }
   }
 
   touchPX = touch.clientX;
