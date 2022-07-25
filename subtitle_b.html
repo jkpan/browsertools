@@ -34047,6 +34047,8 @@ function getTouchPos(canvasDom, touchEvent) {
 var touchPX;
 var touchPY;
 var touchMoveState = 0;
+const touchOffset = 5;
+var sumOffset = 0;
 
 canvas.addEventListener("touchstart", function(evt) {
     evt.preventDefault();
@@ -34054,11 +34056,32 @@ canvas.addEventListener("touchstart", function(evt) {
     touchPX = evt.changedTouches[0].clientX;//touches.x;
     touchPY = evt.changedTouches[0].clientY;//touches.y;
     touchMoveState = 0;
+    sumOffset = 0;
 }, false);
 
 canvas.addEventListener("touchend", function(evt) { //touchend
     
     evt.preventDefault();
+
+    /*
+    while (Math.abs(sumOffset) >= touchOffset) {
+      if (sumOffset > 0) {
+        sumOffset -= touchOffset;
+        keyboard({keyCode : 33});
+        continue;
+      }
+      if (sumOffset < 0) {
+        sumOffset += touchOffset;
+        keyboard({keyCode : 34});
+        continue;
+      }
+      sumOffset = 0;
+      break;
+    }
+    */
+
+    if (touchMoveState != 0) return;
+
     var touches = {x:evt.changedTouches[0].clientX, 
                    y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
     //console.log(touches);
@@ -34069,9 +34092,6 @@ canvas.addEventListener("touchend", function(evt) { //touchend
     
     let gw = Math.floor(touches.x/(canvas.width/3.0));
     let gh = Math.floor(touches.y/(canvas.height/4.0));
-
-    if (touchMoveState != 0) return;
-
     
     if (touches.y < fontsize_sml && touchPY < fontsize_sml) {
       helpSwitch = helpSwitch > 0?0:2;
@@ -34139,14 +34159,46 @@ canvas.addEventListener("touchend", function(evt) { //touchend
 
 }, false);
 
-const touchOffset = 5;
-
 canvas.addEventListener("touchmove", function(evt) {
   evt.preventDefault();
   var touch = evt.touches[0];
   
   let dy = touch.clientY - touchPY;
+  
+  sumOffset += dy;
+  
+  /*
+  while (Math.abs(sumOffset) >= touchOffset) {
+      if (sumOffset > 0) {
+        sumOffset -= touchOffset;
+        keyboard({keyCode : 33});
+        continue;
+      }
+      if (sumOffset < 0) {
+        sumOffset += touchOffset;
+        keyboard({keyCode : 34});
+        continue;
+      }
+      sumOffset = 0;
+      break;
+  }
+  */
 
+  if (sumOffset >= touchOffset) {//往下 
+        //sumOffset -= touchOffset;
+        sumOffset = 0;
+        keyboard({keyCode : 33});
+        touchMoveState = 1;
+  }
+  if (sumOffset <= -touchOffset) {//往下
+        //sumOffset += touchOffset;
+        sumOffset = 0;
+        keyboard({keyCode : 34});
+        touchMoveState = 1;
+  }
+  
+
+  /*
   if (dy >= touchOffset) {//往下 
         keyboard({keyCode : 33});
         touchMoveState = 1;
@@ -34155,6 +34207,7 @@ canvas.addEventListener("touchmove", function(evt) {
         keyboard({keyCode : 34});
         touchMoveState = 1;
   }
+  */
 
   touchPX = touch.clientX;
   touchPY = touch.clientY;
