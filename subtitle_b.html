@@ -32959,7 +32959,7 @@ function getTxtArray(txt, wRatio) {
   do {
       if (ctx.measureText(txt).width > canvas.width * wRatio) {
         let ratio = canvas.width * wRatio/ctx.measureText(txt).width;
-        ratio = Math.ceil(txt.length * ratio) - 1;
+        ratio = Math.ceil(txt.length * ratio) - 1; //字數
         let txt_0 = txt.substr(0, ratio);
         txt = txt.substr(ratio, txt.length - txt_0.length);
         substrings[idx] = txt_0;
@@ -34047,7 +34047,7 @@ function getTouchPos(canvasDom, touchEvent) {
 var touchPX;
 var touchPY;
 var touchMoveState = 0;
-const touchOffset = 5;
+const touchOffset = 8;
 var sumOffset = 0;
 
 canvas.addEventListener("touchstart", function(evt) {
