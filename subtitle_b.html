@@ -34,7 +34,7 @@
     ];
     */
   }
-  
+ 
   var fontfactor = 15.0;
   var fontFamily = "Monospace";
                    //"Arial";
@@ -86,7 +86,7 @@
   var hlight_pointer = hlightStyle;
 
   var txt_fill = txt_fillStyle;
-  var txt_stroke = txt_strokeStyle; 
+  var txt_stroke = txt_strokeStyle;
 
 </script>
 
@@ -32748,6 +32748,33 @@ function init() {
 
 }
 
+function save2Local() {
+  for (let idx = 0;idx < presetVerse.length;idx++) {
+    let key = 'save ' + idx;
+    localStorage.removeItem(key);
+    let value = ''; 
+    if (presetVerse[idx][0].length > 0) {
+      value = presetVerse[idx][0] + ' ' + presetVerse[idx][1] + ' ' + presetVerse[idx][2]; 
+    }
+    localStorage.setItem(key, value);
+  }
+}
+
+function restoreLocal() {
+  for (let idx = 0;idx < presetVerse.length;idx++) {
+    let key = 'save ' + idx;
+    let value = localStorage.getItem(key); 
+    if (value && value.length > 0) {
+      let array = value.split(' ');
+      presetVerse[idx][0] = array[0];
+      presetVerse[idx][1] = parseInt(array[1]);
+      presetVerse[idx][2] = parseInt(array[2]);
+    } else {
+      presetVerse[idx] = [''];
+    }
+  }
+}
+
 function plaintxtMode() {
   removeDiv(); 
   canvas.hidden = true;
@@ -32777,11 +32804,13 @@ function _newBtn() {
 
   var button = document.createElement('button');
 
-  if (canvas.width > canvas.height)
+  if (canvas.width > canvas.height) {
     button.style.width = '200px'; // setting the width to 200px
-  else
+    button.style.height = '75px'; // setting the height to 200px
+  } else {
     button.style.width = '100px';
-  button.style.height = '75px'; // setting the height to 200px
+    button.style.height = '100px'; // setting the height to 200px
+  }
   button.style.background = color_pointer[2];//'rgb(0,180,0)'; // setting the background color to teal
   button.style.color = bgcolor_pointer;//color_pointer[1];// 'green'; // setting the color to white
   button.style.fontSize = '20px'; // setting the font size to 20px
@@ -33101,8 +33130,8 @@ function verseobj() {
           //draw chapter verse
           if (this.chapter > 0 && this.verse > 0) {
             ctx.font = (this.targetFs * 0.7) + "px " + fontFamily;//FONT_SML;
-            _drawSdwtxt(' '+abbr[this.volume], 0, 4);
-            _drawSdwtxt(this.frontxt, 0, 4 + (this.targetFs * 0.7));
+            _drawSdwtxt(' '+abbr[this.volume], 0, 0);
+            _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
           }
         ctx.resetTransform();
       }
@@ -33135,7 +33164,7 @@ function verseobj() {
   return obj;
 }
 
-var animTotal = 30;
+const animTotal = 30;
 var animElapse = 0;
 function verse_update(elapse) {
 
@@ -33211,6 +33240,7 @@ function operateQuene(doanim) {
   }
 
   if (doanim > 0) {
+    //if (animElapse == 0) window.requestAnimationFrame(verse_update);      
     animElapse = 0;
     window.requestAnimationFrame(verse_update);
   } else {
@@ -33466,7 +33496,13 @@ function sortjump(start, end) {
 function combineKey(e) {
   var jump = 10;
   switch (e.keyCode) {
-      
+
+      case 81://'Q'
+        save2Local();
+        break;
+      case 87://'W'
+        restoreLocal();
+        break;
       case 65: sortjump( 1,  5); break;
       case 83: sortjump( 6, 17); break;
       case 68: sortjump(18, 22); break;
