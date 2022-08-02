@@ -32692,6 +32692,20 @@ var abbr = ['',
 
 ];
 
+var fullname = [
+'創世記', '出埃及記', '利未記', '民數記', '申命記',
+'約書亞記', '士師記', '路得記', '撒母耳記上', '撒母耳記下', '列王紀上', '列王紀下', '歷代志上', '歷代志下', 
+'以斯拉記', '尼希米記', '以斯帖記',
+'約伯記', '詩篇', '箴言', '傳道書', '雅歌', 
+'以賽亞書', '耶利米書', '耶利米哀歌', '以西結書', '但以理書', 
+'何西阿書', '約珥書', '阿摩司書', '俄巴底亞書', '約拿書', '彌迦書', '那鴻書', '哈巴谷書', '西番雅書', 
+'哈該書', '撒迦利亞書', '瑪拉基書',
+
+'馬太福音', '馬可福音', '路加福音', '約翰福音', '使徒行傳',
+'羅馬書', '哥林多前書', '哥林多後書', '加拉太書', '以弗所書', '腓立比書', '歌羅西書', '帖撒羅尼迦前書', '帖撒羅尼迦後書',
+'提摩太前書', '提摩太後書', '提多書', '腓利門書', 
+'希伯來書', '雅各書', '彼得前書', '彼得後書', '約翰壹書', '約翰貳書', '約翰參書', '猶大書', '啟示錄'];
+
 /*
 var abbr_eng = ['', 
 'gen', 'exo', 'lev', 'num', 'deu',
@@ -32985,9 +32999,10 @@ function drawHlight(yy, hh) {
 function getTxtArray(txt, wRatio) {
   let substrings = [];
   let idx = 0;
+  let mwidth = canvas.width * wRatio;
   do {
-      if (ctx.measureText(txt).width > canvas.width * wRatio) {
-        let ratio = canvas.width * wRatio/ctx.measureText(txt).width;
+      if (ctx.measureText(txt).width > mwidth) {
+        let ratio = mwidth/ctx.measureText(txt).width;
         ratio = Math.ceil(txt.length * ratio) - 1; //字數
         let txt_0 = txt.substr(0, ratio);
         txt = txt.substr(ratio, txt.length - txt_0.length);
@@ -33199,7 +33214,7 @@ function getQueueNext() {
   return obj;
 }
 
-function operateQuene(doanim) {
+function operateQuene(queueType, doanim) {
   
   if (queue.length == 0) {
     queueType = 0;
@@ -33240,18 +33255,15 @@ function operateQuene(doanim) {
   }
 
   if (doanim > 0) {
-    //if (animElapse == 0) window.requestAnimationFrame(verse_update);      
+    //if (animElapse == 0) window.requestAnimationFrame(verse_update);
     animElapse = 0;
     window.requestAnimationFrame(verse_update);
   } else {
     render(-1);
   }
-    
-  queueType = 0;
-
+  
 }
 
-var queueType;
 var queue = [];
 
 function render(progress) {
@@ -33346,6 +33358,9 @@ function render(progress) {
       ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, 2);
       ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs-1);
     }
+    ctx.textAlign = "right";
+    ctx.fillText(recogResult, canvas.width, 2); 
+    ctx.textAlign = "left";
   } 
 
   //printMain(phase, line);
@@ -33624,6 +33639,18 @@ function jumpTo1() {
   }
 }
 
+function jump2preset(ps) {
+  for (var i = 1;i<SONGS.length;i++) {
+    if (ps[0] == SONGS[i][0][0]) {
+        song = i;
+        subtitles = SONGS[i];//presetVerse[value][0]
+        phase = ps[1];
+        line =  ps[2];
+        break;
+    }
+  }
+}
+
 function keyboard(e) { //key up
 
     //alert(e.keyCode);
@@ -33756,8 +33783,7 @@ function keyboard(e) { //key up
             phase = _phase;
             line = _line;
             if (mode == 0 && queue.length > 0) {
-              queueType = 2;
-              operateQuene(e.keyCode == 37?1:0);
+              operateQuene(2, e.keyCode == 37?1:0);
               return;
             }
           }
@@ -33780,8 +33806,7 @@ function keyboard(e) { //key up
             phase = _phase;
             line  = _line;
             if (mode == 0 && queue.length > 0) {
-              queueType = 1;
-              operateQuene(e.keyCode == 39?1:0);
+              operateQuene(1, e.keyCode == 39?1:0);
               return;
             }
           }
@@ -33828,15 +33853,7 @@ function keyboard(e) { //key up
           var value = e.keyCode - 48;
           if (value > presetVerse.length -1) break;
           if (presetVerse[value][0].length == 0) break;
-          for (var i = 1;i<SONGS.length;i++) {
-            if (presetVerse[value][0] == SONGS[i][0][0]) {
-              song = i;
-              subtitles = SONGS[i];//presetVerse[value][0]
-              phase = presetVerse[value][1];
-              line = presetVerse[value][2];
-              break;
-            }
-          }
+          jump2preset(presetVerse[value]);
           if (mode == 1) {
             removeDiv();
             canvas.hidden = true;
@@ -33894,7 +33911,9 @@ function keyboard(e) { //key up
           presetVerse[0][2] = line;
           break; 
         //case 32: canvas.requestFullscreen(); break;
-        case 13: //'enter' 
+        case 13: //'enter'
+          
+          break;
         case 27: //'escape'
           jumpTo1();
           mode = 0;
@@ -34048,7 +34067,20 @@ init();
 
 var keylock = 0;
 
-window.addEventListener('keyup', keyboard, false);
+//window.addEventListener('keyup', keyboard, false);
+window.addEventListener('keyup', function(e) {
+  
+  if (e.keyCode == 32) { //control
+    if (recognition && recognizing) {
+      recognition.stop();
+    }
+    return;
+  }
+
+  keyboard(e);
+
+}, false);
+
 window.addEventListener('keydown', function(e) {
 
   //if (e.keyCode == 17) keylock = 2;
@@ -34056,7 +34088,16 @@ window.addEventListener('keydown', function(e) {
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = 1;
     _repaint();
+    return;
   }
+
+  if (e.keyCode == 32) { //control
+    if (recognition && !recognizing) {
+      recognition.start();
+    }
+    return;
+  }
+
 
 }, false);
 window.addEventListener('resize', function() {
@@ -34099,30 +34140,11 @@ canvas.addEventListener("touchend", function(evt) { //touchend
     
     evt.preventDefault();
 
-    /*
-    while (Math.abs(sumOffset) >= touchOffset) {
-      if (sumOffset > 0) {
-        sumOffset -= touchOffset;
-        keyboard({keyCode : 33});
-        continue;
-      }
-      if (sumOffset < 0) {
-        sumOffset += touchOffset;
-        keyboard({keyCode : 34});
-        continue;
-      }
-      sumOffset = 0;
-      break;
-    }
-    */
-
     if (touchMoveState != 0) return;
 
     var touches = {x:evt.changedTouches[0].clientX, 
                    y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
-    //console.log(touches);
-    //return;
-    //var touches = getTouchPos(canvas, evt);
+    
     let _gw = Math.floor(touchPX/(canvas.width/3.0));
     let _gh = Math.floor(touchPY/(canvas.height/4.0));
     
@@ -34181,7 +34203,6 @@ canvas.addEventListener("touchend", function(evt) { //touchend
       return;
     }
 
-    
     //left
     if (gw == 0 && (gh == 2 || gh == 3)) {
       keyboard({keyCode : 37});
@@ -34203,48 +34224,19 @@ canvas.addEventListener("touchmove", function(evt) {
   
   sumOffset += dy;
   
-  /*
-  while (Math.abs(sumOffset) >= touchOffset) {
-      if (sumOffset > 0) {
-        sumOffset -= touchOffset;
-        keyboard({keyCode : 33});
-        continue;
-      }
-      if (sumOffset < 0) {
-        sumOffset += touchOffset;
-        keyboard({keyCode : 34});
-        continue;
-      }
-      sumOffset = 0;
-      break;
-  }
-  */
-
   if (sumOffset >= touchOffset) {//往下 
-        //sumOffset -= touchOffset;
-        sumOffset = 0;
-        keyboard({keyCode : 33});
-        touchMoveState = 1;
+    //sumOffset -= touchOffset;
+    sumOffset = 0;
+    keyboard({keyCode : 33});
+    touchMoveState = 1;
   }
   if (sumOffset <= -touchOffset) {//往下
-        //sumOffset += touchOffset;
-        sumOffset = 0;
-        keyboard({keyCode : 34});
-        touchMoveState = 1;
+    //sumOffset += touchOffset;
+    sumOffset = 0;
+    keyboard({keyCode : 34});
+    touchMoveState = 1;
   }
   
-
-  /*
-  if (dy >= touchOffset) {//往下 
-        keyboard({keyCode : 33});
-        touchMoveState = 1;
-  }
-  if (dy <= -touchOffset) {//往下
-        keyboard({keyCode : 34});
-        touchMoveState = 1;
-  }
-  */
-
   touchPX = touch.clientX;
   touchPY = touch.clientY;
 
@@ -34259,8 +34251,145 @@ _repaint();
 
 openSelection(0);
 
+//var grammar = '#JSGF V1.0; grammar colors; public <color> = ';
+//for(let i = 0;i<SONGS.length;i++) console.log("'"+ SONGS[i][0][0] + "'" + ",");
+function parseRecogResult() {
+  if (recogResult.length == 0) return;
+  let result = ['', 0, 0];
+  let RecogResult = recogResult;
+  RecogResult = RecogResult.replace('紀', '記');
+  RecogResult = RecogResult.replace('生命', '申命');
+
+  for (var i = 1;i<SONGS.length;i++) {
+    if (RecogResult.startsWith(SONGS[i][0][0])) {
+
+        result[0] = SONGS[i][0][0];
+        jump2preset(result);
+        _repaint();
+
+        let cut = SONGS[i][0][0].length;
+        RecogResult = RecogResult.substr(cut, recogResult.length - cut);
+        console.log(RecogResult);
+        if (RecogResult.length == 0) break;
+
+        RecogResult = RecogResult.replace('篇', '章');
+        RecogResult = RecogResult.replace('一', '1');
+        RecogResult = RecogResult.replace('二', '2');
+        RecogResult = RecogResult.replace('三', '3');
+        RecogResult = RecogResult.replace('四', '4');
+        RecogResult = RecogResult.replace('五', '5');
+        RecogResult = RecogResult.replace('六', '6');
+        RecogResult = RecogResult.replace('七', '7');
+        RecogResult = RecogResult.replace('八', '8');
+        RecogResult = RecogResult.replace('九', '9');
+
+        console.log(RecogResult);
+
+        let array = RecogResult.split('章');
+        if (array.length == 0) break;
+        if (array[0].length == 0) break;
+        let chapter = parseInt(array[0]);
+        if (chapter >= SONGS[i].length) {
+          break;
+        }
+        result[1] = chapter;
+        jump2preset(result);
+        _repaint();
+
+        if (array.length > 1) {
+            if (array[1].length == 0) break;
+
+            array = array[1].split('節');
+            if (array.length == 0) break;
+            let verse = parseInt(array[0]);
+            if (array[0].length == 0) break;
+            if (verse >= SONGS[i][chapter].length) break; 
+            result[2] = verse;
+            jump2preset(result);
+            _repaint();
+        }
+        
+        break;
+    }
+  }
+  recogResult = '';
+  return;
+  //
+}
+
+//
+var recogResult = '';
+var recognizing = false;
+var recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+recognition.interimResults = true;
+recognition.lang = 'zh-TW';//'en-US';
+//recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+
+var speechRecognitionList = new webkitSpeechGrammarList();
+var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
+//console.log(grammar);
+speechRecognitionList.addFromString(grammar, 2);
+recognition.grammars = speechRecognitionList;
+
+recognition.onstart = function() {
+    recognizing = true;
+    console.log('info_speak_now');
+    recogResult = '';
+};
+
+recognition.onerror = function(event) {
+
+  recogResult = '';
+
+  if (event.error == 'no-speech') {
+    console.log('info_no_speech');
+  }
+  if (event.error == 'audio-capture') {
+      console.log('info_no_microphone');
+  }
+  if (event.error == 'not-allowed') {
+    console.log('not-allowed');
+  }
+
+};
+
+recognition.onend = function() {
+  recognizing = false;
+  recogResult = '';
+  console.log('onend');
+};
+
+recognition.onresult = function(event) {
+    
+    if (typeof(event.results) == 'undefined') {
+      console.log('onresult undefined');
+      recognition.onend = null;
+      recognition.stop();
+      return;
+    }
+    let final_transcript = '';
+    let interim_transcript = '';
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        final_transcript += event.results[i][0].transcript;
+        //console.log('onresult isfinal: ' + final_transcript);
+      } else {
+        interim_transcript += event.results[i][0].transcript;
+        //console.log('onresult not isfinal: ' + interim_transcript);
+      }
+    }
+    //final_transcript = capitalize(final_transcript);
+    recogResult = final_transcript;
+    console.log('onresult: ' + final_transcript);
+    _repaint();
+    parseRecogResult();
+};
+
 </script>
-<!-- Animation -->
+
+<!-- Animation
 <script type="text/javascript" charset="UTF-8">
 
 var pre = 0;
@@ -34388,3 +34517,4 @@ function newParticle_casual() {
 }
 
 </script>
+-->
