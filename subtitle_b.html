@@ -34276,6 +34276,7 @@ function parseRecogResult() {
   for (var i = 1;i<SONGS.length;i++) {
     //if (RecogResult.startsWith(SONGS[i][0][0])) {
     if (RecogResult.startsWith(anothername[i])) {
+
         result[0] = SONGS[i][0][0];
         jump2preset(result);
         _repaint();
@@ -34305,9 +34306,8 @@ function parseRecogResult() {
         if (array[0].length == 0) break;
         let chapter = parseInt(array[0]);
         if (isNaN(chapter)) break;
-        if (chapter >= SONGS[i].length) {
-          break;
-        }
+        if (chapter >= SONGS[i].length) break;
+        
         result[1] = chapter;
         jump2preset(result);
         _repaint();
@@ -34321,7 +34321,8 @@ function parseRecogResult() {
             let verse = parseInt(array[0]);
             if (isNaN(verse)) break;
             if (array[0].length == 0) break;
-            if (verse >= SONGS[i][chapter].length) break; 
+            if (verse >= SONGS[i][chapter].length) break;
+            
             result[2] = verse;
             jump2preset(result);
             _repaint();
@@ -34346,10 +34347,10 @@ recognition.lang = 'zh-TW';//'en-US';
 //recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
-//var speechRecognitionList = new webkitSpeechGrammarList();
-//var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
-//speechRecognitionList.addFromString(grammar, 2);
-//recognition.grammars = speechRecognitionList;
+var speechRecognitionList = new webkitSpeechGrammarList();
+var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + anothername.join(' | ') + ' ;';
+speechRecognitionList.addFromString(grammar, 2);
+recognition.grammars = speechRecognitionList;
 
 recognition.onstart = function() {
     recognizing = true;
