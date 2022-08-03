@@ -32692,9 +32692,12 @@ var abbr = ['',
 
 ];
 
-var fullname = [
+var anothername = ['',
 '創世記', '出埃及記', '利未記', '民數記', '申命記',
-'約書亞記', '士師記', '路得記', '撒母耳記上', '撒母耳記下', '列王紀上', '列王紀下', '歷代志上', '歷代志下', 
+'約書亞記', '士師記', '路得記', '撒母耳記上', '撒母耳記下', 
+'列王記上', '列王記下',
+//'列王紀上', '列王紀下', 
+'歷代志上', '歷代志下', 
 '以斯拉記', '尼希米記', '以斯帖記',
 '約伯記', '詩篇', '箴言', '傳道書', '雅歌', 
 '以賽亞書', '耶利米書', '耶利米哀歌', '以西結書', '但以理書', 
@@ -32704,7 +32707,10 @@ var fullname = [
 '馬太福音', '馬可福音', '路加福音', '約翰福音', '使徒行傳',
 '羅馬書', '哥林多前書', '哥林多後書', '加拉太書', '以弗所書', '腓立比書', '歌羅西書', '帖撒羅尼迦前書', '帖撒羅尼迦後書',
 '提摩太前書', '提摩太後書', '提多書', '腓利門書', 
-'希伯來書', '雅各書', '彼得前書', '彼得後書', '約翰壹書', '約翰貳書', '約翰參書', '猶大書', '啟示錄'];
+'希伯來書', '雅各書', '彼得前書', '彼得後書', 
+//'約翰壹書', '約翰貳書', '約翰參書',
+'約翰一書', '約翰二書', '約翰三書', 
+'猶大書', '啟示錄'];
 
 /*
 var abbr_eng = ['', 
@@ -34257,6 +34263,7 @@ openSelection(0);
 
 //var grammar = '#JSGF V1.0; grammar colors; public <color> = ';
 //for(let i = 0;i<SONGS.length;i++) console.log("'"+ SONGS[i][0][0] + "'" + ",");
+
 function parseRecogResult() {
   if (recogResult.length == 0) return;
   let result = ['', 0, 0];
@@ -34264,10 +34271,11 @@ function parseRecogResult() {
   RecogResult = RecogResult.replace('紀', '記');
   RecogResult = RecogResult.replace('生命', '申命');
   RecogResult = RecogResult.replace('第', '');
+  RecogResult = RecogResult.replace('誌', '志');
 
   for (var i = 1;i<SONGS.length;i++) {
-    if (RecogResult.startsWith(SONGS[i][0][0])) {
-
+    //if (RecogResult.startsWith(SONGS[i][0][0])) {
+    if (RecogResult.startsWith(anothername[i])) {
         result[0] = SONGS[i][0][0];
         jump2preset(result);
         _repaint();
@@ -34338,11 +34346,10 @@ recognition.lang = 'zh-TW';//'en-US';
 //recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
-var speechRecognitionList = new webkitSpeechGrammarList();
-var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
-//console.log(grammar);
-speechRecognitionList.addFromString(grammar, 2);
-recognition.grammars = speechRecognitionList;
+//var speechRecognitionList = new webkitSpeechGrammarList();
+//var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
+//speechRecognitionList.addFromString(grammar, 2);
+//recognition.grammars = speechRecognitionList;
 
 recognition.onstart = function() {
     recognizing = true;
