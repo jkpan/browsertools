@@ -32692,11 +32692,11 @@ var abbr = ['',
 
 ];
 
-var anothername = ['',
+var fullname = ['',
 '創世記', '出埃及記', '利未記', '民數記', '申命記',
 '約書亞記', '士師記', '路得記', '撒母耳記上', '撒母耳記下', 
-'列王記上', '列王記下',
-//'列王紀上', '列王紀下', 
+//'列王記上', '列王記下',
+'列王紀上', '列王紀下', 
 '歷代志上', '歷代志下', 
 '以斯拉記', '尼希米記', '以斯帖記',
 '約伯記', '詩篇', '箴言', '傳道書', '雅歌', 
@@ -32708,8 +32708,8 @@ var anothername = ['',
 '羅馬書', '哥林多前書', '哥林多後書', '加拉太書', '以弗所書', '腓立比書', '歌羅西書', '帖撒羅尼迦前書', '帖撒羅尼迦後書',
 '提摩太前書', '提摩太後書', '提多書', '腓利門書', 
 '希伯來書', '雅各書', '彼得前書', '彼得後書', 
-//'約翰壹書', '約翰貳書', '約翰參書',
-'約翰一書', '約翰二書', '約翰三書', 
+'約翰壹書', '約翰貳書', '約翰參書',
+//'約翰一書', '約翰二書', '約翰三書', 
 '猶大書', '啟示錄'];
 
 /*
@@ -34087,6 +34087,7 @@ window.addEventListener('keyup', function(e) {
 
 }, false);
 
+
 window.addEventListener('keydown', function(e) {
 
   //if (e.keyCode == 17) keylock = 2;
@@ -34097,13 +34098,13 @@ window.addEventListener('keydown', function(e) {
     return;
   }
 
-  if (e.keyCode == 32) { //control
+  if (e.keyCode == 32) { //space
+       
     if (recognition && !recognizing) {
       recognition.start();
     }
     return;
   }
-
 
 }, false);
 window.addEventListener('resize', function() {
@@ -34257,25 +34258,23 @@ _repaint();
 
 openSelection(0);
 
-//var _value = 'hello';
-//var _chapter = parseInt(_value);
-//console.log('isNaN(_chapter) : ' + isNaN(_chapter) + ': ' + _chapter);
-
-//var grammar = '#JSGF V1.0; grammar colors; public <color> = ';
-//for(let i = 0;i<SONGS.length;i++) console.log("'"+ SONGS[i][0][0] + "'" + ",");
-
 function parseRecogResult() {
+
   if (recogResult.length == 0) return;
   let result = ['', 0, 0];
   let RecogResult = recogResult;
-  RecogResult = RecogResult.replace('紀', '記');
-  RecogResult = RecogResult.replace('生命', '申命');
-  RecogResult = RecogResult.replace('第', '');
+
+  RecogResult = RecogResult.replace('創世紀', '創世記');
+  RecogResult = RecogResult.replace('列王記', '列王紀');
+  RecogResult = RecogResult.replace('生命記', '申命記');
   RecogResult = RecogResult.replace('誌', '志');
+  RecogResult = RecogResult.replace('約翰一', '約翰壹');
+  RecogResult = RecogResult.replace('約翰二', '約翰貳');
+  RecogResult = RecogResult.replace('約翰三', '約翰參');
 
   for (var i = 1;i<SONGS.length;i++) {
     //if (RecogResult.startsWith(SONGS[i][0][0])) {
-    if (RecogResult.startsWith(anothername[i])) {
+    if (RecogResult.startsWith(fullname[i])) {
 
         result[0] = SONGS[i][0][0];
         jump2preset(result);
@@ -34287,7 +34286,6 @@ function parseRecogResult() {
         console.log(RecogResult);
         if (RecogResult.length == 0) break;
 
-        RecogResult = RecogResult.replace('篇', '章');
         RecogResult = RecogResult.replace('一', '1');
         RecogResult = RecogResult.replace('二', '2');
         RecogResult = RecogResult.replace('三', '3');
@@ -34298,38 +34296,36 @@ function parseRecogResult() {
         RecogResult = RecogResult.replace('八', '8');
         RecogResult = RecogResult.replace('九', '9');
         RecogResult = RecogResult.replace('十', '0');
+        RecogResult = RecogResult.replace('篇', ' ');
+        RecogResult = RecogResult.replace('章', ' ');
+        RecogResult = RecogResult.replace('節', ' ');
+        RecogResult = RecogResult.replace('第', ' ');
 
         console.log(RecogResult);
 
-        let array = RecogResult.split('章');
+        let array = RecogResult.split(' ');
         if (array.length == 0) break;
         if (array[0].length == 0) break;
         let chapter = parseInt(array[0]);
         if (isNaN(chapter)) break;
-        if (chapter >= SONGS[i].length) break;
+        if (chapter < 0 || chapter >= SONGS[i].length) break;
         
         result[1] = chapter;
         jump2preset(result);
         _repaint();
-        //window.requestAnimationFrame(_repaint);
 
-        if (array.length > 1) {
-            if (array[1].length == 0) break;
+        if (array.length == 1) break;
+        if (array[1].length == 0) break;
+        let verse = parseInt(array[1]);
+        if (isNaN(verse)) break;
+        if (verse < 0 || verse >= SONGS[i][chapter].length) break;
 
-            array = array[1].split('節');
-            if (array.length == 0) break;
-            let verse = parseInt(array[0]);
-            if (isNaN(verse)) break;
-            if (array[0].length == 0) break;
-            if (verse >= SONGS[i][chapter].length) break;
-            
-            result[2] = verse;
-            jump2preset(result);
-            _repaint();
-            //window.requestAnimationFrame(_repaint);
-        }
-        
+        result[2] = verse;
+        jump2preset(result);
+        _repaint();
+
         break;
+
     }
   }
   recogResult = '';
@@ -34343,14 +34339,16 @@ var recognizing = false;
 var recognition = new webkitSpeechRecognition();
 recognition.continuous = true;
 recognition.interimResults = true;
-recognition.lang = 'zh-TW';//'en-US';
+recognition.lang = 'cmn-Hant-TW';//'zh-TW';//'en-US';'en-US';
 //recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
+/*
 var speechRecognitionList = new webkitSpeechGrammarList();
-var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + anothername.join(' | ') + ' ;';
+var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
 speechRecognitionList.addFromString(grammar, 2);
 recognition.grammars = speechRecognitionList;
+*/
 
 recognition.onstart = function() {
     recognizing = true;
