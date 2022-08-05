@@ -33364,9 +33364,18 @@ function render(progress) {
       ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, 2);
       ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs-1);
     }
+
+    if (recognition && recognizing) {
+      ctx.fillStyle = color_pointer[0];
+      ctx.fillRect(0, 0, canvas.width, fs * 2);
+    }
+    ctx.fillStyle = color_pointer[2];
     ctx.textAlign = "right";
     ctx.fillText(recogResult, canvas.width, 2); 
     ctx.textAlign = "left";
+
+       
+
   } 
 
   //printMain(phase, line);
@@ -34076,12 +34085,18 @@ var keylock = 0;
 //window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keyup', function(e) {
   
+  if (recognition && recognizing) {
+    recognition.stop();
+  }
+
+  /*
   if (e.keyCode == 32) { //control
     if (recognition && recognizing) {
       recognition.stop();
     }
     return;
   }
+  */
 
   keyboard(e);
 
@@ -34260,6 +34275,8 @@ openSelection(0);
 
 function parseRecogResult() {
 
+  console.log('parseRecogResult...' + recogResult);
+
   if (recogResult.length == 0) return;
   let result = ['', 0, 0];
   let RecogResult = recogResult;
@@ -34282,25 +34299,26 @@ function parseRecogResult() {
         //window.requestAnimationFrame(_repaint);
 
         let cut = SONGS[i][0][0].length;
-        RecogResult = RecogResult.substr(cut, recogResult.length - cut);
-        console.log(RecogResult);
+        RecogResult = RecogResult.substr(cut, RecogResult.length - cut);
         if (RecogResult.length == 0) break;
 
-        RecogResult = RecogResult.replace('一', '1');
-        RecogResult = RecogResult.replace('二', '2');
-        RecogResult = RecogResult.replace('三', '3');
-        RecogResult = RecogResult.replace('四', '4');
-        RecogResult = RecogResult.replace('五', '5');
-        RecogResult = RecogResult.replace('六', '6');
-        RecogResult = RecogResult.replace('七', '7');
-        RecogResult = RecogResult.replace('八', '8');
-        RecogResult = RecogResult.replace('九', '9');
-        RecogResult = RecogResult.replace('十', '0');
-        RecogResult = RecogResult.replace('篇', ' ');
-        RecogResult = RecogResult.replace('章', ' ');
-        RecogResult = RecogResult.replace('節', ' ');
-        RecogResult = RecogResult.replace('第', ' ');
-
+        console.log(RecogResult);
+                
+        RecogResult = RecogResult.replaceAll('一', '1');
+        RecogResult = RecogResult.replaceAll('二', '2');
+        RecogResult = RecogResult.replaceAll('三', '3');
+        RecogResult = RecogResult.replaceAll('四', '4');
+        RecogResult = RecogResult.replaceAll('五', '5');
+        RecogResult = RecogResult.replaceAll('六', '6');
+        RecogResult = RecogResult.replaceAll('七', '7');
+        RecogResult = RecogResult.replaceAll('八', '8');
+        RecogResult = RecogResult.replaceAll('九', '9');
+        RecogResult = RecogResult.replaceAll('十', '10');
+        RecogResult = RecogResult.replaceAll('篇', ' ');
+        RecogResult = RecogResult.replaceAll('章', ' ');
+        RecogResult = RecogResult.replaceAll('節', '');
+        RecogResult = RecogResult.replaceAll('第', '');
+        
         console.log(RecogResult);
 
         let array = RecogResult.split(' ');
@@ -34329,8 +34347,6 @@ function parseRecogResult() {
     }
   }
   recogResult = '';
-  return;
-  //
 }
 
 //
@@ -34339,21 +34355,26 @@ var recognizing = false;
 var recognition = new webkitSpeechRecognition();
 recognition.continuous = true;
 recognition.interimResults = true;
-recognition.lang = 'cmn-Hant-TW';//'zh-TW';//'en-US';'en-US';
+recognition.lang = 'cmn-Hant-TW';//'zh-TW';//'en-US';'en-US';'cmn-Hant-TW';
 //recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
+if(navigator.userAgent.indexOf("Chrome") != -1 ) {
+  var speechRecognitionList = new webkitSpeechGrammarList();
+  var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
+  speechRecognitionList.addFromString(grammar, 2);
+  recognition.grammars = speechRecognitionList;
+}
+
 /*
-var speechRecognitionList = new webkitSpeechGrammarList();
-var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
-speechRecognitionList.addFromString(grammar, 2);
-recognition.grammars = speechRecognitionList;
+
 */
 
 recognition.onstart = function() {
     recognizing = true;
     console.log('info_speak_now');
     recogResult = '';
+    _repaint();
 };
 
 recognition.onerror = function(event) {
@@ -34373,9 +34394,11 @@ recognition.onerror = function(event) {
 };
 
 recognition.onend = function() {
+  parseRecogResult();
   recognizing = false;
   recogResult = '';
   console.log('onend');
+  _repaint();
 };
 
 recognition.onresult = function(event) {
@@ -34386,33 +34409,40 @@ recognition.onresult = function(event) {
       recognition.stop();
       return;
     }
-    let final_transcript = '';
-    let interim_transcript = '';
+
+    //let final_transcript = '';
+    //let interim_transcript = '';
+    recogResult = '';
+
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        final_transcript += event.results[i][0].transcript;
-        recogResult = final_transcript;
-        console.log('onresult isfinal: ' + final_transcript);
+        //final_transcript += event.results[i][0].transcript;
+        //recogResult = final_transcript;
+        recogResult += event.results[i][0].transcript;
+        console.log('onresult isfinal: ' + recogResult);
         //window.requestAnimationFrame(voice_update);
       } else {
-        interim_transcript += event.results[i][0].transcript;
-        recogResult = interim_transcript;
-        console.log('onresult not isfinal: ' + interim_transcript);
+        //interim_transcript += event.results[i][0].transcript;
+        //recogResult = interim_transcript;
+        recogResult += event.results[i][0].transcript;
+        console.log('onresult not isfinal: ' + recogResult);
+        _repaint();
         //window.requestAnimationFrame(voice_update);
       }
     }
     //final_transcript = capitalize(final_transcript);
-    recogResult = final_transcript;
-    console.log('onresult: ' + final_transcript);
+    //recogResult = final_transcript;
+    console.log('onresult: ' + recogResult);
     _repaint();
     //window.requestAnimationFrame(_repaint);
-    parseRecogResult();
 };
 
+/*
 function voice_update(elapse) {
   console.log('voice_update');
   _repaint();
 }
+*/
 
 </script>
 
