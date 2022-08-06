@@ -34114,7 +34114,6 @@ window.addEventListener('keydown', function(e) {
   }
 
   if (e.keyCode == 32) { //space
-       
     if (recognition && !recognizing) {
       recognition.start();
     }
@@ -34318,6 +34317,7 @@ function parseRecogResult() {
         RecogResult = RecogResult.replaceAll('章', ' ');
         RecogResult = RecogResult.replaceAll('節', '');
         RecogResult = RecogResult.replaceAll('第', '');
+        RecogResult = RecogResult.trim();
         
         console.log(RecogResult);
 
@@ -34366,10 +34366,6 @@ if(navigator.userAgent.indexOf("Chrome") != -1 ) {
   recognition.grammars = speechRecognitionList;
 }
 
-/*
-
-*/
-
 recognition.onstart = function() {
     recognizing = true;
     console.log('info_speak_now');
@@ -34410,39 +34406,22 @@ recognition.onresult = function(event) {
       return;
     }
 
-    //let final_transcript = '';
-    //let interim_transcript = '';
     recogResult = '';
 
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        //final_transcript += event.results[i][0].transcript;
-        //recogResult = final_transcript;
         recogResult += event.results[i][0].transcript;
         console.log('onresult isfinal: ' + recogResult);
-        //window.requestAnimationFrame(voice_update);
+        _repaint();
       } else {
-        //interim_transcript += event.results[i][0].transcript;
-        //recogResult = interim_transcript;
         recogResult += event.results[i][0].transcript;
         console.log('onresult not isfinal: ' + recogResult);
         _repaint();
-        //window.requestAnimationFrame(voice_update);
       }
     }
-    //final_transcript = capitalize(final_transcript);
-    //recogResult = final_transcript;
     console.log('onresult: ' + recogResult);
     _repaint();
-    //window.requestAnimationFrame(_repaint);
 };
-
-/*
-function voice_update(elapse) {
-  console.log('voice_update');
-  _repaint();
-}
-*/
 
 </script>
 
