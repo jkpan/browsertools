@@ -33185,6 +33185,41 @@ function verseobj() {
   return obj;
 }
 
+function blankend_update(elapse) {
+
+  render(-1);
+
+  ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - animElapse/animTotal) + ')';//bgcolor_pointer;//'green';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  if (animElapse < animTotal) {
+    animElapse++;
+    window.requestAnimationFrame(blankend_update);
+  } else {
+    animElapse = 0;
+    _repaint();
+  }
+
+}
+
+function blank_update(elapse) {
+
+  render(-1);
+
+  ctx.fillStyle = 'rgba(0,128,0,' + (animElapse/animTotal) + ')';//bgcolor_pointer;//'green';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  if (animElapse < animTotal) {
+    animElapse++;
+    window.requestAnimationFrame(blank_update);
+  } else {
+    doblank = 1;
+    animElapse = 0;
+    _repaint();
+  }
+
+}
+
 const animTotal = 30;
 var animElapse = 0;
 function verse_update(elapse) {
@@ -33198,6 +33233,7 @@ function verse_update(elapse) {
   } else {
     animElapse = 0;
   }
+
 }
 
 function getQueuePre() {
@@ -33270,12 +33306,17 @@ function operateQuene(queueType, doanim) {
   
 }
 
+function render(progress) {
+  _layer0();
+  _render(progress);
+  _layer2();
+  _layerui();
+}
+
 var queue = [];
 
-function render(progress) {
-
-  _layer0();
-
+function _render(progress) {
+  
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.6;
       
@@ -33373,16 +33414,9 @@ function render(progress) {
     ctx.textAlign = "right";
     ctx.fillText(recogResult, canvas.width, 2); 
     ctx.textAlign = "left";
-
-       
-
   } 
 
-  //printMain(phase, line);
   ctx.textBaseline = 'alphabetic';
-
-  _layer2();
-  _layerui();
 
 }
 
@@ -33431,7 +33465,7 @@ function printMain(chapter, verse) {
       queue.push(obj);      
   }
 
-  render(-1);
+  _render(-1);
 
 }
 
@@ -33687,6 +33721,17 @@ function keyboard(e) { //key up
           
     switch (e.keyCode) {
       case 66: //'b'
+        //console.log('b press');
+        if (color_selection == 0) {
+          animElapse = 0;
+          if (doblank == 0) {
+            window.requestAnimationFrame(blank_update);
+          } else {
+            doblank = 0;
+            window.requestAnimationFrame(blankend_update);
+          }
+          return;
+        }
         doblank = doblank == 0?1:0;
         break;
       case 67: copyToClickBoard(); break; // 'c' copy
