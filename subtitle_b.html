@@ -99,7 +99,8 @@
                 "shift'ASDFG' 舊約分類  shift'ZXCV' 新約分類",
                 "shift'1234567890' 選章",
                 "'shift左右' 上十節下十節  'shift上下' 上十章下十章",
-                "shift+- 字大小  'esc' 跳回預設樣式"
+                "shift+- 字大小  'esc' 跳回預設樣式",
+                "'space' 語音辨識(Google Chrome + 網路連線)"
                 ]]
 } </script>
 
@@ -34322,7 +34323,7 @@ function parseRecogResult() {
   console.log('parseRecogResult...' + recogResult);
 
   if (recogResult.length == 0) return;
-  let result = ['', 0, 0];
+  let result = [SONGS[song][0][0], 0, 0];
   let RecogResult = recogResult;
 
   RecogResult = RecogResult.replace('創世紀', '創世記');
@@ -34344,54 +34345,54 @@ function parseRecogResult() {
 
         let cut = SONGS[i][0][0].length;
         RecogResult = RecogResult.substr(cut, RecogResult.length - cut);
-        if (RecogResult.length == 0) break;
-
-        console.log(RecogResult);
-                
-        RecogResult = RecogResult.replaceAll('一', '1');
-        RecogResult = RecogResult.replaceAll('二', '2');
-        RecogResult = RecogResult.replaceAll('三', '3');
-        RecogResult = RecogResult.replaceAll('四', '4');
-        RecogResult = RecogResult.replaceAll('五', '5');
-        RecogResult = RecogResult.replaceAll('六', '6');
-        RecogResult = RecogResult.replaceAll('七', '7');
-        RecogResult = RecogResult.replaceAll('八', '8');
-        RecogResult = RecogResult.replaceAll('九', '9');
-        RecogResult = RecogResult.replaceAll('十', '10');
-        RecogResult = RecogResult.replaceAll('篇', ' ');
-        RecogResult = RecogResult.replaceAll('章', ' ');
-        RecogResult = RecogResult.replaceAll('節', '');
-        RecogResult = RecogResult.replaceAll('第', '');
         RecogResult = RecogResult.trim();
-        
-        console.log(RecogResult);
-
-        let array = RecogResult.split(' ');
-        if (array.length == 0) break;
-        if (array[0].length == 0) break;
-        let chapter = parseInt(array[0]);
-        if (isNaN(chapter)) break;
-        if (chapter < 0 || chapter >= SONGS[i].length) break;
-        
-        result[1] = chapter;
-        jump2preset(result);
-        _repaint();
-
-        if (array.length == 1) break;
-        if (array[1].length == 0) break;
-        let verse = parseInt(array[1]);
-        if (isNaN(verse)) break;
-        if (verse < 0 || verse >= SONGS[i][chapter].length) break;
-
-        result[2] = verse;
-        jump2preset(result);
-        _repaint();
-
-        break;
-
+        if (RecogResult.length == 0) return;
     }
   }
-  recogResult = '';
+
+  console.log(RecogResult);
+                
+  RecogResult = RecogResult.replaceAll('一', '1');
+  RecogResult = RecogResult.replaceAll('二', '2');
+  RecogResult = RecogResult.replaceAll('三', '3');
+  RecogResult = RecogResult.replaceAll('四', '4');
+  RecogResult = RecogResult.replaceAll('五', '5');
+  RecogResult = RecogResult.replaceAll('六', '6');
+  RecogResult = RecogResult.replaceAll('七', '7');
+  RecogResult = RecogResult.replaceAll('八', '8');
+  RecogResult = RecogResult.replaceAll('九', '9');
+  RecogResult = RecogResult.replaceAll('十', '10');
+  RecogResult = RecogResult.replaceAll('篇', ' ');
+  RecogResult = RecogResult.replaceAll('章', ' ');
+  RecogResult = RecogResult.replaceAll('節', '');
+  RecogResult = RecogResult.replaceAll('第', '');
+  RecogResult = RecogResult.trim();
+        
+  console.log(RecogResult);
+
+  let array = RecogResult.split(' ');
+  if (array.length == 0) return;
+  if (array[0].length == 0) return;
+  let chapter = parseInt(array[0]);
+  if (isNaN(chapter)) return;
+  if (chapter < 0 || chapter >= SONGS[song].length) return;
+        
+  result[1] = chapter;
+  jump2preset(result);
+  _repaint();
+
+  if (array.length == 1) return;
+  if (array[1].length == 0) return;
+  let verse = parseInt(array[1]);
+  if (isNaN(verse)) return;
+  if (verse < 0 || verse >= SONGS[song][chapter].length) return;
+
+  result[2] = verse;
+  jump2preset(result);
+  _repaint();
+
+  //recogResult = '';
+
 }
 
 //
