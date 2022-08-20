@@ -95,7 +95,7 @@
                 "'-'上一卷  '='下一卷", 
                 "'1234567890' 跳至預存  'QWERTYUIOP' 儲存1-0", 
                 "'L' 選卷  'K' 選章  'J' 選節", 
-                "'A' 換顏色  'B' Blank  'C' 複製目前章節到剪貼簿 'M'文字模式",
+                "'A' 換顏色  'B' Blank  'C' 複製此節到剪貼簿 'M'文字模式",
                 "shift'ASDFG' 舊約分類  shift'ZXCV' 新約分類",
                 "shift'1234567890' 選章",
                 "'shift左右' 上十節下十節  'shift上下' 上十章下十章",
@@ -32769,6 +32769,44 @@ function init() {
 
 }
 
+var funcInterval;
+function startActionInterval() {
+  funcInterval = window.setInterval(saveAction2Local, 100);
+}
+
+function startRestoreInterval() {
+  funcInterval = window.setInterval(restoreAction2Local, 100);
+}
+
+function stopActionInterval() {
+  clearInterval(funcInterval);
+}
+
+function saveAction2Local() {
+  //console.log('saveAction2Local');
+  let key = 'save action';
+  localStorage.removeItem(key);
+  let value = subtitles[0][0] + ' ' + phase + ' ' + line;
+  localStorage.setItem(key, value);
+}
+
+function restoreAction2Local() {
+  //console.log('saveAction2Local ');
+  let key = 'save action';
+  let value = localStorage.getItem(key);
+  if (!value) return;
+  value = value.trim();
+  if (value && value.length == 0) return;
+  let array = value.split(' ');
+  let volume = array[0];
+  let chapter = parseInt(array[1]);
+  let verse = parseInt(array[2]);
+  if (volume == subtitles[0][0] && chapter == phase && verse == line) return;
+  let result = [array[0], parseInt(array[1]), parseInt(array[2])];
+  jump2preset(result);
+  _repaint();
+}
+
 function save2Local() {
   for (let idx = 0;idx < presetVerse.length;idx++) {
     let key = 'save ' + idx;
@@ -33561,7 +33599,15 @@ function sortjump(start, end) {
 function combineKey(e) {
   var jump = 10;
   switch (e.keyCode) {
-
+      case 49:
+        startActionInterval();
+        break;
+      case 50:
+        startRestoreInterval();
+        break;
+      case 51:
+        stopActionInterval();
+        break;
       case 81://'Q'
         save2Local();
         break;

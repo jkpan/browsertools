@@ -4,16 +4,19 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('救恩18'),
-            getSong('其他55'),
-            getSong('救恩203'),
-            getSong('讚美之泉82'),
+            getSong('讚美之泉57'),
+            getSong('其他56'),
+            getSong('讚美之泉83'),
+            getSong('救恩167'),
+            getSong('讚美之泉21'),
             
-            getSong('短歌61'),
+            //getSong('短歌61'),
 
             getSong('主禱文'),
             getSong('使徒信經'),
             getSong('救恩300'),
+
+            getSong('救恩293'),
 
             //getSong('救恩'),
             //getSong('短歌'),
@@ -3741,6 +3744,12 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["哈利路亞 哈利路亞", "哈利路亞 哈利路", "哈利路亞 哈利路亞", "哈利路亞 哈利路"], 
                ["我的幫助從造天地的耶和華而來"]]
 } </script>
+<script id="讚美之泉83" name="更深之處" type="application/json" charset="UTF-8"> {
+  "content" : [["更深之處", "讚美之泉"],
+               ["高舉我的雙手 聖靈來充滿我", "更深地渴求主 認識祢更多", "進入水深之處 我心炙熱燃燒", "只為愛祢 傾倒一切敬拜祢"],
+               ["帶我進入 更深之處", "帶我進入 祢心意深處", "帶我走向 更高之處", "完全獻上 聆聽祢聲音", "來愛祢"],
+               ["從前耳聞有祢 現在親眼見祢", "渴望在祢同在裡 更多親近", "從前耳聞有祢 現在親眼見祢", "渴望在祢同在裡 更多與祢親近"]]
+} </script>
 <script id="讚美之泉" name="" type="application/json" charset="UTF-8"> {
   "content" : [["", "讚美之泉"],
                ["", "", "", ""]]
@@ -4081,6 +4090,11 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["主的靈 如風吹我心", "安慰憂傷破碎的靈", "祂是王 掌管我的心靈", "親愛主 願你從天降臨"],
                ["一道江河 流呀流呀", "流到豐盛的生命", "頌讚奇妙榮耀的聖名", "我靈歌唱 唱呀唱呀", "唱到靈裡都歡欣", "主聖靈現在來掌權運行"]]
 } </script>
+<script id="其他56" name="神真是我的力量" type="application/json" charset="UTF-8"> {
+  "content" : [["神真是我的力量"],
+               ["除了祢在天上有誰", "除了祢在地上我也沒有所愛慕", "雖然有時候我身心軟弱", "但有一件事永遠不會改變"],
+               ["神真是我的力量 神真是我的力量", "神真是我的力量 我的福分到永遠", "神真是我的力量 神真是我的力量", "神真是我的力量 我的福分到永遠"]]
+} </script>
 <script id="其他" name="" type="application/json" charset="UTF-8"> {
   "content" : [[""],
                ["", "", "", ""]]
@@ -4169,6 +4183,46 @@ function init() {
     FONT = fontsize + "px " + fontFamily;
 
     //canvas.style.caretColor = "red";
+}
+
+var funcInterval;
+function startActionInterval() {
+  funcInterval = window.setInterval(saveAction2Local, 100);
+}
+
+function startRestoreInterval() {
+  funcInterval = window.setInterval(restoreAction2Local, 100);
+}
+
+function stopActionInterval() {
+  clearInterval(funcInterval);
+}
+
+function saveAction2Local() {
+  //console.log('saveAction2Local');
+  let key = 'save progress';
+  localStorage.removeItem(key);
+  let value = song + ' ' + phase + ' ' + line;
+  localStorage.setItem(key, value);
+}
+
+function restoreAction2Local() {
+  //console.log('saveAction2Local ');
+  let key = 'save progress';
+  let value = localStorage.getItem(key);
+  if (!value) return;
+  value = value.trim();
+  if (value && value.length == 0) return;
+  let array = value.split(' ');
+  let _song = parseInt(array[0]);
+  let _phase = parseInt(array[1]);
+  let _line = parseInt(array[2]);
+  if (_song == song && _phase == phase && _line == line) return;
+  song = _song;
+  subtitles = SONGS[song];
+  phase = _phase;
+  line = _line;
+  _repaint();
 }
 
 function _createEmptyBtn() {
@@ -4460,9 +4514,16 @@ function printPhaseChart() {
 function combineKey(e) {
   
   switch (e.keyCode) {
-    case 32:
-      history.back();
-      return;
+    case 49:
+        startActionInterval();
+        break;
+    case 50:
+        startRestoreInterval();
+        break;
+    case 51:
+        stopActionInterval();
+        break;
+    case 32: history.back(); return;
     case 189: //'-'
       fontfactor += 0.5;
       if (fontfactor > 20) 
