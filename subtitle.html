@@ -4,9 +4,10 @@ function flow() {
 
   SONGS = [ [['']],
 
-            getSong('其他58'),
-            getSong('救恩77'),
-            getSong('其他59'),
+            getSong('其他60'),
+            getSong('其他61'),
+            getSong('其他50'),
+            getSong('救恩176'),
 
             getSong('主禱文'),
             getSong('使徒信經'),
@@ -4116,6 +4117,19 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["是寶貴禱告良辰 表示信託之心", "祂深知我們需要 必按時供應", "只要誠心全信靠 便能盡除愁苦", "是勞倦者的良藥 何等甜美之處"],
                ["是禱告良辰 是寶貴良辰", "是勞倦者的良藥 何等甜美之處"]]
 } </script>
+<script id="其他60" name="頌讚全能上帝" type="application/json" charset="UTF-8"> {
+  "content" : [["頌讚全能上帝"],
+               ["天上的父神 我們愛你", "在全地上尊崇你聖名", "願你國度 如今降臨我們中間", "讓我們宣揚你奇妙作為"],
+               ["頌讚主聖名 全能上帝", "昔在今在永在的父神", "頌讚主聖名 全能上帝", "你作王到永遠"]]
+} </script>
+<script id="其他61" name="耶穌 萬國的盼望" type="application/json" charset="UTF-8"> {
+  "content" : [["耶穌 萬國的盼望"],
+               ["耶穌 萬國的盼望", "耶穌 憂傷者的安慰", "你是這世界唯一的盼望"],
+               ["耶穌 黑暗中的光", "耶穌 現實中的真理", "你是這世界唯一的盼望"],
+               ["因你為我 道成肉身", "斷開黑暗 復活得勝"],
+               ["你是我神 永住我心", "你是磐石 我所倚靠", "你是真光 照亮在全世界之上"],
+               ["你已經復活 戰勝懼怕", "和平君王 領我親近", "耶穌我主 你是我永活的盼望", "我信靠你"]]
+} </script>
 <script id="其他" name="" type="application/json" charset="UTF-8"> {
   "content" : [[""],
                ["", "", "", ""]]
@@ -4207,16 +4221,26 @@ function init() {
 }
 
 var funcInterval;
+var intervalType = 0;
 function startActionInterval() {
+  if (funcInterval) 
+    stopActionInterval();
   funcInterval = window.setInterval(saveAction2Local, 100);
+  intervalType = 1;
 }
 
 function startRestoreInterval() {
-  funcInterval = window.setInterval(restoreAction2Local, 100);
+  if (funcInterval) 
+    stopActionInterval();
+  funcInterval = window.setInterval(restoreActionFromLocal, 100);
+  intervalType = -1;
 }
 
 function stopActionInterval() {
-  clearInterval(funcInterval);
+  if (funcInterval) 
+    clearInterval(funcInterval);
+  funcInterval = null;
+  intervalType = 0;
 }
 
 function saveAction2Local() {
@@ -4227,7 +4251,7 @@ function saveAction2Local() {
   localStorage.setItem(key, value);
 }
 
-function restoreAction2Local() {
+function restoreActionFromLocal() {
   //console.log('saveAction2Local ');
   let key = 'save progress';
   let value = localStorage.getItem(key);
@@ -4804,11 +4828,24 @@ function _layer1() {
 }
 
 function _layer2() {
+
+  if (intervalType == 1) {
+    ctx.beginPath();
+    ctx.fillStyle = COLORS_CK[3];
+    ctx.arc(canvas.width, 0, fontsize/3, 0, 2 * Math.PI, true);
+    ctx.fill();
+    ctx.closePath();
+  } else if (intervalType == -1) {
+    ctx.fillStyle = COLORS_CK[3];
+    ctx.fillRect(canvas.width - fontsize/3, 0, fontsize/3, fontsize/3);
+  }
+
   if (helpSwitch == 1) {
     userhelp(); 
   }
   if (doblank == 1) 
     blank();
+  
 }
 
 function _repaint() {

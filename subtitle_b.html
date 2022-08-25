@@ -32770,27 +32770,39 @@ function init() {
 }
 
 var funcInterval;
+var fake_doblank = 0;
+var intervalType = 0;
 function startActionInterval() {
+  if (funcInterval) 
+    stopActionInterval();
   funcInterval = window.setInterval(saveAction2Local, 100);
+  intervalType = 1;
 }
 
 function startRestoreInterval() {
-  funcInterval = window.setInterval(restoreAction2Local, 100);
+  if (funcInterval) 
+    stopActionInterval();
+  funcInterval = window.setInterval(restoreActionFromLocal, 100);
+  intervalType = -1;
 }
 
 function stopActionInterval() {
-  clearInterval(funcInterval);
+  if (funcInterval) 
+    clearInterval(funcInterval);
+  funcInterval = null;
+  intervalType = 0;
 }
 
 function saveAction2Local() {
   //console.log('saveAction2Local');
   let key = 'save action';
   localStorage.removeItem(key);
-  let value = subtitles[0][0] + ' ' + phase + ' ' + line;
+  let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
+              //subtitles[0][0] + ' ' + phase + ' ' + line;
   localStorage.setItem(key, value);
 }
 
-function restoreAction2Local() {
+function restoreActionFromLocal() {
   //console.log('saveAction2Local ');
   let key = 'save action';
   let value = localStorage.getItem(key);
@@ -32798,13 +32810,31 @@ function restoreAction2Local() {
   value = value.trim();
   if (value && value.length == 0) return;
   let array = value.split(' ');
-  let volume = array[0];
+  let volume = parseInt(array[0]);//array[0];
   let chapter = parseInt(array[1]);
   let verse = parseInt(array[2]);
-  if (volume == subtitles[0][0] && chapter == phase && verse == line) return;
-  let result = [array[0], parseInt(array[1]), parseInt(array[2])];
-  jump2preset(result);
+  let _doblank = parseInt(array[3]);
+  if (volume == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
+  
+  fake_doblank = _doblank;
+  if (_doblank != doblank) keyboard({keyCode : 66});
+
+  if (volume == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
+    keyboard({keyCode : 37}); //left
+    return;
+  }
+  
+  if (volume == song && chapter == getNextChapter(phase, line) && verse == getNextVerse(phase, line)) {
+    keyboard({keyCode : 39}); //right
+    return;
+  }
+  
+  song = volume;
+  subtitles = SONGS[song];
+  phase = chapter;
+  line = verse;
   _repaint();
+
 }
 
 function save2Local() {
@@ -33453,7 +33483,18 @@ function _render(progress) {
     ctx.textAlign = "right";
     ctx.fillText(recogResult, canvas.width, 2); 
     ctx.textAlign = "left";
-  } 
+  }
+
+  if (intervalType == 1) {
+    ctx.beginPath();
+    ctx.fillStyle = color_pointer[3];
+    ctx.arc(canvas.width, 0, fontsize_sml_sml, 0, 2 * Math.PI, true);
+    ctx.fill();
+    ctx.closePath();
+  } else if (intervalType == -1) {
+    ctx.fillStyle = color_pointer[3];
+    ctx.fillRect(canvas.width - fontsize_sml_sml, 0, fontsize_sml_sml, fontsize_sml_sml);
+  }
 
   ctx.textBaseline = 'alphabetic';
 
