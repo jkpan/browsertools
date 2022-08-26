@@ -4829,20 +4829,23 @@ function _layer1() {
 
 function _layer2() {
 
-  if (intervalType == 1) {
-    ctx.beginPath();
-    ctx.fillStyle = COLORS_CK[3];
-    ctx.arc(canvas.width, 0, fontsize/3, 0, 2 * Math.PI, true);
-    ctx.fill();
-    ctx.closePath();
-  } else if (intervalType == -1) {
-    ctx.fillStyle = COLORS_CK[3];
-    ctx.fillRect(canvas.width - fontsize/3, 0, fontsize/3, fontsize/3);
+  if (intervalType != 0) {
+    ctx.fillStyle = COLORS_CK[2];
+    let _r = fontsize/5;
+    if (intervalType == 1) {
+      ctx.beginPath();
+      ctx.arc(canvas.width - _r, _r, _r, 0, 2 * Math.PI, true);
+      ctx.fill();
+      ctx.closePath();
+    } else {//if (intervalType == -1) {
+      ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
+    }
   }
+  
 
-  if (helpSwitch == 1) {
+  if (helpSwitch == 1) 
     userhelp(); 
-  }
+  
   if (doblank == 1) 
     blank();
   
