@@ -96,7 +96,8 @@
                 "shift'1234567890' 選章",
                 "'shift左右' 上十節下十節  'shift上下' 上十章下十章",
                 "shift+- 字大小  'esc' 跳回預設樣式",
-                "'space' 語音辨識(Google Chrome + 網路連線)"
+                "按住'space' 語音辨識(Google Chrome + 網路連線)",
+                "shift'P' shift'O' shift'I'"
                 ]]
 } </script>
 
@@ -33638,19 +33639,19 @@ function sortjump(start, end) {
 function combineKey(e) {
   var jump = 10;
   switch (e.keyCode) {
-      case 49:
+      case 80: //P
         startActionInterval();
         break;
-      case 50:
+      case 79: //O
         startRestoreInterval();
         break;
-      case 51:
+      case 73: //I
         stopActionInterval();
         break;
-      case 81://'Q'
+      case 85://'U'
         save2Local();
         break;
-      case 87://'W'
+      case 89://'Y'
         restoreLocal();
         break;
       case 65: sortjump( 1,  5); break;

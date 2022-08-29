@@ -4,11 +4,8 @@ function flow() {
 
   SONGS = [ [['']],          
             
-            getSong('救恩176'),
-            getSong('救恩130'),
-            getSong('其他61'),
-            getSong('其他50'),
-
+            getSong('救恩47'),
+            getSong('救恩160'),
             getSong('救恩209'),
 
             getSong('主禱文'),
@@ -52,7 +49,8 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                 "'QWERTYUI'1-8段  'O'第0段  'C'最後一段", 
                 "'P'投影片模式  'L'即時選歌", 
                 "'S'Show progress  'A'Animation  'B'Blank",
-                "shift+- 字大小"]]
+                "shift+- 字大小",
+                "shift'P' shift'O' shift'I'"]]
 } </script>
 <script id="主禱文" name="主禱文" type="application/json" charset="UTF-8"> {
   "content" : [["主禱文"],
@@ -4561,15 +4559,16 @@ function printPhaseChart() {
 function combineKey(e) {
   
   switch (e.keyCode) {
-    case 49:
+    case 80: //P
         startActionInterval();
         break;
-    case 50:
+    case 79: //O
         startRestoreInterval();
         break;
-    case 51:
+    case 73: //I
         stopActionInterval();
         break;
+
     case 32: history.back(); return;
     case 189: //'-'
       fontfactor += 0.5;
