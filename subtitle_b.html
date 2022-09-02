@@ -32788,12 +32788,13 @@ function stopActionInterval() {
     clearInterval(funcInterval);
   funcInterval = null;
   intervalType = 0;
+  localStorage.removeItem('save action');
 }
 
 function saveAction2Local() {
   //console.log('saveAction2Local');
   let key = 'save action';
-  localStorage.removeItem(key);
+  //localStorage.removeItem(key);
   let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
               //subtitles[0][0] + ' ' + phase + ' ' + line;
   localStorage.setItem(key, value);
