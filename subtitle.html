@@ -27,7 +27,12 @@ var PREFIX = [
   ['其他', 100, false],
 ];
 
-var fontFamily = "cwTeXKai";//"Noto Serif TC";//"標楷體";
+var fontFamily = "Monospace";
+                   //"Arial";
+                   //"cwTeXKai";
+                   //'華康瘦金體';
+                   //"標楷體";
+                   //"Noto Serif TC";
 
 var fontsize = 100;
 var FONT = fontsize + "px " + fontFamily;
@@ -4913,7 +4918,7 @@ function _layer2() {
 
   if (intervalType != 0) {
     ctx.fillStyle = COLORS_CK[2];
-    let _r = fontsize/5;
+    let _r = fontsize/10;
     if (intervalType == 1) {
       ctx.beginPath();
       ctx.arc(canvas.width - _r, _r, _r, 0, 2 * Math.PI, true);
