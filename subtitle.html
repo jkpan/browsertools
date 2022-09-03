@@ -10,6 +10,8 @@ function flow() {
             getSong('讚美之泉84'),
             getSong('讚美之泉85'),
 
+            getSong('讚美之泉86'),
+
             getSong('主禱文'),
             getSong('使徒信經'),
             getSong('救恩300'),
@@ -36,7 +38,7 @@ var fontFamily = "Monospace";
 
 var fontsize = 100;
 var FONT = fontsize + "px " + fontFamily;
-var fontfactor = 10.0;
+var fontfactor = 12.0;
 
 const COLORS_CK = ["rgb(0, 110, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
 const COLOR_PPT = 'blue';
@@ -3764,6 +3766,12 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["困難之中 我仍然讚美", "疑惑之中 我仍然禱告", "行在水面的信心 剛強壯膽地前進", "我的神必在前面 為我爭戰"],
                ["我的禱告 無論求什麼", "只要相信 就必得著", "我的禱告 無論求什麼", "只要相信 只要相信", "只要相信 就必得著"]]
 } </script>
+<script id="讚美之泉86" name="全新的你" type="application/json" charset="UTF-8"> {
+  "content" : [["全新的你", "讚美之泉"],
+               ["你說陰天代表你的心情", "雨天更是你對生命的反應", "你說每天生活一樣平靜", "對於未來沒有一點信心"],
+               ["親愛朋友你是否曾經", "曾經觀看滿天的星星", "期待有人能夠了解你心", "能夠愛你賜你力量更新"],
+               ["耶穌能夠 叫一切都更新", "耶穌能夠 體會你的心情", "耶穌能夠 改變你的曾經", "耶穌愛你 耶穌疼你", "耶穌能造 一個全新的你"]]
+} </script>
 <script id="讚美之泉" name="" type="application/json" charset="UTF-8"> {
   "content" : [["", "讚美之泉"],
                ["", "", "", ""]]
@@ -4507,31 +4515,33 @@ function printChart() {
 
   if (phase == 0) return;
   
-  var all = 0;
+  let all = 0;
   
-  for (var i = 1;i < subtitles.length;i++) {
+  for (let i = 1;i < subtitles.length;i++) {
     all += subtitles[i].length;
   }
   
   if (all == 0) return;
 
-  var gap = canvas.width/all;
-  var _h = 20;
-  var y = canvas.height - _h * 2;
+  let gap = canvas.width/all;
+  let _h = 20;
+  let y = canvas.height - _h * 2;
+
+  let _step = 0;
   
-  var _step = 0;
-  for (var i = 1;i <subtitles.length;i++) {
+  for (let i = 1;i <subtitles.length;i++) {
     if (i%2 == 0) {
       ctx.fillStyle = COLORS_CK[0];//"rgb(0,115,0)";
     } else {
       ctx.fillStyle = COLORS_CK[2];//"rgb(0,160,0)";
     }
+    //let len = subtitles[i].length * gap;
     ctx.fillRect (_step * gap, y, subtitles[i].length * gap, _h);
     _step += subtitles[i].length;
   }
   
   var idx = line;
-  for (var i = 1;i < phase;i++) {
+  for (let i = 1;i < phase;i++) {
     idx += subtitles[i].length;
   }
 
@@ -4554,7 +4564,7 @@ function printPhase() {
 
   var gap = canvas.height/Math.max(3, (subtitles[phase].length + 1));
 
-  for (var i=0;i<subtitles[phase].length;i++) {
+  for (let i=0;i<subtitles[phase].length;i++) {
 
     let _x = canvas.width/2;
     let _y = (i + 1) * gap + fontsize/2;
@@ -4594,7 +4604,6 @@ function printPhase() {
     ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', 
                  canvas.width/2, fontsize/2);
   }
-  
 
 }
 
@@ -4602,36 +4611,48 @@ function printPhaseChart() {
 
   if (phase == 0) return;
 
-  var gap = canvas.width/(subtitles.length - 1);
-  var _h = 20;
-  var y = canvas.height - _h * 2;
+  let gap = canvas.width/(subtitles.length - 1);
+  let _gap = Math.min(canvas.width/4, gap);
+  let _h = 20;
+  let y = canvas.height - _h * 2;
 
-  for (var i = 1;i <subtitles.length;i++) {
+  for (let i = 1;i <subtitles.length;i++) {
     if (i%2 == 0) {
+      /*
       if (mode == 2) {
         ctx.fillStyle = "rgb(0,0,128)";
       } else {
         ctx.fillStyle = "rgb(50,50,50, 0.5)";
       }
+      */
+      ctx.fillStyle = "rgba(0,0,0, 0.1)";
     } else {
+      /*
       if (mode == 2) {
         ctx.fillStyle = "rgb(0,0,200)";
       } else {
         ctx.fillStyle = "rgb(100,100,100, 0.5)";
       }
+      */
+      ctx.fillStyle = "rgba(0,0,0, 0.2)";
     }
-    ctx.fillRect((i-1) * gap, y, gap, _h);
+    ctx.fillRect((i-1) * gap + (gap - _gap)/2, y, _gap, _h);
+    //ctx.fillRect((i-1) * gap, y, gap, _h);
   }
 
   ctx.lineWidth = 3;
 
+  /*
   if (mode == 2) {
     ctx.strokeStyle = "rgb(100,100,200)";
   } else {
     ctx.strokeStyle = "rgb(150,150,150, 0.5)";
   }
+  */
 
-  ctx.strokeRect ((phase-1) * gap, y, gap, _h); 
+  ctx.strokeStyle = "rgba(255,255,255, 0.33)";
+
+  ctx.strokeRect ((phase-1) * gap + (gap - _gap)/2, y, _gap, _h);
 
 }
 
