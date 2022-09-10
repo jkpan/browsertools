@@ -1,20 +1,6 @@
 <script type="text/javascript" charset="UTF-8"> 
 
-  function flow() {
-
-    presetVerse = [
-      /*
-      ['', 0, 0], //0
-      ['創世記', 0, 0], //1
-      ['約書亞記', 0, 0], //['約伯記', 1, 2],     //2
-      ['約伯記', 0, 0], //['撒母耳記上', 12, 2], //3
-      ['以賽亞書', 0, 0], //4
-      ['何西阿書', 0, 0], //5
-      ['馬太福音', 0, 0], //6
-      ['羅馬書', 0, 0], //7
-      ['提摩太前書', 0, 0], //8
-      ['希伯來書', 0, 0], //9
-      */
+var presetVerse = [
 
       [''], //0
       [''], //1
@@ -27,9 +13,22 @@
       [''], //8
       [''], //9
 
+      /*
+      ['', 0, 0],         //0
+      ['創世記', 0, 0],    //1
+      ['約書亞記', 0, 0],  //2
+      ['約伯記', 0, 0],    //3
+      ['以賽亞書', 0, 0],  //4
+      ['何西阿書', 0, 0],  //5
+      ['馬太福音', 0, 0],   //6
+      ['羅馬書', 0, 0],     //7
+      ['提摩太前書', 0, 0], //8
+      ['希伯來書', 0, 0],   //9
+      */
+    
     ];
 
-  }
+  //function flow() {}
  
   var fontfactor = 15.0;
   var fontFamily = "Monospace";
@@ -32727,7 +32726,7 @@ var abbr_eng = ['',
 
 var song;
 var subtitles;
-var presetVerse;
+//var presetVerse;
 
 var phase = 0;
 var line = 0;
@@ -32770,15 +32769,13 @@ var funcInterval;
 var fake_doblank = 0;
 var intervalType = 0;
 function startActionInterval() {
-  if (funcInterval) 
-    stopActionInterval();
-  funcInterval = window.setInterval(saveAction2Local, 100);
+  if (funcInterval) stopActionInterval();
+  //funcInterval = window.setInterval(saveAction2Local, 100);
   intervalType = 1;
 }
 
 function startRestoreInterval() {
-  if (funcInterval) 
-    stopActionInterval();
+  if (funcInterval) stopActionInterval();
   funcInterval = window.setInterval(restoreActionFromLocal, 100);
   intervalType = -1;
 }
@@ -32792,7 +32789,7 @@ function stopActionInterval() {
 }
 
 function saveAction2Local() {
-  //console.log('saveAction2Local');
+  console.log('saveAction2Local');
   let key = 'save action';
   //localStorage.removeItem(key);
   let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
@@ -33640,21 +33637,12 @@ function sortjump(start, end) {
 function combineKey(e) {
   var jump = 10;
   switch (e.keyCode) {
-      case 80: //P
-        startActionInterval();
-        break;
-      case 79: //O
-        startRestoreInterval();
-        break;
-      case 73: //I
-        stopActionInterval();
-        break;
-      case 85://'U'
-        save2Local();
-        break;
-      case 89://'Y'
-        restoreLocal();
-        break;
+      case 80: startActionInterval(); break; //P
+      case 79: startRestoreInterval(); break; //O
+      case 73: stopActionInterval(); break; //I
+      case 85: save2Local(); break; //'U'        
+      case 89: restoreLocal(); break; //'Y'
+        
       case 65: sortjump( 1,  5); break;
       case 83: sortjump( 6, 17); break;
       case 68: sortjump(18, 22); break;
@@ -33735,6 +33723,9 @@ function combineKey(e) {
       default:
         break;
   }
+  
+  if (intervalType == 1) saveAction2Local();
+
   _repaint();
 }
 
@@ -33786,6 +33777,7 @@ function jump2preset(ps) {
         break;
     }
   }
+  if (intervalType == 1) saveAction2Local();
 }
 
 function keyboard(e) { //key up
@@ -33932,6 +33924,7 @@ function keyboard(e) { //key up
             line = _line;
             if (mode == 0 && queue.length > 0) {
               operateQuene(2, e.keyCode == 37?1:0);
+              if (intervalType == 1) saveAction2Local();
               return;
             }
           }
@@ -33955,6 +33948,7 @@ function keyboard(e) { //key up
             line  = _line;
             if (mode == 0 && queue.length > 0) {
               operateQuene(1, e.keyCode == 39?1:0);
+              if (intervalType == 1) saveAction2Local();
               return;
             }
           }
@@ -34076,6 +34070,8 @@ function keyboard(e) { //key up
         default:
           break;
     }
+
+    if (intervalType == 1) saveAction2Local();
 
     _repaint();
 
@@ -34396,7 +34392,7 @@ canvas.addEventListener("touchmove", function(evt) {
 
 }, false);
 
-flow();
+//flow();
 
 song = 0;
 subtitles = SONGS[song];

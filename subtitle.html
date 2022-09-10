@@ -1,25 +1,33 @@
 <script type="text/javascript" charset="UTF-8">
 
-function flow() {
+list = [
 
-  SONGS = [ [['']],          
-            
-            getSong('其他62'),
-            getSong('其他63'),
-            getSong('讚美之泉63'),
-            getSong('讚美之泉84'),
-            getSong('讚美之泉85'),
+'救恩110',
+'讚美之泉11',
+'讚美之泉87',
+'讚美之泉24',
+'新歌頌揚180',
 
-            getSong('讚美之泉86'),
+'主禱文',
+'使徒信經',
+'救恩300',
 
-            getSong('主禱文'),
-            getSong('使徒信經'),
-            getSong('救恩300'),
+//聖餐
+'救恩293', //約翰福音三章16節
+'救恩297', //感謝主
+'其他64', //耶穌血真寶貴
 
-            //救恩 短歌 讚美之泉 新歌頌揚 其他
+//追思禮拜
+'救恩284', //神阿與祢更近
+'救恩245', //居住在榮美地 
+'救恩248', //不久在天聚會
+'救恩177', //靠近十字架 
+'救恩257', //當我眾到了天堂
+'其他8',   //點名時候"     
 
-          ];
-}
+];
+
+//function flow() {}
 
 var PREFIX = [
   ['救恩', 300, true],
@@ -35,10 +43,6 @@ var fontFamily = "Monospace";
                    //'華康瘦金體';
                    //"標楷體";
                    //"Noto Serif TC";
-
-var fontsize = 100;
-var FONT = fontsize + "px " + fontFamily;
-var fontfactor = 12.0;
 
 const COLORS_CK = ["rgb(0, 110, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
 const COLOR_PPT = 'blue';
@@ -3772,6 +3776,12 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["親愛朋友你是否曾經", "曾經觀看滿天的星星", "期待有人能夠了解你心", "能夠愛你賜你力量更新"],
                ["耶穌能夠 叫一切都更新", "耶穌能夠 體會你的心情", "耶穌能夠 改變你的曾經", "耶穌愛你 耶穌疼你", "耶穌能造 一個全新的你"]]
 } </script>
+<script id="讚美之泉87" name="只要有祢在我左右" type="application/json" charset="UTF-8"> {
+  "content" : [["只要有祢在我左右", "讚美之泉"],
+               ["開我的眼睛 讓我看到天使天軍", "仇敵的攻擊 我要更堅定信靠祢", "祢是我力量 祢是我永遠的拯救", "祢的右手施展能力 顯出榮耀"],
+               ["只要有祢在我左右 我必不懼怕", "靠著祢的聖靈 祢的應許 永遠不放棄", "只要有祢在我左右 我必不懼怕", "神啊 誰能像祢 至聖至榮", "可頌可畏 施行奇事"],
+               ["誰能控告 誰能抵擋", "我是神所揀選的"]]
+} </script>
 <script id="讚美之泉" name="" type="application/json" charset="UTF-8"> {
   "content" : [["", "讚美之泉"],
                ["", "", "", ""]]
@@ -4166,6 +4176,11 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["主的恩典大大小小", "主的恩典從頭到腳", "白白得來不能忘掉", "感謝湧出如浪潮"],
                ["啦啦啦啦啦我要讚美", "啦啦啦啦啦我還要讚美", "啦啦啦啦啦我一生讚美", "一生要來讚美主"]]
 } </script>
+<script id="其他64" name="耶穌血真寶貴" type="application/json" charset="UTF-8"> {
+  "content" : [["耶穌血真寶貴"],
+               ["耶穌血真寶貴", "耶穌血真寶貴", "耶穌血真寶貴", "能洗我白如雪"],
+               ["哈利路亞 哈利路亞", "哈利路亞 十字架", "哈利路亞 哈利路亞", "我今來到十架下"]]
+} </script>
 <script id="其他" name="" type="application/json" charset="UTF-8"> {
   "content" : [[""],
                ["", "", "", ""]]
@@ -4224,10 +4239,17 @@ function getSong(jsonid) {
   return [['']];
 } 
 
-var SONGS;
+var SONGS = 
+[ [['']] 
+
+];
 
 var song;
 var subtitles;
+
+var fontsize = 100;
+var FONT = fontsize + "px " + fontFamily;
+var fontfactor = 12.0;
 
 var phase = 0;
 var line = 0;
@@ -4260,22 +4282,19 @@ function init() {
 var funcInterval;
 var intervalType = 0;
 function startActionInterval() {
-  if (funcInterval) 
-    stopActionInterval();
-  funcInterval = window.setInterval(saveAction2Local, 100);
+  if (funcInterval) stopActionInterval();
+  //funcInterval = window.setInterval(saveAction2Local, 100);
   intervalType = 1;
 }
 
 function startRestoreInterval() {
-  if (funcInterval) 
-    stopActionInterval();
+  if (funcInterval) stopActionInterval();
   funcInterval = window.setInterval(restoreActionFromLocal, 100);
   intervalType = -1;
 }
 
 function stopActionInterval() {
-  if (funcInterval) 
-    clearInterval(funcInterval);
+  if (funcInterval) clearInterval(funcInterval);
   funcInterval = null;
   intervalType = 0;
   localStorage.removeItem('save progress');
@@ -4960,6 +4979,7 @@ function _layer2() {
 }
 
 function _repaint() {
+  if (intervalType == 1) saveAction2Local();
   _layer0();
   _layer1();
   _layer2();
@@ -5044,7 +5064,8 @@ canvas.addEventListener('mousemove', e => {
 });
 */
 
-flow();
+//flow();
+for(let i=0;i<list.length;i++) SONGS[i+1] = getSong(list[i]);
 
 song = 0;
 subtitles = SONGS[song];
