@@ -1,13 +1,12 @@
 <script type="text/javascript" charset="UTF-8">
 
+//今日歌單
 var list = [
 
-'短歌51',
-'短歌10',
-'救恩184',
-'救恩174',
-'救恩160',
-'短歌150',
+'其他65',
+'新歌頌揚241',
+'其他66',
+'其他67',
 
 '主禱文',
 '使徒信經',
@@ -15,17 +14,16 @@ var list = [
 
 ];
 
-//function flow() {}
-
+//歌詞總覽
 var VOLUME = [
   ['救恩', 300, true, '救恩詩歌'],
   ['短歌', 174, true, '救恩短歌'],
   ['讚美之泉', 200, false, '讚美之泉'],
   ['新歌頌揚', 400, false, '新歌頌揚'],
   ['其他', 100, false, '其他'],
-  
 ];
 
+//事件歌單
 var TOOLS = [
   '程序',
   '聖誕節', 
@@ -34,16 +32,11 @@ var TOOLS = [
   '追思禮拜',
 ];
 
-
-var fontFamily = "Monospace";
-                   //"Arial";
-                   //"cwTeXKai";
-                   //'華康瘦金體';
-                   //"標楷體";
-                   //"Noto Serif TC";
+//字型顏色設定
+var fontFamily = "Monospace"; //"Arial" "cwTeXKai" '華康瘦金體' "標楷體" "Noto Serif TC";
 
 const COLORS_CK = ["rgb(0, 110, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
-const COLOR_PPT = 'blue';
+const COLOR_PPT = 'rgb(0,0,200)';
 const COLOR_PPT_SML = 'rgb(0, 70, 0)';
 
 </script>
@@ -52,37 +45,31 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
   "content" : [["方向鍵  '左右'切句  '上下'切段",
                 "'0-9'0-9首  '-'上一首  '='下一首", 
                 "'QWERTYUI'1-8段  'O'第0段  'C'最後一段", 
-                "'P'投影片模式  'L'即時選歌", 
-                "'S'Show progress  'A'Animation  'B'Blank",
+                "'P'投影片模式切換  'L'即時選歌", 
+                "'S'顯示進度  'A'動畫  'B'Blank",
                 "shift+- 字大小",
-                "shift'P' shift'O' shift'I'"]]
+                "shift'P'控方 shift'O'被控方 shift'I'取消"]]
 } </script>
 
+<!-- 事件歌單 -->
 <script id="程序" name="" type="application/json" charset="UTF-8"> {
   "content" : [ "主禱文", "使徒信經", "救恩300" ]
 } </script>
 <script id="聖誕節" name="" type="application/json" charset="UTF-8"> {
   "content" : [ "救恩267", "救恩268", "救恩269", "救恩270", "救恩271", "救恩272", "救恩273",
-                "救恩274", "救恩275", "救恩276" ]
+                "救恩274", "救恩275", "救恩276", "其他17", "其他18", "其他19"]
 } </script>
 <script id="復活節" name="" type="application/json" charset="UTF-8"> {
   "content" : [ "救恩277", "救恩278", "救恩279", "救恩280" ]
 } </script>  
 <script id="追思禮拜" name="" type="application/json" charset="UTF-8"> {
-  "content" : [ 
-                "救恩177",
-                "救恩245",
-                "救恩248", 
-                "救恩257",
-                "救恩283", 
-                "救恩284", 
-                "其他8" ]
+  "content" : [ "救恩177", "救恩245", "救恩248", "救恩257", "救恩283", "救恩284", "其他8" ]
 } </script>
 <script id="聖餐禮拜" name="" type="application/json" charset="UTF-8"> {
-  "content" : [ "救恩293", 
-                "救恩297",  
-                "其他64" ]
+  "content" : [ "救恩293", "救恩297", "其他64" ]
 } </script>
+
+<!-- 程序相關 -->
 <script id="主禱文" name=" " type="application/json" charset="UTF-8"> {
   "content" : [["主禱文"],
                ["我們在天上的父親", "願尊祢名為聖", "天國降臨 願祢旨意", "行在地上如在天上", "每日賜我所需飲食"],
@@ -94,6 +81,7 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["被釘於十字架", "受死 埋葬 降在陰間", "第三天從死人中復活", "升天坐在全能父神的右邊", "將來必從那裡降臨", "審判活人死人"],
                ["我信聖靈 我信聖而公之教會", "我信聖徒相通 我信罪得赦免", "我信身體復活 我信永生", "阿們"]]
 } </script>
+
 <!-- 救恩詩歌 -->
 <script id="救恩1" name="讚美神" type="application/json" charset="UTF-8"> {
   "content" : [["讚美神", "救恩1"],
@@ -3209,6 +3197,13 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["當聖靈在我的心 我要讚美主", "像當年的大衛王", "當聖靈在我的心 我要讚美主", "像當年的大衛王"],
                ["我要唱 我要唱", "像當年的大衛王", "我要唱 我要唱", "像當年的大衛王"]]
 } </script>
+<script id="新歌頌揚241" name="讓神兒子的愛圍繞你" type="application/json" charset="UTF-8"> {
+  "content" : [["讓神兒子的愛圍繞你", "新歌頌揚241"],
+               ["讓神的兒子以祂聖靈", "和祂愛來圍繞你", "讓祂充滿你心 使你靈滿足", "讓祂擔負你一切掛慮", "賞賜平安的聖靈", "降臨在你生命中 使你完全"],
+               ["耶穌 主耶穌", "求充滿我們", "耶穌 主耶穌", "求充滿我們"],
+               ["哦揚聲歡呼歌唱讚美", "讓你心充滿喜樂", "舉起雙手甘願順服祂的名", "將你的憂傷破碎心靈", "痛苦歲月交給祂", "你將靠著祂的名 進入永生"],
+               ["耶穌 主耶穌", "求充滿我們", "耶穌 主耶穌", "求充滿我們"]]
+} </script>
 <script id="新歌頌揚242" name="偉大奇妙神" type="application/json" charset="UTF-8"> {
   "content" : [["偉大奇妙神", "新歌頌揚242"], 
                ["我們有偉大奇妙神", "祂創造天地和萬物", "我們有偉大奇妙神", "祂使瞎眼看見 瘸腿能行走"],
@@ -4209,11 +4204,31 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                ["耶穌血真寶貴", "耶穌血真寶貴", "耶穌血真寶貴", "能洗我白如雪"],
                ["哈利路亞 哈利路亞", "哈利路亞 十字架", "哈利路亞 哈利路亞", "我今來到十架下"]]
 } </script>
+<script id="其他65" name="當轉眼仰望耶穌" type="application/json" charset="UTF-8"> {
+  "content" : [["當轉眼仰望耶穌"],
+               ["你心是否困倦且愁煩", "眼前一片黑暗朦朦", "只要仰望主就得光明", "生命變更自由豐盛"],
+               ["當轉眼仰望耶穌", "定睛在祂奇妙慈容", "在救主榮耀恩典大光中", "世上事必然顯為虛空"],
+               ["主已從死亡進入永生", "我們當跟隨主不渝", "罪惡權勢不能再轄制", "因靠主必得勝有餘"],
+               ["當轉眼仰望耶穌", "定睛在祂奇妙慈容", "在救主榮耀恩典大光中", "世上事必然顯為虛空"],
+               ["救主的應許永不改變", "專心信靠萬事安穩", "快快傳揚祂全備救恩", "使凡信者不至沉淪"],
+               ["當轉眼仰望耶穌", "定睛在祂奇妙慈容", "在救主榮耀恩典大光中", "世上事必然顯為虛空"]]
+} </script>
+<script id="其他66" name="在呼召我之處" type="application/json" charset="UTF-8"> {
+  "content" : [["在呼召我之處"],
+               ["主溫柔的聖靈 讓我全心感受", "滲透我的生命 賜下平靜和安息", "你使我心得滿足"],
+               ["主慈愛的真理 你榮光照向我", "包圍我的身體 賜下平靜和安息", "讓我感受你的愛"],
+               ["在呼召我之處 我要獻上敬拜", "無論遭遇何事 依然揚聲歌唱", "在呼召我之處 我要獻上敬拜", "無論遭遇何事 依然揚聲歌唱"],
+               ["在我行走時成為我道路", "活著時成為我生命", "就在這地 獻上敬拜"]]
+} </script>
+<script id="其他67" name="神本為大" type="application/json" charset="UTF-8"> {
+  "content" : [["神本為大"],
+               ["耶和華本為大 該受大讚美", "祂名何等偉大 能力存到永遠", "在祂隱密處是何等的安穩", "祂是信實全能神 永遠在身旁"],
+               ["神是應當稱頌 祂能力已彰顯", "祂已恩待我們 向我們大施慈愛", "我主祂已興起 要施恩給我們", "神是應當稱頌 祂名配得讚美", "耶穌是全能的神"]]
+} </script>
 <script id="其他" name="" type="application/json" charset="UTF-8"> {
   "content" : [[""],
                ["", "", "", ""]]
 } </script>
-
 <!-- 
   詩歌歌詞區 End cursor:none;
     -->
@@ -4896,7 +4911,7 @@ function keyboard(e) {
           break;
         case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
         //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-          var value = e.keyCode - 48;
+          let value = e.keyCode - 48;
           if (value < SONGS.length) {
             song = value;
             subtitles = SONGS[song];

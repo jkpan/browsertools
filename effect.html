@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+      body {
+        margin: 0px;
+        height: 100%;
+        background-color:rgb(112, 112, 112);
+      }
+      main {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+    </head>   
+<body>
+
+  <canvas id="canvas" width="100" height="100"></canvas>
+
+</body>
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+var canvas;
+var ctx;
+
+function init() {
+    canvas = document.getElementById("canvas");
+    ctx = canvas.getContext("2d");
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+}
+
+function repaint() {
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = 'green';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+}
+
+function canvasResize() {
+  init();
+  repaint();
+}
+
+function _update() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = 'green';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+}
+
+var pre = 0;
+var particles = [];
+var animSwh = 0;
+
+function keyboard(e) {
+
+    //alert(e.keyCode);
+    
+    switch (e.keyCode) {
+  
+        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
+          var value = e.keyCode - 48;
+          initAnim(value);
+          break;
+    }
+}
+//randomPick();
+var mouseX;
+var mouseY;
+
+window.addEventListener('resize', canvasResize);
+canvasResize();
+
+window.addEventListener('keyup', keyboard, false);
+canvas.addEventListener('mousemove', e => {
+    mouseX = e.x;
+    mouseY = e.y;
+    
+});
+
+function initAnim(idx) {
+
+    /*
+    if (particles.length >= 1) {
+        for (var i = 0;i<particles.length;i++) {
+            particles[i].release();
+        }
+    }
+    particles.length = 0;
+    particles = [];
+    */
+
+    if (idx > 0 && idx <= 4) {
+        let len = particles.length;
+        for (let i = 0;i<20;i++) {
+            particles[len + i] = applaud();
+            particles[len + i].initial(canvas, idx);
+        }
+    } else if (idx == 5) {
+        let len = particles.length;
+        for (let i = 0;i<1;i++) {
+            particles[len + i] = hammer();
+            particles[len + i].initial(canvas);
+        }
+    } else {
+        animSwh = 0;
+        return;
+    }
+
+    if (animSwh == 0) {
+        animSwh = 1;
+        pre = -1;
+        window.requestAnimationFrame(anim_update);
+        console.log('requestAnimationFrame anim_update');
+    }  
+
+}
+
+function anim_update(elapse) {
+
+    _update();
+
+    if (pre < 0) pre = elapse;
+
+    let dt = elapse - pre;
+    pre = elapse;
+
+    for (var i = 0;i<particles.length;i++) {
+        particles[i].update(canvas, ctx, dt);
+        if (particles[i].state == 0) {
+            particles.splice(particles[i], 1);
+            i--;
+        }
+    }
+
+    if (particles.length == 0) animSwh = 0;
+
+
+    if (animSwh == 1) {
+        window.requestAnimationFrame(anim_update);
+    } else {
+        _update();
+        console.log('anim_update end');
+    }
+
+}
+
+function applaud() {
+  let p = {
+    x: 0,
+    y: 0,
+    dest_y:0,
+    txt: '',
+    elapse:0,
+    fontsize:100,
+    txt_0: '🤲', //'🙌',
+    txt_1: '👏',
+    //👐🙏
+    state: 1,
+    rotate: 0,
+    release: function() { 
+        this.txt = '';
+        this.state = 0;
+    },
+    initial: function (c, type) {
+      this.state = type;
+      if (type == 1) {
+        this.txt_0 = '🤲';
+        this.txt_1 = '👏';
+      } else if (type == 2) {
+        this.txt_0 = '😀';
+        this.txt_1 = '🙂';
+      } else if (type == 3) {
+        this.txt_0 = '😄';
+        this.txt_1 = '😊';
+      } else if (type == 4) {
+        let r = Math.floor(Math.random() * 4);
+        if (r == 0) {
+            this.txt_0 = '😎';
+            this.txt_1 = '😎';
+        } else if (r == 1) {
+            this.txt_0 = '🥸';
+            this.txt_1 = '🥸';
+        } else if (r == 2) {
+            this.txt_0 = '🤪';
+            this.txt_1 = '🤪';
+        } else if (r == 3) {
+            this.txt_0 = '😜';
+            this.txt_1 = '😜';
+        }
+      }
+
+      if ( Math.ceil(2 * Math.random()) == 0)
+        this.txt = this.txt_0;
+      else 
+        this.txt = this.txt_1;
+      
+      this.fontsize = c.height/8 - Math.floor(c.height/20 * Math.random());
+
+      this.x = c.width * Math.random(); 
+      this.dest_y = c.height - this.fontsize - Math.floor(c.height/4 * Math.random());
+      this.y = c.height + this.fontsize;
+      this.elapse = 0;
+    },
+    
+    update: function (c, _ctx, dt) {
+
+        if (this.state == 0) return;
+
+        _ctx.textAlign = "center";
+        _ctx.textBaseline = 'middle';//'bottom
+        _ctx.font = this.fontsize + 'px Monospace';//this.fontsize + "px";
+        
+        if (this.state == 4) {
+            
+            _ctx.save();
+            _ctx.translate(this.x, this.y);
+            this.rotate += 1.0 * dt * 0.001;
+            _ctx.rotate(this.rotate);
+            _ctx.fillText(this.txt, 0, 0);//this.x, this.y); 
+            _ctx.restore();
+            
+        } else {
+            _ctx.fillText(this.txt, this.x, this.y);
+        }
+        
+        
+
+        //
+
+        if (this.dest_y < c.height) {
+            this.y = this.y + (this.dest_y - this.y) * dt * 0.001 * 2;
+            if (Math.abs(this.y - this.dest_y) < 4) 
+                this.dest_y = c.height + this.fontsize * 2;
+        } else {
+            this.y = this.y + (this.dest_y - this.y) * dt * 0.001 * 2;
+        }
+        
+        //if (this.dest_y < c.height && Math.abs(this.y - this.dest_y) < 4) this.dest_y = c.height + this.fontsize * 2;
+        
+        if (this.dest_y > c.height && Math.abs(this.y - this.dest_y) < 4) {
+            this.release();
+            return;
+        }
+
+        this.elapse += dt * 0.001;
+        if (this.elapse > (0.1 + Math.random() * 0.15)) {
+            this.elapse = 0;
+            if (this.txt == this.txt_0) 
+                this.txt = this.txt_1;
+            else 
+                this.txt = this.txt_0;
+        }
+        
+    }
+  }
+  return p;
+}
+
+function hammer() {
+  let p = {
+    x: 0,
+    y: 0,
+    txt: '🔨',
+    elapse:0,
+    fontsize:100,
+    state: 1,
+    rotate: 0,
+    _rotate: Math.PI/6,
+    easein:function(_t) {
+      return _t * _t * _t;
+    },
+    easeout:function(_t) {
+      return -_t * _t + 2 * _t;
+    },
+    release: function() { 
+        this.txt = '';
+        this.state = 0;
+    },
+    initial: function (c) {
+      this.txt = '🔨';
+      this.fontsize = c.height/8;
+
+      this.x = mouseX + this.fontsize;//c.width/2;// * Math.random(); 
+      this.y = mouseY;//c.height/2;
+      this.elapse = 0;
+      this.rotate = this._rotate;
+      this.state = 1;
+    },
+    
+    update: function (c, _ctx, dt) {
+
+        if (this.state == 0) return;
+
+        _ctx.textAlign = "right";
+        _ctx.textBaseline = 'bottom';//'bottom
+        _ctx.font = this.fontsize + 'px Monospace';//this.fontsize + "px";
+        
+        
+        this.elapse += dt/1000.0;
+        let ein = this.easein(this.elapse/0.2);
+        this.rotate = this._rotate + (-Math.PI/3 - this._rotate) * ein;
+        if (this.rotate < -Math.PI/3) 
+            this.rotate = -Math.PI/3;
+        
+        //this.rotate -= 0.1;
+        
+        _ctx.save();
+        _ctx.translate(this.x, this.y);
+        _ctx.rotate(this.rotate);
+        _ctx.fillText(this.txt, 0, 0);//this.x, this.y); 
+        _ctx.restore();
+
+        if (Math.abs(-Math.PI/3 - this.rotate) < 0.01) {
+            this.state = 0;
+        }
+    }
+  }
+  return p;
+}
+
+</script>
+
