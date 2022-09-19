@@ -3,10 +3,6 @@
 //今日歌單
 var list = [
 
-'其他65',
-'新歌頌揚241',
-'其他66',
-'其他67',
 
 '主禱文',
 '使徒信經',
@@ -4660,13 +4656,17 @@ function printChart() {
 function printPhase() {
 
   ctx.font = FONT;
-  ctx.textAlign = 'center';
+  if (mode == 1) {
+    ctx.textAlign = 'left';
+  } else {
+    ctx.textAlign = 'center';
+  }
 
   var gap = canvas.height/Math.max(3, (subtitles[phase].length + 1));
+  let _x = mode == 1?canvas.width * 0.1:canvas.width/2;
 
   for (let i=0;i<subtitles[phase].length;i++) {
 
-    let _x = canvas.width/2;
     let _y = (i + 1) * gap + fontsize/2;
     
     let txt = subtitles[phase][i];
@@ -4679,15 +4679,39 @@ function printPhase() {
     
     if (doblank == 1) {
       ctx.fillStyle = 'rgb(0,255,0)';
-      ctx.strokeStyle = 'rgb(0,255,0)';
     } else {
       ctx.fillStyle = 'white';
-      ctx.strokeStyle = 'white';
     }
-    
+
+    if (mode == 1) {
+      ctx.strokeStyle = doblank == 1?'rgba(0,255,0, 0)':'black';
+      ctx.lineWidth = Math.ceil(fontsize/10.0);//ctx.lineWidth = 4;
+      ctx.strokeText(txt, _x, _y);
+
+      ctx.lineWidth = 1;
+      ctx.fillText(txt, _x, _y);
+
+    } else if (mode == 2) {
+      ctx.lineWidth = 1;
+      ctx.fillText(txt, _x, _y);
+    }
+
+    /*
+    if (mode == 1 && doblank == 0) {
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 6;
+      ctx.strokeText(txt, _x, _y);
+    }
+
     ctx.fillText(txt, _x, _y);
+    */
   
-    if (i == line) {    
+    if (i == line) {
+      if (doblank == 1) 
+        ctx.strokeStyle = 'rgb(0,255,0)';
+      else 
+        ctx.strokeStyle = 'white';
+      ctx.lineWidth = 1;
       ctx.strokeRect (10, _y, 20, 20);
     }
 
@@ -4702,7 +4726,7 @@ function printPhase() {
     
     ctx.font = fontsize/3 + "px Arial";
     ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', 
-                 canvas.width/2, fontsize/2);
+                 mode == 1?canvas.width * 0.1:canvas.width/2, fontsize/2);
   }
 
 }
@@ -5016,12 +5040,12 @@ function _layer1() {
                                     (1-_scale) * canvas.height - _gap);
 
     if (doblank == 1) {
-      ctx.fillStyle = 'green';//'rgb(0, 0, 0, 0.5)';
+      ctx.fillStyle = 'green';
     } else {
-      ctx.fillStyle = COLOR_PPT_SML;//'rgb(0, 0, 0, 0.5)';
+      ctx.fillStyle = COLOR_PPT_SML;
     }
   
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //ctx.fillRect(0, 0, canvas.width, canvas.height);
     printPhase();
 
     //if (displayProgress == 1) printPhaseChart();

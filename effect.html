@@ -68,13 +68,54 @@ var animSwh = 0;
 function keyboard(e) {
 
     //alert(e.keyCode);
-    
+    let len = particles.length;
     switch (e.keyCode) {
   
-        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
-          var value = e.keyCode - 48;
-          initAnim(value);
+        case 48:
+            initAnim(0);
+            break;
+        case 49: case 50: case 51:  //case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
+            var value = e.keyCode - 48;
+            for (let i = 0;i<5;i++) {
+                particles[len + i] = applaud();
+                particles[len + i].initial(canvas, value);
+            }
+            initAnim(1);
           break;
+        case 81: //'Q'
+            particles[len] = hammer();
+            particles[len].initial(canvas);
+            initAnim(1);
+            break;
+        case 87:
+            particles[len] = character();
+            particles[len].initial(canvas, '❓');
+            initAnim(1);
+            break;
+        case 69:
+            particles[len] = character();
+            particles[len].initial(canvas, '❗');
+            initAnim(1);
+            break;
+        case 65: case 83: case 68: case 70: case 71: case 72: //'A'
+            particles[len] = passby();
+            if (e.keyCode == 65) particles[len].initial(canvas, 1);
+            if (e.keyCode == 83) particles[len].initial(canvas, 2);
+            if (e.keyCode == 68) particles[len].initial(canvas, 3);
+            if (e.keyCode == 70) particles[len].initial(canvas, 4);
+            if (e.keyCode == 71) particles[len].initial(canvas, 5);
+            if (e.keyCode == 72) particles[len].initial(canvas, 6);
+            initAnim(1);
+            break;
+        case 90: //'Z' 
+        case 88: //'X'
+            particles[len] = animframe();
+            if (e.keyCode == 90)
+                particles[len].initial(canvas, 1);
+            if (e.keyCode == 88)
+                particles[len].initial(canvas, 2);
+            initAnim(1);
+            break;
     }
 }
 //randomPick();
@@ -93,29 +134,10 @@ canvas.addEventListener('mousemove', e => {
 
 function initAnim(idx) {
 
-    /*
-    if (particles.length >= 1) {
+    if (idx == 0) {
         for (var i = 0;i<particles.length;i++) {
             particles[i].release();
         }
-    }
-    particles.length = 0;
-    particles = [];
-    */
-
-    if (idx > 0 && idx <= 4) {
-        let len = particles.length;
-        for (let i = 0;i<20;i++) {
-            particles[len + i] = applaud();
-            particles[len + i].initial(canvas, idx);
-        }
-    } else if (idx == 5) {
-        let len = particles.length;
-        for (let i = 0;i<1;i++) {
-            particles[len + i] = hammer();
-            particles[len + i].initial(canvas);
-        }
-    } else {
         animSwh = 0;
         return;
     }
@@ -141,10 +163,12 @@ function anim_update(elapse) {
     for (var i = 0;i<particles.length;i++) {
         particles[i].update(canvas, ctx, dt);
         if (particles[i].state == 0) {
-            particles.splice(particles[i], 1);
+            particles.splice(i, 1);
             i--;
         }
     }
+
+    console.log('len : ' + particles.length);
 
     if (particles.length == 0) animSwh = 0;
 
@@ -181,12 +205,15 @@ function applaud() {
         this.txt_0 = '🤲';
         this.txt_1 = '👏';
       } else if (type == 2) {
-        this.txt_0 = '😀';
-        this.txt_1 = '🙂';
+        let r = Math.floor(Math.random() * 2);
+        if (r == 0) {
+            this.txt_0 = '😀';
+            this.txt_1 = '🙂';
+        } else {
+            this.txt_0 = '😄';
+            this.txt_1 = '😊';
+        } 
       } else if (type == 3) {
-        this.txt_0 = '😄';
-        this.txt_1 = '😊';
-      } else if (type == 4) {
         let r = Math.floor(Math.random() * 4);
         if (r == 0) {
             this.txt_0 = '😎';
@@ -203,7 +230,7 @@ function applaud() {
         }
       }
 
-      if ( Math.ceil(2 * Math.random()) == 0)
+      if ( Math.floor(2 * Math.random()) == 0)
         this.txt = this.txt_0;
       else 
         this.txt = this.txt_1;
@@ -224,7 +251,7 @@ function applaud() {
         _ctx.textBaseline = 'middle';//'bottom
         _ctx.font = this.fontsize + 'px Monospace';//this.fontsize + "px";
         
-        if (this.state == 4) {
+        if (this.state == 3) {
             
             _ctx.save();
             _ctx.translate(this.x, this.y);
@@ -236,10 +263,6 @@ function applaud() {
         } else {
             _ctx.fillText(this.txt, this.x, this.y);
         }
-        
-        
-
-        //
 
         if (this.dest_y < c.height) {
             this.y = this.y + (this.dest_y - this.y) * dt * 0.001 * 2;
@@ -300,7 +323,6 @@ function hammer() {
       this.rotate = this._rotate;
       this.state = 1;
     },
-    
     update: function (c, _ctx, dt) {
 
         if (this.state == 0) return;
@@ -327,9 +349,184 @@ function hammer() {
         if (Math.abs(-Math.PI/3 - this.rotate) < 0.01) {
             this.state = 0;
         }
+
+        //if (this.elapse > 1.0) this.state = 0;
     }
   }
   return p;
+}
+
+function passby() {
+  let p = {
+    x: 0,
+    y: 0,
+    txt: '🚗',//🚗 🚙 🚕 🚌 🏎 🚓 🚚 🛻
+    fontsize:100,
+    velocity:250,
+    state: 1,
+    disturb:0,
+    release: function() { 
+        this.txt = '';
+        this.state = 0;
+    },
+    initial: function (c, idx) {
+      this.fontsize = c.height/8;
+      this.x = canvas.width + this.fontsize;
+      this.y = mouseY;
+      this.state = idx;
+      this.velocity = 200 + 100 * Math.random();
+      switch(this.state) {
+        case 1: this.txt = '🚗'; break;
+        case 2: this.txt = '🚓'; this.velocity *= 2; break;
+        case 3: this.txt = '🚕'; break;
+        case 4: this.txt = '🚚'; break;
+        case 5: this.txt = '🏎'; this.velocity *= 3; break;
+        case 6: this.txt = '🚌'; this.velocity *= 0.8; break;
+        default: this.txt = '🚗'; break;
+      }
+    },
+    
+    update: function (c, _ctx, dt) {
+
+        if (this.state == 0) return;
+
+        _ctx.textAlign = "center";
+        _ctx.textBaseline = 'middle';//'bottom
+        _ctx.font = this.fontsize + 'px Monospace';//this.fontsize + "px";
+        
+        if (this.state == 5) 
+            this.disturb = 0;
+        
+        this.velocity += dt * 0.1;
+        this.x -= this.velocity * dt * 0.001;
+        _ctx.fillText(this.txt, this.x, this.y + this.disturb); 
+        
+        this.disturb = Math.floor(Math.random() * 5) - 2; //012012
+        
+        if (this.x < -this.fontsize) this.release();
+        
+    }
+  }
+  return p;
+
+}
+
+function animframe() {
+  let p = {
+    x: 0,
+    y: 0,
+    txt: '🌏',
+    elapse:0,
+    _elapse:0,
+    fontsize:100,
+    state: 1,
+    order: 0,
+    release: function() { 
+        this.txt = '';
+        this.state = 0;
+    },
+    initial: function (c, idx) {
+      this.txt = '🚗';
+      this.fontsize = c.height/8;
+
+      this.x = mouseX; 
+      this.y = mouseY;//c.height/2;
+      this.state = idx;
+      this.order = 0;
+      if (this.state == 1) this.txt = '🌏';
+      if (this.state == 2) this.txt = '🌕';
+    },
+    
+    update: function (c, _ctx, dt) {
+
+        if (this.state == 0) return;
+
+        _ctx.textAlign = "center";
+        _ctx.textBaseline = 'middle';//'bottom
+        _ctx.font = this.fontsize + 'px Monospace';//this.fontsize + "px";
+        
+        if (this._elapse > 0.1) {
+
+            this._elapse = 0;
+
+            if (this.state == 1) {
+                this.order = (this.order + 1) %3;
+                switch(this.order) {
+                    case 0: this.txt = '🌏'; break;
+                    case 1: this.txt = '🌍'; break;
+                    case 2: this.txt = '🌎'; break;
+                }
+            } else if (this.state == 2) {
+                //🌕🌖🌗🌘🌑🌒🌓🌔
+                this.order = (this.order + 1) %8;
+                switch(this.order) {
+                    case 0: this.txt = '🌕'; break;
+                    case 1: this.txt = '🌖'; break;
+                    case 2: this.txt = '🌗'; break;
+                    case 3: this.txt = '🌘'; break;
+                    case 4: this.txt = '🌑'; break;
+                    case 5: this.txt = '🌒'; break;
+                    case 6: this.txt = '🌓'; break;
+                    case 7: this.txt = '🌔'; break;
+                }
+                
+            }
+
+        }
+    
+        _ctx.fillText(this.txt, this.x, this.y);
+        
+        this._elapse += dt/1000.0;
+        this.elapse += dt/1000.0;
+        
+        if (this.elapse > 4.0) this.release();
+        
+    }
+  }
+  return p;
+  
+}
+
+function character() {
+  let p = {
+    x: 0,
+    y: 0,
+    txt: '',
+    elapse:0,
+    fontsize:100,
+    state: 1,
+    release: function() { 
+        this.txt = '';
+        this.state = 0;
+    },
+    initial: function (c, _txt) {
+      this.txt = _txt;
+      this.fontsize = c.height/8;
+
+      this.x = mouseX; 
+      this.y = mouseY;//c.height/2;
+      this.state = 1;
+    },
+    
+    update: function (c, _ctx, dt) {
+
+        if (this.state == 0) return;
+
+        _ctx.textAlign = "center";
+        _ctx.textBaseline = 'middle';//'bottom
+        _ctx.font = this.fontsize + 'px Monospace';//this.fontsize + "px";
+            
+        _ctx.fillText(this.txt, this.x, this.y);
+        
+        this.elapse += dt/1000.0;
+        
+        if (this.elapse > 2.0) 
+            this.release();
+        
+    }
+  }
+  return p;
+  
 }
 
 </script>
