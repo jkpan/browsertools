@@ -97,6 +97,21 @@ function keyboard(e) {
             particles[len].initial(canvas, '❗');
             initAnim(1);
             break;
+        case 82:
+            particles[len] = character();
+            particles[len].initial(canvas, '👍');
+            initAnim(1);
+            break;
+        case 84:
+            particles[len] = character();
+            particles[len].initial(canvas, '🧡');
+            initAnim(1);
+            break;
+        case 89:
+            particles[len] = character();
+            particles[len].initial(canvas, '💔');
+            initAnim(1);
+            break;
         case 65: case 83: case 68: case 70: case 71: case 72: //'A'
             particles[len] = passby();
             if (e.keyCode == 65) particles[len].initial(canvas, 1);
