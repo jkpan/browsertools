@@ -1,0 +1,255 @@
+<script type="text/javascript" src="./led_still.js"></script>
+<script type="text/javascript" charset="UTF-8"> 
+
+var color_0 = '#ffffff';
+var uploadImage;
+
+function processImg(src, des) {
+
+  var obj = document.getElementById(src);
+  uploadImage = obj;
+  _processImg(des);    
+
+}
+
+function _processImg(des) {
+
+  if (uploadImage == null) return; 
+
+  var sel_gap = document.getElementById('Gap');
+  var sel_lsize = document.getElementById('Lsize');
+  var sel_colorl = document.getElementById('colorLevel');
+  var sel_darkl = document.getElementById('darkLevel');
+
+  var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
+  var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
+  var cll = parseInt(sel_colorl.options[sel_colorl.options.selectedIndex].value, 10);
+  var dkl = parseInt(sel_darkl.options[sel_darkl.options.selectedIndex].value, 10);
+  
+  side = gap;
+  dots = lsz;
+  coll = cll;
+  drkl = dkl;
+
+
+  var tempCanvas = document.createElement("canvas");
+  
+  //tempCtx.font = _font;
+  let fw = uploadImage.width;// Math.ceil(tempCtx.measureText(txt).width) + 4;
+  let fh = uploadImage.height;
+  
+  let cw = (Math.floor(fw/(side + dots))) * (side + dots);
+  let ch = (Math.floor(fh/(side + dots))) * (side + dots);
+
+  // set the temp canvas size == the canvas size
+  tempCanvas.width = cw;
+  tempCanvas.height = ch;
+
+  var tempCtx = tempCanvas.getContext("2d");
+  
+  //maskimg
+  initLED(0, 0, fw, fh);
+  newLEDMask();
+  
+  tempCtx.fillStyle = 'black';
+  tempCtx.fillRect(0, 0, fw, fh);
+  tempCtx.drawImage(uploadImage, 0, 0);
+  //tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+  maskimg.onload = function() {
+    ledAction4Still(tempCanvas, tempCtx);
+    var img = document.getElementById(des);//'legend');
+    img.src = tempCanvas.toDataURL();
+    //console.log('mask generated 0! ' + maskimg.width + ', ' + maskimg.height);
+    //ledAction(tempCanvas, tempCtx);
+    
+      /*
+      var _canvas = document.createElement("canvas");
+      _canvas.width = tempCanvas.width/2;
+      _canvas.height = tempCanvas.height/2;
+      var _ctx = _canvas.getContext("2d");
+      _ctx.drawImage(tempCanvas, 0, 0, tempCanvas.width/2, tempCanvas.height/2);
+      */
+    
+    //_canvas.toDataURL();
+    
+  }
+
+  
+}
+
+</script>
+  
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <style>
+        body {
+          margin: 0px;
+          height: 100%;
+          background-color:rgb(55, 55, 55);
+        }
+        input[type=text] {
+          width:60%;
+          border:2px solid #aaa;
+          border-radius: 4px;
+          margin: 2% 2%;
+          outline: none;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+        input[type=text]:focus {
+          border-color: dodgerblue;
+          box-shadow: 0 0 8px 0 dodgerblue;
+        }
+        select {
+          border:2px solid #aaa;
+          border-radius: 4px;
+          margin: 2% 2%;
+          outline: none;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+        .effect {
+          filter: invert(100%); /* blur(1px) ;*/
+        }
+      </style>
+      </head>   
+  <body>
+    
+    <div style="margin: 2% 2%;">
+      <!--input id="banner_size" type="hidden" value="128" /-->
+      <img id="legend" />
+    <br/>
+
+    <label style="color:#ff0000;size: 48px;">LED Size</label>
+      <select name="Lsize" id="Lsize">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+      </select> 
+
+    <label style="color:#ff0000;size: 48px;">Gap</label>
+      <select name="Gap" id="Gap">
+        <option value="0">0 Pixel</option>
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+      </select>
+      
+      <label style="color:#ff0000;size: 48px;">color scale</label>
+      <select name="colorLevel" id="colorLevel">
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8" selected>8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
+
+      <label style="color:#ff0000;size: 48px;">dark level</label>
+      <select name="darkLevel" id="darkLevel">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8" >8</option>
+        <option value="9">9</option>
+        <option value="10" selected>10</option>
+      </select>
+
+
+      <br/>
+
+      <!--input type="file" id="img"/>
+      <img id="file0" filename="bg10.png"/><br/-->   
+      
+      <br/>
+
+      <img id="b00" src="bg00.png"/>
+      <img id="i00" filename="bg00.png"/><br/>
+      <button type="button" id="imgo" onclick="processImg('b00', 'i00')">Generate 00</button>
+      
+      <hr size="8" width="100%" color="green">
+
+      <img id="b01" src="bg01.png"/>
+      <img id="i01" filename="bg01.png"/><br/>
+      <button type="button" id="imgo" onclick="processImg('b01', 'i01')">Generate 01</button>
+
+      <hr size="8" width="100%" color="green">
+
+      <img id="b02" src="bg02.png"/>
+      <img id="i02" filename="bg02.png"/><br/>
+      <button type="button" id="imgo" onclick="processImg('b02', 'i02')">Generate 02</button>
+
+      <hr size="8" width="100%" color="green">
+
+      <img id="b03" src="bg03.png"/>
+      <img id="i03" filename="bg03.png"/><br/>
+      <button type="button" id="imgo" onclick="processImg('b03', 'i03')">Generate 03</button> 
+      
+      <hr size="8" width="100%" color="green">
+
+      <img id="b04" src="bg04.png"/>
+      <img id="i04" filename="bg04.png"/><br/>
+      <button type="button" id="imgo" onclick="processImg('b04', 'i04')">Generate 04</button>
+      
+      <hr size="8" width="100%" color="green">
+
+      <img id="b05" src="bg05.png"/>
+      <img id="i05" filename="bg05.png"/><br/>
+      <button type="button" id="imgo" onclick="processImg('b05', 'i05')">Generate 05</button>
+      
+      <hr size="8" width="100%" color="green">
+
+      <img id="b06" src="bg06.png"/>
+      <img id="i06" filename="bg06.png"/><br/>
+      <button type="button" id="imgo" onclick="processImg('b06', 'i06')">Generate 06</button>
+      
+      <hr size="8" width="100%" color="green">
+
+      <img id="b07" src="bg07.png"/>
+      <button type="button" id="imgo" onclick="processImg('b07', 'i07')">Generate 07</button> 
+      <img id="i07" filename="bg07.png"/><br/>
+
+      <hr size="8" width="100%" color="green">
+
+      <img id="b08" src="bg08.png"/>
+      <button type="button" id="imgo" onclick="processImg('b08', 'i08')">Generate 08</button>
+      <img id="i08" filename="bg08.png"/><br/>
+
+      <hr size="8" width="100%" color="green">
+
+      <img id="b09" src="bg09.png"/>
+      <button type="button" id="imgo" onclick="processImg('b09', 'i09')">Generate 09</button> 
+      <img id="i09" filename="bg09.png"/><br/>
+
+      <hr size="8" width="100%" color="green">
+
+      <img id="b10" src="bg10.png"/>
+      <button type="button" id="imgo" onclick="processImg('b10', 'i10')">Generate 10</button> 
+      <img id="i10" filename="bg10.png"/><br/>      
+      
+      
+
+    </div>
+
+  </body>
+  
+</html>

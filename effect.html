@@ -114,21 +114,19 @@ function keyboard(e) {
             break;
         case 65: case 83: case 68: case 70: case 71: case 72: //'A'
             particles[len] = passby();
-            if (e.keyCode == 65) particles[len].initial(canvas, 1);
-            if (e.keyCode == 83) particles[len].initial(canvas, 2);
-            if (e.keyCode == 68) particles[len].initial(canvas, 3);
-            if (e.keyCode == 70) particles[len].initial(canvas, 4);
-            if (e.keyCode == 71) particles[len].initial(canvas, 5);
+            if (e.keyCode == 65) particles[len].initial(canvas, 1); else 
+            if (e.keyCode == 83) particles[len].initial(canvas, 2); else 
+            if (e.keyCode == 68) particles[len].initial(canvas, 3); else 
+            if (e.keyCode == 70) particles[len].initial(canvas, 4); else 
+            if (e.keyCode == 71) particles[len].initial(canvas, 5); else 
             if (e.keyCode == 72) particles[len].initial(canvas, 6);
             initAnim(1);
             break;
         case 90: //'Z' 
         case 88: //'X'
             particles[len] = animframe();
-            if (e.keyCode == 90)
-                particles[len].initial(canvas, 1);
-            if (e.keyCode == 88)
-                particles[len].initial(canvas, 2);
+            if (e.keyCode == 90) particles[len].initial(canvas, 1); else 
+            if (e.keyCode == 88) particles[len].initial(canvas, 2);
             initAnim(1);
             break;
     }
