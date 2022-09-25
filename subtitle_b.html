@@ -33485,12 +33485,12 @@ function _render(progress) {
     ctx.fillStyle = color_pointer[2];
     let _r = fontsize_sml_sml/4;
     if (intervalType == 1) {
+      ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
+    } else { //intervalType == -1
       ctx.beginPath();
       ctx.arc(canvas.width - _r, _r, _r, 0, 2 * Math.PI, true);
       ctx.fill();
       ctx.closePath();
-    } else { //if (intervalType == -1) {
-      ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
     }
   }
 

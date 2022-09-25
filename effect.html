@@ -74,14 +74,32 @@ function keyboard(e) {
         case 48:
             initAnim(0);
             break;
-        case 49: case 50: case 51:  //case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
-            var value = e.keyCode - 48;
+        case 49:  
             for (let i = 0;i<5;i++) {
                 particles[len + i] = applaud();
-                particles[len + i].initial(canvas, value);
+                particles[len + i].initial(canvas, ['🤲','👏'], 1);
             }
             initAnim(1);
-          break;
+            break;
+        case 50: 
+            for (let i = 0;i<5;i++) {
+                particles[len + i] = applaud();
+                particles[len + i].initial(canvas, Math.floor(2 * Math.random()) == 0?['😀','🙂']:['😄','😊'], 1);
+            }
+            initAnim(1);
+            break;
+        case 51:  { //case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
+            let all = ['😎', '🥸', '🤪', '😜'];
+            for (let i = 0;i<5;i++) {
+                let r = Math.floor(Math.random() * 4);
+                particles[len + i] = applaud();
+                particles[len + i].initial(canvas, 
+                                           [all[r], all[r]], 
+                                           Math.floor(2 * Math.random()) == 0?2:3);
+            }
+            initAnim(1);
+          }
+            break;
         case 81: //'Q'
             particles[len] = hammer();
             particles[len].initial(canvas);
@@ -112,21 +130,34 @@ function keyboard(e) {
             particles[len].initial(canvas, '💔');
             initAnim(1);
             break;
+        case 85:
+            particles[len] = character();
+            particles[len].initial(canvas, '😂');
+            initAnim(1);
+            break;
         case 65: case 83: case 68: case 70: case 71: case 72: //'A'
             particles[len] = passby();
-            if (e.keyCode == 65) particles[len].initial(canvas, 1); else 
-            if (e.keyCode == 83) particles[len].initial(canvas, 2); else 
-            if (e.keyCode == 68) particles[len].initial(canvas, 3); else 
-            if (e.keyCode == 70) particles[len].initial(canvas, 4); else 
-            if (e.keyCode == 71) particles[len].initial(canvas, 5); else 
-            if (e.keyCode == 72) particles[len].initial(canvas, 6);
+            if (e.keyCode == 65) particles[len].initial(canvas, '🚗'); else 
+            if (e.keyCode == 83) particles[len].initial(canvas, '🚓'); else 
+            if (e.keyCode == 68) particles[len].initial(canvas, '🚕'); else 
+            if (e.keyCode == 70) particles[len].initial(canvas, '🚚'); else 
+            if (e.keyCode == 71) particles[len].initial(canvas, '🏎'); else 
+            if (e.keyCode == 72) particles[len].initial(canvas, '🚌');
             initAnim(1);
             break;
         case 90: //'Z' 
+            particles[len] = animframe();
+            particles[len].initial(canvas, ['🌏', '🌍', '🌎']);
+            initAnim(1);
+            break;
         case 88: //'X'
             particles[len] = animframe();
-            if (e.keyCode == 90) particles[len].initial(canvas, 1); else 
-            if (e.keyCode == 88) particles[len].initial(canvas, 2);
+            particles[len].initial(canvas, ['🌕', '🌖', '🌗', '🌘', '🌑', '🌒', '🌓', '🌔']);
+            initAnim(1);
+            break;
+        case 67:
+            particles[len] = animframe();
+            particles[len].initial(canvas, ['⚽', '🏀', '⚾', '🥎', '🎾', '🏐', '🎱', '🏈']);
             initAnim(1);
             break;
     }
@@ -181,7 +212,7 @@ function anim_update(elapse) {
         }
     }
 
-    console.log('len : ' + particles.length);
+    //console.log('len : ' + particles.length);
 
     if (particles.length == 0) animSwh = 0;
 
@@ -212,36 +243,10 @@ function applaud() {
         this.txt = '';
         this.state = 0;
     },
-    initial: function (c, type) {
-      this.state = type;
-      if (type == 1) {
-        this.txt_0 = '🤲';
-        this.txt_1 = '👏';
-      } else if (type == 2) {
-        let r = Math.floor(Math.random() * 2);
-        if (r == 0) {
-            this.txt_0 = '😀';
-            this.txt_1 = '🙂';
-        } else {
-            this.txt_0 = '😄';
-            this.txt_1 = '😊';
-        } 
-      } else if (type == 3) {
-        let r = Math.floor(Math.random() * 4);
-        if (r == 0) {
-            this.txt_0 = '😎';
-            this.txt_1 = '😎';
-        } else if (r == 1) {
-            this.txt_0 = '🥸';
-            this.txt_1 = '🥸';
-        } else if (r == 2) {
-            this.txt_0 = '🤪';
-            this.txt_1 = '🤪';
-        } else if (r == 3) {
-            this.txt_0 = '😜';
-            this.txt_1 = '😜';
-        }
-      }
+    initial: function (c, imgx2, _state) {
+      this.txt_0 = imgx2[0];
+      this.txt_1 = imgx2[1];
+      this.state = _state;
 
       if ( Math.floor(2 * Math.random()) == 0)
         this.txt = this.txt_0;
@@ -254,8 +259,7 @@ function applaud() {
       this.dest_y = c.height - this.fontsize - Math.floor(c.height/4 * Math.random());
       this.y = c.height + this.fontsize;
       this.elapse = 0;
-    },
-    
+    },   
     update: function (c, _ctx, dt) {
 
         if (this.state == 0) return;
@@ -264,11 +268,14 @@ function applaud() {
         _ctx.textBaseline = 'middle';//'bottom
         _ctx.font = this.fontsize + 'px Monospace';//this.fontsize + "px";
         
-        if (this.state == 3) {
+        if (this.state > 1) {
             
             _ctx.save();
             _ctx.translate(this.x, this.y);
-            this.rotate += 1.0 * dt * 0.001;
+            if (this.state == 2)
+              this.rotate += 1.0 * dt * 0.001;
+            else 
+              this.rotate -= 1.0 * dt * 0.001;
             _ctx.rotate(this.rotate);
             _ctx.fillText(this.txt, 0, 0);//this.x, this.y); 
             _ctx.restore();
@@ -377,17 +384,28 @@ function passby() {
     fontsize:100,
     velocity:250,
     state: 1,
-    disturb:0,
+    disturb:1,
     release: function() { 
         this.txt = '';
         this.state = 0;
     },
-    initial: function (c, idx) {
+    initial: function (c, icon) {
       this.fontsize = c.height/8;
       this.x = canvas.width + this.fontsize;
       this.y = mouseY;
-      this.state = idx;
+      this.state = 1;
       this.velocity = 200 + 100 * Math.random();
+      this.txt = icon;
+      switch(this.txt) {
+        case '🚗': break;
+        case '🚓': this.velocity *= 2; break;
+        case '🚕': break;
+        case '🚚': break;
+        case '🏎': this.disturb = 0; this.velocity *= 3; break;
+        case '🚌': this.velocity *= 0.8; break;
+        default: break;
+      }
+      /*
       switch(this.state) {
         case 1: this.txt = '🚗'; break;
         case 2: this.txt = '🚓'; this.velocity *= 2; break;
@@ -397,6 +415,7 @@ function passby() {
         case 6: this.txt = '🚌'; this.velocity *= 0.8; break;
         default: this.txt = '🚗'; break;
       }
+      */
     },
     
     update: function (c, _ctx, dt) {
@@ -407,14 +426,14 @@ function passby() {
         _ctx.textBaseline = 'middle';//'bottom
         _ctx.font = this.fontsize + 'px Monospace';//this.fontsize + "px";
         
-        if (this.state == 5) 
-            this.disturb = 0;
-        
+
+
         this.velocity += dt * 0.1;
         this.x -= this.velocity * dt * 0.001;
         _ctx.fillText(this.txt, this.x, this.y + this.disturb); 
         
-        this.disturb = Math.floor(Math.random() * 5) - 2; //012012
+        if (this.disturb != 0) 
+          this.disturb = Math.floor(Math.random() * 3) + 1; //012012
         
         if (this.x < -this.fontsize) this.release();
         
@@ -428,26 +447,24 @@ function animframe() {
   let p = {
     x: 0,
     y: 0,
-    txt: '🌏',
     elapse:0,
     _elapse:0,
     fontsize:100,
     state: 1,
     order: 0,
+    frame: [],
     release: function() { 
-        this.txt = '';
         this.state = 0;
     },
-    initial: function (c, idx) {
-      this.txt = '🚗';
+    initial: function (c, _frame) {
       this.fontsize = c.height/8;
-
+      this.frame = _frame;
       this.x = mouseX; 
-      this.y = mouseY;//c.height/2;
-      this.state = idx;
+      this.y = mouseY;
+      this.state = 1;
       this.order = 0;
-      if (this.state == 1) this.txt = '🌏';
-      if (this.state == 2) this.txt = '🌕';
+      //if (this.state == 1) this.txt = '';
+      //if (this.state == 2) this.txt = '🌕';
     },
     
     update: function (c, _ctx, dt) {
@@ -462,32 +479,11 @@ function animframe() {
 
             this._elapse = 0;
 
-            if (this.state == 1) {
-                this.order = (this.order + 1) %3;
-                switch(this.order) {
-                    case 0: this.txt = '🌏'; break;
-                    case 1: this.txt = '🌍'; break;
-                    case 2: this.txt = '🌎'; break;
-                }
-            } else if (this.state == 2) {
-                //🌕🌖🌗🌘🌑🌒🌓🌔
-                this.order = (this.order + 1) %8;
-                switch(this.order) {
-                    case 0: this.txt = '🌕'; break;
-                    case 1: this.txt = '🌖'; break;
-                    case 2: this.txt = '🌗'; break;
-                    case 3: this.txt = '🌘'; break;
-                    case 4: this.txt = '🌑'; break;
-                    case 5: this.txt = '🌒'; break;
-                    case 6: this.txt = '🌓'; break;
-                    case 7: this.txt = '🌔'; break;
-                }
-                
-            }
+            this.order = (this.order + 1) % this.frame.length;
 
         }
     
-        _ctx.fillText(this.txt, this.x, this.y);
+        _ctx.fillText(this.frame[this.order], this.x, this.y);
         
         this._elapse += dt/1000.0;
         this.elapse += dt/1000.0;

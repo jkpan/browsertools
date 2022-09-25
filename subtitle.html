@@ -3,27 +3,15 @@
 //今日歌單
 var list = [
 
-'新歌頌揚117', // C3/4真平安
-'新歌頌揚220', // G4/4我敬拜祢全能神
-'新歌頌揚133', // G4/4永活更新的路
-'新歌頌揚252', // F4/4全心來讚美祢
-'救恩227',    // F4/4谷中百合花
-
-/*
 '讚美之泉71',
 '讚美之泉88',
 '讚美之泉78',
 '其他42',
 '讚美之泉21',
-*/
 
 '主禱文',
 '使徒信經',
 '救恩300',
-
-'其他68', //千萬個理由
-'其他8',  //點名時候
-'讚美之泉56', //恩典之路
 
 ];
 
@@ -5080,12 +5068,12 @@ function _layer2() {
     ctx.fillStyle = COLORS_CK[2];
     let _r = fontsize/10;
     if (intervalType == 1) {
+      ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
+    } else {//intervalType == -1)
       ctx.beginPath();
       ctx.arc(canvas.width - _r, _r, _r, 0, 2 * Math.PI, true);
       ctx.fill();
       ctx.closePath();
-    } else {//if (intervalType == -1) {
-      ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
     }
   }
   
