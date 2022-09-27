@@ -31,8 +31,7 @@ var presetVerse = [
   //function flow() {}
  
   var fontfactor = 15.0;
-  var fontFamily = "標楷體";
-                   //"Monospace";
+  var fontFamily = "Monospace";
                    //"Arial";
                    //"cwTeXKai";
                    //'華康瘦金體';
@@ -97,7 +96,7 @@ var presetVerse = [
                 "'shift左右' 上十節下十節  'shift上下' 上十章下十章",
                 "shift+- 字大小  'esc' 跳回預設樣式",
                 "按住'space' 語音辨識(Google Chrome + 網路連線)",
-                "shift'P' shift'O' shift'I'"
+                "F1控方 F2被控方"
                 ]]
 } </script>
 
@@ -33637,13 +33636,7 @@ function sortjump(start, end) {
 
 function combineKey(e) {
   var jump = 10;
-  switch (e.keyCode) {
-      case 80: startActionInterval(); break; //P
-      case 79: startRestoreInterval(); break; //O
-      case 73: stopActionInterval(); break; //I
-      case 85: save2Local(); break; //'U'        
-      case 89: restoreLocal(); break; //'Y'
-        
+  switch (e.keyCode) {        
       case 65: sortjump( 1,  5); break;
       case 83: sortjump( 6, 17); break;
       case 68: sortjump(18, 22); break;
@@ -33801,6 +33794,28 @@ function keyboard(e) { //key up
     //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
           
     switch (e.keyCode) {
+
+      case 112: 
+        if (intervalType != 0) {
+          stopActionInterval();
+          break;
+        }
+        startActionInterval(); 
+        break;
+      case 113:
+        if (intervalType != 0) {
+          stopActionInterval();
+          break;
+        }
+        startRestoreInterval(); 
+        break;
+      case 114: 
+        save2Local(); 
+        break;        
+      case 115: 
+        restoreLocal(); 
+        break;
+
       case 66: //'b'
         //console.log('b press');
         if (color_selection == 0) {

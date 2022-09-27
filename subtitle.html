@@ -3,11 +3,17 @@
 //今日歌單
 var list = [
 
+'救恩179', //走在君王大道上
+'救恩230', //奇妙平安
+'救恩104', //站在神的應許上
+
+/*
 '讚美之泉71',
 '讚美之泉88',
 '讚美之泉78',
 '其他42',
 '讚美之泉21',
+*/
 
 '主禱文',
 '使徒信經',
@@ -31,10 +37,11 @@ var TOOLS = [
   '復活節',
   '聖餐禮拜',
   '追思禮拜',
+  //'主再來'
 ];
 
 //字型顏色設定
-var fontFamily = "標楷體";//"Monospace"; //"Arial" "cwTeXKai" '華康瘦金體' "標楷體" "Noto Serif TC";
+var fontFamily = "Monospace"; //"Arial" "cwTeXKai" '華康瘦金體' "標楷體" "Noto Serif TC";
 
 const COLORS_CK = ["rgb(0, 110, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 240, 0)"];
 const COLOR_PPT = 'rgb(0,0,200)';
@@ -49,7 +56,7 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
                 "'P'投影片模式切換  'L'即時選歌", 
                 "'S'顯示進度  'A'動畫  'B'Blank",
                 "shift+- 字大小",
-                "shift'P'控方 shift'O'被控方 shift'I'取消"]]
+                "F1控方 F2被控方"]]
 } </script>
 
 <!-- 事件歌單 -->
@@ -68,6 +75,9 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
 } </script>
 <script id="聖餐禮拜" name="" type="application/json" charset="UTF-8"> {
   "content" : [ "救恩293", "救恩297", "其他64" ]
+} </script>
+<script id="主再來" name="" type="application/json" charset="UTF-8"> {
+  "content" : [ "救恩70" ]
 } </script>
 
 <!-- 程序相關 -->
@@ -4719,6 +4729,7 @@ function printPhase() {
 
       if (i == line) {
         ctx.lineWidth = 1;
+        ctx.strokeStyle = 'white';
         ctx.strokeRect (10, _y, 20, 20);
       }
 
@@ -4786,16 +4797,6 @@ function printPhaseChart() {
 function combineKey(e) {
   
   switch (e.keyCode) {
-    case 80: //P
-        startActionInterval();
-        break;
-    case 79: //O
-        startRestoreInterval();
-        break;
-    case 73: //I
-        stopActionInterval();
-        break;
-
     case 32: history.back(); return;
     case 189: //'-'
       fontfactor += 0.5;
@@ -4838,7 +4839,23 @@ function keyboard(e) {
     */
     
     switch (e.keyCode) {
-      
+      case 112: //P
+        if (intervalType != 0) {
+          stopActionInterval();
+          break;
+        }
+        startActionInterval();
+        break;
+      case 113: //O
+        if (intervalType != 0) {
+          stopActionInterval();
+          break;
+        }
+        startRestoreInterval();
+        break;
+      //case 73: //I
+      //  
+      //  break;
       case 66: //'b'
         doblank = doblank == 0?1:0;
         break;

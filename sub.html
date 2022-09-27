@@ -4,25 +4,28 @@ var funcInterval;
 var intervalType = 0;
 
 function startRestoreInterval() {
-  if (funcInterval) stopActionInterval();
+
+  if (funcInterval) {
+    stopTabInterval();
+    return;
+  }
   funcInterval = window.setInterval(restoreTabFromLocal, 500);
   intervalType = -1;
+
+  var b = document.getElementById('ox');
+  b.textContent = 'x';
+
 }
 
 function stopTabInterval() {
   if (funcInterval) clearInterval(funcInterval);
   funcInterval = null;
   intervalType = 0;
-  //localStorage.removeItem('save tab');
+
+  var b = document.getElementById('ox');
+  b.textContent = 'o';
 }
 
-/*
-function startActionInterval() {
-  if (funcInterval) stopActionInterval();
-  intervalType = 1;
-}
-
-*/
 var tab;
 function saveTab2Local() {
   //console.log('saveAction2Local');
@@ -110,7 +113,7 @@ function restoreTabFromLocal() {
       <button type="button" class="button" onclick="switchFunction(3)">.</button>
   </div>
   <div class="four" style="background-color: green;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="startRestoreInterval()">o</button>
+    <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
   </div>
   <div id="content_txt" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
       <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
