@@ -1,5 +1,45 @@
 <script type="text/javascript" charset="UTF-8"> 
 
+/*
+function getIframeWindow(iframe_object) {
+
+  var doc;
+
+  if (iframe_object.contentWindow) {
+    console.log('1');
+    return iframe_object.contentWindow;
+  }
+
+  if (iframe_object.window) {
+    console.log('2');
+    return iframe_object.window;
+  }
+
+  if (!doc && iframe_object.contentDocument) {
+    doc = iframe_object.contentDocument;
+    console.log('3');
+  } 
+  
+  if (!doc && iframe_object.document) {
+    doc = iframe_object.document;
+    console.log('4');
+  }
+
+  if (doc && doc.defaultView) {
+    console.log('5');
+   return doc.defaultView;
+  }
+
+  if (doc && doc.parentWindow) {
+    console.log('6');
+    return doc.parentWindow;
+  }
+
+  console.log('7');
+  return undefined;
+}
+*/
+
 var funcInterval;
 var intervalType = 0;
 
@@ -15,6 +55,24 @@ function startRestoreInterval() {
   var b = document.getElementById('ox');
   b.textContent = 'x';
 
+  //document.getElementById("frame_1").contentWindow.startRestoreInterval();
+  //
+  //var s1 = document.getElementById('frame_1');
+  //s1.textContent.startRestoreInterval();
+  //s1.contentWindow.sub_function();
+  //s1.contentWindow.startRestoreInterval();
+  
+  /*
+  var el = document.getElementById('frame_1');
+  var frame_win = getIframeWindow(el);
+  console.log(frame_win);
+  if (frame_win) {
+    console.log('run startRestoreInterval');
+    frame_win.sub_function();//startRestoreInterval();
+  }
+
+  console.log('run end');
+  */
 }
 
 function stopTabInterval() {
@@ -28,9 +86,7 @@ function stopTabInterval() {
 
 var tab;
 function saveTab2Local() {
-  //console.log('saveAction2Local');
   let key = 'save tab';
-  //localStorage.removeItem(key);
   let value = '' + tab;
   localStorage.setItem(key, value);
 }
