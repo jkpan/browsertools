@@ -3,17 +3,13 @@
 //今日歌單
 var list = [
 
-'救恩179', //走在君王大道上
-'救恩230', //奇妙平安
-'救恩104', //站在神的應許上
 
-/*
 '讚美之泉71',
 '讚美之泉88',
 '讚美之泉78',
 '其他42',
 '讚美之泉21',
-*/
+
 
 '主禱文',
 '使徒信經',
@@ -4846,7 +4842,8 @@ function keyboard(e) {
     */
     
     switch (e.keyCode) {
-      case 119: //P
+      case 112:
+      case 119:
         if (intervalType != 0) {
           stopActionInterval();
           break;
@@ -5168,8 +5165,16 @@ init();
 
 var keylock = false;
 
-window.addEventListener('keyup', keyboard, false);
+window.addEventListener('keyup', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  keyboard(e);
+}, false);
+//window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function(e) {
+
+  e.preventDefault();
+  e.stopPropagation();
 
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = true;
