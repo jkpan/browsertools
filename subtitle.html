@@ -3405,7 +3405,7 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
 } </script>
 <script id="讚美之泉21" name="榮耀的呼召" type="application/json" charset="UTF-8"> {
   "content" : [["榮耀的呼召", "讚美之泉"],
-               ["將自己獻上當作活祭", "作主聖潔貴重的器皿", "祢豐富恩惠必充足澆灌我", " 使我瓦器裡充滿莫大能力"],
+               ["將自己獻上當作活祭", "作主聖潔貴重的器皿", "祢豐富恩惠必充足澆灌我", "使我瓦器裡充滿莫大能力"],
                ["高舉雙手讚美祢我主", " 全心全人都給祢耶穌", "一生意義 活出榮耀的呼召", "勇敢地向著標竿直跑"],
                ["跟隨耶穌 愛我的主", "我愛祢 耶穌", "跟隨耶穌 愛我的主", "我愛祢 耶穌"]]
 } </script>
@@ -4267,11 +4267,15 @@ const COLOR_PPT_SML = 'rgb(0, 70, 0)';
   "content" : [[""], 
                ["", "", "", ""]]
 } </script>
-<!--              -->
+
+<!------------------>
 <!-- 詩歌歌詞區 End -->
-<!--              -->
-<!--  下面不要動!   -->
-<!--              -->
+<!------------------>
+
+<!------------------->
+<!---- 下面不要動! ---->
+<!------------------->
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -5188,21 +5192,17 @@ window.addEventListener('resize', function() {
 
 /*
 canvas.addEventListener('mousemove', e => {
-
   if (mode != 0) return;
   if (canvas.hidden) return;
   if (animSwh != 0) return;
-
   _repaint();
   ctx.strokeStyle = 'rgb(0,255,0)';
   ctx.strokeRect (e.x - 5, e.y - 5, 10, 10);
-
   //doblank = 0; helpSwitch = 0; displayProgress = 0;
 });
 */
 
-//flow();
-for(let i=0;i<list.length;i++) SONGS[i+1] = getSong(list[i]);
+for(let i=0;i<list.length;i++) SONGS[i+1] = getSong(list[i]); //flow();
 
 song = 0;
 subtitles = SONGS[song];
