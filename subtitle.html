@@ -5170,15 +5170,15 @@ init();
 var keylock = false;
 
 window.addEventListener('keyup', function(e) {
-  e.preventDefault();
-  e.stopPropagation();
+  //e.preventDefault();
+  //e.stopPropagation();
   keyboard(e);
 }, false);
 //window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function(e) {
 
-  e.preventDefault();
-  e.stopPropagation();
+  //e.preventDefault();
+  //e.stopPropagation();
 
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = true;
