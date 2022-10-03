@@ -16,7 +16,7 @@
   .wrapper {
     display: grid;
     gap: 0px;
-    grid-template-columns: 1fr 1fr 1fr 1fr 28fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 27fr;
     grid-template-rows: 1fr 31fr;
     width: 100%;
     height: 100vh;
@@ -37,8 +37,12 @@
     grid-column: 4 / 5;
     grid-row: 1 / 2;
   }
+  .five {
+    grid-column: 5 / 6;
+    grid-row: 1 / 2;
+  }
   .content {
-    grid-column: 1 / 6;
+    grid-column: 1 / 7;
     grid-row: 2 / 3;
   }
   .button {
@@ -67,6 +71,9 @@
   <div class="four" style="background-color: green;margin: 0px;opacity: 1.0;">
     <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
   </div>
+  <div class="five" style="background-color: green;margin: 0px;opacity: 1.0;">
+    <button id="ox" type="button" class="button" onclick="switchFunction(4)">slide</button>
+  </div>
   <div id="content_txt" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
       <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
   </div>
@@ -75,6 +82,10 @@
   </div>
   <div id="content_txt3" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
     <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src="effect.html"></iframe>
+  </div>
+  <div id="content_txt4" class="content" style="background-color: white;margin: 0px;opacity: 1.0;">
+    <!--iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src="https://drive.google.com/embeddedfolderview?id=0AEZtlPLAGObgUk9PVA#grid"></iframe-->         
+    <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSQa-rR4_c6nzr7AN_6cVwcIYPpfiW25jZen3RuVf3dLG52qTSevrpGzC7p2fT0bg/embed?start=false&loop=false&delayms=3000" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>  
   </div>
 </div>
 </body>
@@ -139,8 +150,7 @@ function _switchFunction(idx) {
       document.getElementById('content_txt').hidden = true;
       document.getElementById('content_txt2').hidden = true;
       document.getElementById('content_txt3').hidden = true;
-      
-      
+      document.getElementById('content_txt4').hidden = true;
 
       switch(idx) {
         case 1:
@@ -154,6 +164,11 @@ function _switchFunction(idx) {
         case 3:
           document.getElementById('content_txt3').hidden = false;
           document.getElementById('frame_3').focus();
+          break;
+        case 4:
+          document.getElementById('content_txt4').hidden = false;
+          document.getElementById('frame_4').focus();
+          //
           break;
       }
     
