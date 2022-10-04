@@ -3,11 +3,13 @@
 
   var ppt_1 = "";//"https://docs.google.com/presentation/d/e/2PACX-1vSQa-rR4_c6nzr7AN_6cVwcIYPpfiW25jZen3RuVf3dLG52qTSevrpGzC7p2fT0bg/embed?start=false&loop=false&delayms=3000";
   var ppt_2 = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000";
+  
+  
   //"https://jkpan.github.io/browsertools/marquee_v.html";
   
-  var tool_1 = "https://jkpan.github.io/browsertools/subtitle.html";
-  var tool_2 = "https://jkpan.github.io/browsertools/subtitle_b.html";
-  var tool_3 = "https://jkpan.github.io/browsertools/effect.html";
+  var tool_1 = 'subtitle.html';//"https://jkpan.github.io/browsertools/subtitle.html";
+  var tool_2 = 'subtitle_b.html';//"https://jkpan.github.io/browsertools/subtitle_b.html";
+  var tool_3 = 'effect.html';//"https://jkpan.github.io/browsertools/effect.html";
   
 </script>
 <html>
@@ -82,7 +84,14 @@
         border-color: dodgerblue;
         box-shadow: 0 0 8px 0 dodgerblue;
   }
-
+  .okbutton {
+      font-size: 24px;
+      background-color:green;
+      color: #00ff00;
+      width: 100px;
+      height: 75px;
+      border: none;
+  }
   </style>
 </head>
 <body>
@@ -144,8 +153,10 @@
 
   <div id="content_input_1" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
     <br/>
-    <input type="text" id="ppt_url_1" name="input_url" value="" placeholder="url" />
-    <button type="button" onclick="slideGo()">OK</button>
+    <input type="text" id="ppt_url_1" name="input_url" value="" 
+           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
+           placeholder="" />
+    <button class="okbutton" type="button" onclick="slideGo()">OK</button>
     <br/>
   </div>
 

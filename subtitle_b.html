@@ -32888,13 +32888,9 @@ function _newBtn() {
 
   var button = document.createElement('button');
 
-  if (canvas.width > canvas.height) {
-    button.style.width = '200px'; // setting the width to 200px
-    button.style.height = '75px'; // setting the height to 200px
-  } else {
-    button.style.width = '100px';
-    button.style.height = '100px'; // setting the height to 200px
-  }
+  button.style.width = '200px'; // setting the width to 200px
+  button.style.height = '75px'; // setting the height to 200px
+  
   button.style.background = color_pointer[2];//'rgb(0,180,0)'; // setting the background color to teal
   button.style.color = bgcolor_pointer;//color_pointer[1];// 'green'; // setting the color to white
   button.style.fontSize = '20px'; // setting the font size to 20px
