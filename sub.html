@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<script type="text/javascript" charset="UTF-8">
+
+  var ppt_1 = "";//"https://docs.google.com/presentation/d/e/2PACX-1vSQa-rR4_c6nzr7AN_6cVwcIYPpfiW25jZen3RuVf3dLG52qTSevrpGzC7p2fT0bg/embed?start=false&loop=false&delayms=3000";
+  var ppt_2 = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000";
+  //"https://jkpan.github.io/browsertools/marquee_v.html";
+  
+  var tool_1 = "https://jkpan.github.io/browsertools/subtitle.html";
+  var tool_2 = "https://jkpan.github.io/browsertools/subtitle_b.html";
+  var tool_3 = "https://jkpan.github.io/browsertools/effect.html";
+  
+</script>
 <html>
 <head>
   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
@@ -16,7 +27,7 @@
   .wrapper {
     display: grid;
     gap: 0px;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 27fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 26fr 1fr;
     grid-template-rows: 1fr 31fr;
     width: 100%;
     height: 100vh;
@@ -41,8 +52,12 @@
     grid-column: 5 / 6;
     grid-row: 1 / 2;
   }
+  .six {
+    grid-column: 7 / 8;
+    grid-row: 1 / 2;
+  }
   .content {
-    grid-column: 1 / 7;
+    grid-column: 1 / 8;
     grid-row: 2 / 3;
   }
   .button {
@@ -54,44 +69,100 @@
     border: none;
     vertical-align: middle;
   }
+  input[type=text] {
+        width:60%;
+        border:2px solid #aaa;
+        border-radius: 4px;
+        margin: 2% 2%;
+        outline: none;
+        padding: 8px;
+        box-sizing: border-box;
+  }
+  input[type=text]:focus {
+        border-color: dodgerblue;
+        box-shadow: 0 0 8px 0 dodgerblue;
+  }
+
   </style>
 </head>
 <body>
 
-<div class="wrapper" style="background-color: green; opacity: 1.0;">
-  <div class="one" style="background-color: green;margin: 0px;opacity: 1.0;">
+<div class="wrapper" style="background-color: #006400; opacity: 1.0;">
+  
+  <div id="div_1" class="one" style="background-color: #006400;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(1)">.</button>
   </div>
-  <div class="two" style="background-color: green;margin: 0px;opacity: 1.0;">
+  <div id="div_2" class="two" style="background-color: #006400;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(2)">..</button>
   </div>
-  <div class="three" style="background-color: green;margin: 0px;opacity: 1.0;">
-      <button type="button" class="button" onclick="switchFunction(3)">.</button>
+  <div id="div_3" class="three" style="background-color: #006400;margin: 0px;opacity: 1.0;">
+      <button type="button" class="button" onclick="switchFunction(3)">...</button>
   </div>
-  <div class="four" style="background-color: green;margin: 0px;opacity: 1.0;">
+  <div id="div_4" class="four" style="background-color: #006400;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(4)">*</button>
+  </div>
+  <div id="div_5" class="five" style="background-color: #006400;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(5)">**</button>
+  </div>
+
+  <div id="div_ox" class="six" style="background-color: #006400;margin: 0px;opacity: 1.0;">
     <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
   </div>
-  <div class="five" style="background-color: green;margin: 0px;opacity: 1.0;">
-    <button id="ox" type="button" class="button" onclick="switchFunction(4)">slide</button>
-  </div>
-  <div id="content_txt" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
-      <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src="https://jkpan.github.io/browsertools/subtitle.html"></iframe>
+
+  <div id="content_txt1" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
+      <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
+      <script type="text/javascript" charset="UTF-8">
+        document.getElementById("frame_1").src = tool_1;
+      </script>
   </div>
   <div id="content_txt2" class="content" style="background-color: yellow;margin: 0px;opacity: 1.0;">
-      <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src="https://jkpan.github.io/browsertools/subtitle_b.html"></iframe>
+      <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      <script type="text/javascript" charset="UTF-8">
+        document.getElementById("frame_2").src = tool_2;
+      </script>
   </div>
   <div id="content_txt3" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src="effect.html"></iframe>
+    <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_3").src = tool_3;
+    </script>
   </div>
+
   <div id="content_txt4" class="content" style="background-color: white;margin: 0px;opacity: 1.0;">
-    <!--iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src="https://drive.google.com/embeddedfolderview?id=0AEZtlPLAGObgUk9PVA#grid"></iframe-->         
-    <iframe id="frame_4" src="https://docs.google.com/presentation/d/e/2PACX-1vSQa-rR4_c6nzr7AN_6cVwcIYPpfiW25jZen3RuVf3dLG52qTSevrpGzC7p2fT0bg/embed?start=false&loop=false&delayms=3000" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>  
+    <iframe id="frame_4" src="" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>  
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_4").src = ppt_1;
+    </script>
   </div>
+  
+  <div id="content_txt5" class="content" style="background-color: white;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_5" src="" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>  
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_5").src = ppt_2;
+    </script>
+  </div>
+
+  <div id="content_input_1" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
+    <br/>
+    <input type="text" id="ppt_url_1" name="input_url" value="" placeholder="url" />
+    <button type="button" onclick="slideGo()">OK</button>
+    <br/>
+  </div>
+
 </div>
 </body>
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function slideGo() {
+  let value = document.getElementById("ppt_url_1").value;//String.fromCodePoint(0x1F604);
+  if (value.length == 0) 
+    return;
+  ppt_1 = value;
+  document.getElementById("frame_4").src = ppt_1;
+  switchFunction(4);
+}
 
 var tab;
 var funcInterval;
@@ -147,28 +218,54 @@ function switchFunction(idx) {
 
 function _switchFunction(idx) {
       
-      document.getElementById('content_txt').hidden = true;
+      document.getElementById('content_txt1').hidden = true;
       document.getElementById('content_txt2').hidden = true;
       document.getElementById('content_txt3').hidden = true;
       document.getElementById('content_txt4').hidden = true;
+        document.getElementById('content_input_1').hidden = true;
+      document.getElementById('content_txt5').hidden = true;
 
+      document.getElementById("div_1").style.background = "rgb(0,100,0)";
+      document.getElementById("div_2").style.background = "rgb(0,100,0)";
+      document.getElementById("div_3").style.background = "rgb(0,100,0)";
+      document.getElementById("div_4").style.background = "rgb(0,100,0)";
+      document.getElementById("div_5").style.background = "rgb(0,100,0)";
+
+     
       switch(idx) {
         case 1:
-          document.getElementById('content_txt').hidden = false;
+          document.getElementById("div_1").style.background = "rgb(0,128,0)";
+          document.getElementById('content_txt1').hidden = false;
           document.getElementById('frame_1').focus();
           break;
         case 2:
+          document.getElementById("div_2").style.background = "rgb(0,128,0)";
           document.getElementById('content_txt2').hidden = false;
           document.getElementById('frame_2').focus();
           break;
         case 3:
+          document.getElementById("div_3").style.background = "rgb(0,128,0)";
           document.getElementById('content_txt3').hidden = false;
           document.getElementById('frame_3').focus();
           break;
         case 4:
-          document.getElementById('content_txt4').hidden = false;
-          document.getElementById('frame_4').focus();
-          //
+          document.getElementById("div_4").style.background = "rgb(0,128,0)";
+          //let src = document.getElementById("frame_4").src;
+          if (ppt_1.length == 0) { //|| src.endsWith('sub.html')) {
+            document.getElementById('content_input_1').hidden = false;
+            document.getElementById('content_input_1').focus();
+            //alert('input!');
+          } else {
+            document.getElementById('content_txt4').hidden = false;
+            document.getElementById('frame_4').focus();
+            //alert('iframe ' + document.getElementById("frame_4").src);
+          }
+          
+          break;
+        case 5:
+          document.getElementById("div_5").style.background = "rgb(0,128,0)";
+          document.getElementById('content_txt5').hidden = false;
+          document.getElementById('frame_5').focus();
           break;
       }
     
@@ -176,5 +273,6 @@ function _switchFunction(idx) {
 
 tab = 1
 _switchFunction(tab);
+document.getElementById('frame_1').focus();
 
 </script>
