@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <script type="text/javascript" charset="UTF-8">
 
-  var ppt_1 = "";//"https://docs.google.com/presentation/d/e/2PACX-1vSQa-rR4_c6nzr7AN_6cVwcIYPpfiW25jZen3RuVf3dLG52qTSevrpGzC7p2fT0bg/embed?start=false&loop=false&delayms=3000";
-  var ppt_2 = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000";
+  var tool_1 = 'subtitle.html';
+  var tool_2 = 'subtitle_b.html';
+  var tool_3 = 'effect.html';
+  var tool_4 = 'marquee_v.html';
+
+  var ppt_1 = "";
+  var ppt_2 = "";
+  var ppt_h = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000";
   
   
   //"https://jkpan.github.io/browsertools/marquee_v.html";
   
-  var tool_1 = 'subtitle.html';//"https://jkpan.github.io/browsertools/subtitle.html";
-  var tool_2 = 'subtitle_b.html';//"https://jkpan.github.io/browsertools/subtitle_b.html";
-  var tool_3 = 'effect.html';//"https://jkpan.github.io/browsertools/effect.html";
+  
   
 </script>
 <html>
@@ -29,7 +33,7 @@
   .wrapper {
     display: grid;
     gap: 0px;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 26fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 24fr 1fr 1fr;
     grid-template-rows: 1fr 31fr;
     width: 100%;
     height: 100vh;
@@ -55,11 +59,24 @@
     grid-row: 1 / 2;
   }
   .six {
+    grid-column: 6 / 7;
+    grid-row: 1 / 2;
+  }
+  .seven {
     grid-column: 7 / 8;
     grid-row: 1 / 2;
   }
+  .eight {
+    grid-column: 8 / 9;
+    grid-row: 1 / 2;
+  }
+  .nine {
+    grid-column: 9 / 10;
+    grid-row: 1 / 2;
+  }
+
   .content {
-    grid-column: 1 / 8;
+    grid-column: 1 /10;
     grid-row: 2 / 3;
   }
   .button {
@@ -96,26 +113,38 @@
 </head>
 <body>
 
-<div class="wrapper" style="background-color: #006400; opacity: 1.0;">
+<div class="wrapper" style="background-color: #007000; opacity: 1.0;">
   
-  <div id="div_1" class="one" style="background-color: #006400;margin: 0px;opacity: 1.0;">
+  <div id="div_1" class="one" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(1)">.</button>
   </div>
-  <div id="div_2" class="two" style="background-color: #006400;margin: 0px;opacity: 1.0;">
+  <div id="div_2" class="two" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(2)">..</button>
   </div>
-  <div id="div_3" class="three" style="background-color: #006400;margin: 0px;opacity: 1.0;">
+  <div id="div_3" class="three" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(3)">...</button>
   </div>
-  <div id="div_4" class="four" style="background-color: #006400;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(4)">*</button>
+  <div id="div_4" class="four" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(4)">....</button>
   </div>
-  <div id="div_5" class="five" style="background-color: #006400;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(5)">**</button>
+  <div id="div_5" class="five" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(5)">*</button>
+  </div>
+  <div id="div_6" class="six" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(6)">**</button>
   </div>
 
-  <div id="div_ox" class="six" style="background-color: #006400;margin: 0px;opacity: 1.0;">
+  <div id="div_empty" class="seven" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+  </div>
+
+  <div id="div_help" class="eight" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <!--button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button-->
+    <button type="button" class="button" onclick="switchFunction(8)">help</button>
+  </div>
+
+  <div id="div_ox" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
     <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
+    <!--button id="ox" type="button" class="button" onclick="startTestkey()">o</button-->
   </div>
 
   <div id="content_txt1" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
@@ -136,18 +165,17 @@
       document.getElementById("frame_3").src = tool_3;
     </script>
   </div>
-
-  <div id="content_txt4" class="content" style="background-color: white;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_4" src="" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>  
+  <div id="content_txt4" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_4").src = ppt_1;
+      document.getElementById("frame_4").src = tool_4;
     </script>
   </div>
-  
-  <div id="content_txt5" class="content" style="background-color: white;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_5" src="" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>  
+
+  <div id="content_txt5" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_5" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
     <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_5").src = ppt_2;
+      document.getElementById("frame_5").src = ppt_1;
     </script>
   </div>
 
@@ -160,6 +188,30 @@
     <br/>
   </div>
 
+  <div id="content_txt6" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_6" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_6").src = ppt_2;
+    </script>
+  </div>
+
+  <div id="content_input_2" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
+    <br/>
+    <input type="text" id="ppt_url_2" name="input_url" value="" 
+           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
+           placeholder="" />
+    <button class="okbutton" type="button" onclick="slideGo2()">OK</button>
+    <br/>
+  </div>
+
+  <div id="content_txth" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_h" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_h").src = ppt_h;
+    </script>
+  </div>
+
+
 </div>
 </body>
 </html>
@@ -171,8 +223,17 @@ function slideGo() {
   if (value.length == 0) 
     return;
   ppt_1 = value;
-  document.getElementById("frame_4").src = ppt_1;
-  switchFunction(4);
+  document.getElementById("frame_5").src = ppt_1;
+  switchFunction(5);
+}
+
+function slideGo2() {
+  let value = document.getElementById("ppt_url_2").value;//String.fromCodePoint(0x1F604);
+  if (value.length == 0) 
+    return;
+  ppt_2 = value;
+  document.getElementById("frame_6").src = ppt_2;
+  switchFunction(6);
 }
 
 var tab;
@@ -185,6 +246,7 @@ function startRestoreInterval() {
     stopTabInterval();
     return;
   }
+
   funcInterval = window.setInterval(restoreTabFromLocal, 500);
   intervalType = -1;
 
@@ -233,15 +295,21 @@ function _switchFunction(idx) {
       document.getElementById('content_txt2').hidden = true;
       document.getElementById('content_txt3').hidden = true;
       document.getElementById('content_txt4').hidden = true;
-        document.getElementById('content_input_1').hidden = true;
+        
       document.getElementById('content_txt5').hidden = true;
-
-      document.getElementById("div_1").style.background = "rgb(0,100,0)";
-      document.getElementById("div_2").style.background = "rgb(0,100,0)";
-      document.getElementById("div_3").style.background = "rgb(0,100,0)";
-      document.getElementById("div_4").style.background = "rgb(0,100,0)";
-      document.getElementById("div_5").style.background = "rgb(0,100,0)";
-
+        document.getElementById('content_input_1').hidden = true;
+      document.getElementById('content_txt6').hidden = true;
+        document.getElementById('content_input_2').hidden = true;
+      document.getElementById('content_txth').hidden = true;
+            
+      document.getElementById("div_1").style.background = "rgb(0,112,0)";
+      document.getElementById("div_2").style.background = "rgb(0,112,0)";
+      document.getElementById("div_3").style.background = "rgb(0,112,0)";
+      document.getElementById("div_4").style.background = "rgb(0,112,0)";
+      document.getElementById("div_5").style.background = "rgb(0,112,0)";
+      document.getElementById("div_6").style.background = "rgb(0,112,0)";
+      document.getElementById("div_empty").style.background = "rgb(0,112,0)";
+      document.getElementById("div_help").style.background = "rgb(0,112,0)";
      
       switch(idx) {
         case 1:
@@ -261,22 +329,35 @@ function _switchFunction(idx) {
           break;
         case 4:
           document.getElementById("div_4").style.background = "rgb(0,128,0)";
-          //let src = document.getElementById("frame_4").src;
-          if (ppt_1.length == 0) { //|| src.endsWith('sub.html')) {
-            document.getElementById('content_input_1').hidden = false;
-            document.getElementById('content_input_1').focus();
-            //alert('input!');
-          } else {
-            document.getElementById('content_txt4').hidden = false;
-            document.getElementById('frame_4').focus();
-            //alert('iframe ' + document.getElementById("frame_4").src);
-          }
-          
+          document.getElementById('content_txt4').hidden = false;
+          document.getElementById('frame_4').focus();
           break;
         case 5:
           document.getElementById("div_5").style.background = "rgb(0,128,0)";
-          document.getElementById('content_txt5').hidden = false;
-          document.getElementById('frame_5').focus();
+          if (ppt_1.length == 0) {
+            document.getElementById('content_input_1').hidden = false;
+            document.getElementById('content_input_1').focus();
+          } else {
+            document.getElementById('content_txt5').hidden = false;
+            document.getElementById('frame_5').focus();
+          }
+          break;
+        case 6:
+          document.getElementById("div_6").style.background = "rgb(0,128,0)";
+          if (ppt_2.length == 0) {
+            document.getElementById('content_input_2').hidden = false;
+            document.getElementById('content_input_2').focus();
+          } else {
+            document.getElementById('content_txt6').hidden = false;
+            document.getElementById('frame_6').focus();
+          }
+          break;
+        case 8:
+          document.getElementById("div_help").style.background = "rgb(0,128,0)";
+          document.getElementById('content_txth').hidden = false;
+          document.getElementById('frame_h').focus();
+          break;
+        default:
           break;
       }
     
@@ -285,5 +366,71 @@ function _switchFunction(idx) {
 tab = 1
 _switchFunction(tab);
 document.getElementById('frame_1').focus();
+
+/*
+window.addEventListener('keydown', function(e) {
+  //e.preventDefault();
+  //e.stopPropagation();
+  //console.dir(e);
+  document.getElementById('frame_5').postMessage(e);//dispatchEvent(e);
+}, true);
+
+window.addEventListener('keyup', function(e) {
+  //e.preventDefault();
+  //e.stopPropagation();
+  //console.dir(e);
+  document.getElementById('frame_5').postMessage(e);
+}, true);
+
+function keygo() {
+  
+  var event = document.getElementById('frame_1').createEvent('KeyboardEvent'); // create a key event define the event
+  event.initKeyboardEvent("keydown",       // typeArg,                                                           
+    true,             // canBubbleArg,                                                        
+    true,             // cancelableArg,                                                       
+    null,             // viewArg,  Specifies UIEvent.view. This value may be null.     
+    false,            // ctrlKeyArg,                                                               
+    false,            // altKeyArg,                                                        
+    false,            // shiftKeyArg,                                                      
+    false,            // metaKeyArg,                                                       
+    49,               // keyCodeArg (39 is the right arrow key ),                                                      
+    0);              // charCodeArg);
+  document.getElementById('frame_1').dispatchEvent(event);
+
+  event = document.getElementById('frame_1').createEvent('KeyboardEvent');
+  event.initKeyboardEvent("keyup",       // typeArg,                                                           
+    true,             // canBubbleArg,                                                        
+    true,             // cancelableArg,                                                       
+    null,             // viewArg,  Specifies UIEvent.view. This value may be null.     
+    false,            // ctrlKeyArg,                                                               
+    false,            // altKeyArg,                                                        
+    false,            // shiftKeyArg,                                                      
+    false,            // metaKeyArg,                                                       
+    49,               // keyCodeArg (39 is the right arrow key ),                                                      
+    0);              // charCodeArg);
+  document.getElementById('frame_1').dispatchEvent(event);
+  
+  console.log('dispatchEvent : ' + event);
+
+}
+
+function startTestkey() {
+
+  return;
+
+  if (funcInterval) {
+    stopTabInterval();
+    return;
+  }
+
+  funcInterval = window.setInterval(keygo, 5000);
+  intervalType = -1;
+
+  var b = document.getElementById('ox');
+  b.textContent = 'x';
+
+}
+*/
+
 
 </script>
