@@ -10,11 +10,6 @@
   var ppt_2 = "";
   var ppt_h = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000";
   
-  
-  //"https://jkpan.github.io/browsertools/marquee_v.html";
-  
-  
-  
 </script>
 <html>
 <head>
@@ -34,7 +29,7 @@
     display: grid;
     gap: 0px;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 24fr 1fr 1fr;
-    grid-template-rows: 1fr 31fr;
+    grid-template-rows: 1fr 63fr;
     width: 100%;
     height: 100vh;
   }
@@ -115,55 +110,42 @@
 
 <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
   
+  <!-- 歌詞 -->
   <div id="div_1" class="one" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(1)">.</button>
   </div>
+  <div id="content_txt1" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_1").src = tool_1;
+    </script>
+  </div>
+
+  <!-- 聖經 -->
   <div id="div_2" class="two" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(2)">..</button>
   </div>
-  <div id="div_3" class="three" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-      <button type="button" class="button" onclick="switchFunction(3)">...</button>
-  </div>
-  <div id="div_4" class="four" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(4)">....</button>
-  </div>
-  <div id="div_5" class="five" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(5)">*</button>
-  </div>
-  <div id="div_6" class="six" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(6)">**</button>
-  </div>
-
-  <div id="div_empty" class="seven" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-  </div>
-
-  <div id="div_help" class="eight" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <!--button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button-->
-    <button type="button" class="button" onclick="switchFunction(8)">help</button>
-  </div>
-
-  <div id="div_ox" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
-    <!--button id="ox" type="button" class="button" onclick="startTestkey()">o</button-->
-  </div>
-
-  <div id="content_txt1" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
-      <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
-      <script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_1").src = tool_1;
-      </script>
-  </div>
   <div id="content_txt2" class="content" style="background-color: yellow;margin: 0px;opacity: 1.0;">
-      <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      <script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_2").src = tool_2;
-      </script>
+    <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_2").src = tool_2;
+    </script>
+  </div>
+
+  <!-- effect -->
+  <div id="div_3" class="three" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+      <button type="button" class="button" onclick="switchFunction(3)">.</button>
   </div>
   <div id="content_txt3" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
     <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     <script type="text/javascript" charset="UTF-8">
       document.getElementById("frame_3").src = tool_3;
     </script>
+  </div>
+
+  <!--  -->
+  <div id="div_4" class="four" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(4)">..</button>
   </div>
   <div id="content_txt4" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
     <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
@@ -172,13 +154,16 @@
     </script>
   </div>
 
+  <!-- 投影片1 -->
+  <div id="div_5" class="five" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(5)">:</button>
+  </div>
   <div id="content_txt5" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <iframe id="frame_5" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
     <script type="text/javascript" charset="UTF-8">
       document.getElementById("frame_5").src = ppt_1;
     </script>
   </div>
-
   <div id="content_input_1" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
     <br/>
     <input type="text" id="ppt_url_1" name="input_url" value="" 
@@ -188,13 +173,16 @@
     <br/>
   </div>
 
+  <!-- 投影片2 -->
+  <div id="div_6" class="six" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(6)">::</button>
+  </div>
   <div id="content_txt6" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <iframe id="frame_6" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
     <script type="text/javascript" charset="UTF-8">
       document.getElementById("frame_6").src = ppt_2;
     </script>
   </div>
-
   <div id="content_input_2" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
     <br/>
     <input type="text" id="ppt_url_2" name="input_url" value="" 
@@ -204,6 +192,13 @@
     <br/>
   </div>
 
+  <!-- Gap -->
+  <div id="div_empty" class="seven" style="background-color: #007000;margin: 0px;opacity: 1.0;"></div>
+
+  <!-- Help投影片 -->
+  <div id="div_help" class="eight" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction(8)">-</button>
+  </div>
   <div id="content_txth" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <iframe id="frame_h" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
     <script type="text/javascript" charset="UTF-8">
@@ -211,6 +206,9 @@
     </script>
   </div>
 
+  <div id="div_ox" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
+  </div>
 
 </div>
 </body>
@@ -252,6 +250,14 @@ function startRestoreInterval() {
 
   var b = document.getElementById('ox');
   b.textContent = 'x';
+
+
+  var song = document.getElementById("frame_1").contentWindow;
+  song.postMessage('x', '/');
+  
+  var Bible = document.getElementById("frame_2").contentWindow;
+  Bible.postMessage('x', '/');
+  
   
 }
 
@@ -262,6 +268,13 @@ function stopTabInterval() {
 
   var b = document.getElementById('ox');
   b.textContent = 'o';
+
+  var song = document.getElementById("frame_1").contentWindow;
+  song.postMessage('o', '/');
+
+  var Bible = document.getElementById("frame_2").contentWindow;
+  Bible.postMessage('o', '/');
+
 }
 
 function saveTab2Local() {

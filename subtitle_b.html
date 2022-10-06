@@ -32767,24 +32767,15 @@ function init() {
 
 var funcInterval;
 var fake_doblank = 0;
-var intervalType = 0;
-function startActionInterval() {
-  if (funcInterval) stopActionInterval();
-  //funcInterval = window.setInterval(saveAction2Local, 100);
-  intervalType = 1;
-}
-
 function startRestoreInterval() {
   if (funcInterval) stopActionInterval();
   funcInterval = window.setInterval(restoreActionFromLocal, 100);
-  intervalType = -1;
 }
 
 function stopActionInterval() {
   if (funcInterval) 
     clearInterval(funcInterval);
   funcInterval = null;
-  intervalType = 0;
   localStorage.removeItem('save action');
 }
 
@@ -32890,7 +32881,7 @@ function _newBtn() {
 
   button.style.width = '200px'; // setting the width to 200px
   button.style.height = '75px'; // setting the height to 200px
-  
+
   button.style.background = color_pointer[2];//'rgb(0,180,0)'; // setting the background color to teal
   button.style.color = bgcolor_pointer;//color_pointer[1];// 'green'; // setting the color to white
   button.style.fontSize = '20px'; // setting the font size to 20px
@@ -33476,6 +33467,13 @@ function _render(progress) {
     ctx.textAlign = "left";
   }
 
+  if (funcInterval) {
+    ctx.fillStyle = color_pointer[2];
+    let _r = fontsize_sml_sml/4;
+    ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
+  }
+
+  /*
   if (intervalType != 0) {
     ctx.fillStyle = color_pointer[2];
     let _r = fontsize_sml_sml/4;
@@ -33488,6 +33486,7 @@ function _render(progress) {
       ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
     }
   }
+  */
 
   ctx.textBaseline = 'alphabetic';
 
@@ -33714,7 +33713,7 @@ function combineKey(e) {
         break;
   }
   
-  if (intervalType == 1) saveAction2Local();
+  if (!funcInterval) saveAction2Local();
 
   _repaint();
 }
@@ -33767,7 +33766,7 @@ function jump2preset(ps) {
         break;
     }
   }
-  if (intervalType == 1) saveAction2Local();
+  if (!funcInterval) saveAction2Local();
 }
 
 function keyboard(e) { //key up
@@ -33791,18 +33790,8 @@ function keyboard(e) { //key up
           
     switch (e.keyCode) {
 
-      case 112:
-        e.preventDefault();
-        e.stopPropagation();
-      case 119:      
-        if (intervalType != 0) {
-          stopActionInterval();
-          break;
-        }
-        startActionInterval(); 
-        break;
       case 113:
-        if (intervalType != 0) {
+        if (funcInterval) {
           stopActionInterval();
           break;
         }
@@ -33939,7 +33928,7 @@ function keyboard(e) { //key up
             line = _line;
             if (mode == 0 && queue.length > 0) {
               operateQuene(2, e.keyCode == 37?1:0);
-              if (intervalType == 1) saveAction2Local();
+              if (!funcInterval) saveAction2Local();
               return;
             }
           }
@@ -33963,7 +33952,7 @@ function keyboard(e) { //key up
             line  = _line;
             if (mode == 0 && queue.length > 0) {
               operateQuene(1, e.keyCode == 39?1:0);
-              if (intervalType == 1) saveAction2Local();
+              if (!funcInterval) saveAction2Local();
               return;
             }
           }
@@ -34086,7 +34075,7 @@ function keyboard(e) { //key up
           break;
     }
 
-    if (intervalType == 1) saveAction2Local();
+    if (!funcInterval) saveAction2Local();
 
     _repaint();
 
@@ -34223,6 +34212,19 @@ function blank() {
 */
 
 init();
+
+
+function receiveMessage(e) {
+  if (e.data == 'x') { //alert(e.data);
+    startRestoreInterval();
+  }
+  if (e.data == 'o') { //alert(e.data);
+    stopActionInterval();
+  }
+  _repaint();
+}
+// 監聽 message 事件
+window.addEventListener('message', receiveMessage, false);
 
 var keylock = 0;
 
