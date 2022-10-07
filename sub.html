@@ -15,7 +15,7 @@
 <head>
   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
   <!--meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8"/-->
-  <style>   
+  <style>
   body {
     margin: 0px;
     height: 100%;
@@ -74,6 +74,12 @@
     grid-column: 1 /10;
     grid-row: 2 / 3;
   }
+  
+  .fullcontent {
+    grid-column: 1 /10;
+    grid-row: 1 / 3;
+  }
+
   .button {
     font-size: 24px;
     background-color:transparent;
@@ -114,55 +120,25 @@
   <div id="div_1" class="one" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(1)">.</button>
   </div>
-  <div id="content_txt1" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_1").src = tool_1;
-    </script>
-  </div>
-
+  
   <!-- 聖經 -->
   <div id="div_2" class="two" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(2)">..</button>
   </div>
-  <div id="content_txt2" class="content" style="background-color: yellow;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_2").src = tool_2;
-    </script>
-  </div>
-
-  <!-- effect -->
+  
+  <!-- Effect -->
   <div id="div_3" class="three" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction(3)">.</button>
   </div>
-  <div id="content_txt3" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_3").src = tool_3;
-    </script>
-  </div>
-
-  <!--  -->
+  
+  <!-- News -->
   <div id="div_4" class="four" style="background-color: #007000;margin: 0px;opacity: 1.0;">
     <button type="button" class="button" onclick="switchFunction(4)">..</button>
   </div>
-  <div id="content_txt4" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_4").src = tool_4;
-    </script>
-  </div>
-
+  
   <!-- 投影片1 -->
   <div id="div_5" class="five" style="background-color: #007000;margin: 0px;opacity: 1.0;">
     <button type="button" class="button" onclick="switchFunction(5)">:</button>
-  </div>
-  <div id="content_txt5" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_5" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
-    <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_5").src = ppt_1;
-    </script>
   </div>
   <div id="content_input_1" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
     <br/>
@@ -176,12 +152,6 @@
   <!-- 投影片2 -->
   <div id="div_6" class="six" style="background-color: #007000;margin: 0px;opacity: 1.0;">
     <button type="button" class="button" onclick="switchFunction(6)">::</button>
-  </div>
-  <div id="content_txt6" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_6" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
-    <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_6").src = ppt_2;
-    </script>
   </div>
   <div id="content_input_2" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
     <br/>
@@ -206,9 +176,59 @@
     </script>
   </div>
 
+  <!-- full screen CONTENT -->
+  <!-- 歌詞 -->
+  <div id="content_txt1" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
+      <script type="text/javascript" charset="UTF-8">
+        document.getElementById("frame_1").src = tool_1;
+      </script>
+  </div>
+
+  <!-- 聖經 -->
+  <div id="content_txt2" class="content" style="background-color: yellow;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      <script type="text/javascript" charset="UTF-8">
+        document.getElementById("frame_2").src = tool_2;
+      </script>
+  </div>
+
+  <!-- Effect -->
+  <div id="content_txt3" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_3").src = tool_3;
+    </script>
+  </div>
+
+  <!-- News -->
+  <div id="content_txt4" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_4").src = tool_4;
+    </script>
+  </div>
+
+  <!-- 投影片1 -->
+  <div id="content_txt5" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_5" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+      <script type="text/javascript" charset="UTF-8">
+        document.getElementById("frame_5").src = ppt_1;
+      </script>
+  </div>
+
+  <!-- 投影片2 -->
+  <div id="content_txt6" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_6" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+      <script type="text/javascript" charset="UTF-8">
+        document.getElementById("frame_6").src = ppt_2;
+      </script>
+  </div>
+
   <div id="div_ox" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
     <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
   </div>
+
 
 </div>
 </body>
@@ -251,6 +271,14 @@ function startRestoreInterval() {
   var b = document.getElementById('ox');
   b.textContent = 'x';
 
+  document.getElementById('content_txt1').className = "fullcontent";
+  document.getElementById('content_txt2').className = "fullcontent";
+  document.getElementById('content_txt3').className = "fullcontent";
+  document.getElementById('content_txt4').className = "fullcontent";
+        
+  document.getElementById('content_txt5').className = "fullcontent";
+  document.getElementById('content_txt6').className = "fullcontent";
+  //document.getElementById('content_txth').className = "fullcontent";
 
   var song = document.getElementById("frame_1").contentWindow;
   song.postMessage('x', '/');
@@ -268,6 +296,16 @@ function stopTabInterval() {
 
   var b = document.getElementById('ox');
   b.textContent = 'o';
+
+  document.getElementById('content_txt1').className = "content";
+  document.getElementById('content_txt2').className = "content";
+  document.getElementById('content_txt3').className = "content";
+  document.getElementById('content_txt4').className = "content";
+        
+  document.getElementById('content_txt5').className = "content";
+  document.getElementById('content_txt6').className = "content";
+  //document.getElementById('content_txth').className = "content";
+
 
   var song = document.getElementById("frame_1").contentWindow;
   song.postMessage('o', '/');
@@ -376,74 +414,8 @@ function _switchFunction(idx) {
     
 }
 
-tab = 1
-_switchFunction(tab);
-document.getElementById('frame_1').focus();
-
-/*
-window.addEventListener('keydown', function(e) {
-  //e.preventDefault();
-  //e.stopPropagation();
-  //console.dir(e);
-  document.getElementById('frame_5').postMessage(e);//dispatchEvent(e);
-}, true);
-
-window.addEventListener('keyup', function(e) {
-  //e.preventDefault();
-  //e.stopPropagation();
-  //console.dir(e);
-  document.getElementById('frame_5').postMessage(e);
-}, true);
-
-function keygo() {
-  
-  var event = document.getElementById('frame_1').createEvent('KeyboardEvent'); // create a key event define the event
-  event.initKeyboardEvent("keydown",       // typeArg,                                                           
-    true,             // canBubbleArg,                                                        
-    true,             // cancelableArg,                                                       
-    null,             // viewArg,  Specifies UIEvent.view. This value may be null.     
-    false,            // ctrlKeyArg,                                                               
-    false,            // altKeyArg,                                                        
-    false,            // shiftKeyArg,                                                      
-    false,            // metaKeyArg,                                                       
-    49,               // keyCodeArg (39 is the right arrow key ),                                                      
-    0);              // charCodeArg);
-  document.getElementById('frame_1').dispatchEvent(event);
-
-  event = document.getElementById('frame_1').createEvent('KeyboardEvent');
-  event.initKeyboardEvent("keyup",       // typeArg,                                                           
-    true,             // canBubbleArg,                                                        
-    true,             // cancelableArg,                                                       
-    null,             // viewArg,  Specifies UIEvent.view. This value may be null.     
-    false,            // ctrlKeyArg,                                                               
-    false,            // altKeyArg,                                                        
-    false,            // shiftKeyArg,                                                      
-    false,            // metaKeyArg,                                                       
-    49,               // keyCodeArg (39 is the right arrow key ),                                                      
-    0);              // charCodeArg);
-  document.getElementById('frame_1').dispatchEvent(event);
-  
-  console.log('dispatchEvent : ' + event);
-
-}
-
-function startTestkey() {
-
-  return;
-
-  if (funcInterval) {
-    stopTabInterval();
-    return;
-  }
-
-  funcInterval = window.setInterval(keygo, 5000);
-  intervalType = -1;
-
-  var b = document.getElementById('ox');
-  b.textContent = 'x';
-
-}
-*/
-
+//tab = 1;
+switchFunction(1);
+//document.getElementById('frame_1').focus();
 
 </script>

@@ -33445,8 +33445,8 @@ function _render(progress) {
 
     if (color_selection > 0) 
       ctx.fillStyle = 'rgba(155, 155, 155, 0.66)';
-    ctx.font = (fs * 1.5) + 'px Arial';
-    ctx.fillText(subtitles[0][0], 4, 2);
+    ctx.font = (fs * 1.2) + 'px Arial';
+    ctx.fillText(subtitles[0][0], 10, 2);
     let gap = ctx.measureText(subtitles[0][0]).width + 20;
     ctx.font = (fs-4) + 'px Arial';
     for (let idx = 1;idx <= presetVerse.length;idx++) {
@@ -33469,8 +33469,9 @@ function _render(progress) {
 
   if (funcInterval) {
     ctx.fillStyle = color_pointer[2];
-    let _r = fontsize_sml_sml/4;
-    ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
+    let _r = fontsize_sml_sml/5;
+    ctx.fillRect(0, 0, _r * 2, _r * 2);
+    //ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
   }
 
   /*
