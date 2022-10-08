@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <script type="text/javascript" charset="UTF-8">
 
-  var tool_1 = 'subtitle.html';
-  var tool_2 = 'subtitle_b.html';
-  var tool_3 = 'effect.html';
-  var tool_4 = 'marquee_v.html';
+  var tool_song = 'subtitle.html';
+  var tool_Bible = 'subtitle_b.html';
+  var tool_effect = 'effect.html';
+  var tool_news = 'marquee_v.html';
 
   var ppt_1 = "";
   var ppt_2 = "";
+  var ppt_3 = "";
   var ppt_h = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000";
   
 </script>
@@ -28,7 +29,7 @@
   .wrapper {
     display: grid;
     gap: 0px;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 24fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 22fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 63fr;
     width: 100%;
     height: 100vh;
@@ -69,14 +70,22 @@
     grid-column: 9 / 10;
     grid-row: 1 / 2;
   }
+  .ten {
+    grid-column: 10 / 11;
+    grid-row: 1 / 2;
+  }
+  .eleven {
+    grid-column: 11 / 12;
+    grid-row: 1 / 2;
+  }
 
   .content {
-    grid-column: 1 /10;
+    grid-column: 1 /12;
     grid-row: 2 / 3;
   }
   
   .fullcontent {
-    grid-column: 1 /10;
+    grid-column: 1 /12;
     grid-row: 1 / 3;
   }
 
@@ -110,6 +119,39 @@
       height: 75px;
       border: none;
   }
+
+  .spliter {
+    display: grid;
+    gap: 0px;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 2fr 1fr;
+    width: 100%;
+    height: 100%;
+  }
+  .splitertop {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+  }
+  .spliterbottom {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+  }
+
+  .spliterleft {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+  }
+  .spliterright {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+  }
+
+  .spliterall {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+  }
+
+
   </style>
 </head>
 <body>
@@ -117,28 +159,28 @@
 <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
   
   <!-- 歌詞 -->
-  <div id="div_1" class="one" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-      <button type="button" class="button" onclick="switchFunction(1)">.</button>
+  <div id="div_song" class="one" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+      <button type="button" class="button" onclick="switchFunction('song')">.</button>
   </div>
   
   <!-- 聖經 -->
-  <div id="div_2" class="two" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-      <button type="button" class="button" onclick="switchFunction(2)">..</button>
+  <div id="div_Bible" class="two" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+      <button type="button" class="button" onclick="switchFunction('Bible')">..</button>
   </div>
   
   <!-- Effect -->
-  <div id="div_3" class="three" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-      <button type="button" class="button" onclick="switchFunction(3)">.</button>
+  <div id="div_effect" class="three" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+      <button type="button" class="button" onclick="switchFunction('effect')">.</button>
   </div>
   
   <!-- News -->
-  <div id="div_4" class="four" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(4)">..</button>
+  <div id="div_news" class="four" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction('news')">..</button>
   </div>
   
   <!-- 投影片1 -->
-  <div id="div_5" class="five" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(5)">:</button>
+  <div id="div_slide1" class="five" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction('slide1')">:</button>
   </div>
   <div id="content_input_1" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
     <br/>
@@ -150,8 +192,8 @@
   </div>
 
   <!-- 投影片2 -->
-  <div id="div_6" class="six" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(6)">::</button>
+  <div id="div_slide2" class="six" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction('slide2')">::</button>
   </div>
   <div id="content_input_2" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
     <br/>
@@ -162,13 +204,27 @@
     <br/>
   </div>
 
-  <!-- Gap -->
-  <div id="div_empty" class="seven" style="background-color: #007000;margin: 0px;opacity: 1.0;"></div>
-
-  <!-- Help投影片 -->
-  <div id="div_help" class="eight" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction(8)">-</button>
+  <!-- 投影片3 -->
+  <div id="div_slide3" class="seven" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction('slide3')">:.</button>
   </div>
+  <div id="content_input_3" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
+    <br/>
+    <input type="text" id="ppt_url_3" name="input_url" value="" 
+           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
+           placeholder="" />
+    <button class="okbutton" type="button" onclick="slideGo3()">OK</button>
+    <br/>
+  </div>
+
+  <!-- Gap -->
+  <div id="div_empty" class="eight" style="background-color: #007000;margin: 0px;opacity: 1.0;"></div>
+
+  <!-- Help投影片 
+  <div id="div_help" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction('help')">-</button>
+  </div>
+  -->
   <div id="content_txth" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <iframe id="frame_h" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
     <script type="text/javascript" charset="UTF-8">
@@ -178,71 +234,173 @@
 
   <!-- full screen CONTENT -->
   <!-- 歌詞 -->
-  <div id="content_txt1" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
+  <div id="content_song" class="content" style="background-color: cyan;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_song" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
       <script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_1").src = tool_1;
+        document.getElementById("frame_song").src = tool_song;
       </script>
   </div>
 
   <!-- 聖經 -->
-  <div id="content_txt2" class="content" style="background-color: yellow;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+  <div id="content_Bible" class="content" style="background-color: yellow;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_Bible" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
       <script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_2").src = tool_2;
+        document.getElementById("frame_Bible").src = tool_Bible;
       </script>
   </div>
 
   <!-- Effect -->
-  <div id="content_txt3" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+  <div id="content_effect" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_effect" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_3").src = tool_3;
+      document.getElementById("frame_effect").src = tool_effect;
     </script>
   </div>
 
   <!-- News -->
-  <div id="content_txt4" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+  <div id="content_news" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_news" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_4").src = tool_4;
+      document.getElementById("frame_news").src = tool_news;
     </script>
   </div>
 
   <!-- 投影片1 -->
-  <div id="content_txt5" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_5" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+  <div id="content_slide1" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_slide1" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
       <script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_5").src = ppt_1;
+        document.getElementById("frame_slide1").src = ppt_1;
       </script>
   </div>
 
   <!-- 投影片2 -->
-  <div id="content_txt6" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_6" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+  <!--div id="content_slide2" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_slide2" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
       <script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_6").src = ppt_2;
+        document.getElementById("frame_slide2").src = ppt_2;
       </script>
+  </div-->
+  <div id="content_slide2" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <div class="spliter" style="background-color: black;margin: 0px;opacity: 1.0;">
+      <div id="slide2_main" class="splitertop" style="background-color: black;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_slide2" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+        <script type="text/javascript" charset="UTF-8">
+          document.getElementById("frame_slide2").src = ppt_2;
+        </script>
+      </div>
+      <div id="slide2_sub" class="spliterbottom" style="background-color: black;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_Bible_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
+    </div>
   </div>
 
-  <div id="div_ox" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+  <!-- 投影片3 -->
+  <!--div id="content_slide3" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_slide3" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+        <script type="text/javascript" charset="UTF-8">
+          document.getElementById("frame_slide3").src = ppt_3;
+        </script>
+  </div-->
+  <div id="content_slide3" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+    <div class="spliter" style="background-color: black;margin: 0px;opacity: 1.0;">
+      <div id="slide3_main" class="spliterleft" style="background-color: black;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_slide3" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
+        <script type="text/javascript" charset="UTF-8">
+          document.getElementById("frame_slide3").src = ppt_3;
+        </script>
+      </div>
+      <div id="slide3_sub" class="spliterright" style="background-color: black;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_Bible_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
+    </div>
+  </div>
+  
+  <div id="div_layout" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="somelayout()">=</button>
+  </div>
+
+  <div id="div_help" class="ten" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="fullScreen()">-</button>
+  </div>
+
+  <div id="div_ox" class="eleven" style="background-color: #007000;margin: 0px;opacity: 1.0;">
     <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
   </div>
 
-
 </div>
+
+
+
 </body>
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function fullScreen() {
+  if (document.getElementById('content_song').className == 'fullcontent') {
+    document.getElementById('content_song').className = "content";
+    document.getElementById('content_Bible').className = "content";
+    document.getElementById('content_effect').className = "content";
+    document.getElementById('content_news').className = "content";
+        
+    document.getElementById('content_slide1').className = "content";
+    document.getElementById('content_slide2').className = "content";
+    document.getElementById('content_slide3').className = "content";
+    //document.getElementById('content_txth').className = "content";
+  } else {
+    document.getElementById('content_song').className = "fullcontent";
+    document.getElementById('content_Bible').className = "fullcontent";
+    document.getElementById('content_effect').className = "fullcontent";
+    document.getElementById('content_news').className = "fullcontent";
+        
+    document.getElementById('content_slide1').className = "fullcontent";
+    document.getElementById('content_slide2').className = "fullcontent";
+    document.getElementById('content_slide3').className = "fullcontent";
+    //document.getElementById('content_txth').className = "fullcontent";
+  }
+  
+}
+
+function somelayout() {
+
+  if (document.getElementById('slide2_sub').hidden) {
+    document.getElementById('slide2_main').className = 'splitertop';
+    document.getElementById('slide2_sub').hidden = false;
+    document.getElementById('slide2_sub').className = 'spliterbottom';
+  } else {
+    document.getElementById('slide2_main').className = 'spliterall';
+    document.getElementById('slide2_sub').className = 'spliterbottom';
+    document.getElementById('slide2_sub').hidden = true;
+  }
+
+  if (document.getElementById('slide3_sub').hidden) {
+    document.getElementById('slide3_main').className = 'spliterleft';
+    document.getElementById('slide3_sub').className = 'spliterright';
+    document.getElementById('slide3_sub').hidden = false;
+  } else {
+    document.getElementById('slide3_main').className = 'spliterall';
+    document.getElementById('slide3_sub').className = 'spliterright';
+    document.getElementById('slide3_sub').hidden = true;
+  }
+
+  /*
+  if (document.getElementById('slide3_main').className == 'spliterleft') {
+    document.getElementById('slide3_main').className = "splitertop";
+    document.getElementById('slide3_sub').className = "spliterbottom";
+  } else {
+    document.getElementById('slide3_main').className = "spliterleft";
+    document.getElementById('slide3_sub').className = "spliterright";
+  }
+  */
+}
 
 function slideGo() {
   let value = document.getElementById("ppt_url_1").value;//String.fromCodePoint(0x1F604);
   if (value.length == 0) 
     return;
   ppt_1 = value;
-  document.getElementById("frame_5").src = ppt_1;
-  switchFunction(5);
+  document.getElementById("frame_slide1").src = ppt_1;
+  switchFunction('slide1');
 }
 
 function slideGo2() {
@@ -250,8 +408,19 @@ function slideGo2() {
   if (value.length == 0) 
     return;
   ppt_2 = value;
-  document.getElementById("frame_6").src = ppt_2;
-  switchFunction(6);
+  document.getElementById("frame_slide2").src = ppt_2;
+  document.getElementById("frame_Bible_2").src = tool_Bible;
+  switchFunction('slide2');
+}
+
+function slideGo3() {
+  let value = document.getElementById("ppt_url_3").value;//String.fromCodePoint(0x1F604);
+  if (value.length == 0) 
+    return;
+  ppt_3 = value;
+  document.getElementById("frame_slide3").src = ppt_3;
+  document.getElementById("frame_Bible_3").src = tool_Bible;
+  switchFunction('slide3');
 }
 
 var tab;
@@ -271,21 +440,18 @@ function startRestoreInterval() {
   var b = document.getElementById('ox');
   b.textContent = 'x';
 
-  document.getElementById('content_txt1').className = "fullcontent";
-  document.getElementById('content_txt2').className = "fullcontent";
-  document.getElementById('content_txt3').className = "fullcontent";
-  document.getElementById('content_txt4').className = "fullcontent";
-        
-  document.getElementById('content_txt5').className = "fullcontent";
-  document.getElementById('content_txt6').className = "fullcontent";
-  //document.getElementById('content_txth').className = "fullcontent";
+  if (document.getElementById("frame_song").contentWindow)
+    document.getElementById("frame_song").contentWindow.postMessage('x', '/');
 
-  var song = document.getElementById("frame_1").contentWindow;
-  song.postMessage('x', '/');
+  if (document.getElementById("frame_Bible").contentWindow)
+    document.getElementById("frame_Bible").contentWindow.postMessage('x', '/');
   
-  var Bible = document.getElementById("frame_2").contentWindow;
-  Bible.postMessage('x', '/');
-  
+  if (document.getElementById("frame_Bible_2").contentWindow)
+    document.getElementById("frame_Bible_2").contentWindow.postMessage('x', '/');
+    
+  if (document.getElementById("frame_Bible_3").contentWindow)
+    document.getElementById("frame_Bible_3").contentWindow.postMessage('x', '/');
+
   
 }
 
@@ -297,21 +463,17 @@ function stopTabInterval() {
   var b = document.getElementById('ox');
   b.textContent = 'o';
 
-  document.getElementById('content_txt1').className = "content";
-  document.getElementById('content_txt2').className = "content";
-  document.getElementById('content_txt3').className = "content";
-  document.getElementById('content_txt4').className = "content";
-        
-  document.getElementById('content_txt5').className = "content";
-  document.getElementById('content_txt6').className = "content";
-  //document.getElementById('content_txth').className = "content";
+  if (document.getElementById("frame_song").contentWindow)
+    document.getElementById("frame_song").contentWindow.postMessage('o', '/');
 
+  if (document.getElementById("frame_Bible").contentWindow)
+    document.getElementById("frame_Bible").contentWindow.postMessage('o', '/');
+  
+  if (document.getElementById("frame_Bible_2").contentWindow)
+    document.getElementById("frame_Bible_2").contentWindow.postMessage('o', '/');
 
-  var song = document.getElementById("frame_1").contentWindow;
-  song.postMessage('o', '/');
-
-  var Bible = document.getElementById("frame_2").contentWindow;
-  Bible.postMessage('o', '/');
+  if (document.getElementById("frame_Bible_3").contentWindow)
+    document.getElementById("frame_Bible_3").contentWindow.postMessage('o', '/');
 
 }
 
@@ -322,88 +484,116 @@ function saveTab2Local() {
 }
 
 function restoreTabFromLocal() {
-  //console.log('restoreTabFromLocal');
   let key = 'save tab';
   let value = localStorage.getItem(key);
+  
   if (!value) return;
+  
   value = value.trim();
+  
   if (value && value.length == 0) return;
-  let _tab = parseInt(value);
+  
+  let _tab = value;//parseInt(value);
+
   if (_tab == tab) return;
+
   tab = _tab;
   _switchFunction(_tab);
+
 }
 
 function switchFunction(idx) {
   tab = idx;
   _switchFunction(idx);
+  if (keylock) return;
   saveTab2Local();
 }
 
 function _switchFunction(idx) {
+
+      /*
+      if (idx == 'layout') {
+        somelayout();
+        return;
+      }
+      */
       
-      document.getElementById('content_txt1').hidden = true;
-      document.getElementById('content_txt2').hidden = true;
-      document.getElementById('content_txt3').hidden = true;
-      document.getElementById('content_txt4').hidden = true;
+      document.getElementById('content_song').hidden = true;
+      document.getElementById('content_Bible').hidden = true;
+      document.getElementById('content_effect').hidden = true;
+      document.getElementById('content_news').hidden = true;
         
-      document.getElementById('content_txt5').hidden = true;
+      document.getElementById('content_slide1').hidden = true;
         document.getElementById('content_input_1').hidden = true;
-      document.getElementById('content_txt6').hidden = true;
+      document.getElementById('content_slide2').hidden = true;
         document.getElementById('content_input_2').hidden = true;
+      document.getElementById('content_slide3').hidden = true;
+        document.getElementById('content_input_3').hidden = true;
       document.getElementById('content_txth').hidden = true;
             
-      document.getElementById("div_1").style.background = "rgb(0,112,0)";
-      document.getElementById("div_2").style.background = "rgb(0,112,0)";
-      document.getElementById("div_3").style.background = "rgb(0,112,0)";
-      document.getElementById("div_4").style.background = "rgb(0,112,0)";
-      document.getElementById("div_5").style.background = "rgb(0,112,0)";
-      document.getElementById("div_6").style.background = "rgb(0,112,0)";
+      document.getElementById("div_song").style.background = "rgb(0,112,0)";
+      document.getElementById("div_Bible").style.background = "rgb(0,112,0)";
+      document.getElementById("div_effect").style.background = "rgb(0,112,0)";
+      document.getElementById("div_news").style.background = "rgb(0,112,0)";
+      document.getElementById("div_slide1").style.background = "rgb(0,112,0)";
+      document.getElementById("div_slide2").style.background = "rgb(0,112,0)";
+      document.getElementById("div_slide3").style.background = "rgb(0,112,0)";
       document.getElementById("div_empty").style.background = "rgb(0,112,0)";
       document.getElementById("div_help").style.background = "rgb(0,112,0)";
-     
+      document.getElementById("div_layout").style.background = "rgb(0,112,0)";
+      
       switch(idx) {
-        case 1:
-          document.getElementById("div_1").style.background = "rgb(0,128,0)";
-          document.getElementById('content_txt1').hidden = false;
-          document.getElementById('frame_1').focus();
+        case 'song':
+          document.getElementById("div_song").style.background = "rgb(0,128,0)";
+          document.getElementById('content_song').hidden = false;
+          document.getElementById('frame_song').focus();
           break;
-        case 2:
-          document.getElementById("div_2").style.background = "rgb(0,128,0)";
-          document.getElementById('content_txt2').hidden = false;
-          document.getElementById('frame_2').focus();
+        case 'Bible':
+          document.getElementById("div_Bible").style.background = "rgb(0,128,0)";
+          document.getElementById('content_Bible').hidden = false;
+          document.getElementById('frame_Bible').focus();
           break;
-        case 3:
-          document.getElementById("div_3").style.background = "rgb(0,128,0)";
-          document.getElementById('content_txt3').hidden = false;
-          document.getElementById('frame_3').focus();
+        case 'effect':
+          document.getElementById("div_effect").style.background = "rgb(0,128,0)";
+          document.getElementById('content_effect').hidden = false;
+          document.getElementById('frame_effect').focus();
           break;
-        case 4:
-          document.getElementById("div_4").style.background = "rgb(0,128,0)";
-          document.getElementById('content_txt4').hidden = false;
-          document.getElementById('frame_4').focus();
+        case 'news':
+          document.getElementById("div_news").style.background = "rgb(0,128,0)";
+          document.getElementById('content_news').hidden = false;
+          document.getElementById('frame_news').focus();
           break;
-        case 5:
-          document.getElementById("div_5").style.background = "rgb(0,128,0)";
+        case 'slide1':
+          document.getElementById("div_slide1").style.background = "rgb(0,128,0)";
           if (ppt_1.length == 0) {
             document.getElementById('content_input_1').hidden = false;
             document.getElementById('content_input_1').focus();
           } else {
-            document.getElementById('content_txt5').hidden = false;
-            document.getElementById('frame_5').focus();
+            document.getElementById('content_slide1').hidden = false;
+            document.getElementById('frame_slide1').focus();
           }
           break;
-        case 6:
-          document.getElementById("div_6").style.background = "rgb(0,128,0)";
+        case 'slide2':
+          document.getElementById("div_slide2").style.background = "rgb(0,128,0)";
           if (ppt_2.length == 0) {
             document.getElementById('content_input_2').hidden = false;
             document.getElementById('content_input_2').focus();
           } else {
-            document.getElementById('content_txt6').hidden = false;
-            document.getElementById('frame_6').focus();
+            document.getElementById('content_slide2').hidden = false;
+            document.getElementById('frame_slide2').focus();
           }
           break;
-        case 8:
+        case 'slide3':
+          document.getElementById("div_slide3").style.background = "rgb(0,128,0)";
+          if (ppt_3.length == 0) {
+            document.getElementById('content_input_3').hidden = false;
+            document.getElementById('content_input_3').focus();
+          } else {
+            document.getElementById('content_slide3').hidden = false;
+            document.getElementById('frame_slide3').focus();
+          }
+          break;
+        case 'help':
           document.getElementById("div_help").style.background = "rgb(0,128,0)";
           document.getElementById('content_txth').hidden = false;
           document.getElementById('frame_h').focus();
@@ -414,8 +604,28 @@ function _switchFunction(idx) {
     
 }
 
-//tab = 1;
-switchFunction(1);
-//document.getElementById('frame_1').focus();
+switchFunction('song');
+
+var keylock = false;
+window.addEventListener('keyup', function(e) {
+
+  if (e.keyCode == 16) {
+    keylock = false;
+  }
+
+  console.log('key up:' + e.keyCode);
+
+}, false);
+
+window.addEventListener('keydown', function(e) {
+
+  if (e.keyCode == 16) {
+    keylock = true;
+  }
+
+  console.log('key down:' + e.keyCode);
+
+}, false);
+
 
 </script>

@@ -33469,7 +33469,7 @@ function _render(progress) {
 
   if (funcInterval) {
     ctx.fillStyle = color_pointer[2];
-    let _r = fontsize_sml_sml/5;
+    let _r = 4;//fontsize_sml_sml/5;
     ctx.fillRect(0, 0, _r * 2, _r * 2);
     //ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
   }
@@ -33721,15 +33721,15 @@ function combineKey(e) {
 
 function enlargeFS() {
   fontfactor -= 0.5;
-  if (fontfactor < 8) 
-    fontfactor = 8.0;
+  if (fontfactor < 4) 
+    fontfactor = 4.0;
   init();
 }
 
 function downsizeFS() {
   fontfactor += 0.5;
-  if (fontfactor > 30) 
-    fontfactor = 30;
+  if (fontfactor > 40) 
+    fontfactor = 40;
   init();
 }
 
