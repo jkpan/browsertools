@@ -3,13 +3,14 @@
 
   var tool_song = 'subtitle.html';
   var tool_Bible = 'subtitle_b.html';
-  var tool_effect = 'effect.html';
-  var tool_news = 'marquee_v.html';
-
-  var ppt_1 = "";
-  var ppt_2 = "";
-  var ppt_3 = "";
-  var ppt_h = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000";
+  var tool_index = 'index.html';//'effect.html';
+  
+  var demo = 'https://docs.google.com/presentation/d/e/2PACX-1vQF2IcPH9tSgDnQVPQm_EbE_ZXAHZj-9lX4-Gb9zsdAhlyiC8LhQrTwHs0f-5OZ2g/embed?start=false&loop=false&delayms=3000';
+  var ppt = [demo, //'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000',
+             '', 
+             '', 
+             ''];
+  var pptype = [0, 0, 0, 0];
   
 </script>
 <html>
@@ -26,6 +27,35 @@
   ::-webkit-scrollbar {
     display: none;
   }
+  input[type=text] {
+        width:60%;
+        border:2px solid #0d0;
+        border-radius: 4px;
+        margin: 2% 2%;
+        outline: none;
+        padding: 8px;
+        box-sizing: border-box;
+  }
+  input[type=text]:focus {
+        border-color: #00ff00;
+        box-shadow: 0 0 8px 0 #007000;
+  }
+  ::selection {
+    color: #007000;
+    background: #00ff00;
+    border-color: #00ff00;
+    box-shadow: 0 0 8px 0 #007000;
+  }
+  .select {
+            font-size: 28px;
+            height: 40px;
+            border: none;
+            border-radius: 3px;
+            vertical-align: middle;
+            margin: 2% 2%;
+            color: #00ff00;
+
+        }
   .wrapper {
     display: grid;
     gap: 0px;
@@ -98,19 +128,6 @@
     border: none;
     vertical-align: middle;
   }
-  input[type=text] {
-        width:60%;
-        border:2px solid #aaa;
-        border-radius: 4px;
-        margin: 2% 2%;
-        outline: none;
-        padding: 8px;
-        box-sizing: border-box;
-  }
-  input[type=text]:focus {
-        border-color: dodgerblue;
-        box-shadow: 0 0 8px 0 dodgerblue;
-  }
   .okbutton {
       font-size: 24px;
       background-color:green;
@@ -119,7 +136,6 @@
       height: 75px;
       border: none;
   }
-
   .spliter {
     display: grid;
     gap: 0px;
@@ -165,72 +181,57 @@
   
   <!-- 聖經 -->
   <div id="div_Bible" class="two" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-      <button type="button" class="button" onclick="switchFunction('Bible')">..</button>
+      <button type="button" class="button" onclick="switchFunction('Bible')">.</button>
   </div>
   
-  <!-- Effect -->
+  <!-- index -->
   <div id="div_effect" class="three" style="background-color: #007000;margin: 0px;opacity: 1.0;">
       <button type="button" class="button" onclick="switchFunction('effect')">.</button>
   </div>
   
-  <!-- News -->
+  <!-- index -->
   <div id="div_news" class="four" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction('news')">..</button>
+    <button type="button" class="button" onclick="switchFunction('news')">.</button>
   </div>
-  
-  <!-- 投影片1 -->
-  <div id="div_slide1" class="five" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction('slide1')">:</button>
-  </div>
-  <div id="content_input_1" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
+
+  <!-- 輸入 -->
+  <div id="content_input" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
     <br/>
-    <input type="text" id="ppt_url_1" name="input_url" value="" 
+    <input type="text" id="ppt_url" name="input_url" value="" 
            style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
            placeholder="" />
+    <script type="text/javascript" charset="UTF-8">
+        document.getElementById("ppt_url").value = ppt[0];
+    </script>
+    <br/>
+    <select id="Bibletype" style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;">
+      <option value="0" selected>投影片</option>
+      <option value="1">投影片左 經文右</option>
+      <option value="2">投影片中 經文右</option>
+      <option value="3">投影片上 經文下</option>
+      <option value="4">投影片中 經文下</option>
+    </select>
     <button class="okbutton" type="button" onclick="slideGo()">OK</button>
     <br/>
   </div>
 
+  <!-- 投影片1 -->
+  <div id="div_slide1" class="five" style="background-color: #007000;margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="switchFunction('slide1')">:</button>
+  </div>
+  
   <!-- 投影片2 -->
   <div id="div_slide2" class="six" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction('slide2')">::</button>
+    <button type="button" class="button" onclick="switchFunction('slide2')">:</button>
   </div>
-  <div id="content_input_2" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
-    <br/>
-    <input type="text" id="ppt_url_2" name="input_url" value="" 
-           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
-           placeholder="" />
-    <button class="okbutton" type="button" onclick="slideGo2()">OK</button>
-    <br/>
-  </div>
-
+  
   <!-- 投影片3 -->
   <div id="div_slide3" class="seven" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction('slide3')">:.</button>
-  </div>
-  <div id="content_input_3" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
-    <br/>
-    <input type="text" id="ppt_url_3" name="input_url" value="" 
-           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
-           placeholder="" />
-    <button class="okbutton" type="button" onclick="slideGo3()">OK</button>
-    <br/>
+    <button type="button" class="button" onclick="switchFunction('slide3')">:</button>
   </div>
 
   <!-- Gap -->
   <div id="div_empty" class="eight" style="background-color: #007000;margin: 0px;opacity: 1.0;"></div>
-
-  <!-- Help投影片 
-  <div id="div_help" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="switchFunction('help')">-</button>
-  </div>
-  -->
-  <div id="content_txth" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_h" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
-    <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_h").src = ppt_h;
-    </script>
-  </div>
 
   <!-- full screen CONTENT -->
   <!-- 歌詞 -->
@@ -253,7 +254,7 @@
   <div id="content_effect" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
     <iframe id="frame_effect" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_effect").src = tool_effect;
+      document.getElementById("frame_effect").src = tool_index;
     </script>
   </div>
 
@@ -261,32 +262,27 @@
   <div id="content_news" class="content" style="background-color: magenta;margin: 0px;opacity: 1.0;">
     <iframe id="frame_news" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_news").src = tool_news;
+      document.getElementById("frame_news").src = tool_index;
     </script>
   </div>
 
   <!-- 投影片1 -->
   <div id="content_slide1" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_slide1" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
-      <script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_slide1").src = ppt_1;
-      </script>
+    <div class="spliter" style="background-color: black;margin: 0px;opacity: 1.0;">
+      <div id="slide1_main" class="splitertop" style="background-color: black;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_slide1" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
+      </div>
+      <div id="slide1_sub" class="spliterbottom" style="background-color: black;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_Bible_1" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
+    </div>
   </div>
 
   <!-- 投影片2 -->
-  <!--div id="content_slide2" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_slide2" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
-      <script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_slide2").src = ppt_2;
-      </script>
-  </div-->
   <div id="content_slide2" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <div class="spliter" style="background-color: black;margin: 0px;opacity: 1.0;">
       <div id="slide2_main" class="splitertop" style="background-color: black;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_slide2" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
-        <script type="text/javascript" charset="UTF-8">
-          document.getElementById("frame_slide2").src = ppt_2;
-        </script>
+        <iframe id="frame_slide2" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
       </div>
       <div id="slide2_sub" class="spliterbottom" style="background-color: black;margin: 0px;opacity: 1.0;">
         <iframe id="frame_Bible_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
@@ -295,36 +291,27 @@
   </div>
 
   <!-- 投影片3 -->
-  <!--div id="content_slide3" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_slide3" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
-        <script type="text/javascript" charset="UTF-8">
-          document.getElementById("frame_slide3").src = ppt_3;
-        </script>
-  </div-->
   <div id="content_slide3" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <div class="spliter" style="background-color: black;margin: 0px;opacity: 1.0;">
-      <div id="slide3_main" class="spliterleft" style="background-color: black;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_slide3" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>  
-        <script type="text/javascript" charset="UTF-8">
-          document.getElementById("frame_slide3").src = ppt_3;
-        </script>
+      <div id="slide3_main" class="splitertop" style="background-color: black;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_slide3" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
       </div>
-      <div id="slide3_sub" class="spliterright" style="background-color: black;margin: 0px;opacity: 1.0;">
+      <div id="slide3_sub" class="spliterbottom" style="background-color: black;margin: 0px;opacity: 1.0;">
         <iframe id="frame_Bible_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
       </div>
     </div>
   </div>
   
-  <div id="div_layout" class="nine" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="somelayout()">=</button>
+  <div id="div_layout" class="nine" style="margin: 0px;opacity: 1.0;">
+    <button id="layoutBtn" type="button" class="button" onclick="somelayout()">+</button>
   </div>
 
-  <div id="div_help" class="ten" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button type="button" class="button" onclick="fullScreen()">-</button>
+  <div id="div_fs" class="ten" style="margin: 0px;opacity: 1.0;">
+    <button type="button" class="button" onclick="fullScreen()">[]</button>
   </div>
 
-  <div id="div_ox" class="eleven" style="background-color: #007000;margin: 0px;opacity: 1.0;">
-    <button id="ox" type="button" class="button" onclick="startRestoreInterval()">o</button>
+  <div id="div_ox" class="eleven" style="margin: 0px;opacity: 1.0;">
+    <button id="oxBtn" type="button" class="button" onclick="startRestoreInterval()">o</button>
   </div>
 
 </div>
@@ -346,7 +333,7 @@ function fullScreen() {
     document.getElementById('content_slide1').className = "content";
     document.getElementById('content_slide2').className = "content";
     document.getElementById('content_slide3').className = "content";
-    //document.getElementById('content_txth').className = "content";
+    
   } else {
     document.getElementById('content_song').className = "fullcontent";
     document.getElementById('content_Bible').className = "fullcontent";
@@ -356,71 +343,122 @@ function fullScreen() {
     document.getElementById('content_slide1').className = "fullcontent";
     document.getElementById('content_slide2').className = "fullcontent";
     document.getElementById('content_slide3').className = "fullcontent";
-    //document.getElementById('content_txth').className = "fullcontent";
+    
   }
   
 }
 
 function somelayout() {
 
-  if (document.getElementById('slide2_sub').hidden) {
-    document.getElementById('slide2_main').className = 'splitertop';
-    document.getElementById('slide2_sub').hidden = false;
-    document.getElementById('slide2_sub').className = 'spliterbottom';
-  } else {
-    document.getElementById('slide2_main').className = 'spliterall';
-    document.getElementById('slide2_sub').className = 'spliterbottom';
-    document.getElementById('slide2_sub').hidden = true;
-  }
+  for (let idx = 1;idx<=3;idx++) {
+    let _main = 'slide' + idx + '_main';
+    let _sub =  'slide' + idx + '_sub';
+    let elementMain = document.getElementById(_main);
+    let elementSub = document.getElementById(_sub);
 
-  if (document.getElementById('slide3_sub').hidden) {
-    document.getElementById('slide3_main').className = 'spliterleft';
-    document.getElementById('slide3_sub').className = 'spliterright';
-    document.getElementById('slide3_sub').hidden = false;
-  } else {
-    document.getElementById('slide3_main').className = 'spliterall';
-    document.getElementById('slide3_sub').className = 'spliterright';
-    document.getElementById('slide3_sub').hidden = true;
+    switch(pptype[idx]) {
+    case 0: return;
+    case 1: 
+      elementSub.hidden = !elementSub.hidden;
+      if (elementSub.hidden) {
+        elementMain.className = 'spliterall';
+      } else {
+        elementMain.className = 'spliterleft';
+      }
+      break;
+    case 2:   
+      elementSub.hidden = !elementSub.hidden;
+      break;
+    case 3: 
+      elementSub.hidden = !elementSub.hidden;
+      if (elementSub.hidden) {
+        elementMain.className = 'spliterall';
+      } else {
+        elementMain.className = 'splitertop';
+      }
+      break;
+    case 4: 
+      elementSub.hidden = !elementSub.hidden;
+      break;
+    }
   }
 
   /*
-  if (document.getElementById('slide3_main').className == 'spliterleft') {
-    document.getElementById('slide3_main').className = "splitertop";
-    document.getElementById('slide3_sub').className = "spliterbottom";
-  } else {
-    document.getElementById('slide3_main').className = "spliterleft";
-    document.getElementById('slide3_sub').className = "spliterright";
+  let idx = 0;
+  let type = 0;
+
+  switch (tab) {
+    case 'slide1': idx = 1; break;
+    case 'slide2': idx = 2; break;
+    case 'slide3': idx = 3; break;
+    default: return;
   }
   */
+  
+ 
 }
+
 
 function slideGo() {
-  let value = document.getElementById("ppt_url_1").value;//String.fromCodePoint(0x1F604);
-  if (value.length == 0) 
-    return;
-  ppt_1 = value;
-  document.getElementById("frame_slide1").src = ppt_1;
-  switchFunction('slide1');
-}
 
-function slideGo2() {
-  let value = document.getElementById("ppt_url_2").value;//String.fromCodePoint(0x1F604);
-  if (value.length == 0) 
-    return;
-  ppt_2 = value;
-  document.getElementById("frame_slide2").src = ppt_2;
-  document.getElementById("frame_Bible_2").src = tool_Bible;
-  switchFunction('slide2');
-}
+  let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
+  if (value.length == 0) return;
+  
+  let sel = document.getElementById('Bibletype');
+  let type = parseInt(sel.options[sel.options.selectedIndex].value, 10); //alert('sel : ' + type);
 
-function slideGo3() {
-  let value = document.getElementById("ppt_url_3").value;//String.fromCodePoint(0x1F604);
-  if (value.length == 0) 
+  let idx = 0;
+
+  if (tab == 'slide1') 
+    idx = 1;
+  else if (tab == 'slide2') 
+    idx = 2;
+  else if (tab == 'slide3') 
+    idx = 3;
+  else 
     return;
-  ppt_3 = value;
-  document.getElementById("frame_slide3").src = ppt_3;
-  document.getElementById("frame_Bible_3").src = tool_Bible;
-  switchFunction('slide3');
+
+  ppt[idx] = value;
+  pptype[idx] = type;
+  document.getElementById('frame_slide' + idx).src = ppt[idx];
+  
+
+  let _main = 'slide' + idx + '_main';
+  let _sub =  'slide' + idx + '_sub';
+  switch(pptype[idx]) {
+    case 0:
+      document.getElementById(_main).className = 'spliterall';
+      document.getElementById(_sub).hidden = true;
+      document.getElementById('frame_Bible_' + idx).src = '';
+      break;
+    case 1:
+      document.getElementById(_main).className = 'spliterleft';
+      document.getElementById(_sub).hidden = false;
+      document.getElementById('frame_Bible_' + idx).src = tool_Bible;
+      document.getElementById(_sub).className = 'spliterright';
+      break;
+    case 2:
+      document.getElementById(_main).className = 'spliterall';
+      document.getElementById(_sub).hidden = false;
+      document.getElementById('frame_Bible_' + idx).src = tool_Bible;
+      document.getElementById(_sub).className = 'spliterright';
+      break;
+    case 3:
+      document.getElementById(_main).className = 'splitertop';
+      document.getElementById(_sub).hidden = false;
+      document.getElementById('frame_Bible_' + idx).src = tool_Bible;
+      document.getElementById(_sub).className = 'spliterbottom';
+      break;
+    case 4:
+      document.getElementById(_main).className = 'spliterall';
+      document.getElementById(_sub).hidden = false;
+      document.getElementById('frame_Bible_' + idx).src = tool_Bible;
+      document.getElementById(_sub).className = 'spliterbottom';
+      break;
+  }
+
+  switchFunction('slide' + idx);
+
 }
 
 var tab;
@@ -437,14 +475,14 @@ function startRestoreInterval() {
   funcInterval = window.setInterval(restoreTabFromLocal, 500);
   intervalType = -1;
 
-  var b = document.getElementById('ox');
+  var b = document.getElementById('oxBtn');
   b.textContent = 'x';
 
   if (document.getElementById("frame_song").contentWindow)
     document.getElementById("frame_song").contentWindow.postMessage('x', '/');
 
-  if (document.getElementById("frame_Bible").contentWindow)
-    document.getElementById("frame_Bible").contentWindow.postMessage('x', '/');
+  if (document.getElementById("frame_Bible_1").contentWindow)
+    document.getElementById("frame_Bible_1").contentWindow.postMessage('x', '/');
   
   if (document.getElementById("frame_Bible_2").contentWindow)
     document.getElementById("frame_Bible_2").contentWindow.postMessage('x', '/');
@@ -460,14 +498,14 @@ function stopTabInterval() {
   funcInterval = null;
   intervalType = 0;
 
-  var b = document.getElementById('ox');
+  var b = document.getElementById('oxBtn');
   b.textContent = 'o';
 
   if (document.getElementById("frame_song").contentWindow)
     document.getElementById("frame_song").contentWindow.postMessage('o', '/');
 
-  if (document.getElementById("frame_Bible").contentWindow)
-    document.getElementById("frame_Bible").contentWindow.postMessage('o', '/');
+  if (document.getElementById("frame_Bible_1").contentWindow)
+    document.getElementById("frame_Bible_1").contentWindow.postMessage('o', '/');
   
   if (document.getElementById("frame_Bible_2").contentWindow)
     document.getElementById("frame_Bible_2").contentWindow.postMessage('o', '/');
@@ -510,26 +548,16 @@ function switchFunction(idx) {
 }
 
 function _switchFunction(idx) {
-
-      /*
-      if (idx == 'layout') {
-        somelayout();
-        return;
-      }
-      */
       
       document.getElementById('content_song').hidden = true;
       document.getElementById('content_Bible').hidden = true;
       document.getElementById('content_effect').hidden = true;
       document.getElementById('content_news').hidden = true;
         
+      document.getElementById('content_input').hidden = true;
       document.getElementById('content_slide1').hidden = true;
-        document.getElementById('content_input_1').hidden = true;
       document.getElementById('content_slide2').hidden = true;
-        document.getElementById('content_input_2').hidden = true;
       document.getElementById('content_slide3').hidden = true;
-        document.getElementById('content_input_3').hidden = true;
-      document.getElementById('content_txth').hidden = true;
             
       document.getElementById("div_song").style.background = "rgb(0,112,0)";
       document.getElementById("div_Bible").style.background = "rgb(0,112,0)";
@@ -539,9 +567,7 @@ function _switchFunction(idx) {
       document.getElementById("div_slide2").style.background = "rgb(0,112,0)";
       document.getElementById("div_slide3").style.background = "rgb(0,112,0)";
       document.getElementById("div_empty").style.background = "rgb(0,112,0)";
-      document.getElementById("div_help").style.background = "rgb(0,112,0)";
-      document.getElementById("div_layout").style.background = "rgb(0,112,0)";
-      
+        
       switch(idx) {
         case 'song':
           document.getElementById("div_song").style.background = "rgb(0,128,0)";
@@ -565,9 +591,10 @@ function _switchFunction(idx) {
           break;
         case 'slide1':
           document.getElementById("div_slide1").style.background = "rgb(0,128,0)";
-          if (ppt_1.length == 0) {
-            document.getElementById('content_input_1').hidden = false;
-            document.getElementById('content_input_1').focus();
+          if (ppt[1].length == 0) {
+            document.getElementById('content_input').hidden = false;
+            document.getElementById('content_input').focus();
+            document.getElementById("ppt_url").select();
           } else {
             document.getElementById('content_slide1').hidden = false;
             document.getElementById('frame_slide1').focus();
@@ -575,9 +602,10 @@ function _switchFunction(idx) {
           break;
         case 'slide2':
           document.getElementById("div_slide2").style.background = "rgb(0,128,0)";
-          if (ppt_2.length == 0) {
-            document.getElementById('content_input_2').hidden = false;
-            document.getElementById('content_input_2').focus();
+          if (ppt[2].length == 0) {
+            document.getElementById('content_input').hidden = false;
+            document.getElementById('content_input').focus();
+            document.getElementById("ppt_url").select();
           } else {
             document.getElementById('content_slide2').hidden = false;
             document.getElementById('frame_slide2').focus();
@@ -585,18 +613,14 @@ function _switchFunction(idx) {
           break;
         case 'slide3':
           document.getElementById("div_slide3").style.background = "rgb(0,128,0)";
-          if (ppt_3.length == 0) {
-            document.getElementById('content_input_3').hidden = false;
-            document.getElementById('content_input_3').focus();
+          if (ppt[3].length == 0) {
+            document.getElementById('content_input').hidden = false;
+            document.getElementById('content_input').focus();
+            document.getElementById("ppt_url").select();//.value;//String.fromCodePoint(0x1F604);
           } else {
             document.getElementById('content_slide3').hidden = false;
             document.getElementById('frame_slide3').focus();
           }
-          break;
-        case 'help':
-          document.getElementById("div_help").style.background = "rgb(0,128,0)";
-          document.getElementById('content_txth').hidden = false;
-          document.getElementById('frame_h').focus();
           break;
         default:
           break;
@@ -609,23 +633,14 @@ switchFunction('song');
 var keylock = false;
 window.addEventListener('keyup', function(e) {
 
-  if (e.keyCode == 16) {
-    keylock = false;
-  }
-
-  console.log('key up:' + e.keyCode);
-
+  if (e.keyCode == 16) keylock = false;
+  
 }, false);
 
 window.addEventListener('keydown', function(e) {
 
-  if (e.keyCode == 16) {
-    keylock = true;
-  }
-
-  console.log('key down:' + e.keyCode);
+  if (e.keyCode == 16) keylock = true;
 
 }, false);
-
 
 </script>
