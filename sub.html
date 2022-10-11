@@ -350,7 +350,20 @@ function fullScreen() {
 
 function somelayout() {
 
-  for (let idx = 1;idx<=3;idx++) {
+  if (!funcInterval) 
+    saveAction2Local(0);
+  
+  let idx = 0;
+  let type = 0;
+
+  switch (tab) {
+    case 'slide1': idx = 1; break;
+    case 'slide2': idx = 2; break;
+    case 'slide3': idx = 3; break;
+    default: return;
+  }
+  
+  //for (let idx = 1;idx<=3;idx++) {
     let _main = 'slide' + idx + '_main';
     let _sub =  'slide' + idx + '_sub';
     let elementMain = document.getElementById(_main);
@@ -381,20 +394,7 @@ function somelayout() {
       elementSub.hidden = !elementSub.hidden;
       break;
     }
-  }
-
-  /*
-  let idx = 0;
-  let type = 0;
-
-  switch (tab) {
-    case 'slide1': idx = 1; break;
-    case 'slide2': idx = 2; break;
-    case 'slide3': idx = 3; break;
-    default: return;
-  }
-  */
-  
+  //}
  
 }
 
@@ -421,7 +421,6 @@ function slideGo() {
   ppt[idx] = value;
   pptype[idx] = type;
   document.getElementById('frame_slide' + idx).src = ppt[idx];
-  
 
   let _main = 'slide' + idx + '_main';
   let _sub =  'slide' + idx + '_sub';
@@ -458,9 +457,11 @@ function slideGo() {
   }
 
   switchFunction('slide' + idx);
+  document.getElementById('frame_slide' + idx).focus();
 
 }
 
+var action = '';
 var tab;
 var funcInterval;
 var intervalType = 0;
@@ -515,13 +516,41 @@ function stopTabInterval() {
 
 }
 
+function saveAction2Local(act) {
+  
+  var date = new Date();
+
+  let h = date.getHours() % 12;
+  let min = date.getMinutes();
+  let s = date.getSeconds();
+  let ms = date.getMilliseconds();
+
+  let key = 'save act';
+  let value = act + ' ' + h + ':' + min +':' + s + ':' + ms;
+  localStorage.setItem(key, value);
+
+}
+
 function saveTab2Local() {
   let key = 'save tab';
   let value = '' + tab;
   localStorage.setItem(key, value);
 }
 
+
+
 function restoreTabFromLocal() {
+
+  let actkey = 'save act';
+  let actvalue = localStorage.getItem(actkey);
+  if (actvalue && actvalue.trim().length > 0) {
+    actvalue = actvalue.trim();
+    if (action != actvalue) {
+      somelayout();
+    }
+    action = actvalue;
+  } 
+
   let key = 'save tab';
   let value = localStorage.getItem(key);
   

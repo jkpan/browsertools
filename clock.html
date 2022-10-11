@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200&display=swap" rel="stylesheet">
+    <style>
+    @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
+      body {
+        margin: 0px;
+        height: 100%;
+        background-color:green
+        /*cursor:none;*/
+      }
+      main {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      hr {
+        border: 4px solid #00ff00;
+      }
+    </style>
+    </head>   
+<body>
+
+  <canvas id="canvas" width="100" height="100"></canvas>
+
+</body>
+
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+var canvas;
+var ctx;
+
+var pre = 0;
+var particles = [];
+
+function init() {
+    
+    canvas = document.getElementById("canvas");
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx = canvas.getContext("2d");
+}
+
+function anim_update(elapse) {
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'black'; 
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  //if (img) ctx.drawImage(img,0,0, canvas.width, canvas.height);
+
+  let dt = elapse - pre;
+  pre = elapse;
+  
+  for (var i = 0;i<particles.length;i++) {
+    particles[i].update(canvas, ctx, dt);
+  }
+
+  window.requestAnimationFrame(anim_update);
+
+}
+
+//function randomPickAnim() { let idx = Math.floor(Math.random() * 5); initAnim(idx);}
+
+function initAnim() {
+  
+  /* 
+  if (particles.length >= 1) {
+    for (var i = 0;i<particles.length;i++) {
+      particles[i].release();
+    }
+  }
+  */
+
+  particles.length = 0;
+  particles = [];
+
+  particles[0] = newClock();
+  particles[0].initial(canvas);
+ 
+  window.requestAnimationFrame(anim_update);
+
+}
+
+function newClock() {
+  let p = {
+    release: function() { },
+    initial: function (c) { },
+    update: function (c, _ctx, dt) {
+      
+      var x = c.width/2.0;
+      var y = c.height/2.0;
+      var len = c.height/5.0;
+
+      var date = new Date();
+
+      let h = date.getHours() % 12;
+      let min = date.getMinutes();
+      let s = date.getSeconds();
+      let ms = date.getMilliseconds();
+
+
+      _ctx.strokeStyle = "rgb(100, 100, 100)";
+      _ctx.lineWidth = 16;
+      _ctx.beginPath();
+      _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
+      _ctx.stroke();
+
+      _ctx.fillStyle = "rgb(100, 100, 100)";
+      for (let i = 0;i<12;i++) {
+        let angle = (90 - i * 360.0/12.0) * Math.PI/180;
+        let dx = 2 * len * Math.cos(angle);
+        let dy = -2 * len * Math.sin(angle);
+        _ctx.beginPath();
+        _ctx.arc(x + dx, y + dy, len/12, 0, 2 * Math.PI, true);
+        _ctx.fill();
+      }
+
+      /*
+      _ctx.textAlign = 'center';
+      _ctx.fillStyle = "rgb(100, 100, 20)";
+      _ctx.font = '48px Arial';
+      _ctx.fillText(date.toLocaleString(), c.width/2.0, c.height * 0.5 + 70);
+      */
+
+      _ctx.lineCap = "round";
+
+      /*
+       * HOUR
+       */
+      let angle = (90 - (h + min/60.0) * 360.0/12.0) * Math.PI/180;
+      let dx = 0.8 * len * Math.cos(angle);
+      let dy = -0.8 * len * Math.sin(angle);
+      
+      _ctx.beginPath();
+      _ctx.moveTo(x, y);
+      _ctx.lineTo(x + dx, y + dy);
+      _ctx.lineWidth = 40;
+      _ctx.strokeStyle = "rgb(0, 0, 150)";
+      _ctx.stroke();
+      
+      /*
+       * MINUTE
+       */
+      angle = (90 - (min + s/60.0) * 360.0/60.0) * Math.PI/180;
+      dx = 1.5 * len * Math.cos(angle);
+      dy = -1.5 * len * Math.sin(angle);
+
+      _ctx.beginPath();
+      _ctx.moveTo(x, y);
+      _ctx.lineTo(x + dx, y + dy);
+      _ctx.lineWidth = 20;
+      _ctx.strokeStyle =  "rgb(120, 120, 0)";
+      _ctx.stroke();
+      
+      /*
+       * SECOND
+       */
+      //var gap = Math.floor(ms/(1000/10));
+      //console.log(gap);
+      //angle = (90 - (s + gap/10) * 360.0/60.0) * Math.PI/180;
+      angle = (90 - (s + ms/1000.0) * 360.0/60.0) * Math.PI/180;
+      dx = 1.7 * len * Math.cos(angle);
+      dy = -1.7 * len * Math.sin(angle);
+
+      _ctx.beginPath();
+      _ctx.moveTo(x, y);
+      _ctx.lineTo(x + dx, y + dy);
+      _ctx.lineWidth = 10;
+      _ctx.strokeStyle = "rgb(120, 0, 0)";
+      _ctx.stroke();
+
+      
+      _ctx.beginPath();
+      _ctx.fillStyle = "rgb(120, 0, 0)";
+      _ctx.arc(x, y, 20, 0, 2 * Math.PI, true);
+      _ctx.fill();
+      
+      //var n = d.getTime();
+      let fs = c.width/16;
+      _ctx.font = fs + "px Monospace";
+      _ctx.fillStyle = "rgb(100,100,100)"
+      //if (Math.random() > 0.5) 
+      _ctx.fillText(h + ':' + min +':' + s, fs, fs );
+
+    }
+  }
+  return p;
+}
+
+window.addEventListener('resize', function() {
+  init();
+  _repaint();
+});
+
+init();
+initAnim();
+
+</script>
