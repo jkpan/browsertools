@@ -110,13 +110,13 @@ function newClock() {
       let ms = date.getMilliseconds();
 
 
-      _ctx.strokeStyle = "rgb(100, 100, 100)";
+      _ctx.strokeStyle = "rgb(150, 150, 150)";
       _ctx.lineWidth = 16;
       _ctx.beginPath();
       _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
       _ctx.stroke();
 
-      _ctx.fillStyle = "rgb(100, 100, 100)";
+      _ctx.fillStyle = "rgb(150, 150, 150)";
       for (let i = 0;i<12;i++) {
         let angle = (90 - i * 360.0/12.0) * Math.PI/180;
         let dx = 2 * len * Math.cos(angle);
@@ -125,6 +125,13 @@ function newClock() {
         _ctx.arc(x + dx, y + dy, len/12, 0, 2 * Math.PI, true);
         _ctx.fill();
       }
+
+      //var n = d.getTime();
+      let fs = c.width/16;
+      _ctx.font = fs + "px Monospace";
+      //_ctx.fillStyle = "rgb(100,100,100)"
+      //if (Math.random() > 0.5) 
+      _ctx.fillText(date.getHours() + ':' + min +':' + s, fs, fs );
 
       /*
       _ctx.textAlign = 'center';
@@ -146,7 +153,7 @@ function newClock() {
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
       _ctx.lineWidth = 40;
-      _ctx.strokeStyle = "rgb(0, 0, 150)";
+      _ctx.strokeStyle = "rgb(50, 50, 255)";
       _ctx.stroke();
       
       /*
@@ -160,7 +167,7 @@ function newClock() {
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
       _ctx.lineWidth = 20;
-      _ctx.strokeStyle =  "rgb(120, 120, 0)";
+      _ctx.strokeStyle =  "rgb(255, 255, 50)";
       _ctx.stroke();
       
       /*
@@ -177,21 +184,14 @@ function newClock() {
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
       _ctx.lineWidth = 10;
-      _ctx.strokeStyle = "rgb(120, 0, 0)";
+      _ctx.strokeStyle = "rgb(255, 50, 50)";
       _ctx.stroke();
 
       
       _ctx.beginPath();
-      _ctx.fillStyle = "rgb(120, 0, 0)";
+      _ctx.fillStyle = "rgb(255, 50, 50)";
       _ctx.arc(x, y, 20, 0, 2 * Math.PI, true);
       _ctx.fill();
-      
-      //var n = d.getTime();
-      let fs = c.width/16;
-      _ctx.font = fs + "px Monospace";
-      _ctx.fillStyle = "rgb(100,100,100)"
-      //if (Math.random() > 0.5) 
-      _ctx.fillText(h + ':' + min +':' + s, fs, fs );
 
     }
   }

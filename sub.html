@@ -324,6 +324,7 @@
 <script type="text/javascript" charset="UTF-8">
 
 function fullScreen() {
+
   if (document.getElementById('content_song').className == 'fullcontent') {
     document.getElementById('content_song').className = "content";
     document.getElementById('content_Bible').className = "content";
@@ -343,8 +344,9 @@ function fullScreen() {
     document.getElementById('content_slide1').className = "fullcontent";
     document.getElementById('content_slide2').className = "fullcontent";
     document.getElementById('content_slide3').className = "fullcontent";
-    
   }
+
+  _switchFunction(tab);
   
 }
 
@@ -395,6 +397,8 @@ function somelayout() {
       break;
     }
   //}
+
+  _switchFunction(tab);
  
 }
 
@@ -456,8 +460,8 @@ function slideGo() {
       break;
   }
 
-  switchFunction('slide' + idx);
-  document.getElementById('frame_slide' + idx).focus();
+  _switchFunction(tab);//'slide' + idx);
+  //document.getElementById('frame_slide' + idx).focus();
 
 }
 
