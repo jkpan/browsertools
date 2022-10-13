@@ -267,38 +267,26 @@
   </div>
 
   <!-- 投影片1 -->
-  <div id="content_slide1" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+  <div id="content_slide_1" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <div class="spliter" style="background-color: black;margin: 0px;opacity: 1.0;">
-      <div id="slide1_main" class="splitertop" style="background-color: black;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_slide1" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
-      </div>
-      <div id="slide1_sub" class="spliterbottom" style="background-color: black;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_Bible_1" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+      <iframe class="splitertop"    id="frame_slide_1" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
+      <iframe class="spliterbottom" id="frame_Bible_1" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     </div>
   </div>
 
   <!-- 投影片2 -->
-  <div id="content_slide2" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+  <div id="content_slide_2" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <div class="spliter" style="background-color: black;margin: 0px;opacity: 1.0;">
-      <div id="slide2_main" class="splitertop" style="background-color: black;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_slide2" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
-      </div>
-      <div id="slide2_sub" class="spliterbottom" style="background-color: black;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_Bible_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+      <iframe class="splitertop" id="frame_slide_2" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
+      <iframe class="spliterbottom" id="frame_Bible_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     </div>
   </div>
 
   <!-- 投影片3 -->
-  <div id="content_slide3" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
+  <div id="content_slide_3" class="content" style="background-color: black;margin: 0px;opacity: 1.0;">
     <div class="spliter" style="background-color: black;margin: 0px;opacity: 1.0;">
-      <div id="slide3_main" class="splitertop" style="background-color: black;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_slide3" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
-      </div>
-      <div id="slide3_sub" class="spliterbottom" style="background-color: black;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_Bible_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+      <iframe class="splitertop" id="frame_slide_3" src="" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
+      <iframe class="spliterbottom" id="frame_Bible_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>      
     </div>
   </div>
   
@@ -331,9 +319,9 @@ function fullScreen() {
     document.getElementById('content_effect').className = "content";
     document.getElementById('content_news').className = "content";
         
-    document.getElementById('content_slide1').className = "content";
-    document.getElementById('content_slide2').className = "content";
-    document.getElementById('content_slide3').className = "content";
+    document.getElementById('content_slide_1').className = "content";
+    document.getElementById('content_slide_2').className = "content";
+    document.getElementById('content_slide_3').className = "content";
     
   } else {
     document.getElementById('content_song').className = "fullcontent";
@@ -341,9 +329,9 @@ function fullScreen() {
     document.getElementById('content_effect').className = "fullcontent";
     document.getElementById('content_news').className = "fullcontent";
         
-    document.getElementById('content_slide1').className = "fullcontent";
-    document.getElementById('content_slide2').className = "fullcontent";
-    document.getElementById('content_slide3').className = "fullcontent";
+    document.getElementById('content_slide_1').className = "fullcontent";
+    document.getElementById('content_slide_2').className = "fullcontent";
+    document.getElementById('content_slide_3').className = "fullcontent";
   }
 
   _switchFunction(tab);
@@ -366,10 +354,8 @@ function somelayout() {
   }
   
   //for (let idx = 1;idx<=3;idx++) {
-    let _main = 'slide' + idx + '_main';
-    let _sub =  'slide' + idx + '_sub';
-    let elementMain = document.getElementById(_main);
-    let elementSub = document.getElementById(_sub);
+    let elementMain = document.getElementById('frame_slide_' + idx);
+    let elementSub = document.getElementById('frame_Bible_' + idx);
 
     switch(pptype[idx]) {
     case 0: return;
@@ -424,39 +410,44 @@ function slideGo() {
 
   ppt[idx] = value;
   pptype[idx] = type;
-  document.getElementById('frame_slide' + idx).src = ppt[idx];
+  
+  //let _main = 'slide' + idx + '_main';
+  //let _sub =  'slide' + idx + '_sub';
 
-  let _main = 'slide' + idx + '_main';
-  let _sub =  'slide' + idx + '_sub';
+  let elementMain = document.getElementById('frame_slide_' + idx);
+  let elementSub = document.getElementById('frame_Bible_' + idx);
+
+  elementMain.src = ppt[idx];
+
   switch(pptype[idx]) {
     case 0:
-      document.getElementById(_main).className = 'spliterall';
-      document.getElementById(_sub).hidden = true;
-      document.getElementById('frame_Bible_' + idx).src = '';
+      elementMain.className = 'spliterall';
+      elementSub.hidden = true;
+      elementSub.src = '';
       break;
     case 1:
-      document.getElementById(_main).className = 'spliterleft';
-      document.getElementById(_sub).hidden = false;
-      document.getElementById('frame_Bible_' + idx).src = tool_Bible;
-      document.getElementById(_sub).className = 'spliterright';
+      elementMain.className = 'spliterleft';
+      elementSub.hidden = false;
+      elementSub.src = tool_Bible;
+      elementSub.className = 'spliterright';
       break;
     case 2:
-      document.getElementById(_main).className = 'spliterall';
-      document.getElementById(_sub).hidden = false;
-      document.getElementById('frame_Bible_' + idx).src = tool_Bible;
-      document.getElementById(_sub).className = 'spliterright';
+      elementMain.className = 'spliterall';
+      elementSub.hidden = false;
+      elementSub.src = tool_Bible;
+      elementSub.className = 'spliterright';
       break;
     case 3:
-      document.getElementById(_main).className = 'splitertop';
-      document.getElementById(_sub).hidden = false;
-      document.getElementById('frame_Bible_' + idx).src = tool_Bible;
-      document.getElementById(_sub).className = 'spliterbottom';
+      elementMain.className = 'splitertop';
+      elementSub.hidden = false;
+      elementSub.src = tool_Bible;
+      elementSub.className = 'spliterbottom';
       break;
     case 4:
-      document.getElementById(_main).className = 'spliterall';
-      document.getElementById(_sub).hidden = false;
-      document.getElementById('frame_Bible_' + idx).src = tool_Bible;
-      document.getElementById(_sub).className = 'spliterbottom';
+      elementMain.className = 'spliterall';
+      elementSub.hidden = false;
+      elementSub.src = tool_Bible;
+      elementSub.className = 'spliterbottom';
       break;
   }
 
@@ -486,6 +477,10 @@ function startRestoreInterval() {
   if (document.getElementById("frame_song").contentWindow)
     document.getElementById("frame_song").contentWindow.postMessage('x', '/');
 
+  if (document.getElementById("frame_Bible").contentWindow)
+    document.getElementById("frame_Bible").contentWindow.postMessage('x', '/');
+
+
   if (document.getElementById("frame_Bible_1").contentWindow)
     document.getElementById("frame_Bible_1").contentWindow.postMessage('x', '/');
   
@@ -508,6 +503,9 @@ function stopTabInterval() {
 
   if (document.getElementById("frame_song").contentWindow)
     document.getElementById("frame_song").contentWindow.postMessage('o', '/');
+
+  if (document.getElementById("frame_Bible").contentWindow)
+    document.getElementById("frame_Bible").contentWindow.postMessage('o', '/');
 
   if (document.getElementById("frame_Bible_1").contentWindow)
     document.getElementById("frame_Bible_1").contentWindow.postMessage('o', '/');
@@ -588,10 +586,10 @@ function _switchFunction(idx) {
       document.getElementById('content_news').hidden = true;
         
       document.getElementById('content_input').hidden = true;
-      document.getElementById('content_slide1').hidden = true;
-      document.getElementById('content_slide2').hidden = true;
-      document.getElementById('content_slide3').hidden = true;
-            
+      document.getElementById('content_slide_1').hidden = true;
+      document.getElementById('content_slide_2').hidden = true;
+      document.getElementById('content_slide_3').hidden = true;
+      
       document.getElementById("div_song").style.background = "rgb(0,112,0)";
       document.getElementById("div_Bible").style.background = "rgb(0,112,0)";
       document.getElementById("div_effect").style.background = "rgb(0,112,0)";
@@ -629,8 +627,8 @@ function _switchFunction(idx) {
             document.getElementById('content_input').focus();
             document.getElementById("ppt_url").select();
           } else {
-            document.getElementById('content_slide1').hidden = false;
-            document.getElementById('frame_slide1').focus();
+            document.getElementById('content_slide_1').hidden = false;
+            document.getElementById('frame_slide_1').focus();
           }
           break;
         case 'slide2':
@@ -640,8 +638,8 @@ function _switchFunction(idx) {
             document.getElementById('content_input').focus();
             document.getElementById("ppt_url").select();
           } else {
-            document.getElementById('content_slide2').hidden = false;
-            document.getElementById('frame_slide2').focus();
+            document.getElementById('content_slide_2').hidden = false;
+            document.getElementById('frame_slide_2').focus();
           }
           break;
         case 'slide3':
@@ -651,8 +649,8 @@ function _switchFunction(idx) {
             document.getElementById('content_input').focus();
             document.getElementById("ppt_url").select();//.value;//String.fromCodePoint(0x1F604);
           } else {
-            document.getElementById('content_slide3').hidden = false;
-            document.getElementById('frame_slide3').focus();
+            document.getElementById('content_slide_3').hidden = false;
+            document.getElementById('frame_slide_3').focus();
           }
           break;
         default:

@@ -32780,7 +32780,7 @@ function stopActionInterval() {
 }
 
 function saveAction2Local() {
-  console.log('saveAction2Local');
+  //console.log('saveAction2Local');
   let key = 'save action';
   //localStorage.removeItem(key);
   let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
@@ -34199,6 +34199,8 @@ function userhelp() {
   }
 }
 
+init();
+
 /*
 function blank() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -34211,9 +34213,6 @@ function blank() {
   }
 }
 */
-
-init();
-
 
 function receiveMessage(e) {
   if (e.data == 'x') { //alert(e.data);
@@ -34415,15 +34414,6 @@ canvas.addEventListener("touchmove", function(evt) {
 
 }, false);
 
-//flow();
-
-song = 0;
-subtitles = SONGS[song];
-//prepareImage();
-_repaint();
-
-openSelection(0);
-
 function parseRecogResult() {
 
   console.log('parseRecogResult...' + recogResult);
@@ -34574,6 +34564,14 @@ recognition.onresult = function(event) {
     console.log('onresult: ' + recogResult);
     _repaint();
 };
+
+song = 0;
+subtitles = SONGS[song];
+
+jumpTo1();
+_repaint();
+
+//openSelection(0);
 
 </script>
 
