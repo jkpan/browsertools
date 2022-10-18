@@ -34166,6 +34166,10 @@ function _layerui() {
     }
     ctx.fillText(SONGS[i][0][0], x - (i == song?fontsize_sml/2:0) , y);
     y -= fontsize_sml * 1.5;
+    if (y < fontsize_sml) {
+      x += canvas.width/4;
+      y = canvas.height - fontsize_sml;
+    }
   }
 }
 

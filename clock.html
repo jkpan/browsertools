@@ -104,7 +104,7 @@ function newClock() {
 
       var date = new Date();
 
-      let h = date.getHours() % 12;
+      let h = date.getHours();
       let min = date.getMinutes();
       let s = date.getSeconds();
       let ms = date.getMilliseconds();
@@ -129,9 +129,12 @@ function newClock() {
       //var n = d.getTime();
       let fs = c.width/16;
       _ctx.font = fs + "px Monospace";
-      //_ctx.fillStyle = "rgb(100,100,100)"
-      //if (Math.random() > 0.5) 
-      _ctx.fillText(date.getHours() + ':' + min +':' + s, fs, fs );
+      //_ctx.fillStyle = "rgb(100,100,100)" //if (Math.random() > 0.5) 
+      
+      _ctx.fillText((h<10?'0'+h:h) + ':' + 
+                    (min<10?'0'+min:min) +':' + 
+                    (s<10?'0'+s:s), 
+                    fs, fs );
 
       /*
       _ctx.textAlign = 'center';
@@ -145,6 +148,7 @@ function newClock() {
       /*
        * HOUR
        */
+      h = h % 12;
       let angle = (90 - (h + min/60.0) * 360.0/12.0) * Math.PI/180;
       let dx = 0.8 * len * Math.cos(angle);
       let dy = -0.8 * len * Math.sin(angle);
