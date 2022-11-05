@@ -3,9 +3,12 @@
 //今日歌單
 var list = [
 
-'救恩11',
-'其他73',
-'救恩210',
+'讚美之泉55',
+'讚美之泉85',
+'其他74',
+'讚美之泉92',
+'其他75',
+'短歌104',
 
 '主禱文',
 '使徒信經',
@@ -23,7 +26,7 @@ var VOLUME = [
 ];
 
 //事件歌單
-var TOOLS = [
+var EVENTS = [
   '程序',
   '聖誕節', 
   '復活節',
@@ -3851,10 +3854,18 @@ var TOOLS = [
                ["再一次 再一次", "再一次觸摸我的靈", "讓敬拜 衝破雲霄", "如祢信實上達穹蒼"],
                ["再一次 再一次", "再一次獻上我生命", "我的心 不停為祢燃燒", "我一生單為祢而活"]]
 } </script>
+<script id="讚美之泉92" name="我們歡迎君王降臨" type="application/json" charset="UTF-8"> {
+  "content" : [["我們歡迎君王降臨", "讚美之泉"],
+               ["宇宙的中心 耶穌", "世界的中心 耶穌", "萬物都本於祢", "屬於祢 歸於祢", "祢是榮耀君王"],
+               ["我們歡迎 君王降臨", "渴望看見 祢的彰顯", "呼求祢來翻轉 震動這土地", "復興我們聖潔的熱情"],
+               ["我們歡迎 君王降臨", "同心高舉 祢聖潔的名", "呼求天窗打開 春雨不停息", "我們呼喊歡迎君王降臨"],
+               ["大大張口 大大充滿", "恩膏如雨 澆灌這地", "眼未看見 耳未聽見", "渴慕更多 看見祢的榮面"]]
+} </script>
 <script id="讚美之泉" name="" type="application/json" charset="UTF-8"> {
   "content" : [["", "讚美之泉"],
                ["", "", "", ""]]
 } </script>
+
 <!-- others -->
 <script id="其他1" name="主是我力量" type="application/json" charset="UTF-8"> {
   "content" : [["主是我力量"],
@@ -4317,11 +4328,24 @@ var TOOLS = [
                ["感謝神賜路旁玫瑰", "感謝神玫瑰有刺", "感謝神賜家庭溫暖", "感謝神有福盼望"],
                ["感謝神賜喜樂憂愁", "感謝神屬天平安", "感謝神賜明天盼望", "要感謝直到永遠"]]
 } </script>
+<script id="其他74" name="求充滿這地" type="application/json" charset="UTF-8"> {
+  "content" : [["求充滿這地"], 
+               ["喔主 感謝祢創造這土地", "以永恆話語 賜下無限生命", "用恩典的馨香氣息 祝福這地", "讓我們全心跟隨祢帶領"],
+               ["喔主 感謝祢創造這土地", "以慈愛澆灌 以喜樂耕耘", "用無數的白晝黑夜 孕育這地", "順服的人情 感恩的心情", "現在都只願 以基督的心為心"],
+               ["主求祢充滿我們 來醫治這地", "痛苦疾病要過去 神蹟在運行", "主求祢充滿我們 來轉化這地", "黑暗權勢要離去"],
+               ["主求祢充滿我們 來醫治這地", "全地看見祢榮耀 祢復興降臨", "主求祢充滿我們 來轉化這地", "全地尊榮祢聖名 為祢而站立"],
+               ["一生祝福 永不停息", "世代因祢愛延續 呼求祢", "一生祝福 永不停息", "世代因祢愛延續 呼求祢"]]
+} </script>
+<script id="其他75" name="向左向右開展" type="application/json" charset="UTF-8"> {
+  "content" : [["向左向右開展"], 
+               ["我知道 祢的愛永不失敗", "我知道 祢信實永不更改", "踏上這未知旅途 我期待", "祢同在一路相伴 不離開"],
+               ["祢是葡萄樹 我是枝子", "祢常與我同在", "離了祢 我不能做什麼", "祢的慈繩愛索 牽引我", "尋回起初的愛 再次能明白"],
+               ["祢的心意是要我 向左向右開展", "擴張我帳幕之地 不限制祢作為", "祢的心意是在親密中 向我彰顯", "祢慈愛永不移轉", "每當我就近祢 就有平安"]]
+} </script>
 <script id="其他" name="" type="application/json" charset="UTF-8"> {
   "content" : [[""], 
                ["", "", "", ""]]
 } </script>
-
 <!------------------>
 <!-- 詩歌歌詞區 End -->
 <!------------------>
@@ -4549,15 +4573,15 @@ function createBtns() {
     div.insertAdjacentHTML('beforeend', '<p></p>');
   }
 
-  for (let pf = 0;pf<TOOLS.length;pf++) {
+  for (let pf = 0;pf<EVENTS.length;pf++) {
 
     var span = document.createElement('span');
     span.style.color = 'rgb(0,255,0)' // apply your style
-    span.appendChild(document.createTextNode(TOOLS[pf]));
+    span.appendChild(document.createTextNode(EVENTS[pf]));
     div.appendChild(span);
     div.insertAdjacentHTML('beforeend', '<p></p>');
     
-    let toolList = getSong(TOOLS[pf]);
+    let toolList = getSong(EVENTS[pf]);
 
     for(let i = 0;i<toolList.length;i++) {
       var btn = _songBtn(toolList[i]);
