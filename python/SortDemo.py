@@ -5,6 +5,9 @@ import random
 # from PyQt5 import QtCore, QtGui, QtWidgets
 import sys, time
 import asyncio
+from clock import Clock
+#import clock
+
 # import PyQt5
 # from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
@@ -15,7 +18,7 @@ class Sort(QWidget): # {
 
     def __init__(self): # {
         super().__init__()
-        self.A = [int(random.random() * 500) for i in range(300)]
+        self.A = [int(random.random() * 300) for i in range(150)]
     # }
         
     def prepare(self): # {
@@ -167,6 +170,10 @@ class Panel(QWidget): # {
 
         self.sortPane = Sort()
         layout.addWidget(self.sortPane, 1, 0, 3, 3)
+
+        self.timeclock = Clock()
+        layout.addWidget(self.timeclock, 4, 0, 2, 2)
+
     # }
 
     def action1(self) :

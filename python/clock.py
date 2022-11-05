@@ -2,17 +2,47 @@
 import sys
 import math
 import datetime
+import time
+import asyncio
+import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QApplication, QWidget, QGraphicsScene, QGraphicsView
 from PyQt5.QtGui import QPainter, QColor, QFont
-from PyQt5.QtCore import Qt, QPoint, QRect
+from PyQt5.QtCore import Qt, QPoint, QRect, QObject, QThread, pyqtSignal
+
 
 class Clock(QWidget):
+
     def __init__(self):
         super().__init__()
+        self.start()
+
+    def start(self):
+        t = threading.Thread(target = self.threadStart)
+        t.start()
+        #t.join()
+
+    def threadStart(self):
+        print("start...")
+        self.startFlag = True
+        while(self.startFlag):
+            #print("start..loop")
+            #time.sleep(0.016)
+            self._repaint()
+
+    def stop(self):
+        self.startFlag = False
+        print("stop")
     
-    def paintEvent(self, event):
+    def _repaint(self): # {
+        self.update()
+        QApplication.processEvents()
+        time.sleep(0.016)
+    # }
+
+    
+    def paintEvent(self, event): # {
         
         
         x = self.frameGeometry().width()/2.0
@@ -52,9 +82,9 @@ class Clock(QWidget):
 
         for i in range(12): #(let i = 0;i<12;i++) {
             angle = (90 - i * 360.0/12.0) * math.pi/180
-            dx = 2 * len * math.cos(angle)
-            dy = 2 * len * math.sin(angle)
-            qpainter.drawEllipse(x + dx - len/20 , y - dy - len/20, len/10, len/10)
+            dx = 1.9 * len * math.cos(angle)
+            dy = 1.9 * len * math.sin(angle)
+            qpainter.drawEllipse(x + dx - 5 , y - dy - 5, 10, 10)
 
         # hour
         pen.setWidth(20)
@@ -82,11 +112,14 @@ class Clock(QWidget):
         pen.setColor(Qt.red)
         qpainter.setPen(pen)
 
-        angle = (90 - (s + ms/1000.0) * 360.0/60.0) * math.pi/180
+        angle = (90 - (s + ms) * 360.0/60.0) * math.pi/180
         dx = 1.7 * len * math.cos(angle)
         dy = 1.7 * len * math.sin(angle)
         qpainter.drawLine(x, y, x + dx, y - dy)
 
+        pen.setWidth(16)
+        pen.setColor(Qt.red)
+        qpainter.setPen(pen)
         qpainter.drawEllipse(x - 8, y - 8, 16, 16)
 
         qpainter.end()
@@ -98,41 +131,19 @@ class Clock(QWidget):
         qpainter.drawText(event.rect(), Qt.AlignCenter, 'hello world')
         '''
 
-        '''
-      //var n = d.getTime();
-      let fs = c.width/16;
-      _ctx.font = fs + "px Monospace";
-      //_ctx.fillStyle = "rgb(100,100,100)" //if (Math.random() > 0.5) 
-      
-      _ctx.fillText((h<10?'0'+h:h) + ':' + 
-                    (min<10?'0'+min:min) +':' + 
-                    (s<10?'0'+s:s), 
-                    fs, fs );
-
-      /*
-      _ctx.textAlign = 'center';
-      _ctx.fillStyle = "rgb(100, 100, 20)";
-      _ctx.font = '48px Arial';
-      _ctx.fillText(date.toLocaleString(), c.width/2.0, c.height * 0.5 + 70);
-      */
-
-      _ctx.lineCap = "round";
-
-      
-
-        '''
         # qpainter.drawText(10, 30, 'PyQt5')
         # qpainter.drawText(QRect(10, 30, 100, 30), Qt.AlignLeft, 'PyQt5')
         # qpainter.drawText(10, 30, 100, 30, Qt.AlignLeft, 'PyQt5')    
 
+    # }
         
 
 #if __name__ == '__main__':
-    
+''' 
 app = QApplication(sys.argv)
 w = Clock()
 w.setWindowTitle('Clock')
 w.setGeometry(50, 50, 500, 500)
 w.show()
 sys.exit(app.exec_())
-
+'''
