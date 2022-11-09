@@ -9,20 +9,55 @@ import threading
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QApplication, QWidget, QGraphicsScene, QGraphicsView
 from PyQt5.QtGui import QPainter, QColor, QFont
-from PyQt5.QtCore import Qt, QPoint, QRect, QObject, QThread, pyqtSignal
+from PyQt5.QtCore import Qt, QPoint, QRect, QObject, QThread, pyqtSignal, QTimer
+
+class UpdateThread(QThread):
+
+    trigger = pyqtSignal() #pyqtSignal(str)
+    finished = pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        while(True):
+            time.sleep(0.125)
+            self.trigger.emit() #str(i+1))
+        self.finished.emit()
+        '''
+        for i in range(5):
+            time.sleep(1)
+            self.trigger.emit(str(i+1))
+            print('WorkerThread::run ' + str(i))
+        '''
+# UpdateThread
 
 
 class Clock(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.start()
+        self.sec = 0
+        self.work = UpdateThread()
+        self.startThread()
 
+    def startThread(self):
+        #self.mybutton.setDisabled(True)
+        self.work.trigger.connect(self._repaint)
+        self.work.finished.connect(self.stop)
+        self.work.start()
+
+    '''
     def start(self):
-        t = threading.Thread(target = self.threadStart)
-        t.start()
-        #t.join()
-
+        self.mytimer = QTimer(self)
+        self.mytimer.timeout.connect(self._repaint)
+        self.mytimer.start(125)
+    '''
+        
+        #t = threading.Thread(target = self.threadStart) t.start()
+        
+        
+    '''
     def threadStart(self):
         print("start...")
         self.startFlag = True
@@ -34,17 +69,19 @@ class Clock(QWidget):
     def stop(self):
         self.startFlag = False
         print("stop")
-    
-    def _repaint(self): # {
+    '''
+    def stop(self):
+        print()
+    #
+
+    def _repaint(self):
         self.update()
         QApplication.processEvents()
-        time.sleep(0.016)
-    # }
-
+        #time.sleep(0.016)
+    #
     
-    def paintEvent(self, event): # {
-        
-        
+    def paintEvent(self, event):
+                
         x = self.frameGeometry().width()/2.0
         y = self.frameGeometry().height()/2.0
         len = self.frameGeometry().height()/5.0
@@ -59,6 +96,10 @@ class Clock(QWidget):
         min = current_time.minute
         s = current_time.second
         ms = current_time.microsecond/1000000
+
+        #if (self.sec != s): print("sec: ", s)
+        
+        self.sec = s
 
         qpainter = QPainter()
 
@@ -102,7 +143,7 @@ class Clock(QWidget):
         pen.setColor(Qt.yellow)
         qpainter.setPen(pen)
 
-        angle = (90 - (min + s/60.0) * 360.0/60.0) * math.pi/180
+        angle = (90 - (min + (s+ms)/60.0) * 360.0/60.0) * math.pi/180
         dx = 1.5 * len * math.cos(angle)
         dy = 1.5 * len * math.sin(angle)
         qpainter.drawLine(x, y,  x + dx, y - dy)
@@ -135,8 +176,9 @@ class Clock(QWidget):
         # qpainter.drawText(QRect(10, 30, 100, 30), Qt.AlignLeft, 'PyQt5')
         # qpainter.drawText(10, 30, 100, 30, Qt.AlignLeft, 'PyQt5')    
 
-    # }
-        
+    # paintEvent
+
+# Clock
 
 #if __name__ == '__main__':
 ''' 
