@@ -3,9 +3,11 @@
 //今日歌單
 var list = [
 
-'救恩42',
-'救恩231',
-'救恩155',
+'新歌頌揚291',
+'讚美之泉78', //寶貴十架
+'讚美之泉75', //我的生命獻給祢
+'救恩179',
+'短歌4',
 
 '主禱文',
 '使徒信經',
@@ -3240,6 +3242,13 @@ var EVENTS = [
                ["全心來讚美你 舉雙手表明", "我愛你 主 你是我的一切", "我尊榮你聖潔至高的名"], 
                ["全心來讚美你 舉雙手表明", "我愛你 主 你是我的一切", "我尊榮你聖潔的名", "尊榮你聖潔的名", "尊榮你聖潔至高的名"]]
 } </script>
+<script id="新歌頌揚291" name="我們進入神的殿" type="application/json" charset="UTF-8"> {
+  "content" : [["我們進入神的殿", "新歌頌揚291"],
+               ["我們進入神的殿 奉主名聚集來敬拜祂", "我們進入神的殿 奉主名聚集來敬拜祂", "我們進入神的殿 奉主名聚集"],
+               ["讓我們放下自己 全心尋求主 來敬拜祂", "讓我們放下自己 全心尋求主 來敬拜祂", "讓我們放下自己 全心尋求主"],
+               ["舉起聖潔的雙手 稱頌祂聖名來敬拜祂", "舉起聖潔的雙手 稱頌祂聖名來敬拜祂", "舉起聖潔的雙手 稱頌祂聖名"],
+               ["來敬拜主基督", "敬拜祂 主基督耶穌"]]
+} </script>
 <script id="新歌頌揚307" name="每當我瞻仰你" type="application/json" charset="UTF-8"> {
   "content" : [["每當我瞻仰你", "新歌頌揚307"], 
                ["每當我瞻仰你至聖榮面", "每當我在愛中仰望你", "在你榮耀光中 所有一切都失去光彩", 
@@ -4478,12 +4487,48 @@ function restoreActionFromLocal() {
   let _line = parseInt(array[2]);
   let _doblank = parseInt(array[3]);
   if (_song == song && _phase == phase && _line == line && _doblank == doblank) return;
+  /*
+  if (_song >= SONGS.length) {
+    syncListFromController();
+    return;
+  }
+  */
   song = _song;
   subtitles = SONGS[song];
   phase = _phase;
   line = _line;
   doblank = _doblank;
   _repaint();
+}
+
+function syncListFromController() {
+  let key = 'song list';
+  let value = localStorage.getItem(key);
+  if (!value) return;
+  value = value.trim();
+  if (value && value.length == 0) return;
+  let array = value.split(',');
+  list = array;
+  SONGS = [ [['']] ];
+  for(let i=0;i<list.length;i++) {
+    SONGS[i+1] = getSong(list[i]); //flow();
+    console.log('....' + list[i]);
+  }
+  song = SONGS.length - 1;
+  phase = 0;
+  line = 0;
+  subtitles = SONGS[song];
+  _repaint();
+}
+
+function saveListFromController() {
+  let key = 'song list';
+  value = '';
+  for (let i=0;i<list.length;i++){
+    value += list[i];
+    value += ',';
+  }
+  localStorage.setItem(key, value);
 }
 
 function _createEmptyBtn() {
@@ -4510,6 +4555,8 @@ function _createBtn(idtxt, attr) {
   button.style.fontSize = '16px'; // setting the font size to 20px
 
   button.onclick = function() {
+    //list.push(idtxt);
+    //saveListFromController();
     SONGS[SONGS.length] = getSong(idtxt);
     song = SONGS.length - 1;
     phase = 0;
