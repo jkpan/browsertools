@@ -4868,13 +4868,19 @@ function printPhase() {
 
     }
   }
+  //'rgb(0,240,0)'
 
-  if (phase > 0 && mode == 2) {
-    ctx.fillStyle = doblank == 1?'rgb(0,240,0)':'yellow';    
-    ctx.font = fontsize/3 + "px Arial";
+  if (phase > 0) {
+
+    if (doblank == 1 || mode == 1) {
+      ctx.fillStyle = 'rgb(0,240,0)';
+    } else {
+      ctx.fillStyle = 'yellow';
+    }
+    
+    ctx.font = fontsize/2 + "px Arial";
     ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', 
-                 //mode == 1?canvas.width * 0.1:
-                 canvas.width/2, 
+                 mode == 1?canvas.width * 0.1:canvas.width/2, 
                  fontsize/2);
   }
 
