@@ -3,13 +3,11 @@
 //今日歌單
 var list = [
 
-'新歌頌揚291',
-'讚美之泉78', //寶貴十架
-'讚美之泉75', //我的生命獻給祢
-'救恩179',
-'短歌4',
 
-'讚美之泉57',
+'其他58',
+'讚美之泉46',
+'救恩155',
+
 
 '主禱文',
 '使徒信經',
@@ -3642,7 +3640,7 @@ var EVENTS = [
                ["一步又一步 這是恩典之路", "你愛 你手 將我緊緊抓住", "一步又一步 這是盼望之路", "你愛 你手 牽引我走這人生路"]]
 } </script>
 <script id="讚美之泉57" name="常常喜樂" type="application/json" charset="UTF-8"> {
-  "content" : [["常常喜樂", "讚美之泉"],
+  "content" : [["常常喜樂", "盛曉玫", "讚美之泉"],
                ["常常喜樂 向主高歌", "不論環境如何", "高山或低谷主都看顧", "相信就能蒙福"],
                ["常常禱告 耐心等候", "主做事有定時", "流淚撒種必歡呼收割", "相信就有喜樂"],
                ["下垂的手再一次舉起來", "封閉的心再一次敞開", "拋開一切憂慮 放下一切重擔", "來到主的面前我喜樂滿懷"],
@@ -4417,8 +4415,7 @@ function getSong(jsonid) {
   return [['']];
 } 
 
-var SONGS = 
-[ [['']] 
+var SONGS = [ [['']] 
 
 ];
 
@@ -4489,12 +4486,12 @@ function restoreActionFromLocal() {
   let _line = parseInt(array[2]);
   let _doblank = parseInt(array[3]);
   if (_song == song && _phase == phase && _line == line && _doblank == doblank) return;
-  /*
+
   if (_song >= SONGS.length) {
     syncListFromController();
     return;
   }
-  */
+
   song = _song;
   subtitles = SONGS[song];
   phase = _phase;
@@ -4513,8 +4510,12 @@ function syncListFromController() {
   list = array;
   SONGS = [ [['']] ];
   for(let i=0;i<list.length;i++) {
+    list[i] = list[i].trim();
+    if (list[i].length == 0) 
+      break;
+    console.log('syncList : ' + list[i]);
     SONGS[i+1] = getSong(list[i]); //flow();
-    console.log('....' + list[i]);
+    
   }
   song = SONGS.length - 1;
   phase = 0;
@@ -4531,6 +4532,7 @@ function saveListFromController() {
     value += ',';
   }
   localStorage.setItem(key, value);
+  console.log('saveList ' + value);
 }
 
 function _createEmptyBtn() {
@@ -4557,8 +4559,10 @@ function _createBtn(idtxt, attr) {
   button.style.fontSize = '16px'; // setting the font size to 20px
 
   button.onclick = function() {
-    //list.push(idtxt);
-    //saveListFromController();
+    
+    list.push(idtxt);
+    saveListFromController();
+
     SONGS[SONGS.length] = getSong(idtxt);
     song = SONGS.length - 1;
     phase = 0;
@@ -4696,6 +4700,7 @@ function printSubtitle() {
 
   }
 }
+
 function printTxt(i, j, vpos) {
 
   let txt = subtitles[i][j];

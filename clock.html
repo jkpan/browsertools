@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200&display=swap" rel="stylesheet">
     <style>
-    @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
       body {
         margin: 0px;
         height: 100%;
@@ -42,6 +40,7 @@ var ctx;
 
 var pre = 0;
 var particles = [];
+var frequence = -1;
 
 function init() {
     
@@ -109,7 +108,6 @@ function newClock() {
       let s = date.getSeconds();
       let ms = date.getMilliseconds();
 
-
       _ctx.strokeStyle = "rgb(150, 150, 150)";
       _ctx.lineWidth = 16;
       _ctx.beginPath();
@@ -135,7 +133,13 @@ function newClock() {
                     (min<10?'0'+min:min) +':' + 
                     (s<10?'0'+s:s), 
                     fs, fs );
-
+      _ctx.font = (fs/2) + "px Monospace";
+      _ctx.fillText( date.getFullYear() + '/' + 
+                    (date.getMonth() + 1) +'/' + 
+                    date.getDate() 
+                    // + '(' + date.getDay() + ')'
+                    , fs, fs + fs/2 );
+       
       /*
       _ctx.textAlign = 'center';
       _ctx.fillStyle = "rgb(100, 100, 20)";
@@ -175,12 +179,18 @@ function newClock() {
       _ctx.stroke();
       
       /*
-       * SECOND
+       * SECOND -1, 0.5, 3, 4 , 5
        */
-      //var gap = Math.floor(ms/(1000/10));
-      //console.log(gap);
-      //angle = (90 - (s + gap/10) * 360.0/60.0) * Math.PI/180;
-      angle = (90 - (s + ms/1000.0) * 360.0/60.0) * Math.PI/180;
+      angle = Math.PI/180;
+      if (frequence < 0) {
+        angle = (90 - (s + ms/1000.0) * 6.0) * angle;//360.0/60.0
+      } else {
+        let hz = frequence * 2;
+        var gap = Math.floor(ms/(1000/hz));
+        angle = (90 - (s + gap/hz) * 6.0) * angle;
+      }
+    
+      //
       dx = 1.7 * len * Math.cos(angle);
       dy = -1.7 * len * Math.sin(angle);
 
@@ -207,7 +217,28 @@ window.addEventListener('resize', function() {
   _repaint();
 });
 
+window.addEventListener('keydown', function(e) {
+  switch(frequence) {
+    case -1:
+      frequence = 5;
+      break;
+    case 5:
+      frequence = 4;
+      break;
+    case 4:
+      frequence = 3;
+      break;
+    case 3:
+      frequence = 0.5;
+      break;
+    case 0.5:
+      frequence = -1;
+      break;
+  }
+}, false);
+
 init();
 initAnim();
+
 
 </script>
