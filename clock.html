@@ -64,7 +64,7 @@ function anim_update(elapse) {
 
   if (scale < 0) return;
 
-  
+
   //transform
   let _scale = scale;
   let _gap = (1-_scale) * canvas.width + (scale < 1.0?
@@ -113,6 +113,8 @@ function initAnim() {
 
 function newClock() {
   let p = {
+    fontColor: "rgb(180, 180, 180)",
+    bgColor: "rgba(0, 0, 0, 0.5)",
     release: function() { },
     initial: function (c) { },
     update: function (c, _ctx, dt) {
@@ -128,15 +130,15 @@ function newClock() {
       let s = date.getSeconds();
       let ms = date.getMilliseconds();
 
-      _ctx.strokeStyle = "rgb(150, 150, 150)";
-      _ctx.fillStyle =  "rgba(0, 0, 0, 0.5)";
+      _ctx.strokeStyle = this.fontColor;
+      _ctx.fillStyle =  this.bgColor;
       _ctx.lineWidth = 16;
       _ctx.beginPath();
       _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
       _ctx.fill();
       _ctx.stroke();
 
-      _ctx.fillStyle = "rgb(150, 150, 150)";
+      _ctx.fillStyle = this.fontColor;
       for (let i = 0;i<12;i++) {
         let angle = (90 - i * 360.0/12.0) * Math.PI/180;
         let dx = 2 * len * Math.cos(angle);
@@ -150,17 +152,18 @@ function newClock() {
       let fs = c.width/16;
       _ctx.font = fs + "px Monospace";
       //_ctx.fillStyle = "rgb(100,100,100)" //if (Math.random() > 0.5) 
-      
+      //
       _ctx.fillText((h<10?'0'+h:h) + ':' + 
                     (min<10?'0'+min:min) +':' + 
                     (s<10?'0'+s:s), 
-                    fs, fs );
-      _ctx.font = (fs/2) + "px Monospace";
+                    fs, fs);
+      
+      _ctx.font = (fs/1.5) + "px Monospace";
       _ctx.fillText( date.getFullYear() + '/' + 
                     (date.getMonth() + 1) +'/' + 
                     date.getDate() 
                     // + '(' + date.getDay() + ')'
-                    , fs, fs + fs/2 );
+                    , fs, fs + fs/1.5);
        
       /*
       _ctx.textAlign = 'center';
@@ -300,9 +303,6 @@ window.addEventListener('keydown', function(e) {
 init();
 initAnim();
 
-
-</script>
-
 /*
     a	c	e
     b	d	f
@@ -311,3 +311,5 @@ initAnim();
                   xscale, xskew, yscale, yskew, xoffset, yoffset
     ctx.resetTransform
 */ 
+
+</script>
