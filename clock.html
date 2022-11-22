@@ -37,11 +37,13 @@
 
 var canvas;
 var ctx;
-var scale = 1.0/2.0;
+
+var c_obj;
 
 var pre = 0;
-var particles = [];
-var frequence = -1;
+var scale = 1.0/2.0;
+
+//var particles = [];
 
 function init() {
     
@@ -78,10 +80,8 @@ function anim_update(elapse) {
                                     _gap, 
                                     (1-_scale) * canvas.height);
   //xscale, xskew, yscale, yskew, xoffset, yoffset
-  
-  for (var i = 0;i<particles.length;i++) {
-    particles[i].update(canvas, ctx, dt);
-  }
+
+  c_obj.update(canvas, ctx, dt);
 
   ctx.resetTransform();
 
@@ -92,38 +92,47 @@ function anim_update(elapse) {
 //function randomPickAnim() { let idx = Math.floor(Math.random() * 5); initAnim(idx);}
 
 function initAnim() {
-  
-  /* 
-  if (particles.length >= 1) {
-    for (var i = 0;i<particles.length;i++) {
-      particles[i].release();
-    }
+
+  if (!c_obj) {
+    c_obj = new ClockObj();
+    c_obj.initial(canvas);
+    console.log('new Clock');
   }
-  */
 
-  particles.length = 0;
-  particles = [];
-
-  particles[0] = newClock();
-  particles[0].initial(canvas);
- 
   window.requestAnimationFrame(anim_update);
 
 }
 
-function newClock() {
-  let p = {
-    fontColor: "rgb(180, 180, 180)",
-    bgColor: "rgba(0, 0, 0, 0.5)",
-    release: function() { },
-    initial: function (c) { },
-    update: function (c, _ctx, dt) {
-      
-      var x = c.width/2.0;
-      var y = c.height/2.0;
-      var len = c.height/5.0;
+class ClockObj {
 
-      var date = new Date();
+  fontColor = "rgb(180, 180, 180)";
+  bgColor = "rgba(0, 0, 0, 0.5)";
+  frequence = -1;
+  
+  constructor() {
+
+  }
+
+  release() { }
+  initial(c) { }
+
+  changeFreq() {
+    switch(this.frequence) {
+        case -1: this.frequence = 5; break;
+        case 5:  this.frequence = 4; break;
+        case 4:  this.frequence = 3; break;
+        case 3:  this.frequence = 0.5; break;
+        case 0.5: this.frequence = -1; break;
+      }
+  }
+
+  update(c, _ctx, dt) {
+
+      let x = c.width/2.0;
+      let y = c.height/2.0;
+      let len = c.height/5.0;
+
+      let date = new Date();
 
       let h = date.getHours();
       let min = date.getMinutes();
@@ -148,23 +157,41 @@ function newClock() {
         _ctx.fill();
       }
 
+      _ctx.fillStyle =  this.bgColor;
+
       //var n = d.getTime();
       let fs = c.width/16;
       _ctx.font = fs + "px Monospace";
       //_ctx.fillStyle = "rgb(100,100,100)" //if (Math.random() > 0.5) 
       //
-      _ctx.fillText((h<10?'0'+h:h) + ':' + 
-                    (min<10?'0'+min:min) +':' + 
-                    (s<10?'0'+s:s), 
-                    fs, fs);
+      let _time = (h<10?'0'+h:h) + ':' + 
+                  (min<10?'0'+min:min) +':' + 
+                  (s<10?'0'+s:s);
+
+      //_ctx.strokeStyle = this.bgColor;
+      //_ctx.lineWidth = Math.ceil(fs/14.0);
+      //_ctx.strokeText(_time, fs, fs);
+
+      _ctx.fillText(_time, fs, fs);
+
       
       _ctx.font = (fs/1.5) + "px Monospace";
-      _ctx.fillText( date.getFullYear() + '/' + 
+      let _date = date.getFullYear() + '/' + 
                     (date.getMonth() + 1) +'/' + 
-                    date.getDate() 
-                    // + '(' + date.getDay() + ')'
+                    date.getDate();
+      //_ctx.strokeText(_date, fs, fs + fs/1.5);
+      _ctx.fillText( _date  // + '(' + date.getDay() + ')'
                     , fs, fs + fs/1.5);
-       
+      
+      /*
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = Math.ceil(fontsize/12.0);//ctx.lineWidth = 4;
+      ctx.strokeText(txt, x, y);
+
+      ctx.fillStyle = 'white';
+      ctx.lineWidth = 1;
+      ctx.fillText(txt, x, y);
+      */
       /*
       _ctx.textAlign = 'center';
       _ctx.fillStyle = "rgb(100, 100, 20)";
@@ -207,10 +234,10 @@ function newClock() {
        * SECOND -1, 0.5, 3, 4 , 5
        */
       angle = Math.PI/180;
-      if (frequence < 0) {
+      if (this.frequence < 0) {
         angle = (90 - (s + ms/1000.0) * 6.0) * angle;//360.0/60.0
       } else {
-        let hz = frequence * 2;
+        let hz = this.frequence * 2;
         var gap = Math.floor(ms/(1000/hz));
         angle = (90 - (s + gap/hz) * 6.0) * angle;
       }
@@ -239,35 +266,7 @@ function newClock() {
       _ctx.fillStyle = "rgb(255, 50, 50)";
       _ctx.arc(x, y, 24, 0, 2 * Math.PI, true);
       _ctx.fill();
-
-    }
   }
-  return p;
-}
-
-function keyboard(e) {
-
-  //alert(e.keyCode);
-  /*
-  if (e.keyCode == 16) {
-    //keylock
-    return;
-  }
-  */
-  /*
-  switch (e.keyCode) {
-    case 113:
-      if (funcInterval) {
-        stopActionInterval();
-        break;
-      }
-      startRestoreInterval();
-      break;
-    case 66: //'b'
-      doblank = doblank == 0?1:0;
-      break;
-  }
-  */
 
 }
 
@@ -276,26 +275,32 @@ window.addEventListener('resize', function() {
 });
 
 window.addEventListener('keydown', function(e) {
-  keyboard(e);
+  //keyboard(e);
+  if (!c_obj) return;
+
   switch(e.keyCode) {
     case 70://f
-      switch(frequence) {
-        case -1: frequence = 5; break;
-        case 5:  frequence = 4; break;
-        case 4:  frequence = 3; break;
-        case 3:  frequence = 0.5; break;
-        case 0.5: frequence = -1; break;
-      }
+      c_obj.changeFreq();
       break;
     case 66://b
       scale = -scale;
       if (scale > 0) 
         initAnim();
       break;
-    case 49: scale = 1.0; break;
-    case 50: scale = 1/2.0; break;
-    case 51: scale = 1/3.0; break;
-    case 52: scale = 1/4.0; break;
+    //keyboard({keyCode : 66})
+    case 49: 
+    case 50: 
+    case 51: 
+    case 52: 
+      if (scale < 0) { 
+        scale = -scale;
+        initAnim();
+      }
+      if (e.keyCode == 49) scale = 1.0;
+      if (e.keyCode == 50) scale = 1.0/2.0;
+      if (e.keyCode == 51) scale = 1.0/3.0;
+      if (e.keyCode == 52) scale = 1.0/4.0;
+      break;
   }
   
 }, false);
