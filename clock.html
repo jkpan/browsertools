@@ -157,32 +157,33 @@ class ClockObj {
         _ctx.fill();
       }
 
-      _ctx.fillStyle =  this.bgColor;
-
-      //var n = d.getTime();
-      let fs = c.width/16;
-      _ctx.font = fs + "px Monospace";
+      
       //_ctx.fillStyle = "rgb(100,100,100)" //if (Math.random() > 0.5) 
       //
       let _time = (h<10?'0'+h:h) + ':' + 
                   (min<10?'0'+min:min) +':' + 
                   (s<10?'0'+s:s);
+      let _date = date.getFullYear() + '/' + 
+                  (date.getMonth() + 1) +'/' + 
+                  date.getDate();
+      
+      let fs = c.width/16;
+      _ctx.font = fs + "px Monospace";
 
-      //_ctx.strokeStyle = this.bgColor;
-      //_ctx.lineWidth = Math.ceil(fs/14.0);
-      //_ctx.strokeText(_time, fs, fs);
+      _ctx.fillStyle = 'rgb(0,64,0)';
 
+      _ctx.lineWidth = Math.ceil(fs/14.0);
+      _ctx.strokeStyle = this.fontColor;
+
+      _ctx.strokeText(_time, fs, fs);      
       _ctx.fillText(_time, fs, fs);
 
-      
       _ctx.font = (fs/1.5) + "px Monospace";
-      let _date = date.getFullYear() + '/' + 
-                    (date.getMonth() + 1) +'/' + 
-                    date.getDate();
-      //_ctx.strokeText(_date, fs, fs + fs/1.5);
-      _ctx.fillText( _date  // + '(' + date.getDay() + ')'
-                    , fs, fs + fs/1.5);
-      
+
+      _ctx.strokeText(_date, fs, fs + fs/1.5);
+      _ctx.fillText(  _date, fs, fs + fs/1.5);
+
+
       /*
       ctx.strokeStyle = 'black';
       ctx.lineWidth = Math.ceil(fontsize/12.0);//ctx.lineWidth = 4;
