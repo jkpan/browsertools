@@ -233,19 +233,6 @@ function keyboard(e) {
       saveAction2Local(e.keyCode);
     //repaint();
 }
-//randomPick();
-var mouseX;
-var mouseY;
-
-window.addEventListener('resize', canvasResize);
-canvasResize();
-
-window.addEventListener('keyup', keyboard, false);
-canvas.addEventListener('mousemove', e => {
-    mouseX = e.x;
-    mouseY = e.y;
-    
-});
 
 function receiveMessage(e) {
   /*
@@ -265,6 +252,22 @@ function receiveMessage(e) {
   }
   _update();
 }
+
+//randomPick();
+var mouseX;
+var mouseY;
+
+window.addEventListener('resize', canvasResize);
+canvasResize();
+
+window.addEventListener('keyup', keyboard, false);
+canvas.addEventListener('mousemove', e => {
+    mouseX = e.x;
+    mouseY = e.y;
+});
+
+// 監聽 message 事件
+window.addEventListener('message', receiveMessage, false);
 
 function initAnim(idx) {
 
