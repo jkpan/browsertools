@@ -492,7 +492,12 @@ function startRestoreInterval() {
   if (document.getElementById("frame_Bible_3").contentWindow)
     document.getElementById("frame_Bible_3").contentWindow.postMessage('x', '/');
 
-  
+  if (document.getElementById("frame_effect").contentWindow)
+    document.getElementById("frame_effect").contentWindow.postMessage('x', '/');
+  if (document.getElementById("frame_news").contentWindow)
+    document.getElementById("frame_news").contentWindow.postMessage('x', '/');
+
+    
 }
 
 function stopTabInterval() {
@@ -517,6 +522,14 @@ function stopTabInterval() {
 
   if (document.getElementById("frame_Bible_3").contentWindow)
     document.getElementById("frame_Bible_3").contentWindow.postMessage('o', '/');
+
+  if (document.getElementById("frame_Bible_3").contentWindow)
+    document.getElementById("frame_Bible_3").contentWindow.postMessage('o', '/');
+
+  if (document.getElementById("frame_effect").contentWindow)
+    document.getElementById("frame_effect").contentWindow.postMessage('o', '/');
+  if (document.getElementById("frame_news").contentWindow)
+    document.getElementById("frame_news").contentWindow.postMessage('o', '/');
 
 }
 

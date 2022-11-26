@@ -38,6 +38,49 @@ function init() {
     
 }
 
+////
+var funcInterval;
+function startActionInterval() {
+  if (funcInterval) 
+    stopActionInterval();
+  funcInterval = window.setInterval(readActionFromLocal, 100);
+}
+
+function stopActionInterval() {
+  if (funcInterval) clearInterval(funcInterval);
+  funcInterval = null;
+  localStorage.removeItem('effect action');
+}
+
+function saveAction2Local(presskey) {
+  let key = 'effect action';
+  let value = mouseX/canvas.width + ' ' + mouseY/canvas.height + ' ' + presskey;
+  localStorage.setItem(key, value);
+}
+
+function readActionFromLocal() {
+
+  let key = 'effect action';
+  let value = localStorage.getItem(key);
+  if (!value) return;
+  
+  localStorage.removeItem(key);
+
+  value = value.trim();
+  if (value && value.length == 0) return;
+  let array = value.split(' ');
+  mouseX = canvas.width *  parseFloat(array[0]);
+  mouseY = canvas.height * parseFloat(array[1]);
+  let _key = parseInt(array[2]);
+  
+  keyboard({keyCode : _key});
+
+}
+
+
+////
+
+/*
 function repaint() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -46,10 +89,11 @@ function repaint() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 }
+*/
 
 function canvasResize() {
   init();
-  repaint();
+  _update();
 }
 
 function _update() {
@@ -58,6 +102,12 @@ function _update() {
 
     ctx.fillStyle = 'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (funcInterval) {
+      ctx.fillStyle = 'rgb(0,255,0)';
+      let _r = 8;
+      ctx.fillRect(0, 0, _r * 2, _r * 2);
+    }
 
 }
 
@@ -70,7 +120,15 @@ function keyboard(e) {
     //alert(e.keyCode);
     let len = particles.length;
     switch (e.keyCode) {
-  
+        case 113:
+          if (funcInterval) {
+            stopActionInterval();
+            _update();
+            break;
+          }
+          startActionInterval();
+          _update();
+        break;
         case 48:
             initAnim(0);
             break;
@@ -171,6 +229,9 @@ function keyboard(e) {
             initAnim(1);
             break;
     }
+    if (!funcInterval) 
+      saveAction2Local(e.keyCode);
+    //repaint();
 }
 //randomPick();
 var mouseX;
@@ -185,6 +246,25 @@ canvas.addEventListener('mousemove', e => {
     mouseY = e.y;
     
 });
+
+function receiveMessage(e) {
+  /*
+  // 來源網址（e.origin）不是指定的網域時
+  if(e.origin !== 'https://xxxxxxx.tw') {
+    alert('資料來源錯誤');
+    return false;
+  }
+    // 來源網址是指定的網域時
+  */
+
+  if (e.data == 'x') { //alert(e.data);
+    startActionInterval();
+  }
+  if (e.data == 'o') { //alert(e.data);
+    stopActionInterval();
+  }
+  _update();
+}
 
 function initAnim(idx) {
 
@@ -225,7 +305,6 @@ function anim_update(elapse) {
     //console.log('len : ' + particles.length);
 
     if (particles.length == 0) animSwh = 0;
-
 
     if (animSwh == 1) {
         window.requestAnimationFrame(anim_update);
