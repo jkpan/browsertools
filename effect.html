@@ -54,7 +54,9 @@ function stopActionInterval() {
 
 function saveAction2Local(presskey) {
   let key = 'effect action';
-  let value = mouseX/canvas.width + ' ' + mouseY/canvas.height + ' ' + presskey;
+  let value = mouseX/canvas.width + ' ' + mouseY/canvas.height;
+  if (presskey)
+    value +=  ' ' + presskey;
   localStorage.setItem(key, value);
 }
 
@@ -71,9 +73,10 @@ function readActionFromLocal() {
   let array = value.split(' ');
   mouseX = canvas.width *  parseFloat(array[0]);
   mouseY = canvas.height * parseFloat(array[1]);
-  let _key = parseInt(array[2]);
-  
-  keyboard({keyCode : _key});
+  if (array.length > 2 && array[2].trim().length > 0) {
+    let _key = parseInt(array[2]);
+    keyboard({keyCode : _key});
+  }
 
 }
 
@@ -158,6 +161,12 @@ function keyboard(e) {
             initAnim(1);
           }
             break;
+        case 52: {
+          particles[len + 0] = spotLight();
+          particles[len + 0].initial();
+          initAnim(1);
+        }
+          break;
         case 81: //'Q'
             particles[len] = hammer();
             particles[len].initial(canvas);
@@ -612,6 +621,53 @@ function character() {
         
         if (this.elapse > 2.0) 
             this.release();
+        
+    }
+  }
+  return p;
+  
+}
+
+function spotLight() {
+  let p = {
+    x: 0,
+    y: 0,
+    state: 1,
+    elapse: 0,
+    release: function() { 
+      this.state = 0;
+    },
+    initial: function () {
+      this.x = -1;//mouseX; 
+      this.y = -1;//mouseY;
+      this.state = 1;
+      this.elapse = -0.1;
+    },
+    
+    update: function (c, _ctx, dt) {
+
+        if (this.state == 0) return;
+
+        _ctx.fillStyle = 'rgb(0,64,0)';
+        _ctx.fillRect(0, 0, c.width, c.height);
+
+        _ctx.beginPath();
+        _ctx.fillStyle = 'green';
+        let radius = c.width/16;
+        _ctx.arc(mouseX - radius, mouseY - radius, radius, 0, 2 * Math.PI, true);
+        _ctx.fill();
+        _ctx.closePath();
+
+        this.elapse += dt/1000.0;
+
+        if (!funcInterval && 
+            this.elapse > 0.1 && 
+            this.x != mouseX && this.y != mouseY) {
+          saveAction2Local();
+          this.x = mouseX;
+          this.y = mouseY;
+          this.elapse = 0;
+        }
         
     }
   }

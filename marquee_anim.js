@@ -36,7 +36,7 @@ function newParticle_casual() {
       _ctx.beginPath();
       _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
       _ctx.fill();
-      
+      _ctx.closePath();
       //ctx.restore();
       
       this.A = this.A - 0.3 * dt * 0.001;
@@ -110,6 +110,7 @@ function newParticle_in() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       if (this.t > this.elapse) {
         this.initial(c);
       }
@@ -177,6 +178,7 @@ function newParticle_out() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       if (this.t > this.elapse) {
         this.initial(c);
       }
@@ -259,7 +261,8 @@ function newParticle_ring() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
-      
+      _ctx.closePath();
+
       if (this.t > this.elapse) {
         this.type = this.type == 0?1:0;
         this.initial(c);
@@ -347,6 +350,7 @@ function newParticle_firework_particle() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       
       if (this.t > this.elapse) {
         this.t = this.elapse;
@@ -431,6 +435,7 @@ function newClock() {
       _ctx.beginPath();
       _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
       _ctx.stroke();
+      _ctx.closePath();
 
       /*
       _ctx.fillStyle = "rgb(100, 100, 100)";
@@ -458,7 +463,8 @@ function newClock() {
       _ctx.lineWidth = 60;
       _ctx.strokeStyle = "rgb(0, 0, 150)";
       _ctx.stroke();
-      
+      _ctx.closePath();
+
       /*
        * MINUTE
        */
@@ -472,6 +478,7 @@ function newClock() {
       _ctx.lineWidth = 40;
       _ctx.strokeStyle =  "rgb(120, 120, 0)";
       _ctx.stroke();
+      _ctx.closePath();
       
       /*
        * SECOND
@@ -489,12 +496,13 @@ function newClock() {
       _ctx.lineWidth = 20;
       _ctx.strokeStyle = "rgb(120, 0, 0)";
       _ctx.stroke();
-
+      _ctx.closePath();
       
       _ctx.beginPath();
       _ctx.fillStyle = "rgb(120, 0, 0)";
       _ctx.arc(x, y, 20, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       
     }
   }
@@ -538,7 +546,7 @@ function newParticle_snow() {
       _ctx.beginPath();
       _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
       _ctx.fill();
-      
+      _ctx.closePath();
 
       //ctx.restore();
       this.A = this.A - dt * 0.0002;

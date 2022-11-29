@@ -54,17 +54,18 @@ var presetVerse = [
   //strokeStyle = 'black';//'rgb(0, 0, 0, ' + a + ')';
   //ctx.fillStyle
 
+  var bgStyle_green = bgStyle;//'blue';
+  var hlightStyle_green = hlightStyle;//'rgb(0, 0, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  const COLORS_green = COLORS_CK;//["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
   var bgStyle_blue = 'blue';
   var hlightStyle_blue = 'rgb(0, 0, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_blue = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
-  
   var bgStyle_black = 'black';
   var hlightStyle_black = 'rgb(80, 80, 80)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_black = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
-
   var bgStyle_white = 'white';
   var hlightStyle_white = 'rgb(180, 180, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_white = ["rgb(255, 255, 255)", "rgb(180, 180, 180)", "rgb(120, 128, 128)", "rgb(80, 80, 80)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
@@ -74,6 +75,7 @@ var presetVerse = [
 
   var txt_strokeStyle_white = 'rgb(255,255,255)';
   var txt_fillStyle_white = 'rgba(0, 0, 0, '; 
+
 
   /////
   var bgcolor_pointer = bgStyle;
@@ -33181,7 +33183,7 @@ function verseobj() {
 
       //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
 
-      if (color_selection == 0) 
+      if (color_selection < 1) 
         return this.level == 0? this.substrings.length * fs + fs * 0.5:
                                 this.substrings.length * fs + fs * 0.2;
       else 
@@ -33336,11 +33338,11 @@ function operateQuene(queueType, doanim) {
     if (obj.chapter == phase && obj.verse == line) {
       obj.setLevel(0);
       sel = i;
-      //if (color_selection == 0 && i >= 2) queue[i-2].setLevel(2);
+      //if (color_selection < 1 && i >= 2) queue[i-2].setLevel(2);
     }
   }
 
-  if (color_selection == 0) {
+  if (color_selection < 1) {
     if (sel >= 2)
       queue[sel - 2].setLevel(2);
     if (queue.length > sel + 2)
@@ -33371,8 +33373,9 @@ function _render(progress) {
   let x = canvas.width * 0.1;
   let y = canvas.height * 0.6;
       
-  if (color_selection > 0)
+  if (color_selection != 0)
     y = canvas.height * 0.4;
+  
   let fixy = y;
   
   let offY = fixy;
@@ -33501,7 +33504,7 @@ function printMain(chapter, verse) {
   let i = chapter;
   let j = verse;
 
-  let amount = color_selection == 0?2:8;
+  let amount = color_selection < 1? 2 : 8;
 
   for (let k = 1;k<=amount;k++) {
 
@@ -33510,7 +33513,7 @@ function printMain(chapter, verse) {
       i = _i;
 
       let obj = verseobj();
-      if (color_selection == 0 && k == amount) {
+      if (color_selection < 1 && k == amount) {
         obj.initial(song, i, j, 2);
       } else {
         obj.initial(song, i, j, 1);
@@ -33530,7 +33533,7 @@ function printMain(chapter, verse) {
       i = _i;
 
       let obj = verseobj();
-      if (color_selection == 0 && k == amount) {
+      if (color_selection < 1 && k == amount) {
         obj.initial(song, i, j, 2);
       } else {
         obj.initial(song, i, j, 1);
@@ -33544,7 +33547,7 @@ function printMain(chapter, verse) {
 
 function _drawSdwtxt(txt, x, y) {
 
-  if (doblank == 1 && color_selection == 0) {
+  if (doblank == 1 && color_selection < 1) {
     ctx.fillStyle = color_pointer[3];//'rgb(0, 220, 0)';
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
@@ -33565,7 +33568,7 @@ function _drawSdwtxt(txt, x, y) {
 
 function _drawtxt(txt, x, y, a) {
     
-  if (doblank == 1 && color_selection == 0) {
+  if (doblank == 1 && color_selection < 1) {
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
   } else {
     ctx.fillStyle = txt_fill + a + ')';
@@ -33807,7 +33810,7 @@ function keyboard(e) { //key up
 
       case 66: //'b'
         //console.log('b press');
-        if (color_selection == 0) {
+        if (color_selection < 1) {
           animElapse = 0;
           if (doblank == 0) {
             window.requestAnimationFrame(blank_update);
@@ -33857,8 +33860,9 @@ function keyboard(e) { //key up
       case 65: //a
           helpSwitch = 0;
           if (canvas.hidden) break;
-          color_selection = (color_selection + 1 )%4;
-          if (color_selection == 0) {
+          let cs = (color_selection + 1) % 5;
+          color_selection = cs == 4?-1:cs;
+          if (color_selection < 1) {
             bgcolor_pointer = bgStyle;
             color_pointer = COLORS_CK;
             hlight_pointer = hlightStyle;

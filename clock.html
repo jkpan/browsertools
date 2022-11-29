@@ -131,6 +131,7 @@ class ClockObj {
       let x = c.width/2.0;
       let y = c.height/2.0;
       let len = c.height/5.0;
+      let lw = c.height/22;
 
       let date = new Date();
 
@@ -141,11 +142,12 @@ class ClockObj {
 
       _ctx.strokeStyle = this.fontColor;
       _ctx.fillStyle =  this.bgColor;
-      _ctx.lineWidth = 16;
+      _ctx.lineWidth = lw;
       _ctx.beginPath();
       _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
       _ctx.fill();
       _ctx.stroke();
+      _ctx.closePath();
 
       _ctx.fillStyle = this.fontColor;
       for (let i = 0;i<12;i++) {
@@ -153,8 +155,9 @@ class ClockObj {
         let dx = 2 * len * Math.cos(angle);
         let dy = -2 * len * Math.sin(angle);
         _ctx.beginPath();
-        _ctx.arc(x + dx, y + dy, len/12, 0, 2 * Math.PI, true);
+        _ctx.arc(x + dx, y + dy, lw/1.5, 0, 2 * Math.PI, true);
         _ctx.fill();
+        _ctx.closePath();
       }
 
       
@@ -213,9 +216,10 @@ class ClockObj {
       _ctx.beginPath();
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = 40;
+      _ctx.lineWidth = lw * 1.6;
       _ctx.strokeStyle = "rgb(50, 50, 255)";
       _ctx.stroke();
+      _ctx.closePath();
       
       /*
        * MINUTE
@@ -227,10 +231,11 @@ class ClockObj {
       _ctx.beginPath();
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = 20;
+      _ctx.lineWidth = lw;
       _ctx.strokeStyle = "rgb(255, 255, 50)";
       _ctx.stroke();
-      
+      _ctx.closePath();
+
       /*
        * SECOND -1, 0.5, 3, 4 , 5
        */
@@ -244,16 +249,18 @@ class ClockObj {
       }
     
       //
+      _ctx.lineWidth = lw * 0.5;
       dx = 1.7 * len * Math.cos(angle);
       dy = -1.7 * len * Math.sin(angle);
       _ctx.beginPath();
       _ctx.moveTo(x + dx, y + dy);
-      dx = 0.3 * len * Math.cos(angle + Math.PI);
-      dy = -0.3 * len * Math.sin(angle + Math.PI);
+      dx = 0.4 * len * Math.cos(angle + Math.PI);
+      dy = -0.4 * len * Math.sin(angle + Math.PI);
       _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = 10;
+      
       _ctx.strokeStyle = "rgb(255, 50, 50)";
       _ctx.stroke();
+      _ctx.closePath();
 
       /*
       _ctx.moveTo(x, y);
@@ -265,8 +272,9 @@ class ClockObj {
       
       _ctx.beginPath();
       _ctx.fillStyle = "rgb(255, 50, 50)";
-      _ctx.arc(x, y, 24, 0, 2 * Math.PI, true);
+      _ctx.arc(x, y, lw, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
   }
 
 }

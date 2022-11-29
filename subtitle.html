@@ -3,12 +3,9 @@
 //今日歌單
 var list = [
 
-'讚美之泉76',
-'讚美之泉41',
-'讚美之泉21',
-'讚美之泉22',
-
-'救恩60',
+'救恩220',
+'救恩257',
+'救恩245',
 
 '主禱文',
 '使徒信經',
@@ -1753,13 +1750,13 @@ var EVENTS = [
 } </script>
 <script id="救恩220" name="我知道所信的是誰" type="application/json" charset="UTF-8"> {
   "content" : [["我知道所信的是誰", "救恩220"],
-               ["不知因何神奇妙恩 向我祂明明說", "因何我雖然真不配 主愛竟救了我"],
+               ["不知因何神奇妙恩", "向我祂明明說", "因何我雖然真不配", "主愛竟救了我"],
                ["但我知道所信的是誰", "也深深相信祂能彀保全", "我一切所交付祂的", "十分妥 直到那日"],
-               ["不知如何因信得救 為我有恩門開", "如何一信了神的話 平安即滿我懷"],
+               ["不知如何因信得救", "為我有恩門開", "如何一信了神的話", "平安即滿我懷"],
                ["但我知道所信的是誰", "也深深相信祂能彀保全", "我一切所交付祂的", "十分妥 直到那日"],
-               ["不知以後是好是歹 要等在我路上", "未見我救主面之前 或苦或樂難講"],
+               ["不知以後是好是歹", "要等在我路上", "未見我救主面之前", "或苦或樂難講"],
                ["但我知道所信的是誰", "也深深相信祂能彀保全", "我一切所交付祂的", "十分妥 直到那日"],
-               ["不知於何時主要來 或晝或夜未定", "是否我先過死蔭谷 或空中救主迎"],
+               ["不知於何時主要來", "或晝或夜未定", "是否我先過死蔭谷", "或空中救主迎"],
                ["但我知道所信的是誰", "也深深相信祂能彀保全", "我一切所交付祂的", "十分妥 直到那日"]]
 } </script>
 <script id="救恩221" name="永遠同在" type="application/json" charset="UTF-8"> {
@@ -5514,6 +5511,7 @@ function newParticle_casual() {
       _ctx.beginPath();
       _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       
       //ctx.restore();
       
@@ -5588,6 +5586,7 @@ function newParticle_in() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       if (this.t > this.elapse) {
         this.initial(c);
       }
@@ -5655,6 +5654,7 @@ function newParticle_out() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       if (this.t > this.elapse) {
         this.initial(c);
       }
@@ -5737,7 +5737,7 @@ function newParticle_ring() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
-      
+      _ctx.closePath();
       if (this.t > this.elapse) {
         this.type = this.type == 0?1:0;
         this.initial(c);
@@ -5825,7 +5825,7 @@ function newParticle_firework_particle() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
-      
+      _ctx.closePath();
       if (this.t > this.elapse) {
         this.t = this.elapse;
       }
@@ -5949,6 +5949,7 @@ function newClock() {
       _ctx.beginPath();
       _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
       _ctx.stroke();
+      _ctx.closePath();
 
       _ctx.fillStyle = "rgb(100, 100, 100)";
       for (let i = 0;i<12;i++) {
@@ -5958,6 +5959,7 @@ function newClock() {
         _ctx.beginPath();
         _ctx.arc(x + dx, y + dy, len/12, 0, 2 * Math.PI, true);
         _ctx.fill();
+        _ctx.closePath();
       }
 
       /*
@@ -5982,7 +5984,7 @@ function newClock() {
       _ctx.lineWidth = 40;
       _ctx.strokeStyle = "rgb(0, 0, 150)";
       _ctx.stroke();
-      
+      _ctx.closePath();
       /*
        * MINUTE
        */
@@ -5996,7 +5998,8 @@ function newClock() {
       _ctx.lineWidth = 20;
       _ctx.strokeStyle =  "rgb(120, 120, 0)";
       _ctx.stroke();
-      
+      _ctx.closePath();
+
       /*
        * SECOND
        */
@@ -6013,13 +6016,13 @@ function newClock() {
       _ctx.lineWidth = 10;
       _ctx.strokeStyle = "rgb(120, 0, 0)";
       _ctx.stroke();
-
+      _ctx.closePath();
       
       _ctx.beginPath();
       _ctx.fillStyle = "rgb(120, 0, 0)";
       _ctx.arc(x, y, 20, 0, 2 * Math.PI, true);
       _ctx.fill();
-      
+      _ctx.closePath();
     }
   }
   return p;
@@ -6062,7 +6065,7 @@ function newParticle_snow() {
       _ctx.beginPath();
       _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
       _ctx.fill();
-      
+      _ctx.closePath();
 
       //ctx.restore();
       this.A = this.A - dt * 0.0002;
@@ -6159,6 +6162,7 @@ function newParticle_skylight() {
       _ctx.beginPath();
       _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       if (this.t > this.elapse) {
         this.initial(c);
         this.t = 0;
@@ -6273,6 +6277,7 @@ function newParticle_sunrise() {
       _ctx.beginPath();
       _ctx.arc(x, y, this.radius, 0, 2 * Math.PI, true);
       _ctx.fill();
+      _ctx.closePath();
       if (this.t > this.elapse) {
         this.initial(c);
         this.elapse = 3 + Math.random();
