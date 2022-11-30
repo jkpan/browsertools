@@ -4716,7 +4716,7 @@ function printTxt(i, j, vpos) {
     if (line == j) {
       ctx.fillStyle = 'rgb(0,200,0)';
       ctx.strokeStyle = 'rgb(0,200,0)';
-      ctx.strokeRect (x + 4, y, 20, 10);
+      ctx.strokeRect (x + 4, y, canvas.width/60, canvas.height/60);
     }
 
   } else {
@@ -4828,10 +4828,27 @@ function printPhase() {
   ctx.font = FONT;
 
   var gap = canvas.height/Math.max(3, (subtitles[phase].length + 1));
-  let _x = mode == 1?canvas.width * 0.1:canvas.width/2;
-  ctx.textAlign = mode == 1?'left':'center';
+  
+  if (mode == 2) {
+    let _x = canvas.width/2;
+    ctx.textAlign = 'center';
+    for (let i=0;i<subtitles[phase].length;i++) {
+      let _y = (i + 1) * gap + fontsize/2;
+      let txt = subtitles[phase][i];
+      if (phase == 0 && txt.length > 0) txt = '[' + txt + ']';
+      ctx.fillStyle = 'white';
+      ctx.fillText(txt, _x, _y);
 
-  if (mode == 1) {
+      if (i == line) {
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'white';
+        ctx.strokeRect (10, _y, canvas.width/60, canvas.height/60);
+      }
+
+    }
+  } else { //mode 1, 3
+    let _x = canvas.width * 0.1;
+    ctx.textAlign = 'left';
     for (let i=0;i<subtitles[phase].length;i++) {
       let _y = (i + 1) * gap + fontsize/2;
       let txt = subtitles[phase][i];
@@ -4846,39 +4863,20 @@ function printPhase() {
       if (i == line) {
         ctx.lineWidth = 1;
         ctx.strokeStyle = doblank == 1?'rgb(0,240,0)':'white';
-        ctx.strokeRect (10, _y, 20, 20);
+        ctx.strokeRect (10, _y, canvas.width/60, canvas.height/60);
       }
 
     }
-  } else {
-    for (let i=0;i<subtitles[phase].length;i++) {
-      let _y = (i + 1) * gap + fontsize/2;
-      let txt = subtitles[phase][i];
-      if (phase == 0 && txt.length > 0) txt = '[' + txt + ']';
-      ctx.fillStyle = 'white';
-      ctx.fillText(txt, _x, _y);
-
-      if (i == line) {
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = 'white';
-        ctx.strokeRect (10, _y, 20, 20);
-      }
-
-    }
-  }
+  } 
   //'rgb(0,240,0)'
 
   if (phase > 0) {
 
-    if (doblank == 1 || mode == 1) {
-      ctx.fillStyle = 'rgb(0,240,0)';
-    } else {
-      ctx.fillStyle = 'yellow';
-    }
+    ctx.fillStyle = mode == 2?'yellow':'rgb(0,240,0)';
     
     ctx.font = fontsize/2 + "px Arial";
     ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', 
-                 mode == 1?canvas.width * 0.1:canvas.width/2, 
+                 mode == 2?canvas.width/2:canvas.width * 0.1, 
                  fontsize/2);
   }
 
@@ -5025,8 +5023,8 @@ function keyboard(e) {
         }
         break;
       case 65: //'A'
-          if (mode == 1) 
-            break;
+          if (mode == 1) break;
+          if (mode == 3) break;
           if (animSwh == 0) {
             initAnim(animIdx);
           } else {
@@ -5041,7 +5039,7 @@ function keyboard(e) {
           break;
       case 80:
           if (animSwh == 0) {
-            mode = (mode+1)%3;
+            mode = (mode+1)%4;
           }
           animSwh = 0;
           break; //'p' ppt mode
@@ -5149,7 +5147,7 @@ function _layer0() {
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else if (mode == 1) {
+  } else if (mode == 1 || mode == 3) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   } else if (mode == 2) {
@@ -5163,9 +5161,10 @@ function _layer0() {
 
 function _layer1() {
   if (mode == 0) {
-    if (displayProgress == 1) printChart();
+    if (displayProgress == 1) 
+      printChart();
     printSubtitle();
-  } else if (mode == 1) {
+  } else if (mode == 1 || mode == 3) {
 
     /*
     a	c	e
@@ -5176,12 +5175,12 @@ function _layer1() {
     ctx.resetTransform
     */
 
-    if (displayProgress == 1) 
+    if ( mode == 1 && displayProgress == 1) 
       printFullChart();
 
     //if (doblank == 1) return;
     
-    let _scale = 0.5;
+    let _scale = mode == 1?0.5:1.0;
     let _gap = 0; //canvas.width/100;
 
     ctx.transform(_scale, 

@@ -97,7 +97,7 @@
 
   <!-- clock -->
   <div id="content_clock" class="clock" style="background-color: magenta;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_effect" frameborder="0" width="100%" height="100%" align="right" src="clock.html"></iframe>
+    <iframe id="frame_clock" frameborder="0" width="100%" height="100%" align="right" src="clock.html"></iframe>
   </div>
 
   <!-- News 
@@ -113,3 +113,20 @@
 
 </body>
 </html>
+
+<script type="text/javascript" charset="UTF-8">
+
+function receiveMessage(e) {
+    if (document.getElementById("frame_song").contentWindow)
+        document.getElementById("frame_song").contentWindow.postMessage(e.data, '/');
+    if (document.getElementById("frame_clock").contentWindow)
+        document.getElementById("frame_clock").contentWindow.postMessage(e.data, '/');
+    if (document.getElementById("frame_Bible").contentWindow)
+        document.getElementById("frame_Bible").contentWindow.postMessage(e.data, '/');
+    _repaint();
+}
+   
+  // 監聽 message 事件
+window.addEventListener('message', receiveMessage, false);
+
+</script>

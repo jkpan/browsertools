@@ -40,8 +40,8 @@ var ctx;
 
 var c_obj;
 
-var pre = 0;
-var scale = 1.0/2.0;
+//var pre = 0;
+var scale = 1.0;//1.0/2.0;
 
 //var particles = [];
 
@@ -61,8 +61,8 @@ function anim_update(elapse) {
 
   //if (img) ctx.drawImage(img,0,0, canvas.width, canvas.height);
 
-  let dt = elapse - pre;
-  pre = elapse;
+  //let dt = elapse - pre;
+  //pre = elapse;
 
   if (scale < 0) return;
 
@@ -81,7 +81,7 @@ function anim_update(elapse) {
                                     (1-_scale) * canvas.height);
   //xscale, xskew, yscale, yskew, xoffset, yoffset
 
-  c_obj.update(canvas, ctx, dt);
+  c_obj.update(canvas, ctx);
 
   ctx.resetTransform();
 
@@ -126,7 +126,7 @@ class ClockObj {
       }
   }
 
-  update(c, _ctx, dt) {
+  update(c, _ctx) {
 
       let x = c.width/2.0;
       let y = c.height/2.0;
