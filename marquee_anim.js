@@ -328,8 +328,9 @@ function newParticle_firework_particle() {
       this.colorDis(idx);
       
       this.A = 1.0;//0.5 + Math.random()/2.0;
-      
-      this.radius = 6 + 4 * (1- range/_range);// + Math.random() * 50;
+
+      //this.radius = 6 + 4 * (1- range/_range);// + Math.random() * 50;      
+      this.radius = (c.height/72) + (c.height/84) * (1- range/_range);// + Math.random() * 50;
       this.elapse = _elapse;
       this.t = 0;
 

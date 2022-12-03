@@ -4,7 +4,7 @@ var dots = 3;
 var pixFunc;
 
 var dot_none = 33;
-var criteria = dot_none;// * 2 / 3;//dot_none/2;
+var criteria = dot_none * 2;//dot_none/2;
 
 var _r = 0;//dot_r;// * Math.random();
 var _g = 0;//dot_g;// * Math.random();
@@ -154,62 +154,6 @@ function newLEDMask() { //ledEffect() {
 
 }
 
-function ledAction(_canvas, _ctx) {
-
-  if (!maskimg) {
-    //console.log('maskimg not ready');
-    return;
-  }
-
-  _ctx.drawImage(maskimg, posx, posy);
-
-  if (dots == 1) { //window.requestAnimationFrame(anim_update);
-    return;
-  }
-
-  let mask = _ctx.getImageData(posx, posy, mwidth, mheight);
-  var data = mask.data;
-
-  let wid = mwidth;
-  
-  for (let i = initDot;i < data.length;i += jumpLine) {
-    
-    let h = Math.floor((i/4)/wid);
-
-    for (let k = i;;k+=jumpSide) {
-
-      let _pix = k/4;
-      let _h = Math.floor(_pix/wid);
-      let _w = _pix%wid;
-
-      if (_w > maskWidth) break;
-      if (_h != h) break;
-  
-      switch(dots) {
-        case 2:
-          setPix4_2(data, k);
-          break;
-        case 3:
-          setPix4_3(data, k);
-          break;
-        case 4:
-          setPix4_4(data, k);
-          break;
-        case 5:
-          setPix4_5(data, k);
-          break;
-        case 6:
-          setPix4_6(data, k);  
-          break;
-        case 7:
-          setPix4_7(data, k);  
-          break;
-      }
-    }
-  }
-  _ctx.putImageData(mask, posx, posy);
-}
-
 /*
  * for still result
  */
@@ -260,9 +204,13 @@ function filter_gray(coloramount) {
 
 function filter_reduceColor(coloramount) {
   let block = Math.ceil(255/coloramount);
-  _r = Math.floor(_r/block) * block;// * (3/4);
-  _g = Math.floor(_g/block) * block;// * (3/4);
-  _b = Math.floor(_b/block) * block;// * (3/4);
+  //_r = Math.floor(_r/block) * block;// * (3/4);
+  //_g = Math.floor(_g/block) * block;// * (3/4);
+  //_b = Math.floor(_b/block) * block;// * (3/4);
+  _r = Math.ceil(_r/block) * block;// * (3/4);
+  _g = Math.ceil(_g/block) * block;// * (3/4);
+  _b = Math.ceil(_b/block) * block;// * (3/4);
+  
 }
 
 function filter() {
@@ -424,6 +372,63 @@ function setPix4Still_7(data, k) {
 
 }
 
+/*
+function ledAction(_canvas, _ctx) {
+
+  if (!maskimg) {
+    //console.log('maskimg not ready');
+    return;
+  }
+
+  _ctx.drawImage(maskimg, posx, posy);
+
+  if (dots == 1) { //window.requestAnimationFrame(anim_update);
+    return;
+  }
+
+  let mask = _ctx.getImageData(posx, posy, mwidth, mheight);
+  var data = mask.data;
+
+  let wid = mwidth;
+  
+  for (let i = initDot;i < data.length;i += jumpLine) {
+    
+    let h = Math.floor((i/4)/wid);
+
+    for (let k = i;;k+=jumpSide) {
+
+      let _pix = k/4;
+      let _h = Math.floor(_pix/wid);
+      let _w = _pix%wid;
+
+      if (_w > maskWidth) break;
+      if (_h != h) break;
+  
+      switch(dots) {
+        case 2:
+          setPix4_2(data, k);
+          break;
+        case 3:
+          setPix4_3(data, k);
+          break;
+        case 4:
+          setPix4_4(data, k);
+          break;
+        case 5:
+          setPix4_5(data, k);
+          break;
+        case 6:
+          setPix4_6(data, k);  
+          break;
+        case 7:
+          setPix4_7(data, k);  
+          break;
+      }
+    }
+  }
+  _ctx.putImageData(mask, posx, posy);
+}
+*/
 
 /*
 
