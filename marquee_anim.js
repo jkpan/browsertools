@@ -410,49 +410,90 @@ function newParticle_firework() {
 
 function newClock() {
   let p = {
+    fontColor : "rgb(120, 120, 120)",
+    bgColor : "rgba(0, 0, 0, 0.0)",
+    hourColor : "rgb(50, 50, 180)",
+    minColor : "rgb(180, 180, 50)",
+    secColor : "rgb(180, 50, 50)",
+    frequence : -1,
+    changeFreq :  function() {
+      switch(this.frequence) {
+        case -1: this.frequence = 5; break;
+        case 5:  this.frequence = 4; break;
+        case 4:  this.frequence = 3; break;
+        case 3:  this.frequence = 0.5; break;
+        case 0.5: this.frequence = -1; break;
+      }
+    },
     release: function() { },
     initial: function (c) { },
     update: function (c, _ctx, dt) {
-      
-      var x = c.width/2.0;
-      var y = c.height/2.0;
-      var len = c.height/5.0;
 
-      var date = new Date();
+      let x = c.width/2.0;
+      let y = c.height/2.0;
+      let len = c.height/5.0;
+      let lw = c.height/22;
 
-      //var n = d.getTime();
-      //_ctx.font = "64px Arial";
-      //_ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')'; //"rgb(0,0,20)"
-      //if (Math.random() > 0.5) _ctx.fillText(h + ':' + min +':' + s, this.x, this.y);
+      let date = new Date();
 
-      let h = date.getHours() % 12;
+      let h = date.getHours();
       let min = date.getMinutes();
       let s = date.getSeconds();
       let ms = date.getMilliseconds();
 
-      _ctx.strokeStyle = "rgb(100, 100, 100)";
-      _ctx.lineWidth = 32;
+      _ctx.strokeStyle = this.fontColor;
+      _ctx.fillStyle =  this.bgColor;
+      _ctx.lineWidth = lw;
       _ctx.beginPath();
       _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
+      _ctx.fill();
       _ctx.stroke();
       _ctx.closePath();
 
-      /*
-      _ctx.fillStyle = "rgb(100, 100, 100)";
+      _ctx.fillStyle = this.fontColor;
       for (let i = 0;i<12;i++) {
         let angle = (90 - i * 360.0/12.0) * Math.PI/180;
         let dx = 2 * len * Math.cos(angle);
         let dy = -2 * len * Math.sin(angle);
         _ctx.beginPath();
-        _ctx.arc(x + dx, y + dy, len/5, 0, 2 * Math.PI, true);
+        _ctx.arc(x + dx, y + dy, lw/1.5, 0, 2 * Math.PI, true);
         _ctx.fill();
+        _ctx.closePath();
       }
+
+      /*
+      //_ctx.fillStyle = "rgb(100,100,100)" //if (Math.random() > 0.5) 
+      //
+      let _time = (h<10?'0'+h:h) + ':' + 
+                  (min<10?'0'+min:min) +':' + 
+                  (s<10?'0'+s:s);
+      let _date = date.getFullYear() + '/' + 
+                  (date.getMonth() + 1) +'/' + 
+                  date.getDate();
+      
+      let fs = c.width/16;
+      _ctx.font = fs + "px Monospace";
+
+      _ctx.fillStyle = 'rgb(0,64,0)';
+
+      _ctx.lineWidth = Math.ceil(fs/14.0);
+      _ctx.strokeStyle = this.fontColor;
+
+      _ctx.strokeText(_time, fs, fs);      
+      _ctx.fillText(_time, fs, fs);
+
+      _ctx.font = (fs/1.5) + "px Monospace";
+
+      _ctx.strokeText(_date, fs, fs + fs/1.5);
+      _ctx.fillText(  _date, fs, fs + fs/1.5);
       */
+
       _ctx.lineCap = "round";
 
       /*
        * HOUR
        */
+      h = h % 12;
       let angle = (90 - (h + min/60.0) * 360.0/12.0) * Math.PI/180;
       let dx = 0.8 * len * Math.cos(angle);
       let dy = -0.8 * len * Math.sin(angle);
@@ -460,11 +501,11 @@ function newClock() {
       _ctx.beginPath();
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = 60;
-      _ctx.strokeStyle = "rgb(0, 0, 150)";
+      _ctx.lineWidth = lw * 1.6;
+      _ctx.strokeStyle = this.hourColor;
       _ctx.stroke();
       _ctx.closePath();
-
+      
       /*
        * MINUTE
        */
@@ -475,35 +516,50 @@ function newClock() {
       _ctx.beginPath();
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = 40;
-      _ctx.strokeStyle =  "rgb(120, 120, 0)";
+      _ctx.lineWidth = lw;
+      _ctx.strokeStyle = this.minColor;
       _ctx.stroke();
       _ctx.closePath();
-      
+
       /*
-       * SECOND
+       * SECOND -1, 0.5, 3, 4 , 5
        */
-      //var gap = Math.floor(ms/(1000/10));
-      //console.log(gap);
-      //angle = (90 - (s + gap/10) * 360.0/60.0) * Math.PI/180;
-      angle = (90 - (s + ms/1000.0) * 360.0/60.0) * Math.PI/180;
+      angle = Math.PI/180;
+      if (this.frequence < 0) {
+        angle = (90 - (s + ms/1000.0) * 6.0) * angle;//360.0/60.0
+      } else {
+        let hz = this.frequence * 2;
+        var gap = Math.floor(ms/(1000/hz));
+        angle = (90 - (s + gap/hz) * 6.0) * angle;
+      }
+    
+      //
+      _ctx.lineWidth = lw * 0.5;
       dx = 1.7 * len * Math.cos(angle);
       dy = -1.7 * len * Math.sin(angle);
-
       _ctx.beginPath();
-      _ctx.moveTo(x, y);
+      _ctx.moveTo(x + dx, y + dy);
+      dx = 0.4 * len * Math.cos(angle + Math.PI);
+      dy = -0.4 * len * Math.sin(angle + Math.PI);
       _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = 20;
-      _ctx.strokeStyle = "rgb(120, 0, 0)";
+      
+      _ctx.strokeStyle = this.secColor;
       _ctx.stroke();
       _ctx.closePath();
+
+      /*
+      _ctx.moveTo(x, y);
+      _ctx.lineTo(x + dx, y + dy);
+      _ctx.lineWidth = 10;
+      _ctx.strokeStyle = "rgb(255, 50, 50)";
+      _ctx.stroke();
+      */
       
       _ctx.beginPath();
-      _ctx.fillStyle = "rgb(120, 0, 0)";
-      _ctx.arc(x, y, 20, 0, 2 * Math.PI, true);
+      _ctx.fillStyle = this.secColor;
+      _ctx.arc(x, y, lw, 0, 2 * Math.PI, true);
       _ctx.fill();
       _ctx.closePath();
-      
     }
   }
   return p;

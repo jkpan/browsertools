@@ -109,6 +109,10 @@ class ClockObj {
   bgColor = "rgba(0, 0, 0, 0.5)";
   frequence = -1;
   
+  hourColor = "rgb(50, 50, 255)";
+  minColor = "rgb(255, 255, 50)";
+  secColor = "rgb(255, 50, 50)";
+
   constructor() {
 
   }
@@ -217,7 +221,7 @@ class ClockObj {
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
       _ctx.lineWidth = lw * 1.6;
-      _ctx.strokeStyle = "rgb(50, 50, 255)";
+      _ctx.strokeStyle = this.hourColor;
       _ctx.stroke();
       _ctx.closePath();
       
@@ -232,7 +236,7 @@ class ClockObj {
       _ctx.moveTo(x, y);
       _ctx.lineTo(x + dx, y + dy);
       _ctx.lineWidth = lw;
-      _ctx.strokeStyle = "rgb(255, 255, 50)";
+      _ctx.strokeStyle = this.minColor;
       _ctx.stroke();
       _ctx.closePath();
 
@@ -258,7 +262,7 @@ class ClockObj {
       dy = -0.4 * len * Math.sin(angle + Math.PI);
       _ctx.lineTo(x + dx, y + dy);
       
-      _ctx.strokeStyle = "rgb(255, 50, 50)";
+      _ctx.strokeStyle = this.secColor;
       _ctx.stroke();
       _ctx.closePath();
 
@@ -271,7 +275,7 @@ class ClockObj {
       */
       
       _ctx.beginPath();
-      _ctx.fillStyle = "rgb(255, 50, 50)";
+      _ctx.fillStyle = this.secColor;
       _ctx.arc(x, y, lw, 0, 2 * Math.PI, true);
       _ctx.fill();
       _ctx.closePath();
