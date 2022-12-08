@@ -1,3 +1,210 @@
+<script type="text/javascript" charset="UTF-8">
+
+const GRID_W = 32;
+const GRID_H = 32;
+
+function initContent() {
+  applets = [
+        new Applet({x:22, y:2, w:10, h:10, elm:document.getElementById("frame_clock")}),
+        new Applet({x:2, y:2, w:10, h:10,  elm:document.getElementById("frame_song")}),
+        new Applet({x:3, y:17, w:28, h:14, elm:document.getElementById("frame_Bible")})
+  ]
+}
+
+class Applet {
+
+  x = 0;
+  y = 0;
+  w = 0;
+  h = 0;
+  elm = null;
+
+  constructor(data) {
+    this.x = data.x;
+    this.y = data.y;
+    this.w = data.w;
+    this.h = data.h;
+    this.elm = data.elm;
+    //this.settle();
+    this.adjust();
+  }
+
+  moveX_(_x) {
+
+    let fix_rx = this.x + this.w;
+   
+    if (_x < 1) return false;
+    if (_x >= fix_rx) return false;
+    if (fix_rx - _x < 2) return false;
+
+    this.x = _x;
+    this.w = fix_rx - this.x;
+
+    this.settle();
+    return true;
+
+  }
+
+  move_X(_x) {
+
+    if (_x > GRID_W + 1) return false;
+    if (_x <= this.x) return false;
+    if (_x - this.x < 2) return false;
+    this.w = _x - this.x;
+    this.settle();
+    return true;
+
+  }
+
+  moveY_(_y) {
+
+    let fix_by = this.y + this.h;
+   
+    if (_y < 1) return false;
+    if (_y >= fix_by) return false;
+    if (fix_by - _y < 2) return false;
+
+    this.y = _y;
+    this.h = fix_by - this.y;
+
+    this.settle();
+    return true;
+  }
+
+  move_Y(_y) {
+
+    if (_y > GRID_H + 1) return false;
+    if (_y <= this.y) return false;
+    if (_y - this.y < 2) return false;
+    this.h = _y - this.y;
+    this.settle();
+    return true;
+  }
+
+  moveBody(_x, _y) {
+    console.log(this.x + ', ' + this.y + ' moveBody ' + _x + ', ' + _y);
+    if (_x < 1) {
+      return false;
+    }
+    if (_x + this.w > GRID_W + 1) {
+      return false;
+    }
+    if (_y < 1) {
+      return false;
+    }
+    if (_y + this.h > GRID_H + 1) {
+      return false;
+    }
+    this.x = _x;
+    this.y = _y;
+    this.settle();
+    return true;
+  }
+
+  adjust() {
+
+    if (this.w < 1) this.w = 1;
+    if (this.h < 1) this.h = 1;
+  
+    if (this.x < 1) {
+      this.x = 1;
+    }
+    if (this.x + this.w > GRID_W + 1) {
+      this.w = GRID_W + 1 - this.x;
+    }
+
+    if (this.y < 1) {
+      this.y = 1;
+    }
+    if (this.y + this.h > GRID_H + 1) {
+      this.h = GRID_H + 1 - this.y;
+    }
+
+    this.settle();
+  }
+
+  settle() {
+    //if (!checkRange()) return;
+    this.elm.style.gridColumn = this.x + ' / ' + (this.x + this.w);//' '2 / 4';
+    this.elm.style.gridRow = this.y + ' / ' + (this.y + this.h);//'1 / 8';
+  }
+
+  checkInside(px, py) { //pixel x y
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+    if (px < (this.x - 1) * _gap_w) return false;
+    if (py < (this.y - 1) * _gap_h) return false;
+    if (px > (this.x + this.w - 1) * _gap_w) return false;
+    if (py > (this.y + this.h - 1) * _gap_h) return false;
+    return true;
+  }
+
+  check_L_Edge(px) {
+    console.log('check_L_Edge');
+    let _gap_w = canvas.width/GRID_W;
+    let _gap = 0.25 * _gap_w;
+    if (Math.abs(px - (this.x - 1) * _gap_w) < _gap) {
+      return true;
+    }
+    return false;
+  }
+
+  check_R_Edge(px) {
+    console.log('check_R_Edge');
+    let _gap_w = canvas.width/GRID_W;
+    let _gap = 0.25 * _gap_w;
+    if (Math.abs(px - (this.x + this.w - 1) * _gap_w) < _gap) {
+      return true;
+    }
+    return false;
+  }
+
+  check_T_Edge(py) {
+    console.log('check_T_Edge');
+    let _gap_h = canvas.height/GRID_H;
+    let _gap = 0.25 * _gap_h;
+    if (Math.abs(py - (this.y - 1) * _gap_h) < _gap) {
+      return true;
+    }
+    return false;
+  }
+
+  check_B_Edge(py) {
+    console.log('check_B_Edge');
+    let _gap_h = canvas.height/GRID_H;
+    let _gap = 0.25 * _gap_h;
+    if (Math.abs(py - (this.y + this.h - 1) * _gap_h) < _gap) {
+      return true;
+    }
+    return false;
+  }
+
+  drawSelRect() {
+
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+  
+    ctx.lineWidth = _gap_h * 0.25;
+    ctx.strokeStyle = 'rgb(0,255,0)';
+
+    ctx.strokeRect((this.x - 1) * _gap_w, 
+                   (this.y - 1) * _gap_h, 
+                   this.w * _gap_w, 
+                   this.h * _gap_h);
+  }
+
+  onTop() {
+    //myElement.parentNode.appendChild(myElement);
+  }
+
+  getPos() {
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+    return [(this.x - 1) * _gap_w, (this.y - 1) * _gap_h];
+  }
+
+}
+</script>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,52 +225,28 @@
   .wrapper {
     display: grid;
     gap: 0px;
-    grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr;
-    grid-template-rows:    0.5fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr;
+    
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
     width: 100%;
     height: 100vh;
   }
   .full {
-    grid-column: 2 / 8;
-    grid-row: 2 / 8;
+    grid-column: 1 / 33;
+    grid-row: 1 / 33;
   }
   .clock {
-    grid-column: 6 / 9;
-    grid-row: 1 / 4;
+    grid-column: 20 / 30;
+    grid-row: 2 / 12;
   }
   .song {
-    grid-column: 1 / 4;
-    grid-row: 1 / 4;
+    grid-column: 2 / 10;
+    grid-row: 2 / 10;
   }
   .Bible {
-    grid-column:  2 / 8;
-    grid-row: 5 / 9;
-  }
-
-  .top {
-    grid-column:  2 / 8;
-    grid-row: 1 / 5;
-  }
-  .bottom {
-    grid-column:  2 / 8;
-    grid-row: 5 / 9;
-  }
-  .left {
-    grid-column:  1 / 4;
-    grid-row: 2 / 8;
-  }
-  .right {
-    grid-column:  6 / 9;
-    grid-row: 2 / 8;
-  }
-  .button {
-    font-size: 24px;
-    background-color:transparent;
-    color: #00ff00;
-    width:100%;
-    height:100%;
-    border: none;
-    vertical-align: middle;
+    grid-column:  3 / 31;
+    grid-row: 20 / 31;
   }
   </style>
 </head>
@@ -71,30 +254,14 @@
 
 <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
   
-  <!-- full screen CONTENT -->
-  <!--div id="content_song" class="song" style="background-color: cyan;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_song" frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
-  </div>
-
-  <div id="content_Bible" class="Bible" style="background-color: yellow;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_Bible" frameborder="0" width="100%" height="100%" align="right" src="subtitle_b.html"></iframe>
-  </div>
-
-  <div id="content_clock" class="clock" style="background-color: magenta;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_clock" frameborder="0" width="100%" height="100%" align="right" src="clock.html"></iframe>
-  </div-->
-
-    <iframe class="song" id="frame_song" frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
-    <iframe class="clock" id="frame_clock" frameborder="0" width="100%" height="100%" align="left" src="clock.html"></iframe>
-    <iframe class="Bible" id="frame_Bible" frameborder="0" width="100%" height="100%" align="left" src="subtitle_b.html"></iframe>
+    <iframe class="full" id="frame_clock" frameborder="0" width="100%" height="100%" align="left" src="clock.html"></iframe>
+    <iframe class="full" id="frame_song" frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
+    <iframe class="full" id="frame_Bible" frameborder="0" width="100%" height="100%" align="left" src="subtitle_b.html"></iframe>
     <!--iframe class="full" id="frame_effect" frameborder="0" width="100%" height="100%" align="right" src="effect.html">
     </iframe-->
-    <!--div id="content_control" class="full" style="background-color: magenta;margin: 0px;opacity: 1.0;">
+    <div id="content_control" class="full" style="background-color: rgb(255, 255, 255);margin: 0px;opacity: 0.2;">
       <canvas id="canvas" width="100" height="100"></canvas>
-    </div-->
-    
-
-    <can
+    </div>
     
 </div>
 
@@ -103,27 +270,73 @@
 
 <script type="text/javascript" charset="UTF-8">
 
-/*
 var canvas;
 var ctx;
+var keylock = false;
+var selectIdx = -1;
+var mouseDown = -1;
+var mouseDownPos;
+
+var applets = null;
 
 function init() {
+
     let div = document.getElementById("content_control");
+    div.hidden = false;
+    
     canvas = document.getElementById("canvas");
     canvas.width  = div.clientWidth;
     canvas.height = div.clientHeight;
+
     ctx = canvas.getContext("2d");
-    //canvas.style.caretColor = "red";
+
+    div.hidden = true;
+    
+    if (applets == null) {
+      initContent();      
+    }
+
 }
 
 function _repaint() {
-    ctx.fillStyle = "rgba(255, 255, 0, 0.5)";//'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //ctx.fillStyle = "rgba(255, 255, 0, 0.5)";//'green';
+    //ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    let gap_w = canvas.width/GRID_W;
+    let gap_h = canvas.height/GRID_H;
+
+    console.log('_repaint:' + canvas.width + ',' + canvas.height);
+
+    for (let i = 0;i<GRID_W;i++) {
+      for (let j = 0;j<GRID_H;j++) {
+        if ((i + j) % 2 == 0)
+          ctx.fillStyle = "rgba(50, 50, 50, 1.0)";
+        else 
+          ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
+        ctx.fillRect(i * gap_w, j * gap_h, gap_w, gap_h);
+      }    
+    }
+    if (selectIdx >= 0) {
+      applets[selectIdx].drawSelRect();
+    }
+
+    debugDraw();
 }
 
-init();
-_repaint();
-*/
+var dx = 0;
+var dy = 0;
+var dw = 0;
+var dh = 0;
+function debugSet(_dx, _dy, _dw, _dh) {
+  dx = _dx;
+  dy = _dy;
+  dw = _dw;
+  dh = _dh;
+}
+function debugDraw() {
+  ctx.fillStyle = "rgba(255, 255, 0, 1.0)";
+  ctx.fillRect(dx, dy, dw, dh);
+}
 
 function receiveMessage(e) {
     if (document.getElementById("frame_song").contentWindow)
@@ -134,40 +347,187 @@ function receiveMessage(e) {
         document.getElementById("frame_Bible").contentWindow.postMessage(e.data, '/');
     if (document.getElementById("frame_effect").contentWindow)
         document.getElementById("frame_effect").contentWindow.postMessage(e.data, '/');
-        
     _repaint();
 }
    
   // 監聽 message 事件
 window.addEventListener('message', receiveMessage, false);
 
-var left;
-var right;
-var top;
-var bottom;
-
-window.addEventListener('keydown', function(e) {
-  
-  //document.getElementById("frame_clock").style.gridRow = '2 / 4';
-  //document.getElementById("frame_clock").style.gridColumn = '1 / 8';
-  /*
-  switch (e.keyCode) {
-    case 37: //left
-      document.getElementById('frame_clock').className = "left";
-      break;
-    case 38: //top
-      document.getElementById('frame_clock').className = "top";
-      break;
-    case 39: //right
-      document.getElementById('frame_clock').className = "right";
-      break;
-    case 40: //bottom
-      document.getElementById('frame_clock').className = "bottom";
-      break;
+window.addEventListener('keyup', function(e) {
+  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+    keylock = false;
+    let div = document.getElementById("content_control");
+    div.hidden = true;
+    mouseDown = -1;
+    selectIdx = -1;
   }
-  */
+  
+  _repaint();
+}, false);
+window.addEventListener('keydown', function(e) {
+
+  //e.preventDefault();
+  //e.stopPropagation();
+  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+    keylock = true;
+    let div = document.getElementById("content_control");
+    div.hidden = false;
+    console.log('edit mode');
+  }
+
+  _repaint();
 
 }, false);
+
+var mouseX;
+var mouseY;
+
+init();
+_repaint();
+
+window.addEventListener('resize', function(){
+  
+  //let div = document.getElementById("content_control");
+  //div.hidden = false;
+  init();
+  //div.hidden = true;
+
+});
+canvas.addEventListener('mousemove', e => {
+
+  console.log('mouse move ' + mouseDown);
+
+    mouseX = e.x;
+    mouseY = e.y;
+    
+    if (mouseDown < 0) {
+      selectIdx = -1;
+      for (let i=0;i<applets.length;i++) {
+        if (applets[i].checkInside(mouseX, mouseY)) {
+          selectIdx = i;
+          break;
+        }
+      }
+      _repaint();
+      return;
+    }
+
+    if (selectIdx < 0) return;
+
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+
+    let applet = applets[selectIdx];
+    let pos = applet.getPos();
+    
+    let _px = pos[0] + mouseX - mouseDownPos[0];
+    let _py = pos[1] + mouseY - mouseDownPos[1];
+
+    //move
+    let _x = Math.floor((_px + _gap_w/2)/_gap_w) + 1;//Math.ceil(_px/_gap_w);
+    let _y = Math.floor((_py + _gap_h/2)/_gap_h) + 1;//Math.ceil(_py/_gap_h);
+    
+    
+
+    switch(mouseDown) {
+      case 0:
+        if (_x != applet.x || _y != applet.y) {
+          if (applet.moveBody(_x, _y)) {
+            mouseDownPos = [mouseX, mouseY];
+          }
+        }
+        break;
+      case 1:
+        if (_x != applet.x) {
+          if (applet.moveX_(_x)) {
+            mouseDownPos = [mouseX, mouseY];
+          }
+        }
+        break;
+      case 2:
+        _px =  pos[0] + applet.w * _gap_w + mouseX - mouseDownPos[0];
+        _x = Math.floor((_px + _gap_w/2)/_gap_w) + 1;
+        if (_x != applet.x + applet.w) {
+          if (applet.move_X(_x)) {
+            mouseDownPos = [mouseX, mouseY];
+          }
+        }
+        break;
+      case 3:
+        if (_y != applet.y) {
+          if (applet.moveY_(_y)) {
+            mouseDownPos = [mouseX, mouseY];
+          }
+        }
+        break;
+      case 4:
+        _py = pos[1] + applet.h * _gap_h + mouseY - mouseDownPos[1];
+        _y = Math.floor((_py + _gap_h/2)/_gap_h) + 1;
+        if (_y != applet.y + applet.h) {
+          if (applet.move_Y(_y)) {
+            mouseDownPos = [mouseX, mouseY];
+          }
+        }
+        break;
+    }
+    //pull left edge
+
+
+    //debugSet((_x - 1) * _gap_w, (_y - 1)* _gap_h, applet.w * _gap_w, applet.h * _gap_h);
+    
+    //debugSet(_px, _py, applet.w * _gap_w, applet.h * _gap_h);
+    _repaint();
+    return true;
+
+    //console.log(_py + ', ' + (_py + _gap_h/2) +', ' + _gap_h + ', ' + (_py + _gap_h/2)/_gap_h + ', ' + Math.floor((_py + _gap_h/2)/_gap_h));
+    //document.getElementById('frame_clock').className = "left";
+    //console.log('mouse move');
+
+});
+
+canvas.addEventListener('mousedown', (e) =>{
+  //console.log('mouse down');
+  mouseDownPos = [e.x, e.y];
+  
+  if (selectIdx >= 0) {
+
+    mouseDown = 0;
+    
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+
+    let applet = applets[selectIdx];
+    let pos = applet.getPos();
+    
+    if (applets[selectIdx].check_L_Edge(mouseX)) {
+      console.log('i got L_Edge');
+      mouseDown = 1;
+      return;
+    } 
+    if (applets[selectIdx].check_R_Edge(mouseX)) {
+      console.log('i got R_Edge');
+      mouseDown = 2;
+      return;
+    }
+
+    if (applets[selectIdx].check_T_Edge(mouseY)) {
+      console.log('i got T_Edge');
+      mouseDown = 3;
+      return;
+    } 
+    if (applets[selectIdx].check_B_Edge(mouseY)) {
+      console.log('i got B_Edge');
+      mouseDown = 4;
+      return;
+    }
+    
+  }
+  
+});
+canvas.addEventListener('mouseup', () =>{
+  mouseDown = -1;
+  return true;
+});
 
 
 </script>
