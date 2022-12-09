@@ -230,9 +230,23 @@ class Applet {
     height: 100vh;
   }
   .full {
+    
     grid-column: 1 / 33;
     grid-row: 1 / 33;
+    
+    user-select: none;
+
+    /*-webkit-user-select: none;*/ /* Chrome/Safari */ 
+    /*-moz-user-select: none; *//* Firefox */
+    /* -ms-user-select: none; *//* IE10+ */
+
+    /* The rule below is not implemented in browsers yet */
+    /* -o-user-select: none; */
+
+    /* The rule below is implemented in most browsers by now */
+
   }
+    
   </style>
 </head>
 <body>
@@ -268,6 +282,8 @@ function init() {
 
     let div = document.getElementById("content_control");
     div.hidden = false;
+    div.style.gridColumn =  '1 / ' + (GRID_W + 1)//' '2 / 4';
+    div.style.gridRow = '1 / ' + (GRID_H + 1);//'1 / 8';
     
     canvas = document.getElementById("canvas");
     canvas.width  = div.clientWidth;
@@ -405,8 +421,6 @@ canvas.addEventListener('mousemove', e => {
     let _x = Math.floor((_px + _gap_w/2)/_gap_w) + 1;//Math.ceil(_px/_gap_w);
     let _y = Math.floor((_py + _gap_h/2)/_gap_h) + 1;//Math.ceil(_py/_gap_h);
     
-    
-
     switch(mouseDown) {
       case 0:
         if (_x != applet.x || _y != applet.y) {
