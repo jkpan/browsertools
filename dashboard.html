@@ -82,7 +82,7 @@ class Applet {
   }
 
   moveBody(_x, _y) {
-    console.log(this.x + ', ' + this.y + ' moveBody ' + _x + ', ' + _y);
+    //console.log(this.x + ', ' + this.y + ' moveBody ' + _x + ', ' + _y);
     if (_x < 1) {
       return false;
     }
@@ -140,7 +140,6 @@ class Applet {
   }
 
   check_L_Edge(px) {
-    console.log('check_L_Edge');
     let _gap_w = canvas.width/GRID_W;
     let _gap = 0.25 * _gap_w;
     if (Math.abs(px - (this.x - 1) * _gap_w) < _gap) {
@@ -150,7 +149,6 @@ class Applet {
   }
 
   check_R_Edge(px) {
-    console.log('check_R_Edge');
     let _gap_w = canvas.width/GRID_W;
     let _gap = 0.25 * _gap_w;
     if (Math.abs(px - (this.x + this.w - 1) * _gap_w) < _gap) {
@@ -160,7 +158,6 @@ class Applet {
   }
 
   check_T_Edge(py) {
-    console.log('check_T_Edge');
     let _gap_h = canvas.height/GRID_H;
     let _gap = 0.25 * _gap_h;
     if (Math.abs(py - (this.y - 1) * _gap_h) < _gap) {
@@ -170,7 +167,6 @@ class Applet {
   }
 
   check_B_Edge(py) {
-    console.log('check_B_Edge');
     let _gap_h = canvas.height/GRID_H;
     let _gap = 0.25 * _gap_h;
     if (Math.abs(py - (this.y + this.h - 1) * _gap_h) < _gap) {
@@ -194,7 +190,8 @@ class Applet {
   }
 
   onTop() {
-    //myElement.parentNode.appendChild(myElement);
+    console.log('onTop');
+    this.elm.parentNode.appendChild(this.elm);
   }
 
   getPos() {
@@ -235,18 +232,6 @@ class Applet {
   .full {
     grid-column: 1 / 33;
     grid-row: 1 / 33;
-  }
-  .clock {
-    grid-column: 20 / 30;
-    grid-row: 2 / 12;
-  }
-  .song {
-    grid-column: 2 / 10;
-    grid-row: 2 / 10;
-  }
-  .Bible {
-    grid-column:  3 / 31;
-    grid-row: 20 / 31;
   }
   </style>
 </head>
@@ -299,13 +284,9 @@ function init() {
 }
 
 function _repaint() {
-    //ctx.fillStyle = "rgba(255, 255, 0, 0.5)";//'green';
-    //ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     let gap_w = canvas.width/GRID_W;
     let gap_h = canvas.height/GRID_H;
-
-    console.log('_repaint:' + canvas.width + ',' + canvas.height);
 
     for (let i = 0;i<GRID_W;i++) {
       for (let j = 0;j<GRID_H;j++) {
@@ -372,7 +353,6 @@ window.addEventListener('keydown', function(e) {
     keylock = true;
     let div = document.getElementById("content_control");
     div.hidden = false;
-    console.log('edit mode');
   }
 
   _repaint();
@@ -394,8 +374,6 @@ window.addEventListener('resize', function(){
 
 });
 canvas.addEventListener('mousemove', e => {
-
-  console.log('mouse move ' + mouseDown);
 
     mouseX = e.x;
     mouseY = e.y;
@@ -470,23 +448,18 @@ canvas.addEventListener('mousemove', e => {
         }
         break;
     }
-    //pull left edge
 
-
-    //debugSet((_x - 1) * _gap_w, (_y - 1)* _gap_h, applet.w * _gap_w, applet.h * _gap_h);
-    
     //debugSet(_px, _py, applet.w * _gap_w, applet.h * _gap_h);
+
     _repaint();
     return true;
 
-    //console.log(_py + ', ' + (_py + _gap_h/2) +', ' + _gap_h + ', ' + (_py + _gap_h/2)/_gap_h + ', ' + Math.floor((_py + _gap_h/2)/_gap_h));
     //document.getElementById('frame_clock').className = "left";
-    //console.log('mouse move');
 
 });
 
 canvas.addEventListener('mousedown', (e) =>{
-  //console.log('mouse down');
+  
   mouseDownPos = [e.x, e.y];
   
   if (selectIdx >= 0) {
@@ -500,27 +473,26 @@ canvas.addEventListener('mousedown', (e) =>{
     let pos = applet.getPos();
     
     if (applets[selectIdx].check_L_Edge(mouseX)) {
-      console.log('i got L_Edge');
       mouseDown = 1;
       return;
     } 
     if (applets[selectIdx].check_R_Edge(mouseX)) {
-      console.log('i got R_Edge');
       mouseDown = 2;
       return;
     }
 
     if (applets[selectIdx].check_T_Edge(mouseY)) {
-      console.log('i got T_Edge');
       mouseDown = 3;
       return;
     } 
     if (applets[selectIdx].check_B_Edge(mouseY)) {
-      console.log('i got B_Edge');
       mouseDown = 4;
       return;
     }
-    
+
+    //applets[selectIdx].onTop();
+
+
   }
   
 });
