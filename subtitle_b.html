@@ -33371,12 +33371,8 @@ var queue = [];
 function _render(progress) {
   
   let x = canvas.width * 0.1;
-  let y = canvas.height * 0.6;
-      
-  if (color_selection != 0)
-    y = canvas.height * 0.4;
-  
-  let fixy = y;
+
+  let fixy = color_selection == 0?canvas.height * 0.6:canvas.height * 0.33;
   
   let offY = fixy;
 
@@ -33388,6 +33384,13 @@ function _render(progress) {
       obj.setTargetTransY(offY);
       offY += obj.preDraw(-2);
       offY += fontsize_sml_sml/2.0;
+
+      if (offY > canvas.height) { //經文超出高度 往上移
+        let _gap = offY - canvas.height;
+        fixy -= _gap;
+        offY -= _gap;
+        obj.setTargetTransY(fixy);
+      }
       
       for (let k = i + 1;k<queue.length;k++) {
         let o = queue[k];

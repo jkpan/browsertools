@@ -25,7 +25,7 @@ var canvas;
 var ctx;
 
 var phase = 0;
-var keepGoing = 1;
+var keepGoing = 0;
 var keepLEDGoing = 1;
 
 var pre = 0;
@@ -34,6 +34,21 @@ var particlesAnim = [];
 var backEffect;
 
 var doblank = 0;
+
+function initCanvas() {
+  canvas = document.getElementById("canvas");
+  canvas.width  = window.innerWidth;// Width;
+  canvas.height = window.innerHeight;//window.outerHeight;
+  ctx = canvas.getContext("2d");
+}
+
+function init() {
+  initCanvas();
+
+  initLED(0, 0, canvas.width, canvas.height);
+  newLEDMask();
+}
+
 
 function newParticle_swingtxt(_txt, xx, yy) {
     let p = {
@@ -172,18 +187,32 @@ function anim_update(elapse) {
     }
     
     if (keepGoing == 1) {
-      window.requestAnimationFrame(anim_update);
-      //console.log("requestAnimationFrame update " + elapse);
+      window.requestAnimationFrame(anim_update); //console.log("requestAnimationFrame update " + elapse);
     }
   
 }
+
+/*
+async function restartAnim() {
+  console.log('1 keepGoing : ' + keepGoing);
+  if (keepGoing == 1) {
+    new Promise(function(resolve, reject) {
+      
+      console.log('2 keepGoing : ' + keepGoing);
+      while (keepGoing != -100) {}
+      resolve(); // 正確完成的回傳方法//reject();  // 失敗的回傳方法
+    }).then(function() {
+      console.log('3 keepGoing : ' + keepGoing);
+      initAnim();
+    });
+  }
+}
+*/
   
 function initAnim() {
   
-    keepGoing = 0;
-
-    if (subtitle.length == 1) 
-      return;
+    //keepGoing = 0;
+    //if (subtitle.length == 1) return;
 
     var c = document.getElementById("canvas");
     var ctx = c.getContext("2d");
@@ -320,6 +349,8 @@ function initAnim() {
       default:
         break;
     }
+
+    if (keepGoing == 1) return;
 
     keepGoing = 1;
     window.requestAnimationFrame(anim_update);

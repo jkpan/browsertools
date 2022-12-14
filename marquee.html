@@ -559,27 +559,12 @@
         return { x: touchEvent.touches[0].clientX - rect.left,
                  y: touchEvent.touches[0].clientY - rect.top};
     }
-    
-    function initCanvas() {
-        canvas = document.getElementById("canvas");
-        canvas.width  = window.innerWidth;// Width;
-        canvas.height = window.innerHeight;//window.outerHeight;
-        ctx = canvas.getContext("2d");
-    }
-    
-    function init() {
-        initCanvas();
-    
-        initLED(0, 0, canvas.width, canvas.height);
-        newLEDMask();
-    }
-    
+        
     window.addEventListener('keyup', keyboard, false);
     window.addEventListener('resize', function() {
-        if (canvas.hidden) 
-          return;
+        if (canvas.hidden) return;
         init();
-        //initAnim();
+        initAnim();
     });
     
     document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {

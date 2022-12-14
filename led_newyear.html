@@ -24,22 +24,6 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
-  
-function initCanvas() {
-    canvas = document.getElementById("canvas");
-    //canvas.width  = window.outerWidth;// Width;
-    //canvas.height = window.outerHeight;//window.outerHeight;
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    ctx = canvas.getContext("2d");
-}
-
-function init() {
-    initCanvas();
-
-    initLED(0, 0, canvas.width, canvas.height);
-    newLEDMask();
-}
 
 function _initData() {
 
@@ -73,6 +57,7 @@ _initData();
 
 window.addEventListener('resize', function() {
     init();
+    initAnim();
 });
 
 </script>
