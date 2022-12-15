@@ -60,6 +60,31 @@ window.addEventListener('resize', function() {
     initAnim();
 });
 
+function touchAction(_x, _y) {
+    if (_x < canvas.width/2 && _y > canvas.height/2) { //左下
+        canvas.requestFullscreen();
+        return;
+    }
+    if (_x > canvas.width/2 && _y < canvas.height/2) { //右上
+        keepLEDGoing = keepLEDGoing == 0?1:0;
+    }
+}
+
+canvas.addEventListener("touchstart", function(evt) {
+
+    evt.preventDefault();
+    var touches = getTouchPos(canvas, evt);
+    
+    touchAction(touches.x, touches.y);
+
+});
+
+canvas.addEventListener('mousedown', (e) =>{
+  
+  touchAction(e.x, e.y);
+
+});
+
 </script>
 
 
