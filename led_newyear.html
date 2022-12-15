@@ -60,6 +60,12 @@ window.addEventListener('resize', function() {
     initAnim();
 });
 
+function getTouchPos(canvasDom, touchEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return {x: touchEvent.touches[0].clientX - rect.left,
+            y: touchEvent.touches[0].clientY - rect.top};
+}
+
 function touchAction(_x, _y) {
     if (_x < canvas.width/2 && _y > canvas.height/2) { //左下
         canvas.requestFullscreen();
