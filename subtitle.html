@@ -4487,7 +4487,7 @@ var funcInterval;
 function startRestoreInterval() {
   if (funcInterval) 
     stopActionInterval();
-  funcInterval = window.setInterval(restoreActionFromLocal, 100);
+  funcInterval = window.setInterval(restoreActionFromLocal, 200);
 }
 
 function stopActionInterval() {
@@ -4503,7 +4503,6 @@ function saveAction2Local() {
 }
 
 function restoreActionFromLocal() {
-  //console.log('saveAction2Local ');
   let key = 'save progress';
   let value = localStorage.getItem(key);
   if (!value) return;

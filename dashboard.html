@@ -5,9 +5,9 @@ const GRID_H = 32;
 
 function initContent() {
   applets = [
-        new Applet({x:22, y:2, w:10, h:10, elm:document.getElementById("frame_clock")}),
-        new Applet({x:2, y:2, w:10, h:10,  elm:document.getElementById("frame_song")}),
-        new Applet({x:3, y:17, w:28, h:14, elm:document.getElementById("frame_Bible")})
+        new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock")}),
+        new Applet({x:1, y:2, w:13, h:31,  elm:document.getElementById("frame_song")}),
+        new Applet({x:15, y:14, w:17, h:18, elm:document.getElementById("frame_Bible")})
   ]
 }
 
@@ -127,6 +127,9 @@ class Applet {
     //if (!checkRange()) return;
     this.elm.style.gridColumn = this.x + ' / ' + (this.x + this.w);//' '2 / 4';
     this.elm.style.gridRow = this.y + ' / ' + (this.y + this.h);//'1 / 8';
+    console.log('---------------');
+    console.log(this.x + '/' + (this.x + this.w));
+    console.log(this.y + '/' + (this.y + this.h));
   }
 
   checkInside(px, py) { //pixel x y
@@ -175,6 +178,44 @@ class Applet {
     return false;
   }
 
+  isHide() {
+    return this.elm.hidden;
+  }
+  
+  hideSelf() {
+    this.elm.hidden = true;
+  }
+
+  removeSelf() {
+    this.elm.remove();
+  }
+
+  
+
+  enlargeSelf() {
+    this.x = 1;
+    this.y = 1;
+    this.w = GRID_W;
+    this.h = GRID_W;
+    this.settle();
+  }
+
+  isClickHide(px, py) {
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+    if (px < (this.x - 2 + this.w) * _gap_w) return false;
+    if (py > (this.y) * _gap_h) return false;
+    return true;
+  }
+
+  isClickEnlarge(px, py) {
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+    if (px < (this.x - 3 + this.w) * _gap_w) return false;
+    if (py > (this.y) * _gap_h) return false;
+    return true;
+  }
+
   drawSelRect() {
 
     let _gap_w = canvas.width/GRID_W;
@@ -187,6 +228,25 @@ class Applet {
                    (this.y - 1) * _gap_h, 
                    this.w * _gap_w, 
                    this.h * _gap_h);
+
+    ctx.fillStyle = 'rgb(0, 180, 0)';
+    let _x = (this.x - 3 + this.w) * _gap_w;
+    let _y = (this.y - 1) * _gap_h;
+    ctx.fillRect(_x, _y, _gap_w, _gap_h);
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = _gap_h + "px Arial";
+    ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
+    ctx.fillText('口', _x + _gap_w/2, _y + _gap_h/2);
+
+    ctx.fillStyle = 'rgb(0, 255, 0)';
+    ctx.fillRect(_x + _gap_w, _y, _gap_w, _gap_h);
+    
+    ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
+    ctx.fillText('-', _x + _gap_w + _gap_w/2, _y + _gap_h/2);
+    
+    
   }
 
   onTop() {
@@ -233,7 +293,7 @@ class Applet {
     
     grid-column: 1 / 33;
     grid-row: 1 / 33;
-    
+
     user-select: none;
 
     /*-webkit-user-select: none;*/ /* Chrome/Safari */ 
@@ -336,14 +396,13 @@ function debugDraw() {
 }
 
 function receiveMessage(e) {
-    if (document.getElementById("frame_song").contentWindow)
-        document.getElementById("frame_song").contentWindow.postMessage(e.data, '/');
-    if (document.getElementById("frame_clock").contentWindow)
-        document.getElementById("frame_clock").contentWindow.postMessage(e.data, '/');
-    if (document.getElementById("frame_Bible").contentWindow)
-        document.getElementById("frame_Bible").contentWindow.postMessage(e.data, '/');
-    if (document.getElementById("frame_effect").contentWindow)
-        document.getElementById("frame_effect").contentWindow.postMessage(e.data, '/');
+  
+  for (let i=0;i<applets.length;i++) {
+    applets[i].elm.contentWindow.postMessage(e.data, '/');
+  }
+
+  //if (document.getElementById("frame_song").contentWindow) document.getElementById("frame_song").contentWindow.postMessage(e.data, '/');
+
     _repaint();
 }
    
@@ -397,7 +456,8 @@ canvas.addEventListener('mousemove', e => {
     if (mouseDown < 0) {
       selectIdx = -1;
       for (let i=0;i<applets.length;i++) {
-        if (applets[i].checkInside(mouseX, mouseY)) {
+        if (//!applets[i].isHide() && 
+        applets[i].checkInside(mouseX, mouseY)) {
           selectIdx = i;
           break;
         }
@@ -485,6 +545,20 @@ canvas.addEventListener('mousedown', (e) =>{
 
     let applet = applets[selectIdx];
     let pos = applet.getPos();
+
+    if (applet.isClickHide(mouseX, mouseY)) {
+      //applet.hideSelf();
+      applets.splice(selectIdx, 1);
+      applet.removeSelf();
+      selectIdx = -1;
+      _repaint();
+      return;      
+    } else if (applet.isClickEnlarge(mouseX, mouseY)) {
+      applet.enlargeSelf();
+      _repaint();
+      return;
+    }
+
     
     if (applets[selectIdx].check_L_Edge(mouseX)) {
       mouseDown = 1;
