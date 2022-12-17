@@ -74,7 +74,7 @@ function touchAction(_x, _y) {
     }
 }
 
-canvas.addEventListener("touchstart", function(evt) {
+canvas.addEventListener("touchend" /*"touchstart"*/, function(evt) {
 
     //evt.preventDefault();
     var touches = getTouchPos(canvas, evt);
