@@ -567,7 +567,7 @@
         initAnim();
     });
     
-    document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
+    document.getElementsByTagName("canvas")[0].addEventListener("touchend" /*"touchstart"*/, function(evt) {
               //canvas.requestFullscreen();
     
               if (canvas.hidden) return;
