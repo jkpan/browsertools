@@ -7,6 +7,10 @@ var subtitle = [ [''],
 var left_gap = 32;
 
 var fsize = 128;
+
+dots = 4;
+side = 1;
+
 fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
 
 var FONT = (fsize - 4) + "px cwTeXKai";//"px 黑體-繁";//宋體-繁"; "px 標楷體";
@@ -48,7 +52,6 @@ function emojiGo(emj) {
         margin: 0px;
         height: 100%;
         background-color:green;
-
         /*cursor:none;*/
       }
       /*
@@ -61,18 +64,33 @@ function emojiGo(emj) {
       ::-webkit-scrollbar {
         display: none;
       }
-      input[type=text] {
-        width:60%;
-        border:2px solid #aaa;
+      textarea[type=text] {
+        /*width:60%;*/
+        border:2px solid rgb(0, 128, 0);
         border-radius: 4px;
         margin: 2% 2%;
         outline: none;
-        padding: 8px;
+        padding: 0px;
         box-sizing: border-box;
+        background: rgb(0, 150, 0);
+        color: rgb(0, 255, 0);
+        width: 96%;
       }
-      input[type=text]:focus {
-        border-color: dodgerblue;
-        box-shadow: 0 0 8px 0 dodgerblue;
+      textarea[type=text]:focus {
+        border:2px solid;
+        border-color: rgb(0, 255, 0);
+        box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+        background: rgb(0, 150, 0);
+        color: rgb(0, 255, 0);
+      }
+      .okbutton {
+        font-size: 24px;
+        background-color: rgb(0, 150, 0);
+        color: #00ff00;
+        margin: 2% 2%;
+        width:96%;
+        border: 2px solid;
+        vertical-align: middle;
       }
     </style>
     </head>   
@@ -80,12 +98,334 @@ function emojiGo(emj) {
 
   <div id="ui" style="margin: 2% 2%;">
     <br/>
-    <!--p style="font-size:48px">&#x1f604;</p-->
-    <input type="text" id="txt" name="myfield" value="😎中文跑馬燈" placeholder="message"/><br/>
-    <button type="button" id="go" style="margin: 2% 2%;width:120px;height:40px;border:2px #ff0000;" onclick="textGo()">OK</button>
+    <textarea type="text" id="txt" name="mytext" rows="6" cols="40" required>😎中文跑馬燈</textarea>
+    <!--input type="text" id="txt" name="myfield" value="😎中文跑馬燈" 
+           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
+           placeholder=""/-->
     
-      <br/>
-      <br/>
+    <br/>
+    <button class="okbutton" onclick="textGo()">OK</button>  
+  </div>
+
+  <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
+
+</body>
+
+</html>
+
+
+<script type="text/javascript" charset="UTF-8">
+
+var canvas;
+var ctx;
+
+function initCanvas() {
+    canvas = document.getElementById("canvas");
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    ctx = canvas.getContext("2d");
+}
+
+function init() {
+  
+  initCanvas();
+
+  initLED(left_gap, 0, fsize, canvas.height);
+  newLEDMask();
+
+}
+
+function newParticle_txt_verticle(_p, _idx, xx, yy) {
+  let p = {
+          x: xx + 2,
+          y: yy,
+        txt: "",
+          p: _p,
+        idx: _idx,
+ activeFlag: true,
+      array: [],
+    release: function() {
+      this.txt = '';
+      this.array = [];
+      this.array.length = 0;
+    },
+
+    initial: function (c) {
+      this.release();
+      this.txt = subtitle[this.p][this.idx];
+      
+      this.array = Array.from(this.txt);
+      this.activeFlag = true;
+
+      //for(let i=0;i<a.length;i++)  console.log(a.length + '-' + i +":"+a[i]);
+      
+      return this.array.length;//this.txt.length;
+    },
+
+    update: function (c, _ctx, dt) {
+        
+      //console.log(this.y);
+      if (!this.activeFlag) return;//= true;
+
+      if (dt > 1000) dt = 16;
+
+      this.y -= dt * 0.001 * speed;
+
+      /*
+      if (this.y < -this.txt.length * fsize) {
+        this.activeFlag = false;
+        return;
+      }
+      */
+
+      if (this.y > c.height + fsize)
+        return;
+
+      _ctx.textAlign = "left";
+      _ctx.font = FONT;// + "px 標楷體";
+      
+      _ctx.strokeStyle = 'black';
+      _ctx.lineWidth = 3;
+        
+      _ctx.fillStyle = 'white';
+
+      /*
+      for (var i = 0;i<this.txt.length;i++) {
+        let _x = this.x; 
+        let _y = this.y + (i * fsize);
+        if (_y < -fsize) 
+            continue;
+        if (_y > c.height + fsize) 
+            break;
+    
+        _ctx.strokeText(this.txt.substr(i, 1), _x, _y);
+        _ctx.fillText(this.txt.substr(i, 1), _x, _y);
+        //console.log(this.txt.substr(i, 1) + '('+ this.x + ', ' + (this.y + (i * fsize)) + ')');
+      }
+      */
+
+      for(let i=0;i<this.array.length;i++) {
+        let _x = this.x; 
+        let _y = this.y + (i * fsize);
+        if (_y < -fsize) 
+            continue;
+        if (_y > c.height + fsize) 
+            break;
+        _ctx.strokeText(this.array[i], _x, _y);
+        _ctx.fillText(this.array[i], _x, _y);
+        if (i == this.array.length - 1 && _y < -fsize/2) {
+          this.activeFlag = false;
+        } 
+      }
+
+      //console.log("repaint");
+
+    }
+  }
+  return p;
+}
+
+function clear_update() {
+  ctx.fillStyle = 'green';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function anim_update(elapse) {
+
+  //ctx.clearRect(0, 0, canvas.width, canvas.height);
+  clear_update();
+  
+  if (keepGoing == 0) {    
+    return;
+  }
+
+  let dt = elapse - pre;
+  pre = elapse;
+
+  if (keepLEDGoing == 1) {    
+    ctx.fillStyle = 'black';
+    //verticle
+    ctx.fillRect(left_gap - 4, 0, fsize + 8, canvas.height);
+    //ctx.fillRect(0, 0, canvas.width, fsize + 9);
+  }
+    
+  for (var i = 0;i<particles.length;i++) {
+    particles[i].update(canvas, ctx, dt);
+  }
+
+  //verticle
+  if (particles[particles.length - 1].activeFlag == false) { //
+    let yy = canvas.height + fsize;
+    for (var i = 0;i<particles.length;i++) {
+      let txtlen = particles[i].initial(canvas);
+      particles[i].y = yy;
+      yy += (txtlen + 2) * fsize;
+    }
+  }
+  
+  if (keepLEDGoing == 1) {
+      //ledAction(canvas, ctx);
+      ledAction4Still(canvas, ctx);
+  }
+
+  if (keepGoing == 1) {
+    window.requestAnimationFrame(anim_update);
+  }
+}
+
+function initAnim() {
+
+  keepGoing = 0;
+
+  if (phase == 0) {
+      return;
+  }
+
+  var c = document.getElementById("canvas");
+  var ctx = c.getContext("2d");
+
+  //console.log(c.width + ', ' + c.height);
+  
+  if (particles.length >= 1) {
+    for (var i = 0;i<particles.length;i++) {
+      particles[i].release();
+    }
+  }
+
+  particles.length = 0;
+  particles = [];
+
+  //verticle
+  let xx = left_gap;
+  let yy = c.height + fsize;
+  let _idx = 0;
+  var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
+  for (_idx = 0;_idx<total;_idx++) {
+      particles[_idx] = newParticle_txt_verticle(phase, _idx,  xx, yy);//();
+      let txtlen = particles[_idx].initial(c);
+      yy += (txtlen + 2) * fsize;
+  }
+
+  keepGoing = 1;
+  window.requestAnimationFrame(anim_update);
+
+}
+
+var phase = 0;
+var keepGoing = 1;
+var keepLEDGoing = 1;
+
+var pre = 0;
+var particles = [];
+
+function ledSwitch() {
+  keepLEDGoing = keepLEDGoing == 0?1:0;
+}
+
+function keyboard(e) {
+
+    if (canvas.hidden) return; 
+
+    switch (e.keyCode) {
+        case 76: //'l'
+            ledSwitch();
+            break;
+        case 66: //'b' //doblank = doblank == 0?1:0;
+            if (keepGoing == 0) {
+              initAnim();
+            } else {
+              keepGoing = 0;
+            }
+            //keepLEDGoing = keepLEDGoing==0?1:0;
+            break;
+        case 39: //'ArrowRight'
+        case 38: //'ArrowUp'
+            speed += 20;
+            break; 
+        case 37: //'ArrowLeft'
+        case 40: //'ArrowDown':
+            speed -= 20;
+            //if (speed < 10) speed = 0;
+            break;
+        /*
+        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57: {
+        //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+            var value = e.keyCode - 48;
+            if (value > subtitle.length - 1)
+                break;
+            
+            phase = value;
+            if (keepGoing == 0) {
+              initAnim();
+            } else {
+              keepGoing = 0;
+            }
+        }
+        break;
+        */
+        case 73: //i
+          //inputTxt();
+          if (canvas.hidden == false) {
+            switch2Input();
+          } else {
+            switch2Marquee();
+          }
+          break;
+
+    }
+
+}
+
+function switch2Input() {
+  
+  keepGoing = 0;
+
+  var div = document.getElementById('ui');
+  if (div) {
+    div.hidden = false;
+    canvas.hidden = true;
+  }
+  
+}
+
+function switch2Marquee() {
+  var div = document.getElementById('ui');
+  if (div) {
+    div.hidden = true;
+    canvas.hidden = false;
+  }
+}
+
+initCanvas();
+switch2Input();
+
+//init();
+window.addEventListener('resize', function() {
+    if (canvas.hidden) 
+      return;
+    init();
+});
+
+//window.addEventListener('click', initAnim, false);
+//document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
+window.addEventListener('keyup', keyboard, false);
+
+</script>
+
+
+    <!--p style="font-size:48px">&#x1f604;</p-->
+    <!--input type="text" id="txt" name="myfield" value="😎中文跑馬燈" 
+           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
+           placeholder="" onkeydown="goText(this)"/>
+           <script>
+            function goText(ele) {
+                if(event.keyCode == 13) {
+                    textGo();
+                }
+            }
+            </script-->
+
+      <!--br/>
 
       <a onclick="emojiGo('😂')">😂</a>
       <a onclick="emojiGo('❤️')">❤️</a>
@@ -761,311 +1101,4 @@ function emojiGo(emj) {
       <a onclick="emojiGo('🚷')">🚷</a>
       <a onclick="emojiGo('🔞')">🔞</a>
 
-      <br/>
-      <br/>
-
-
-  </div>
-
-  <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
-
-</body>
-
-</html>
-
-
-<script type="text/javascript" charset="UTF-8">
-
-var canvas;
-var ctx;
-
-function initCanvas() {
-    canvas = document.getElementById("canvas");
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    ctx = canvas.getContext("2d");
-}
-
-function init() {
-  
-  initCanvas();
-
-  initLED(left_gap, 0, fsize, canvas.height);
-  newLEDMask();
-
-}
-
-function newParticle_txt_verticle(_p, _idx, xx, yy) {
-  let p = {
-          x: xx + 2,
-          y: yy,
-        txt: "",
-          p: _p,
-        idx: _idx,
- activeFlag: true,
-      array: [],
-    release: function() {
-      this.txt = '';
-      this.array = [];
-      this.array.length = 0;
-    },
-
-    initial: function (c) {
-      this.release();
-      this.txt = subtitle[this.p][this.idx];
-      
-      this.array = Array.from(this.txt);
-      this.activeFlag = true;
-
-      //for(let i=0;i<a.length;i++)  console.log(a.length + '-' + i +":"+a[i]);
-      
-      return this.array.length;//this.txt.length;
-    },
-
-    update: function (c, _ctx, dt) {
-        
-      //console.log(this.y);
-      if (!this.activeFlag) return;//= true;
-
-      if (dt > 1000) dt = 16;
-
-      this.y -= dt * 0.001 * speed;
-
-      /*
-      if (this.y < -this.txt.length * fsize) {
-        this.activeFlag = false;
-        return;
-      }
-      */
-
-      if (this.y > c.height + fsize)
-        return;
-
-      _ctx.textAlign = "left";
-      _ctx.font = FONT;// + "px 標楷體";
-      
-      _ctx.strokeStyle = 'white';
-      _ctx.lineWidth = 4;
-        
-      _ctx.fillStyle = 'white';
-
-      /*
-      for (var i = 0;i<this.txt.length;i++) {
-        let _x = this.x; 
-        let _y = this.y + (i * fsize);
-        if (_y < -fsize) 
-            continue;
-        if (_y > c.height + fsize) 
-            break;
-    
-        _ctx.strokeText(this.txt.substr(i, 1), _x, _y);
-        _ctx.fillText(this.txt.substr(i, 1), _x, _y);
-        //console.log(this.txt.substr(i, 1) + '('+ this.x + ', ' + (this.y + (i * fsize)) + ')');
-      }
-      */
-
-      for(let i=0;i<this.array.length;i++) {
-        let _x = this.x; 
-        let _y = this.y + (i * fsize);
-        if (_y < -fsize) 
-            continue;
-        if (_y > c.height + fsize) 
-            break;
-        _ctx.strokeText(this.array[i], _x, _y);
-        _ctx.fillText(this.array[i], _x, _y);
-        if (i == this.array.length - 1 && _y < -fsize/2) {
-          this.activeFlag = false;
-        } 
-      }
-
-      //console.log("repaint");
-
-    }
-  }
-  return p;
-}
-
-function anim_update(elapse) {
-
-  //ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  ctx.fillStyle = 'green';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  let dt = elapse - pre;
-  pre = elapse;
-  
-  /*
-  if (keepGoing != 1) {
-    if (phase != 0) {
-        initAnim();
-    }
-    return;
-  }
-  */
-
-  if (keepLEDGoing == 1) {    
-    ctx.fillStyle = 'black';
-    //verticle
-    ctx.fillRect(left_gap - 4, 0, fsize + 8, canvas.height);
-    //ctx.fillRect(0, 0, canvas.width, fsize + 9);
-  }
-    
-  for (var i = 0;i<particles.length;i++) {
-    particles[i].update(canvas, ctx, dt);
-  }
-
-  //verticle
-  if (particles[particles.length - 1].activeFlag == false) { //
-    let yy = canvas.height + fsize;
-    for (var i = 0;i<particles.length;i++) {
-      let txtlen = particles[i].initial(canvas);
-      particles[i].y = yy;
-      yy += (txtlen + 2) * fsize;
-    }
-  }
-  
-  if (keepLEDGoing == 1) {
-      //ledAction(canvas, ctx);
-      ledAction4Still(canvas, ctx);
-  }
-
-  if (keepGoing == 1) {
-    window.requestAnimationFrame(anim_update);
-  }
-}
-
-function initAnim() {
-
-  keepGoing = 0;
-
-  if (phase == 0) {
-      return;
-  }
-
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
-
-  //console.log(c.width + ', ' + c.height);
-  
-  if (particles.length >= 1) {
-    for (var i = 0;i<particles.length;i++) {
-      particles[i].release();
-    }
-  }
-
-  particles.length = 0;
-  particles = [];
-
-  //verticle
-  let xx = left_gap;
-  let yy = c.height + fsize;
-  let _idx = 0;
-  var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-  for (_idx = 0;_idx<total;_idx++) {
-      particles[_idx] = newParticle_txt_verticle(phase, _idx,  xx, yy);//();
-      let txtlen = particles[_idx].initial(c);
-      yy += (txtlen + 2) * fsize;
-  }
-
-  keepGoing = 1;
-  window.requestAnimationFrame(anim_update);
-
-}
-
-var phase = 0;
-var keepGoing = 1;
-var keepLEDGoing = 1;
-
-var pre = 0;
-var particles = [];
-var doblank = 0;
-
-function ledSwitch() {
-  keepLEDGoing = keepLEDGoing == 0?1:0;
-}
-
-function keyboard(e) {
-
-    if (canvas.hidden) return; 
-
-    switch (e.keyCode) {
-        case 76: //'l'
-            ledSwitch();
-            break;
-        case 66: //'b'
-            doblank = doblank == 0?1:0;
-            break;
-        case 38: //'ArrowUp'
-            speed += 20;
-            break; 
-        case 40: //'ArrowDown':
-            speed -= 20;
-            //if (speed < 10) speed = 0;
-            break;
-        case 37: //'ArrowLeft'
-            break; 
-        case 39: //'ArrowRight'
-            break;
-        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57: {
-        //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-            var value = e.keyCode - 48;
-            if (value > subtitle.length - 1)
-                break;
-            
-            phase = value;
-            if (keepGoing == 0) {
-              initAnim();
-            } else {
-              keepGoing = 0;
-            }
-
-        }
-        break;
-        case 73: //i
-          //inputTxt();
-          if (canvas.hidden == false) {
-            switch2Input();
-          } else {
-            switch2Marquee();
-          }
-          break;
-
-    }
-
-}
-
-function switch2Input() {
-  
-  keepGoing = 0;
-
-  var div = document.getElementById('ui');
-  if (div) {
-    div.hidden = false;
-    canvas.hidden = true;
-  }
-  
-}
-
-function switch2Marquee() {
-  var div = document.getElementById('ui');
-  if (div) {
-    div.hidden = true;
-    canvas.hidden = false;
-  }
-}
-
-initCanvas();
-switch2Input();
-
-//init();
-window.addEventListener('resize', function() {
-    if (canvas.hidden) 
-      return;
-    init();
-});
-//window.addEventListener('click', initAnim, false);
-//document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
-window.addEventListener('keyup', keyboard, false);
-
-</script>
+      <br/-->

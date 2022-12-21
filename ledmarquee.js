@@ -33,8 +33,6 @@ var particles = [];
 var particlesAnim = [];
 var backEffect;
 
-var doblank = 0;
-
 function initCanvas() {
   canvas = document.getElementById("canvas");
   canvas.width  = window.innerWidth;// Width;
