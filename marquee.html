@@ -566,6 +566,28 @@
         init();
         initAnim();
     });
+
+    const controlRatio = 0.2;
+    
+    function touchAction(_x, _y) {
+      if (_x > canvas.width * (1 - controlRatio) && _y > canvas.height * (1 - controlRatio)) { //右下
+        switch2Input();
+        return;
+      }
+      if (_x > canvas.width * (1 - controlRatio) && _y < canvas.height * controlRatio) { //右上
+        ledSwitch();
+        return;
+      }
+      /*
+      if (_x < canvas.width * controlRatio && _y > canvas.height * (1 - controlRatio)) { //左下
+        canvas.requestFullscreen();
+        return;
+      }
+      if (_x < canvas.width * controlRatio && _y < canvas.height * controlRatio) { //左上
+    
+      }
+      */
+    }
     
     document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
               //canvas.requestFullscreen();
@@ -574,23 +596,16 @@
     
               //evt.preventDefault();
               var touches = getTouchPos(canvas, evt);
-    
-              if (touches.x > canvas.width/2 && touches.y > canvas.height/2) { //右下
-                  switch2Input();
-                  return;
-              }
-              if (touches.x < canvas.width/2 && touches.y > canvas.height/2) { //左下
-                  canvas.requestFullscreen();
-                  return;
-              }
-              if (touches.x > canvas.width/2 && touches.y < canvas.height/2) { //右上
-                  ledSwitch();
-              }
-              if (touches.x < canvas.width/2 && touches.y < canvas.height/2) { //左上
-    
-              }
+
+              touchAction(touches.x, touches.y);
     
     });
+
+    
+    document.getElementsByTagName("canvas")[0].addEventListener('mousedown', (e) =>{
+      touchAction(e.x, e.y);
+    });
+    
     
     initCanvas();
     switch2Input();

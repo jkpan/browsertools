@@ -66,12 +66,27 @@ function getTouchPos(canvasDom, touchEvent) {
             y: touchEvent.touches[0].clientY - rect.top};
 }
 
+/*
 function touchAction(_x, _y) {
-    if (_x < canvas.width/2 && _y > canvas.height/2) { //左下
+    if (_x > canvas.width * (1 - controlRatio) && _y > canvas.height * (1 - controlRatio)) { //右下
+        switch2Input();
+        return;
+    }
+    if (_x > canvas.width * (1 - controlRatio) && _y < canvas.height * controlRatio) { //右上
+        ledSwitch();
+        return;
+    }
+}
+*/
+
+const controlRatio = 0.2;
+
+function touchAction(_x, _y) {
+    if (_x < canvas.width * controlRatio && _y > canvas.height * (1 - controlRatio)) { //左下
         canvas.requestFullscreen();
         return;
     }
-    if (_x > canvas.width/2 && _y < canvas.height/2) { //右上
+    if (_x > canvas.width * (1 - controlRatio) && _y < canvas.height * controlRatio) { //右上
         keepLEDGoing = keepLEDGoing == 0?1:0;
     }
 }
