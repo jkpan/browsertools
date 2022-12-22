@@ -1,11 +1,8 @@
+<script type="text/javascript" src="clock.js" charset="UTF-8"></script>
 <script type="text/javascript" charset="UTF-8">
 
 //今日歌單
 var list = [
-
-'救恩267',
-'救恩274',
-'讚美之泉97',
 
 '救恩273',
 '讚美之泉99',
@@ -5551,8 +5548,12 @@ function initAnim(idx) {
       particles[i].initial(canvas);
     }
   } else if (idx == 10) {
-    particles[0] = newClock();
-    particles[0].initial(canvas);
+    try {
+      particles[0] = new ClockObj();//newClock();
+      //particles[0].initial(canvas);
+    } catch (e) {
+      console.log("no clock obj included");
+    }
   }
 
   if (animSwh == 0) {
@@ -6008,163 +6009,6 @@ function newParticle_rect() {
         this.initial(c);
       }
       //console.log(this.y + ', ' + this.x + ':' + dt);
-    }
-  }
-  return p;
-}
-
-function newClock() {
-  let p = {
-    fontColor : "rgb(120, 120, 120)",
-    bgColor : "rgba(0, 0, 0, 0.0)",
-    hourColor : "rgb(50, 50, 180)",
-    minColor : "rgb(180, 180, 50)",
-    secColor : "rgb(180, 50, 50)",
-    frequence : -1,
-    changeFreq :  function() {
-      switch(this.frequence) {
-        case -1: this.frequence = 5; break;
-        case 5:  this.frequence = 4; break;
-        case 4:  this.frequence = 3; break;
-        case 3:  this.frequence = 0.5; break;
-        case 0.5: this.frequence = -1; break;
-      }
-    },
-    release: function() { },
-    initial: function (c) { },
-    update: function (c, _ctx, dt) {
-
-      let x = c.width/2.0;
-      let y = c.height/2.0;
-      let len = c.height/5.0;
-      let lw = c.height/22;
-
-      let date = new Date();
-
-      let h = date.getHours();
-      let min = date.getMinutes();
-      let s = date.getSeconds();
-      let ms = date.getMilliseconds();
-
-      _ctx.strokeStyle = this.fontColor;
-      _ctx.fillStyle =  this.bgColor;
-      _ctx.lineWidth = lw;
-      _ctx.beginPath();
-      _ctx.arc(x, y, 2 * len + 10, 0, 2 * Math.PI, true);
-      _ctx.fill();
-      _ctx.stroke();
-      _ctx.closePath();
-
-      _ctx.fillStyle = this.fontColor;
-      for (let i = 0;i<12;i++) {
-        let angle = (90 - i * 360.0/12.0) * Math.PI/180;
-        let dx = 2 * len * Math.cos(angle);
-        let dy = -2 * len * Math.sin(angle);
-        _ctx.beginPath();
-        _ctx.arc(x + dx, y + dy, lw/1.5, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        _ctx.closePath();
-      }
-
-      /*
-      //_ctx.fillStyle = "rgb(100,100,100)" //if (Math.random() > 0.5) 
-      //
-      let _time = (h<10?'0'+h:h) + ':' + 
-                  (min<10?'0'+min:min) +':' + 
-                  (s<10?'0'+s:s);
-      let _date = date.getFullYear() + '/' + 
-                  (date.getMonth() + 1) +'/' + 
-                  date.getDate();
-      
-      let fs = c.width/16;
-      _ctx.font = fs + "px Monospace";
-
-      _ctx.fillStyle = 'rgb(0,64,0)';
-
-      _ctx.lineWidth = Math.ceil(fs/14.0);
-      _ctx.strokeStyle = this.fontColor;
-
-      _ctx.strokeText(_time, fs, fs);      
-      _ctx.fillText(_time, fs, fs);
-
-      _ctx.font = (fs/1.5) + "px Monospace";
-
-      _ctx.strokeText(_date, fs, fs + fs/1.5);
-      _ctx.fillText(  _date, fs, fs + fs/1.5);
-      */
-
-      _ctx.lineCap = "round";
-
-      /*
-       * HOUR
-       */
-      h = h % 12;
-      let angle = (90 - (h + min/60.0) * 360.0/12.0) * Math.PI/180;
-      let dx = 0.8 * len * Math.cos(angle);
-      let dy = -0.8 * len * Math.sin(angle);
-      
-      _ctx.beginPath();
-      _ctx.moveTo(x, y);
-      _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = lw * 1.6;
-      _ctx.strokeStyle = this.hourColor;
-      _ctx.stroke();
-      _ctx.closePath();
-      
-      /*
-       * MINUTE
-       */
-      angle = (90 - (min + s/60.0) * 360.0/60.0) * Math.PI/180;
-      dx = 1.5 * len * Math.cos(angle);
-      dy = -1.5 * len * Math.sin(angle);
-
-      _ctx.beginPath();
-      _ctx.moveTo(x, y);
-      _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = lw;
-      _ctx.strokeStyle = this.minColor;
-      _ctx.stroke();
-      _ctx.closePath();
-
-      /*
-       * SECOND -1, 0.5, 3, 4 , 5
-       */
-      angle = Math.PI/180;
-      if (this.frequence < 0) {
-        angle = (90 - (s + ms/1000.0) * 6.0) * angle;//360.0/60.0
-      } else {
-        let hz = this.frequence * 2;
-        var gap = Math.floor(ms/(1000/hz));
-        angle = (90 - (s + gap/hz) * 6.0) * angle;
-      }
-    
-      //
-      _ctx.lineWidth = lw * 0.5;
-      dx = 1.7 * len * Math.cos(angle);
-      dy = -1.7 * len * Math.sin(angle);
-      _ctx.beginPath();
-      _ctx.moveTo(x + dx, y + dy);
-      dx = 0.4 * len * Math.cos(angle + Math.PI);
-      dy = -0.4 * len * Math.sin(angle + Math.PI);
-      _ctx.lineTo(x + dx, y + dy);
-      
-      _ctx.strokeStyle = this.secColor;
-      _ctx.stroke();
-      _ctx.closePath();
-
-      /*
-      _ctx.moveTo(x, y);
-      _ctx.lineTo(x + dx, y + dy);
-      _ctx.lineWidth = 10;
-      _ctx.strokeStyle = "rgb(255, 50, 50)";
-      _ctx.stroke();
-      */
-      
-      _ctx.beginPath();
-      _ctx.fillStyle = this.secColor;
-      _ctx.arc(x, y, lw, 0, 2 * Math.PI, true);
-      _ctx.fill();
-      _ctx.closePath();
     }
   }
   return p;

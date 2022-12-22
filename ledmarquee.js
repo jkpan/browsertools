@@ -327,7 +327,7 @@ function initAnim() {
         }
         break;
       case 8:
-        particlesAnim[0] = newClock();
+        particlesAnim[0] = new ClockObj();// newClock();
         particlesAnim[0].initial(canvas);
         break;
         

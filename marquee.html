@@ -1,5 +1,6 @@
 <script type="text/javascript" src="led.js" charset="UTF-8"></script>
 <script type="text/javascript" src="marquee_anim.js" charset="UTF-8"></script>
+<script type="text/javascript" src="clock.js" charset="UTF-8"></script>
 <script type="text/javascript" src="ledmarquee.js" charset="UTF-8"></script>
 <script type="text/javascript" charset="UTF-8"> 
 
@@ -594,7 +595,7 @@
     
               if (canvas.hidden) return;
     
-              //evt.preventDefault();
+              evt.preventDefault();
               var touches = getTouchPos(canvas, evt);
 
               touchAction(touches.x, touches.y);
