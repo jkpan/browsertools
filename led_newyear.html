@@ -27,8 +27,8 @@
 
 function _initData() {
 
-    side = 4;
-    dots = 6;
+    side = 3;
+    dots = 4;
     
     makeRound = true;
 
@@ -44,8 +44,8 @@ function _initData() {
     animIdx = 7;//parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
     bgIdx = 0;
 
-    subtitle[1] = ["🎉Happy New Year🐰"];
-    subtitle[2] = ["從歲首到年終 耶和華 你神的眼目時常看顧那地 [申11:12]"];
+    subtitle[1] = ["2023🐰HappyNewYear🎉"];
+    subtitle[2] = ["從歲首到年終 耶和華 你神的眼目時常看顧那地"];//[申11:12]
       
     init();
     initAnim();
@@ -65,19 +65,6 @@ function getTouchPos(canvasDom, touchEvent) {
     return {x: touchEvent.touches[0].clientX - rect.left,
             y: touchEvent.touches[0].clientY - rect.top};
 }
-
-/*
-function touchAction(_x, _y) {
-    if (_x > canvas.width * (1 - controlRatio) && _y > canvas.height * (1 - controlRatio)) { //右下
-        switch2Input();
-        return;
-    }
-    if (_x > canvas.width * (1 - controlRatio) && _y < canvas.height * controlRatio) { //右上
-        ledSwitch();
-        return;
-    }
-}
-*/
 
 const controlRatio = 0.2;
 

@@ -237,15 +237,16 @@ class Applet {
 
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = _gap_h + "px Arial";
+    ctx.font = Math.floor(_gap_h * 0.75) + "px Arial";
     ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
-    ctx.fillText('口', _x + _gap_w/2, _y + _gap_h/2);
+    //ctx.fillText('口', _x + _gap_w/2, _y + _gap_h/2);
+    ctx.fillText('^', _x + _gap_w/2, _y + _gap_h/2);
 
     ctx.fillStyle = 'rgb(0, 255, 0)';
     ctx.fillRect(_x + _gap_w, _y, _gap_w, _gap_h);
     
     ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
-    ctx.fillText('-', _x + _gap_w + _gap_w/2, _y + _gap_h/2);
+    ctx.fillText('x', _x + _gap_w + _gap_w/2, _y + _gap_h/2);
     
     
   }
@@ -555,7 +556,8 @@ canvas.addEventListener('mousedown', (e) =>{
       _repaint();
       return;      
     } else if (applet.isClickEnlarge(mouseX, mouseY)) {
-      applet.enlargeSelf();
+      //applet.enlargeSelf();
+      applet.onTop();
       _repaint();
       return;
     }
