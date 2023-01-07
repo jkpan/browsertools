@@ -32726,6 +32726,9 @@ var abbr_eng = ['',
 ];
 */
 
+const MAX_VERSES_GREEN = 3;
+const MAX_VERSES_NORMAL = 8;
+
 var song;
 var subtitles;
 //var presetVerse;
@@ -33112,6 +33115,8 @@ function verseobj() {
         this.targetFs = fontsize_sml;
       else if (this.level == 2)
         this.targetFs = fontsize_sml_sml;
+      else 
+        this.targetFs = fontsize_sml_sml * 0.8;
     },
 
     targetTransY: 0,
@@ -33165,10 +33170,13 @@ function verseobj() {
         }
       } else if (this.level == 1) {
         this.wratio = 0.9;
-        this.opacity = 0.8;
+        this.opacity = 0.85;
       } else if (this.level == 2) {
         this.wratio = 0.9;
-        this.opacity = 0.5;
+        this.opacity = 0.7;
+      } else {
+        this.wratio = 0.9;
+        this.opacity = 0.55;
       }
 
       ctx.font = fs + "px " + fontFamily;
@@ -33343,10 +33351,22 @@ function operateQuene(queueType, doanim) {
   }
 
   if (color_selection < 1) {
+    for (let _sel = 2;;_sel++)
+      if (sel >= _sel) queue[sel - _sel].setLevel(_sel);
+      else break;
+    for (let _sel = 2;;_sel++)
+      if (queue.length > sel + _sel) queue[sel + _sel].setLevel(_sel);
+      else break;
+    /*
     if (sel >= 2)
       queue[sel - 2].setLevel(2);
     if (queue.length > sel + 2)
       queue[sel + 2].setLevel(2);
+    if (sel >= 3)
+      queue[sel - 3].setLevel(3);
+    if (queue.length > sel + 3)
+      queue[sel + 3].setLevel(3);
+      */
   }
 
   if (doanim > 0) {
@@ -33507,7 +33527,7 @@ function printMain(chapter, verse) {
   let i = chapter;
   let j = verse;
 
-  let amount = color_selection < 1? 2 : 8;
+  let amount = color_selection < 1? MAX_VERSES_GREEN : MAX_VERSES_NORMAL;
 
   for (let k = 1;k<=amount;k++) {
 
@@ -33516,11 +33536,12 @@ function printMain(chapter, verse) {
       i = _i;
 
       let obj = verseobj();
-      if (color_selection < 1 && k == amount) {
-        obj.initial(song, i, j, 2);
+      if (color_selection < 1) {
+        obj.initial(song, i, j, k);
       } else {
         obj.initial(song, i, j, 1);
       }
+
       queue.unshift(obj);
   }
 
@@ -33536,12 +33557,13 @@ function printMain(chapter, verse) {
       i = _i;
 
       let obj = verseobj();
-      if (color_selection < 1 && k == amount) {
-        obj.initial(song, i, j, 2);
+      if (color_selection < 1) {
+        obj.initial(song, i, j, k);
       } else {
         obj.initial(song, i, j, 1);
       }
-      queue.push(obj);      
+
+      queue.push(obj);   
   }
 
   _render(-1);
