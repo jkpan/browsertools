@@ -32726,8 +32726,8 @@ var abbr_eng = ['',
 ];
 */
 
-const MAX_VERSES_GREEN = 3;
-const MAX_VERSES_NORMAL = 8;
+const MAX_VERSES_GREEN = 2;
+const MAX_VERSES_NORMAL = 7;
 
 var song;
 var subtitles;
@@ -33191,7 +33191,7 @@ function verseobj() {
 
       //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
 
-      if (color_selection < 1) 
+      if (color_selection <= 1) 
         return this.level == 0? this.substrings.length * fs + fs * 0.5:
                                 this.substrings.length * fs + fs * 0.2;
       else 
@@ -33350,7 +33350,7 @@ function operateQuene(queueType, doanim) {
     }
   }
 
-  if (color_selection < 1) {
+  if (color_selection <= 1) {
     for (let _sel = 2;;_sel++)
       if (sel >= _sel) queue[sel - _sel].setLevel(_sel);
       else break;
@@ -33469,7 +33469,7 @@ function _render(progress) {
     ctx.fillRect(0, 0, canvas.width, fs * 2);
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
 
-    if (color_selection > 0) 
+    if (color_selection > 1) 
       ctx.fillStyle = 'rgba(155, 155, 155, 0.66)';
     ctx.font = (fs * 1.2) + 'px Arial';
     ctx.fillText(subtitles[0][0], 10, 2);
@@ -33527,7 +33527,7 @@ function printMain(chapter, verse) {
   let i = chapter;
   let j = verse;
 
-  let amount = color_selection < 1? MAX_VERSES_GREEN : MAX_VERSES_NORMAL;
+  let amount = color_selection <= 1? MAX_VERSES_GREEN : MAX_VERSES_NORMAL;
 
   for (let k = 1;k<=amount;k++) {
 
@@ -33536,7 +33536,7 @@ function printMain(chapter, verse) {
       i = _i;
 
       let obj = verseobj();
-      if (color_selection < 1) {
+      if (color_selection <= 1) {
         obj.initial(song, i, j, k);
       } else {
         obj.initial(song, i, j, 1);
@@ -33557,7 +33557,7 @@ function printMain(chapter, verse) {
       i = _i;
 
       let obj = verseobj();
-      if (color_selection < 1) {
+      if (color_selection <= 1) {
         obj.initial(song, i, j, k);
       } else {
         obj.initial(song, i, j, 1);
@@ -33572,7 +33572,7 @@ function printMain(chapter, verse) {
 
 function _drawSdwtxt(txt, x, y) {
 
-  if (doblank == 1 && color_selection < 1) {
+  if (doblank == 1 && color_selection <= 1) {
     ctx.fillStyle = color_pointer[3];//'rgb(0, 220, 0)';
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
@@ -33593,7 +33593,7 @@ function _drawSdwtxt(txt, x, y) {
 
 function _drawtxt(txt, x, y, a) {
     
-  if (doblank == 1 && color_selection < 1) {
+  if (doblank == 1 && color_selection <= 1) {
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
   } else {
     ctx.fillStyle = txt_fill + a + ')';
@@ -33798,6 +33798,39 @@ function jump2preset(ps) {
   if (!funcInterval) saveAction2Local();
 }
 
+function colorSwitch() {
+  switch(color_selection) {  
+    case 2:
+      bgcolor_pointer = bgStyle_black;
+      color_pointer = COLORS_black;
+      hlight_pointer = hlightStyle_black;
+      txt_fill = txt_fillStyle;
+      txt_stroke = txt_strokeStyle; 
+      break;
+    case 3:
+      bgcolor_pointer = bgStyle_white;
+      color_pointer = COLORS_white;
+      hlight_pointer = hlightStyle_white;
+      txt_fill = txt_fillStyle_white;
+      txt_stroke = txt_strokeStyle_white; 
+      break;
+    case 4:
+      bgcolor_pointer = bgStyle_blue;
+      color_pointer = COLORS_blue;
+      hlight_pointer = hlightStyle_blue;
+      txt_fill = txt_fillStyle;
+      txt_stroke = txt_strokeStyle; 
+      break;
+    default: //0, 1
+      bgcolor_pointer = bgStyle;
+      color_pointer = COLORS_CK;
+      hlight_pointer = hlightStyle;
+      txt_fill = txt_fillStyle;
+      txt_stroke = txt_strokeStyle; 
+      break;
+  }
+}
+
 function keyboard(e) { //key up
 
     //alert(e.keyCode);
@@ -33835,7 +33868,7 @@ function keyboard(e) { //key up
 
       case 66: //'b'
         //console.log('b press');
-        if (color_selection < 1) {
+        if (color_selection <= 1) {
           animElapse = 0;
           if (doblank == 0) {
             window.requestAnimationFrame(blank_update);
@@ -33885,43 +33918,9 @@ function keyboard(e) { //key up
       case 65: //a
           helpSwitch = 0;
           if (canvas.hidden) break;
-          let cs = (color_selection + 1) % 5;
-          color_selection = cs == 4?-1:cs;
-          if (color_selection < 1) {
-            bgcolor_pointer = bgStyle;
-            color_pointer = COLORS_CK;
-            hlight_pointer = hlightStyle;
-
-            txt_fill = txt_fillStyle;
-            txt_stroke = txt_strokeStyle; 
-
-          } else if (color_selection == 1) {
-            bgcolor_pointer = bgStyle_black;
-            color_pointer = COLORS_black;
-            hlight_pointer = hlightStyle_black;
-            txt_fill = txt_fillStyle;
-            txt_stroke = txt_strokeStyle; 
-          } else if (color_selection == 2) { 
-            bgcolor_pointer = bgStyle_blue;
-            color_pointer = COLORS_blue;
-            hlight_pointer = hlightStyle_blue;
-            txt_fill = txt_fillStyle;
-            txt_stroke = txt_strokeStyle; 
-          } if (color_selection == 3) { 
-            bgcolor_pointer = bgStyle_white;
-            color_pointer = COLORS_white;
-            hlight_pointer = hlightStyle_white;
-            txt_fill = txt_fillStyle_white;
-            txt_stroke = txt_strokeStyle_white; 
-          }      
-          
-          
-          //if (canvas.hidden) break;
-          //initAnim(1);
-          //if (animSwh == 0) initAnim(animIdx);  else initAnim(-1);
-          
+          color_selection = (color_selection + 1) % 5;
+          colorSwitch();          
           break;
-        
       case 72: //'H'
           if (canvas.hidden) {
               removeDiv();  
