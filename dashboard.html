@@ -188,11 +188,13 @@ class Applet {
     this.elm.hidden = true;
   }
 
+  showSelf() {
+    this.elm.hidden = false;
+  }
+
   removeSelf() {
     this.elm.remove();
   }
-
-  
 
   enlargeSelf() {
     this.x = 1;
@@ -206,11 +208,19 @@ class Applet {
     let _gap_w = canvas.width/GRID_W;
     let _gap_h = canvas.height/GRID_H;
     if (px < (this.x - 2 + this.w) * _gap_w) return false;
+    if (py > (this.y + 1) * _gap_h || py < (this.y) * _gap_h) return false;
+    return true;
+  }
+
+  isClickRemove(px, py) {
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+    if (px < (this.x - 2 + this.w) * _gap_w) return false;
     if (py > (this.y) * _gap_h) return false;
     return true;
   }
 
-  isClickEnlarge(px, py) {
+  isClickOntop(px, py) {
     let _gap_w = canvas.width/GRID_W;
     let _gap_h = canvas.height/GRID_H;
     if (px < (this.x - 3 + this.w) * _gap_w) return false;
@@ -231,6 +241,7 @@ class Applet {
                    this.w * _gap_w, 
                    this.h * _gap_h);
 
+    //draw ^ ontop
     ctx.fillStyle = 'rgb(0, 180, 0)';
     let _x = (this.x - 3 + this.w) * _gap_w;
     let _y = (this.y - 1) * _gap_h;
@@ -240,15 +251,22 @@ class Applet {
     ctx.textBaseline = 'middle';
     ctx.font = Math.floor(_gap_h * 0.75) + "px Arial";
     ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
-    //ctx.fillText('口', _x + _gap_w/2, _y + _gap_h/2);
     ctx.fillText('^', _x + _gap_w/2, _y + _gap_h/2);
 
+    //draw X remove
     ctx.fillStyle = 'rgb(0, 255, 0)';
     ctx.fillRect(_x + _gap_w, _y, _gap_w, _gap_h);
     
     ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
     ctx.fillText('x', _x + _gap_w + _gap_w/2, _y + _gap_h/2);
     
+
+    //draw _ hide
+    ctx.fillStyle = 'rgb(0, 180, 0)';
+    ctx.fillRect(_x + _gap_w, _y + _gap_h, _gap_w, _gap_h);
+    
+    ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
+    ctx.fillText('_', _x + _gap_w + _gap_w/2, _y + _gap_h + _gap_h/2);
     
   }
 
@@ -605,13 +623,18 @@ canvas.addEventListener('mousedown', (e) =>{
     let pos = applet.getPos();
 
     if (applet.isClickHide(mouseX, mouseY)) {
-      //applet.hideSelf();
+      if (applet.isHide()) 
+        applet.showSelf();
+      else 
+        applet.hideSelf();
+      return;
+    } else if (applet.isClickRemove(mouseX, mouseY)) {
       applets.splice(selectIdx, 1);
       applet.removeSelf();
       selectIdx = -1;
       _repaint();
       return;      
-    } else if (applet.isClickEnlarge(mouseX, mouseY)) {
+    } else if (applet.isClickOntop(mouseX, mouseY)) {
       //applet.enlargeSelf();
       applet.onTop();
       _repaint();
@@ -636,9 +659,6 @@ canvas.addEventListener('mousedown', (e) =>{
       mouseDown = 4;
       return;
     }
-
-    //applets[selectIdx].onTop();
-
 
   }
   
