@@ -32801,26 +32801,26 @@ function restoreActionFromLocal() {
   value = value.trim();
   if (value && value.length == 0) return;
   let array = value.split(' ');
-  let volume = parseInt(array[0]);//array[0];
+  let volumn = parseInt(array[0]);//array[0];
   let chapter = parseInt(array[1]);
   let verse = parseInt(array[2]);
   let _doblank = parseInt(array[3]);
-  if (volume == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
+  if (volumn == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
   
   fake_doblank = _doblank;
   if (_doblank != doblank) keyboard({keyCode : 66});
 
-  if (volume == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
+  if (volumn == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
     keyboard({keyCode : 37}); //left
     return;
   }
   
-  if (volume == song && chapter == getNextChapter(phase, line) && verse == getNextVerse(phase, line)) {
+  if (volumn == song && chapter == getNextChapter(phase, line) && verse == getNextVerse(phase, line)) {
     keyboard({keyCode : 39}); //right
     return;
   }
   
-  song = volume;
+  song = volumn;
   subtitles = SONGS[song];
   phase = chapter;
   line = verse;
@@ -32898,7 +32898,7 @@ function _newBtn() {
   return button;
 }
 
-function createBtnVolume() {
+function createBtnVolumn() {
 
   var div = document.createElement('div');
   div.id = 'btns';
@@ -32915,7 +32915,7 @@ function createBtnVolume() {
     if (i == 54) div.insertAdjacentHTML('beforeend', '<br/><br/>');
     if (i == 58) div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-    var button = _newBtn(); //_createVolume(i);
+    var button = _newBtn(); //_createVolumn(i);
     button.innerHTML = SONGS[i][0][0];
     button.id = 'vol ' + i;
     button.onclick = function() {
@@ -33008,7 +33008,7 @@ function openSelection(type) {
   canvas.hidden = true;
   switch(type) {
     case 0:
-      createBtnVolume();
+      createBtnVolumn();
       break;
     case 1:
       if (song == 0) {
@@ -33082,7 +33082,7 @@ function getTxtArray(txt, wRatio) {
 
 function verseobj() {
   let obj = {
-    volume: 0,
+    volumn: 0,
     chapter: 0,
     verse: 0,
     wratio: 0.9,
@@ -33096,8 +33096,8 @@ function verseobj() {
     
     //targetsize: fontsize,
           
-    initial: function(volume, c, v, level) {
-      this.volume = volume;
+    initial: function(volumn, c, v, level) {
+      this.volumn = volumn;
       this.chapter = c;
       this.verse = v;
       this.setLevel(level);
@@ -33144,15 +33144,15 @@ function verseobj() {
         this.transY = this.transY + (this.targetTransY - this.transY) * progress;
       }
     
-      if (this.volume <= 0 || this.chapter < 0 || this.verse < 0) return 0;
+      if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
        
       let txt = '';
       this.frontxt = '';
 
-      if (this.chapter == 0) {   //print volume only
+      if (this.chapter == 0) {   //print volumn only
         if (this.level == 0)
           txt = subtitles[0][0];
-      } else if (this.verse == 0) { //print volume with chapter
+      } else if (this.verse == 0) { //print volumn with chapter
         txt = '[' + subtitles[this.chapter][0] + ']';
       } else {                     //normal verse
         txt = subtitles[this.chapter][this.verse];
@@ -33212,7 +33212,7 @@ function verseobj() {
           //draw chapter verse
           if (this.chapter > 0 && this.verse > 0) {
             ctx.font = (this.targetFs * 0.7) + "px " + fontFamily;//FONT_SML;
-            _drawSdwtxt(' '+abbr[this.volume], 0, 0);
+            _drawSdwtxt(' '+abbr[this.volumn], 0, 0);
             _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
           }
         ctx.resetTransform();
@@ -34379,17 +34379,17 @@ canvas.addEventListener("touchend", function(evt) { //touchend
       return;
     }
     
-    //preious volume
+    //preious volumn
     if (gw == 0 && gh == 1) {
       keyboard({keyCode : 189});
       return;
     }
-    //select volume 
+    //select volumn 
     if (gw == 1 && gh == 1) {
       keyboard({keyCode : 76});
       return;
     }
-    //next volume
+    //next volumn
     if (gw == 2 && gh == 1) {
       keyboard({keyCode : 187});
       return;
@@ -34535,7 +34535,7 @@ recognition.maxAlternatives = 1;
 
 if(navigator.userAgent.indexOf("Chrome") != -1 ) {
   var speechRecognitionList = new webkitSpeechGrammarList();
-  var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
+  var grammar = '#JSGF V1.0; grammar volumn; public <volumn> = ' + fullname.join(' | ') + ' ;';
   speechRecognitionList.addFromString(grammar, 2);
   recognition.grammars = speechRecognitionList;
 }
