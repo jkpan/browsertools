@@ -84,7 +84,7 @@ class Applet {
   }
 
   moveBody(_x, _y) {
-    //console.log(this.x + ', ' + this.y + ' moveBody ' + _x + ', ' + _y);
+
     if (_x < 1) {
       return false;
     }
@@ -129,9 +129,8 @@ class Applet {
     //if (!checkRange()) return;
     this.elm.style.gridColumn = this.x + ' / ' + (this.x + this.w);//' '2 / 4';
     this.elm.style.gridRow = this.y + ' / ' + (this.y + this.h);//'1 / 8';
-    console.log('---------------');
-    console.log(this.x + '/' + (this.x + this.w));
-    console.log(this.y + '/' + (this.y + this.h));
+    //console.log(this.x + '/' + (this.x + this.w));
+    //console.log(this.y + '/' + (this.y + this.h));
   }
 
   checkInside(px, py) { //pixel x y
@@ -271,7 +270,6 @@ class Applet {
   }
 
   onTop() {
-    console.log('onTop');
     this.elm.parentNode.appendChild(this.elm);
   }
 
