@@ -37,7 +37,8 @@ function initCanvas() {
   canvas = document.getElementById("canvas");
   canvas.width  = window.innerWidth;// Width;
   canvas.height = window.innerHeight;//window.outerHeight;
-  ctx = canvas.getContext("2d");
+  //ctx = canvas.getContext("2d");
+  ctx = canvas.getContext("2d", {willReadFrequently:true});
 }
 
 function init() {
