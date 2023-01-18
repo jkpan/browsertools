@@ -21,14 +21,50 @@ class Applet {
   h = 0;
   elm = null;
 
+  sx = 0;
+  sy = 0;
+  sw = 0;
+  sh = 0;
+  shide = false;
+  
   constructor(data) {
     this.x = data.x;
     this.y = data.y;
     this.w = data.w;
     this.h = data.h;
     this.elm = data.elm;
-    //this.settle();
     this.adjust();
+    this.presave();
+  }
+
+  presave() {
+    this.sx = this.x;
+    this.sy = this.y;
+    this.sw = this.w;
+    this.sh = this.h;
+    this.shide = this.elm.hidden;
+  }
+
+  recover() {
+    this.x = this.sx;
+    this.y = this.sy;
+    this.w = this.sw;
+    this.h = this.sh;
+    this.elm.hidden = this.shide;
+    this.settle();
+  }
+
+  tmpHide() {
+    this.elm.hidden = true;
+  }
+
+  enlargeSelf() {
+    this.x = 2;
+    this.y = 2;
+    this.w = GRID_W - 2;
+    this.h = GRID_H - 2;
+    this.elm.hidden = false;
+    this.settle();
   }
 
   moveX_(_x) {
@@ -43,6 +79,7 @@ class Applet {
     this.w = fix_rx - this.x;
 
     this.settle();
+    this.presave();
     return true;
 
   }
@@ -54,6 +91,7 @@ class Applet {
     if (_x - this.x < 2) return false;
     this.w = _x - this.x;
     this.settle();
+    this.presave();
     return true;
 
   }
@@ -70,6 +108,7 @@ class Applet {
     this.h = fix_by - this.y;
 
     this.settle();
+    this.presave();
     return true;
   }
 
@@ -80,6 +119,7 @@ class Applet {
     if (_y - this.y < 2) return false;
     this.h = _y - this.y;
     this.settle();
+    this.presave();
     return true;
   }
 
@@ -100,6 +140,7 @@ class Applet {
     this.x = _x;
     this.y = _y;
     this.settle();
+    this.presave();
     return true;
   }
 
@@ -185,22 +226,16 @@ class Applet {
   
   hideSelf() {
     this.elm.hidden = true;
+    this.presave();
   }
 
   showSelf() {
     this.elm.hidden = false;
+    this.presave();
   }
 
   removeSelf() {
     this.elm.remove();
-  }
-
-  enlargeSelf() {
-    this.x = 1;
-    this.y = 1;
-    this.w = GRID_W;
-    this.h = GRID_W;
-    this.settle();
   }
 
   isClickHide(px, py) {
@@ -267,6 +302,12 @@ class Applet {
     ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
     ctx.fillText('_', _x + _gap_w + _gap_w/2, _y + _gap_h + _gap_h/2);
     
+  }
+
+  getPosition() {
+    let _gap_w = canvas.width/GRID_W;
+    let _gap_h = canvas.height/GRID_H;
+    return [(this.x - 1) * _gap_w, (this.y - 1) * _gap_h];
   }
 
   onTop() {
@@ -392,7 +433,7 @@ class Applet {
 
     
 
-    <div id="content_control" class="full" style="background-color: rgb(255, 255, 255);margin: 0px;opacity: 0.33;">
+    <div id="content_control" class="full" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 0.5;">
       <canvas id="canvas" width="100" height="100"></canvas>
     </div>
     
@@ -434,79 +475,167 @@ function init() {
 }
 
 function _repaint() {
-    
-    let gap_w = canvas.width/GRID_W;
-    let gap_h = canvas.height/GRID_H;
+   
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (let i = 0;i<GRID_W;i++) {
-      for (let j = 0;j<GRID_H;j++) {
-        if ((i + j) % 2 == 0)
-          ctx.fillStyle = "rgba(50, 50, 50, 1.0)";
-        else 
-          ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
+  let gap_w = canvas.width/GRID_W;
+  let gap_h = canvas.height/GRID_H;
+
+  ctx.fillStyle = "rgba(0, 255, 0, 0.1)";
+  for (let i = 0;i<GRID_W;i++) {
+    for (let j = 0;j<GRID_H;j++) {
+      if ((i + j) % 2 == 0) 
         ctx.fillRect(i * gap_w, j * gap_h, gap_w, gap_h);
-      }    
     }
-    if (selectIdx >= 0) {
-      applets[selectIdx].drawSelRect();
-    }
-
-}
-
-/*
-var dx = 0;
-var dy = 0;
-var dw = 0;
-var dh = 0;
-function debugSet(_dx, _dy, _dw, _dh) {
-  dx = _dx;
-  dy = _dy;
-  dw = _dw;
-  dh = _dh;
-}
-function debugDraw() {
-  ctx.fillStyle = "rgba(255, 255, 0, 1.0)";
-  ctx.fillRect(dx, dy, dw, dh);
-}
-*/
-
-function receiveMessage(e) {
+  }
   
+  if (selectIdx >= 0) {
+    applets[selectIdx].drawSelRect();
+  }
+
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.font = (gap_w * 2) + "px Arial";
+  ctx.fillStyle = 'rgb(0, 255, 0)';//"rgb(0,180,0)";
+  for (let i=0;i<applets.length;i++) {
+    let pos = applets[i].getPosition();
+    ctx.fillText(' ' + i, pos[0], pos[1]);
+  }
+
+}
+
+var animElapse = 0;
+
+function anim_update(elapse) {
+  animElapse--;
+  if(animElapse <= 0) {
+    animElapse = 0;
+    //remove later
+    let div = document.getElementById("content_control");
+    div.hidden = true;
+    //
+    return;
+  }
+  //remove later
+  _repaint();
+  //
+  window.requestAnimationFrame(anim_update);
+  
+}
+
+function anim_start() {
+
+  if (animElapse > 0) {
+    animElapse = 10;
+    return;
+  }
+
+  animElapse = 10;
+  //remove later
+  let div = document.getElementById("content_control");
+  div.hidden = false;
+  //
+  window.requestAnimationFrame(anim_update);
+
+}
+
+// 監聽 message 事件
+window.addEventListener('message', e => {
   for (let i=0;i<applets.length;i++) {
     applets[i].elm.contentWindow.postMessage(e.data, '/');
   }
+}, false);
 
-  //if (document.getElementById("frame_song").contentWindow) document.getElementById("frame_song").contentWindow.postMessage(e.data, '/');
+var keysel = -1;
 
-    _repaint();
+function keyboard(e) {
+
+  //alert(e.keyCode);
+  switch (e.keyCode) {
+    case 65: //A
+      applets[keysel].showSelf();
+      break;    
+    case 83: //S
+      applets[keysel].hideSelf();
+      break; 
+    //case 49:
+    case 81: //Q
+      for (let i=0;i<applets.length;i++) {
+        applets[i].recover();
+        applets[i].tmpHide();
+      }
+      applets[keysel].enlargeSelf();
+      break;
+    case 87: //W
+      for (let i=0;i<applets.length;i++) {
+        applets[i].recover();
+      }
+      break;
+    
+    //break; case 88: break;
+    
+    //case 51: break; case 69: break; case 68: break; case 67: break;
+    
+    //case 52: break; case 82: break; case 70: break; case 86: break;
+  }
+
 }
-   
-  // 監聽 message 事件
-window.addEventListener('message', receiveMessage, false);
 
-window.addEventListener('keyup', function(e) {
+window.addEventListener('keyup', e => {
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = false;
     let div = document.getElementById("content_control");
     div.hidden = true;
     mouseDown = -1;
     selectIdx = -1;
+    return;
   }
-  
-  _repaint();
+
+  //keysel = -1;
+
+  switch (e.keyCode) {
+    case 48:
+    case 49:
+    case 50:
+    case 51:
+    case 52:
+    case 53:
+    case 54:
+    case 55:
+    case 56:
+    case 57:
+      let v = e.keyCode - 48;
+      if (v < applets.length) {
+        keysel = v;
+        applets[keysel].presave();
+        anim_start();
+        return;
+      } else {
+        keysel = -1;
+      }
+      break;
+    default:
+      if (keysel < applets.length) {
+        keyboard(e);
+      }
+      break;
+  }
+  //keyboard(e);
+
 }, false);
+
 window.addEventListener('keydown', function(e) {
 
   //e.preventDefault();
   //e.stopPropagation();
-  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+  if (e.keyCode == 16) { // || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = true;
     let div = document.getElementById("content_control");
     div.hidden = false;
+    _repaint();
+    return;
   }
-
-  _repaint();
-
+  
 }, false);
 
 var mouseX;
@@ -515,14 +644,7 @@ var mouseY;
 init();
 _repaint();
 
-window.addEventListener('resize', function(){
-  
-  //let div = document.getElementById("content_control");
-  //div.hidden = false;
-  init();
-  //div.hidden = true;
-
-});
+window.addEventListener('resize', e => { init(); });
 canvas.addEventListener('mousemove', e => {
 
     mouseX = e.x;
@@ -667,5 +789,23 @@ canvas.addEventListener('mouseup', () =>{
   return true;
 });
 
+</script>
 
+<script>
+  /*
+var dx = 0;
+var dy = 0;
+var dw = 0;
+var dh = 0;
+function debugSet(_dx, _dy, _dw, _dh) {
+  dx = _dx;
+  dy = _dy;
+  dw = _dw;
+  dh = _dh;
+}
+function debugDraw() {
+  ctx.fillStyle = "rgba(255, 255, 0, 1.0)";
+  ctx.fillRect(dx, dy, dw, dh);
+}
+*/
 </script>
