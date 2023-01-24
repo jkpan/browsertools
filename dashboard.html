@@ -4,13 +4,15 @@ const GRID_W = 32;
 const GRID_H = 32;
 
 function initContent() {
+  
   applets = [
-        new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock")}),
         new Applet({x:1, y:14, w:13, h:18,  elm:document.getElementById("frame_song")}),
         new Applet({x:15, y:14, w:17, h:18, elm:document.getElementById("frame_Bible")}),
-        new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news")}),
         new Applet({x:5, y:1, w:12, h:12, elm:document.getElementById("div_slide")}),
+        new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock")}),
+        new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news")}),
   ]
+  //new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news")});
 }
 
 class Applet {
@@ -20,19 +22,34 @@ class Applet {
   w = 0;
   h = 0;
   elm = null;
-
+  
   sx = 0;
   sy = 0;
   sw = 0;
-  sh = 0;
+  sh = 0; //sOpacity = 0;
   shide = false;
-  
+
+  t_x = 0;
+  t_y = 0;
+  t_w = 0;
+  t_h = 0;
+  t_Opacity = 1.0;
+  //t_hide = false;
+
+  printInfo() {
+    console.log('(' + this.x + ', ' + this.y + ', ' + this.w + ', ' + this.h + '), ' + this.elm.hidden + ', "' + this.elm.style.opacity + '"');
+  }
+
   constructor(data) {
     this.x = data.x;
     this.y = data.y;
     this.w = data.w;
     this.h = data.h;
     this.elm = data.elm;
+    this.elm.style.opacity = '1.0';
+    this.shide = false;
+    //this.sOpacity = 1.0;
+    //this.t_Opacity = 1.0;
     this.adjust();
     this.presave();
   }
@@ -41,30 +58,83 @@ class Applet {
     this.sx = this.x;
     this.sy = this.y;
     this.sw = this.w;
-    this.sh = this.h;
+    this.sh = this.h;//this.sOpacity = parseFloat(this.elm.style.opacity);
     this.shide = this.elm.hidden;
   }
 
   recover() {
-    this.x = this.sx;
-    this.y = this.sy;
-    this.w = this.sw;
-    this.h = this.sh;
-    this.elm.hidden = this.shide;
-    this.settle();
+    this.t_x = this.sx;
+    this.t_y = this.sy;
+    this.t_w = this.sw;
+    this.t_h = this.sh;
+    if (this.shide) {
+      this.t_Opacity = 0.0;
+    } else {
+      this.elm.hidden = false;
+      this.t_Opacity = 1.0;
+    }
   }
 
-  tmpHide() {
-    this.elm.hidden = true;
+
+  tmpHide() { //other in bg
+    this.t_Opacity = 0.0;
   }
+
+  //tmpShow() { this.t_Opacity = 1.0;}
 
   enlargeSelf() {
-    this.x = 2;
-    this.y = 2;
-    this.w = GRID_W - 2;
-    this.h = GRID_H - 2;
-    this.elm.hidden = false;
-    this.settle();
+    this.t_x = 1;
+    this.t_y = 1;
+    this.t_w = GRID_W;
+    this.t_h = GRID_H;
+    //this.elm.hidden = false;
+    //this.elm.style.opacity = 0;
+    if (this.elm.hidden) {
+      this.elm.hidden = false;
+      this.elm.style.opacity = '0.0';
+    }
+    this.t_Opacity = 1.0;
+  }
+
+  targetProgress() {
+
+    if (this.x != this.t_x) 
+      this.x += Math.ceil((this.t_x - this.x)/Math.abs(this.t_x - this.x));
+    if (this.y != this.t_y) 
+      this.y += Math.ceil((this.t_y - this.y)/Math.abs(this.t_y - this.y));
+    if (this.w != this.t_w) 
+      this.w += Math.ceil((this.t_w - this.w)/Math.abs(this.t_w - this.w));
+    if (this.h != this.t_h) 
+      this.h += Math.ceil((this.t_h - this.h)/Math.abs(this.t_h - this.h));
+    
+    let opcy = parseFloat(this.elm.style.opacity);
+    
+    //console.log(this.elm.style.opacity);// + ',, ' + opcy + ', ' + this.t_Opacity);
+
+    if (opcy != this.t_Opacity) {
+      opcy += (this.t_Opacity - opcy) * 0.016 * 3;
+      if (Math.abs(opcy - this.t_Opacity) <= 0.05) {
+        opcy = this.t_Opacity;
+        if (opcy > 0.5) {
+          this.elm.hidden = false;
+        } else {
+          this.elm.hidden = true;
+        }
+      }
+      this.elm.style.opacity = '' + opcy;
+      /*
+      if (opcy == 0.0) 
+        this.elm.hidden = true;
+      else if (opcy == 1.0) 
+         this.elm.hidden = false;
+      */
+    }
+    
+    this.settle();//
+    if (opcy == this.t_Opacity && this.x == this.t_x && this.y == this.t_y && this.w == this.t_w && this.h == this.t_h) {
+      return true;
+    }
+    return false;
   }
 
   moveX_(_x) {
@@ -221,16 +291,20 @@ class Applet {
   }
 
   isHide() {
-    return this.elm.hidden;
+    return this.elm.hidden;//parseFloat(this.elm.style.opacity) < 0.1;
   }
   
   hideSelf() {
+    this.elm.style.opacity = '0.0';
     this.elm.hidden = true;
+    //this.elm.style.opacity = '' + 0.0;
     this.presave();
   }
 
   showSelf() {
+    this.elm.style.opacity = '1.0';
     this.elm.hidden = false;
+    //this.elm.style.opacity = '' + 1.0;
     this.presave();
   }
 
@@ -311,6 +385,7 @@ class Applet {
   }
 
   onTop() {
+    console.log('onTop');
     this.elm.parentNode.appendChild(this.elm);
   }
 
@@ -366,6 +441,70 @@ class Applet {
     /* The rule below is implemented in most browsers by now */
 
   }
+  .controlPart {
+    grid-column: 1 / 33;
+    grid-row: 32 / 33;
+    user-select: none;
+    background-color:transparent;
+    color:black;
+    z-index: 99;
+  }
+  .one {
+    grid-column: 1 / 2;
+    grid-row: 32 / 33;
+    font-size: 24px;
+    background-color:#ff0000;
+    color: #00ff00;
+    width:100%;
+    height:100%;
+    border: none;
+    vertical-align: middle;
+  }
+  .two {
+    grid-column:  2 / 3;
+    grid-row: 32 / 33;
+    font-size: 24px;
+    background-color:#ff0000;
+    color: #00ff00;
+    width:100%;
+    height:100%;
+    border: none;
+    vertical-align: middle;
+  }
+  .three {
+    grid-column: 3 / 4;
+    grid-row: 32 / 33;
+    font-size: 24px;
+    background-color:#ff0000;
+    color: #00ff00;
+    width:100%;
+    height:100%;
+    border: none;
+    vertical-align: middle;
+  }
+  .four {
+    grid-column: 4 / 5;
+    grid-row: 32 / 33;
+    font-size: 24px;
+    background-color:#ff0000;
+    color: #00ff00;
+    width:100%;
+    height:100%;
+    border: none;
+    vertical-align: middle;
+  }
+  .five {
+    grid-column: 5 / 6;
+    grid-row: 32 / 33;
+    font-size: 24px;
+    background-color:#ff0000;
+    color: #00ff00;
+    width:100%;
+    height:100%;
+    border: none;
+    vertical-align: middle;
+  }
+  
   input[type=text] {
         border:2px solid rgb(0, 128, 0);
         border-radius: 2px;
@@ -393,16 +532,22 @@ class Applet {
         border: 2px solid;
         vertical-align: middle;
       }
+  button {
+  /*input[type="button"], input[type="submit"] {*/
+  /*font-size: 24px;*/
+    background-color:transparent;
+    color: #00ff00;
+    border: none;
+    vertical-align: middle;
+  }
   </style>
 </head>
 <body>
 
 <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
 
-    <iframe class="full" id="frame_clock" frameborder="0" width="100%" height="100%" align="left" src="clock.html"></iframe>
     <iframe class="full" id="frame_song" frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
     <iframe class="full" id="frame_Bible" frameborder="0" width="100%" height="100%" align="left" src="subtitle_b.html"></iframe>
-    <iframe class="full" id="frame_news" frameborder="0" width="100%" height="100%" align="left" src="marquee_v.html"></iframe>
     <!--iframe class="full" id="frame_effect" frameborder="0" width="100%" height="100%" align="right" src="effect.html"></iframe-->
 
     <div class="full" id="div_slide" style="background-color: green;margin: 0px;opacity: 1.0;">
@@ -413,7 +558,7 @@ class Applet {
           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
           placeholder="" />
           <script type="text/javascript" charset="UTF-8">
-            document.getElementById("ppt_url").value = '';//'https://www.youtube.com/embed/LzS_Mw0bnaw';
+            document.getElementById("ppt_url").value = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//'https://www.youtube.com/embed/LzS_Mw0bnaw';
             document.getElementById("ppt_url").select();
             function slideGo() {
 
@@ -431,12 +576,33 @@ class Applet {
       
     </div>
 
-    
+    <iframe class="full" id="frame_clock" frameborder="0" width="100%" height="100%" align="left" src="clock.html"></iframe>
+    <iframe class="full" id="frame_news" frameborder="0" width="100%" height="100%" align="left" src="marquee_v.html"></iframe>
 
+  
     <div id="content_control" class="full" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 0.5;">
       <canvas id="canvas" width="100" height="100"></canvas>
     </div>
+
+    <!--div id="content_control" class="controlPart" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 1.0;">
     
+    </div-->
+    
+    
+    <!--button type="button" class="one" onclick="spot2iframe(0)">.</button>
+    <button type="button" class="two" onclick="spot2iframe(1)">:</button>
+    <button type="button" class="three" onclick="spot2iframe(2)">.:</button>
+    <button type="button" class="four" onclick="spot2iframe(3)">::</button>
+    <button type="button" class="five" onclick="spot2iframe(4)">.::</button-->
+    <div id="controlDiv" class="controlPart">
+      <button type="button" onclick="spot2iframe(0)">0</button>
+      <button type="button" onclick="spot2iframe(1)">1</button>
+      <button type="button" onclick="spot2iframe(2)">2</button>
+      <button type="button" onclick="spot2iframe(3)">3</button>
+      <button type="button" onclick="spot2iframe(4)">4</button>
+    </div>
+    
+
 </div>
 
 </body>
@@ -452,6 +618,63 @@ var mouseDown = -1;
 var mouseDownPos;
 
 var applets = null;
+
+var keysel = -1;
+
+function anim_update(elapse) {
+
+  //if (elapse < 0) {}
+  let count = 0;
+  for (let i=0;i<applets.length;i++) {
+    if (applets[i].targetProgress()) 
+      count++;
+  }
+
+  //console.log(i);
+  if (count == applets.length) {
+    for (let i=0;i<applets.length;i++) {
+      if (parseFloat(applets[i].elm.style.opacity) == 0.0)
+        applets[i].elm.hidden = true;
+      else
+        applets[i].elm.hidden = false;
+    }
+    return;
+  }
+
+  window.requestAnimationFrame(anim_update);
+  
+}
+
+function recoverAll() {
+  //enlargeLock = false;
+  for (let i=0;i<applets.length;i++) {
+    applets[i].recover();
+  }
+}
+
+function spot2iframe(idx) {
+  //console.log('spot2iframe ' + keysel + ', ' + idx);
+  if (keysel == idx) {
+    recoverAll();
+    keysel = -1;
+    anim_update(-1);
+    return;
+  } else {
+    recoverAll();
+    if (idx >= applets.length) {
+      keysel = -1;
+      anim_update(-1);
+      return;
+    }
+    keysel = idx;
+    for (let i=0;i<applets.length;i++) {
+        applets[i].tmpHide();
+    }
+    applets[keysel].enlargeSelf();
+    applets[keysel].elm.focus();
+    anim_update(-1);
+  }
+}
 
 function init() {
 
@@ -504,41 +727,6 @@ function _repaint() {
 
 }
 
-var animElapse = 0;
-
-function anim_update(elapse) {
-  animElapse--;
-  if(animElapse <= 0) {
-    animElapse = 0;
-    //remove later
-    let div = document.getElementById("content_control");
-    div.hidden = true;
-    //
-    return;
-  }
-  //remove later
-  _repaint();
-  //
-  window.requestAnimationFrame(anim_update);
-  
-}
-
-function anim_start() {
-
-  if (animElapse > 0) {
-    animElapse = 10;
-    return;
-  }
-
-  animElapse = 10;
-  //remove later
-  let div = document.getElementById("content_control");
-  div.hidden = false;
-  //
-  window.requestAnimationFrame(anim_update);
-
-}
-
 // 監聽 message 事件
 window.addEventListener('message', e => {
   for (let i=0;i<applets.length;i++) {
@@ -546,25 +734,27 @@ window.addEventListener('message', e => {
   }
 }, false);
 
-var keysel = -1;
-
+/*
 function keyboard(e) {
-
+  
   //alert(e.keyCode);
   switch (e.keyCode) {
     case 65: //A
+      recoverAll();
       applets[keysel].showSelf();
       break;    
     case 83: //S
+      recoverAll();
       applets[keysel].hideSelf();
       break; 
     //case 49:
     case 81: //Q
+      recoverAll();
       for (let i=0;i<applets.length;i++) {
-        applets[i].recover();
         applets[i].tmpHide();
       }
       applets[keysel].enlargeSelf();
+      //enlargeLock = true;
       break;
     case 87: //W
       for (let i=0;i<applets.length;i++) {
@@ -580,6 +770,7 @@ function keyboard(e) {
   }
 
 }
+*/
 
 window.addEventListener('keyup', e => {
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
@@ -592,7 +783,7 @@ window.addEventListener('keyup', e => {
   }
 
   //keysel = -1;
-
+  /*
   switch (e.keyCode) {
     case 48:
     case 49:
@@ -620,7 +811,7 @@ window.addEventListener('keyup', e => {
       }
       break;
   }
-  //keyboard(e);
+  */
 
 }, false);
 
