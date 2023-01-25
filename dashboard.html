@@ -499,7 +499,7 @@ class Applet {
 </head>
 <body>
 
-<div class="wrapper" style="background-color: #007000; opacity: 1.0;">
+<div id="mainDiv" class="wrapper" style="background-color: #007000; opacity: 1.0;">
 
     <iframe class="full" id="frame_song" frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
     <iframe class="full" id="frame_Bible" frameborder="0" width="100%" height="100%" align="left" src="subtitle_b.html"></iframe>
@@ -546,6 +546,7 @@ class Applet {
       <button type="button" onclick="spot2iframe('info')">Info</button>
       <button type="button" onclick="spot2iframe('effect')">Effect</button>
       <button type="button" onclick="spot2iframe('time')">Time</button>
+      <button type="button" onclick="colorSwitch()">B/G</button>
     </div>
     
 
@@ -555,6 +556,18 @@ class Applet {
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function colorSwitch() {
+  let div = document.getElementById("mainDiv");
+  //console.log(typeof div.style.backgroundColor);
+  //console.log(div.style.backgroundColor);
+  if (div.style.backgroundColor == 'black') {
+    div.style.backgroundColor = 'rgb(0, 112, 0)';
+  } else {
+    div.style.backgroundColor = 'black';
+  }
+
+}
 
 var canvas;
 var ctx;
@@ -676,14 +689,17 @@ function _repaint() {
     applets[selectIdx].drawSelRect();
   }
 
+  
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
-  ctx.font = (gap_w * 2) + "px Arial";
+  ctx.font = gap_w + "px Arial";
   ctx.fillStyle = 'rgb(0, 255, 0)';//"rgb(0,180,0)";
   for (let i=0;i<applets.length;i++) {
     let pos = applets[i].getPosition();
-    ctx.fillText(' ' + i, pos[0], pos[1]);
+    //ctx.fillText(' ' + i, pos[0], pos[1]);
+    ctx.fillText(applets[i].keyname, pos[0], pos[1]);
   }
+  
 
 }
 
