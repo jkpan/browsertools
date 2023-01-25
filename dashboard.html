@@ -6,16 +6,19 @@ const GRID_H = 32;
 function initContent() {
   
   applets = [
-        new Applet({x:1, y:14, w:13, h:18,  elm:document.getElementById("frame_song")}),
-        new Applet({x:15, y:14, w:17, h:18, elm:document.getElementById("frame_Bible")}),
-        new Applet({x:5, y:1, w:12, h:12, elm:document.getElementById("div_slide")}),
-        new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock")}),
-        new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news")}),
+        new Applet({x:1, y:14, w:15, h:18,  elm:document.getElementById("frame_song"), keyname:'hymn'}),
+        new Applet({x:17, y:14, w:16, h:18, elm:document.getElementById("frame_Bible"), keyname:'Bible'}),
+        new Applet({x:5, y:1, w:12, h:12, elm:document.getElementById("div_slide"), keyname:'ppt'}),
+        new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news"), keyname:'info'}),
+        new Applet({x:18, y:2, w:4, h:4, elm:document.getElementById("frame_effect"), keyname:'effect'}),
+        new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock"), keyname:'time'}),
   ]
   //new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news")});
 }
 
 class Applet {
+
+  keyname = null;
 
   x = 0;
   y = 0;
@@ -41,6 +44,7 @@ class Applet {
   }
 
   constructor(data) {
+    this.keyname = data.keyname;
     this.x = data.x;
     this.y = data.y;
     this.w = data.w;
@@ -112,7 +116,8 @@ class Applet {
     //console.log(this.elm.style.opacity);// + ',, ' + opcy + ', ' + this.t_Opacity);
 
     if (opcy != this.t_Opacity) {
-      opcy += (this.t_Opacity - opcy) * 0.016 * 3;
+      opcy += 0.05 * (this.t_Opacity - opcy)/Math.abs(this.t_Opacity - opcy);
+      //opcy += (this.t_Opacity - opcy) * 0.016 * 3;
       if (Math.abs(opcy - this.t_Opacity) <= 0.05) {
         opcy = this.t_Opacity;
         if (opcy > 0.5) {
@@ -441,6 +446,14 @@ class Applet {
     /* The rule below is implemented in most browsers by now */
 
   }
+  .ctrlfull {
+    
+    grid-column: 1 / 33;
+    grid-row: 1 / 33;
+
+    user-select: none;
+    z-index: 90;
+  }
   .controlPart {
     grid-column: 1 / 33;
     grid-row: 32 / 33;
@@ -448,63 +461,7 @@ class Applet {
     background-color:transparent;
     color:black;
     z-index: 99;
-  }
-  .one {
-    grid-column: 1 / 2;
-    grid-row: 32 / 33;
-    font-size: 24px;
-    background-color:#ff0000;
-    color: #00ff00;
-    width:100%;
-    height:100%;
-    border: none;
-    vertical-align: middle;
-  }
-  .two {
-    grid-column:  2 / 3;
-    grid-row: 32 / 33;
-    font-size: 24px;
-    background-color:#ff0000;
-    color: #00ff00;
-    width:100%;
-    height:100%;
-    border: none;
-    vertical-align: middle;
-  }
-  .three {
-    grid-column: 3 / 4;
-    grid-row: 32 / 33;
-    font-size: 24px;
-    background-color:#ff0000;
-    color: #00ff00;
-    width:100%;
-    height:100%;
-    border: none;
-    vertical-align: middle;
-  }
-  .four {
-    grid-column: 4 / 5;
-    grid-row: 32 / 33;
-    font-size: 24px;
-    background-color:#ff0000;
-    color: #00ff00;
-    width:100%;
-    height:100%;
-    border: none;
-    vertical-align: middle;
-  }
-  .five {
-    grid-column: 5 / 6;
-    grid-row: 32 / 33;
-    font-size: 24px;
-    background-color:#ff0000;
-    color: #00ff00;
-    width:100%;
-    height:100%;
-    border: none;
-    vertical-align: middle;
-  }
-  
+  } 
   input[type=text] {
         border:2px solid rgb(0, 128, 0);
         border-radius: 2px;
@@ -533,8 +490,6 @@ class Applet {
         vertical-align: middle;
       }
   button {
-  /*input[type="button"], input[type="submit"] {*/
-  /*font-size: 24px;*/
     background-color:transparent;
     color: #00ff00;
     border: none;
@@ -576,30 +531,21 @@ class Applet {
       
     </div>
 
-    <iframe class="full" id="frame_clock" frameborder="0" width="100%" height="100%" align="left" src="clock.html"></iframe>
     <iframe class="full" id="frame_news" frameborder="0" width="100%" height="100%" align="left" src="marquee_v.html"></iframe>
+    <iframe class="full" id="frame_effect" frameborder="0" width="100%" height="100%" align="left" src="effect.html"></iframe>
+    <iframe class="full" id="frame_clock" frameborder="0" width="100%" height="100%" align="left" src="clock.html"></iframe>
 
-  
-    <div id="content_control" class="full" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 0.5;">
+    <div id="content_control" class="ctrlfull" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 0.5;">
       <canvas id="canvas" width="100" height="100"></canvas>
-    </div>
-
-    <!--div id="content_control" class="controlPart" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 1.0;">
+    </div>   
     
-    </div-->
-    
-    
-    <!--button type="button" class="one" onclick="spot2iframe(0)">.</button>
-    <button type="button" class="two" onclick="spot2iframe(1)">:</button>
-    <button type="button" class="three" onclick="spot2iframe(2)">.:</button>
-    <button type="button" class="four" onclick="spot2iframe(3)">::</button>
-    <button type="button" class="five" onclick="spot2iframe(4)">.::</button-->
     <div id="controlDiv" class="controlPart">
-      <button type="button" onclick="spot2iframe(0)">0</button>
-      <button type="button" onclick="spot2iframe(1)">1</button>
-      <button type="button" onclick="spot2iframe(2)">2</button>
-      <button type="button" onclick="spot2iframe(3)">3</button>
-      <button type="button" onclick="spot2iframe(4)">4</button>
+      <button type="button" onclick="spot2iframe('hymn')">歌詞</button>
+      <button type="button" onclick="spot2iframe('Bible')">聖經</button>
+      <button type="button" onclick="spot2iframe('ppt')">PPT</button>
+      <button type="button" onclick="spot2iframe('info')">Info</button>
+      <button type="button" onclick="spot2iframe('effect')">Effect</button>
+      <button type="button" onclick="spot2iframe('time')">Time</button>
     </div>
     
 
@@ -652,7 +598,21 @@ function recoverAll() {
   }
 }
 
-function spot2iframe(idx) {
+function showCtrlPane(show) {
+  let div = document.getElementById("controlDiv");
+  div.hidden = !show;
+}
+
+function spot2iframe(keyname) {
+  let idx = -1;
+  for (let i=0;i<applets.length;i++) {
+    if (keyname == applets[i].keyname) {
+      idx = i;
+      break;
+    }
+  }
+  if (idx == -1) return;
+
   //console.log('spot2iframe ' + keysel + ', ' + idx);
   if (keysel == idx) {
     recoverAll();
@@ -836,6 +796,12 @@ init();
 _repaint();
 
 window.addEventListener('resize', e => { init(); });
+document.addEventListener('mouseenter', e => {
+  showCtrlPane(true);
+});
+document.addEventListener('mouseleave', e => {
+  showCtrlPane(false);
+});
 canvas.addEventListener('mousemove', e => {
 
     mouseX = e.x;
