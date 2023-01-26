@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+      <style>
+      body {
+        margin: 0px;
+        height: 100%;
+        width: 100%;
+        background-color: rgb(0, 128, 0);
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      input[type=text] {
+            border:2px solid rgb(0, 128, 0);
+            border-radius: 2px;
+            margin: 2% 2%;
+            outline: none;
+            padding: 0px;
+            box-sizing: border-box;
+            background: rgb(0, 150, 0);
+            color: rgb(0, 255, 0);
+            width: 96%;
+          }
+      input[type=text]:focus {
+        border:2px solid;
+        border-color: rgb(0, 255, 0);
+        box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+        background: rgb(0, 150, 0);
+        color: rgb(0, 255, 0);    
+      }
+      .okbutton {
+            font-size: 24px;
+            background-color: rgb(0, 150, 0);
+            color: #00ff00;
+            margin: 2% 2%;
+            width:96%;
+            border: 2px solid;
+            vertical-align: middle;
+          }
+      </style>
+    </head>
+    <body>
+        
+        <br/>
+        <input type="text" id="ppt_url" name="input_url" value="" 
+              style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
+              placeholder="" />
+              <script type="text/javascript" charset="UTF-8">
+                document.getElementById("ppt_url").value = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//'https://www.youtube.com/embed/LzS_Mw0bnaw';
+                document.getElementById("ppt_url").select();
+                function urlGo() {
+                  let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
+                  if (value.length == 0) 
+                    return;
+                  window.location.href = value;
+                }
+              </script>
+        <br/>
+        <button class="okbutton" type="button" onclick="urlGo()">OK</button>
+          
+    
+    </body>
+</html>
+    

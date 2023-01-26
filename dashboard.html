@@ -8,7 +8,7 @@ function initContent() {
   applets = [
         new Applet({x:1, y:14, w:15, h:18,  elm:document.getElementById("frame_song"), keyname:'hymn'}),
         new Applet({x:17, y:14, w:16, h:18, elm:document.getElementById("frame_Bible"), keyname:'Bible'}),
-        new Applet({x:5, y:1, w:12, h:12, elm:document.getElementById("div_slide"), keyname:'ppt'}),
+        new Applet({x:5, y:1, w:12, h:12, elm:document.getElementById("frame_slide"), keyname:'ppt'}),
         new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news"), keyname:'info'}),
         new Applet({x:18, y:2, w:4, h:4, elm:document.getElementById("frame_effect"), keyname:'effect'}),
         new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock"), keyname:'time'}),
@@ -501,13 +501,12 @@ class Applet {
 
 <div id="mainDiv" class="wrapper" style="background-color: #007000; opacity: 1.0;">
 
-    <iframe class="full" id="frame_song" frameborder="0" width="100%" height="100%" align="left" src="subtitle.html"></iframe>
-    <iframe class="full" id="frame_Bible" frameborder="0" width="100%" height="100%" align="left" src="subtitle_b.html"></iframe>
-    <!--iframe class="full" id="frame_effect" frameborder="0" width="100%" height="100%" align="right" src="effect.html"></iframe-->
-
-    <div class="full" id="div_slide" style="background-color: green;margin: 0px;opacity: 1.0;">
+    <iframe class="full" id="frame_song" frameborder="0" width="100%" height="100%" src="subtitle.html"></iframe>
+    <iframe class="full" id="frame_Bible" frameborder="0" width="100%" height="100%" src="subtitle_b.html"></iframe>
+    <iframe class="full" id="frame_slide" frameborder="0" width="100%" height="100%" src="newurl.html"></iframe>
+    <!--div class="full" id="div_slide" style="background-color: green;margin: 0px;opacity: 1.0;">
       <iframe id="frame_slide" src="" hidden="true" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
-      <div id="div_input" class="content" style="background-color: green;margin: 0px;opacity: 1.0;">
+      <div id="div_input" style="background-color: green;margin: 0px;opacity: 1.0;">
         <br/>
         <input type="text" id="ppt_url" name="input_url" value="" 
           style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
@@ -529,11 +528,11 @@ class Applet {
         <button class="okbutton" type="button" onclick="slideGo()">OK</button>
       </div>
       
-    </div>
+    </div-->
 
-    <iframe class="full" id="frame_news" frameborder="0" width="100%" height="100%" align="left" src="marquee_v.html"></iframe>
-    <iframe class="full" id="frame_effect" frameborder="0" width="100%" height="100%" align="left" src="effect.html"></iframe>
-    <iframe class="full" id="frame_clock" frameborder="0" width="100%" height="100%" align="left" src="clock.html"></iframe>
+    <iframe class="full" id="frame_news" frameborder="0" width="100%" height="100%" src="marquee_v.html"></iframe>
+    <iframe class="full" id="frame_effect" frameborder="0" width="100%" height="100%" src="effect.html"></iframe>
+    <iframe class="full" id="frame_clock" frameborder="0" width="100%" height="100%" src="clock.html"></iframe>
 
     <div id="content_control" class="ctrlfull" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 0.5;">
       <canvas id="canvas" width="100" height="100"></canvas>
@@ -580,6 +579,18 @@ var applets = null;
 
 var keysel = -1;
 
+function createFrame(id, url) {
+  //class="full" id="frame_song" frameborder="0" width="100%" height="100%" src="subtitle.html"
+  frame = document.createElement("iframe");
+  frame.setAttribute("src", url);
+  frame.setAttribute("class", "full");
+  frame.setAttribute("id", id);
+  frame.frameBorder = 0;
+  frame.style.width = "100%";
+  frame.style.height = "100%";
+  document.getElementById("mainDiv").appendChild(frame);
+}
+
 function anim_update(elapse) {
 
   //if (elapse < 0) {}
@@ -616,6 +627,38 @@ function showCtrlPane(show) {
   div.hidden = !show;
 }
 
+function _createFrame(keyname) {
+  /*
+    applets = [
+        new Applet({x:1, y:14, w:15, h:18,  elm:document.getElementById("frame_song"), keyname:'hymn'}),
+        new Applet({x:17, y:14, w:16, h:18, elm:document.getElementById("frame_Bible"), keyname:'Bible'}),
+        new Applet({x:5, y:1, w:12, h:12, elm:document.getElementById("frame_slide"), keyname:'ppt'}),
+        new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news"), keyname:'info'}),
+        new Applet({x:18, y:2, w:4, h:4, elm:document.getElementById("frame_effect"), keyname:'effect'}),
+        new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock"), keyname:'time'}),
+  ]
+  */
+  switch(keyname) {
+    case 'hymn':
+      createFrame(id, url);
+      break;
+    case 'Bible':
+      break;
+    case 'ppt':
+      break;
+    case 'info':
+      break;
+    case 'effect':
+      break;
+    case 'time':
+      break;
+    default:
+      return;
+
+  }
+  
+}
+
 function spot2iframe(keyname) {
   let idx = -1;
   for (let i=0;i<applets.length;i++) {
@@ -624,7 +667,10 @@ function spot2iframe(keyname) {
       break;
     }
   }
-  if (idx == -1) return;
+  if (idx == -1) {
+    
+    return;
+  }
 
   //console.log('spot2iframe ' + keysel + ', ' + idx);
   if (keysel == idx) {
