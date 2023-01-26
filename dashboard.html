@@ -4,16 +4,7 @@ const GRID_W = 32;
 const GRID_H = 32;
 
 function initContent() {
-  
-  applets = [
-        new Applet({x:1, y:14, w:15, h:18,  elm:document.getElementById("frame_song"), keyname:'hymn'}),
-        new Applet({x:17, y:14, w:16, h:18, elm:document.getElementById("frame_Bible"), keyname:'Bible'}),
-        new Applet({x:5, y:1, w:12, h:12, elm:document.getElementById("frame_slide"), keyname:'ppt'}),
-        new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news"), keyname:'info'}),
-        new Applet({x:18, y:2, w:4, h:4, elm:document.getElementById("frame_effect"), keyname:'effect'}),
-        new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock"), keyname:'time'}),
-  ]
-  //new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news")});
+  applets = [];
 }
 
 class Applet {
@@ -49,7 +40,7 @@ class Applet {
     this.y = data.y;
     this.w = data.w;
     this.h = data.h;
-    this.elm = data.elm;
+    this.elm = document.getElementById(this.keyname);//data.elm;
     this.elm.style.opacity = '1.0';
     this.shide = false;
     //this.sOpacity = 1.0;
@@ -501,39 +492,6 @@ class Applet {
 
 <div id="mainDiv" class="wrapper" style="background-color: #007000; opacity: 1.0;">
 
-    <iframe class="full" id="frame_song" frameborder="0" width="100%" height="100%" src="subtitle.html"></iframe>
-    <iframe class="full" id="frame_Bible" frameborder="0" width="100%" height="100%" src="subtitle_b.html"></iframe>
-    <iframe class="full" id="frame_slide" frameborder="0" width="100%" height="100%" src="newurl.html"></iframe>
-    <!--div class="full" id="div_slide" style="background-color: green;margin: 0px;opacity: 1.0;">
-      <iframe id="frame_slide" src="" hidden="true" frameborder="0" width="100%" height="100%" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
-      <div id="div_input" style="background-color: green;margin: 0px;opacity: 1.0;">
-        <br/>
-        <input type="text" id="ppt_url" name="input_url" value="" 
-          style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
-          placeholder="" />
-          <script type="text/javascript" charset="UTF-8">
-            document.getElementById("ppt_url").value = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//'https://www.youtube.com/embed/LzS_Mw0bnaw';
-            document.getElementById("ppt_url").select();
-            function slideGo() {
-
-              let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
-              if (value.length == 0) return;
-              let elementSub = document.getElementById('frame_slide');
-              elementSub.hidden = false;
-              elementSub.src = value;
-              document.getElementById('div_input').hidden = true;
-            }
-          </script>
-        <br/>
-        <button class="okbutton" type="button" onclick="slideGo()">OK</button>
-      </div>
-      
-    </div-->
-
-    <iframe class="full" id="frame_news" frameborder="0" width="100%" height="100%" src="marquee_v.html"></iframe>
-    <iframe class="full" id="frame_effect" frameborder="0" width="100%" height="100%" src="effect.html"></iframe>
-    <iframe class="full" id="frame_clock" frameborder="0" width="100%" height="100%" src="clock.html"></iframe>
-
     <div id="content_control" class="ctrlfull" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 0.5;">
       <canvas id="canvas" width="100" height="100"></canvas>
     </div>   
@@ -541,7 +499,8 @@ class Applet {
     <div id="controlDiv" class="controlPart">
       <button type="button" onclick="spot2iframe('hymn')">歌詞</button>
       <button type="button" onclick="spot2iframe('Bible')">聖經</button>
-      <button type="button" onclick="spot2iframe('ppt')">PPT</button>
+      <button type="button" onclick="spot2iframe('ppt_1')">PPT 1</button>
+      <button type="button" onclick="spot2iframe('ppt_2')">PPT 2</button>
       <button type="button" onclick="spot2iframe('info')">Info</button>
       <button type="button" onclick="spot2iframe('effect')">Effect</button>
       <button type="button" onclick="spot2iframe('time')">Time</button>
@@ -589,6 +548,7 @@ function createFrame(id, url) {
   frame.style.width = "100%";
   frame.style.height = "100%";
   document.getElementById("mainDiv").appendChild(frame);
+  return frame;
 }
 
 function anim_update(elapse) {
@@ -628,29 +588,34 @@ function showCtrlPane(show) {
 }
 
 function _createFrame(keyname) {
-  /*
-    applets = [
-        new Applet({x:1, y:14, w:15, h:18,  elm:document.getElementById("frame_song"), keyname:'hymn'}),
-        new Applet({x:17, y:14, w:16, h:18, elm:document.getElementById("frame_Bible"), keyname:'Bible'}),
-        new Applet({x:5, y:1, w:12, h:12, elm:document.getElementById("frame_slide"), keyname:'ppt'}),
-        new Applet({x:1, y:1, w:4, h:32, elm:document.getElementById("frame_news"), keyname:'info'}),
-        new Applet({x:18, y:2, w:4, h:4, elm:document.getElementById("frame_effect"), keyname:'effect'}),
-        new Applet({x:24, y:2, w:11, h:10, elm:document.getElementById("frame_clock"), keyname:'time'}),
-  ]
-  */
   switch(keyname) {
     case 'hymn':
-      createFrame(id, url);
+      createFrame(keyname, 'subtitle.html');
+      applets.push(new Applet({x:1, y:14, w:15, h:18, keyname:'hymn'}));
       break;
     case 'Bible':
+      createFrame(keyname, 'subtitle_b.html');
+      applets.push(new Applet({x:17, y:14, w:16, h:18, keyname:'Bible'}));
       break;
-    case 'ppt':
+    case 'ppt_1':
+      createFrame(keyname, 'newurl.html');
+      applets.push(new Applet({x:5, y:1, w:12, h:6, keyname:'ppt_1'}));
+      break;
+    case 'ppt_2':
+      createFrame(keyname, 'newurl.html');
+      applets.push(new Applet({x:5, y:7, w:12, h:6, keyname:'ppt_2'}));
       break;
     case 'info':
+      createFrame(keyname, 'marquee_v.html');
+      applets.push(new Applet({x:1, y:1, w:4, h:32, keyname:'info'}));
       break;
     case 'effect':
+      createFrame(keyname, 'effect.html');
+      applets.push(new Applet({x:18, y:2, w:4, h:4, keyname:'effect'}));
       break;
     case 'time':
+      createFrame(keyname, 'clock.html');
+      applets.push(new Applet({x:24, y:2, w:11, h:10, keyname:'time'}));
       break;
     default:
       return;
@@ -668,7 +633,7 @@ function spot2iframe(keyname) {
     }
   }
   if (idx == -1) {
-    
+    _createFrame(keyname);
     return;
   }
 
