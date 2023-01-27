@@ -427,15 +427,6 @@ class Applet {
 
     user-select: none;
 
-    /*-webkit-user-select: none;*/ /* Chrome/Safari */ 
-    /*-moz-user-select: none; *//* Firefox */
-    /* -ms-user-select: none; *//* IE10+ */
-
-    /* The rule below is not implemented in browsers yet */
-    /* -o-user-select: none; */
-
-    /* The rule below is implemented in most browsers by now */
-
   }
   .ctrlfull {
     
@@ -582,11 +573,6 @@ function recoverAll() {
   }
 }
 
-function showCtrlPane(show) {
-  let div = document.getElementById("controlDiv");
-  div.hidden = !show;
-}
-
 function _createFrame(keyname) {
   switch(keyname) {
     case 'hymn':
@@ -721,44 +707,6 @@ window.addEventListener('message', e => {
   }
 }, false);
 
-/*
-function keyboard(e) {
-  
-  //alert(e.keyCode);
-  switch (e.keyCode) {
-    case 65: //A
-      recoverAll();
-      applets[keysel].showSelf();
-      break;    
-    case 83: //S
-      recoverAll();
-      applets[keysel].hideSelf();
-      break; 
-    //case 49:
-    case 81: //Q
-      recoverAll();
-      for (let i=0;i<applets.length;i++) {
-        applets[i].tmpHide();
-      }
-      applets[keysel].enlargeSelf();
-      //enlargeLock = true;
-      break;
-    case 87: //W
-      for (let i=0;i<applets.length;i++) {
-        applets[i].recover();
-      }
-      break;
-    
-    //break; case 88: break;
-    
-    //case 51: break; case 69: break; case 68: break; case 67: break;
-    
-    //case 52: break; case 82: break; case 70: break; case 86: break;
-  }
-
-}
-*/
-
 window.addEventListener('keyup', e => {
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = false;
@@ -768,37 +716,6 @@ window.addEventListener('keyup', e => {
     selectIdx = -1;
     return;
   }
-
-  //keysel = -1;
-  /*
-  switch (e.keyCode) {
-    case 48:
-    case 49:
-    case 50:
-    case 51:
-    case 52:
-    case 53:
-    case 54:
-    case 55:
-    case 56:
-    case 57:
-      let v = e.keyCode - 48;
-      if (v < applets.length) {
-        keysel = v;
-        applets[keysel].presave();
-        anim_start();
-        return;
-      } else {
-        keysel = -1;
-      }
-      break;
-    default:
-      if (keysel < applets.length) {
-        keyboard(e);
-      }
-      break;
-  }
-  */
 
 }, false);
 
@@ -823,12 +740,27 @@ init();
 _repaint();
 
 window.addEventListener('resize', e => { init(); });
-document.addEventListener('mouseenter', e => {
+
+function showCtrlPane(show) {
+  let div = document.getElementById("controlDiv");
+  //div.hidden = !show;
+  if (show) {
+    div.style.opacity = '0.8';
+  } else {
+    div.style.opacity = '0.2';
+  }
+}
+
+let div = document.getElementById("controlDiv");
+div.addEventListener('mouseenter', e => {
+//document.addEventListener('mouseenter', e => {
   showCtrlPane(true);
 });
-document.addEventListener('mouseleave', e => {
+div.addEventListener('mouseleave', e => {
+//document.addEventListener('mouseleave', e => {
   showCtrlPane(false);
 });
+
 canvas.addEventListener('mousemove', e => {
 
     mouseX = e.x;
@@ -973,23 +905,4 @@ canvas.addEventListener('mouseup', () =>{
   return true;
 });
 
-</script>
-
-<script>
-  /*
-var dx = 0;
-var dy = 0;
-var dw = 0;
-var dh = 0;
-function debugSet(_dx, _dy, _dw, _dh) {
-  dx = _dx;
-  dy = _dy;
-  dw = _dw;
-  dh = _dh;
-}
-function debugDraw() {
-  ctx.fillStyle = "rgba(255, 255, 0, 1.0)";
-  ctx.fillRect(dx, dy, dw, dh);
-}
-*/
 </script>
