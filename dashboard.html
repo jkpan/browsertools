@@ -529,19 +529,6 @@ var applets = null;
 
 var keysel = -1;
 
-function createFrame(id, url) {
-  //class="full" id="frame_song" frameborder="0" width="100%" height="100%" src="subtitle.html"
-  frame = document.createElement("iframe");
-  frame.setAttribute("src", url);
-  frame.setAttribute("class", "full");
-  frame.setAttribute("id", id);
-  frame.frameBorder = 0;
-  frame.style.width = "100%";
-  frame.style.height = "100%";
-  document.getElementById("mainDiv").appendChild(frame);
-  return frame;
-}
-
 function anim_update(elapse) {
 
   //if (elapse < 0) {}
@@ -571,6 +558,19 @@ function recoverAll() {
   for (let i=0;i<applets.length;i++) {
     applets[i].recover();
   }
+}
+
+function createFrame(id, url) {
+  //class="full" id="frame_song" frameborder="0" width="100%" height="100%" src="subtitle.html"
+  frame = document.createElement("iframe");
+  frame.setAttribute("src", url);
+  frame.setAttribute("class", "full");
+  frame.setAttribute("id", id);
+  frame.frameBorder = 0;
+  frame.style.width = "100%";
+  frame.style.height = "100%";
+  document.getElementById("mainDiv").appendChild(frame);
+  return frame;
 }
 
 function _createFrame(keyname) {
@@ -620,6 +620,8 @@ function spot2iframe(keyname) {
   }
   if (idx == -1) {
     _createFrame(keyname);
+    recoverAll();
+    anim_update(-1);
     return;
   }
 
