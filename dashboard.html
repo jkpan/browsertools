@@ -381,8 +381,22 @@ class Applet {
   }
 
   onTop() {
-    console.log('onTop');
-    this.elm.parentNode.appendChild(this.elm);
+    for (let i=0;i<applets.length;i++) {
+      if (applets[i].elm == this.elm) {
+        applets[i].elm.style.zIndex = '' + applets.length;
+      } else {
+        let order = parseInt(applets[i].elm.style.zIndex);
+        if (isNaN(order)) {
+          applets[i].elm.style.zIndex = '0';
+          continue;
+        }
+        if (order > 0) {
+          order--;
+          applets[i].elm.style.zIndex = '' + order;
+        }
+      }
+    }
+    //this.elm.parentNode.appendChild(this.elm);
   }
 
   getPos() {
@@ -507,6 +521,16 @@ class Applet {
 <script type="text/javascript" charset="UTF-8">
 
 function colorSwitch() {
+  /*
+  var win = window.open("dashboard.html", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=200,top="+(screen.height-400)+",left="+(screen.width-840));
+  return;
+  win.document.body.innerHTML = "<button type=\"button\" onclick=\"spot2iframe('hymn')\">歌詞</button>" + 
+                                "<button type=\"button\" onclick=\"spot2iframe('Bible')\">聖經</button>"+
+                                "<button type=\"button\" onclick=\"spot2iframe('ppt_1')\">PPT 1</button>"+
+                                "<button type=\"button\" onclick=\"spot2iframe('ppt_2')\">PPT 2</button>";
+
+  return;
+  */
   let div = document.getElementById("mainDiv");
   //console.log(typeof div.style.backgroundColor);
   //console.log(div.style.backgroundColor);

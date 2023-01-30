@@ -1835,7 +1835,7 @@ class ClockObj {
   bgColor = "rgba(0, 0, 0, 0.5)";
   frequence = -1;
 
-  hourColor = "rgb(50, 50, 255)";
+  hourColor = "rgb(0, 200, 200)";
   minColor = "rgb(255, 255, 50)";
   secColor = "rgb(255, 50, 50)";
 
