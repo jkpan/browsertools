@@ -118,12 +118,7 @@ class Applet {
         }
       }
       this.elm.style.opacity = '' + opcy;
-      /*
-      if (opcy == 0.0) 
-        this.elm.hidden = true;
-      else if (opcy == 1.0) 
-         this.elm.hidden = false;
-      */
+      
     }
     
     this.settle();//
@@ -510,6 +505,7 @@ class Applet {
       <button type="button" onclick="spot2iframe('effect')">Effect</button>
       <button type="button" onclick="spot2iframe('time')">Time</button>
       <button type="button" onclick="colorSwitch()">B/G</button>
+      <button type="button" onclick="openCtrl()">Ctrl</button>
     </div>
     
 
@@ -520,20 +516,14 @@ class Applet {
 
 <script type="text/javascript" charset="UTF-8">
 
-function colorSwitch() {
-  /*
-  var win = window.open("dashboard.html", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=200,top="+(screen.height-400)+",left="+(screen.width-840));
-  return;
-  win.document.body.innerHTML = "<button type=\"button\" onclick=\"spot2iframe('hymn')\">歌詞</button>" + 
-                                "<button type=\"button\" onclick=\"spot2iframe('Bible')\">聖經</button>"+
-                                "<button type=\"button\" onclick=\"spot2iframe('ppt_1')\">PPT 1</button>"+
-                                "<button type=\"button\" onclick=\"spot2iframe('ppt_2')\">PPT 2</button>";
+function openCtrl() {
+  window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=580,height=100,top="+(screen.height-400)+",left="+(screen.width-840));
+}
 
-  return;
-  */
+function colorSwitch() {
+  
   let div = document.getElementById("mainDiv");
-  //console.log(typeof div.style.backgroundColor);
-  //console.log(div.style.backgroundColor);
+
   if (div.style.backgroundColor == 'black') {
     div.style.backgroundColor = 'rgb(0, 112, 0)';
   } else {
@@ -793,10 +783,13 @@ canvas.addEventListener('mousemove', e => {
     mouseY = e.y;
     
     if (mouseDown < 0) {
+      if (selectIdx >= 0 && applets[selectIdx].checkInside(mouseX, mouseY)) {
+        _repaint();
+        return;
+      }
       selectIdx = -1;
       for (let i=0;i<applets.length;i++) {
-        if (//!applets[i].isHide() && 
-        applets[i].checkInside(mouseX, mouseY)) {
+        if (applets[i].checkInside(mouseX, mouseY)) { //&& !applets[i].isHide()
           selectIdx = i;
           break;
         }
@@ -862,12 +855,8 @@ canvas.addEventListener('mousemove', e => {
         break;
     }
 
-    //debugSet(_px, _py, applet.w * _gap_w, applet.h * _gap_h);
-
     _repaint();
     return true;
-
-    //document.getElementById('frame_clock').className = "left";
 
 });
 
@@ -930,5 +919,12 @@ canvas.addEventListener('mouseup', () =>{
   mouseDown = -1;
   return true;
 });
+
+  /*
+  win.document.body.innerHTML = "<button type=\"button\" onclick=\"window.parent.spot2iframe('hymn')\">歌詞</button>" + 
+                                "<button type=\"button\" onclick=\"window.parent.spot2iframe('Bible')\">聖經</button>"+
+                                "<button type=\"button\" onclick=\"window.parent.spot2iframe('ppt_1')\">PPT 1</button>"+
+                                "<button type=\"button\" onclick=\"window.parent.spot2iframe('ppt_2')\">PPT 2</button>";
+  */
 
 </script>
