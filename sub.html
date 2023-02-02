@@ -70,6 +70,7 @@
     grid-column: 1 / 12;
     grid-row: 1 / 2;
     background-color: #007000;
+    z-index: 90;
   }
   .content {
     grid-column: 1 /12;
@@ -79,7 +80,7 @@
     font-size: 24px;
     background-color:transparent;
     color: #00ff00;
-    /*width:100%;*/
+    width:5%;
     height:100%;
     border: none;
     vertical-align: middle;
@@ -617,54 +618,22 @@ window.addEventListener('keydown', function(e) {
 
 }, false);
 
-function showCtrlPane(show) {
-  let div = document.getElementById("ctrlBtns");
+function showPane(elm, show) {
+  let div = document.getElementById('ctrlBtns');
   //div.hidden = !show;
   if (show) {
-    div.style.opacity = '1.0';
+    elm.style.opacity = '1.0';
   } else {
-    div.style.opacity = '0.0';
+    elm.style.opacity = '0.0';
   }
 }
 
 let div = document.getElementById("ctrlBtns");
 div.addEventListener('mouseenter', e => {
-//document.addEventListener('mouseenter', e => {
-  showCtrlPane(true);
+  showPane(div, true);
 });
 div.addEventListener('mouseleave', e => {
-//document.addEventListener('mouseleave', e => {
-  showCtrlPane(false);
+  showPane(div, false);
 });
 
-</script>
-
-<script type="text/javascript" charset="UTF-8">
-
-/*
-function fullScreen() {
-
-if (document.getElementById('content_song').className == 'fullcontent') {
-  document.getElementById('content_song').className = "content";
-  document.getElementById('content_Bible').className = "content";
-  document.getElementById('content_effect').className = "content";
-  document.getElementById('content_news').className = "content";
-      
-  document.getElementById('content_slide_1').className = "content";
-  document.getElementById('content_slide_2').className = "content";
-  document.getElementById('content_slide_3').className = "content";
-  
-} else {
-  document.getElementById('content_song').className = "fullcontent";
-  document.getElementById('content_Bible').className = "fullcontent";
-  document.getElementById('content_effect').className = "fullcontent";
-  document.getElementById('content_news').className = "fullcontent";
-      
-  document.getElementById('content_slide_1').className = "fullcontent";
-  document.getElementById('content_slide_2').className = "fullcontent";
-  document.getElementById('content_slide_3').className = "fullcontent";
-}
-_switchFunction(tab);
-}
-*/
 </script>
