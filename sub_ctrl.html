@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+      <style>
+      body {
+        margin: 0px;
+        height: 100%;
+        width: 100%;
+        background-color: rgb(0, 128, 0);
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      button {
+            font-size: 16px;
+            background-color: rgb(0, 150, 0);
+            color: #00ff00;
+            margin: 0% 0%;
+            width:8%;
+            border: 1px solid;
+            vertical-align: middle;
+            user-select: none;
+          }
+      </style>
+    </head>
+    <body>
+                  
+        <div id="controlWin" class="controlPart">
+            <button id="f1" tabindex="-1" onclick="controlParent('f1')">.</button>
+            <button id="f2" tabindex="-1" onclick="controlParent('f2')">.</button>
+            <button id="f3" tabindex="-1" onclick="controlParent('f3')">.</button>
+            <button id="f4" tabindex="-1" onclick="controlParent('f4')">.</button>
+            <button id="slide1" tabindex="-1" onclick="controlParent('slide1')">:</button>
+            <button id="slide2" tabindex="-1" onclick="controlParent('slide2')">:</button>
+            <button id="slide3" tabindex="-1" onclick="controlParent('slide3')">:</button>
+        </div>
+      
+    </body>
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+var elm;
+
+function controlParent(keyname) {
+    
+    elm = window.opener.switchFunction(keyname);
+
+    //setTimeout(doFocus, 500);
+}
+
+/*
+function doFocus() {
+
+    document.getElementById('f1').blur();
+    document.getElementById('f2').blur();
+    document.getElementById('f3').blur();
+    document.getElementById('f4').blur();
+    document.getElementById('slide1').blur();
+    document.getElementById('slide2').blur();
+    document.getElementById('slide3').blur();
+    window.blur();
+    
+    window.opener.focus();
+    elm.focus();
+
+}
+*/
+
+</script>

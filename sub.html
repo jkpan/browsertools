@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <script type="text/javascript" charset="UTF-8">
 
-  var tool_song = 'subtitle.html';
+  //var tool_song = 'subtitle.html';
   var tool_Bible = 'subtitle_b.html';
   var tool_index = 'tools.html';//'effect.html';
   
@@ -239,7 +239,7 @@
     &nbsp;
     &nbsp;
     &nbsp;
-    &nbsp;
+    <!--button class="button" onclick="openCtrl()">ctrl</button-->
     <button class="button" onclick="somelayout()">_</button>
     <button id="oxBtn" class="button" onclick="startRestoreInterval()">o</button>
   </div>
@@ -253,6 +253,10 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function openCtrl() {
+  window.open("sub_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=240,height=100,top="+(screen.height-400)+",left="+(screen.width-840));
+}
 
 function somelayout() {
 
@@ -560,31 +564,33 @@ function _switchFunction(idx) {
           document.getElementById("btn_f1").style.background = "rgb(0,128,0)";
           document.getElementById('content_song').hidden = false;
           document.getElementById('frame_song').focus();
-          break;
+          return document.getElementById('frame_song');
         case 'f2':
           document.getElementById("btn_f2").style.background = "rgb(0,128,0)";
           document.getElementById('content_Bible').hidden = false;
           document.getElementById('frame_Bible').focus();
-          break;
+          return document.getElementById('frame_Bible');
         case 'f3':
           document.getElementById("btn_f3").style.background = "rgb(0,128,0)";
           document.getElementById('content_effect').hidden = false;
           document.getElementById('frame_effect').focus();
-          break;
+          return document.getElementById('frame_effect');
         case 'f4':
           document.getElementById("btn_f4").style.background = "rgb(0,128,0)";
           document.getElementById('content_news').hidden = false;
           document.getElementById('frame_news').focus();
-          break;
+          return document.getElementById('frame_news');
         case 'slide1':
           document.getElementById("btn_s1").style.background = "rgb(0,128,0)";
           if (ppt[1].length == 0) {
             document.getElementById('content_input').hidden = false;
             document.getElementById('content_input').focus();
             document.getElementById("ppt_url").select();
+            return document.getElementById('content_input');
           } else {
             document.getElementById('content_slide_1').hidden = false;
             document.getElementById('frame_slide_1').focus();
+            return document.getElementById('frame_slide_1');
           }
           break;
         case 'slide2':
@@ -593,9 +599,11 @@ function _switchFunction(idx) {
             document.getElementById('content_input').hidden = false;
             document.getElementById('content_input').focus();
             document.getElementById("ppt_url").select();
+            return document.getElementById('content_input');
           } else {
             document.getElementById('content_slide_2').hidden = false;
             document.getElementById('frame_slide_2').focus();
+            return document.getElementById('frame_slide_2');
           }
           break;
         case 'slide3':
@@ -604,13 +612,15 @@ function _switchFunction(idx) {
             document.getElementById('content_input').hidden = false;
             document.getElementById('content_input').focus();
             document.getElementById("ppt_url").select();//.value;//String.fromCodePoint(0x1F604);
+            return document.getElementById('content_input');
           } else {
             document.getElementById('content_slide_3').hidden = false;
             document.getElementById('frame_slide_3').focus();
+            return document.getElementById('frame_slide_3');
           }
           break;
         default:
-          break;
+          return null;
       }
 }
 
@@ -622,7 +632,7 @@ function fullScreen() {
     document.getElementById('content_Bible').className = "content";
     document.getElementById('content_effect').className = "content";
     document.getElementById('content_news').className = "content";
-
+ 
     document.getElementById('content_slide_1').className = "content";
     document.getElementById('content_slide_2').className = "content";
     document.getElementById('content_slide_3').className = "content";

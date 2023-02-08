@@ -1,0 +1,125 @@
+  
+<script type="text/javascript" charset="UTF-8">
+  
+  //logE = 4.8 + 1.5M
+  const maxM = 8.0;
+  const minM = 6.0;
+
+</script>
+
+<!DOCTYPE html>
+<html>
+<body>
+<p>地震能量 (logE = 4.8 + 1.5M) </p>
+
+<!--input type="text" id="v1" value=""/>
+<script type="text/javascript" charset="UTF-8">
+  function go() {
+    //compare();
+    let value = document.getElementById("v1").value;
+    if (isNaN(parseFloat(value)) || (value < minM || value > maxM)) {
+      makeChart(-1);
+      return;
+    }
+
+    makeChart(value);
+
+  }
+</script>
+<p></p>
+<button class="okbutton" type="button" onclick="go()">OK</button-->
+
+<p></p>
+  <canvas id="canvas" width="400" height="500"></canvas>
+<br/>
+
+<p id="demo"></p>
+
+</body>
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+  
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+    
+  function makeChart(thism) {
+    
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+      ctx.font = "10px Arial";
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = "rgb(255,255,255)";
+      ctx.lineWidth = 1;
+
+      let max = -1;
+
+      for (let i=maxM;i>=minM;i-=0.1) {
+        let v = compute(i);
+        if (max < 0) {
+          max = v;
+          /*
+          v     max
+          -- = --------
+          y     height
+              v * height
+          y = -----------
+              max
+          
+          i     maxM
+          -- = --------
+          x     width
+              i * width
+          x = ----------
+                maxM
+          */
+        }
+        let h = v * (canvas.height - 20)/max;
+        let x = 10 + (i-minM) * (canvas.width - 20)/(maxM - minM);
+        let y = (canvas.height - 10) - h;
+
+        ctx.fillStyle = "rgb(100,100,255)";
+        ctx.fillRect(x, y, 2, h);
+
+        ctx.fillStyle = "rgb(255,240,255)";
+        ctx.fillText(i.toFixed(1), x, y);
+        
+      }
+    
+      if (thism < 0) return;
+    
+      let v = compute(thism);
+    
+      ctx.fillStyle = 'red';
+      let h = v * (canvas.height - 20)/max;
+      ctx.fillRect (10 + (thism - minM) * (canvas.width - 20)/(maxM - minM), 
+                    (canvas.height - 10) - h, 
+                    1, 
+                    h);
+    
+    
+      //console.log(':' + (compute(7.8) / compute(7.3)));
+  }
+    
+    //function compare() { console.log(':' + (compute(7.8) / compute(7.3))); }
+    
+  function compute(m) {
+      let v = Math.pow(10, 4.8 + 1.5 * m);
+      //v = Math.log(v);
+      return v;
+  }
+    
+  makeChart(-1);
+
+    /*
+    document.getElementById("demo").innerHTML =
+    parseFloat(10) + "<br>" +
+    parseFloat("10") + "<br>" +
+    parseFloat("10.33") + "<br>" +
+    parseFloat("34 45 66") + "<br>" +
+    parseFloat("He was 40");
+    */
+</script>

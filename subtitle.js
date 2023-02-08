@@ -1,3 +1,24 @@
+
+function createCanvas() {
+  
+  let _canvas = document.createElement('canvas');
+  _canvas.id = "canvas";
+  _canvas.width = 100;
+  _canvas.height = 100;
+  //_canvas.style.zIndex = 8;
+  //_canvas.style.position = "absolute";
+  //_canvas.style.border = "1px solid";
+
+  let body = document.getElementsByTagName("body")[0];
+  body.appendChild(_canvas);
+
+  document.body.style.display = false;
+  document.body.style.margin = 0;
+  document.body.style.backgroundColor = 'green';
+}
+
+createCanvas();
+
 var list = [];
 
 const content_help = [[
