@@ -17,7 +17,18 @@ function createCanvas() {
   document.body.style.backgroundColor = 'green';
 }
 
+function createHiddenFile() {
+  let _file = document.createElement('input');
+  _file.type = "file";
+  _file.id = "img";
+  _file.hidden = "true";
+  let body = document.getElementsByTagName("body")[0];
+  body.appendChild(_file);
+  //<input id="img" type="file" hidden="true"/>
+}
+
 createCanvas();
+createHiddenFile();
 
 var list = [];
 
@@ -750,6 +761,10 @@ function keyboard(e) {
           }
           break;
         //oqwertyui
+        case 77:
+          img = null;
+          document.getElementById('img').click();
+          break;
         case 79: phase = 0; line = 0; break;
         case 81: if (subtitles.length > 1) { phase = 1; line = 0; } break;
         case 87: if (subtitles.length > 2) { phase = 2; line = 0; } break;
@@ -792,10 +807,10 @@ function _layer0() {
   } else if (mode == 2) {
     ctx.fillStyle = COLOR_PPT;//'blue';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } 
-  if (img) {
+    if (img) {
       ctx.drawImage(img,0,0, canvas.width, canvas.height);
-  }
+    }
+  } 
 }
 
 function _layer1() {
@@ -918,6 +933,26 @@ function blank() {
 }
 
 init();
+
+var input = document.getElementById('img');
+// 當使用者修改內容(選擇檔案)
+input.addEventListener('change', function (event) {
+  var files = event.target.files;
+  var file;
+  if (files && files.length > 0) {
+    file = files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      var _img = new Image();
+      _img.onload = function() {
+        img = _img;
+        _repaint(); 
+      }
+      _img.src = e.target.result;
+    }
+  }    
+});
 
 var keylock = false;
 

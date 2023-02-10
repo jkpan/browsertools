@@ -9,7 +9,7 @@
       body {
         margin: 0px;
         height: 100%;
-        background-color:green
+        background-color: transparent;
         /*cursor:none;*/
       }
       main {
@@ -56,13 +56,11 @@ function init() {
 function anim_update(elapse) {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'green'; 
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  //ctx.fillStyle = 'green'; 
+  //ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  //if (img) ctx.drawImage(img,0,0, canvas.width, canvas.height);
 
-  //let dt = elapse - pre;
-  //pre = elapse;
+  //let dt = elapse - pre; pre = elapse;
 
   if (scale < 0) return;
 
