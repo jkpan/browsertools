@@ -54,12 +54,16 @@
                   let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
                   if (value.length == 0) 
                     return;
+                  if (value.includes('google'))
+                    value += '&rm=minimal';
                   window.location.href = value;
                 }
               </script>
         <br/>
         <button class="okbutton" type="button" onclick="urlGo()">OK</button>
-          
+        <p style="color:#00ff00">
+          Google Slides 按 's' 打開speaker notes
+        </p>
     
     </body>
 </html>

@@ -337,7 +337,11 @@ function slideGo() {
   let elementMain = document.getElementById('frame_slide_' + idx);
   let elementSub = document.getElementById('frame_Bible_' + idx);
 
-  elementMain.src = ppt[idx];
+  let url_dest = ppt[idx];
+  if (url_dest.includes('google'))
+    url_dest += '&rm=minimal';
+
+  elementMain.src = url_dest;//ppt[idx];
 
   switch(pptype[idx]) {
     case 0:
