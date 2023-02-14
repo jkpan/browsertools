@@ -290,13 +290,21 @@ class Applet {
       this.elm.style.opacity = '0.0';
       this.elm.hidden = false;
       this.t_Opacity = 1.0;
+      this.presave();
       this.shide = false;
     } else { //target to hide
       this.elm.style.opacity = '1.0';
       this.elm.hidden = false;
       this.t_Opacity = 0.0;
+      this.presave();
       this.shide = true;
     }
+
+    this.t_x = this.x;
+    this.t_y = this.y;
+    this.t_w = this.w;
+    this.t_h = this.h;
+
   }
 
   hideSelf() {
@@ -512,7 +520,7 @@ class Applet {
     
     <div id="controlDiv" class="controlPart">
 
-      <button onclick="spot2iframe('hymn')">歌詞</button>
+      <button onclick="spot2iframe('hymn')">歌詞</button><!--button onclick="switchVisible4iframe('hymn')">.</button-->
       <button onclick="spot2iframe('Bible')">聖經</button>
       <button onclick="spot2iframe('ppt_1')">PPT 1</button>
       <button onclick="spot2iframe('ppt_2')">PPT 2</button>
