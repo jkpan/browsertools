@@ -285,6 +285,20 @@ class Applet {
     return this.elm.hidden;//parseFloat(this.elm.style.opacity) < 0.1;
   }
   
+  progress_hide_show_Self() {
+    if (this.elm.hidden) { //target to show
+      this.elm.style.opacity = '0.0';
+      this.elm.hidden = false;
+      this.t_Opacity = 1.0;
+      this.shide = false;
+    } else { //target to hide
+      this.elm.style.opacity = '1.0';
+      this.elm.hidden = false;
+      this.t_Opacity = 0.0;
+      this.shide = true;
+    }
+  }
+
   hideSelf() {
     this.elm.style.opacity = '0.0';
     this.elm.hidden = true;
@@ -497,6 +511,7 @@ class Applet {
     </div>   
     
     <div id="controlDiv" class="controlPart">
+
       <button onclick="spot2iframe('hymn')">歌詞</button>
       <button onclick="spot2iframe('Bible')">聖經</button>
       <button onclick="spot2iframe('ppt_1')">PPT 1</button>
@@ -626,6 +641,22 @@ function _createFrame(keyname) {
 
   }
   
+}
+
+function switchVisible4iframe(keyname) {
+  let idx = -1;
+  for (let i=0;i<applets.length;i++) {
+    if (keyname == applets[i].keyname) {
+      idx = i;
+      break;
+    }
+  }
+
+  if (idx == -1) return;
+  
+  applets[idx].progress_hide_show_Self();
+  anim_update(-1);
+
 }
 
 function spot2iframe(keyname) {
