@@ -39,6 +39,14 @@
             border: 2px solid;
             vertical-align: middle;
           }
+      input[type=file] {
+        border:2px solid;
+        border-color: rgb(0, 255, 0);
+        box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+        background: rgb(0, 150, 0);
+        background-color: rgb(0, 150, 0);
+        color: rgb(0, 255, 0);
+      }
       </style>
     </head>
     <body>
@@ -54,17 +62,40 @@
                   let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
                   if (value.length == 0) 
                     return;
-                  if (value.includes('google'))
-                    value += '&rm=minimal';
+                  //if (value.includes('google')) value += '&rm=minimal';
                   window.location.href = value;
                 }
               </script>
         <br/>
         <button class="okbutton" type="button" onclick="urlGo()">OK</button>
         <p style="color:#00ff00">
-          Google Slides 按 's' 打開speaker notes
+          * Google簡報若不要出現下方功能bar, url後方請加上"&rm=minimal", 此時若要打開speaker notes請按's'
         </p>
+
+        <P style="color:#00ff00">
+          PDF:
+          <input type="file" id="pdf_sel" />
+        </P>
     
     </body>
 </html>
-    
+  
+<script type="text/javascript" charset="UTF-8">
+
+// 當使用者修改內容(選擇檔案)
+var input = document.getElementById('pdf_sel');
+input.addEventListener('change', function (event) {
+
+  var files = event.target.files;
+  var file;
+  if (files && files.length > 0) {
+    file = files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      window.location.href = e.target.result;
+    }
+  }
+});
+
+</script>

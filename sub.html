@@ -161,6 +161,9 @@
       <option value="3">投影片上 經文下</option>
       <option value="4">投影片中 經文下</option>
     </select>
+    <p style="color:#00ff00">
+      * Google簡報若不要出現下方功能bar, url後方請加上"&rm=minimal", 此時若要打開speaker notes請按's'
+    </p>
     <button class="okbutton" type="button" onclick="slideGo()">OK</button>
     <br/>
   </div>
@@ -337,11 +340,10 @@ function slideGo() {
   let elementMain = document.getElementById('frame_slide_' + idx);
   let elementSub = document.getElementById('frame_Bible_' + idx);
 
-  let url_dest = ppt[idx];
-  if (url_dest.includes('google'))
-    url_dest += '&rm=minimal';
+  //let url_dest = ppt[idx];
+  //if (url_dest.includes('google')) url_dest += '&rm=minimal';
 
-  elementMain.src = url_dest;//ppt[idx];
+  elementMain.src = ppt[idx];
 
   switch(pptype[idx]) {
     case 0:

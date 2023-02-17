@@ -1,4 +1,5 @@
 
+//Complete Html Page
 function createCanvas() {
   
   let _canvas = document.createElement('canvas');
@@ -29,6 +30,8 @@ function createHiddenFile() {
 
 createCanvas();
 createHiddenFile();
+//end html page
+
 
 var list = [];
 

@@ -28,6 +28,7 @@ class Applet {
   t_w = 0;
   t_h = 0;
   t_Opacity = 1.0;
+  //t_angle = 0;
   //t_hide = false;
 
   printInfo() {
@@ -516,8 +517,8 @@ class Applet {
 
     <div id="content_control" class="ctrlfull" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 0.5;">
       <canvas id="canvas" width="100" height="100"></canvas>
-    </div>   
-    
+    </div>
+
     <div id="controlDiv" class="controlPart">
 
       <button onclick="spot2iframe('hymn')">歌詞</button><!--button onclick="switchVisible4iframe('hymn')">.</button-->
@@ -530,6 +531,7 @@ class Applet {
       <button onclick="spot2iframe('time')">Time</button>
       <button onclick="colorSwitch()">B/G</button>
       <button onclick="openCtrl()">Ctrl</button>
+      <!--input type="file" id="pdf_input" /-->
     </div>
     
 </div>
@@ -538,6 +540,24 @@ class Applet {
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+/*
+var input = document.getElementById('pdf_input');
+input.addEventListener('change', function (event) {
+
+  var files = event.target.files;
+  var file;
+  if (files && files.length > 0) {
+    file = files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      createFrame('pdf', e.target.result);
+      applets.push(new Applet({x:1, y:14, w:15, h:18, keyname:'pdf'}));
+    }
+  }
+});
+*/
 
 function openCtrl() {
   window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=100,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
