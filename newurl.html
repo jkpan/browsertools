@@ -3,6 +3,24 @@
     <head>
       <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
       <style>
+  .wrapper {
+      display: grid;
+      gap: 0px;
+    
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+      width: 100%;
+      height: 100vh;
+  }
+  .full {
+    
+    grid-column: 1 / 33;
+    grid-row: 1 / 33;
+
+    user-select: none;
+
+  }
       body {
         margin: 0px;
         height: 100%;
@@ -50,33 +68,44 @@
       </style>
     </head>
     <body>
-        
-        <br/>
-        <input type="text" id="ppt_url" name="input_url" value="" 
-              style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
-              placeholder="" />
-              <script type="text/javascript" charset="UTF-8">
-                document.getElementById("ppt_url").value = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//'https://www.youtube.com/embed/LzS_Mw0bnaw';
-                document.getElementById("ppt_url").select();
-                function urlGo() {
-                  let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
-                  if (value.length == 0) 
-                    return;
-                  //if (value.includes('google')) value += '&rm=minimal';
-                  window.location.href = value;
-                }
-              </script>
-        <br/>
-        <button class="okbutton" type="button" onclick="urlGo()">OK</button>
-        <p style="color:#00ff00">
-          * Google簡報若不要出現下方功能bar, url後方請加上"&rm=minimal", 此時若要打開speaker notes請按's'
-        </p>
 
-        <P style="color:#00ff00">
-          PDF:
-          <input type="file" id="pdf_sel" />
-        </P>
-    
+      <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
+        <video class="full" id="vsrc" width="100%" height="100%" controls="controls" hidden="true"><!--source src="" type="video/mp4"-->
+        </video>
+        <!--iframe class="full" id="pdframe" src="" hidden="true" width="100%" height="100%"></iframe-->
+        <div class="full" id="ui">
+          <input type="text" id="ppt_url" name="input_url" value="" 
+                style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
+                placeholder="" />
+                <script type="text/javascript" charset="UTF-8">
+                  document.getElementById("ppt_url").value = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//'https://www.youtube.com/embed/LzS_Mw0bnaw';
+                  document.getElementById("ppt_url").select();
+                  function urlGo() {
+                    let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
+                    if (value.length == 0) 
+                      return;
+                    //if (value.includes('google')) value += '&rm=minimal';
+                    window.location.href = value;
+                  }
+                </script>
+          <br/>
+          <button class="okbutton" type="button" onclick="urlGo()">OK</button>
+          <p style="color:#00ff00">
+            &nbsp;* Google簡報若不要出現下方功能bar, url後方請加上"&rm=minimal", 此時若要打開speaker notes請按's'
+            <br/>
+            &nbsp;* Canva簡報, 檢查url後方有無"view?embed", 沒有就自行加上
+          </p>
+          <P style="color:#00ff00">
+            PDF:
+            <input type="file" id="pdf_sel" />
+          </P>
+          <P style="color:#00ff00">
+            mp4:
+            <input type="file" id="video_sel" />
+          </P>
+        </div>
+      </div>
+
     </body>
 </html>
   
@@ -93,9 +122,64 @@ input.addEventListener('change', function (event) {
     var reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function(e) {
+
+      let ui = document.getElementById("ui");
+      ui.hidden = true;
+
       window.location.href = e.target.result;
+
     }
   }
 });
 
+var vinput = document.getElementById('video_sel');
+vinput.addEventListener('change', function (event) {
+
+  var files = event.target.files;
+  var file;
+  if (files && files.length > 0) {
+    file = files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+
+      let ui = document.getElementById("ui");
+      ui.hidden = true;
+
+      let elm = document.getElementById("vsrc");
+      elm.hidden = false;
+      elm.src = e.target.result;
+
+      /*      
+      let frame = document.getElementById("pdframe");
+      frame.hidden = false;
+      frame.src = e.target.result;
+      */
+
+    }
+  }
+});
+
+/*
+edit:
+https://www.canva.com/design/DAFY964Fw6Q/h7INsnBvo-q1ZBllt6OeCg/edit?utm_content=DAFY964Fw6Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+play:
+https://www.canva.com/design/DAFY964Fw6Q/Q3H7T_HsNl7OQVQMtVutAw/view?utm_content=DAFY964Fw6Q&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
+embedded:
+<div style="position: relative; width: 100%; height: 0; padding-top: 56.2500%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFY964Fw6Q&#x2F;view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+黃玉馨 設計的 <a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFY964Fw6Q&#x2F;view?utm_content=DAFY964Fw6Q&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">莊稼多工人少</a>
+=>
+https://www.canva.com/design/DAFY964Fw6Q/view?embed
+embedded:
+https://www.canva.com/design/DAFY964Fw6Q/view
++?embed
+=
+https://www.canva.com/design/DAFY964Fw6Q/view?embed
+*/
 </script>

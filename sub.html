@@ -163,8 +163,14 @@
     </select>
     <p style="color:#00ff00">
       * Google簡報若不要出現下方功能bar, url後方請加上"&rm=minimal", 此時若要打開speaker notes請按's'
+      <br/>
+      * Canva簡報, 確保url後方是"view?embed"結尾, 沒有就自行加上
     </p>
     <button class="okbutton" type="button" onclick="slideGo()">OK</button>
+    <P style="color:#00ff00">
+      PDF:
+      <input type="file" id="pdf_sel" />
+    </P>
     <br/>
   </div>
 
@@ -257,6 +263,22 @@
 
 <script type="text/javascript" charset="UTF-8">
 
+var input = document.getElementById('pdf_sel');
+input.addEventListener('change', function (event) {
+
+  var files = event.target.files;
+  var file;
+  if (files && files.length > 0) {
+    file = files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      //console.log(e.target.result);
+      slideGo(e.target.result);
+    }
+  }
+});
+
 function openCtrl() {
   window.open("sub_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=240,height=100,top="+(screen.height-400)+",left="+(screen.width-840));
 }
@@ -312,9 +334,9 @@ function somelayout() {
 }
 
 
-function slideGo() {
+function slideGo(url_data) {
 
-  let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
+  let value = url_data == null?document.getElementById("ppt_url").value:url_data;//String.fromCodePoint(0x1F604);
   if (value.length == 0) return;
   
   let sel = document.getElementById('Bibletype');
