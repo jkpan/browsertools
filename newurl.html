@@ -70,10 +70,13 @@
     <body>
 
       <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
-        <video class="full" id="vsrc" width="100%" height="100%" controls="controls" hidden="true"><!--source src="" type="video/mp4"-->
-        </video>
+        <!--embed-->
+        <iframe width="100%" height="100%" hidden="true" class="full" id="pdf-viewer" type="application/pdf"></iframe>
+        <video class="full" id="vsrc" width="100%" height="100%" controls="controls" hidden="true"></video>
+
         <!--iframe class="full" id="pdframe" src="" hidden="true" width="100%" height="100%"></iframe-->
         <div class="full" id="ui">
+          <br/>
           <input type="text" id="ppt_url" name="input_url" value="" 
                 style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
                 placeholder="" />
@@ -97,11 +100,13 @@
           </p>
           <P style="color:#00ff00">
             PDF:
-            <input type="file" id="pdf_sel" />
+            <input type="file" accept=".pdf" onchange="selectPDF(event)"/>
           </P>
           <P style="color:#00ff00">
-            mp4:
-            <input type="file" id="video_sel" />
+            video:
+
+            <input type="file" accept="video/*" onchange="playVideo(event)">
+
           </P>
         </div>
       </div>
@@ -111,54 +116,34 @@
   
 <script type="text/javascript" charset="UTF-8">
 
-// 當使用者修改內容(選擇檔案)
-var input = document.getElementById('pdf_sel');
-input.addEventListener('change', function (event) {
+function selectPDF(event) {
 
-  var files = event.target.files;
-  var file;
-  if (files && files.length > 0) {
-    file = files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
+  let ui = document.getElementById("ui");
+  ui.hidden = true;
 
-      let ui = document.getElementById("ui");
-      ui.hidden = true;
+  const file = event.target.files[0];//input.files[0];
+	const fileURL = URL.createObjectURL(file);
 
-      window.location.href = e.target.result;
+  let viewer = document.getElementById('pdf-viewer');
+	viewer.setAttribute('src', fileURL);
+  viewer.hidden = false;
 
-    }
-  }
-});
+}
 
-var vinput = document.getElementById('video_sel');
-vinput.addEventListener('change', function (event) {
+function playVideo(event) {
 
-  var files = event.target.files;
-  var file;
-  if (files && files.length > 0) {
-    file = files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
+  let ui = document.getElementById("ui");
+  ui.hidden = true;
 
-      let ui = document.getElementById("ui");
-      ui.hidden = true;
+  const file = event.target.files[0];
+  const videoURL = URL.createObjectURL(file);
 
-      let elm = document.getElementById("vsrc");
-      elm.hidden = false;
-      elm.src = e.target.result;
+  const video = document.getElementById("vsrc");
+  video.src = videoURL;
+  video.hidden = false;
 
-      /*      
-      let frame = document.getElementById("pdframe");
-      frame.hidden = false;
-      frame.src = e.target.result;
-      */
 
-    }
-  }
-});
+}
 
 /*
 edit:
