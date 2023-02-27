@@ -46,7 +46,9 @@ var elm;
 function controlParent(keyname) {
     
     elm = window.opener.switchFunction(keyname);
-
+    document.getElementById(keyname).blur();
+    window.blur();
+    elm.focus();
     //setTimeout(doFocus, 500);
 }
 

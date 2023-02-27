@@ -243,7 +243,7 @@
     &nbsp;
     &nbsp;
     &nbsp;
-    <!--button class="button" onclick="openCtrl()">ctrl</button-->
+    <button class="button" onclick="openCtrl()">c</button>
     <button class="button" onclick="somelayout()">_</button>
     <button id="oxBtn" class="button" onclick="startRestoreInterval()">o</button>
   </div>
@@ -278,6 +278,7 @@ input.addEventListener('change', function (event) {
 
 function openCtrl() {
   window.open("sub_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=240,height=100,top="+(screen.height-400)+",left="+(screen.width-840));
+  window.focus();
 }
 
 function somelayout() {
@@ -549,16 +550,21 @@ function restoreTabFromLocal() {
 }
 
 function switchFunction(idx) {
+  /*
   let tablinks = document.getElementsByClassName("tablinks");
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
   //evt.currentTarget.className += " active";
+  */
 
   tab = idx;
   _switchFunction(idx);
   if (keylock) return;
   saveTab2Local();
+  
+  //window.focus();
+
 }
 
 function _switchFunction(idx) {
@@ -698,7 +704,8 @@ function showPane(elm, show) {
   let div = document.getElementById('ctrlBtns');
   //div.hidden = !show;
   if (show) {
-    elm.style.opacity = '1.0';
+    //elm.style.opacity = '1.0';
+    elm.style.opacity = '0.4';
     //document.getElementById('content_song').className = "content";
     //document.getElementById('content_Bible').className = "content";
     //document.getElementById('content_effect').className = "content";
