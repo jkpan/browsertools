@@ -9,6 +9,8 @@ class ClockObj {
     minColor = "rgb(255, 255, 50)";
     secColor = "rgb(255, 50, 50)";
   
+    //showNumber = true;
+
     constructor() {
   
     }
@@ -16,6 +18,12 @@ class ClockObj {
     release() { }
     initial(c) { }
   
+    /*
+    numberSwitch() {
+      this.showNumber = !this.showNumber;
+    }
+    */
+
     changeFreq() {
       switch(this.frequence) {
           case -1: this.frequence = 5; break;
@@ -158,7 +166,7 @@ class ClockObj {
         let fs = c.width/16;
         _ctx.font = fs + "px Monospace";
         
-        _ctx.fillStyle = 'rgb(0,64,0)';
+        _ctx.fillStyle = 'rgb(0,0,0)';
         
         _ctx.lineWidth = Math.ceil(fs/14.0);
         _ctx.strokeStyle = this.fontColor;

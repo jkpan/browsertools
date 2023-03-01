@@ -51,6 +51,7 @@ class Applet {
   }
 
   presave() {
+    if (this.x == 1 && this.y == 1 && this.w == GRID_W && this.h == GRID_H) return;
     this.sx = this.x;
     this.sy = this.y;
     this.sw = this.w;
@@ -541,23 +542,28 @@ class Applet {
 
 <script type="text/javascript" charset="UTF-8">
 
-/*
+
 function getElmState() {
-  //var myArray = {id1: 100, id2: 200, "tag with spaces": 300};
-  //myArray.id3 = 400;
-  //myArray["id4"] = 500;
-  let stateArray = {hymn:-1, 
-                    Bible:-1, 
+  //var array = {id1: 100, id2: 200, "tag with spaces": 300};
+  //array.id3 = 400;
+  //array["id4"] = 500;
+  let stateArray = {hymn:-1, Bible:-1, 
                     ppt_1:-1, ppt_2:-1, ppt_3:-1,
-                    info:-1,
-                    effect:-1,
-                    time:-1};
+                    info:-1, effect:-1, time:-1};
   for (let key in stateArray) {
-    //console.log("key " + key + " has value " + myArray[key]);
-    
+    for (let i=0;i<applets.length;i++) {
+      if (key == applets[i].keyname) {
+        if (applets[i].elm.hidden || applets[i].t_Opacity == 0) {
+          stateArray[key] = 0;
+        } else {
+          stateArray[key] = 1;
+        }
+      }
+    }
   }
+  return stateArray;
 }
-*/
+
 /*
 var input = document.getElementById('pdf_input');
 input.addEventListener('change', function (event) {
@@ -576,8 +582,18 @@ input.addEventListener('change', function (event) {
 });
 */
 
+var _openWin = null;
+
 function openCtrl() {
-  window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=100,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
+  if (_openWin) 
+    _openWin.close();
+  _openWin = window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=100,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
+}
+
+function closeCtrl() {
+  if (_openWin) 
+    _openWin.close();
+  _openWin = null;
 }
 
 function colorSwitch() {
@@ -689,6 +705,7 @@ function _createFrame(keyname) {
 }
 
 function switchVisible4iframe(keyname) {
+
   let idx = -1;
   for (let i=0;i<applets.length;i++) {
     if (keyname == applets[i].keyname) {
@@ -705,6 +722,7 @@ function switchVisible4iframe(keyname) {
 }
 
 function spot2iframe(keyname) {
+
   let idx = -1;
   for (let i=0;i<applets.length;i++) {
     if (keyname == applets[i].keyname) {
@@ -716,6 +734,7 @@ function spot2iframe(keyname) {
     _createFrame(keyname);
     recoverAll();
     anim_update(-1);
+    //closeCtrl();
     return;
   }
 
