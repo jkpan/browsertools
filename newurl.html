@@ -8,8 +8,8 @@ body {
   margin: 0px;
   height: 100%;
   width: 100%;
-  background-color: rgb(0, 128, 0);
-  /*border: 2px solid rgb(0, 255, 0);*/
+  background-color: transparent;
+  /* rgb(0, 128, 0); border: 2px solid rgb(0, 255, 0);*/
 }
 .wrapper {
   
@@ -75,7 +75,7 @@ img {
 </style>
 </head>
     <body>
-            
+
       <!--hr size="8" width="100%" color="#00ff00"/-->
 
       <div class="wrapper">
@@ -88,12 +88,17 @@ img {
 
         <!--iframe class="full" id="pdframe" src="" hidden="true" width="100%" height="100%"></iframe-->
         <div class="full" id="ui">
-          &nbsp;嵌入url:
-          <input type="text" id="ppt_url" name="input_url" value="" 
+          &nbsp;嵌入url(Google簡報, Canva簡報, Youtube影片...):
+          <textarea id="ppt_url" name="mytext" rows="5" 
+            style="width:90%;box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" >
+https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false
+          </textarea>
+          <!--https://www.youtube.com/embed/u1V5BpkHhEQ-->
+          <!--input type="text" id="ppt_url" name="input_url" value="" 
                 style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
-                placeholder="" />
+                placeholder="" /-->
                 <script type="text/javascript" charset="UTF-8">
-                  document.getElementById("ppt_url").value = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//'https://www.youtube.com/embed/LzS_Mw0bnaw';
+                  //document.getElementById("ppt_url").value = 'https://www.youtube.com/embed/LzS_Mw0bnaw';
                   document.getElementById("ppt_url").select();
                   function urlGo() {
                     let value = document.getElementById("ppt_url").value;//String.fromCodePoint(0x1F604);
@@ -111,17 +116,11 @@ img {
             &nbsp;* Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自行加上
           
           <hr size="4" width="100%" color="#00ff00"/>
-
+          &nbsp;本機檔案<br/>
           &nbsp;PDF
-            <input type="file" accept=".pdf" onchange="selectPDF(event)"/>
-         
-          <hr size="4" width="100%" color="#00ff00"/>
-
+            <input type="file" accept=".pdf" onchange="selectPDF(event)"/><br/>
           &nbsp;Image
-            <input type="file" onchange="selectImg(event)"/>
-          
-          <hr size="4" width="100%" color="#00ff00"/>
-
+            <input type="file" onchange="selectImg(event)"/><br/>
           &nbsp;Video
             <input type="file" accept="video/*" onchange="playVideo(event)"/>
           
@@ -134,6 +133,8 @@ img {
 <script type="text/javascript" charset="UTF-8">
 
 function selectImg(event) {
+  //document.style.opacity = '0.0';
+  //document.style.opacity = "0.0";
   // 取得所選檔案
   var selectedFile = event.target.files[0];
 			
