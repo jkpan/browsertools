@@ -489,15 +489,22 @@ function printPhase() {
       let _y = (i + 1) * gap + fontsize/2;
       let txt = subtitles[phase][i];
       if (phase == 0 && txt.length > 0) txt = '[' + txt + ']';
+      
       ctx.fillStyle = 'white';
+      
+      if (img) {
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = Math.ceil(fontsize/10.0);//ctx.lineWidth = 4;
+        ctx.strokeText(txt, _x, _y);
+      }
+      
       ctx.fillText(txt, _x, _y);
-
+      
       if (i == line && song > 0) {
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'white';
         ctx.strokeRect (10, _y, canvas.width/60, canvas.height/60);
       }
-
     }
   } else { //mode 1, 3
     let _x = canvas.width * 0.1;
@@ -507,31 +514,38 @@ function printPhase() {
       let txt = subtitles[phase][i];
       if (phase == 0 && txt.length > 0) txt = '[' + txt + ']';
       ctx.fillStyle = doblank == 1?'rgb(0,240,0)':'white';
-      ctx.strokeStyle = doblank == 1?'rgba(0,240,0, 0)':'black';
-      ctx.lineWidth = Math.ceil(fontsize/10.0);//ctx.lineWidth = 4;
-      ctx.strokeText(txt, _x, _y);
 
+      
+        ctx.strokeStyle = doblank == 1?'rgba(0,240,0, 0)':'black';
+        ctx.lineWidth = Math.ceil(fontsize/10.0);//ctx.lineWidth = 4;
+        ctx.strokeText(txt, _x, _y);  
+      
+      
       ctx.fillText(txt, _x, _y);
 
+      
       if (i == line && song > 0) {
         ctx.lineWidth = 1;
         ctx.strokeStyle = doblank == 1?'rgb(0,240,0)':'white';
         ctx.strokeRect (10, _y, canvas.width/60, canvas.height/60);
       }
+      
 
     }
   } 
-  //'rgb(0,240,0)'
 
+  
   if (song > 0 && phase > 0) {
 
-    ctx.fillStyle = mode == 2?'yellow':'rgb(0,240,0)';
+    //ctx.fillStyle = mode == 2?'yellow':'rgb(0,240,0)';
+    ctx.fillStyle = 'rgb(0,200,0)';
     
     ctx.font = fontsize/2 + "px Arial";
     ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', 
                  mode == 2?canvas.width/2:canvas.width * 0.1, 
                  fontsize/2);
   }
+  
 
 }
 

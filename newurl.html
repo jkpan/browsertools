@@ -1,82 +1,94 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
-      <style>
-  .wrapper {
-      display: grid;
-      gap: 0px;
+<head>
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+<style>
+body {
+  color: rgb(0,255,0);
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(0, 128, 0);
+  /*border: 2px solid rgb(0, 255, 0);*/
+}
+.wrapper {
+  
+  display: grid;
+  gap: 0px;
     
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-      grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
-      width: 100%;
-      height: 100vh;
-  }
-  .full {
+  width: 100%;
+  height: 100vh;
+
+}
+.full {
     
-    grid-column: 1 / 33;
-    grid-row: 1 / 33;
+  grid-column: 1 / 33;
+  grid-row: 1 / 33;
 
-    user-select: none;
-
-  }
-      body {
-        margin: 0px;
-        height: 100%;
-        width: 100%;
-        background-color: rgb(0, 128, 0);
-      }
-      ::-webkit-scrollbar {
-        display: none;
-      }
-      input[type=text] {
-            border:2px solid rgb(0, 128, 0);
-            border-radius: 2px;
-            margin: 2% 2%;
-            outline: none;
-            padding: 0px;
-            box-sizing: border-box;
-            background: rgb(0, 150, 0);
-            color: rgb(0, 255, 0);
-            width: 96%;
-          }
-      input[type=text]:focus {
-        border:2px solid;
-        border-color: rgb(0, 255, 0);
-        box-shadow: 0 0 8px 0 rgb(0, 255, 0);
-        background: rgb(0, 150, 0);
-        color: rgb(0, 255, 0);    
-      }
-      .okbutton {
-            font-size: 24px;
-            background-color: rgb(0, 150, 0);
-            color: #00ff00;
-            margin: 2% 2%;
-            width:96%;
-            border: 2px solid;
-            vertical-align: middle;
-          }
-      input[type=file] {
-        border:2px solid;
-        border-color: rgb(0, 255, 0);
-        box-shadow: 0 0 8px 0 rgb(0, 255, 0);
-        background: rgb(0, 150, 0);
-        background-color: rgb(0, 150, 0);
-        color: rgb(0, 255, 0);
-      }
-      </style>
-    </head>
+  user-select: none;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+input[type=text] {
+  border:2px solid rgb(0, 128, 0);
+  border-radius: 2px;
+  margin: 2% 2%;
+  outline: none;
+  padding: 0px;
+  box-sizing: border-box;
+  background: rgb(0, 150, 0);
+  color: rgb(0, 255, 0);
+  width: 96%;
+}
+input[type=text]:focus {
+  border:2px solid;
+  border-color: rgb(0, 255, 0);
+  box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+  background: rgb(0, 150, 0);
+  color: rgb(0, 255, 0);    
+}
+.okbutton {
+  font-size: 24px;
+  background-color: rgb(0, 150, 0);
+  color: #00ff00;
+  margin: 2% 2%;
+  width: 50%;
+  border: 2px solid;
+  vertical-align: middle;
+}
+input[type=file] {
+  border:2px solid;
+  border-color: rgb(0, 255, 0);
+  box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+  background: rgb(0, 150, 0);
+  background-color: rgb(0, 150, 0);
+  color: rgb(0, 255, 0);
+}
+img {
+  display: block;
+  margin: 0 auto;
+}
+</style>
+</head>
     <body>
+            
+      <!--hr size="8" width="100%" color="#00ff00"/-->
 
-      <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
+      <div class="wrapper">
+        
         <!--embed-->
         <iframe width="100%" height="100%" hidden="true" class="full" id="pdf-viewer" type="application/pdf"></iframe>
         <video class="full" id="vsrc" width="100%" height="100%" controls="controls" hidden="true"></video>
+        
+        <div class="full" id="image_container" hidden="true"></div>
 
         <!--iframe class="full" id="pdframe" src="" hidden="true" width="100%" height="100%"></iframe-->
         <div class="full" id="ui">
-          <br/>
+          &nbsp;嵌入url:
           <input type="text" id="ppt_url" name="input_url" value="" 
                 style="box-shadow: 0px 0px 0px #00ff00;border:1px solid #00ff00;color: #00ff00;background-color: green;margin: 10px;opacity: 1.0;" 
                 placeholder="" />
@@ -93,21 +105,26 @@
                 </script>
           <br/>
           <button class="okbutton" type="button" onclick="urlGo()">OK</button>
-          <p style="color:#00ff00">
-            &nbsp;* Google簡報若不要出現下方功能bar, url後方請加上"&rm=minimal", 此時若要打開speaker notes請按's'
+          <br/>
+            &nbsp;* Google簡報若不要出現下方功能bar, '嵌入'用的url後方請加上'&rm=minimal', 此時若要打開speaker notes請按's'
             <br/>
-            &nbsp;* Canva簡報, 檢查url後方有無"view?embed", 沒有就自行加上
-          </p>
-          <P style="color:#00ff00">
-            PDF:
+            &nbsp;* Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自行加上
+          
+          <hr size="4" width="100%" color="#00ff00"/>
+
+          &nbsp;PDF
             <input type="file" accept=".pdf" onchange="selectPDF(event)"/>
-          </P>
-          <P style="color:#00ff00">
-            video:
+         
+          <hr size="4" width="100%" color="#00ff00"/>
 
-            <input type="file" accept="video/*" onchange="playVideo(event)">
+          &nbsp;Image
+            <input type="file" onchange="selectImg(event)"/>
+          
+          <hr size="4" width="100%" color="#00ff00"/>
 
-          </P>
+          &nbsp;Video
+            <input type="file" accept="video/*" onchange="playVideo(event)"/>
+          
         </div>
       </div>
 
@@ -115,6 +132,52 @@
 </html>
   
 <script type="text/javascript" charset="UTF-8">
+
+function selectImg(event) {
+  // 取得所選檔案
+  var selectedFile = event.target.files[0];
+			
+			// 檢查檔案是否為圖片檔
+			if (!selectedFile.type.match('image.*')) {
+				alert("選擇的檔案不是圖片檔！");
+				return;
+			}
+
+      let ui = document.getElementById("ui");
+      ui.hidden = true;
+
+			// 讀取檔案並將其轉換成Data URL
+			var reader = new FileReader();
+			reader.onload = function(event) {
+				var imageUrl = event.target.result;
+        let img = new Image();
+        img.src = imageUrl;
+        img.onload = function() {
+          var width = img.width;
+          var height = img.height;
+          let div = document.getElementById("image_container");
+          div.hidden = false;
+          if (width > height) 
+            div.innerHTML = '<img width="100%" height="auto" aligh="center" src="' + imageUrl + '" />';
+          else 
+            div.innerHTML = '<img width="auto" height="100%" aligh="center" src="' + imageUrl + '" />';
+        };
+				
+			};
+			reader.readAsDataURL(selectedFile);
+}
+/*
+reader.readAsDataURL(file);
+
+    reader.onload = function(e) {
+      var _img = new Image();
+      _img.onload = function() {
+        img = _img;
+        _repaint(); 
+      }
+      _img.src = e.target.result;
+    }
+    */
 
 function selectPDF(event) {
 
