@@ -202,6 +202,14 @@ function filter_gray(coloramount) {
   _b = _c;
 }
 
+function filter_reduce_and_lighter(coloramount) {
+  let block = Math.ceil(255/coloramount);
+  _r = Math.min(255, Math.ceil(_r/block) * block);// * drkl/10);
+  _g = Math.min(255, Math.ceil(_g/block) * block);// * drkl/10);
+  _b = Math.min(255, Math.ceil(_b/block) * block);// * drkl/10);
+}
+
+/*
 function filter_reduceColor(coloramount) {
   let block = Math.ceil(255/coloramount);
   //_r = Math.floor(_r/block) * block;// * (3/4);
@@ -210,11 +218,11 @@ function filter_reduceColor(coloramount) {
   _r = Math.ceil(_r/block) * block;// * (3/4);
   _g = Math.ceil(_g/block) * block;// * (3/4);
   _b = Math.ceil(_b/block) * block;// * (3/4);
-  
 }
+*/
 
 function filter() {
-  //filter_reduceColor(8);
+  filter_reduce_and_lighter(8);
   //filter_gray(16);
 }
 
