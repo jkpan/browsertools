@@ -18,7 +18,7 @@ function createCanvas() {
   document.body.style.backgroundColor = 'green';
 }
 
-function createHiddenFile() {
+function createBGHiddenFile() {
   let _file = document.createElement('input');
   _file.type = "file";
   _file.id = "img";
@@ -28,8 +28,18 @@ function createHiddenFile() {
   //<input id="img" type="file" hidden="true"/>
 }
 
+function createListHiddenFile() {
+  let _file = document.createElement('input');
+  _file.type = "file";
+  _file.id = "json";
+  _file.hidden = "true";
+  let body = document.getElementsByTagName("body")[0];
+  body.appendChild(_file);
+  //<input id="img" type="file" hidden="true"/>
+}
+
 createCanvas();
-createHiddenFile();
+createBGHiddenFile();
 //end html page
 
 

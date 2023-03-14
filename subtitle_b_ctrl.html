@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+      <style>
+      body {
+        margin: 0px;
+        background-color: rgb(0, 128, 0);
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+.wrapper {
+    display: grid;
+    gap: 0px;
+    
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+    width: 100%;
+    height: 100vh;
+  }
+  .left {
+    
+    grid-column: 1 / 15;
+    grid-row: 1 / 33;
+
+    user-select: none;
+
+  }
+  .mid {
+    
+    grid-column: 15 / 25;
+    grid-row: 1 / 33;
+
+    user-select: none;
+  }
+  .right {
+    
+    grid-column: 25 / 33;
+    grid-row: 1 / 33;
+
+    user-select: none;
+
+  }
+
+      button {
+            font-size: 16px;
+            background-color: transparent;
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            width: 30%;
+            border: 1px solid;
+            vertical-align: middle;
+          }
+      </style>
+    </head>
+    <body>
+        
+        <div id="mainDiv" class="wrapper" style="background-color: #007000; opacity: 1.0;">
+
+        <div class="left" id="volumn">
+
+        </div>
+
+        <div class="mid" id="chapters">
+
+        </div>
+
+        <div class="right" id="verses">
+
+        </div>
+      
+    </body>
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+var _song = 0;
+var _phase = 0;
+var _line = 0;
+
+function _newBtn() {
+
+    var button = document.createElement('button');
+
+    //button.className = '';
+
+    return button;
+}
+
+function createBtnVolumn() {
+
+    document.getElementById('chapters').innerHTML = '';
+    document.getElementById('verses').innerHTML = '';
+
+    let div = document.getElementById('volumn');
+        
+    for (var i=1;i<=66;i++) {
+
+        if (i == 6) div.insertAdjacentHTML('beforeend',  '<br/><br/>');
+        if (i == 18) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        if (i == 23) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        if (i == 28) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        if (i == 40) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        if (i == 45) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        if (i == 54) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        if (i == 58) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+
+        var button = _newBtn(); //_createVolumn(i);
+        button.innerHTML = window.opener.SONGS[i][0][0];
+        button.id = 'vol ' + i;
+        button.onclick = function() {
+            let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+            window.opener.subtitles = window.opener.SONGS[idx];
+            
+            if (document.getElementById('vol ' + _song)) 
+                document.getElementById('vol ' + _song).style.background = 'transparent';
+
+            window.opener.song = _song = idx;
+            window.opener.phase = _phase = 0;
+            window.opener.line = _line = 0;
+
+            this.style.background = "rgb(255,0,0)";
+
+            window.opener.saveAction2Local();
+            window.opener._repaint();
+            createBtnChapter();
+
+            return false;
+        };
+        
+        if (i > 39) button.style.color = 'rgb(255, 255, 255)'; // setting the color to white
+  
+        div.appendChild(button);
+        
+        if (i == 39) div.insertAdjacentHTML('beforeend', '<br/>');
+    }
+
+}
+
+function createBtnChapter() {
+
+    document.getElementById('verses').innerHTML = '';
+
+    let div = document.getElementById('chapters');
+    div.innerHTML = '';
+
+    var len = window.opener.subtitles.length;
+    
+    for (var i=1;i<=len-1;i++) {
+        let button = _newBtn();//document.createElement('button');
+        button.innerHTML = '' + i;
+        button.id = 'chp ' + i;
+        button.onclick = function() {
+            
+            let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+
+            if (document.getElementById('chp ' + _phase)) 
+                document.getElementById('chp ' + _phase).style.background = 'transparent';//
+
+
+            window.opener.song = _song;
+            window.opener.phase = _phase = idx;
+            window.opener.line = _line = 0;
+
+            this.style.background = "rgb(255,0,0)";
+
+            window.opener.saveAction2Local();
+            window.opener._repaint();
+            createBtnVerse();
+            return false;
+        };
+        div.appendChild(button);
+    }
+}
+
+function createBtnVerse() {
+
+    let div = document.getElementById('verses');
+    div.innerHTML = '';
+
+    var len = window.opener.subtitles[window.opener.phase].length;
+    for (var i=1;i<=len-1;i++) {
+        let button = _newBtn();//document.createElement('button');
+        button.innerHTML = '' + i;
+        button.id = 'ver ' + i;
+        button.onclick = function() {
+            let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+
+            if (document.getElementById('ver ' + _line)) 
+                document.getElementById('ver ' + _line).style.background = 'transparent';//
+
+            window.opener.song = _song;
+            window.opener.phase = _phase;
+            window.opener.line = _line = idx;
+
+            this.style.background = "rgb(255,0,0)";
+
+            window.opener.saveAction2Local();
+            window.opener._repaint();
+            return false;
+        };
+        div.appendChild(button);
+    }
+
+}
+
+createBtnVolumn();
+
+window.addEventListener('keyup', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.opener.keyupAction(e);
+}, false);
+  
+  
+window.addEventListener('keydown', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    window.opener.keydownAction(e);
+}, false);
+
+
+</script>
