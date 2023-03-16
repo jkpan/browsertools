@@ -40,6 +40,7 @@ function createListHiddenFile() {
 
 createCanvas();
 createBGHiddenFile();
+createListHiddenFile();
 //end html page
 
 
@@ -74,7 +75,7 @@ function getSong(jsonid) {
 
 const EMPTY = [ [['____歌詞____'],['']] ];
 
-var SONGS = EMPTY;//[ [['____歌詞____'],['']] ];
+var SONGS = EMPTY.slice();//[ [['____歌詞____'],['']] ];
 
 var song;
 var subtitles;
@@ -164,7 +165,7 @@ function syncListFromController() {
   if (value && value.length == 0) return;
   let array = value.split(',');
   list = array;
-  SONGS = EMPTY;//[ [['____歌詞____'],['']] ];
+  SONGS = EMPTY.slice();//[ [['____歌詞____'],['']] ];
   for(let i=0;i<list.length;i++) {
     list[i] = list[i].trim();
     if (list[i].length == 0) 
@@ -792,6 +793,7 @@ function keyboard(e) {
           img = null;
           document.getElementById('img').click();
           break;
+        case 74: document.getElementById('json').click(); break;
         case 79: phase = 0; line = 0; break;
         case 81: if (subtitles.length > 1) { phase = 1; line = 0; } break;
         case 87: if (subtitles.length > 2) { phase = 2; line = 0; } break;
@@ -961,9 +963,33 @@ function blank() {
 
 init();
 
-var input = document.getElementById('img');
 // 當使用者修改內容(選擇檔案)
-input.addEventListener('change', function (event) {
+const inputFile = document.getElementById('json');
+if (inputFile)
+  inputFile.addEventListener('change', function (event) {
+    if (inputFile.files.length > 0) {
+      // 讀取使用者選擇的檔案
+      const file = inputFile.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file);
+      // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
+      reader.onload = function(event) {
+        const fileContent = event.target.result;
+        const jsonData = JSON.parse(fileContent);
+        // 進行 JSON 資料的處理
+
+        getSongsFromJson(jsonData);
+        //getSongsFromList()
+        console.log(jsonData);
+
+      }
+    }
+  });
+
+// 當使用者修改內容(選擇檔案)
+var input = document.getElementById('img');
+if (input)
+  input.addEventListener('change', function (event) {
   var files = event.target.files;
   var file;
   if (files && files.length > 0) {
@@ -1040,6 +1066,37 @@ canvas.addEventListener('mousemove', e => {
   //doblank = 0; helpSwitch = 0; displayProgress = 0;
 });
 */
+
+function getSongsFromJson(jsonData) {
+
+  let array = jsonData.content;
+  if (array.length == 0) return;
+
+  SONGS = EMPTY.slice();
+  list = [];
+
+  for(let i=0;i<array.length;i++) { //if (array[i].length) console.log(array[i]);
+    if (typeof array[i] === 'string') {
+      //console.log('string:' + array[i]);
+      SONGS[i+1] = getSong(array[i]);
+      list[i] = array[i];
+    } else {
+      SONGS[i+1] = array[i];
+      list[i] = '';
+      //console.log('obj:' + array[i]);
+    }
+  }
+
+  song = 0;
+  subtitles = SONGS[song];
+  phase = 0;
+  line = 0;
+  _repaint();
+
+  console.log(SONGS.length);
+  console.log(SONGS);
+
+}
 
 function getSongsFromList() {
   list = getSong('LIST');
