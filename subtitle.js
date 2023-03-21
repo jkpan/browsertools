@@ -38,12 +38,6 @@ function createListHiddenFile() {
   //<input id="img" type="file" hidden="true"/>
 }
 
-createCanvas();
-createBGHiddenFile();
-createListHiddenFile();
-//end html page
-
-
 var list = [];
 
 const content_help = [[
@@ -151,8 +145,20 @@ function restoreActionFromLocal() {
 
   song = _song;
   subtitles = SONGS[song];
+
   phase = _phase;
   line = _line;
+
+  if (phase >= subtitles.length) {
+    syncListFromController();
+    return;
+  }
+
+  if (line >= subtitles[phase].length) {
+    syncListFromController();
+    return;
+  }
+
   doblank = _doblank;
   _repaint();
 }
@@ -161,33 +167,14 @@ function syncListFromController() {
   let key = 'song list';
   let value = localStorage.getItem(key);
   if (!value) return;
-  value = value.trim();
-  if (value && value.length == 0) return;
-  let array = value.split(',');
-  list = array;
-  SONGS = EMPTY.slice();//[ [['____歌詞____'],['']] ];
-  for(let i=0;i<list.length;i++) {
-    list[i] = list[i].trim();
-    if (list[i].length == 0) 
-      break;
-    console.log('syncList : ' + list[i]);
-    SONGS[i+1] = getSong(list[i]); //flow();
-    
-  }
-  song = SONGS.length - 1;
-  phase = 0;
-  line = 0;
-  subtitles = SONGS[song];
-  _repaint();
+  var array = JSON.parse(value);
+  getSongsFromList(array);
+  console.log('syncListFromController.');
 }
 
 function saveListFromController() {
   let key = 'song list';
-  value = '';
-  for (let i=0;i<list.length;i++){
-    value += list[i];
-    value += ',';
-  }
+  let value = JSON.stringify(list);
   localStorage.setItem(key, value);
   console.log('saveList ' + value);
 }
@@ -961,6 +948,12 @@ function blank() {
   */
 }
 
+//generate HTML
+createCanvas();
+createBGHiddenFile();
+createListHiddenFile();
+//end html page
+
 init();
 
 // 當使用者修改內容(選擇檔案)
@@ -978,8 +971,11 @@ if (inputFile)
         const jsonData = JSON.parse(fileContent);
         // 進行 JSON 資料的處理
 
-        getSongsFromJson(jsonData);
-        //getSongsFromList()
+        if (!jsonData.content || jsonData.content.length == 0) return;
+        
+        getSongsFromList(jsonData.content);
+        if (!funcInterval) saveListFromController();
+
         console.log(jsonData);
 
       }
@@ -1067,43 +1063,39 @@ canvas.addEventListener('mousemove', e => {
 });
 */
 
+/*
 function getSongsFromJson(jsonData) {
 
-  let array = jsonData.content;
-  if (array.length == 0) return;
+  if (jsonData.content.length == 0) return;
+    
+  getSongsFromList(jsonData.content);
 
+}
+*/
+
+function getSongsFromList(_list) {
+
+  if (_list) 
+    list = _list;
+  else 
+    list = getSong('LIST');
+  
   SONGS = EMPTY.slice();
-  list = [];
-
-  for(let i=0;i<array.length;i++) { //if (array[i].length) console.log(array[i]);
-    if (typeof array[i] === 'string') {
-      //console.log('string:' + array[i]);
-      SONGS[i+1] = getSong(array[i]);
-      list[i] = array[i];
+  
+  for(let i=0;i<list.length;i++) { //SONGS[i+1] = getSong(list[i]);
+    if (typeof list[i] === 'string') {
+      SONGS[i+1] = getSong(list[i]);
     } else {
-      SONGS[i+1] = array[i];
-      list[i] = '';
-      //console.log('obj:' + array[i]);
+      SONGS[i+1] = list[i];
     }
   }
 
   song = 0;
-  subtitles = SONGS[song];
   phase = 0;
   line = 0;
-  _repaint();
 
-  console.log(SONGS.length);
-  console.log(SONGS);
-
-}
-
-function getSongsFromList() {
-  list = getSong('LIST');
-  for(let i=0;i<list.length;i++) 
-    SONGS[i+1] = getSong(list[i]);
-  song = 0;
   subtitles = SONGS[song];
+
   _repaint();
 }
 
