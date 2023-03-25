@@ -279,6 +279,7 @@ input.addEventListener('change', function (event) {
 var _openWin = null;
 function openCtrl() {
   if (_openWin) _openWin.close();
+  //toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no
   _openWin = window.open("sub_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=200,top="+(screen.height-400)+",left="+(screen.width-840));
   //window.focus();
   let div = document.getElementById('ctrlBtns');

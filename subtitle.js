@@ -169,7 +169,7 @@ function syncListFromController() {
   if (!value) return;
   var array = JSON.parse(value);
   getSongsFromList(array);
-  console.log('syncListFromController.');
+  console.log('syncListFromController.' + value);
 }
 
 function saveListFromController() {
@@ -971,12 +971,12 @@ if (inputFile)
         const jsonData = JSON.parse(fileContent);
         // 進行 JSON 資料的處理
 
-        if (!jsonData.content || jsonData.content.length == 0) return;
+        if (!jsonData.list || jsonData.list.length == 0) return;
         
-        getSongsFromList(jsonData.content);
+        getSongsFromList(jsonData.list);
         if (!funcInterval) saveListFromController();
 
-        console.log(jsonData);
+        console.log(jsonData.list);
 
       }
     }
