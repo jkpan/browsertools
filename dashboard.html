@@ -532,7 +532,8 @@ class Applet {
       <button onclick="spot2iframe('time')">Time</button>
       <button onclick="colorSwitch()">B/G</button>
       <button onclick="openCtrl()">Ctrl</button>
-      <!--input type="file" id="pdf_input" /-->
+      <button onclick="openProfile()">Profile</button>
+      <input type="file" id="profile" hidden="true" onchange="selectProfile(event)" />
     </div>
     
 </div>
@@ -542,8 +543,125 @@ class Applet {
 
 <script type="text/javascript" charset="UTF-8">
 
+function handleProfile(jsonData) {
+
+  for (let i=0;i<applets.length;i++) {
+      applets[i].removeSelf();
+  }
+  applets = [];
+  _repaint();
+
+  if (jsonData.hymn) {
+    let app = _createFrame('hymn');
+    app.x = jsonData.hymn[0];
+    app.y = jsonData.hymn[1];
+    app.w = jsonData.hymn[2];
+    app.h = jsonData.hymn[3];
+    app.presave();
+    app.settle();
+  }
+  if (jsonData.Bible) {
+    let app = _createFrame('Bible');
+    app.x = jsonData.Bible[0];
+    app.y = jsonData.Bible[1];
+    app.w = jsonData.Bible[2];
+    app.h = jsonData.Bible[3];
+    app.presave();
+    app.settle();
+  }
+  if (jsonData.ppt_1) {
+    let app = _createFrame('ppt_1');
+    app.x = jsonData.ppt_1[0];
+    app.y = jsonData.ppt_1[1];
+    app.w = jsonData.ppt_1[2];
+    app.h = jsonData.ppt_1[3];
+    app.presave();
+    app.settle();
+  }
+  if (jsonData.ppt_2) {
+    let app = _createFrame('ppt_2');
+    app.x = jsonData.ppt_2[0];
+    app.y = jsonData.ppt_2[1];
+    app.w = jsonData.ppt_2[2];
+    app.h = jsonData.ppt_2[3];
+    app.presave();
+    app.settle();
+  }
+  if (jsonData.ppt_3) {
+    let app = _createFrame('ppt_3');
+    app.x = jsonData.ppt_3[0];
+    app.y = jsonData.ppt_3[1];
+    app.w = jsonData.ppt_3[2];
+    app.h = jsonData.ppt_3[3];
+    app.presave();
+    app.settle();
+  }
+  if (jsonData.info) {
+    let app = _createFrame('info');
+    app.x = jsonData.info[0];
+    app.y = jsonData.info[1];
+    app.w = jsonData.info[2];
+    app.h = jsonData.info[3];
+    app.presave();
+    app.settle();
+  }
+  if (jsonData.effect) {
+    let app = _createFrame('effect');
+    app.x = jsonData.effect[0];
+    app.y = jsonData.effect[1];
+    app.w = jsonData.effect[2];
+    app.h = jsonData.effect[3];
+    app.presave();
+    app.settle();
+  }
+  if (jsonData.time) {
+    let app = _createFrame('time');
+    app.x = jsonData.time[0];
+    app.y = jsonData.time[1];
+    app.w = jsonData.time[2];
+    app.h = jsonData.time[3];
+    app.presave();
+    app.settle();
+  }
+  
+  _repaint();
+  //if (applets.length == 0) return;
+    
+}
+
+function selectProfile(event) {
+  let inputFile = document.getElementById('profile');
+  if (inputFile.files.length > 0) {
+      // 讀取使用者選擇的檔案
+      const file = inputFile.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file);
+      // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
+      reader.onload = function(event) {
+        const fileContent = event.target.result;
+        const jsonData = JSON.parse(fileContent);
+        // 進行 JSON 資料的處理
+
+        //if (!jsonData.list || jsonData.list.length == 0) return;
+        
+        console.log(jsonData);
+
+        handleProfile(jsonData);
+      
+      }
+    }
+}
+
+function openProfile() {
+  document.getElementById('profile').click();
+}
 
 function getElmState() {
+  for (let i=0;i<applets.length;i++) {
+    console.log(applets[i].keyname + ' : ' + 
+                applets[i].x + ', ' + applets[i].y + ', ' + 
+                applets[i].w + ', ' + applets[i].h);
+  }
   //var array = {id1: 100, id2: 200, "tag with spaces": 300};
   //array.id3 = 400;
   //array["id4"] = 500;
@@ -665,40 +783,55 @@ function createFrame(id, url) {
 
 function _createFrame(keyname) {
   switch(keyname) {
-    case 'hymn':
+    case 'hymn': {
       createFrame(keyname, 'subtitle.html');
-      applets.push(new Applet({x:1, y:14, w:15, h:18, keyname:'hymn'}));
-      break;
-    case 'Bible':
+      let app = new Applet({x:1, y:14, w:15, h:18, keyname:'hymn'});
+      applets.push(app);
+      return app;
+    } break;
+    case 'Bible': {
       createFrame(keyname, 'subtitle_b.html');
-      applets.push(new Applet({x:17, y:14, w:16, h:18, keyname:'Bible'}));
-      break;
-    case 'ppt_1':
+      let app = new Applet({x:17, y:14, w:16, h:18, keyname:'Bible'});
+      applets.push(app);
+      return app;
+    } break;
+    case 'ppt_1': {
       createFrame(keyname, 'newurl.html');
-      applets.push(new Applet({x:6, y:1, w:6, h:8, keyname:'ppt_1'}));
-      break;
-    case 'ppt_2':
+      let app = new Applet({x:6, y:1, w:6, h:8, keyname:'ppt_1'});
+      applets.push(app);
+      return app;
+    } break;
+    case 'ppt_2': {
       createFrame(keyname, 'newurl.html');
-      applets.push(new Applet({x:8, y:3, w:6, h:8, keyname:'ppt_2'}));
-      break;
-    case 'ppt_3':
+      let app = new Applet({x:8, y:3, w:6, h:8, keyname:'ppt_2'});
+      applets.push(app);
+      return app;
+    } break;
+    case 'ppt_3': {
       createFrame(keyname, 'newurl.html');
-      applets.push(new Applet({x:10, y:5, w:6, h:8, keyname:'ppt_3'}));
-      break;
-    case 'info':
+      let app = new Applet({x:10, y:5, w:6, h:8, keyname:'ppt_3'});
+      applets.push(app);
+    } break;
+    case 'info': {
       createFrame(keyname, 'marquee_v.html');
-      applets.push(new Applet({x:1, y:1, w:4, h:32, keyname:'info'}));
-      break;
-    case 'effect':
+      let app = new Applet({x:1, y:1, w:4, h:32, keyname:'info'});
+      applets.push(app);
+      return app;
+    } break;
+    case 'effect': {
       createFrame(keyname, 'effect.html');
-      applets.push(new Applet({x:18, y:2, w:4, h:4, keyname:'effect'}));
-      break;
-    case 'time':
+      let app = new Applet({x:18, y:2, w:4, h:4, keyname:'effect'});
+      applets.push(app);
+      return app;
+    } break;
+    case 'time': {
       createFrame(keyname, 'clock.html');
-      applets.push(new Applet({x:24, y:2, w:11, h:10, keyname:'time'}));
-      break;
+      let app = new Applet({x:24, y:2, w:11, h:10, keyname:'time'});
+      applets.push(app);
+      return app;
+    } break;
     default:
-      return;
+      return null;
 
   }
   
