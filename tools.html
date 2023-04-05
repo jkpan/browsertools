@@ -45,3 +45,205 @@
 
 <!--a href="./subtitle_anima.html">動畫測試</a-->
 <!--a href="https://sites.google.com/site/instantfunmobile/">阿榮娛樂</a-->
+<!--
+import UIKit
+import SpriteKit
+
+class GameScene: SKScene, SKPhysicsContactDelegate {
+
+    let player = SKSpriteNode(imageNamed: "playerShip") // 玩家的太空船
+    var scoreLabel = SKLabelNode(fontNamed: "HelveticaNeue-Bold") // 顯示分數的標籤
+    var livesLabel = SKLabelNode(fontNamed: "HelveticaNeue-Bold") // 顯示生命值的標籤
+    var score = 0 // 玩家的分數
+    var lives = 3 // 玩家的生命值
+
+    override func didMove(to view: SKView) {
+        backgroundColor = SKColor.black // 背景顏色為黑色
+
+        player.position = CGPoint(x: size.width * 0.5, y: size.height * 0.1) // 玩家的太空船初始位置
+        addChild(player)
+
+        scoreLabel.fontSize = 24
+        scoreLabel.fontColor = SKColor.white
+        scoreLabel.text = "Score: 0"
+        scoreLabel.position = CGPoint(x: size.width * 0.8, y: size.height * 0.9)
+        addChild(scoreLabel)
+
+        livesLabel.fontSize = 24
+        livesLabel.fontColor = SKColor.white
+        livesLabel.text = "Lives: 3"
+        livesLabel.position = CGPoint(x: size.width * 0.1, y: size.height * 0.9)
+        addChild(livesLabel)
+
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0) // 重力為零
+        physicsWorld.contactDelegate = self
+
+        run(SKAction.repeatForever(
+            SKAction.sequence([
+                SKAction.run(addEnemy),
+                SKAction.wait(forDuration: 1.0)
+            ])
+        ))
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+
+            player.position.x = location.x
+
+            let bullet = SKSpriteNode(imageNamed: "bullet")
+            bullet.position = player.position
+            bullet.position.y += 5
+
+            let action = SKAction.moveTo(y: size.height + bullet.size.height, duration: 0.5)
+            let actionDone = SKAction.removeFromParent()
+            bullet.run(SKAction.sequence([action, actionDone]))
+
+            bullet.physicsBody = SKPhysicsBody(rectangleOf: bullet.size)
+            bullet.physicsBody?.categoryBitMask = PhysicsCategory.Bullet
+            bullet.physicsBody?.contactTestBitMask = PhysicsCategory.Enemy
+            bullet.physicsBody?.affectedByGravity = false
+            addChild(bullet)
+
+            run(SKAction.playSoundFileNamed("shoot.wav", waitForCompletion: false))
+        }
+    }
+
+    func addEnemy() {
+        let enemy = SKSpriteNode(imageNamed: "enemyShip")
+        let randomX = CGFloat.random(in: enemy.size.width/2..<size.width-enemy.size.width/2)
+        enemy.position = CGPoint(x: randomX, y:
+        size.height + enemy.size.height)
+    addChild(enemy)
+
+    let action = SKAction.moveTo(y: -enemy.size.height, duration: 2.0)
+    let actionDone = SKAction.removeFromParent()
+    enemy.run(SKAction.sequence([action, actionDone]))
+
+    enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
+    enemy.physicsBody?.categoryBitMask = PhysicsCategory.Enemy
+    enemy.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
+    enemy.physicsBody?.affectedByGravity = false
+}
+
+func didBegin(_ contact: SKPhysicsContact) {
+    var firstBody: SKPhysicsBody
+    var secondBody: SKPhysicsBody
+
+    if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+        firstBody = contact.bodyA
+        secondBody = contact.bodyB
+    } else {
+        firstBody = contact.bodyB
+        secondBody = contact.bodyA
+    }
+
+    if ((firstBody.categoryBitMask & PhysicsCategory.Bullet != 0) &&
+        (secondBody.categoryBitMask & PhysicsCategory.Enemy != 0)) {
+        bulletDidCollideWithEnemy(bulletNode: firstBody.node as! SKSpriteNode, enemyNode: secondBody.node as! SKSpriteNode)
+    }
+}
+
+func bulletDidCollideWithEnemy(bulletNode: SKSpriteNode, enemyNode: SKSpriteNode) {
+    let explosion = SKSpriteNode(imageNamed: "explosion")
+    explosion.position = enemyNode.position
+    addChild(explosion)
+
+    let removeExplosion = SKAction.removeFromParent()
+    let wait = SKAction.wait(forDuration: 0.3)
+    explosion.run(SKAction.sequence([wait, removeExplosion]))
+
+    bulletNode.removeFromParent()
+    enemyNode.removeFromParent()
+
+    score += 1
+    scoreLabel.text = "Score: \(score)"
+
+    run(SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false))
+}
+
+override func update(_ currentTime: TimeInterval) {
+    for node in self.children {
+        if node.position.y < 0 {
+            node.removeFromParent()
+
+            if node is SKSpriteNode && node.physicsBody?.categoryBitMask == PhysicsCategory.Enemy {
+                lives -= 1
+                livesLabel.text = "Lives: \(lives)"
+
+                if lives <= 0 {
+                    let gameOverScene = GameOverScene(size: self.size, score: score)
+                    self.view?.presentScene(gameOverScene, transition: SKTransition.fade(withDuration: 0.5))
+                }
+            }
+        }
+    }
+}
+
+}
+
+struct PhysicsCategory {
+static let None: UInt32 = 0
+static let Bullet: UInt32 = 0b1 // 1
+static let Enemy: UInt32 = 0b10 // 2
+}
+
+class GameOverScene: SKScene {
+init(size: CGSize, score: Int) {
+super.init(size: size)
+let gameOverLabel = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
+    gameOverLabel.text = "Game Over"
+    gameOverLabel.fontSize = 32
+    gameOverLabel.fontColor = SKColor.white
+    gameOverLabel.position = CGPoint(x: size.width/2, y: size.height/2)
+    addChild(gameOverLabel)
+
+    let scoreLabel = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
+    scoreLabel.text = "Score: \(score)"
+    scoreLabel.fontSize = 24
+    scoreLabel.fontColor = SKColor.white
+    scoreLabel.position = CGPoint(x: size.width/2, y: size.height/2 - 40)
+    addChild(scoreLabel)
+}
+
+required init?(coder aDecoder: NSCoder) {
+    fatalError("")
+}
+
+}
+
+class GameViewController: UIViewController {
+override func viewDidLoad() {
+super.viewDidLoad()
+
+let scene = GameScene(size: view.bounds.size)
+scene.scaleMode = .resizeFill
+
+let skView = view as! SKView
+skView.presentScene(scene)
+skView.showsFPS = true
+skView.showsNodeCount = true
+}
+
+override var prefersStatusBarHidden: Bool {
+return true
+}
+}
+
+
+let appDelegate = UIApplication.shared.delegate as! AppDelegate
+let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+let gameViewController = mainStoryboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+appDelegate.window?.rootViewController = gameViewController
+appDelegate.window?.makeKeyAndVisible()
+
+// Run the app
+UIApplicationMain(
+CommandLine.argc,
+UnsafeMutableRawPointer(CommandLine.unsafeArgv).bindMemory(to: UnsafeMutablePointer<Int8>.self, capacity: Int(CommandLine.argc)),
+NSStringFromClass(UIApplication.self),
+NSStringFromClass(AppDelegate.self)
+)
+
+-->
