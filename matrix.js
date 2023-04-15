@@ -2,6 +2,10 @@
 var canvas;
 var ctx;
 
+var PT_R = 0;
+var PT_G = 0;
+var PT_B = 0;
+
 function init() {
     canvas = document.getElementById("canvas");
     canvas.width  = window.innerWidth;
@@ -99,7 +103,10 @@ function newParticle_txt(sequence, total) {
           break;
         }
         if (i < this.array.length) {
-          let rb = Math.floor(150 * _len/this.idxlen);
+          let ratio = _len/this.idxlen;
+          let _r = PT_R == 0?Math.floor(150 * ratio):255;
+          let _g = PT_G == 0?Math.floor(150 * ratio):255;
+          let _b = PT_B == 0?Math.floor(150 * ratio):255;
           
           if (i == this.idx) {
             
@@ -122,7 +129,8 @@ function newParticle_txt(sequence, total) {
               opa *= 0.5;
             }
             //if (opa > 0.05)
-            _ctx.fillStyle = 'rgb(' + rb + ',255,' + rb + ',' + opa +')';
+            _ctx.fillStyle = 'rgb(' + _r + ',' + _g + ',' + _b + ',' + opa + ')';
+            //_ctx.fillStyle = 'rgb(' + '0,255,0,'  + opa +')';
           }
           _ctx.fillText(this.array[i], this.x, this.y + (i * this.size));  
           //_ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
@@ -197,7 +205,7 @@ function doresize() {
 var pre = 0;
 var particles = [];
 
-var subtitle = getSong('詩');
+var subtitle = getSong('scripture');
 
 init();
 
