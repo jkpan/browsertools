@@ -745,10 +745,15 @@ var presetVerse = [
   
   }
   
-  const animTotal = 24;
-  var animElapse = 0;
+  const animTotal = 30;
+  var animElapse = 0; //var savePre = 0;
   function verse_update(elapse) {
   
+
+    //if (Math.random() < 0.05) 
+    //console.log('dt: ' + 0.001 * (elapse - savePre));
+    //savePre = elapse;
+
     render(animElapse/animTotal);
     //console.log(elapse + ' : ' + animElapse/animTotal);
     

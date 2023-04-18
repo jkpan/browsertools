@@ -68,10 +68,10 @@ function newParticle_txt(sequence, total) {
       this.idxlen = Math.max(2, Math.floor(this.array.length * 0.8));//10 + 10 * Math.random();
       this.elapse = 0;
       this.idx = 0;
-      this.gap = 0.08 + Math.random() * 0.1;
-      
-
+      this.gap = 0.06 + Math.random() * 0.15;
+      //console.log('___  ' + this.gap);
     },
+
     update: function (c, _ctx, dt) {
       
       if (dt > 1000) dt = 16;
@@ -81,10 +81,8 @@ function newParticle_txt(sequence, total) {
 
       _ctx.textAlign = "left";
 
-      var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"Noto Serif TC";//"標楷體";
+      var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"Noto Serif TC";"標楷體";
       _ctx.font = this.size + "px "+ fontFamily;
-
-      //ctx.fillText(this.txt.substr(i, 1), this.x, this.y);
 
       this.elapse += dt * 0.001;
       if (this.elapse > this.gap) {
@@ -93,33 +91,31 @@ function newParticle_txt(sequence, total) {
           this.initial(c);
           return;
         }
-      
         this.elapse = 0;
-      } 
+      }
+
+      //console.log(this.idx + '/' + this.array.length);
 
       let _len = this.idxlen;
       for (var i = this.idx;i>=0;i--) {
-        if (i < 0) {
-          break;
-        }
+        
         if (i < this.array.length) {
-          let ratio = _len/this.idxlen;
-          let _r = PT_R == 0?Math.floor(150 * ratio):255;
-          let _g = PT_G == 0?Math.floor(150 * ratio):255;
-          let _b = PT_B == 0?Math.floor(150 * ratio):255;
+          
+          let cl = Math.floor(150 * _len/this.idxlen);
+
+          let _r = PT_R == 0?cl:255;
+          let _g = PT_G == 0?cl:255;
+          let _b = PT_B == 0?cl:255;
           
           if (i == this.idx) {
             
             if (this.lev >= 2) {
-              //_ctx.strokeStyle = 'rgb(255, 255, 255, 0.5)';
-              //_ctx.lineWidth = 0;
               _ctx.fillStyle = 'rgb(255, 255, 255, 0.8)';
             } else {
               _ctx.strokeStyle = 'rgb(255, 0, 0, 1.0)';
               _ctx.lineWidth = 4;
               _ctx.fillStyle = 'rgb(240, 255, 240, 1.0)';
               _ctx.strokeText(this.array[i], this.x, this.y + (i * this.size));
-              //_ctx.strokeText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
             }      
             
           } else {
@@ -128,16 +124,13 @@ function newParticle_txt(sequence, total) {
             if (this.lev >= 2) {
               opa *= 0.5;
             }
-            //if (opa > 0.05)
             _ctx.fillStyle = 'rgb(' + _r + ',' + _g + ',' + _b + ',' + opa + ')';
-            //_ctx.fillStyle = 'rgb(' + '0,255,0,'  + opa +')';
           }
-          _ctx.fillText(this.array[i], this.x, this.y + (i * this.size));  
+          _ctx.fillText(this.array[i], this.x, this.y + (i * this.size)); 
           //_ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
         }  
         _len--;
-        if (_len == 0) 
-          break;
+        if (_len == 0) break;
       }
       
     }
@@ -157,6 +150,8 @@ function anim_update(elapse) {
 
   let dt = elapse - pre;
   pre = elapse;
+
+  //if (Math.random() < 0.05) console.log('dt: ' + dt);
   
   for (var i = 0;i<particles.length;i++) {
     particles[i].update(c, ctx, dt);
