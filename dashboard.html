@@ -530,9 +530,11 @@ class Applet {
       <button onclick="spot2iframe('info')">Info</button>
       <button onclick="spot2iframe('effect')">Effect</button>
       <button onclick="spot2iframe('time')">Time</button>
+      <button>|</button>
       <button onclick="colorSwitch()">B/G</button>
       <button onclick="openCtrl()">Ctrl</button>
       <button onclick="openProfile()">Profile</button>
+      <button id="oxBtn" onclick="sendOX()">o</button>
       <input type="file" id="profile" hidden="true" onchange="selectProfile(event)" />
     </div>
     
@@ -542,6 +544,19 @@ class Applet {
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function sendOX() {
+
+  var b = document.getElementById('oxBtn');
+  if (b.textContent == 'o') {
+    b.textContent = 'x';
+    postMsg('x');
+  } else {
+    b.textContent = 'o';
+    postMsg('o');
+  }
+
+}
 
 function handleProfile(jsonData) {
 
@@ -949,11 +964,17 @@ function _repaint() {
 
 }
 
+function postMsg(edata) {
+  for (let i=0;i<applets.length;i++) {
+    applets[i].elm.contentWindow.postMessage(edata, '/');
+  }
+}
+
 // 監聽 message 事件
 window.addEventListener('message', e => {
-  for (let i=0;i<applets.length;i++) {
-    applets[i].elm.contentWindow.postMessage(e.data, '/');
-  }
+  postMsg(e.data);
+  var b = document.getElementById('oxBtn');
+  b.textContent = e.data;
 }, false);
 
 window.addEventListener('keyup', e => {

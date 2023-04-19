@@ -5,7 +5,7 @@
 <style>
 body {
   color: rgb(0,255,0);
-  margin: 0px;
+  margin: 4% 2%;
   height: 100%;
   width: 100%;
   background-color: rgb(0, 128, 0);
@@ -37,7 +37,7 @@ textarea {
   border:2px solid rgb(0, 128, 0);
   border-radius: 2px;
   border-color: rgb(0, 255, 0);
-  margin: 2% 2%;
+  margin: 1%;
   outline: none;
   padding: 0px;
   box-sizing: border-box;
@@ -111,12 +111,15 @@ img {
             &nbsp;* Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上
           
           <hr size="4" width="100%" color="#00ff00"/>
-          &nbsp;本機檔案<br/>
-          &nbsp;PDF
+          本機檔案:<br/>
+          <P></P>
+          PDF&nbsp;&nbsp;&nbsp;
             <input type="file" accept=".pdf" onchange="selectPDF(event)"/><br/>
-          &nbsp;Image
+          <P></P>
+          Image&nbsp;
             <input type="file" onchange="selectImg(event)"/><br/>
-          &nbsp;Video
+          <P></P>
+          Video&nbsp;
             <input type="file" accept="video/*" onchange="playVideo(event)"/>
           
         </div>
