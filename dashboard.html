@@ -135,7 +135,9 @@ class Applet {
     
     this.settle();//
 
-    if (opcy == this.t_Opacity && this.x == this.t_x && this.y == this.t_y && this.w == this.t_w && this.h == this.t_h) {
+    if (this.ry == this.t_rotateY && opcy == this.t_Opacity && 
+        this.x == this.t_x        && this.y == this.t_y && 
+        this.w == this.t_w        && this.h == this.t_h) {
       return true;
     }
     return false;
@@ -318,7 +320,14 @@ class Applet {
     this.t_y = this.y;
     this.t_w = this.w;
     this.t_h = this.h;
+  }
 
+  progress_perspective_Self() {
+    if (Math.abs(this.t_rotateY) == 80) {
+      this.t_rotateY = 0;
+    } else {
+      this.t_rotateY = 80;
+    }
   }
 
   hideSelf() {
@@ -894,8 +903,8 @@ function perspective4iframe(keyname) {
 
   if (idx == -1) return;
 
-  recoverAll();
-  applets[idx].progress_hide_show_Self();
+  //recoverAll();
+  applets[idx].progress_perspective_Self();
   anim_update(-1);
 
 }
