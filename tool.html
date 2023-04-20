@@ -9,6 +9,21 @@
 
 <!DOCTYPE html>
 <html>
+  <style>
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box {
+  border: 2px solid red;
+  height: 100px;
+  width: 100px;
+  position: absolute;
+}
+  </style>
 <body>
 <p>地震能量 (logE = 4.8 + 1.5M) </p>
 
@@ -28,12 +43,16 @@
 </script>
 <p></p>
 <button class="okbutton" type="button" onclick="go()">OK</button-->
+<!--p id="demo"></p-->
 
 <p></p>
   <canvas id="canvas" width="400" height="500"></canvas>
 <br/>
+<p></p>
 
-<p id="demo"></p>
+<div id="ex1" class="container">
+  <div id="ex1-layer" class="box"></div>
+</div>
 
 </body>
 </html>
@@ -122,4 +141,47 @@
     parseFloat("34 45 66") + "<br>" +
     parseFloat("He was 40");
     */
+
+
+let constrain = 20;
+let mouseOverContainer = document.getElementById("ex1");
+let ex1Layer = document.getElementById("ex1-layer");
+
+
+function transforms(x, y, el) {
+  //console.log(x + ',' + y + ':' + el);
+  let box = el.getBoundingClientRect();
+  let calcX = -(y - box.y - (box.height / 2)) / constrain;
+  let calcY = (x - box.x - (box.width / 2)) / constrain;
+  
+  return "perspective(100px) "
+    + "   rotateX("+ calcX +"deg) "
+    + "   rotateY("+ calcY +"deg) ";
+};
+
+
+function transformElement(el, xyEl) {
+  //console.log(xyEl[0] + ',' + xyEl[1] + ',' + xyEl[2] + ',' + xyEl[3] + '------' + el);
+  el.style.transform  = transforms.apply(null, xyEl);
+}
+
+var calcY = 0;
+
+mouseOverContainer.onmousemove = function(e) {
+  let xy = [e.clientX, e.clientY];
+  let position = xy.concat([ex1Layer]);
+
+  window.requestAnimationFrame(function(){
+    
+    calcY += 1;
+    if (calcY > 90) 
+      calcY = 0;
+    console.log(calcY);
+    //transformElement(ex1Layer, position);
+    ex1Layer.style.transform  = "perspective(500px) rotateY(" + calcY + "deg)";
+    //"perspective(100px) " + "   rotateX(" + calcX + "deg) " + "   rotateY("+ calcY +"deg) ";
+  });
+};
+
 </script>
+

@@ -110,11 +110,11 @@ function newParticle_txt(sequence, total) {
           if (i == this.idx) {
             
             if (this.lev >= 2) {
-              _ctx.fillStyle = 'rgb(255, 255, 255, 0.8)';
+              _ctx.fillStyle = 'rgb(' + (PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(200, 200, 200, 0.8)';
             } else {
-              _ctx.strokeStyle = 'rgb(255, 0, 0, 1.0)';
-              _ctx.lineWidth = 4;
-              _ctx.fillStyle = 'rgb(240, 255, 240, 1.0)';
+              _ctx.strokeStyle = 'rgb(' +(PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(255, 0, 0, 1.0)';
+              _ctx.lineWidth = 6;
+              _ctx.fillStyle = 'rgb(0,0,0,1.0)';
               _ctx.strokeText(this.array[i], this.x, this.y + (i * this.size));
             }      
             

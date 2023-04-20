@@ -16,6 +16,7 @@ class Applet {
   w = 0;
   h = 0;
   elm = null;
+  ry = 0;
   
   sx = 0;
   sy = 0;
@@ -28,11 +29,14 @@ class Applet {
   t_w = 0;
   t_h = 0;
   t_Opacity = 1.0;
+  t_rotateY = 0.0;
   //t_angle = 0;
   //t_hide = false;
 
   printInfo() {
-    console.log('(' + this.x + ', ' + this.y + ', ' + this.w + ', ' + this.h + '), ' + this.elm.hidden + ', "' + this.elm.style.opacity + '"');
+    console.log('(' + this.x + ', ' + this.y + ', ' + 
+                this.w + ', ' + this.h + '), ' + 
+                this.elm.hidden + ', "' + this.elm.style.opacity + '" ' + this.ry);
   }
 
   constructor(data) {
@@ -44,6 +48,8 @@ class Applet {
     this.elm = document.getElementById(this.keyname);//data.elm;
     this.elm.style.opacity = '1.0';
     this.shide = false;
+    this.ry = 0;
+    this.t_rotateY = 0;
     //this.sOpacity = 1.0;
     //this.t_Opacity = 1.0;
     this.adjust();
@@ -72,12 +78,9 @@ class Applet {
     }
   }
 
-
   tmpHide() { //other in bg
     this.t_Opacity = 0.0;
   }
-
-  //tmpShow() { this.t_Opacity = 1.0;}
 
   enlargeSelf() {
     this.t_x = 1;
@@ -105,7 +108,7 @@ class Applet {
       this.h += Math.ceil((this.t_h - this.h)/Math.abs(this.t_h - this.h));
     
     let opcy = parseFloat(this.elm.style.opacity);
-    
+   
     //console.log(this.elm.style.opacity);// + ',, ' + opcy + ', ' + this.t_Opacity);
 
     if (opcy != this.t_Opacity) {
@@ -122,8 +125,16 @@ class Applet {
       this.elm.style.opacity = '' + opcy;
       
     }
+
+    if (this.ry != this.t_rotateY) {
+      this.ry += (this.t_rotateY - this.ry) * 0.1;
+      if (Math.abs(this.ry - this.t_rotateY) <= 0.05) {
+        this.ry = this.t_rotateY;
+      }
+    } 
     
     this.settle();//
+
     if (opcy == this.t_Opacity && this.x == this.t_x && this.y == this.t_y && this.w == this.t_w && this.h == this.t_h) {
       return true;
     }
@@ -235,6 +246,7 @@ class Applet {
     this.elm.style.gridRow = this.y + ' / ' + (this.y + this.h);//'1 / 8';
     //console.log(this.x + '/' + (this.x + this.w));
     //console.log(this.y + '/' + (this.y + this.h));
+    this.elm.style.transform  = "perspective(500px) rotateY(" + this.ry + "deg)";
   }
 
   checkInside(px, py) { //pixel x y
@@ -864,6 +876,24 @@ function switchVisible4iframe(keyname) {
 
   if (idx == -1) return;
   
+  recoverAll();
+  applets[idx].progress_hide_show_Self();
+  anim_update(-1);
+
+}
+
+function perspective4iframe(keyname) {
+
+  let idx = -1;
+  for (let i=0;i<applets.length;i++) {
+    if (keyname == applets[i].keyname) {
+      idx = i;
+      break;
+    }
+  }
+
+  if (idx == -1) return;
+
   recoverAll();
   applets[idx].progress_hide_show_Self();
   anim_update(-1);

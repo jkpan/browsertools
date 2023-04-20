@@ -17,7 +17,7 @@
             background-color: rgb(0, 150, 0);
             color: #00ff00;
             /*margin: 2% 2%;*/
-            width:45%;
+            width:30%;
             border: 1px solid;
             vertical-align: middle;
           }
@@ -28,20 +28,28 @@
         <div id="controlWin" class="controlPart">
             <button id="hymn" onclick="controlParent('hymn')">歌詞</button>
                 <button id="hymn_v" onclick="switchVisible('hymn')">.</button>
+                <button id="hymn_p" onclick="perspective('hymn')">.</button>
             <button id="Bible" onclick="controlParent('Bible')">聖經</button>
                 <button id="Bible_v" onclick="switchVisible('Bible')">.</button>
+                <button id="Bible_p" onclick="perspective('Bible')">.</button>
             <button id="ppt_1" onclick="controlParent('ppt_1')">PPT 1</button>
                 <button id="ppt_1_v" onclick="switchVisible('ppt_1')">.</button>
+                <button id="ppt_1_p" onclick="perspective('ppt_1')">.</button>
             <button id="ppt_2" onclick="controlParent('ppt_2')">PPT 2</button>
                 <button id="ppt_2_v" onclick="switchVisible('ppt_2')">.</button>
+                <button id="ppt_2_p" onclick="perspective('ppt_2')">.</button>
             <button id="ppt_3" onclick="controlParent('ppt_3')">PPT 3</button>
                 <button id="ppt_3_v" onclick="switchVisible('ppt_3')">.</button>
+                <button id="ppt_3_p" onclick="perspective('ppt_3')">.</button>
             <button id="info" onclick="controlParent('info')">Info</button>
                 <button id="info_v" onclick="switchVisible('info')">.</button>
+                <button id="info_p" onclick="perspective('info')">.</button>
             <button id="effect" onclick="controlParent('effect')">Effect</button>
                 <button id="effect_v" onclick="switchVisible('effect')">.</button>
+                <button id="effect_p" onclick="perspective('effect')">.</button>
             <button id="time" onclick="controlParent('time')">Time</button>
                 <button id="time_v" onclick="switchVisible('time')">.</button>
+                <button id="time_p" onclick="perspective('time')">.</button>
             <button onclick="reloadState()">reload</button>
         </div>
       
@@ -74,16 +82,20 @@ function reloadState() {
 }
 
 function controlParent(keyname) {
-
     window.opener.spot2iframe(keyname);
     reloadState();
 }
 
 function switchVisible(keyname) {
-
     window.opener.switchVisible4iframe(keyname);
     reloadState();
 }
+
+function perspective(keyname) {
+    window.opener.switchVisible4iframe(keyname);
+    reloadState();
+}
+
 
 reloadState();
 

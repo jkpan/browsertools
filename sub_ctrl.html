@@ -26,14 +26,12 @@
     <body>
                   
         <div id="controlWin" class="controlPart">
-            <button id="f1" tabindex="-1" onclick="controlParent('f1')">.</button>
-            <button id="f2" tabindex="-1" onclick="controlParent('f2')">.</button>
-            <button id="f3" tabindex="-1" onclick="controlParent('f3')">.</button>
-            <button id="f4" tabindex="-1" onclick="controlParent('f4')">.</button>
-            <button id="slide1" tabindex="-1" onclick="controlParent('slide1')">:</button>
-            <button id="slide2" tabindex="-1" onclick="controlParent('slide2')">:</button>
-            <button id="slide3" tabindex="-1" onclick="controlParent('slide3')">:</button>
-            <button id="slide3" tabindex="-1" onclick="closeWin()">close</button>
+            <button id="f1" onclick="controlParent('f1')">.</button>
+            <button id="f2" onclick="controlParent('f2')">.</button>
+            <button id="f3" onclick="controlParent('f3')">.</button>
+            <button id="f4" onclick="controlParent('f4')">.</button>
+            <button id="f5" onclick="controlParent('f5')">.</button>
+            <button onclick="closeWin()">close</button>
         </div>
       
     </body>
@@ -44,9 +42,7 @@
 var elm;
 
 function controlParent(keyname) {
-    
     elm = window.opener.switchFunction(keyname);
-
     //document.getElementById(keyname).blur();
     //window.blur();
     //elm.focus();
@@ -71,7 +67,6 @@ function doFocus() {
     
     window.opener.focus();
     elm.focus();
-
 }
 */
 
