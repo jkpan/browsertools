@@ -23,8 +23,10 @@ class Applet {
   sx = 0;
   sy = 0;
   sw = 0;
-  sh = 0; //sOpacity = 0;
-  shide = false;
+  sh = 0; 
+  sOpacity = 0;
+  sRy = 0;
+  //shide = false;
 
   t_x = 0;
   t_y = 0;
@@ -52,8 +54,8 @@ class Applet {
     this.shide = false;
     this.ry = 0;
     this.t_rotateY = 0;
-    //this.sOpacity = 1.0;
-    //this.t_Opacity = 1.0;
+    this.sOpacity = 1.0;
+    this.t_Opacity = 1.0;
     this.adjust();
     this.presave();
   }
@@ -64,7 +66,9 @@ class Applet {
     this.sy = this.y;
     this.sw = this.w;
     this.sh = this.h;//this.sOpacity = parseFloat(this.elm.style.opacity);
-    this.shide = this.elm.hidden;
+    this.sOpacity = this.t_Opacity;
+    this.sRy = this.t_rotateY;
+    //this.shide = this.elm.hidden;
   }
 
   recover() {
@@ -72,9 +76,10 @@ class Applet {
     this.t_y = this.sy;
     this.t_w = this.sw;
     this.t_h = this.sh;
-    if (this.shide) {
-      this.t_Opacity = 0.0;
-    }
+    this.t_Opacity = this.sOpacity;
+    this.t_rotateY = this.sRy;
+
+    //if (this.shide) this.t_Opacity = 0.0;
     /* 
     else {
       this.elm.hidden = false;
@@ -93,13 +98,15 @@ class Applet {
     this.t_w = GRID_W;
     this.t_h = GRID_H;
     this.t_rotateY = 0;
+    this.t_Opacity = 1.0;
     //this.elm.hidden = false;
     //this.elm.style.opacity = 0;
+    /*
     if (this.elm.hidden) {
       this.elm.hidden = false;
       this.elm.style.opacity = '0.0';
     }
-    this.t_Opacity = 1.0;
+    */
   }
 
   targetProgress() {
@@ -124,8 +131,8 @@ class Applet {
       //opcy += (this.t_Opacity - opcy) * 0.016 * 3;
       if (Math.abs(opcy - this.t_Opacity) <= 0.1) {
         opcy = this.t_Opacity;
-        if (opcy > 0.9) this.elm.hidden = false;
-        if (opcy < 0.1) this.elm.hidden = true;
+        //if (opcy > 0.9) this.elm.hidden = false;
+        //if (opcy < 0.1) this.elm.hidden = true;
       }
       this.elm.style.opacity = '' + opcy;
     }
@@ -302,22 +309,23 @@ class Applet {
   }
 
   isHide() {
-    return this.elm.hidden;//parseFloat(this.elm.style.opacity) < 0.1;
+    return this.t_Opacity == 0.0;
+    //return this.elm.hidden;//parseFloat(this.elm.style.opacity) < 0.1;
   }
   
   progress_hide_show_Self() {
-    if (this.elm.hidden) { //target to show
+    if (this.t_Opacity == 0.0) { //target to show
       this.elm.style.opacity = '0.0';
-      this.elm.hidden = false;
+      //this.elm.hidden = false;
       this.t_Opacity = 1.0;
       this.presave();
       this.shide = false;
     } else { //target to hide
       this.elm.style.opacity = '1.0';
-      this.elm.hidden = false;
+      //this.elm.hidden = false;
       this.t_Opacity = 0.0;
       this.presave();
-      this.shide = true;
+      //this.shide = true;
     }
 
     this.t_x = this.x;
@@ -335,25 +343,28 @@ class Applet {
       if ((this.x-1) * b + this.w * b/2 < canvas.width/2) {
         this.t_rotateY = PRY_MAX;
         this.elm.style.transformOrigin = "left center";
-        if (!this.elm.hidden) this.t_Opacity = 0.5;
+        this.t_Opacity = 0.5;
       } else {
         this.t_rotateY = -PRY_MAX;
         this.elm.style.transformOrigin = "right center";
-        if (!this.elm.hidden) this.t_Opacity = 0.5;
+        this.t_Opacity = 0.5;
       }
     }
+    this.presave();
   }
 
   hideSelf() {
     this.elm.style.opacity = '0.0';
-    this.elm.hidden = true;
+    this.t_Opacity = 0.0;
+    //this.elm.hidden = true;
     //this.elm.style.opacity = '' + 0.0;
     this.presave();
   }
 
   showSelf() {
     this.elm.style.opacity = '1.0';
-    this.elm.hidden = false;
+    this.t_Opacity = 1.0;
+    //this.elm.hidden = false;
     //this.elm.style.opacity = '' + 1.0;
     this.presave();
   }
@@ -723,7 +734,7 @@ function getElmState() {
   for (let key in stateArray) {
     for (let i=0;i<applets.length;i++) {
       if (key == applets[i].keyname) {
-        if (applets[i].elm.hidden || applets[i].t_Opacity == 0) {
+        if (applets[i].t_Opacity == 0) {
           stateArray[key] = 0;
         } else {
           stateArray[key] = 1;
@@ -800,12 +811,14 @@ function anim_update(elapse) {
 
   //console.log(i);
   if (count == applets.length) {
+    /*
     for (let i=0;i<applets.length;i++) {
       if (parseFloat(applets[i].elm.style.opacity) == 0.0)
         applets[i].elm.hidden = true;
       else
         applets[i].elm.hidden = false;
     }
+    */
     return;
   }
 
