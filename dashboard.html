@@ -2,6 +2,8 @@
 
 const GRID_W = 32;
 const GRID_H = 32;
+const PPPX = "perspective(1000px)";
+const PRY_MAX = 70;
 
 function initContent() {
   applets = [];
@@ -72,10 +74,13 @@ class Applet {
     this.t_h = this.sh;
     if (this.shide) {
       this.t_Opacity = 0.0;
-    } else {
+    }
+    /* 
+    else {
       this.elm.hidden = false;
       this.t_Opacity = 1.0;
     }
+    */
   }
 
   tmpHide() { //other in bg
@@ -87,6 +92,7 @@ class Applet {
     this.t_y = 1;
     this.t_w = GRID_W;
     this.t_h = GRID_H;
+    this.t_rotateY = 0;
     //this.elm.hidden = false;
     //this.elm.style.opacity = 0;
     if (this.elm.hidden) {
@@ -112,23 +118,21 @@ class Applet {
     //console.log(this.elm.style.opacity);// + ',, ' + opcy + ', ' + this.t_Opacity);
 
     if (opcy != this.t_Opacity) {
-      opcy += 0.05 * (this.t_Opacity - opcy)/Math.abs(this.t_Opacity - opcy);
+      
+      opcy += (this.t_Opacity - opcy) * 0.1;
+      //opcy += 0.05 * (this.t_Opacity - opcy)/Math.abs(this.t_Opacity - opcy);
       //opcy += (this.t_Opacity - opcy) * 0.016 * 3;
-      if (Math.abs(opcy - this.t_Opacity) <= 0.05) {
+      if (Math.abs(opcy - this.t_Opacity) <= 0.1) {
         opcy = this.t_Opacity;
-        if (opcy > 0.5) {
-          this.elm.hidden = false;
-        } else {
-          this.elm.hidden = true;
-        }
+        if (opcy > 0.9) this.elm.hidden = false;
+        if (opcy < 0.1) this.elm.hidden = true;
       }
       this.elm.style.opacity = '' + opcy;
-      
     }
 
     if (this.ry != this.t_rotateY) {
       this.ry += (this.t_rotateY - this.ry) * 0.1;
-      if (Math.abs(this.ry - this.t_rotateY) <= 0.05) {
+      if (Math.abs(this.ry - this.t_rotateY) <= 1.0) {
         this.ry = this.t_rotateY;
       }
     } 
@@ -248,7 +252,7 @@ class Applet {
     this.elm.style.gridRow = this.y + ' / ' + (this.y + this.h);//'1 / 8';
     //console.log(this.x + '/' + (this.x + this.w));
     //console.log(this.y + '/' + (this.y + this.h));
-    this.elm.style.transform  = "perspective(500px) rotateY(" + this.ry + "deg)";
+    this.elm.style.transform  = PPPX+" rotateY(" + this.ry + "deg)";
   }
 
   checkInside(px, py) { //pixel x y
@@ -323,10 +327,20 @@ class Applet {
   }
 
   progress_perspective_Self() {
-    if (Math.abs(this.t_rotateY) == 80) {
+    if (Math.abs(this.t_rotateY) == PRY_MAX) {
       this.t_rotateY = 0;
+      this.t_Opacity = 1.0;
     } else {
-      this.t_rotateY = 80;
+      let b = canvas.width/GRID_W;
+      if ((this.x-1) * b + this.w * b/2 < canvas.width/2) {
+        this.t_rotateY = PRY_MAX;
+        this.elm.style.transformOrigin = "left center";
+        if (!this.elm.hidden) this.t_Opacity = 0.5;
+      } else {
+        this.t_rotateY = -PRY_MAX;
+        this.elm.style.transformOrigin = "right center";
+        if (!this.elm.hidden) this.t_Opacity = 0.5;
+      }
     }
   }
 
@@ -480,6 +494,8 @@ class Applet {
     grid-row: 1 / 33;
 
     user-select: none;
+
+    /*transform-origin: left center;*/
 
   }
   .ctrlfull {
@@ -903,7 +919,7 @@ function perspective4iframe(keyname) {
 
   if (idx == -1) return;
 
-  //recoverAll();
+  recoverAll();
   applets[idx].progress_perspective_Self();
   anim_update(-1);
 
