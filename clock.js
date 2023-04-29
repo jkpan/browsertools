@@ -8,8 +8,6 @@ class ClockObj {
     hourColor = "rgb(0, 200, 200)";
     minColor = "rgb(255, 255, 50)";
     secColor = "rgb(255, 50, 50)";
-  
-    //showNumber = true;
 
     constructor() {
   
@@ -17,12 +15,6 @@ class ClockObj {
   
     release() { }
     initial(c) { }
-  
-    /*
-    numberSwitch() {
-      this.showNumber = !this.showNumber;
-    }
-    */
 
     changeFreq() {
       switch(this.frequence) {
@@ -38,8 +30,8 @@ class ClockObj {
   
         let x = c.width/2.0;
         let y = c.height/2.0;
-        let len = c.height/5.0;
-        let lw = c.height/22;
+        let len = Math.min(c.width, c.height)/5.0;
+        let lw = Math.min(c.width, c.height)/22;
   
         let date = new Date();
   
@@ -143,11 +135,6 @@ class ClockObj {
     }
 
     printDatetime(c, _ctx) {
-
-        let x = c.width/2.0;
-        let y = c.height/2.0;
-        let len = c.height/5.0;
-        let lw = c.height/22;
         
         let date = new Date();
         

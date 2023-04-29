@@ -1724,23 +1724,10 @@ var presetVerse = [
     _openWin = null;
   }
   
-  for(let i=1;i<abbr.length;i++) 
-    SONGS[i] = getSong(abbr[i]);
+  //canvas init
   init();
   
-  /*
-  function blank() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (animSwh == 1 || mode == 1) {
-      ctx.fillStyle = 'black'; //"rgb(0,0,255)"
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else {
-      ctx.fillStyle = 'green'; //"rgb(0,0,255)"
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-  }
-  */
-  
+  // message 事件
   function receiveMessage(e) {
     if (e.data == 'x') { //alert(e.data);
       startRestoreInterval();
@@ -1750,60 +1737,51 @@ var presetVerse = [
     }
     _repaint();
   }
-  // 監聽 message 事件
+
   window.addEventListener('message', receiveMessage, false);
   
+  /*
+   * 鍵盤相關... START
+   */
   var keylock = 0;
-
   function keyupAction(e) {
     //e.preventDefault();
     //e.stopPropagation();
-  
     if (recognition && recognizing) {
         recognition.stop();
-      }
-    
-      /*
-      if (e.keyCode == 32) { //control
-        if (recognition && recognizing) {
-          recognition.stop();
-        }
-        return;
-      }
-      */
-    
-      keyboard(e);
+    }
+    keyboard(e);
   }
   
-  //window.addEventListener('keyup', keyboard, false);
   window.addEventListener('keyup', keyupAction, false);
   
   function keydownAction(e) {
-
-    //if (e.keyCode == 17) keylock = 2;
-    //e.preventDefault();
-    //e.stopPropagation();
     
     if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
-        keylock = 1;
-        _repaint();
-        return;
-      }
+      keylock = 1;
+      _repaint();
+      return;
+    }
     
-      if (e.keyCode == 32) { //space
-        if (recognition && !recognizing) {
-          recognition.start();
-        }
-        return;
+    if (e.keyCode == 32) { //space
+      if (recognition && !recognizing) {
+        recognition.start();
       }
+      return;
+    }
+
   }
   
   window.addEventListener('keydown', keydownAction, false);
-
+  //鍵盤相關 ... END
+  
+  //大小變化
   window.addEventListener('resize', function() {
     init();
     _repaint();
   });
+
+  // 滑鼠滾輪...
   window.addEventListener('wheel',function (event){
     //only vertical scroll
     if (event.deltaY > 4) {
@@ -1811,9 +1789,11 @@ var presetVerse = [
     } else if (event.deltaY < -4) {
       keyboard({keyCode : 33}); //left
     }
-  
   });
   
+  /*
+   * 手機觸控相關... START
+   */  
   function getTouchPos(canvasDom, touchEvent) {
     var rect = canvasDom.getBoundingClientRect();
     return { x: touchEvent.touches[0].clientX - rect.left,
@@ -1942,7 +1922,12 @@ var presetVerse = [
     touchPY = touch.clientY;
   
   }, false);
-  
+  //手機觸控相關... END
+
+
+  /*
+   * 語音辨識相關... START
+   */
   function parseRecogResult() {
   
     console.log('parseRecogResult...' + recogResult);
@@ -2017,7 +2002,6 @@ var presetVerse = [
     _repaint();
   
     //recogResult = '';
-  
   }
   
   //
@@ -2093,7 +2077,11 @@ var presetVerse = [
       console.log('onresult: ' + recogResult);
       _repaint();
   };
+  // 語音辨識相關 ... END
   
+  //建構整本聖經
+  for(let i=1;i<abbr.length;i++) SONGS[i] = getSong(abbr[i]);
+
   song = 0;
   subtitles = SONGS[song];
   

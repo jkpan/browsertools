@@ -2140,3 +2140,16 @@ class ClockObj {
   }
 
 }
+
+/*
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'data.json', true);
+xhr.onload = function() {
+  if (xhr.status === 200) {
+    var data = JSON.parse(xhr.responseText);
+    // 在页面中显示数据
+    document.getElementById('data').innerHTML = JSON.stringify(data);
+  }
+};
+xhr.send();
+*/

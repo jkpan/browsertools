@@ -129,13 +129,15 @@ class Applet {
       opcy += (this.t_Opacity - opcy) * 0.1;
       //opcy += 0.05 * (this.t_Opacity - opcy)/Math.abs(this.t_Opacity - opcy);
       //opcy += (this.t_Opacity - opcy) * 0.016 * 3;
-      if (Math.abs(opcy - this.t_Opacity) <= 0.1) {
+      if (Math.abs(opcy - this.t_Opacity) <= 0.05) {
         opcy = this.t_Opacity;
         //if (opcy > 0.9) this.elm.hidden = false;
         //if (opcy < 0.1) this.elm.hidden = true;
       }
-      this.elm.style.opacity = '' + opcy;
+    
     }
+
+    this.elm.style.opacity = '' + opcy;
 
     if (this.ry != this.t_rotateY) {
       this.ry += (this.t_rotateY - this.ry) * 0.1;
@@ -259,7 +261,10 @@ class Applet {
     this.elm.style.gridRow = this.y + ' / ' + (this.y + this.h);//'1 / 8';
     //console.log(this.x + '/' + (this.x + this.w));
     //console.log(this.y + '/' + (this.y + this.h));
-    this.elm.style.transform  = PPPX+" rotateY(" + this.ry + "deg)";
+    if (this.ry == 0.0 && this.t_rotateY == 0.0) 
+      this.elm.style.transform  = '';
+    else 
+      this.elm.style.transform  = PPPX+" rotateY(" + this.ry + "deg)";
   }
 
   checkInside(px, py) { //pixel x y
