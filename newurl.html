@@ -85,6 +85,8 @@ img {
         <iframe width="100%" height="100%" hidden="true" class="full" id="pdf-viewer" type="application/pdf"></iframe>
         <video class="full" id="vsrc" width="100%" height="100%" controls="controls" hidden="true"></video>
         
+        <div class="full" id="ppt_container" hidden="true"></div>
+
         <div class="full" id="image_container" hidden="true"></div>
 
         <div class="full" id="ui">
@@ -102,9 +104,24 @@ img {
                 window.location.href = value;
                 document.querySelector('body').style.background = 'transparent';
               }
+              function iframeGo() {
+
+                document.querySelector('body').style.background = 'transparent';
+
+                document.getElementById("ui").hidden = true;
+
+              
+                let value = document.getElementById("ppt_url").value;
+                document.querySelector('body').innerHTML = value;
+                //let div = document.getElementById("ppt_container");
+                //div.innerHTML = value;
+                //div.hidden = false;
+              }
+
             </script>
           <br/>
           <button class="okbutton" type="button" onclick="urlGo()">OK</button>
+          <button class="okbutton" type="button" onclick="iframeGo()">OK (embedded whole iframe)</button>
           <br/>
             &nbsp;* Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal', 此時若要打開speaker notes請按's'
             <br/>
@@ -167,18 +184,6 @@ function selectImg(event) {
 			};
 			reader.readAsDataURL(selectedFile);
 }
-/*
-reader.readAsDataURL(file);
-
-    reader.onload = function(e) {
-      var _img = new Image();
-      _img.onload = function() {
-        img = _img;
-        _repaint(); 
-      }
-      _img.src = e.target.result;
-    }
-    */
 
 function selectPDF(event) {
 
