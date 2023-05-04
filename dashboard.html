@@ -125,14 +125,18 @@ class Applet {
     //console.log(this.elm.style.opacity);// + ',, ' + opcy + ', ' + this.t_Opacity);
 
     if (opcy != this.t_Opacity) {
-      
+      this.elm.hidden = false;
       opcy += (this.t_Opacity - opcy) * 0.1;
       //opcy += 0.05 * (this.t_Opacity - opcy)/Math.abs(this.t_Opacity - opcy);
       //opcy += (this.t_Opacity - opcy) * 0.016 * 3;
       if (Math.abs(opcy - this.t_Opacity) <= 0.05) {
         opcy = this.t_Opacity;
-        //if (opcy > 0.9) this.elm.hidden = false;
-        //if (opcy < 0.1) this.elm.hidden = true;
+        
+        if (opcy < 0.1) 
+          this.elm.hidden = true;
+        else 
+          this.elm.hidden = false;
+        
       }
     
     }
@@ -359,18 +363,12 @@ class Applet {
   }
 
   hideSelf() {
-    this.elm.style.opacity = '0.0';
     this.t_Opacity = 0.0;
-    //this.elm.hidden = true;
-    //this.elm.style.opacity = '' + 0.0;
     this.presave();
   }
 
   showSelf() {
-    this.elm.style.opacity = '1.0';
     this.t_Opacity = 1.0;
-    //this.elm.hidden = false;
-    //this.elm.style.opacity = '' + 1.0;
     this.presave();
   }
 
@@ -1202,11 +1200,11 @@ canvas.addEventListener('mousedown', (e) =>{
     let pos = applet.getPos();
 
     if (applet.isClickHide(mouseX, mouseY)) {
-      if (applet.isHide()) 
-        applet.showSelf();
-      else 
-        applet.hideSelf();
+      
+      //if (applet.isHide()) applet.showSelf(); else applet.hideSelf();
+      switchVisible4iframe(applets[selectIdx].keyname);
       return;
+      
     } else if (applet.isClickRemove(mouseX, mouseY)) {
       applets.splice(selectIdx, 1);
       applet.removeSelf();
