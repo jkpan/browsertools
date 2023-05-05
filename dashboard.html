@@ -3,7 +3,8 @@
 const GRID_W = 32;
 const GRID_H = 32;
 const PPPX = "perspective(1000px)";
-const PRY_MAX = 70;
+const PRY_MAX = 20;
+const PRY_OPA = 1.0;
 
 function initContent() {
   applets = [];
@@ -352,11 +353,11 @@ class Applet {
       if ((this.x-1) * b + this.w * b/2 < canvas.width/2) {
         this.t_rotateY = PRY_MAX;
         this.elm.style.transformOrigin = "left center";
-        this.t_Opacity = 0.5;
+        this.t_Opacity = PRY_OPA;
       } else {
         this.t_rotateY = -PRY_MAX;
         this.elm.style.transformOrigin = "right center";
-        this.t_Opacity = 0.5;
+        this.t_Opacity = PRY_OPA;
       }
     }
     this.presave();
