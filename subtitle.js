@@ -823,9 +823,25 @@ function _layer0() {
   } else if (mode == 2) {
     ctx.fillStyle = COLOR_PPT;//'blue';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (img) ctx.drawImage(img,0,0, canvas.width, canvas.height);
+    
+    /*
     if (img) {
-      ctx.drawImage(img,0,0, canvas.width, canvas.height);
-    }
+      let ratio = img.width/img.height;
+      let _ratio = canvas.width/canvas.height; 
+      if (ratio > _ratio) {  //camera太寬 canvas 太方
+        ctx.drawImage(img, 0, 0, img.width, img.height,
+                           0, 0, canvas.width, canvas.width * img.height/img.width);
+      } else {
+        ctx.drawImage(img, 0, 0, img.width, img.height,
+                           0, 0, canvas.height * img.width/img.height, canvas.height);
+      }
+    } 
+    */
+
+
+
   } 
 }
 
@@ -1135,7 +1151,7 @@ function anim_update(elapse) {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (img) {
-      ctx.drawImage(img,0,0, canvas.width, canvas.height);
+    ctx.drawImage(img,0,0, canvas.width, canvas.height);
   } 
 
   let dt = elapse - pre;

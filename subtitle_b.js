@@ -41,6 +41,10 @@ var presetVerse = [
       ]];
 
   //function flow() {}
+
+  const LEV_1_OPC = 0.9;
+  const LEV_2_OPC = 0.8;
+  const LEV_3_OPC = 0.7;
  
   var fontfactor = 15.0;
   var fontFamily = "Monospace";
@@ -634,13 +638,13 @@ var presetVerse = [
           }
         } else if (this.level == 1) {
           this.wratio = 0.9;
-          this.opacity = 0.85;
+          this.opacity = LEV_1_OPC;//0.85;
         } else if (this.level == 2) {
           this.wratio = 0.9;
-          this.opacity = 0.7;
+          this.opacity = LEV_2_OPC;//0.7;
         } else {
           this.wratio = 0.9;
-          this.opacity = 0.55;
+          this.opacity = LEV_3_OPC;//0.55;
         }
   
         ctx.font = fs + "px " + fontFamily;

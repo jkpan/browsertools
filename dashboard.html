@@ -269,7 +269,7 @@ class Applet {
     if (this.ry == 0.0 && this.t_rotateY == 0.0) 
       this.elm.style.transform  = '';
     else 
-      this.elm.style.transform  = PPPX+" rotateY(" + this.ry + "deg)";
+      this.elm.style.transform  = PPPX + " rotateY(" + this.ry + "deg)";
   }
 
   checkInside(px, py) { //pixel x y
@@ -352,11 +352,11 @@ class Applet {
       let b = canvas.width/GRID_W;
       if ((this.x-1) * b + this.w * b/2 < canvas.width/2) {
         this.t_rotateY = PRY_MAX;
-        this.elm.style.transformOrigin = "left center";
+        this.elm.style.transformOrigin = "left center";//"bottom left";
         this.t_Opacity = PRY_OPA;
       } else {
         this.t_rotateY = -PRY_MAX;
-        this.elm.style.transformOrigin = "right center";
+        this.elm.style.transformOrigin = "right center";//"bottom right";
         this.t_Opacity = PRY_OPA;
       }
     }
