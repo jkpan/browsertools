@@ -44,8 +44,11 @@ function initCanvas() {
 function init() {
   initCanvas();
 
+  //led.js
   initLED(0, 0, canvas.width, canvas.height);
+  //led.js
   newLEDMask();
+
 }
 
 
@@ -182,6 +185,7 @@ function anim_update(elapse) {
     }
      
     if (keepLEDGoing == 1) {
+      //led.js
       ledAction4Still(canvas, ctx);
     }
     
