@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Camera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+      body {
+        margin: 0px;
+        height: 100%;
+        background-color:green;
+      }
+      main {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <video id="video" width="640" height="480" autoplay hidden="false"></video>
+    <canvas id="canvas" width="200" height="200"></canvas>
+    <!--canvas id="ascii" width="640" height="480"></canvas-->
+
+<script>
+  // 獲取 video 和 canvas 元素
+  var video;// = document.getElementById('video');
+  var canvas;// = document.getElementById('canvas');
+  var ctx;// = canvas.getContext('2d');
+  
+  function init() {
+    video = document.getElementById('video');
+    canvas = document.getElementById('canvas');
+    //canvas.width  = window.innerWidth;
+    //canvas.height = window.innerHeight;
+    ctx = canvas.getContext('2d');
+  }
+
+  init();
+
+  window.addEventListener('resize', function() {
+    init();
+  });
+  
+      //const _ascii = document.getElementById('ascii');
+      //const _ascii_ctx = canvas.getContext('2d');
+
+      // 使用 getUserMedia 啟用攝影機
+      navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+          video.srcObject = stream;
+          console.log('camera ready!');
+        }).catch(error => {
+          console.error('無法啟用攝影機:', error);
+        });
+
+      // 在 canvas 上繪製攝影機畫面
+      function drawVideoFrame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgb(155, 0, 0)';
+        ctx.fillRect (0, 0, canvas.width, canvas.height);       
+        /*
+        ctx.drawImage(video, 0, 0, 
+                               video.width, video.height,
+                               10, 10, 
+                               canvas.width, canvas.height);
+                               */
+        //console.log('( '+video.width + ', ' + video.height + ')');
+        let ratio = video.width/video.height;
+        let _ratio = canvas.width/canvas.height;
+        if (ratio > _ratio) {  //camera寬 canvas 方
+          ctx.drawImage(video, 0, 0, video.width, video.height,
+                               0, 0, canvas.width, canvas.width * video.height/video.width);
+        } else {
+          ctx.drawImage(video, 0, 0, video.width, video.height,
+                               0, 0, canvas.height * video.width/video.height, canvas.height);
+        }
+        requestAnimationFrame(drawVideoFrame);
+      }
+
+      // 確保攝影機準備就緒後再開始繪製畫面
+      video.addEventListener('canplay', () => {
+        requestAnimationFrame(drawVideoFrame);
+      });
+    </script>
+  </body>
+</html>
