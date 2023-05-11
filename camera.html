@@ -7,7 +7,7 @@
       body {
         margin: 0px;
         height: 100%;
-        background-color:green;
+        background-color:rgb(67, 67, 67);
       }
       main {
         position: fixed;
@@ -20,69 +20,71 @@
     </style>
   </head>
   <body>
-    <video id="video" width="640" height="480" autoplay hidden="false"></video>
-    <canvas id="canvas" width="200" height="200"></canvas>
-    <!--canvas id="ascii" width="640" height="480"></canvas-->
 
-<script>
-  // 獲取 video 和 canvas 元素
-  var video;// = document.getElementById('video');
-  var canvas;// = document.getElementById('canvas');
-  var ctx;// = canvas.getContext('2d');
-  
-  function init() {
-    video = document.getElementById('video');
-    canvas = document.getElementById('canvas');
-    //canvas.width  = window.innerWidth;
-    //canvas.height = window.innerHeight;
-    ctx = canvas.getContext('2d');
-  }
+    <video id="videoElement" width="300" height="200" hidden="true" style="background-color: #707000; opacity: 1.0;" autoplay></video>
+    
+    <canvas id="canvas" width="400" height="200"></canvas>
+    
+    <script>
 
-  init();
+      var video = document.getElementById('videoElement');
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
 
-  window.addEventListener('resize', function() {
-    init();
-  });
-  
-      //const _ascii = document.getElementById('ascii');
-      //const _ascii_ctx = canvas.getContext('2d');
+      function init() {
+          canvas = document.getElementById('canvas');
+          canvas.width  = window.innerWidth;
+          canvas.height = window.innerHeight;
+          ctx = canvas.getContext('2d');
+      }
 
-      // 使用 getUserMedia 啟用攝影機
-      navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-          video.srcObject = stream;
-          console.log('camera ready!');
-        }).catch(error => {
-          console.error('無法啟用攝影機:', error);
-        });
+      window.addEventListener('resize', function() {
+        init();
+      });
 
-      // 在 canvas 上繪製攝影機畫面
       function drawVideoFrame() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'rgb(155, 0, 0)';
-        ctx.fillRect (0, 0, canvas.width, canvas.height);       
-        /*
-        ctx.drawImage(video, 0, 0, 
-                               video.width, video.height,
-                               10, 10, 
-                               canvas.width, canvas.height);
-                               */
+        ctx.fillStyle = 'rgb(0, 128, 0)';
+        ctx.fillRect (0, 0, canvas.width, canvas.height);
         //console.log('( '+video.width + ', ' + video.height + ')');
-        let ratio = video.width/video.height;
+        let vw = video.videoWidth;
+        let vh = video.videoHeight;
+        let ratio = vw/vh;
         let _ratio = canvas.width/canvas.height;
+        
         if (ratio > _ratio) {  //camera寬 canvas 方
-          ctx.drawImage(video, 0, 0, video.width, video.height,
-                               0, 0, canvas.width, canvas.width * video.height/video.width);
+          let cw = canvas.width
+          let ch = canvas.width/ratio;//canvas.width * video.height/video.width;
+          ctx.drawImage(video, 0, 0, vw, vh,
+                               (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
         } else {
-          ctx.drawImage(video, 0, 0, video.width, video.height,
-                               0, 0, canvas.height * video.width/video.height, canvas.height);
+          //console.log(""+video.width+", "+video.height+"");
+          let cw = canvas.height * ratio;
+          let ch = canvas.height;//canvas.width * video.height/video.width;
+          ctx.drawImage(video, 0, 0, vw, vh,
+                               (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+          
         }
         requestAnimationFrame(drawVideoFrame);
       }
 
-      // 確保攝影機準備就緒後再開始繪製畫面
-      video.addEventListener('canplay', () => {
+      document.getElementById('videoElement').addEventListener('canplay', () => {
+        init();
         requestAnimationFrame(drawVideoFrame);
+        //var videoElement = document.getElementById('videoElement');
+        //alert("(" + videoElement.width + ", " + videoElement.height + ")");
       });
+      // 取得視訊鏡頭畫面
+      //if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)
+      navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+          var videoElement = document.getElementById('videoElement');
+          videoElement.srcObject = stream;
+          //alert("(" + videoElement.width + ", " + videoElement.height + ")");
+        }).catch(function(error) {
+          console.error('取得視訊鏡頭畫面失敗：', error);
+        });
+
     </script>
+
   </body>
 </html>
