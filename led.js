@@ -31,6 +31,60 @@ var makeRound = true;
 var color_reduce = 20;//filter_reduce_and_lighter
 // 2 ~ 12
 
+function initAscii(x, y, w, h) {
+
+  side = 0;
+  dots = 16;
+
+  posx = x;
+  posy = y;
+
+  mwidth = w;
+  mheight = h;
+
+  jumpLine = (side + dots) * w * 4;
+  jumpSide = (side + dots) * 4;
+
+  initDot = (side * w + side) * 4;
+
+  gapL = w * 4;
+  gapP = 4;
+
+  pixFunc = setPix4Still_a;
+
+}
+
+/*
+ * for still result
+ */
+function asciiAction4Still(_canvas, _ctx) {
+
+  let mask = _ctx.getImageData(posx, posy, mwidth, mheight);
+  var data = mask.data;
+
+  let wid = mwidth;
+
+  for (let i = initDot;i < data.length;i += jumpLine) {
+    
+    let h = Math.floor((i/4)/wid);
+
+    for (let k = i;;k+=jumpSide) {
+
+      let _pix = k/4;
+      let _h = Math.floor(_pix/wid);
+      let _w = _pix%wid;
+
+      if (_w > maskWidth) break;
+      if (_h != h) break;
+  
+      pixFunc(data, k);
+    }
+  }
+  _ctx.putImageData(mask, posx, posy);
+}
+
+
+
 function initLED(x, y, w, h) {
 
   posx = x;
@@ -58,6 +112,9 @@ function initLED(x, y, w, h) {
     case 7:
       initDot = ((side + 3) * w + (side + 3)) * 4;
       break;
+    default:
+      initDot = (side * w + side) * 4;
+      break;
   }
 
   gapL = w * 4;
@@ -81,6 +138,9 @@ function initLED(x, y, w, h) {
       break;
     case 7:
       pixFunc = setPix4Still_7;  
+      break;
+    default:
+      pixFunc = setPix4Still_a;
       break;
   }
 
@@ -383,6 +443,14 @@ function setPix4Still_7(data, k) {
     setPixColor(data, _k + 5 * gapL + 6 * gapP, _r/2, _g/2, _b/2);
     setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2);
 
+}
+
+function setPix4Still_a(data, k) {
+  computeAverage(data, k, dots);
+  if (side == 0 || !makeRound) return;
+  _r = data[k];
+  _g = data[k+1];
+  _b = data[k+2];
 }
 
 /*

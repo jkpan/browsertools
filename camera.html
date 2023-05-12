@@ -63,16 +63,16 @@ function init() {
   let _ratio = canvas.width/canvas.height;
         
   if (ratio > _ratio) {  //camera寬 canvas 方
-    v_width = canvas.width;
-    v_height = canvas.width/ratio;//canvas.width * video.height/video.width;
-    v_offx = (canvas.width - v_width)/2;
-    v_offy = (canvas.height - v_height)/2;
+    v_width = Math.floor(canvas.width);
+    v_height = Math.floor(canvas.width/ratio);//canvas.width * video.height/video.width;
+    v_offx = Math.floor((canvas.width - v_width)/2);
+    v_offy = Math.floor((canvas.height - v_height)/2);
     //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
   } else {
-    v_width = canvas.height * ratio;
-    v_height = canvas.height;//canvas.width * video.height/video.width;
-    v_offx = (canvas.width - v_width)/2;
-    v_offy = (canvas.height - v_height)/2;
+    v_width = Math.floor(canvas.height * ratio);
+    v_height = Math.floor(canvas.height);//canvas.width * video.height/video.width;
+    v_offx = Math.floor((canvas.width - v_width)/2);
+    v_offy = Math.floor((canvas.height - v_height)/2);
     //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
   }
   
@@ -94,30 +94,8 @@ function effectGo() {
 
 function drawVideoFrame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //ctx.fillStyle = 'rgb(0, 128, 0)';
-  //ctx.fillRect (0, 0, canvas.width, canvas.height);
-  //console.log('( '+video.width + ', ' + video.height + ')');
   ctx.drawImage(video, 0,      0,      video.videoWidth, video.videoHeight, 
                        v_offx, v_offy, v_width,          v_height);
-  /*
-  let vw = video.videoWidth;
-  let vh = video.videoHeight;
-  let ratio = vw/vh;
-  let _ratio = canvas.width/canvas.height;
-        
-  if (ratio > _ratio) {  //camera寬 canvas 方
-          let cw = canvas.width
-          let ch = canvas.width/ratio;//canvas.width * video.height/video.width;
-          ctx.drawImage(video, 0, 0, vw, vh,
-                               (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
-  } else {
-          let cw = canvas.height * ratio;
-          let ch = canvas.height;//canvas.width * video.height/video.width;
-          ctx.drawImage(video, 0, 0, vw, vh,
-                               (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
-          
-  }
-  */
   effectGo();
   requestAnimationFrame(drawVideoFrame);
 }
@@ -141,7 +119,7 @@ function keyboard(e) { //key up
 
   switch (e.keyCode) {
     case 65: //a 1..7
-      if (dots == 7) return;
+      //if (dots == 7) return;
       dots++;
       break;
     case 90: //z
