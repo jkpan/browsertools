@@ -36,12 +36,48 @@ var ctx = canvas.getContext('2d');
 
 var effect_type = 0; //0:none 1:LED 2:ascii
 
+var v_width;
+var v_height;
+var v_offx;
+var v_offy;
+
+function ledinit() {
+  //side = 3;
+  //dots = 5;
+  //makeRound = true;
+
+  //initLED(0, 0, canvas.width, canvas.height);
+  initLED(v_offx, v_offy, v_width, v_height);
+  newLEDMask();
+}
+
 function init() {
   canvas = document.getElementById('canvas');
   canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
   ctx = canvas.getContext('2d');
-  //ledinit();
+
+  let vw = video.videoWidth;
+  let vh = video.videoHeight;
+  let ratio = vw/vh;
+  let _ratio = canvas.width/canvas.height;
+        
+  if (ratio > _ratio) {  //camera寬 canvas 方
+    v_width = canvas.width;
+    v_height = canvas.width/ratio;//canvas.width * video.height/video.width;
+    v_offx = (canvas.width - v_width)/2;
+    v_offy = (canvas.height - v_height)/2;
+    //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+  } else {
+    v_width = canvas.height * ratio;
+    v_height = canvas.height;//canvas.width * video.height/video.width;
+    v_offx = (canvas.width - v_width)/2;
+    v_offy = (canvas.height - v_height)/2;
+    //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+  }
+  
+  if (effect_type == 1)
+    ledinit();
 }
       
 window.addEventListener('resize', function() {
@@ -61,6 +97,9 @@ function drawVideoFrame() {
   //ctx.fillStyle = 'rgb(0, 128, 0)';
   //ctx.fillRect (0, 0, canvas.width, canvas.height);
   //console.log('( '+video.width + ', ' + video.height + ')');
+  ctx.drawImage(video, 0,      0,      video.videoWidth, video.videoHeight, 
+                       v_offx, v_offy, v_width,          v_height);
+  /*
   let vw = video.videoWidth;
   let vh = video.videoHeight;
   let ratio = vw/vh;
@@ -78,6 +117,7 @@ function drawVideoFrame() {
                                (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
           
   }
+  */
   effectGo();
   requestAnimationFrame(drawVideoFrame);
 }
@@ -96,17 +136,6 @@ navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
 }).catch(function(error) {
   console.error('取得視訊鏡頭畫面失敗：', error);
 });
-
-
-function ledinit() {
-  //side = 3;
-  //dots = 5;
-  //makeRound = true;
-  initLED(0, 0, canvas.width, canvas.height);
-  newLEDMask();
-}
-
-
 
 function keyboard(e) { //key up
 
