@@ -28,6 +28,9 @@ var mheight;
 
 var makeRound = true;
 
+var color_reduce = 20;//filter_reduce_and_lighter
+// 2 ~ 12
+
 function initLED(x, y, w, h) {
 
   posx = x;
@@ -222,7 +225,9 @@ function filter_reduceColor(coloramount) {
 */
 
 function filter() {
-  filter_reduce_and_lighter(8);
+  if (color_reduce < 2 || color_reduce > 19) //1 2~19 20
+    return;
+  filter_reduce_and_lighter(color_reduce);
   //filter_gray(16);
 }
 

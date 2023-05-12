@@ -25,82 +25,136 @@
     <video id="videoElement" width="300" height="200" hidden="true" style="background-color: #707000; opacity: 1.0;" autoplay></video>
     
     <canvas id="canvas" width="400" height="200"></canvas>
+  </body>
+</html>
     
-    <script>
+<script>
 
-      var video = document.getElementById('videoElement');
-      var canvas = document.getElementById('canvas');
-      var ctx = canvas.getContext('2d');
+var video = document.getElementById('videoElement');
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
 
-      function init() {
-          canvas = document.getElementById('canvas');
-          canvas.width  = window.innerWidth;
-          canvas.height = window.innerHeight;
-          ctx = canvas.getContext('2d');
-          ledinit();
-      }
+var effect_type = 0; //0:none 1:LED 2:ascii
 
-      function ledinit() {
-        side = 3;
-        dots = 5;
-        makeRound = true;
-        initLED(0, 0, canvas.width, canvas.height);
-        newLEDMask();
-      }
-
-      function ledGo() {
-        ledAction4Still(canvas, ctx);
-      }
+function init() {
+  canvas = document.getElementById('canvas');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx = canvas.getContext('2d');
+  //ledinit();
+}
       
+window.addEventListener('resize', function() {
+  init();
+});
 
-      window.addEventListener('resize', function() {
-        init();
-      });
+function effectGo() {
+  switch(effect_type) {
+    case 0: return;
+    case 1: ledAction4Still(canvas, ctx); return;
+    case 2: return;
+  }
+}
 
-      function drawVideoFrame() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'rgb(0, 128, 0)';
-        ctx.fillRect (0, 0, canvas.width, canvas.height);
-        //console.log('( '+video.width + ', ' + video.height + ')');
-        let vw = video.videoWidth;
-        let vh = video.videoHeight;
-        let ratio = vw/vh;
-        let _ratio = canvas.width/canvas.height;
+function drawVideoFrame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //ctx.fillStyle = 'rgb(0, 128, 0)';
+  //ctx.fillRect (0, 0, canvas.width, canvas.height);
+  //console.log('( '+video.width + ', ' + video.height + ')');
+  let vw = video.videoWidth;
+  let vh = video.videoHeight;
+  let ratio = vw/vh;
+  let _ratio = canvas.width/canvas.height;
         
-        if (ratio > _ratio) {  //camera寬 canvas 方
+  if (ratio > _ratio) {  //camera寬 canvas 方
           let cw = canvas.width
           let ch = canvas.width/ratio;//canvas.width * video.height/video.width;
           ctx.drawImage(video, 0, 0, vw, vh,
                                (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
-        } else {
-          //console.log(""+video.width+", "+video.height+"");
+  } else {
           let cw = canvas.height * ratio;
           let ch = canvas.height;//canvas.width * video.height/video.width;
           ctx.drawImage(video, 0, 0, vw, vh,
                                (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
           
-        }
-        ledGo();
-        requestAnimationFrame(drawVideoFrame);
-      }
+  }
+  effectGo();
+  requestAnimationFrame(drawVideoFrame);
+}
 
-      document.getElementById('videoElement').addEventListener('canplay', () => {
-        init();
-        requestAnimationFrame(drawVideoFrame);
-        //var videoElement = document.getElementById('videoElement');
-        //alert("(" + videoElement.width + ", " + videoElement.height + ")");
-      });
-      // 取得視訊鏡頭畫面
-      //if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)
-      navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-          var videoElement = document.getElementById('videoElement');
-          videoElement.srcObject = stream;
-          //alert("(" + videoElement.width + ", " + videoElement.height + ")");
-        }).catch(function(error) {
-          console.error('取得視訊鏡頭畫面失敗：', error);
-        });
+document.getElementById('videoElement').addEventListener('canplay', () => {
+  init();
+  requestAnimationFrame(drawVideoFrame);
+});
+      
+// 取得視訊鏡頭畫面
+//if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)
+navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+  var videoElement = document.getElementById('videoElement');
+  videoElement.srcObject = stream;
+  //alert("(" + videoElement.width + ", " + videoElement.height + ")");
+}).catch(function(error) {
+  console.error('取得視訊鏡頭畫面失敗：', error);
+});
 
-    </script>
 
-  </body>
-</html>
+function ledinit() {
+  //side = 3;
+  //dots = 5;
+  //makeRound = true;
+  initLED(0, 0, canvas.width, canvas.height);
+  newLEDMask();
+}
+
+
+
+function keyboard(e) { //key up
+
+  switch (e.keyCode) {
+    case 65: //a 1..7
+      if (dots == 7) return;
+      dots++;
+      break;
+    case 90: //z
+      if (dots == 1) return;
+      dots--;
+      break;
+    
+    case 83: //s 
+      if (side == 7) return;
+      side++;
+      break;
+    case 88: //x
+      if (side == 0) return;
+      side--;
+      break;
+
+    case 68: //d
+      //if (color_reduce < 2 || color_reduce > 19) //1 2~19 20
+      if (color_reduce == 20) return;
+      color_reduce++;
+      break;
+    case 67: //c
+      if (color_reduce == 2) return;
+      color_reduce--;
+      break;
+    //case 70: //f
+    case 86: //v
+      makeRound = !makeRound;
+      break;
+    case 27: //escape
+      effect_type = 0; 
+      break;
+    case 32: //space
+      effect_type = (effect_type + 1)%3;
+      break; 
+  }
+  if (effect_type == 1)
+    ledinit();
+
+}
+ 
+window.addEventListener('keyup', keyboard, false);
+
+</script>
+
