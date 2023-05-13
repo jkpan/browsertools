@@ -54,6 +54,9 @@ function initAscii(x, y, w, h) {
 
 }
 
+//const ascii = [' ', '.', ':', '!', '|', '=', '+', '*', '@'];
+const   ascii = [' ',' ','.','_','-','=','+','*','!','&','#','%','@'];
+
 /*
  * for still result
  */
@@ -64,12 +67,15 @@ function asciiAction4Still(_canvas, _ctx) {
 
   let wid = mwidth;
 
+  let array = [];
+  let b = Math.ceil(255/(ascii.length));
+
   for (let i = initDot;i < data.length;i += jumpLine) {
     
     let h = Math.floor((i/4)/wid);
-
+    array[h/dots] = [];//'';
+    let idx = 0;
     for (let k = i;;k+=jumpSide) {
-
       let _pix = k/4;
       let _h = Math.floor(_pix/wid);
       let _w = _pix%wid;
@@ -78,9 +84,34 @@ function asciiAction4Still(_canvas, _ctx) {
       if (_h != h) break;
   
       pixFunc(data, k);
+      
+      //array[h/dots] = array[h/dots] + ascii[Math.floor(_g/b)];
+      array[h/dots][idx] = ascii[Math.floor(_g/b)];
+      idx++;
+
     }
   }
-  _ctx.putImageData(mask, posx, posy);
+
+  
+  _ctx.fillStyle = 'rgba(50,50,50)';
+  ctx.fillRect(posx, posy, mwidth, mheight);
+  ctx.font = '20px Monospace';
+  _ctx.fillStyle = 'rgba(255,255,255)';
+  //console.log('len:' + array.length);
+  //for (let t = 0;t<array.length-1;t++) {
+  //  ctx.fillText(array[t], dots + posx, dots + t * dots + posy);
+  //}
+  
+  for (let t = 0;t<array.length-1;t++) {
+    for (let x = 0;x<array[t].length-1;x++) {
+      ctx.fillText(array[t][x], dots + dots * x + posx, dots + t * dots + posy);
+    }
+
+  }
+    
+
+  //_ctx.putImageData(mask, posx, posy);
+
 }
 
 
