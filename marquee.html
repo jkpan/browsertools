@@ -377,26 +377,27 @@
       
       <div class="ledoption">          
         <label class="label"> LED Size</label>
-        <select class="select" name="Lsize" id="Lsize" onchange="showLEDLegend()">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-        </select> 
+        <select class="select" name="Lsize" id="Lsize" onchange="showLEDLegend()"></select>
+          <script>
+            var select = document.getElementById("Lsize");
+            for (var i = 1; i <= 20; i++) {
+              var option = document.createElement("option");
+              option.text = '' + i;
+              option.setAttribute("value", option.text);
+              select.add(option);
+            }
+          </script>
         <label class="label">Gap</label>
-        <select class="select" name="Gap" id="Gap" onchange="showLEDLegend()">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-        </select>
+        <select class="select" name="Gap" id="Gap" onchange="showLEDLegend()"></select>
+        <script>
+          var select = document.getElementById("Gap");
+          for (var i = 0; i <= 20; i++) {
+            var option = document.createElement("option");
+            option.text = '' + i;
+            option.setAttribute("value", option.text);
+            select.add(option);
+          }
+        </script>
         <input type="checkbox" id="round" value="0" onchange="showLEDLegend()" class="largerCheckbox" checked />
         <label for="cbox1" class="label">Round</label>
       </div>  <!--LED options-->

@@ -224,30 +224,38 @@ function processImg() {
       <option value="192">192</option>
       <option value="204">204</option>
 
-    </select> 
+    </select>
 
     <label style="color:#ff0000;size: 48px;">LED Size</label>
-      <select name="Lsize" id="Lsize" onchange="showLEDLegend()">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-      </select> 
-
+      <select name="Lsize" id="Lsize" onchange="showLEDLegend()"></select>
+      <script>
+        var select = document.getElementById("Lsize");
+        let sel = 0;
+        for (var i = 1; i <= 20; i++) {
+          var option = document.createElement("option");
+          option.text = '' + i;
+          option.setAttribute("value", option.text);
+          select.add(option);
+          if (i  == dots) 
+            select.selectedIndex = sel;
+          sel++;
+        }
+      </script>
     <label style="color:#ff0000;size: 48px;">Gap</label>
-      <select name="Gap" id="Gap" onchange="showLEDLegend()">
-        <option value="0">0 Pixel</option>
-        <option value="1">1</option>
-        <option value="2" selected>2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-      </select>
+      <select name="Gap" id="Gap" onchange="showLEDLegend()"></select>
+      <script>
+        var select = document.getElementById("Gap");
+        sel = 0;
+        for (var i = 0; i <= 20; i++) {
+          var option = document.createElement("option");
+          option.text = '' + i;
+          option.setAttribute("value", option.text);
+          select.add(option);
+          if (i  == side) 
+            select.selectedIndex = sel;
+          sel++;
+        }
+      </script>
       
       <input type="checkbox" id="round" value="0" onchange="showLEDLegend()" checked>
       <label for="cbox1" style="color:#ff0000;size: 48px;">Round</label>
