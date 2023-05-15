@@ -108,13 +108,8 @@ function asciiAction4Still(_canvas, _ctx) {
     }
 
   }
-    
-
   //_ctx.putImageData(mask, posx, posy);
-
 }
-
-
 
 function initLED(x, y, w, h) {
 
@@ -127,6 +122,7 @@ function initLED(x, y, w, h) {
   jumpLine = (side + dots) * w * 4;
   jumpSide = (side + dots) * 4;
 
+  //initDot = (side * w + side) * 4;
   switch(dots) {
     case 1:
       initDot = (side * w + side) * 4;
@@ -192,6 +188,9 @@ function generateMask(w, h, s, d) {
   var mask = tempCtx.createImageData(w, h);
   var data = mask.data;
 
+  let center = s + d/2.0;
+  let rr = d * d/4.0;
+
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
 
@@ -204,10 +203,19 @@ function generateMask(w, h, s, d) {
         
         let _x = x%(s + d);
         let _y = y%(s + d);
+        
+        //if (_x >= s && _y >= s && x < maskWidth && y < maskHeight) data[idx + 3] = 0;
+
+        //if (_x == s && _y == s) data[idx + 3] = 255;
+          
+        //if (_x >= s && _y >= s && x < maskWidth && y < maskHeight) data[idx + 3] = 0;
         if (_x >= s && _y >= s && x < maskWidth && y < maskHeight) { //d
           data[idx + 3] = 0;
+          //if (Math.abs(_x - s - center) <= 2 && Math.abs(_y - center) <= 2) data[idx + 3] = 255;
+          if (makeRound && d > 1 && (Math.abs(_x - center) * Math.abs(_x - center) + Math.abs(_y - center) * Math.abs(_y - center)) >= rr) {
+              data[idx + 3] = 255;
+          }
         }
-
     }
   }
 
@@ -230,7 +238,7 @@ function newLEDMask() { //ledEffect() {
   maskHeight = (Math.floor(h/(side + dots))) * (side + dots);
 
   var mask = generateMask(w, h, side, dots);
-        
+
   // create a temporary canvas
   var tempCanvas = document.createElement("canvas");
   var tempCtx = tempCanvas.getContext("2d");
@@ -257,9 +265,8 @@ function ledAction4Still(_canvas, _ctx) {
     return;
   }
 
-  _ctx.drawImage(maskimg, posx, posy);
-
   if (dots == 1) { //window.requestAnimationFrame(anim_update);
+    _ctx.drawImage(maskimg, posx, posy);
     return;
   }
 
@@ -285,6 +292,7 @@ function ledAction4Still(_canvas, _ctx) {
     }
   }
   _ctx.putImageData(mask, posx, posy);
+  _ctx.drawImage(maskimg, posx, posy);
 }
 
 function filter_gray(coloramount) {
@@ -407,6 +415,7 @@ function setPix4Still_4(data, k) {
   computeAverage(data, _k, 4);
   if (side == 0 || !makeRound) return;
 
+  /*
   setPixColor(data, k - gapP - gapL, 0, 0, 0);//左上
 
   _k = k + gapP + gapL + gapP + gapL;
@@ -415,6 +424,7 @@ function setPix4Still_4(data, k) {
   setPixColor(data, _k - gapL - gapL - gapL, 0, 0, 0);
 
   setPixColor(data, _k - gapP - gapP - gapP, 0, 0, 0);
+  */
 
 }
 
@@ -425,13 +435,12 @@ function setPix4Still_5(data, k) {
   computeAverage(data, _k, 5);
   if (side == 0 || !makeRound) return;
 
+  /*
   setPixColor(data, _k, 0, 0, 0);
-    
   setPixColor(data, _k + 4 * gapL, 0, 0, 0);
-    
   setPixColor(data, _k + 4 * gapP, 0, 0, 0);
-    
   setPixColor(data, _k + 4 * gapL + 4 * gapP, 0, 0, 0);
+  */
   
 }
 
@@ -441,13 +450,12 @@ function setPix4Still_6(data, k) {
   computeAverage(data, _k, 6);
   if (side == 0 || !makeRound) return;
 
+  /*
   setPixColor(data, _k, 0, 0, 0);
-
   setPixColor(data, _k + 5 * gapL, 0, 0, 0);
-
   setPixColor(data, _k + 5 * gapP, 0, 0, 0);
-
   setPixColor(data, _k + 5 * gapL + 5 * gapP, 0, 0, 0);
+  */
 
 }
 
@@ -457,6 +465,7 @@ function setPix4Still_7(data, k) {
   computeAverage(data, _k, 7);
   if (side == 0 || !makeRound) return;
 
+  /*
   _r = data[k];
   _g = data[k+1];
   _b = data[k+2];
@@ -473,6 +482,7 @@ function setPix4Still_7(data, k) {
   setPixColor(data, _k + 6 * gapL + 6 * gapP, 0, 0, 0);
     setPixColor(data, _k + 5 * gapL + 6 * gapP, _r/2, _g/2, _b/2);
     setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2);
+  */
 
 }
 
