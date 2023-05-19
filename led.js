@@ -164,7 +164,7 @@ function generateMask(w, h, s, d) {
         if (_x >= s && _y >= s && x < maskWidth && y < maskHeight) { //d
           data[idx + 3] = 0;
           //if (Math.abs(_x - s - center) <= 2 && Math.abs(_y - center) <= 2) data[idx + 3] = 255;
-          if (makeRound && d > 1 && (Math.abs(_x - center) * Math.abs(_x - center) + Math.abs(_y - center) * Math.abs(_y - center)) >= rr) {
+          if (makeRound && d > 1 && (Math.abs(_x - center) * Math.abs(_x - center) + Math.abs(_y - center) * Math.abs(_y - center)) > rr) {
               data[idx + 3] = 255;
           }
         }
