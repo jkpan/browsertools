@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+      <style>
+      body {
+        margin: 0px;
+        height: 100%;
+        width: 100%;
+        background-color: rgb(0, 0, 0);
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      button {
+            font-size: 32px;
+            background-color: rgb(80, 80, 80);
+            color: #ffffff;
+            margin: 2% 2%;
+            width:25%;
+            height:100px;
+            border: none;
+            vertical-align: middle;
+          }
+      </style>
+    </head>
+    <body>
+       
+        
+        <div id="btn_camera">
+            
+        </div>
+        <hr>
+        <div id="btn_cmd">
+            
+        </div>
+        <hr>
+        <div>
+            <button onclick="todo()">Go</button>
+            <button onclick="clean()">Clean</button>
+        </div>
+
+        <!--div id="controlWin" class="controlPart">
+        <hr>
+            <button onclick="setCamera(1)">1</button>
+            <button onclick="setCamera(2)">2</button>
+            <button onclick="setCamera(3)">3</button>
+            <button onclick="setCamera(4)">4</button>
+        <hr>
+            <button onclick="setAction(1)">des1</button>
+            <button onclick="setAction(2)">des2</button>
+            <button onclick="setAction(3)">des3</button>
+            <button onclick="setAction(4)">des4</button>
+            <button onclick="setAction(5)">des5</button>
+            <button onclick="setAction(6)">des6</button>
+        <hr>
+            
+            
+        </div-->
+      
+    </body>
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+var _cmd = 0;
+var _camera = 0;
+
+function setCamera(no) {
+    _camera = no;
+}
+
+function setAction(ac) {
+    _cmd = ac;
+}
+
+function action(json, url, cb) {
+
+    // 客户端使用 Ajax 发送查询请求
+    const requestData = json;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);//'/command'
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                const respData = JSON.parse(xhr.responseText);
+                //console.log('Query result: ' + respData.state);
+                cb(respData);
+            } else {
+                cb({"state" : "Error"});
+            }
+        }
+    };
+
+    xhr.send(JSON.stringify(requestData));
+}
+
+function todo() {
+    action({
+        "camera": _camera,
+        "cmd": _cmd
+    }, '/command', (res)=>{
+        console.log(JSON.stringify(res));
+    });
+}
+
+function query() {
+    action({
+        "action": "query"
+    }, '/query', (res)=>{
+        console.log(JSON.stringify(res));
+    });
+}
+
+function clean() {
+    _cmd = '0';
+    _camera = '0';
+    action({
+        "camera": _camera,
+        "cmd": _cmd
+    }, '/command', (res)=>{
+        console.log(JSON.stringify(res));
+    });
+}
+
+function _cmdBtn(_command, _des) {
+  var button = document.createElement('button');
+  button.innerHTML = '' + _des;  //button.id = 'btn' + _command;
+
+  button.style.width = '180px'; // setting the width to 200px
+  button.style.height = '100px'; // setting the height to 200px
+  button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
+  //button.style.color = 'rgb(0,255,0)'; // setting the color to white
+  button.style.fontSize = '48px'; // setting the font size to 20px
+
+  button.onclick = function() {
+    setAction(_command);
+    return false;
+  };
+  return button;
+}
+
+function _cameraBtn(_cmra) {
+  var button = document.createElement('button');
+  button.innerHTML = '' + _cmra;
+  //button.id = 'btn' + _cmra;
+
+  button.style.width = '200px'; // setting the width to 200px
+  button.style.height = '100px'; // setting the height to 200px
+  //button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
+  //button.style.color = 'rgb(0,255,0)'; // setting the color to white
+  button.style.fontSize = '48px'; // setting the font size to 20px
+
+  button.onclick = function() {
+    setCamera(_cmra);
+    return false;
+  };
+  return button;
+}
+
+
+function initui() {
+    action({
+        "action": "initui"
+    }, '/initui', (res)=>{
+        console.log('initui:' + JSON.stringify(res));
+        let count = res.camera;
+        let div = document.getElementById('btn_camera');
+        for(let i=1;i<=count;i++) {
+            div.appendChild(_cameraBtn(i));
+        }
+        let cmds = res.cmd;
+        div = document.getElementById('btn_cmd');
+        for(let i=1;i<cmds.length;i++) {
+            div.appendChild(_cmdBtn(i, cmds[i]));
+            if (i%2 == 0) 
+                div.insertAdjacentHTML('beforeend', '<p></p>');
+
+        }
+    });
+}
+
+initui();
+
+</script>
