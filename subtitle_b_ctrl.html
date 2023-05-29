@@ -117,14 +117,21 @@ function createBtnVolumn() {
             if (document.getElementById('vol ' + _song)) 
                 document.getElementById('vol ' + _song).style.background = 'transparent';
 
-            window.opener.song = _song = idx;
-            window.opener.phase = _phase = 0;
-            window.opener.line = _line = 0;
+            //window.opener.song = _song = idx;
+            //window.opener.phase = _phase = 0;
+            //window.opener.line = _line = 0;
+            _song = idx;
+            _phase = 0;
+            _line = 0;
+
+            //console.log('Volumn log: ' + _song + ', ' + _phase + ', ' + _line);
 
             this.style.background = "rgb(255,0,0)";
 
-            window.opener.saveAction2Local();
-            window.opener._repaint();
+            window.opener.jump4external(_song, _phase, _line);
+
+            //window.opener.saveAction2Local();
+            //window.opener._repaint();
             createBtnChapter();
 
             return false;
@@ -158,16 +165,13 @@ function createBtnChapter() {
 
             if (document.getElementById('chp ' + _phase)) 
                 document.getElementById('chp ' + _phase).style.background = 'transparent';//
-
-
-            window.opener.song = _song;
-            window.opener.phase = _phase = idx;
-            window.opener.line = _line = 0;
+            
+            _phase = idx;
+            _line = 0;
 
             this.style.background = "rgb(255,0,0)";
+            window.opener.jump4external(_song, _phase, _line);
 
-            window.opener.saveAction2Local();
-            window.opener._repaint();
             createBtnVerse();
             return false;
         };
@@ -191,14 +195,11 @@ function createBtnVerse() {
             if (document.getElementById('ver ' + _line)) 
                 document.getElementById('ver ' + _line).style.background = 'transparent';//
 
-            window.opener.song = _song;
-            window.opener.phase = _phase;
-            window.opener.line = _line = idx;
+            _line = idx;
 
             this.style.background = "rgb(255,0,0)";
+            window.opener.jump4external(_song, _phase, _line);
 
-            window.opener.saveAction2Local();
-            window.opener._repaint();
             return false;
         };
         div.appendChild(button);

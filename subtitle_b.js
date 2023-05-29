@@ -227,6 +227,62 @@ var presetVerse = [
   
   }
   
+  function restorescripture() {
+    action({
+        "action": "action"
+    }, 
+    '/restorescripture', 
+    (res)=>{
+        console.log(JSON.stringify(res));
+        //jump4external(res.vlm, res.chp, res.ver);
+        ////
+        let volumn = res.vlm;//array[0];
+        let chapter = res.chp;
+        let verse = res.ver;
+        let _doblank = res.blank;
+
+        restoreAnim(volumn, chapter, verse, _doblank);
+
+    });
+  }
+
+  function syncscripture() {
+    action({
+        "vlm": song,
+        "chp": phase,
+        "ver": line,
+        "blank": doblank
+    }, 
+    '/synscripture', 
+    (res)=>{
+        console.log(JSON.stringify(res));
+    });
+  }
+
+  function action(json, url, cb) {
+
+    // 客户端使用 Ajax 发送查询请求
+    const requestData = json;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);//'/command'
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                const respData = JSON.parse(xhr.responseText);
+                //console.log('Query result: ' + respData.state);
+                cb(respData);
+            } else {
+                cb({"state" : "Error"});
+            }
+        }
+    };
+
+    xhr.send(JSON.stringify(requestData));
+  }
+
   var funcInterval;
   var fake_doblank = 0;
   function startRestoreInterval() {
@@ -243,6 +299,7 @@ var presetVerse = [
   
   function saveAction2Local() {
     if (funcInterval) return;
+    //syncscripture();
     let key = 'save action';
     //localStorage.removeItem(key);
     let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
@@ -250,7 +307,34 @@ var presetVerse = [
     localStorage.setItem(key, value);
   }
   
-  function restoreActionFromLocal() {
+  function restoreAnim(volumn, chapter, verse, _doblank) {
+
+    if (volumn == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
+    
+    fake_doblank = _doblank;
+    if (_doblank != doblank) keyboard({keyCode : 66});
+  
+    if (volumn == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
+      keyboard({keyCode : 37}); //left
+      return;
+    }
+    
+    if (volumn == song && chapter == getNextChapter(phase, line) && verse == getNextVerse(phase, line)) {
+      keyboard({keyCode : 39}); //right
+      return;
+    }
+
+    song = volumn;
+    subtitles = SONGS[song];
+    phase = chapter;
+    line = verse;
+    _repaint();
+}
+
+function restoreActionFromLocal() {
+    
+    //restorescripture(); return;
+
     let key = 'save action';
     let value = localStorage.getItem(key);
     if (!value) return;
@@ -261,6 +345,10 @@ var presetVerse = [
     let chapter = parseInt(array[1]);
     let verse = parseInt(array[2]);
     let _doblank = parseInt(array[3]);
+
+    restoreAnim(volumn, chapter, verse, _doblank);
+    
+    /*
     if (volumn == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
     
     fake_doblank = _doblank;
@@ -281,7 +369,8 @@ var presetVerse = [
     phase = chapter;
     line = verse;
     _repaint();
-  
+    */
+
   }
   
   function save2Local() {
@@ -1113,6 +1202,15 @@ var presetVerse = [
     return -1;
   }
   
+  function jump4external(_song, _phase, _line) {
+    song = _song;
+    subtitles = SONGS[song];
+    phase = _phase;
+    line = _line;
+    saveAction2Local();
+    _repaint();
+  }
+
   function sortjump(start, end) {
     if (canvas.hidden) return;
     if (uisel == 0) uisel = 1;

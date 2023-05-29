@@ -15,8 +15,10 @@ const CAMERAS = 4;
 const currentCmds = [0, 
                      0, 0, 0, 0];
 
-//var _camera = 0;
-//var _cmd = 0;
+var volumn = 0;
+var chapter = 0;
+var verse = 0;
+var doblank = 0;
 
 function getDes(cmd) {
   return COMMANDS[cmd];
@@ -137,6 +139,61 @@ function cmd(req, res, _cmd) { //for M5Stick
     });
 }
 
+function restorescripture(req, res) {
+  let body = '';
+  // 接收请求的数据
+  req.on('data', (data) => {
+      body += data;
+  });
+    
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+      // 解析请求数据
+    const requestData = JSON.parse(body);
+      
+    // 设置响应头
+    res.setHeader('Content-Type', 'application/json');
+    
+    console.log('restorescripture:' + volumn +', '+ chapter + ', ' + verse);
+    // 发送响应数据
+    //res.end(JSON.stringify({"camera" : _camera, "cmd" : _cmd}));
+    res.end(JSON.stringify({
+        "vlm": volumn,
+        "chp": chapter,
+        "ver": verse,
+        "blank": doblank
+    }));
+
+  });
+}
+
+function synscripture(req, res) {
+  let body = '';
+    
+  // 接收请求的数据
+  req.on('data', (data) => {
+      body += data;
+  });
+    
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+      // 解析请求数据
+      const requestData = JSON.parse(body);
+      
+      volumn = requestData.vlm;
+      chapter = requestData.chp;
+      verse = requestData.ver;
+      doblank = requestData.blank;
+
+      console.log('synscripture:' + volumn +', '+ chapter + ', ' + verse);
+    
+      res.setHeader('Content-Type', 'application/json');
+      
+      // 发送响应数据
+      res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
+
+  });
+}
 
 const server = http.createServer((req, res) => {
   // 解析URL路徑
@@ -150,6 +207,12 @@ const server = http.createServer((req, res) => {
       return;
     case '/initui':
       initui(req, res);
+      return;
+    case '/synscripture':
+      synscripture(req, res);
+      return;
+    case '/restorescripture':
+      restorescripture(req, res);
       return;
     default:
         if (req.url.startsWith('/cmd')) {
