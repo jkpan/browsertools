@@ -60,18 +60,18 @@ function query(req, res) {
     // 接收请求的数据
     req.on('data', (data) => {
         body += data;
+        //console.log(':' + body);
     });
       
     // 请求数据接收完成后的处理
     req.on('end', () => {
         // 解析请求数据
         const requestData = JSON.parse(body);
-        
+        //console.log(':' + body);
         // 设置响应头
         res.setHeader('Content-Type', 'application/json');
         
         // 发送响应数据
-        //res.end(JSON.stringify({"camera" : _camera, "cmd" : _cmd}));
         res.end(JSON.stringify({"state" : currentCmds}));
 
       });
@@ -158,10 +158,10 @@ function restorescripture(req, res) {
     // 发送响应数据
     //res.end(JSON.stringify({"camera" : _camera, "cmd" : _cmd}));
     res.end(JSON.stringify({
-        "vlm": volumn,
-        "chp": chapter,
-        "ver": verse,
-        "blank": doblank
+        vlm: volumn,
+        chp: chapter,
+        ver: verse,
+        blank: doblank
     }));
 
   });

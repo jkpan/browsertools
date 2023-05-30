@@ -37,7 +37,7 @@ var presetVerse = [
         "shift'左右' 上十節下十節  shift'上下' 上十章下十章",
         "shift'=-' 字大小  'esc' 跳回預設樣式",
         "按住'space' 語音辨識(Chrome, 網路連線)",
-        "'F2'被控方"
+        "'F2'被控方 'F3'遠端被控方(使用node.js)"
       ]];
 
   //function flow() {}
@@ -227,9 +227,9 @@ var presetVerse = [
   
   }
   
-  function restorescripture() {
-    action({
-        "action": "action"
+  function ajax_restore() {
+    _ajax({
+        "action": "restore"
     }, 
     '/restorescripture', 
     (res)=>{
@@ -246,20 +246,47 @@ var presetVerse = [
     });
   }
 
-  function syncscripture() {
-    action({
-        "vlm": song,
-        "chp": phase,
-        "ver": line,
-        "blank": doblank
+  function ajax_sync() {
+    _ajax({
+        vlm: song,
+        chp: phase,
+        ver: line,
+        blank: doblank
     }, 
     '/synscripture', 
     (res)=>{
         console.log(JSON.stringify(res));
+    }, ()=>{
+      console.log('exception');
     });
   }
 
-  function action(json, url, cb) {
+  function _ajax(json, url, cb, errorcb) {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(json)
+    }).then(function(response) {
+      if (response.ok) {
+        return response.json(); // 解析JSON回應
+      } else {
+        throw new Error("請求失敗：" + response.status);
+      }
+    }).then(function(data) {
+      // 在這裡處理解析後的JSON物件
+      console.log(data);
+      cb(data)
+    }).catch(function(error) {
+      // 處理錯誤
+      console.log("錯誤：" + error);
+      errorcb();
+    });
+  }
+
+  /*
+  function _ajax(json, url, cb, errorcb) {
 
     // 客户端使用 Ajax 发送查询请求
     const requestData = json;
@@ -275,13 +302,22 @@ var presetVerse = [
                 //console.log('Query result: ' + respData.state);
                 cb(respData);
             } else {
-                cb({"state" : "Error"});
+                //cb({"state" : "Error"});
+                console.log("connect error");
             }
         }
     };
 
+    xhr.onerror = function() {
+      // 處理連線錯誤的程式碼
+      console.log("連線錯誤");
+      //errorcb();
+    };
+
     xhr.send(JSON.stringify(requestData));
   }
+  */
+  
 
   var funcInterval;
   var fake_doblank = 0;
@@ -299,11 +335,9 @@ var presetVerse = [
   
   function saveAction2Local() {
     if (funcInterval) return;
-    //syncscripture();
-    let key = 'save action';
-    //localStorage.removeItem(key);
+    //ajax_sync();
+    let key = 'save action';  //localStorage.removeItem(key);
     let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
-                //subtitles[0][0] + ' ' + phase + ' ' + line;
     localStorage.setItem(key, value);
   }
   
@@ -333,7 +367,7 @@ var presetVerse = [
 
 function restoreActionFromLocal() {
     
-    //restorescripture(); return;
+    //ajax_restore(); return;
 
     let key = 'save action';
     let value = localStorage.getItem(key);
@@ -347,30 +381,7 @@ function restoreActionFromLocal() {
     let _doblank = parseInt(array[3]);
 
     restoreAnim(volumn, chapter, verse, _doblank);
-    
-    /*
-    if (volumn == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
-    
-    fake_doblank = _doblank;
-    if (_doblank != doblank) keyboard({keyCode : 66});
   
-    if (volumn == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
-      keyboard({keyCode : 37}); //left
-      return;
-    }
-    
-    if (volumn == song && chapter == getNextChapter(phase, line) && verse == getNextVerse(phase, line)) {
-      keyboard({keyCode : 39}); //right
-      return;
-    }
-    
-    song = volumn;
-    subtitles = SONGS[song];
-    phase = chapter;
-    line = verse;
-    _repaint();
-    */
-
   }
   
   function save2Local() {
