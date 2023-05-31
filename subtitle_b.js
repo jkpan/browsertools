@@ -335,7 +335,7 @@ var presetVerse = [
   
   function saveAction2Local() {
     if (funcInterval) return;
-    ajax_sync();
+    //ajax_sync();
     let key = 'save action';  //localStorage.removeItem(key);
     let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
     localStorage.setItem(key, value);
@@ -367,7 +367,7 @@ var presetVerse = [
 
 function restoreActionFromLocal() {
     
-    ajax_restore(); return;
+    //ajax_restore(); return;
 
     let key = 'save action';
     let value = localStorage.getItem(key);
