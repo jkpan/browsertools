@@ -3,8 +3,7 @@ const fs = require('fs');
 //const qs = require('querystring');
 const urltool = require('url');
 
-const COMMANDS = [
-  '.',
+const COMMANDS = ['.',
   '[O]', '[X]',
   '))O((', '((O))',
   '<=',  '=>',
@@ -36,6 +35,8 @@ function command(req, res) {
     req.on('end', () => {
         // 解析请求数据
         const requestData = JSON.parse(body);
+
+        console.log(body);
         
         if (requestData.camera == 0 && requestData.cmd == 0) {
           for (let i=0;i<currentCmds.length;i++) currentCmds[i] = 0;
@@ -225,15 +226,6 @@ const server = http.createServer((req, res) => {
             cmd(req, res, parseInt(queryData.cc));
             return;
           }
-          /*
-          const parse = qs.parse(req.url);
-          console.log('req.url : ' + req.url);
-          console.log('parse : ' + parse.cc);
-          if (parse.cc) {
-            cmd(req, res, parseInt(parse.cc));
-            return;
-          }
-          */
         }
         break;
   }

@@ -12,12 +12,52 @@
       ::-webkit-scrollbar {
         display: none;
       }
-      button {
+      .btn {
+            font-size: 32px;
+            background-color: rgb(200, 200, 200);
+            color: #000000;
+            margin: 2% 2%;
+            width:150px;
+            height:100px;
+            border: none;
+            vertical-align: middle;
+          }
+      .btncamera {
             font-size: 32px;
             background-color: rgb(80, 80, 80);
             color: #ffffff;
-            margin: 2% 2%;
-            width:25%;
+            margin: 2px 2px;
+            width:150px;
+            height:100px;
+            border: none;
+            vertical-align: middle;
+          }
+      .btncamera_press {
+            font-size: 32px;
+            background-color: rgb(180, 180, 180);
+            color: #ff0000;
+            margin: 2px 2px;
+            width:150px;
+            height:100px;
+            border: none;
+            vertical-align: middle;
+          }
+      .btncommand {
+            font-size: 32px;
+            background-color: rgb(50, 50, 50);
+            color: #ffffff;
+            margin: 2px 2px;
+            width:150px;
+            height:100px;
+            border: none;
+            vertical-align: middle;
+          }
+      .btncommand_press {
+            font-size: 32px;
+            background-color: rgb(180, 180, 180);
+            color: #000000;
+            margin: 2px 2px;
+            width:150px;
             height:100px;
             border: none;
             vertical-align: middle;
@@ -26,42 +66,27 @@
     </head>
     <body>
        
-        
-        <div id="btn_camera">
-            
-        </div>
-        <hr>
-        <div id="btn_cmd">
-            
-        </div>
-        <hr>
         <div>
-            <button onclick="todo()">Go</button>
-            <button onclick="clean()">Clean</button>
+            <!--button onclick="todo()">Go</button-->
+            <button class="btn" onclick="clean()">Clean</button>
+            <button class="btn" onclick="query()">reload</button>
+            <div id="state" style="background-color: #ffffff;"></div>
         </div>
-
-        <!--div id="controlWin" class="controlPart">
+        <br/>
+        <div id="btn_camera"></div>
         <hr>
-            <button onclick="setCamera(1)">1</button>
-            <button onclick="setCamera(2)">2</button>
-            <button onclick="setCamera(3)">3</button>
-            <button onclick="setCamera(4)">4</button>
+        <div id="btn_cmd"></div>
         <hr>
-            <button onclick="setAction(1)">des1</button>
-            <button onclick="setAction(2)">des2</button>
-            <button onclick="setAction(3)">des3</button>
-            <button onclick="setAction(4)">des4</button>
-            <button onclick="setAction(5)">des5</button>
-            <button onclick="setAction(6)">des6</button>
-        <hr>
-            
-            
-        </div-->
+        
       
     </body>
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+var btn_camera = [];
+var btn_command = [];
+var cmd_des = [];
 
 var _cmd = 0;
 var _camera = 0;
@@ -74,6 +99,31 @@ function setAction(ac) {
     _cmd = ac;
 }
 
+function _ajax(json, url, cb, errorcb) {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(json)
+    }).then(function(response) {
+      if (response.ok) {
+        return response.json(); // 解析JSON回應
+      } else {
+        throw new Error("請求失敗：" + response.status);
+      }
+    }).then(function(data) {
+      // 在這裡處理解析後的JSON物件
+      //console.log(data);
+      cb(data)
+    }).catch(function(error) {
+      // 處理錯誤
+      console.log('' + error);
+      errorcb(error);
+    });
+}
+
+/*
 function action(json, url, cb) {
 
     // 客户端使用 Ajax 发送查询请求
@@ -97,47 +147,86 @@ function action(json, url, cb) {
 
     xhr.send(JSON.stringify(requestData));
 }
+*/
 
 function todo() {
-    action({
+    _ajax({
         "camera": _camera,
         "cmd": _cmd
-    }, '/command', (res)=>{
+    }, 
+    '/command', 
+    (res)=>{
         console.log(JSON.stringify(res));
+        query();
+    },
+    (error)=>{
+        console.log(error);
     });
 }
 
 function query() {
-    action({
+    _ajax({
         "action": "query"
-    }, '/query', (res)=>{
+    }, 
+    '/query', 
+    (res)=>{
         console.log(JSON.stringify(res));
+        let div = document.getElementById('state');
+        div.innerHTML = "";
+        for (let i=1;i<res.state.length;i++)
+            div.innerHTML += "&nbsp;" + cmd_des[res.state[i]] + '&nbsp;'; 
+    },
+    (error)=>{
+        console.log(error);
     });
 }
 
+function resetBtncmd() {
+    for(let i=0;i<btn_command.length;i++) {
+        btn_command[i].className = 'btncommand';
+    }
+}
+
+function resetBtncma() {
+    for(let i=0;i<btn_camera.length;i++) {
+        btn_camera[i].className = 'btncamera';
+    }
+}
+
 function clean() {
+        
     _cmd = '0';
     _camera = '0';
-    action({
+    _ajax({
         "camera": _camera,
         "cmd": _cmd
-    }, '/command', (res)=>{
+    }, 
+    '/command', 
+    (res)=>{
         console.log(JSON.stringify(res));
+        query();
+        resetBtncma();
+        resetBtncmd();
+    },
+    (error)=>{
+        console.log(error);
     });
 }
 
 function _cmdBtn(_command, _des) {
   var button = document.createElement('button');
   button.innerHTML = '' + _des;  //button.id = 'btn' + _command;
-
-  button.style.width = '180px'; // setting the width to 200px
-  button.style.height = '100px'; // setting the height to 200px
-  button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
-  //button.style.color = 'rgb(0,255,0)'; // setting the color to white
-  button.style.fontSize = '48px'; // setting the font size to 20px
+  button.className = 'btncommand';
 
   button.onclick = function() {
+    resetBtncmd();
+    if (_camera == 0) {
+        alert('select camera!');
+        return;
+    }
     setAction(_command);
+    todo();
+    this.className = 'btncommand_press';
     return false;
   };
   return button;
@@ -146,16 +235,15 @@ function _cmdBtn(_command, _des) {
 function _cameraBtn(_cmra) {
   var button = document.createElement('button');
   button.innerHTML = '' + _cmra;
-  //button.id = 'btn' + _cmra;
-
-  button.style.width = '200px'; // setting the width to 200px
-  button.style.height = '100px'; // setting the height to 200px
-  //button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
-  //button.style.color = 'rgb(0,255,0)'; // setting the color to white
-  button.style.fontSize = '48px'; // setting the font size to 20px
+  button.className = 'btncamera';
 
   button.onclick = function() {
+    resetBtncma();
+    resetBtncmd();
+
     setCamera(_cmra);
+
+    this.className = 'btncamera_press';
     return false;
   };
   return button;
@@ -163,23 +251,32 @@ function _cameraBtn(_cmra) {
 
 
 function initui() {
-    action({
+    _ajax({
         "action": "initui"
-    }, '/initui', (res)=>{
+    }, 
+    '/initui', 
+    (res)=>{
         console.log('initui:' + JSON.stringify(res));
         let count = res.camera;
         let div = document.getElementById('btn_camera');
         for(let i=1;i<=count;i++) {
-            div.appendChild(_cameraBtn(i));
+            let b = _cameraBtn(i);
+            btn_camera.push(b);
+            div.appendChild(b);
         }
-        let cmds = res.cmd;
+        //let cmds = res.cmd;
+        cmd_des = res.cmd;
         div = document.getElementById('btn_cmd');
-        for(let i=1;i<cmds.length;i++) {
-            div.appendChild(_cmdBtn(i, cmds[i]));
+        for(let i=1;i<cmd_des.length;i++) {
+            let b = _cmdBtn(i, cmd_des[i]);
+            btn_command.push(b);
+            div.appendChild(b);
             if (i%2 == 0) 
                 div.insertAdjacentHTML('beforeend', '<p></p>');
-
         }
+    },
+    (error)=>{
+        console.log(error);
     });
 }
 
