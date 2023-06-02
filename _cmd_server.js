@@ -14,7 +14,7 @@ const CAMERAS = 4;
 const currentCmds = [0, 
                      0, 0, 0, 0];
 
-var volumn = 0;
+var volumn = 1;
 var chapter = 0;
 var verse = 0;
 var doblank = 0;
@@ -186,7 +186,7 @@ function synscripture(req, res) {
       verse = requestData.ver;
       doblank = requestData.blank;
 
-      console.log('synscripture:' + volumn +', '+ chapter + ', ' + verse);
+      console.log('synscripture:' + volumn +', '+ chapter + ', ' + verse + ',' + doblank);
     
       res.setHeader('Content-Type', 'application/json');
       

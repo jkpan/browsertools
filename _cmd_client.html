@@ -195,17 +195,17 @@ function resetBtncma() {
 
 function clean() {
         
-    _cmd = '0';
-    _camera = '0';
+    //_cmd = '0'; //_camera = '0';
+    
     _ajax({
-        "camera": _camera,
-        "cmd": _cmd
+        "camera": 0,
+        "cmd": 0
     }, 
     '/command', 
     (res)=>{
         console.log(JSON.stringify(res));
         query();
-        resetBtncma();
+        //resetBtncma();
         resetBtncmd();
     },
     (error)=>{

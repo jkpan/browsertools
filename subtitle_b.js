@@ -177,6 +177,7 @@ var presetVerse = [
   var animIdx = 0;
   
   var doblank = 0;
+  //var doblank = 0;
   var helpSwitch = 0;
   
   var imgurl = '';//'./Icon-1024.png';
@@ -321,6 +322,11 @@ var presetVerse = [
 
   var funcInterval;
   var fake_doblank = 0;
+  //function restoreActionFromServer() {ajax_restore();}
+  function startRestoreFromServerInterval() {
+    if (funcInterval) stopActionInterval();
+    funcInterval = window.setInterval(ajax_restore, 200);
+  }
   function startRestoreInterval() {
     if (funcInterval) stopActionInterval();
     funcInterval = window.setInterval(restoreActionFromLocal, 200);
@@ -335,7 +341,7 @@ var presetVerse = [
   
   function saveAction2Local() {
     if (funcInterval) return;
-    //ajax_sync();
+    ajax_sync();
     let key = 'save action';  //localStorage.removeItem(key);
     let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
     localStorage.setItem(key, value);
@@ -1436,6 +1442,13 @@ function restoreActionFromLocal() {
         //case 27: //'escape'
         //  document.parentElement.focus();
         //  break;
+        case 114:
+          if (funcInterval) {
+            stopActionInterval();
+            break;
+          }
+          startRestoreFromServerInterval();
+          break;
         case 113:
           if (funcInterval) {
             stopActionInterval();
