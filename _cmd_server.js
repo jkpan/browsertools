@@ -7,17 +7,20 @@ const COMMANDS = ['.',
   '[O]', '[X]', '<<O>>', '>>O<<',
   '<=',  '=>', '^',   'v',
   'Piano', 'Drum', 'Guitar', 'Stage', 
-  'Cross', '3F', 'Focus' 
+  'Cross', '3F', '(Focus)' 
 ];
 
 const CAMERAS = 4;
 const currentCmds = [0, 
                      0, 0, 0, 0];
+const msgs = ['', 
+              '', '', '', ''];
 
 var volumn = 1;
 var chapter = 0;
 var verse = 0;
 var doblank = 0;
+var _msg_ = '';
 
 function getDes(cmd) {
   return COMMANDS[cmd];
@@ -36,12 +39,22 @@ function command(req, res) {
         // 解析请求数据
         const requestData = JSON.parse(body);
 
-        console.log(body);
+        console.log('###:' + body);
         
         if (requestData.camera == 0 && requestData.cmd == 0) {
-          for (let i=0;i<currentCmds.length;i++) currentCmds[i] = 0;
+          //COMMANDS[0] = '.';
+          for (let i=0;i<currentCmds.length;i++) 
+            currentCmds[i] = 0;
+          for (let i=0;i<msgs.length;i++) 
+            msgs[i] = '';
         } else {
-          currentCmds[requestData.camera] = requestData.cmd;
+          if (requestData.msg) {
+            msgs[requestData.camera] = requestData.msg;
+            console.log(msgs[requestData.camera] + ', ' + requestData.msg);
+            currentCmds[requestData.camera] = -1;
+          } else {
+            currentCmds[requestData.camera] = requestData.cmd;
+          }          
         }
 
         //_cmd = requestData.cmd;
@@ -73,7 +86,15 @@ function query(req, res) {
         res.setHeader('Content-Type', 'application/json');
         
         // 发送响应数据
-        res.end(JSON.stringify({"state" : currentCmds}));
+        let cmdtext = '';
+        for (let i=1;i<currentCmds.length;i++) {
+          if (currentCmds[i] >= 0)
+            cmdtext += ' ' + getDes(currentCmds[i]);
+          else 
+            cmdtext += ' ' + msgs[i];
+        }
+        
+        res.end(JSON.stringify({"state" : cmdtext}));
 
       });
 }
@@ -116,7 +137,10 @@ function cmdAll(req, res) { //for M5Stick
       // res.end('' + _camera + ' ' + _cmd + ' ' + getDes(_cmd));
       let cc = '';
       for (let i=1;i<currentCmds.length;i++) {
-        cc += getDes(currentCmds[i]);
+        if (currentCmds[i] >= 0)
+          cc += getDes(currentCmds[i]);
+        else 
+          cc += '/';
         cc += ' ';
       }
       cc = cc.trim();
@@ -124,7 +148,7 @@ function cmdAll(req, res) { //for M5Stick
     });
 }
 
-function cmd(req, res, _cmd) { //for M5Stick
+function cmd(req, res, _cma) { //for M5Stick
   let body = '';
   // 接收请求的数据
   req.on('data', (data) => {
@@ -136,7 +160,10 @@ function cmd(req, res, _cmd) { //for M5Stick
       res.setHeader('Content-Type', 'text/html');
       // 发送响应数据
       // res.end('' + _camera + ' ' + _cmd + ' ' + getDes(_cmd));
-      res.end(getDes(currentCmds[_cmd]));
+      if (currentCmds[_cma] >= 0)
+        res.end(getDes(currentCmds[_cma]));
+      else 
+        res.end(msgs[_cma]);
     });
 }
 

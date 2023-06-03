@@ -62,15 +62,17 @@
             border: none;
             vertical-align: middle;
           }
+      
       </style>
     </head>
     <body>
-       
         <div>
             <!--button onclick="todo()">Go</button-->
             <button class="btn" onclick="clean()">Clean</button>
+            <input type="text" id="msg" style="font-size: 32px;width:200px;height:64px;" value="" />
+            <button class="btn" onclick="custoMsg()">Send</button>
             <!--button class="btn" onclick="query()">reload</button-->
-            <div id="state" style="background-color: #ffffff;"></div>
+            <div id="state" style="background-color: #ffffff;font-size: 32px;"></div>
         </div>
         <br/>
         <div id="btn_camera"></div>
@@ -149,6 +151,31 @@ function action(json, url, cb) {
 }
 */
 
+function custoMsg() {
+    resetBtncmd();
+    if (_camera == 0) {
+        alert('select camera!');
+        return;
+    }
+    let _msg = document.getElementById('msg').value;
+    _msg = _msg.trim();
+    if (_msg.length == 0) return;
+    if (_msg === '.') return;
+    _ajax({
+        "camera": _camera,
+        "cmd": 0,
+        "msg":  _msg
+    }, 
+    '/command', 
+    (res)=>{
+        console.log(JSON.stringify(res));
+        query();
+    },
+    (error)=>{
+        console.log(error);
+    });
+}
+
 function todo() {
     _ajax({
         "camera": _camera,
@@ -172,9 +199,8 @@ function query() {
     (res)=>{
         console.log(JSON.stringify(res));
         let div = document.getElementById('state');
-        div.innerHTML = "";
-        for (let i=1;i<res.state.length;i++)
-            div.innerHTML += "&nbsp;" + cmd_des[res.state[i]] + '&nbsp;'; 
+        div.innerText = '     ' + res.state;
+        //for (let i=1;i<res.state.length;i++) div.innerText += cmd_des[res.state[i]] + '       '; 
     },
     (error)=>{
         console.log(error);
@@ -194,7 +220,8 @@ function resetBtncma() {
 }
 
 function clean() {
-        
+    
+    document.getElementById('msg').value = '';
     //_cmd = '0'; //_camera = '0';
     
     _ajax({
