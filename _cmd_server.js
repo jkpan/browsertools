@@ -4,10 +4,10 @@ const fs = require('fs');
 const urltool = require('url');
 
 const COMMANDS = ['.',
-  '[O]', '[X]',
-  '))O((', '((O))',
-  '<=',  '=>',
-  '^',   'v'
+  '[O]', '[X]', '<<O>>', '>>O<<',
+  '<=',  '=>', '^',   'v',
+  'Piano', 'Drum', 'Guitar', 'Stage', 
+  'Cross', '3F', 'Focus' 
 ];
 
 const CAMERAS = 4;
@@ -233,8 +233,7 @@ const server = http.createServer((req, res) => {
   let url = req.url;
 
   if (url === '/') {
-    //url = '/index.html';
-    url = '/_cmd_client.html';
+    url = '/index.html';//url = '_cmd_client.html';
   }
 
   // 將URL路徑轉換為檔案路徑

@@ -13,13 +13,13 @@
         display: none;
       }
       .btn {
-            font-size: 32px;
-            background-color: rgb(200, 200, 200);
+            font-size: 24px;
+            background-color: rgb(70, 200, 70);
             color: #000000;
             margin: 2% 2%;
-            width:150px;
-            height:100px;
-            border: none;
+            width:100px;
+            height:80px;
+            border: 2px;
             vertical-align: middle;
           }
       .btncamera {
@@ -69,7 +69,7 @@
         <div>
             <!--button onclick="todo()">Go</button-->
             <button class="btn" onclick="clean()">Clean</button>
-            <button class="btn" onclick="query()">reload</button>
+            <!--button class="btn" onclick="query()">reload</button-->
             <div id="state" style="background-color: #ffffff;"></div>
         </div>
         <br/>
@@ -215,7 +215,7 @@ function clean() {
 
 function _cmdBtn(_command, _des) {
   var button = document.createElement('button');
-  button.innerHTML = '' + _des;  //button.id = 'btn' + _command;
+  button.innerText = '' + _des;  //button.id = 'btn' + _command;
   button.className = 'btncommand';
 
   button.onclick = function() {
@@ -234,7 +234,7 @@ function _cmdBtn(_command, _des) {
 
 function _cameraBtn(_cmra) {
   var button = document.createElement('button');
-  button.innerHTML = '' + _cmra;
+  button.innerText = '' + _cmra;
   button.className = 'btncamera';
 
   button.onclick = function() {
@@ -271,7 +271,7 @@ function initui() {
             let b = _cmdBtn(i, cmd_des[i]);
             btn_command.push(b);
             div.appendChild(b);
-            if (i%2 == 0) 
+            if (i%4 == 0) 
                 div.insertAdjacentHTML('beforeend', '<p></p>');
         }
     },
