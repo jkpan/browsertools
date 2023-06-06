@@ -547,6 +547,7 @@ class Applet {
     background: rgb(0, 150, 0);
     color: rgb(0, 255, 0);    
   }
+  /*
   .okbutton {
         font-size: 24px;
         background-color: rgb(0, 150, 0);
@@ -556,7 +557,14 @@ class Applet {
         border: 2px solid;
         vertical-align: middle;
       }
-  button {
+  */
+  .btn_sel {
+    background-color: #00ff00;
+    color: #00aa00;
+    border: none;
+    vertical-align: middle;
+  }
+  .btn {
     background-color:transparent;
     color: #00ff00;
     border: none;
@@ -573,20 +581,21 @@ class Applet {
     </div>
 
     <div id="controlDiv" class="controlPart">
-
-      <button onclick="spot2iframe('hymn')">歌詞</button><!--button onclick="switchVisible4iframe('hymn')">.</button-->
-      <button onclick="spot2iframe('Bible')">聖經</button>
-      <button onclick="spot2iframe('ppt_1')">PPT 1</button>
-      <button onclick="spot2iframe('ppt_2')">PPT 2</button>
-      <button onclick="spot2iframe('ppt_3')">PPT 3</button>
-      <button onclick="spot2iframe('info')">Info</button>
-      <button onclick="spot2iframe('effect')">Effect</button>
-      <button onclick="spot2iframe('time')">Time</button>
-      <button>|</button>
-      <button onclick="colorSwitch()">B/G</button>
-      <button onclick="openCtrl()">Ctrl</button>
-      <button onclick="openProfile()">Profile</button>
-      <button id="oxBtn" onclick="sendOX()">o</button>
+      <button class="btn" id="editbtn" onclick="switchEditMode()">Edit mode</button>
+      <button class="btn">|</button>
+      <button class="btn" onclick="spot2iframe('hymn')">歌詞</button><!--button onclick="switchVisible4iframe('hymn')">.</button-->
+      <button class="btn" onclick="spot2iframe('Bible')">聖經</button>
+      <button class="btn" onclick="spot2iframe('ppt_1')">PPT 1</button>
+      <button class="btn" onclick="spot2iframe('ppt_2')">PPT 2</button>
+      <button class="btn" onclick="spot2iframe('ppt_3')">PPT 3</button>
+      <button class="btn" onclick="spot2iframe('info')">Info</button>
+      <button class="btn" onclick="spot2iframe('effect')">Effect</button>
+      <button class="btn" onclick="spot2iframe('time')">Time</button>
+      <button class="btn">|</button>
+      <button class="btn" onclick="colorSwitch()">B/G</button>
+      <button class="btn" onclick="openCtrl()">Ctrl</button>
+      <button class="btn" onclick="openProfile()">Profile</button>
+      <button class="btn" id="oxBtn" onclick="sendOX()">o</button>
       <input type="file" id="profile" hidden="true" onchange="selectProfile(event)" />
     </div>
     
@@ -596,6 +605,40 @@ class Applet {
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+window.addEventListener('keyup', e => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+    switchEditMode();
+  }
+
+}, false);
+
+window.addEventListener('keydown', (e)=> {
+  e.preventDefault();
+  e.stopPropagation();
+  if (e.keyCode == 16) { // || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+      switchEditMode();
+  }
+}, false);
+
+function switchEditMode() {
+  let btn = document.getElementById('editbtn');
+  keylock = !keylock;
+  if (keylock) { //edit mode start
+    btn.className = 'btn_sel';
+    let div = document.getElementById("content_control");
+    div.hidden = false;
+    _repaint();
+  } else {  //end edit mode
+    btn.className = 'btn'
+    let div = document.getElementById("content_control");
+    div.hidden = true;
+    mouseDown = -1;
+    selectIdx = -1;
+  }
+}
 
 function sendOX() {
 
@@ -748,24 +791,6 @@ function getElmState() {
   }
   return stateArray;
 }
-
-/*
-var input = document.getElementById('pdf_input');
-input.addEventListener('change', function (event) {
-
-  var files = event.target.files;
-  var file;
-  if (files && files.length > 0) {
-    file = files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
-      createFrame('pdf', e.target.result);
-      applets.push(new Applet({x:1, y:14, w:15, h:18, keyname:'pdf'}));
-    }
-  }
-});
-*/
 
 var _openWin = null;
 
@@ -1047,32 +1072,6 @@ window.addEventListener('message', e => {
   postMsg(e.data);
   var b = document.getElementById('oxBtn');
   b.textContent = e.data;
-}, false);
-
-window.addEventListener('keyup', e => {
-  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
-    keylock = false;
-    let div = document.getElementById("content_control");
-    div.hidden = true;
-    mouseDown = -1;
-    selectIdx = -1;
-    return;
-  }
-
-}, false);
-
-window.addEventListener('keydown', function(e) {
-
-  //e.preventDefault();
-  //e.stopPropagation();
-  if (e.keyCode == 16) { // || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
-    keylock = true;
-    let div = document.getElementById("content_control");
-    div.hidden = false;
-    _repaint();
-    return;
-  }
-  
 }, false);
 
 var mouseX;
