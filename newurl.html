@@ -16,21 +16,21 @@ body {
   display: grid;
   gap: 0px;
     
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
   width: 100%;
   height: 100vh;
 
 }
 .full {    
-  grid-column: 1 / 11;
-  grid-row: 1 / 11;
+  grid-column: 1 / 13;
+  grid-row: 1 / 13;
   user-select: none;
 }
 .ui {
-    grid-column: 2 / 10;
-    grid-row: 2 / 10;
+    grid-column: 2 / 12;
+    grid-row: 2 / 12;
 }
 
 ::-webkit-scrollbar {
@@ -90,7 +90,7 @@ img {
         <div class="full" id="image_container" hidden="true"></div>
 
         <div class="ui" id="ui">
-          &nbsp;嵌入url(Google簡報, Canva簡報, Youtube影片...):
+          嵌入Google簡報, Canva簡報, Youtube影片...:
           <textarea id="ppt_url" name="mytext" rows="5">
           </textarea>
             <script type="text/javascript" charset="UTF-8">
@@ -123,21 +123,21 @@ img {
           <button class="okbutton" type="button" onclick="urlGo()">OK</button>
           <!--button class="okbutton" type="button" onclick="iframeGo()">OK (embedded whole iframe)</button-->
           <br/>
-            &nbsp;* Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal', 此時若要打開speaker notes請按's'
+            * Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal', 此時若要打開speaker notes按's'
             <br/>
-            &nbsp;* Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上
+            * Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上
           
           <hr size="4" width="100%" color="#00ff00"/>
-          &nbsp;本機檔案:<br/>
+          本機檔案<br/>
           <P></P>
-          &nbsp;PDF&nbsp;&nbsp;&nbsp;
-            <input type="file" accept=".pdf" onchange="selectPDF(event)"/><br/>
+            <button class="okbutton" type="button" onclick="openFile('filepdf')">PDF</button>
+            <input id="filepdf" type="file" hidden="true" accept=".pdf" onchange="selectPDF(event)"/><br/>
           <P></P>
-          &nbsp;Image&nbsp;
-            <input type="file" onchange="selectImg(event)"/><br/>
+            <button class="okbutton" type="button" onclick="openFile('fileimage')">Image</button>
+            <input id="fileimage" type="file" hidden="true" onchange="selectImg(event)"/><br/>
           <P></P>
-          &nbsp;Video&nbsp;
-            <input type="file" accept="video/*" onchange="playVideo(event)"/>
+            <button class="okbutton" type="button" onclick="openFile('filevideo')">Video</button>
+            <input id="filevideo" type="file" hidden="true" accept="video/*" onchange="playVideo(event)"/>
           
         </div>
       </div>
@@ -146,6 +146,10 @@ img {
 </html>
   
 <script type="text/javascript" charset="UTF-8">
+
+function openFile(elmid) {
+  document.getElementById(elmid).click();
+}
 
 function selectImg(event) {
   //document.style.opacity = '0.0';
