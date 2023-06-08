@@ -14,9 +14,10 @@
 
 #define LED_PIN 10 // see https://github.com/m5stack/M5StickC#pinmap
 
-#define CMDURL "http://192.168.0.71/cmd?cc="
+//#define CMDURL "http://192.168.30.146/cmd?cc="
 //#define SSID "AOG-2F"
 //#define PASS "0223210665"
+#define CMDURL "http://192.168.0.71/cmd?cc="
 #define SSID "jkpan home"
 #define PASS "X25031710"
 
@@ -242,15 +243,29 @@ void render(int input, int label, unsigned long int screenColor, unsigned long i
 	M5.Lcd.drawString(String(input), 1, 1, 1);
 
 	M5.Lcd.setTextDatum(MC_DATUM);
-	M5.Lcd.drawString(String(label), M5.Lcd.width() / 4, M5.Lcd.height() / 2 + 2, 7);
   
+  /*
+	M5.Lcd.drawString(String(label), M5.Lcd.width() / 4, M5.Lcd.height() / 2 + 2, 7);
   if (result.compareTo(".") != 0) {
     M5.Lcd.fillRect(M5.Lcd.width()/2, 0, M5.Lcd.width()/2, M5.Lcd.height(), BLUE);
-    M5.Lcd.drawString(String(result), M5.Lcd.width() * 3 / 4, M5.Lcd.height() / 2 + 2, 2);
+    M5.Lcd.drawString(String(result), 
+                      M5.Lcd.width() * 3 / 4, 
+                      M5.Lcd.height() / 2 + 2, 
+                      2);
+  } 
+  */
+
+  M5.Lcd.drawString(String(label), M5.Lcd.width() / 2, M5.Lcd.height() / 3-2, 7);
+  if (result.compareTo(".") != 0) {
+    M5.Lcd.fillRect(0, M5.Lcd.height()*2/3, M5.Lcd.width(), M5.Lcd.height()/3, BLUE);
+    M5.Lcd.drawString(String(result), 
+                      M5.Lcd.width()/2, 
+                      M5.Lcd.height() *5 / 6, 
+                      2);
   } 
 
-  M5.Lcd.setTextDatum(BR_DATUM);
-  M5.Lcd.drawString(String(count), M5.Lcd.width()-2, M5.Lcd.height()-2, 2);
+  //M5.Lcd.setTextDatum(BR_DATUM);
+  //M5.Lcd.drawString(String(count), M5.Lcd.width()-2, M5.Lcd.height()-2, 2);
 
 	float voltage = M5.Axp.GetBatVoltage();
 	float current = M5.Axp.GetBatCurrent();

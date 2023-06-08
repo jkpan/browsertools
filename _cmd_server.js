@@ -11,10 +11,9 @@ const COMMANDS = ['.',
 ];
 
 const CAMERAS = 4;
-const currentCmds = [0, 
-                     0, 0, 0, 0];
-const msgs = ['', 
-              '', '', '', ''];
+//const currentCmds = [0, 0, 0, 0, 0];
+const msgs = ['.', 
+              '.', '.', '.', '.'];
 
 var volumn = 1;
 var chapter = 0;
@@ -22,10 +21,6 @@ var verse = 0;
 var doblank = 0;
 var _msg_ = '';
 
-function getDes(cmd) {
-  return COMMANDS[cmd];
-}
-  
 function command(req, res) {
     let body = '';
     
@@ -41,35 +36,26 @@ function command(req, res) {
 
         console.log('###:' + body);
         
-        if (requestData.camera == 0 && requestData.cmd == 0) {
-          //COMMANDS[0] = '.';
-          for (let i=0;i<currentCmds.length;i++) 
-            currentCmds[i] = 0;
-          for (let i=0;i<msgs.length;i++) 
-            msgs[i] = '';
+        if (requestData.camera == 0) { 
+          for (let i=0;i<msgs.length;i++) msgs[i] = '.';
         } else {
           if (requestData.msg) {
             msgs[requestData.camera] = requestData.msg;
-            console.log(msgs[requestData.camera] + ', ' + requestData.msg);
-            currentCmds[requestData.camera] = -1;
           } else {
-            currentCmds[requestData.camera] = requestData.cmd;
+            msgs[requestData.camera] = '.';
           }          
         }
-
-        //_cmd = requestData.cmd;
-        //_camera = requestData.camera;
       
         res.setHeader('Content-Type', 'application/json');
         
         // 发送响应数据
         res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
 
-        //console.log('camera: ' + _camera + ', cmd: ' + _cmd );
     });
 }
 
 function query(req, res) {
+
     let body = '';
     // 接收请求的数据
     req.on('data', (data) => {
@@ -79,22 +65,10 @@ function query(req, res) {
       
     // 请求数据接收完成后的处理
     req.on('end', () => {
-        // 解析请求数据
-        const requestData = JSON.parse(body);
-        //console.log(':' + body);
-        // 设置响应头
+        // 解析请求数据 const requestData = JSON.parse(body);
+
         res.setHeader('Content-Type', 'application/json');
-        
-        // 发送响应数据
-        let cmdtext = '';
-        for (let i=1;i<currentCmds.length;i++) {
-          if (currentCmds[i] >= 0)
-            cmdtext += ' ' + getDes(currentCmds[i]);
-          else 
-            cmdtext += ' ' + msgs[i];
-        }
-        
-        res.end(JSON.stringify({"state" : cmdtext}));
+        res.end(JSON.stringify({"state" : msgs}));
 
       });
 }
@@ -108,10 +82,7 @@ function initui(req, res) {
     
   // 请求数据接收完成后的处理
   req.on('end', () => {
-      // 解析请求数据
-      const requestData = JSON.parse(body);
-      
-      // 设置响应头
+
       res.setHeader('Content-Type', 'application/json');
       
       // 发送响应数据
@@ -133,15 +104,10 @@ function cmdAll(req, res) { //for M5Stick
   // 请求数据接收完成后的处理
   req.on('end', () => {
       res.setHeader('Content-Type', 'text/html');
-      // 发送响应数据
-      // res.end('' + _camera + ' ' + _cmd + ' ' + getDes(_cmd));
+      
       let cc = '';
-      for (let i=1;i<currentCmds.length;i++) {
-        if (currentCmds[i] >= 0)
-          cc += getDes(currentCmds[i]);
-        else 
-          cc += '/';
-        cc += ' ';
+      for (let i=1;i<msgs.length;i++) {
+        cc += ' ' + msgs[i];
       }
       cc = cc.trim();
       res.end(cc);
@@ -158,12 +124,7 @@ function cmd(req, res, _cma) { //for M5Stick
   // 请求数据接收完成后的处理
   req.on('end', () => {
       res.setHeader('Content-Type', 'text/html');
-      // 发送响应数据
-      // res.end('' + _camera + ' ' + _cmd + ' ' + getDes(_cmd));
-      if (currentCmds[_cma] >= 0)
-        res.end(getDes(currentCmds[_cma]));
-      else 
-        res.end(msgs[_cma]);
+      res.end(msgs[_cma]);
     });
 }
 
@@ -182,9 +143,8 @@ function restorescripture(req, res) {
     // 设置响应头
     res.setHeader('Content-Type', 'application/json');
     
-    console.log('restorescripture:' + volumn +', '+ chapter + ', ' + verse);
+    //console.log('restorescripture:' + volumn +', '+ chapter + ', ' + verse);
     // 发送响应数据
-    //res.end(JSON.stringify({"camera" : _camera, "cmd" : _cmd}));
     res.end(JSON.stringify({
         vlm: volumn,
         chp: chapter,
@@ -244,9 +204,9 @@ const server = http.createServer((req, res) => {
       return;
     default:
         if (req.url.startsWith('/cmd')) {
-          if (req.url === '/cmd') {
-            cmdAll(req, res);
-            return;
+          if (req.url === '/cmd') {    
+            cmdAll(req, res); 
+            return; 
           }
           var queryData = urltool.parse(req.url, true).query;
           if (queryData.cc) {
@@ -288,4 +248,3 @@ const port = 80;
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-

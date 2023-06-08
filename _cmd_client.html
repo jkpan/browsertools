@@ -89,16 +89,18 @@
 var btn_camera = [];
 var btn_command = [];
 var cmd_des = [];
+var msg = '';
 
-var _cmd = 0;
+//var _cmd = 0;
 var _camera = 0;
 
 function setCamera(no) {
     _camera = no;
 }
 
-function setAction(ac) {
-    _cmd = ac;
+function setAction(ac) { 
+    //_cmd = ac;
+    msg = cmd_des[ac];
 }
 
 function _ajax(json, url, cb, errorcb) {
@@ -152,34 +154,20 @@ function action(json, url, cb) {
 */
 
 function custoMsg() {
-    resetBtncmd();
-    if (_camera == 0) {
-        alert('select camera!');
-        return;
-    }
     let _msg = document.getElementById('msg').value;
     _msg = _msg.trim();
     if (_msg.length == 0) return;
-    if (_msg === '.') return;
-    _ajax({
-        "camera": _camera,
-        "cmd": 0,
-        "msg":  _msg
-    }, 
-    '/command', 
-    (res)=>{
-        console.log(JSON.stringify(res));
-        query();
-    },
-    (error)=>{
-        console.log(error);
-    });
+    if (_msg.length === '.') return;
+    resetBtncmd();
+    msg = _msg;
+    todo();
 }
 
 function todo() {
     _ajax({
         "camera": _camera,
-        "cmd": _cmd
+        //"cmd": _cmd
+        "msg":  msg
     }, 
     '/command', 
     (res)=>{
@@ -199,7 +187,11 @@ function query() {
     (res)=>{
         console.log(JSON.stringify(res));
         let div = document.getElementById('state');
-        div.innerText = '     ' + res.state;
+        let msgs = res.state;
+        div.innerText = '';
+        for (let i = 1;i<msgs.length;i++) {
+            div.innerText += '  ' + msgs[i];
+        }
         //for (let i=1;i<res.state.length;i++) div.innerText += cmd_des[res.state[i]] + '       '; 
     },
     (error)=>{
@@ -223,10 +215,9 @@ function clean() {
     
     document.getElementById('msg').value = '';
     //_cmd = '0'; //_camera = '0';
-    
     _ajax({
         "camera": 0,
-        "cmd": 0
+        //"cmd": 0
     }, 
     '/command', 
     (res)=>{
