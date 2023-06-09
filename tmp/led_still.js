@@ -207,9 +207,9 @@ function filter_gray(coloramount) {
 
 function filter_reduceColor(coloramount) {
   let block = Math.ceil(255/coloramount);
-  _r = Math.floor(_r/block) * block * drkl/10;
-  _g = Math.floor(_g/block) * block * drkl/10;
-  _b = Math.floor(_b/block) * block * drkl/10;
+  _r = Math.min(255, Math.ceil(_r/block) * block * drkl/10);
+  _g = Math.min(255, Math.ceil(_g/block) * block * drkl/10);
+  _b = Math.min(255, Math.ceil(_b/block) * block * drkl/10);
 }
 
 function filter() {

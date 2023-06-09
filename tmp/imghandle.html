@@ -4,11 +4,53 @@
 var color_0 = '#ffffff';
 var uploadImage;
 
+function downloadAll() {
+  
+  download('i00');
+  download('i01');
+  download('i02');
+  download('i03');
+  download('i04');
+  download('i05');
+  download('i06');
+  download('i07');
+  download('i08');
+  download('i09');
+  download('i10');
+
+}
+
+function download(elm) {
+  var imgUrl = document.getElementById(elm).src;
+  var link = document.createElement('a');
+  link.href = imgUrl;
+  link.download = document.getElementById(elm).getAttribute('filename');
+  console.log(':' + link.download);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+function processAll() {
+  
+  processImg('b00', 'i00');
+  processImg('b01', 'i01');
+  processImg('b02', 'i02');
+  processImg('b03', 'i03');
+  processImg('b04', 'i04');
+  processImg('b05', 'i05');
+  processImg('b06', 'i06');
+  processImg('b07', 'i07');
+  processImg('b08', 'i08');
+  processImg('b09', 'i09');
+  processImg('b10', 'i10');
+}
+
 function processImg(src, des) {
 
   var obj = document.getElementById(src);
   uploadImage = obj;
-  _processImg(des);    
+  _processImg(des);
 
 }
 
@@ -173,80 +215,106 @@ function _processImg(des) {
         <option value="9">9</option>
         <option value="10" selected>10</option>
       </select>
+      <label style="color:#ff0000;size: 48px;">/10</label>
 
+      <br/>
+
+      <button type="button" onclick="processAll()">Generate All</button>
+      <button type="button" onclick="downloadAll()">Download All</button>
 
       <br/>
 
       <!--input type="file" id="img"/>
-      <img id="file0" filename="bg10.png"/><br/-->   
+      <img id="file0" filename="bg10.png"/><br/--> 
       
       <br/>
 
+      <hr size="8" width="100%" color="green">
+      <button type="button" onclick="processImg('b00', 'i00')">Generate</button>
+      <button type="button" onclick="download('i00')">Download</button><br/>
       <img id="b00" src="bg00.png"/>
-      <img id="i00" filename="bg00.png"/><br/>
-      <button type="button" id="imgo" onclick="processImg('b00', 'i00')">Generate 00</button>
+      <img id="i00" filename="bg00.png"/>
       
-      <hr size="8" width="100%" color="green">
+      <br/>
 
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b01', 'i01')">Generate</button>
+      <button type="button" onclick="download('i01')">Download</button><br/>
       <img id="b01" src="bg01.png"/>
-      <img id="i01" filename="bg01.png"/><br/>
-      <button type="button" id="imgo" onclick="processImg('b01', 'i01')">Generate 01</button>
+      <img id="i01" filename="bg01.png"/>
+      
+      <br/>
 
-      <hr size="8" width="100%" color="green">
-
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b02', 'i02')">Generate</button>
+      <button type="button" onclick="download('i02')">Download</button><br/>
       <img id="b02" src="bg02.png"/>
-      <img id="i02" filename="bg02.png"/><br/>
-      <button type="button" id="imgo" onclick="processImg('b02', 'i02')">Generate 02</button>
-
-      <hr size="8" width="100%" color="green">
-
+      <img id="i02" filename="bg02.png"/>
+      
+      <br/>
+      
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b03', 'i03')">Generate</button>
+      <button type="button" onclick="download('i03')">Download</button><br/>
       <img id="b03" src="bg03.png"/>
-      <img id="i03" filename="bg03.png"/><br/>
-      <button type="button" id="imgo" onclick="processImg('b03', 'i03')">Generate 03</button> 
+      <img id="i03" filename="bg03.png"/>
       
-      <hr size="8" width="100%" color="green">
-
+      <br/>
+      
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b04', 'i04')">Generate</button>
+      <button type="button" onclick="download('i04')">Download</button><br/>
       <img id="b04" src="bg04.png"/>
-      <img id="i04" filename="bg04.png"/><br/>
-      <button type="button" id="imgo" onclick="processImg('b04', 'i04')">Generate 04</button>
+      <img id="i04" filename="bg04.png"/>
+      <br/>
       
-      <hr size="8" width="100%" color="green">
-
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b05', 'i05')">Generate</button>
+      <button type="button" onclick="download('i05')">Download</button><br/>
       <img id="b05" src="bg05.png"/>
-      <img id="i05" filename="bg05.png"/><br/>
-      <button type="button" id="imgo" onclick="processImg('b05', 'i05')">Generate 05</button>
+      <img id="i05" filename="bg05.png"/>
+      
+      <br/>
       
       <hr size="8" width="100%" color="green">
-
+      <button type="button" onclick="processImg('b06', 'i06')">Generate</button>
+      <button type="button" onclick="download('i06')">Download</button><br/>
       <img id="b06" src="bg06.png"/>
-      <img id="i06" filename="bg06.png"/><br/>
-      <button type="button" id="imgo" onclick="processImg('b06', 'i06')">Generate 06</button>
+      <img id="i06" filename="bg06.png"/>
       
-      <hr size="8" width="100%" color="green">
-
+      <br/>
+      
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b07', 'i07')">Generate</button>
+      <button type="button" onclick="download('i07')">Download</button><br/>
       <img id="b07" src="bg07.png"/>
-      <button type="button" id="imgo" onclick="processImg('b07', 'i07')">Generate 07</button> 
-      <img id="i07" filename="bg07.png"/><br/>
+      <img id="i07" filename="bg07.png"/>
+      
+      <br/>
 
-      <hr size="8" width="100%" color="green">
-
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b08', 'i08')">Generate</button>
+      <button type="button" onclick="download('i08')">Download</button><br/>
       <img id="b08" src="bg08.png"/>
-      <button type="button" id="imgo" onclick="processImg('b08', 'i08')">Generate 08</button>
-      <img id="i08" filename="bg08.png"/><br/>
+      <img id="i08" filename="bg08.png"/>
+      
+      <br/>
 
-      <hr size="8" width="100%" color="green">
-
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b09', 'i09')">Generate</button>
+      <button type="button" onclick="download('i09')">Download</button><br/>
       <img id="b09" src="bg09.png"/>
-      <button type="button" id="imgo" onclick="processImg('b09', 'i09')">Generate 09</button> 
-      <img id="i09" filename="bg09.png"/><br/>
+      <img id="i09" filename="bg09.png"/>
+      
+      <br/>
 
-      <hr size="8" width="100%" color="green">
-
+      <hr size="8" width="100%" color="green"/>
+      <button type="button" onclick="processImg('b10', 'i10')">Generate</button>
+      <button type="button" onclick="download('i10')">Download</button><br/>
       <img id="b10" src="bg10.png"/>
-      <button type="button" id="imgo" onclick="processImg('b10', 'i10')">Generate 10</button> 
-      <img id="i10" filename="bg10.png"/><br/>      
+      <img id="i10" filename="bg10.png"/>
       
-      
+      <br/>      
 
     </div>
 
