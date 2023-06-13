@@ -106,7 +106,90 @@ function init() {
     //canvas.style.caretColor = "red";
 }
 
+function ajax_restore() {
+  _ajax({
+      "action": "restore"
+  }, 
+  '/restorelyrics', 
+  (res)=>{
+      console.log(JSON.stringify(res));
+      //jump4external(res.vlm, res.chp, res.ver);
+      ////
+      let _song = res.song;//array[0];
+      let _phase = res.phase;
+      let _line = res.line;
+      let _doblank = res.blank;
+
+      if (_song == song && _phase == phase && _line == line && _doblank == doblank) return;
+
+      //if (_song >= SONGS.length) {        syncListFromController();     return;       }
+      
+      song = _song;
+      subtitles = SONGS[song];
+    
+      phase = _phase;
+      line = _line;
+    
+      if (phase >= subtitles.length) {
+        syncListFromController();
+        return;
+      }
+    
+      //if (line >= subtitles[phase].length) {      syncListFromController();     return;    }
+    
+      doblank = _doblank;
+      
+      _repaint();
+
+
+  });
+}
+
+function ajax_sync() {
+  _ajax({
+      song: song,
+      phase: phase,
+      line: line,
+      blank: doblank
+  }, 
+  '/synclyrics', 
+  (res)=>{
+      console.log(JSON.stringify(res));
+  }, ()=>{
+    console.log('exception');
+  });
+}
+
+function _ajax(json, url, cb, errorcb) {
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(json)
+  }).then(function(response) {
+    if (response.ok) {
+      return response.json(); // 解析JSON回應
+    } else {
+      throw new Error("請求失敗：" + response.status);
+    }
+  }).then(function(data) {
+    // 在這裡處理解析後的JSON物件
+    //console.log(data);
+    cb(data)
+  }).catch(function(error) {
+    // 處理錯誤
+    console.log('' + error);
+    errorcb();
+  });
+}
+
 var funcInterval;
+function startRestoreFromServerInterval() {
+  if (funcInterval) stopActionInterval();
+  funcInterval = window.setInterval(ajax_restore, 200);
+}
+
 function startRestoreInterval() {
   if (funcInterval) 
     stopActionInterval();
@@ -123,6 +206,7 @@ function saveAction2Local() {
   let key = 'save progress';
   let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
   localStorage.setItem(key, value);
+  ajax_sync();
 }
 
 function restoreActionFromLocal() {
@@ -136,6 +220,7 @@ function restoreActionFromLocal() {
   let _phase = parseInt(array[1]);
   let _line = parseInt(array[2]);
   let _doblank = parseInt(array[3]);
+
   if (_song == song && _phase == phase && _line == line && _doblank == doblank) return;
 
   if (_song >= SONGS.length) {
@@ -648,9 +733,13 @@ function keyboard(e) {
         }
         startRestoreInterval();
         break;
-      //case 73: //I
-      //  
-      //  break;
+      case 114:
+        if (funcInterval) {
+          stopActionInterval();
+          break;
+        }
+        startRestoreFromServerInterval();
+        break;
       case 66: //'b'
         doblank = doblank == 0?1:0;
         break;

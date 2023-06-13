@@ -19,6 +19,12 @@ var volumn = 1;
 var chapter = 0;
 var verse = 0;
 var doblank = 0;
+
+var song = 0;
+var phase = 0;
+var line = 0;
+var song_doblank = 0;
+
 var _msg_ = '';
 
 function command(req, res) {
@@ -128,6 +134,65 @@ function cmd(req, res, _cma) { //for M5Stick
     });
 }
 
+function synclyrics(req, res) {
+  let body = '';
+  // 接收请求的数据
+  req.on('data', (data) => {
+      body += data;
+  });
+    
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+      // 解析请求数据
+      const requestData = JSON.parse(body);
+      
+      //var song = 0;
+      //var phase = 0;
+      //var line = 0;
+      //var song_doblank = 0;
+
+      song = requestData.song;
+      phase = requestData.phase;
+      line = requestData.line;
+      song_doblank = requestData.blank;
+
+      console.log('synclyrics:' + song +', '+ phase + ', ' + line + ',' + song_doblank);
+    
+      res.setHeader('Content-Type', 'application/json');
+      
+      // 发送响应数据
+      res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
+
+  });
+}
+
+function restorelyrics(req, res) {
+  let body = '';
+  // 接收请求的数据
+  req.on('data', (data) => {
+      body += data;
+  });
+    
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+      // 解析请求数据
+    const requestData = JSON.parse(body);
+      
+    // 设置响应头
+    res.setHeader('Content-Type', 'application/json');
+    
+    //console.log('restorescripture:' + volumn +', '+ chapter + ', ' + verse);
+    // 发送响应数据
+    res.end(JSON.stringify({
+        song: song,
+        phase: phase,
+        line: line,
+        blank: song_doblank
+    }));
+
+  });
+}
+
 function restorescripture(req, res) {
   let body = '';
   // 接收请求的数据
@@ -202,6 +267,12 @@ const server = http.createServer((req, res) => {
     case '/restorescripture':
       restorescripture(req, res);
       return;
+    case '/synclyrics':
+        synclyrics(req, res);
+        return;
+    case '/restorelyrics':
+        restorelyrics(req, res);
+        return;
     default:
         if (req.url.startsWith('/cmd')) {
           if (req.url === '/cmd') {    

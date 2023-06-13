@@ -177,7 +177,7 @@ var presetVerse = [
   var animIdx = 0;
   
   var doblank = 0;
-  //var doblank = 0;
+  var target_doblank = 0;
   var helpSwitch = 0;
   
   var imgurl = '';//'./Icon-1024.png';
@@ -343,8 +343,9 @@ var presetVerse = [
     if (funcInterval) return;
     ajax_sync();
     let key = 'save action';  //localStorage.removeItem(key);
-    let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
+    let value = song + ' ' + phase + ' ' + line + ' ' + target_doblank;
     localStorage.setItem(key, value);
+    console.log('saveAction2Local:' + value);
   }
   
   function restoreAnim(volumn, chapter, verse, _doblank) {
@@ -1468,14 +1469,19 @@ function restoreActionFromLocal() {
           if (color_selection <= 1) {
             animElapse = 0;
             if (doblank == 0) {
+              target_doblank = 1;
+              saveAction2Local();
               window.requestAnimationFrame(blank_update);
             } else {
               doblank = 0;
+              target_doblank = 0;
+              saveAction2Local();
               window.requestAnimationFrame(blankend_update);
             }
             return;
           }
           doblank = doblank == 0?1:0;
+          target_doblank = doblank;
           break;
         case 67: copyToClickBoard(); break; // 'c' copy
         case 77: //'M' ppt mode
