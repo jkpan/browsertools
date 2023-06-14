@@ -2,6 +2,9 @@ const http = require('http');
 const fs = require('fs');
 //const qs = require('querystring');
 const urltool = require('url');
+const os = require('os');
+
+console.log('cpu: ' + os.cpus().length);
 
 const COMMANDS = ['.',
   '[O]', '[X]', '<<O>>', '>>O<<',
