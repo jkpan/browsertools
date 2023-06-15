@@ -54,6 +54,14 @@ function closeWin() {
 }
 
 /*
+window.onbeforeunload = function(evt) {
+  window.opener.closeCtrlEvent();
+  return true;
+}
+*/
+//window.addEventListener('beforeunload', (event) => {});
+
+/*
 function doFocus() {
 
     document.getElementById('f1').blur();

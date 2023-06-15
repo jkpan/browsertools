@@ -164,14 +164,8 @@ function openCtrl() {
   //window.focus();
   let div = document.getElementById('ctrlBtns');
   div.hidden = true;
-  /*
-  _openWin.onclose = function() {
-    document.getElementById('ctrlBtns').hidden = false;
-  }
-  */
-  _openWin.addEventListener(//'onbeforeunload',
-                            'beforeunload',
-  function (event) {
+
+  _openWin.addEventListener('beforeunload', (event) => { //'onbeforeunload',
     document.getElementById('ctrlBtns').hidden = false;
     event.preventDefault();
     event.returnValue = '';

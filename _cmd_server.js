@@ -3,18 +3,11 @@ const fs = require('fs');
 //const qs = require('querystring');
 const urltool = require('url');
 const os = require('os');
+//const cluster = require('cluster');
 
-console.log('cpu: ' + os.cpus().length);
-
-const COMMANDS = ['.',
-  '[O]', '[X]', '<<O>>', '>>O<<',
-  '<=',  '=>', '^',   'v',
-  'Piano', 'Drum', 'Guitar', 'Stage', 
-  'Cross', '3F', '(Focus)' 
-];
+console.log('cpu ' + os.cpus().length + ' cores');
 
 const CAMERAS = 4;
-//const currentCmds = [0, 0, 0, 0, 0];
 const msgs = ['.', 
               '.', '.', '.', '.'];
 
@@ -27,8 +20,6 @@ var song = 0;
 var phase = 0;
 var line = 0;
 var song_doblank = 0;
-
-var _msg_ = '';
 
 function command(req, res) {
     let body = '';
@@ -97,7 +88,7 @@ function initui(req, res) {
       // 发送响应数据
       let obj = {
         "camera" : CAMERAS,
-        "cmd" : COMMANDS
+        //"cmd" : COMMANDS
       };
       res.end(JSON.stringify(obj));
     });
@@ -261,8 +252,8 @@ const server = http.createServer((req, res) => {
     case '/query':
       query(req, res);
       return;
-    case '/initui':
-      initui(req, res);
+    case '/initui': 
+      initui(req, res); 
       return;
     case '/synscripture':
       synscripture(req, res);

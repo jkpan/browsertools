@@ -269,17 +269,16 @@ var presetVerse = [
         "Content-Type": "application/json"
       },
       body: JSON.stringify(json)
-    }).then(function(response) {
+    }).then((response) => {
       if (response.ok) {
         return response.json(); // 解析JSON回應
       } else {
         throw new Error("請求失敗：" + response.status);
       }
-    }).then(function(data) {
-      // 在這裡處理解析後的JSON物件
-      //console.log(data);
+    }).then((data) => {
+      // 在這裡處理解析後的JSON物件 //console.log(data);
       cb(data)
-    }).catch(function(error) {
+    }).catch((error) => {
       // 處理錯誤
       console.log('' + error);
       errorcb();

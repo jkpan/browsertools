@@ -22,6 +22,16 @@
             border: 2px;
             vertical-align: middle;
           }
+      .btn_state {
+            font-size: 24px;
+            background-color: rgb(0, 0, 0);
+            color: #dddddd;
+            margin: 2px 2px;
+            width:150px;
+            height:50px;
+            border: none;
+            vertical-align: middle;
+          }
       .btncamera {
             font-size: 32px;
             background-color: rgb(80, 80, 80);
@@ -75,6 +85,7 @@
             <div id="state" style="background-color: #ffffff;font-size: 32px;"></div>
         </div>
         <br/>
+        <div id="camera_state"></div>
         <div id="btn_camera"></div>
         <hr>
         <div id="btn_cmd"></div>
@@ -86,9 +97,17 @@
 
 <script type="text/javascript" charset="UTF-8">
 
+var cmd_des = ['.',
+  '[O]', '[X]', '<<O>>', '>>O<<',
+  '<=',  '=>', '^',   'v',
+  'Piano', 'Drum', 'Guitar', 'Stage', 
+  'Cross', '3F', '(Focus)' 
+];
+
+var camera_state = [];
 var btn_camera = [];
 var btn_command = [];
-var cmd_des = [];
+
 var msg = '';
 
 //var _cmd = 0;
@@ -110,17 +129,16 @@ function _ajax(json, url, cb, errorcb) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(json)
-    }).then(function(response) {
+    }).then((response) => {
       if (response.ok) {
         return response.json(); // 解析JSON回應
       } else {
         throw new Error("請求失敗：" + response.status);
       }
-    }).then(function(data) {
-      // 在這裡處理解析後的JSON物件
-      //console.log(data);
-      cb(data)
-    }).catch(function(error) {
+    }).then((data) => {
+      // 在這裡處理解析後的JSON物件 //console.log(data);
+      cb(data);
+    }).catch((error) => {
       // 處理錯誤
       console.log('' + error);
       errorcb(error);
@@ -186,13 +204,12 @@ function query() {
     '/query', 
     (res)=>{
         console.log(JSON.stringify(res));
-        let div = document.getElementById('state');
+        
         let msgs = res.state;
-        div.innerText = '';
         for (let i = 1;i<msgs.length;i++) {
-            div.innerText += '  ' + msgs[i];
+            camera_state[i].innerText = msgs[i];
         }
-        //for (let i=1;i<res.state.length;i++) div.innerText += cmd_des[res.state[i]] + '       '; 
+     
     },
     (error)=>{
         console.log(error);
@@ -276,14 +293,24 @@ function initui() {
     (res)=>{
         console.log('initui:' + JSON.stringify(res));
         let count = res.camera;
-        let div = document.getElementById('btn_camera');
+        let div = document.getElementById('camera_state');
+        for(let i=1;i<=count;i++) {
+            let b = _cameraBtn(i);
+            b.innerText = '';
+            b.disabled = true;
+            b.className = 'btn_state';
+            //camera_state.push(b);
+            camera_state[i] = b;
+            div.appendChild(b);
+        }
+        div = document.getElementById('btn_camera');
         for(let i=1;i<=count;i++) {
             let b = _cameraBtn(i);
             btn_camera.push(b);
             div.appendChild(b);
         }
-        //let cmds = res.cmd;
-        cmd_des = res.cmd;
+        
+        //cmd_des = res.cmd;
         div = document.getElementById('btn_cmd');
         for(let i=1;i<cmd_des.length;i++) {
             let b = _cmdBtn(i, cmd_des[i]);
@@ -299,5 +326,6 @@ function initui() {
 }
 
 initui();
+query();
 
 </script>
