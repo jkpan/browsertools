@@ -242,10 +242,30 @@ function synscripture(req, res) {
   });
 }
 
+function responseFile(filePath, res, append) {
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      // 若檔案不存在，回傳404 Not Found狀態碼
+      res.writeHead(404);
+      res.end('404 Not Found');
+    } else {
+      // 回傳200 OK狀態碼及HTML內容
+      res.writeHead(200, { 'Content-Type': 'text/html' });//; charset = UTF-8
+      res.write(content);
+      //console.log(content);
+      res.write(append);
+      res.end();
+      console.log('filePath: ' + filePath);
+    }
+  });
+}
+
 const server = http.createServer((req, res) => {
   // 解析URL路徑
 
-  switch (req.url) {
+  let url = req.url;
+
+  switch (url) {
     case '/command':
       command(req, res);
       return;
@@ -282,15 +302,30 @@ const server = http.createServer((req, res) => {
         break;
   }
 
-  let url = req.url;
+  let append = '';
 
   if (url === '/') {
-    url = '/index.html';//url = '_cmd_client.html';
+    url = '/index.html';//url = '_cmd_client.html';    
+  } else if (url === '/Bible_play') {
+    url = '/subtitle_b.html';
+    append = 
+    `<script type="text/javascript" charset="UTF-8"> 
+      color_selection = 2; 
+      colorSwitch(); 
+      setMsg_play(); 
+      removeTEvent(); 
+      addFontSizeTouchEvent(); 
+    </script>`;
   }
 
-  // 將URL路徑轉換為檔案路徑
   const filePath = `.${url}`;
+  responseFile(filePath, res, append);
 
+  // 將URL路徑轉換為檔案路徑
+  
+
+  
+  /*
   // 使用fs模組讀取檔案
   fs.readFile(filePath, (err, content) => {
     if (err) {
@@ -306,6 +341,7 @@ const server = http.createServer((req, res) => {
       console.log('filePath: ' + filePath);
     }
   });
+  */
 });
 
 // 啟動server並監聽指定的port

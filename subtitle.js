@@ -175,7 +175,7 @@ function _ajax(json, url, cb, errorcb) {
     }
   }).then((data) => {
     // 在這裡處理解析後的JSON物件 //console.log(data);
-    cb(data)
+    cb(data);
   }).catch((error) => {
     // 處理錯誤
     console.log('' + error);
@@ -205,7 +205,7 @@ function saveAction2Local() {
   let key = 'save progress';
   let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
   localStorage.setItem(key, value);
-  ajax_sync();
+  //ajax_sync();
 }
 
 function restoreActionFromLocal() {

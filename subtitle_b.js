@@ -46,7 +46,7 @@ var presetVerse = [
   const LEV_2_OPC = 0.8;
   const LEV_3_OPC = 0.7;
  
-  var fontfactor = 15.0;
+  var fontfactor = 14.0;
   var fontFamily = "Monospace";
                    //"Arial";
                    //"cwTeXKai";
@@ -168,8 +168,7 @@ var presetVerse = [
   
   var song;
   var subtitles;
-  //var presetVerse;
-  
+    
   var phase = 0;
   var line = 0;
   var mode = 0;
@@ -232,6 +231,8 @@ var presetVerse = [
     _ajax({
         "action": "restore"
     }, 
+    //'http://192.168.0.71/restorescripture', 
+    //'http://localhost/restorescripture', 
     '/restorescripture', 
     (res)=>{
         console.log(JSON.stringify(res));
@@ -254,6 +255,8 @@ var presetVerse = [
         ver: line,
         blank: doblank
     }, 
+    //'http://192.168.0.71/synscripture', 
+    //'http://localhost/synscripture', 
     '/synscripture', 
     (res)=>{
         console.log(JSON.stringify(res));
@@ -285,39 +288,13 @@ var presetVerse = [
     });
   }
 
+  var sync_type = 0;
   /*
-  function _ajax(json, url, cb, errorcb) {
-
-    // 客户端使用 Ajax 发送查询请求
-    const requestData = json;
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', url);//'/command'
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                const respData = JSON.parse(xhr.responseText);
-                //console.log('Query result: ' + respData.state);
-                cb(respData);
-            } else {
-                //cb({"state" : "Error"});
-                console.log("connect error");
-            }
-        }
-    };
-
-    xhr.onerror = function() {
-      // 處理連線錯誤的程式碼
-      console.log("連線錯誤");
-      //errorcb();
-    };
-
-    xhr.send(JSON.stringify(requestData));
+  function drawCtrlUi() {
+    ctx.fillStyle = color_pointer;//'green';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
   */
-  
 
   var funcInterval;
   var fake_doblank = 0;
@@ -340,13 +317,20 @@ var presetVerse = [
   
   function saveAction2Local() {
     if (funcInterval) return;
-    ajax_sync();
+    if (!(sync_type == 1 || sync_type == 2 || sync_type == 3)) return;
+    
+    if (sync_type == 2 || sync_type == 3) {
+      ajax_sync();
+    }
+    if (sync_type == 2) return;
+
     let key = 'save action';  //localStorage.removeItem(key);
     let value = song + ' ' + phase + ' ' + line + ' ' + target_doblank;
     localStorage.setItem(key, value);
     console.log('saveAction2Local:' + value);
   }
   
+  //判斷是不是要卷軸動畫
   function restoreAnim(volumn, chapter, verse, _doblank) {
 
     if (volumn == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
@@ -390,6 +374,7 @@ function restoreActionFromLocal() {
   
   }
   
+  /*
   function save2Local() {
     for (let idx = 0;idx < presetVerse.length;idx++) {
       let key = 'save ' + idx;
@@ -416,6 +401,7 @@ function restoreActionFromLocal() {
       }
     }
   }
+  */
   
   function plaintxtMode() {
     removeDiv(); 
@@ -458,6 +444,132 @@ function restoreActionFromLocal() {
     //button.style.border = 'none';
     
     return button;
+  }
+
+  var ctrls = [];
+
+  function setMsg_X() {
+    sync_type = 4;
+    synctrls();
+  }
+
+  function setMsg_O() {
+    sync_type = 1;
+    synctrls();
+  }
+
+  function setMsg_play() {
+    sync_type = 5;
+    synctrls();
+  }
+  
+  function createCtrlBtn() {
+    removeDiv();
+    canvas.hidden = true;
+    
+    let div = document.createElement('div');
+    div.id = 'ctrl';
+    document.body.appendChild(div);
+
+    var btn_none = _newBtn();
+    btn_none.innerHTML = 'none';
+    btn_none.onclick = function() {
+        sync_type = 0;
+        synctrls();
+        return false;
+    };
+    div.appendChild(btn_none);
+    ctrls[0] = btn_none;
+    
+    div.insertAdjacentHTML('beforeend',  '<br/><br/>');
+
+    var btn_lm = _newBtn();
+    btn_lm.innerHTML = 'local master';
+    btn_lm.onclick = function() {
+        sync_type = 1;
+        synctrls();
+        return false;
+    };
+    div.appendChild(btn_lm);
+    ctrls[1] = btn_lm;
+
+    var btn_wm = _newBtn();
+    btn_wm.innerHTML = 'web master';
+    btn_wm.onclick = function() {
+        sync_type = 2;
+        synctrls();
+        return false;
+    };
+    div.appendChild(btn_wm);
+    ctrls[2] = btn_wm;
+
+    var btn_lwm = _newBtn();
+    btn_lwm.innerHTML = 'local & web master';
+    btn_lwm.onclick = function() {
+        sync_type = 3;
+        synctrls();
+        return false;
+    };
+    div.appendChild(btn_lwm);
+    ctrls[3] = btn_lwm;
+
+    div.insertAdjacentHTML('beforeend',  '<br/><br/>');
+
+    var btn_ls = _newBtn();
+    btn_ls.innerHTML = 'local slave';
+    btn_ls.onclick = function() {
+        sync_type = 4;
+        synctrls();
+        return false;
+    };
+    div.appendChild(btn_ls);
+    ctrls[4] = btn_ls;
+
+    var btn_ws = _newBtn();
+    btn_ws.innerHTML = 'web slave';
+    btn_ws.onclick = function() {
+        sync_type = 5;
+        synctrls();
+        return false;
+    };
+    div.appendChild(btn_ws);
+    ctrls[5] = btn_ws;
+
+    syntoggle();
+
+  }
+
+  function syntoggle() {
+    for(let i=0;i<ctrls.length;i++) {
+      //bgcolor_pointer = bgStyle;
+      //color_pointer = COLORS_CK;
+      //hlight_pointer = hlightStyle;
+      if (sync_type == i) {
+        ctrls[i].style.backgroundColor = hlight_pointer;
+        ctrls[i].style.color = bgcolor_pointer;
+      } else {
+        ctrls[i].style.backgroundColor = bgcolor_pointer;
+        ctrls[i].style.color = hlight_pointer;
+      }
+    }
+  }
+
+  function synctrls() {
+    if (canvas.hidden) syntoggle();
+    if (funcInterval) stopActionInterval();
+    switch(sync_type) {
+      case 0: break;
+      case 1: break;
+      case 2: break;
+      case 3: break;
+      case 4: startRestoreInterval(); break;
+      case 5: startRestoreFromServerInterval(); break;
+    }
+    //return;
+    removeDiv();
+    canvas.hidden = false;
+    _repaint();
+
   }
   
   function createBtnVolumn(elmid) {
@@ -570,6 +682,10 @@ function restoreActionFromLocal() {
     if (txt) {
       document.body.removeChild(txt);
     }
+
+    var ctrl = document.getElementById('ctrl');
+    if (ctrl) document.body.removeChild(ctrl);
+
     return;
   }
   
@@ -1442,27 +1558,21 @@ function restoreActionFromLocal() {
         //case 27: //'escape'
         //  document.parentElement.focus();
         //  break;
-        case 114:
+        /*
+        case 114: //F3
           if (funcInterval) {
             stopActionInterval();
             break;
           }
           startRestoreFromServerInterval();
           break;
-        case 113:
-          if (funcInterval) {
-            stopActionInterval();
-            break;
-          }
-          startRestoreInterval(); 
+        */
+        case 113: //F2
+          //if (funcInterval) stopActionInterval();
+          createCtrlBtn();
+          //startRestoreFromServerInterval();
           break;
-        case 114: 
-          save2Local(); 
-          break;        
-        case 115: 
-          restoreLocal(); 
-          break;
-  
+        //case 114: save2Local(); break; case 115: restoreLocal(); break;
         case 66: //'b'
           //console.log('b press');
           if (color_selection <= 1) {
@@ -1482,7 +1592,9 @@ function restoreActionFromLocal() {
           doblank = doblank == 0?1:0;
           target_doblank = doblank;
           break;
-        case 67: copyToClickBoard(); break; // 'c' copy
+        case 67: // 'c' copy
+          copyToClickBoard(); 
+          break; 
         case 77: //'M' ppt mode
             helpSwitch = 0;
             if (canvas.hidden) {
@@ -1861,10 +1973,10 @@ function restoreActionFromLocal() {
   // message 事件
   function receiveMessage(e) {
     if (e.data == 'x') { //alert(e.data);
-      startRestoreInterval();
+      setMsg_X();
     }
     if (e.data == 'o') { //alert(e.data);
-      stopActionInterval();
+      setMsg_O();
     }
     _repaint();
   }
@@ -1938,97 +2050,100 @@ function restoreActionFromLocal() {
   const touchOffset = 8;
   var sumOffset = 0;
   
-  canvas.addEventListener("touchstart", function(evt) {
-      evt.preventDefault();
-      //var touches = {x:evt.changedTouches[0].clientX, y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
-      touchPX = evt.changedTouches[0].clientX;//touches.x;
-      touchPY = evt.changedTouches[0].clientY;//touches.y;
-      touchMoveState = 0;
-      sumOffset = 0;
-  }, false);
+  function touchstart(evt) {
+    evt.preventDefault();
+    //var touches = {x:evt.changedTouches[0].clientX, y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
+    touchPX = evt.changedTouches[0].clientX;//touches.x;
+    touchPY = evt.changedTouches[0].clientY;//touches.y;
+    touchMoveState = 0;
+    sumOffset = 0;
+  }
+  canvas.addEventListener("touchstart", touchstart, false);
   
-  canvas.addEventListener("touchend", function(evt) { //touchend
+  function touchend(evt) { //touchend
       
-      evt.preventDefault();
+    evt.preventDefault();
+
+    if (touchMoveState != 0) return;
+
+    var touches = {x:evt.changedTouches[0].clientX, 
+                   y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
+    
+    let _gw = Math.floor(touchPX/(canvas.width/3.0));
+    let _gh = Math.floor(touchPY/(canvas.height/4.0));
+    
+    let gw = Math.floor(touches.x/(canvas.width/3.0));
+    let gh = Math.floor(touches.y/(canvas.height/4.0));
+    
+    if (touches.y < fontsize_sml && touchPY < fontsize_sml) {
+      helpSwitch = helpSwitch > 0?0:2;
+      _repaint();
+      return;
+    }
+
+    if (_gw != gw || _gh != gh) return;
+
+    //font size decrease
+    if (gw == 0 && gh == 0) {
+      combineKey({keyCode : 189});
+      return;
+    }
+    //color change
+    if (gw == 1 && gh == 0) {
+      keyboard({keyCode : 65});
+      return;
+    }
+    //font size increase
+    if (gw == 2 && gh == 0) {
+      combineKey({keyCode : 187});
+      return;
+    }
+    
+    //preious volumn
+    if (gw == 0 && gh == 1) {
+      keyboard({keyCode : 189});
+      return;
+    }
+    //select volumn 
+    if (gw == 1 && gh == 1) {//keyboard({keyCode : 76});
+      openSelDiv();
+      return;
+    }
+    
+    //next volumn
+    if (gw == 2 && gh == 1) {
+      keyboard({keyCode : 187});
+      return;
+    }
+
+    
+    //up
+    if (gw == 1 && gh == 2) {
+      keyboard({keyCode : 38});
+      return;
+    }
+    //down
+    if (gw == 1 && gh == 3) { 
+      keyboard({keyCode : 40});
+      return;
+    }
+
+    //left
+    if (gw == 0 && (gh == 2 || gh == 3)) {
+      keyboard({keyCode : 37});
+      return;
+    }    
+    //right
+    if (gw == 2 && (gh == 2 || gh == 3)) {
+      keyboard({keyCode : 39});
+      return;
+    }
+
+  }
+
+  canvas.addEventListener("touchend", touchend, false);
   
-      if (touchMoveState != 0) return;
-  
-      var touches = {x:evt.changedTouches[0].clientX, 
-                     y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
-      
-      let _gw = Math.floor(touchPX/(canvas.width/3.0));
-      let _gh = Math.floor(touchPY/(canvas.height/4.0));
-      
-      let gw = Math.floor(touches.x/(canvas.width/3.0));
-      let gh = Math.floor(touches.y/(canvas.height/4.0));
-      
-      if (touches.y < fontsize_sml && touchPY < fontsize_sml) {
-        helpSwitch = helpSwitch > 0?0:2;
-        _repaint();
-        return;
-      }
-  
-      if (_gw != gw || _gh != gh) return;
-  
-      //font size decrease
-      if (gw == 0 && gh == 0) {
-        combineKey({keyCode : 189});
-        return;
-      }
-      //color change
-      if (gw == 1 && gh == 0) {
-        keyboard({keyCode : 65});
-        return;
-      }
-      //font size increase
-      if (gw == 2 && gh == 0) {
-        combineKey({keyCode : 187});
-        return;
-      }
-      
-      //preious volumn
-      if (gw == 0 && gh == 1) {
-        keyboard({keyCode : 189});
-        return;
-      }
-      //select volumn 
-      if (gw == 1 && gh == 1) {//keyboard({keyCode : 76});
-        openSelDiv();
-        return;
-      }
-      
-      //next volumn
-      if (gw == 2 && gh == 1) {
-        keyboard({keyCode : 187});
-        return;
-      }
-  
-      
-      //up
-      if (gw == 1 && gh == 2) {
-        keyboard({keyCode : 38});
-        return;
-      }
-      //down
-      if (gw == 1 && gh == 3) { 
-        keyboard({keyCode : 40});
-        return;
-      }
-  
-      //left
-      if (gw == 0 && (gh == 2 || gh == 3)) {
-        keyboard({keyCode : 37});
-        return;
-      }    
-      //right
-      if (gw == 2 && (gh == 2 || gh == 3)) {
-        keyboard({keyCode : 39});
-        return;
-      }
-  
-  }, false);
-  
-  canvas.addEventListener("touchmove", function(evt) {
+  function touchmove(evt) {
     evt.preventDefault();
     var touch = evt.touches[0];
     
@@ -2052,9 +2167,48 @@ function restoreActionFromLocal() {
     touchPX = touch.clientX;
     touchPY = touch.clientY;
   
-  }, false);
-  //手機觸控相關... END
+  }
+  canvas.addEventListener("touchmove", touchmove, false);
+  function removeTEvent() {
+    canvas.removeEventListener('touchstart', touchstart);
+    canvas.removeEventListener('touchend', touchend);
+    canvas.removeEventListener('touchmove', touchmove);
+  }
+  function addFontSizeTouchEvent() {
+    console.log('addFontSizeTouchEvent : ');
+    canvas.addEventListener("touchend", (evt) => {
 
+      evt.preventDefault();
+      //if (touchMoveState != 0) return;
+  
+      var touches = {x:evt.changedTouches[0].clientX, 
+                     y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
+      
+      let gw = Math.floor(touches.x/(canvas.width/3.0));
+      let gh = Math.floor(touches.y/(canvas.height/4.0));
+
+      //font size decrease
+      if (gw == 0 && gh == 0) {
+        downsizeFS();
+        _repaint();
+        return;
+      }
+      //color change
+      if (gw == 1 && gh == 0) {
+        keyboard({keyCode : 65});
+        return;
+      }
+      //font size increase
+      if (gw == 2 && gh == 0) {
+        enlargeFS();
+        _repaint();
+        return;
+      }
+
+    }, false);
+  }
+
+  //手機觸控相關... END
 
   /*
    * 語音辨識相關... START
@@ -2218,3 +2372,6 @@ function restoreActionFromLocal() {
   
   jumpTo1();
   _repaint();
+
+  setMsg_O();
+
