@@ -21,6 +21,7 @@ var phase = 0;
 var line = 0;
 var song_doblank = 0;
 
+//intercom下指令
 function command(req, res) {
     let body = '';
     
@@ -54,6 +55,7 @@ function command(req, res) {
     });
 }
 
+//intercom查目前所有指令
 function query(req, res) {
 
     let body = '';
@@ -73,6 +75,7 @@ function query(req, res) {
       });
 }
 
+//intercom得到相機數量
 function initui(req, res) {
   let body = '';
   // 接收请求的数据
@@ -94,6 +97,7 @@ function initui(req, res) {
     });
 }
 
+//好像沒用到
 function cmdAll(req, res) { //for M5Stick
   let body = '';
   // 接收请求的数据
@@ -114,7 +118,8 @@ function cmdAll(req, res) { //for M5Stick
     });
 }
 
-function cmd(req, res, _cma) { //for M5Stick
+//intercom M5Stick取得指令
+function cmd(req, res, _cma) { 
   let body = '';
   // 接收请求的数据
   req.on('data', (data) => {
@@ -128,6 +133,7 @@ function cmd(req, res, _cma) { //for M5Stick
     });
 }
 
+//同步歌詞
 function synclyrics(req, res) {
   let body = '';
   // 接收请求的数据
@@ -139,11 +145,6 @@ function synclyrics(req, res) {
   req.on('end', () => {
       // 解析请求数据
       const requestData = JSON.parse(body);
-      
-      //var song = 0;
-      //var phase = 0;
-      //var line = 0;
-      //var song_doblank = 0;
 
       song = requestData.song;
       phase = requestData.phase;
@@ -160,6 +161,7 @@ function synclyrics(req, res) {
   });
 }
 
+//取得歌詞狀態
 function restorelyrics(req, res) {
   let body = '';
   // 接收请求的数据
@@ -187,6 +189,7 @@ function restorelyrics(req, res) {
   });
 }
 
+//取得經文狀態
 function restorescripture(req, res) {
   let body = '';
   // 接收请求的数据
@@ -214,6 +217,7 @@ function restorescripture(req, res) {
   });
 }
 
+//同步經文
 function synscripture(req, res) {
   let body = '';
     
@@ -242,6 +246,7 @@ function synscripture(req, res) {
   });
 }
 
+//讀檔輸出
 function responseFile(filePath, res, append) {
   fs.readFile(filePath, (err, content) => {
     if (err) {
@@ -266,30 +271,21 @@ const server = http.createServer((req, res) => {
   let url = req.url;
 
   switch (url) {
-    case '/command':
-      command(req, res);
-      return;
-    case '/query':
-      query(req, res);
-      return;
-    case '/initui': 
-      initui(req, res); 
-      return;
-    case '/synscripture':
-      synscripture(req, res);
-      return;
-    case '/restorescripture':
-      restorescripture(req, res);
-      return;
-    case '/synclyrics':
-        synclyrics(req, res);
-        return;
-    case '/restorelyrics':
-        restorelyrics(req, res);
-        return;
+
+    case '/restorescripture': restorescripture(req, res); return;
+    case '/synscripture':     synscripture(req, res);     return;
+
+    case '/query':            query(req, res);            return;
+    case '/command':          command(req, res);          return;
+
+    case '/restorelyrics':    restorelyrics(req, res);    return;
+    case '/synclyrics':       synclyrics(req, res);       return;
+
+    case '/initui':           initui(req, res);           return;
+
     default:
         if (req.url.startsWith('/cmd')) {
-          if (req.url === '/cmd') {    
+          if (req.url === '/cmd') {
             cmdAll(req, res); 
             return; 
           }
@@ -298,6 +294,7 @@ const server = http.createServer((req, res) => {
             cmd(req, res, parseInt(queryData.cc));
             return;
           }
+          return;
         }
         break;
   }
@@ -309,39 +306,18 @@ const server = http.createServer((req, res) => {
   } else if (url === '/Bible_play') {
     url = '/subtitle_b.html';
     append = 
-    `<script type="text/javascript" charset="UTF-8"> 
-      color_selection = 2; 
-      colorSwitch(); 
-      setMsg_play(); 
-      removeTEvent(); 
-      addFontSizeTouchEvent(); 
-    </script>`;
+      `<script type="text/javascript" charset="UTF-8"> 
+        color_selection = 2; 
+        colorSwitch(); 
+        setMsg_play(); 
+        removeTEvent(); 
+        addFontSizeTouchEvent(); 
+      </script>`;
   }
 
   const filePath = `.${url}`;
   responseFile(filePath, res, append);
 
-  // 將URL路徑轉換為檔案路徑
-  
-
-  
-  /*
-  // 使用fs模組讀取檔案
-  fs.readFile(filePath, (err, content) => {
-    if (err) {
-      // 若檔案不存在，回傳404 Not Found狀態碼
-      res.writeHead(404);
-      res.end('404 Not Found');
-    } else {
-      // 回傳200 OK狀態碼及HTML內容
-      res.writeHead(200, { 'Content-Type': 'text/html' });//; charset = UTF-8
-      res.write(content);
-      //console.log(content);
-      res.end();
-      console.log('filePath: ' + filePath);
-    }
-  });
-  */
 });
 
 // 啟動server並監聽指定的port
