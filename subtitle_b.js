@@ -253,7 +253,7 @@ var presetVerse = [
         vlm: song,
         chp: phase,
         ver: line,
-        blank: doblank
+        blank: target_doblank
     }, 
     //'http://192.168.0.71/synscripture', 
     //'http://localhost/synscripture', 
@@ -1568,9 +1568,7 @@ function restoreActionFromLocal() {
           break;
         */
         case 113: //F2
-          //if (funcInterval) stopActionInterval();
           createCtrlBtn();
-          //startRestoreFromServerInterval();
           break;
         //case 114: save2Local(); break; case 115: restoreLocal(); break;
         case 66: //'b'

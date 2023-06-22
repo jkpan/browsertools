@@ -283,6 +283,17 @@ const server = http.createServer((req, res) => {
 
     case '/initui':           initui(req, res);           return;
 
+    case '/Bible_play': {
+      url = '/subtitle_b.html';
+      responseFile(`.${url}`, res, 
+        `<script type="text/javascript" charset="UTF-8"> 
+          color_selection = 2; 
+          colorSwitch(); 
+          setMsg_play(); 
+          removeTEvent(); 
+          addFontSizeTouchEvent(); 
+        </script>`);
+    } return;
     default:
         if (req.url.startsWith('/cmd')) {
           if (req.url === '/cmd') {
@@ -299,24 +310,12 @@ const server = http.createServer((req, res) => {
         break;
   }
 
-  let append = '';
-
   if (url === '/') {
-    url = '/index.html';//url = '_cmd_client.html';    
-  } else if (url === '/Bible_play') {
-    url = '/subtitle_b.html';
-    append = 
-      `<script type="text/javascript" charset="UTF-8"> 
-        color_selection = 2; 
-        colorSwitch(); 
-        setMsg_play(); 
-        removeTEvent(); 
-        addFontSizeTouchEvent(); 
-      </script>`;
+    url = '/index.html';
   }
 
   const filePath = `.${url}`;
-  responseFile(filePath, res, append);
+  responseFile(filePath, res, '');
 
 });
 
