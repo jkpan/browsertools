@@ -7,6 +7,16 @@ const os = require('os');
 
 console.log('cpu ' + os.cpus().length + ' cores');
 
+function print(msg) {
+  process.stdout.write(msg);
+}
+
+function println(msg) {
+  //console.log(msg);
+  process.stdout.write(msg);
+}
+
+
 const CAMERAS = 4;
 const msgs = ['.', 
               '.', '.', '.', '.'];
@@ -35,7 +45,7 @@ function command(req, res) {
         // 解析请求数据
         const requestData = JSON.parse(body);
 
-        console.log('###:' + body);
+        println('(cmd:' + body + ')');
         
         if (requestData.camera == 0) { 
           for (let i=0;i<msgs.length;i++) msgs[i] = '.';
@@ -62,12 +72,13 @@ function query(req, res) {
     // 接收请求的数据
     req.on('data', (data) => {
         body += data;
-        //console.log(':' + body);
     });
       
     // 请求数据接收完成后的处理
     req.on('end', () => {
         // 解析请求数据 const requestData = JSON.parse(body);
+
+        println('(query)');
 
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify({"state" : msgs}));
@@ -85,6 +96,8 @@ function initui(req, res) {
     
   // 请求数据接收完成后的处理
   req.on('end', () => {
+
+      println('(initui)');
 
       res.setHeader('Content-Type', 'application/json');
       
@@ -128,6 +141,9 @@ function cmd(req, res, _cma) {
     
   // 请求数据接收完成后的处理
   req.on('end', () => {
+      
+      print('.');
+
       res.setHeader('Content-Type', 'text/html');
       res.end(msgs[_cma]);
     });
@@ -151,7 +167,7 @@ function synclyrics(req, res) {
       line = requestData.line;
       song_doblank = requestData.blank;
 
-      console.log('synclyrics:' + song +', '+ phase + ', ' + line + ',' + song_doblank);
+      println('(song:' + song +', '+ phase + ', ' + line + ',' + song_doblank + ')');
     
       res.setHeader('Content-Type', 'application/json');
       
@@ -177,7 +193,7 @@ function restorelyrics(req, res) {
     // 设置响应头
     res.setHeader('Content-Type', 'application/json');
     
-    //console.log('restorescripture:' + volumn +', '+ chapter + ', ' + verse);
+    print('#');
     // 发送响应数据
     res.end(JSON.stringify({
         song: song,
@@ -205,7 +221,7 @@ function restorescripture(req, res) {
     // 设置响应头
     res.setHeader('Content-Type', 'application/json');
     
-    //console.log('restorescripture:' + volumn +', '+ chapter + ', ' + verse);
+    print('-');
     // 发送响应数据
     res.end(JSON.stringify({
         vlm: volumn,
@@ -236,7 +252,7 @@ function synscripture(req, res) {
       verse = requestData.ver;
       doblank = requestData.blank;
 
-      console.log('synscripture:' + volumn +', '+ chapter + ', ' + verse + ',' + doblank);
+      println('(Bible:' + volumn +', '+ chapter + ', ' + verse + ',' + doblank + ')');
     
       res.setHeader('Content-Type', 'application/json');
       
@@ -257,10 +273,9 @@ function responseFile(filePath, res, append) {
       // 回傳200 OK狀態碼及HTML內容
       res.writeHead(200, { 'Content-Type': 'text/html' });//; charset = UTF-8
       res.write(content);
-      //console.log(content);
       res.write(append);
       res.end();
-      console.log('filePath: ' + filePath);
+      println('(file: ' + filePath + ')');
     }
   });
 }
@@ -285,7 +300,7 @@ const server = http.createServer((req, res) => {
 
     case '/Bible_play': {
       url = '/subtitle_b.html';
-      responseFile(`.${url}`, res, 
+      responseFile(`.${url}`, res,
         `<script type="text/javascript" charset="UTF-8"> 
           color_selection = 2; 
           colorSwitch(); 
@@ -319,8 +334,10 @@ const server = http.createServer((req, res) => {
 
 });
 
-// 啟動server並監聽指定的port
-const port = 80;
+let port = 80;
+const args = process.argv;//.slice(1);
+if (args.length > 2) port = parseInt(args[2]);
+
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

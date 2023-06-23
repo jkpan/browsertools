@@ -226,44 +226,6 @@ var presetVerse = [
       FONT_SML_SML = fontsize_sml_sml + "px " + fontFamily;
   
   }
-  
-  function ajax_restore() {
-    _ajax({
-        "action": "restore"
-    }, 
-    //'http://192.168.0.71/restorescripture', 
-    //'http://localhost/restorescripture', 
-    '/restorescripture', 
-    (res)=>{
-        console.log(JSON.stringify(res));
-        //jump4external(res.vlm, res.chp, res.ver);
-        ////
-        let volumn = res.vlm;//array[0];
-        let chapter = res.chp;
-        let verse = res.ver;
-        let _doblank = res.blank;
-
-        restoreAnim(volumn, chapter, verse, _doblank);
-
-    });
-  }
-
-  function ajax_sync() {
-    _ajax({
-        vlm: song,
-        chp: phase,
-        ver: line,
-        blank: target_doblank
-    }, 
-    //'http://192.168.0.71/synscripture', 
-    //'http://localhost/synscripture', 
-    '/synscripture', 
-    (res)=>{
-        console.log(JSON.stringify(res));
-    }, ()=>{
-      console.log('exception');
-    });
-  }
 
   function _ajax(json, url, cb, errorcb) {
     fetch(url, {
@@ -287,21 +249,61 @@ var presetVerse = [
       errorcb();
     });
   }
+  
+  function ajax_sync() {
+    _ajax({
+        vlm: song,
+        chp: phase,
+        ver: line,
+        blank: target_doblank
+    }, 
+    //'http://192.168.0.71/synscripture', 
+    //'http://localhost/synscripture', 
+    '/synscripture', 
+    (res)=>{
+        console.log(JSON.stringify(res));
+    }, ()=>{
+      console.log('exception');
+    });
+  }
+
+  function ajax_restore() {
+    _ajax({
+        "action": "restore"
+    }, 
+    //'http://192.168.0.71/restorescripture', 
+    //'http://localhost/restorescripture', 
+    '/restorescripture', 
+    (res)=>{
+        console.log(JSON.stringify(res));
+        //jump4external(res.vlm, res.chp, res.ver);
+        ////
+        let volumn = res.vlm;//array[0];
+        let chapter = res.chp;
+        let verse = res.ver;
+        let _doblank = res.blank;
+
+        restoreAnim(volumn, chapter, verse, _doblank);
+
+        console.log('succ: send');
+        if (sync_type == 5) setTimeout(ajax_restore, 200);
+
+    }, 
+    () => {
+      console.log('error: delay & re-send');
+      if (sync_type == 5) setTimeout(ajax_restore, 2000);
+    });
+  }
 
   var sync_type = 0;
-  /*
-  function drawCtrlUi() {
-    ctx.fillStyle = color_pointer;//'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-  */
-
+  
   var funcInterval;
   var fake_doblank = 0;
   //function restoreActionFromServer() {ajax_restore();}
   function startRestoreFromServerInterval() {
     if (funcInterval) stopActionInterval();
-    funcInterval = window.setInterval(ajax_restore, 200);
+    ajax_restore();
+    //funcInterval = window.setInterval(ajax_restore, 200);
   }
   function startRestoreInterval() {
     if (funcInterval) stopActionInterval();
@@ -316,7 +318,7 @@ var presetVerse = [
   }
   
   function saveAction2Local() {
-    if (funcInterval) return;
+    //if (funcInterval) return;
     if (!(sync_type == 1 || sync_type == 2 || sync_type == 3)) return;
     
     if (sync_type == 2 || sync_type == 3) {
@@ -1188,7 +1190,7 @@ function restoreActionFromLocal() {
       ctx.textAlign = "left";
     }
   
-    if (funcInterval) {
+    if (sync_type == 4 || sync_type == 5) { //if (funcInterval) {
       ctx.fillStyle = color_pointer[2];
       let _r = 4;//fontsize_sml_sml/5;
       ctx.fillRect(0, 0, _r * 2, _r * 2);
