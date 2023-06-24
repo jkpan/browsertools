@@ -285,6 +285,10 @@ const server = http.createServer((req, res) => {
 
   let url = req.url;
 
+  //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  //println('ip = ' + ip);
+  //res.send(`Your IP address is: ${ip}`);
+
   switch (url) {
 
     case '/restorescripture': restorescripture(req, res); return;
@@ -334,10 +338,28 @@ const server = http.createServer((req, res) => {
 
 });
 
+const networkInterfaces = os.networkInterfaces();
+const addresses = [];
+
+Object.keys(networkInterfaces).forEach(interfaceName => {
+  const interfaces = networkInterfaces[interfaceName];
+  interfaces.forEach(interfaceInfo => {
+    if (interfaceInfo.family === 'IPv4' && !interfaceInfo.internal) { // 'IPv6'
+      addresses.push(interfaceInfo.address);
+    }
+  });
+});
+
+//console.log(addresses[0]);
+
 let port = 80;
 const args = process.argv;//.slice(1);
 if (args.length > 2) port = parseInt(args[2]);
 
 server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running...`); //console.log(`Server is running on port ${port}`);
+  if (port  == 80)
+    console.log('http://' + addresses[0]);
+  else 
+    console.log('http://' + addresses[0] + ':' + port);
 });
