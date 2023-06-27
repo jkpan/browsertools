@@ -161,7 +161,43 @@
 <script type="text/javascript" charset="UTF-8">
 
 function loadJson() {
-  document.getElementById('jsonfile').click();
+  //document.getElementById('jsonfile').click();
+  //return;
+  fetch('/sub_slave.json')
+  //fetch('/sub_master.json')
+    .then((response) => {
+        return response.json();
+    })
+    .then( (json) => {
+        console.log(json);//http://localhost/list.json
+        handleProfile(json);
+        //list = json.list;
+        //getSongsFromList();
+    })
+    .catch((error) => {
+        console.log(`Error: ${error}`);
+        //getSongsFromList();
+    });
+    
+}
+
+function handleProfile(jsonData) {
+  //const fileContent = event.target.result;
+  //const jsonData = JSON.parse(fileContent);
+  //console.log(fileContent);
+    for (let i=1;i<=5;i++) {
+      let _f = 'frame_f' + i;
+      if (!jsonData[_f]) continue;
+      let frame = document.getElementById(_f);
+      if (jsonData[_f]['src'])
+        frame.src = jsonData[_f]['src'];
+      else 
+        continue;
+      if (jsonData[_f]['obj']) 
+        frame.onload = function() { 
+          frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/'); 
+        } 
+    }
 }
 
 function selectSetting(event) {
@@ -176,19 +212,7 @@ function selectSetting(event) {
     const fileContent = event.target.result;
     const jsonData = JSON.parse(fileContent);
     console.log(fileContent);
-    for (let i=1;i<=5;i++) {
-      let _f = 'frame_f' + i;
-      if (!jsonData[_f]) continue;
-      let frame = document.getElementById(_f);
-      if (jsonData[_f]['src'])
-        frame.src = jsonData[_f]['src'];
-      else 
-        continue;
-      if (jsonData[_f]['obj']) 
-        frame.onload = function() { 
-          frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/'); 
-        } 
-    }
+    handleProfile(jsonData);
   }
 
 }
