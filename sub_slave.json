@@ -1,5 +1,5 @@
 {
-    "frame_f1" : { "src" : "/dashboard.html", 
+    "frame_f1" : { "src" : "./dashboard.html", 
                    "obj" : {
                         "hymn" : {
                             "posize" :  [1, 3, 18, 29],
@@ -13,7 +13,7 @@
                         "_註解_" : { "posize" :  ["x座標", "y座標", "w寬", "h高"]}
                     }
                 },
-    "frame_f2" : { "src" : "/dashboard.html", 
+    "frame_f2" : { "src" : "./dashboard.html", 
                     "obj" : {
                         "Bible": {
                             "posize" :  [1, 15, 20, 18],

@@ -1,5 +1,5 @@
 {
-    "frame_f1" : { "src" : "/subtitle.html",
+    "frame_f1" : { "src" : "./subtitle.html",
                    "obj" : {
                         "list" : [
                             "救恩106",
@@ -15,7 +15,7 @@
                         "fontfactor" : 10
                     }
                 },
-    "frame_f2" : { "src" : "/dashboard.html", 
+    "frame_f2" : { "src" : "./dashboard.html", 
                    "obj" : {
                         "Bible": {
                             "posize" :  [15, 15, 18, 18], 
