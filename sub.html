@@ -6,14 +6,15 @@
   var tool_Bible = 'subtitle_b.html';
   var tool_index = 'tools.html';//'effect.html';
   
+  /*
   const URL_HELP = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';
   //var demo = 'https://docs.google.com/presentation/d/e/2PACX-1vQF2IcPH9tSgDnQVPQm_EbE_ZXAHZj-9lX4-Gb9zsdAhlyiC8LhQrTwHs0f-5OZ2g/embed?start=false&loop=false&delayms=3000';
-  
   var ppt = [URL_HELP,
              '', 
              '', 
              ''];
   var pptype = [0, 0, 0, 0];
+  */
   
 </script>
 <html>
@@ -146,6 +147,8 @@
     &nbsp;
     <button class="button" onclick="openCtrl()">c</button>
     <button id="oxBtn" class="button" onclick="startRestoreInterval()">o</button>
+    <button id="jsonBtn" class="button" onclick="loadJson()">profile</button>
+    <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/><br/>
   </div>
   
 
@@ -156,6 +159,39 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function loadJson() {
+  document.getElementById('jsonfile').click();
+}
+
+function selectSetting(event) {
+  const inputFile = document.getElementById('jsonfile');
+  if (inputFile.files.length == 0) return;
+  // 讀取使用者選擇的檔案
+  const file = inputFile.files[0];
+  const reader = new FileReader();
+  reader.readAsText(file);
+  // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
+  reader.onload = function(event) {
+    const fileContent = event.target.result;
+    const jsonData = JSON.parse(fileContent);
+    console.log(fileContent);
+    for (let i=1;i<=5;i++) {
+      let _f = 'frame_f' + i;
+      if (!jsonData[_f]) continue;
+      let frame = document.getElementById(_f);
+      if (jsonData[_f]['src'])
+        frame.src = jsonData[_f]['src'];
+      else 
+        continue;
+      if (jsonData[_f]['obj']) 
+        frame.onload = function() { 
+          frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/'); 
+        } 
+    }
+  }
+
+}
 
 var _openWin = null;
 function openCtrl() {

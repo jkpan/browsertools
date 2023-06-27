@@ -1,5 +1,7 @@
 <script type="text/javascript" charset="UTF-8">
 
+const APPS = ['hymn', 'Bible', 'ppt_1', 'ppt_2', 'ppt_3', 'info', 'effect', 'time'];
+
 const GRID_W = 32;
 const GRID_H = 32;
 const PPPX = "perspective(1000px)";
@@ -596,7 +598,7 @@ class Applet {
       <button class="btn" onclick="openCtrl()">Ctrl</button>
       <button class="btn" onclick="openProfile()">Profile</button>
       <button class="btn" id="oxBtn" onclick="sendOX()">o</button>
-      <input type="file" id="profile" hidden="true" onchange="selectProfile(event)" />
+      <input type="file" id="profile" accept=".json" hidden="true" onchange="selectProfile(event)" />
     </div>
     
 </div>
@@ -655,14 +657,34 @@ function sendOX() {
 
 }
 
-function handleProfile(jsonData) {
+function handleProfile(fileContent) {
+
+  const jsonData = JSON.parse(fileContent);
 
   for (let i=0;i<applets.length;i++) {
       applets[i].removeSelf();
   }
+
   applets = [];
   _repaint();
 
+  for (let i=0;i<APPS.length;i++) {
+    if (!jsonData[APPS[i]]) continue;
+    let app = _createFrame(APPS[i]);
+    app.x = jsonData[APPS[i]]['posize'][0];
+    app.y = jsonData[APPS[i]]['posize'][1];
+    app.w = jsonData[APPS[i]]['posize'][2];
+    app.h = jsonData[APPS[i]]['posize'][3];
+    app.presave();
+    app.settle();
+    if (jsonData[APPS[i]].obj) {
+      app.elm.onload = function() {
+        app.elm.contentWindow.postMessage(JSON.stringify(jsonData[APPS[i]].obj), '/');
+      }
+    }
+  }
+
+  /*
   if (jsonData.hymn) {
     let app = _createFrame('hymn');
     app.x = jsonData.hymn[0];
@@ -735,6 +757,7 @@ function handleProfile(jsonData) {
     app.presave();
     app.settle();
   }
+  */
   
   _repaint();
   //if (applets.length == 0) return;
@@ -743,25 +766,18 @@ function handleProfile(jsonData) {
 
 function selectProfile(event) {
   let inputFile = document.getElementById('profile');
-  if (inputFile.files.length > 0) {
-      // 讀取使用者選擇的檔案
-      const file = inputFile.files[0];
-      const reader = new FileReader();
-      reader.readAsText(file);
-      // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
-      reader.onload = function(event) {
-        const fileContent = event.target.result;
-        const jsonData = JSON.parse(fileContent);
-        // 進行 JSON 資料的處理
-
-        //if (!jsonData.list || jsonData.list.length == 0) return;
-        
-        console.log(jsonData);
-
-        handleProfile(jsonData);
-      
-      }
-    }
+  if (inputFile.files.length == 0) return;
+  
+  // 讀取使用者選擇的檔案
+  const file = inputFile.files[0];
+  const reader = new FileReader();
+  reader.readAsText(file);
+  // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
+  reader.onload = function(event) {
+    const fileContent = event.target.result;
+    handleProfile(fileContent);
+    console.log(fileContent);
+  }
 }
 
 function openProfile() {
@@ -1073,9 +1089,14 @@ function postMsg(edata) {
 
 // 監聽 message 事件
 window.addEventListener('message', e => {
-  postMsg(e.data);
-  var b = document.getElementById('oxBtn');
-  b.textContent = e.data;
+
+  if (e.data == 'x' || e.data == 'o') {
+    postMsg(e.data);
+    var b = document.getElementById('oxBtn');
+    b.textContent = e.data;
+  } else {
+    handleProfile(e.data);
+  }
 }, false);
 
 var mouseX;

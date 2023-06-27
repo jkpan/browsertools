@@ -1453,18 +1453,21 @@ function restoreActionFromLocal() {
     _repaint();
   }
   
-  function enlargeFS() {
-    fontfactor -= 0.5;
-    if (fontfactor < 4) 
-      fontfactor = 4.0;
-    init();
-  }
-  
-  function downsizeFS() {
-    fontfactor += 0.5;
+  function setFontFactor(ff) {
+    fontfactor = ff;
     if (fontfactor > 40) 
       fontfactor = 40;
+    if (fontfactor < 4) 
+      fontfactor = 4;
     init();
+  }
+
+  function enlargeFS() {
+    setFontFactor(fontfactor - 0.5);
+  }
+
+  function downsizeFS() {
+    setFontFactor(fontfactor + 0.5);
   }
   
   function copyToClickBoard() {
@@ -1569,7 +1572,8 @@ function restoreActionFromLocal() {
           startRestoreFromServerInterval();
           break;
         */
-        case 113: //F2
+        //case 113: //F2
+        case 13: //enter
           createCtrlBtn();
           break;
         //case 114: save2Local(); break; case 115: restoreLocal(); break;
@@ -1974,9 +1978,18 @@ function restoreActionFromLocal() {
   function receiveMessage(e) {
     if (e.data == 'x') { //alert(e.data);
       setMsg_X();
-    }
-    if (e.data == 'o') { //alert(e.data);
+    } else if (e.data == 'o') { //alert(e.data);
       setMsg_O();
+    } else {
+      
+      const jsonData = JSON.parse(e.data);
+    
+      if (jsonData.color) {
+        color_selection = jsonData.color;
+        colorSwitch();
+      }
+      if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
+    
     }
     _repaint();
   }

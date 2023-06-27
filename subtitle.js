@@ -18,14 +18,73 @@ function createCanvas() {
   document.body.style.backgroundColor = 'green';
 }
 
+function loadBgImg(event) {
+  var files = event.target.files;
+  var file;
+  if (files && files.length > 0) {
+    file = files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e) {
+      var _img = new Image();
+      _img.onload = function() {
+        img = _img;
+        _repaint(); 
+      }
+      _img.src = e.target.result;
+    }
+  }
+}
+
 function createBGHiddenFile() {
   let _file = document.createElement('input');
   _file.type = "file";
   _file.id = "img";
   _file.hidden = "true";
+  _file.accept = "image/png, image/gif, image/jpeg";
+  _file.onchange = loadBgImg;
   let body = document.getElementsByTagName("body")[0];
   body.appendChild(_file);
   //<input id="img" type="file" hidden="true"/>
+}
+
+function json2List(fileContent) {
+
+  const jsonData = JSON.parse(fileContent);
+  // 進行 JSON 資料的處理
+
+  if (!jsonData.list || jsonData.list.length == 0) {
+    //syncListFromController();
+    if (jsonData.master && jsonData.master == 1) 
+      saveListFromController();
+  } else {
+    getSongsFromList(jsonData.list);
+    if (!funcInterval) 
+      if (jsonData.master && jsonData.master == 1) 
+        saveListFromController();
+  }
+
+  if (jsonData.mode) mode = jsonData.mode;
+  if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
+
+  _repaint();
+  //console.log(jsonData.list);
+
+}
+
+function loadListFromJson(event) {
+  var files = event.target.files;//const inputFile = document.getElementById('json');
+  if (files.length > 0) {
+    // 讀取使用者選擇的檔案
+    const file = files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
+    reader.onload = function(event) {
+      const fileContent = event.target.result;
+      json2List(fileContent);
+    }
+  }
 }
 
 function createListHiddenFile() {
@@ -33,6 +92,10 @@ function createListHiddenFile() {
   _file.type = "file";
   _file.id = "json";
   _file.hidden = "true";
+
+  _file.accept = ".json";
+  _file.onchange = loadListFromJson;//"loadListFromJson(event)"
+  //_file.setAttribute("value", option.text);
   let body = document.getElementsByTagName("body")[0];
   body.appendChild(_file);
   //<input id="img" type="file" hidden="true"/>
@@ -192,6 +255,7 @@ function startRestoreFromServerInterval() {
 function startRestoreInterval() {
   if (funcInterval) 
     stopActionInterval();
+  syncListFromController();
   funcInterval = window.setInterval(restoreActionFromLocal, 200);
 }
 
@@ -253,14 +317,17 @@ function syncListFromController() {
   if (!value) return;
   var array = JSON.parse(value);
   getSongsFromList(array);
-  console.log('syncListFromController.' + value);
+  //console.log('syncListFromController.' + );
+  //alert(list + 'syncListFromController : ' + value);
 }
 
 function saveListFromController() {
+  
   let key = 'song list';
   let value = JSON.stringify(list);
   localStorage.setItem(key, value);
-  console.log('saveList ' + value);
+  //alert('saveListFromController : ' + value);
+  //console.log('saveListFromController : ' + value);
 }
 
 function _createEmptyBtn() {
@@ -680,21 +747,24 @@ function printPhaseChart() {
 
 }
 
+function setFontFactor(ff) {
+  fontfactor = ff;
+  if (fontfactor > 20) 
+    fontfactor = 20;
+  if (fontfactor < 3) 
+    fontfactor = 3;
+  init();
+}
+
 function combineKey(e) {
   
   switch (e.keyCode) {
     case 32: history.back(); return;
     case 189: //'-'
-      fontfactor += 0.5;
-      if (fontfactor > 20) 
-        fontfactor = 20;
-      init();
+      setFontFactor(fontfactor + 0.5);
       break;
     case 187: //'='
-      fontfactor -= 0.5;
-      if (fontfactor < 3) 
-        fontfactor = 3.0;
-      init();
+      setFontFactor(fontfactor - 0.5);    
       break;
   }
   _repaint();
@@ -725,13 +795,15 @@ function keyboard(e) {
     */
     
     switch (e.keyCode) {
-      case 113:
+      //case 113: //F2
+      case 13: //Enter
         if (funcInterval) {
           stopActionInterval();
           break;
         }
         startRestoreInterval();
         break;
+      /*
       case 114:
         if (funcInterval) {
           stopActionInterval();
@@ -739,6 +811,7 @@ function keyboard(e) {
         }
         startRestoreFromServerInterval();
         break;
+      */
       case 66: //'b'
         doblank = doblank == 0?1:0;
         break;
@@ -879,7 +952,7 @@ function keyboard(e) {
         case 85: if (subtitles.length > 7) { phase = 7; line = 0; } break;
         case 73: if (subtitles.length > 8) { phase = 8; line = 0; } break;
 
-        case 13: //'enter' 
+        //case 13: //'enter' 
         case 27: //'escape'
           mode = 0;
           removeBtns();
@@ -1060,53 +1133,6 @@ createListHiddenFile();
 
 init();
 
-// 當使用者修改內容(選擇檔案)
-const inputFile = document.getElementById('json');
-if (inputFile)
-  inputFile.addEventListener('change', function (event) {
-    if (inputFile.files.length > 0) {
-      // 讀取使用者選擇的檔案
-      const file = inputFile.files[0];
-      const reader = new FileReader();
-      reader.readAsText(file);
-      // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
-      reader.onload = function(event) {
-        const fileContent = event.target.result;
-        const jsonData = JSON.parse(fileContent);
-        // 進行 JSON 資料的處理
-
-        if (!jsonData.list || jsonData.list.length == 0) return;
-        
-        getSongsFromList(jsonData.list);
-        if (!funcInterval) saveListFromController();
-
-        console.log(jsonData.list);
-
-      }
-    }
-  });
-
-// 當使用者修改內容(選擇檔案)
-var input = document.getElementById('img');
-if (input)
-  input.addEventListener('change', function (event) {
-  var files = event.target.files;
-  var file;
-  if (files && files.length > 0) {
-    file = files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
-      var _img = new Image();
-      _img.onload = function() {
-        img = _img;
-        _repaint(); 
-      }
-      _img.src = e.target.result;
-    }
-  }    
-});
-
 var keylock = false;
 
 /*
@@ -1129,9 +1155,11 @@ function receiveMessage(e) {
 
   if (e.data == 'x') { //alert(e.data);
     startRestoreInterval();
-  }
-  if (e.data == 'o') { //alert(e.data);
+  } else if (e.data == 'o') { //alert(e.data);
     stopActionInterval();
+  } else {
+    console.log('Message received! ' + e.data);
+    json2List(e.data);
   }
   _repaint();
 }

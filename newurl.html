@@ -226,6 +226,19 @@ function playVideo(event) {
 
 }
 
+window.addEventListener('message', (e) => {
+
+  if (e.data.trim().length == 0) reutrn;
+
+  const jsonData = JSON.parse(e.data);
+
+  if (!jsonData.url) return;
+  if (jsonData.url.trim().length == 0) return;
+  document.getElementById("ppt_url").value = jsonData.url.trim();
+  urlGo();
+
+}, false);
+
 /*
 edit:
 https://www.canva.com/design/DAFY964Fw6Q/h7INsnBvo-q1ZBllt6OeCg/edit?utm_content=DAFY964Fw6Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
