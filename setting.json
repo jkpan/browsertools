@@ -3,17 +3,19 @@
         "posize": [1, 7, 18, 26]
     },
     "Bible": {
-        "posize": [15, 15, 18, 18]
+        "posize": [15, 15, 18, 18],
+        "obj" : {
+            "color"  : 2, 
+            "fontfactor": 10
+        }
     },
     "ppt_1": {
-        "posize": [2, 18, 11, 12]
+        "posize": [2, 18, 11, 12],
+        "obj" : {
+            "url" : "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal"
+        }
     },
-        "_ppt_2": [],
-        "_ppt_3": [],
-        "_info": [],
-        "_effect": [],
     "time": {
         "posize": [24, 2, 9, 10]
-    },
-        "_註解_": ["x座標", "y座標", "w寬", "h高"]
+    }
 }

@@ -1,0 +1,14 @@
+{
+    "frame_f1" : { "src" : "./newurl.html",
+                   "obj" : {
+                        "url" : ""
+                    }
+                },
+    "frame_f2" : { "src" : "./newurl.html",
+                    "obj" : {
+                        "url" : ""
+                    }
+                },
+    "frame_f3" : { "src" : "./Bible_play" },
+    "frame_f4" : { "src" : "./newurl.html" }
+}

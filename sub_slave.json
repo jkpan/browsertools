@@ -9,8 +9,7 @@
                                 "fontfactor": 10
                             }
                         },
-                        "time"  : { "posize" :  [24, 2, 9, 10] },
-                        "_註解_" : { "posize" :  ["x座標", "y座標", "w寬", "h高"]}
+                        "time"  : { "posize" :  [24, 2, 9, 10] }
                     }
                 },
     "frame_f2" : { "src" : "./dashboard.html", 
@@ -30,5 +29,4 @@
                         }
                     }
                  }
-
 }
