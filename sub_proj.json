@@ -6,7 +6,7 @@
                 },
     "frame_f2" : { "src" : "./newurl.html",
                     "obj" : {
-                        "url" : "https://docs.google.com/presentation/d/e/2PACX-1vTthU89GbAe_B7fQprDji_nevcsehRi_Z_dxzjuTbLRSS7DcZ5Xrs2BmzGbVAU_5w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                        "url" : ""
                     }
                 },
     "frame_f3" : { "src" : "./Bible_play" },

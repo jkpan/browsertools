@@ -2,8 +2,10 @@
     "frame_f1" : { "src" : "./subtitle.html",
                    "obj" : {
                         "list" : [
-                            "救恩106", "救恩30", "短歌17", "短歌31",
-                            "讚美之泉24", "其他105", "讚美之泉110", "救恩193",
+                            "讚美之泉24", "其他105", "讚美之泉110", "救恩193", 
+                            [["有一位救主"], 
+                             ["有一位救主 何等喜樂", "祂眼中有恩慈 口出安慰", "昨日到今日 永不改變", "有一位救主 指引道路"],
+                             ["過去已經有多次", "心中充滿痛苦的重擔", "肩上擔子 自己無法再背負", "今有一喜訊使你得力", "有一位救主 祂以寬恕待你"]],
                             "主禱文", "使徒信經", "救恩300"],
                         "master"     : 1,
                         "mode"       : 2,
@@ -22,7 +24,7 @@
                         "ppt_1": {
                             "posize" :  [2, 19, 11, 12],
                             "obj" : {
-                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vTthU89GbAe_B7fQprDji_nevcsehRi_Z_dxzjuTbLRSS7DcZ5Xrs2BmzGbVAU_5w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                                "url" : ""
                             }
                         }
                     }

@@ -1981,7 +1981,7 @@ function restoreActionFromLocal() {
     } else if (e.data == 'o') { //alert(e.data);
       setMsg_O();
     } else {
-      
+
       const jsonData = JSON.parse(e.data);
     
       if (jsonData.color) {
@@ -2302,55 +2302,65 @@ function restoreActionFromLocal() {
     //recogResult = '';
   }
   
+  // 檢查瀏覽器是否為 Safari
+  function isSafariBrowser() {
+    var ua = navigator.userAgent.toLowerCase();
+    return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
+  }
+
   //
   var recogResult = '';
   var recognizing = false;
-  var recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.lang = 'cmn-Hant-TW';//'zh-TW';//'en-US';'en-US';'cmn-Hant-TW';
-  //recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
+  var recognition;
+
+  if (isSafariBrowser()) {
+    alert('瀏覽器是 Safari');
+  } else {
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'cmn-Hant-TW';//'zh-TW';//'en-US';'en-US';'cmn-Hant-TW';
+    //recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
   
-  if(navigator.userAgent.indexOf("Chrome") != -1 ) {
-    var speechRecognitionList = new webkitSpeechGrammarList();
-    var grammar = '#JSGF V1.0; grammar volumn; public <volumn> = ' + fullname.join(' | ') + ' ;';
-    speechRecognitionList.addFromString(grammar, 2);
-    recognition.grammars = speechRecognitionList;
-  }
+    if(navigator.userAgent.indexOf("Chrome") != -1 ) {
+      var speechRecognitionList = new webkitSpeechGrammarList();
+      var grammar = '#JSGF V1.0; grammar volumn; public <volumn> = ' + fullname.join(' | ') + ' ;';
+      speechRecognitionList.addFromString(grammar, 2);
+      recognition.grammars = speechRecognitionList;
+    }
   
-  recognition.onstart = function() {
+    recognition.onstart = function() {
       recognizing = true;
       console.log('info_speak_now');
       recogResult = '';
       _repaint();
-  };
+    };
   
-  recognition.onerror = function(event) {
+    recognition.onerror = function(event) {
   
-    recogResult = '';
+      recogResult = '';
   
-    if (event.error == 'no-speech') {
-      console.log('info_no_speech');
-    }
-    if (event.error == 'audio-capture') {
+      if (event.error == 'no-speech') {
+        console.log('info_no_speech');
+      }
+      if (event.error == 'audio-capture') {
         console.log('info_no_microphone');
-    }
-    if (event.error == 'not-allowed') {
-      console.log('not-allowed');
-    }
+      }
+      if (event.error == 'not-allowed') {
+        console.log('not-allowed');
+      }
+    };
   
-  };
+    recognition.onend = function() {
+      parseRecogResult();
+      recognizing = false;
+      recogResult = '';
+      console.log('onend');
+      _repaint();
+    };
   
-  recognition.onend = function() {
-    parseRecogResult();
-    recognizing = false;
-    recogResult = '';
-    console.log('onend');
-    _repaint();
-  };
-  
-  recognition.onresult = function(event) {
+    recognition.onresult = function(event) {
       
       if (typeof(event.results) == 'undefined') {
         console.log('onresult undefined');
@@ -2374,7 +2384,8 @@ function restoreActionFromLocal() {
       }
       console.log('onresult: ' + recogResult);
       _repaint();
-  };
+    };
+  }
   // 語音辨識相關 ... END
   
   //建構整本聖經

@@ -81,18 +81,18 @@
     font-size: 24px;
     background-color:transparent;
     color: #00ff00;
-    width:5%;
+    width: 80px;
     height:100%;
     border: none;
     vertical-align: middle;
   }
   .okbutton {
-      font-size: 24px;
-      background-color:green;
+      font-size: 16px;
+      background-color:rgb(0, 100, 0);
       color: #00ff00;
-      width: 100px;
-      height: 75px;
-      border: none;
+      width: 60px;
+      height: 75%;
+      border: 1px;
   }
   </style>
 </head>
@@ -145,13 +145,19 @@
     &nbsp;
     &nbsp;
     &nbsp;
-    <button class="button" onclick="openCtrl()">c</button>
-    <button id="oxBtn" class="button" onclick="startRestoreInterval()">o</button>
-    <button id="jsonBtn" class="button" onclick="loadJson()">profile</button>
-    <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/><br/>
+    <button class="okbutton" onclick="openCtrl()">c</button>
+    <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
+    &nbsp;
+    &nbsp;
+    <button class="okbutton" onclick="preload('./sub_master.json')">#1</button>
+    <button class="okbutton" onclick="preload('./sub_slave.json')">#2</button>
+    <button class="okbutton" onclick="loadJson()">#</button>
+    <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
+    &nbsp;
+    &nbsp;
+    <button class="okbutton" hidden onclick="current2Json()">export</button>    
   </div>
   
-
 </div>
 
 
@@ -160,25 +166,32 @@
 
 <script type="text/javascript" charset="UTF-8">
 
+function current2Json() {
+  let obj = {
+
+  }
+  for (let i=1;i<=5;i++) {
+    obj['frame_f'+i] = {};
+    obj['frame_f'+i]['src'] = document.getElementById('frame_f'+i).src;
+  }
+  console.log(JSON.stringify(obj));
+}
+
+function preload(url) {
+  fetch(url).then((response) => { // 
+        return response.json();
+    }).then( (json) => {
+        //console.log(json);//http://localhost/list.json
+        handleProfile(json);
+    }).catch((error) => {
+      alert('Error' + error);
+      console.log(`Error: ${error}`);
+      getSongsFromList();
+    });
+}
+
 function loadJson() {
   document.getElementById('jsonfile').click();
-  return;
-  fetch('./sub_slave.json')
-  //fetch('/sub_master.json')
-    .then((response) => {
-        return response.json();
-    })
-    .then( (json) => {
-        console.log(json);//http://localhost/list.json
-        handleProfile(json);
-        //list = json.list;
-        //getSongsFromList();
-    })
-    .catch((error) => {
-        console.log(`Error: ${error}`);
-        //getSongsFromList();
-    });
-    
 }
 
 function handleProfile(jsonData) {

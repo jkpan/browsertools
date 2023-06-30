@@ -29,6 +29,20 @@
 <hr size="8" width="100%" color="#007000">
 <p></p>
 <p></p>
+<a id="dl_0" href="./sub_master.json" download style="display: none;">下载</a>
+<button onclick="downloadFile('dl_0')">下载設定1</button>
+<p></p>
+<p></p>
+<a id="dl_1" href="./sub_slave.json" download style="display: none;">下载</a>
+<button onclick="downloadFile('dl_1')">下载設定2</button>
+<script>
+  function downloadFile(name) {
+    var link = document.getElementById(name);
+    link.click();
+  }
+</script>
+<p></p>
+<p></p>
 <button onclick="location.href='./dashboard.html'">Dashboard客製綠幕</button>
 <p></p>
 <p></p>
@@ -51,20 +65,6 @@
 <p></p>
 <p></p>
 <a href="./camera.html">Camera</a>
-<p></p>
-<p></p>
-<a id="dl_0" href="./sub_master.json" download style="display: none;">下载</a>
-<button onclick="downloadFile('dl_0')">下载設定1</button>
-<p></p>
-<p></p>
-<a id="dl_1" href="./sub_slave.json" download style="display: none;">下载</a>
-<button onclick="downloadFile('dl_1')">下载設定2</button>
-<script>
-  function downloadFile(name) {
-    var link = document.getElementById(name);
-    link.click();
-  }
-</script>
 <p></p>
 <p></p>
 <hr size="8" width="100%" color="#007000">
