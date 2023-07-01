@@ -5,10 +5,15 @@
                     }
                 },
     "frame_f2" : { "src" : "./newurl.html",
-                    "obj" : {
+                   "obj" : {
                         "url" : ""
                     }
                 },
-    "frame_f3" : { "src" : "./Bible_play" },
+    "frame_f3" : { "src" : "./subtitle_b.html",
+                   "obj" : {
+                        "color"  : 2, 
+                        "fontfactor": 10
+                    } 
+                },
     "frame_f4" : { "src" : "./newurl.html" }
 }

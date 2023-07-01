@@ -151,6 +151,7 @@
     &nbsp;
     <button class="okbutton" onclick="preload('./sub_master.json')">#1</button>
     <button class="okbutton" onclick="preload('./sub_slave.json')">#2</button>
+    <button class="okbutton" onclick="preload('./sub_proj.json')">#3</button>
     <button class="okbutton" onclick="loadJson()">#</button>
     <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
     &nbsp;
@@ -198,7 +199,7 @@ function handleProfile(jsonData) {
   //const fileContent = event.target.result;
   //const jsonData = JSON.parse(fileContent);
   //console.log(fileContent);
-    for (let i=1;i<=5;i++) {
+  for (let i=1;i<=5;i++) {
       let _f = 'frame_f' + i;
       if (!jsonData[_f]) continue;
       let frame = document.getElementById(_f);
@@ -210,7 +211,7 @@ function handleProfile(jsonData) {
         frame.onload = function() { 
           frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/'); 
         } 
-    }
+  }
 }
 
 function selectSetting(event) {
@@ -232,17 +233,20 @@ function selectSetting(event) {
 
 var _openWin = null;
 function openCtrl() {
+  
   if (_openWin) _openWin.close();
   _openWin = window.open("sub_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=200,top="+(screen.height-400)+",left="+(screen.width-840));
   //window.focus();
-  let div = document.getElementById('ctrlBtns');
-  div.hidden = true;
+  //let div = document.getElementById('ctrlBtns');
+  //div.hidden = true;
 
+  /*
   _openWin.addEventListener('beforeunload', (event) => { //'onbeforeunload',
     document.getElementById('ctrlBtns').hidden = false;
     event.preventDefault();
     event.returnValue = '';
   });
+  */
 }
 
 var action = '';
