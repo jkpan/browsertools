@@ -26,7 +26,10 @@
                             "posize" :  [15, 15, 18, 18], 
                             "obj" : {
                                 "color"  : 2, 
-                                "fontfactor": 10
+                                "fontfactor": 10,
+                                "saved": [
+                                    ["使徒行傳", 18, 9]
+                                ]
                             }
                         },
                         "ppt_1": {

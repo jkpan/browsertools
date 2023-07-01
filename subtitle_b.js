@@ -1988,7 +1988,15 @@ function restoreActionFromLocal() {
         color_selection = jsonData.color;
         colorSwitch();
       }
-      if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
+      if (jsonData.fontfactor) 
+        setFontFactor(jsonData.fontfactor);
+
+      if (jsonData.saved && jsonData.saved.length > 0) {
+        for (let i=0;i<jsonData.saved.length;i++) {
+          if (i >= 10) break;
+          presetVerse[(i+1)%10] = jsonData.saved[i];
+        }
+      }
     
     }
     _repaint();
