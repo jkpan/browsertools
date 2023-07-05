@@ -2321,9 +2321,8 @@ function restoreActionFromLocal() {
   var recognizing = false;
   var recognition;
 
-  if (isSafariBrowser()) {
-    alert('瀏覽器是 Safari');
-  } else {
+  function initRecognition() {
+
     recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -2393,6 +2392,13 @@ function restoreActionFromLocal() {
       console.log('onresult: ' + recogResult);
       _repaint();
     };
+
+  }
+
+  if (isSafariBrowser()) {
+    console.log('瀏覽器是 Safari');
+  } else {
+    initRecognition();
   }
   // 語音辨識相關 ... END
   
