@@ -668,6 +668,17 @@ function handleProfile(fileContent) {
   applets = [];
   _repaint();
 
+  if (jsonData['B/G']) {
+    let div = document.getElementById("mainDiv");
+    if (jsonData['B/G'] === 'B' || jsonData['B/G'] === 'b') {
+      div.style.backgroundColor = 'black';
+    } else {
+      div.style.backgroundColor = 'black';
+      colorSwitch();
+    }
+  } 
+    
+
   for (let i=0;i<APPS.length;i++) {
     if (!jsonData[APPS[i]]) continue;
     let app = _createFrame(APPS[i]);

@@ -1996,6 +1996,7 @@ function restoreActionFromLocal() {
           if (i >= 10) break;
           presetVerse[(i+1)%10] = jsonData.saved[i];
         }
+        keyboard({keyCode : 49});
       }
     
     }
