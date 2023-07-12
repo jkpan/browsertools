@@ -124,8 +124,6 @@ class Applet {
       this.h += Math.ceil((this.t_h - this.h)/Math.abs(this.t_h - this.h));
     
     let opcy = parseFloat(this.elm.style.opacity);
-   
-    //console.log(this.elm.style.opacity);// + ',, ' + opcy + ', ' + this.t_Opacity);
 
     if (opcy != this.t_Opacity) {
       this.elm.hidden = false;
@@ -266,12 +264,11 @@ class Applet {
     //if (!checkRange()) return;
     this.elm.style.gridColumn = this.x + ' / ' + (this.x + this.w);//' '2 / 4';
     this.elm.style.gridRow = this.y + ' / ' + (this.y + this.h);//'1 / 8';
-    //console.log(this.x + '/' + (this.x + this.w));
-    //console.log(this.y + '/' + (this.y + this.h));
     if (this.ry == 0.0 && this.t_rotateY == 0.0) 
       this.elm.style.transform  = '';
     else 
       this.elm.style.transform  = PPPX + " rotateY(" + this.ry + "deg)";
+    console.log('"posize" : ['+this.x + ', ' + this.y + ', ' + this.w +', '+ this.h + ']');
   }
 
   checkInside(px, py) { //pixel x y
@@ -351,8 +348,7 @@ class Applet {
       this.t_rotateY = 0;
       this.t_Opacity = 1.0;
     } else {
-      let b = canvas.width/GRID_W;
-      if ((this.x-1) * b + this.w * b/2 < canvas.width/2) {
+      if (this.x + this.w/2.0 < (GRID_W/2.0 + 1)) {
         this.t_rotateY = PRY_MAX;
         this.elm.style.transformOrigin = "left center";//"bottom left";
         this.t_Opacity = PRY_OPA;
@@ -657,6 +653,13 @@ function sendOX() {
 
 }
 
+function json2Perspective(app) {
+  recoverAll();
+  app.progress_perspective_Self();
+  anim_update(-1);
+
+}
+
 function handleProfile(fileContent) {
 
   const jsonData = JSON.parse(fileContent);
@@ -676,8 +679,7 @@ function handleProfile(fileContent) {
       div.style.backgroundColor = 'black';
       colorSwitch();
     }
-  } 
-    
+  }    
 
   for (let i=0;i<APPS.length;i++) {
     if (!jsonData[APPS[i]]) continue;
@@ -688,91 +690,18 @@ function handleProfile(fileContent) {
     app.h = jsonData[APPS[i]]['posize'][3];
     app.presave();
     app.settle();
-    if (jsonData[APPS[i]].obj) {
+    let name = APPS[i];
+    if (jsonData[name].obj) {
       app.elm.onload = function() {
-        app.elm.contentWindow.postMessage(JSON.stringify(jsonData[APPS[i]].obj), '/');
+        app.elm.onload = null;
+        app.elm.contentWindow.postMessage(JSON.stringify(jsonData[name].obj), '/');
+        if (jsonData[name]['perspective']) {
+          json2Perspective(app);
+        }
       }
     }
   }
-
-  /*
-  if (jsonData.hymn) {
-    let app = _createFrame('hymn');
-    app.x = jsonData.hymn[0];
-    app.y = jsonData.hymn[1];
-    app.w = jsonData.hymn[2];
-    app.h = jsonData.hymn[3];
-    app.presave();
-    app.settle();
-  }
-  if (jsonData.Bible) {
-    let app = _createFrame('Bible');
-    app.x = jsonData.Bible[0];
-    app.y = jsonData.Bible[1];
-    app.w = jsonData.Bible[2];
-    app.h = jsonData.Bible[3];
-    app.presave();
-    app.settle();
-  }
-  if (jsonData.ppt_1) {
-    let app = _createFrame('ppt_1');
-    app.x = jsonData.ppt_1[0];
-    app.y = jsonData.ppt_1[1];
-    app.w = jsonData.ppt_1[2];
-    app.h = jsonData.ppt_1[3];
-    app.presave();
-    app.settle();
-  }
-  if (jsonData.ppt_2) {
-    let app = _createFrame('ppt_2');
-    app.x = jsonData.ppt_2[0];
-    app.y = jsonData.ppt_2[1];
-    app.w = jsonData.ppt_2[2];
-    app.h = jsonData.ppt_2[3];
-    app.presave();
-    app.settle();
-  }
-  if (jsonData.ppt_3) {
-    let app = _createFrame('ppt_3');
-    app.x = jsonData.ppt_3[0];
-    app.y = jsonData.ppt_3[1];
-    app.w = jsonData.ppt_3[2];
-    app.h = jsonData.ppt_3[3];
-    app.presave();
-    app.settle();
-  }
-  if (jsonData.info) {
-    let app = _createFrame('info');
-    app.x = jsonData.info[0];
-    app.y = jsonData.info[1];
-    app.w = jsonData.info[2];
-    app.h = jsonData.info[3];
-    app.presave();
-    app.settle();
-  }
-  if (jsonData.effect) {
-    let app = _createFrame('effect');
-    app.x = jsonData.effect[0];
-    app.y = jsonData.effect[1];
-    app.w = jsonData.effect[2];
-    app.h = jsonData.effect[3];
-    app.presave();
-    app.settle();
-  }
-  if (jsonData.time) {
-    let app = _createFrame('time');
-    app.x = jsonData.time[0];
-    app.y = jsonData.time[1];
-    app.w = jsonData.time[2];
-    app.h = jsonData.time[3];
-    app.presave();
-    app.settle();
-  }
-  */
-  
-  _repaint();
-  //if (applets.length == 0) return;
-    
+  _repaint();    
 }
 
 function selectProfile(event) {
@@ -787,7 +716,6 @@ function selectProfile(event) {
   reader.onload = function(event) {
     const fileContent = event.target.result;
     handleProfile(fileContent);
-    console.log(fileContent);
   }
 }
 
@@ -867,16 +795,7 @@ function anim_update(elapse) {
       count++;
   }
 
-  //console.log(i);
   if (count == applets.length) {
-    /*
-    for (let i=0;i<applets.length;i++) {
-      if (parseFloat(applets[i].elm.style.opacity) == 0.0)
-        applets[i].elm.hidden = true;
-      else
-        applets[i].elm.hidden = false;
-    }
-    */
     return;
   }
 
@@ -1013,7 +932,6 @@ function spot2iframe(keyname) {
     return;
   }
 
-  //console.log('spot2iframe ' + keysel + ', ' + idx);
   if (keysel == idx) {
     recoverAll();
     keysel = -1;

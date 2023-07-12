@@ -13,7 +13,8 @@ side = 1;
 
 fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
 
-var FONT = (fsize - 4) + "px cwTeXKai";//"px 黑體-繁";//宋體-繁"; "px 標楷體";
+var fontFamily = "Monospace";
+var FONT = (fsize - 4) + "px " + fontFamily;//cwTeXKai";//"px 黑體-繁";//宋體-繁"; "px 標楷體";
 var speed = 160;
 
 function textGo() {
@@ -410,6 +411,22 @@ window.addEventListener('resize', function() {
 //window.addEventListener('click', initAnim, false);
 //document.getElementsByTagName("canvas")[0].addEventListener("touchend", initAnim, false);
 window.addEventListener('keyup', keyboard, false);
+
+window.addEventListener('message', (e) => {
+
+  if (e.data.trim().length == 0) reutrn;
+
+  const jsonData = JSON.parse(e.data);
+
+  if (!jsonData.des) return;
+
+  if (jsonData.des.trim().length == 0) return;
+    
+  document.getElementById("txt").value = jsonData.des.trim();
+  
+
+}, false);
+
 
 </script>
 
