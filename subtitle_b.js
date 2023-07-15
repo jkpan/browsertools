@@ -1224,7 +1224,7 @@ function restoreActionFromLocal() {
     let i = chapter;
     let j = verse;
   
-    let amount = color_selection <= 1? MAX_VERSES_GREEN : MAX_VERSES_NORMAL;
+    let amount = color_selection <= 0? MAX_VERSES_GREEN : MAX_VERSES_NORMAL;
   
     for (let k = 1;k<=amount;k++) {
   

@@ -10,8 +10,10 @@ var fsize = 128;
 
 dots = 7;
 side = 1;
+var gap = dots + side;
 
 fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
+var boardWidth = fsize;
 
 var fontFamily = "Monospace";
 var FONT = (fsize - 4) + "px " + fontFamily;//cwTeXKai";//"px 黑體-繁";//宋體-繁"; "px 標楷體";
@@ -40,6 +42,14 @@ function emojiGo(emj) {
   document.getElementById("txt").value = value;
 }
 
+function widthP() {
+  boardWidth += gap;
+}
+
+function widthM() {
+  boardWidth -= gap;
+  if (boardWidth < gap) boardWidth = gap;
+}
 
 </script>
 
@@ -105,7 +115,11 @@ function emojiGo(emj) {
            placeholder=""/-->
     
     <br/>
-    <button class="okbutton" onclick="textGo()">OK</button>  
+    <button class="okbutton" onclick="textGo()">OK</button>
+    <br/>
+    <button class="okbutton" onclick="widthP()">width + </button>
+    <button class="okbutton" onclick="widthM()">width - </button>
+
   </div>
 
   <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
@@ -132,7 +146,9 @@ function init() {
   
   initCanvas();
 
-  initLED(left_gap, 0, fsize, canvas.height);
+  //initLED(left_gap, 0, fsize, canvas.height);
+  initLED(left_gap, 0, boardWidth, canvas.height);
+
   newLEDMask();
 
 }
@@ -247,7 +263,7 @@ function anim_update(elapse) {
   if (keepLEDGoing == 1) {    
     ctx.fillStyle = 'black';
     //verticle
-    ctx.fillRect(left_gap - 4, 0, fsize + 8, canvas.height);
+    ctx.fillRect(left_gap - 4, 0, boardWidth + 8, canvas.height);
     //ctx.fillRect(0, 0, canvas.width, fsize + 9);
   }
     

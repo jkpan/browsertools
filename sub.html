@@ -63,7 +63,7 @@
     display: grid;
     gap: 0px;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 22fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 63fr;
+    grid-template-rows: 1fr 100fr;
     width: 100%;
     height: 100vh;
   }
@@ -143,8 +143,6 @@
     <button id="btn_f5" class="button" onclick="switchFunction('f5')">.</button>
     &nbsp;
     &nbsp;
-    &nbsp;
-    &nbsp;
     <button class="okbutton" onclick="openCtrl()">c</button>
     <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
     &nbsp;
@@ -154,9 +152,7 @@
     <button class="okbutton" onclick="preload('./sub_proj.json')">#3</button>
     <button class="okbutton" onclick="loadJson()">#</button>
     <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
-    &nbsp;
-    &nbsp;
-    <button class="okbutton" hidden onclick="current2Json()">export</button>    
+    <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
   </div>
   
 </div>
@@ -373,7 +369,7 @@ window.addEventListener('keydown', function(e) {
 function showPane(elm, show) {
   //div.hidden = !show;
   if (show) {
-    elm.style.opacity = '0.4';
+    elm.style.opacity = '0.6';
   } else {
     elm.style.opacity = '0.0';
   }
