@@ -480,6 +480,51 @@ function prepareImage() {
   img.onload = function() {};
 }
 
+function drawIdxHint(x, y) {
+  ctx.lineWidth = 1;
+  if (mode == 2)
+    ctx.strokeStyle = 'white';
+  else 
+    ctx.strokeStyle = 'rgb(0, 200, 0)';
+  ctx.strokeRect (x, y, canvas.width/60, canvas.height/60);
+}
+
+/*
+ * 0: white
+ * 1: white char black edge
+ * 2: black
+ * 3: black char white edge
+ */
+var fontColorType = 0; 
+function txtRendering(txt, x, y) {
+
+  //fontColorType = 3;
+
+  ctx.lineWidth = Math.ceil(fontsize/12.0);
+
+  switch (fontColorType) {
+    case 0:
+      ctx.fillStyle = 'white';
+      break;
+    case 1:
+      ctx.fillStyle = 'white';
+      ctx.strokeStyle = 'black';
+      ctx.strokeText(txt, x, y);
+      break;
+    case 2:
+      ctx.fillStyle = 'black';
+      break;
+    case 3:
+      ctx.fillStyle = 'black';
+      ctx.strokeStyle = 'white';
+      ctx.strokeText(txt, x, y);
+      break;
+  }
+  
+  ctx.fillText(txt, x, y);
+
+}
+
 function printSubtitle() {
   if (dword == 0) {
     printTxt(phase, line, 0);
@@ -501,7 +546,7 @@ function printSubtitle() {
   }
 }
 
-function printTxt(i, j, vpos) {
+function printTxt(i, j, vpos) { //subtitle mode 
 
   let txt = subtitles[i][j];
       
@@ -515,11 +560,8 @@ function printTxt(i, j, vpos) {
     x = canvas.width - fontsize/2;
     y = vpos == 0?y:canvas.height - fontsize * 2;
 
-    if (line == j) {
-      ctx.fillStyle = 'rgb(0,200,0)';
-      ctx.strokeStyle = 'rgb(0,200,0)';
-      ctx.strokeRect (x + 4, y, canvas.width/60, canvas.height/60);
-    }
+    if (line == j) drawIdxHint(x + 4, y);
+    
 
   } else {
     ctx.textAlign = "center";
@@ -532,20 +574,15 @@ function printTxt(i, j, vpos) {
       txt = '-';
   }
 
-  if (doblank == 1 || (i == 0 && animSwh == 0)) {
-    ctx.fillStyle = COLORS_CK[2];//"rgb(0,180,0)";
-    ctx.lineWidth = 1;
-    ctx.fillText(txt, x, y);
-    return;
-  }
+    
+  if (doblank == 1 || (i == 0 && animSwh == 0)) { //單行綠色標題
+      ctx.fillStyle = COLORS_CK[2];//"rgb(0,180,0)";
+      ctx.fillText(txt, x, y);
+      return;
+  }  
+  
 
-  ctx.strokeStyle = 'black';
-  ctx.lineWidth = Math.ceil(fontsize/12.0);//ctx.lineWidth = 4;
-  ctx.strokeText(txt, x, y);
-
-  ctx.fillStyle = 'white';
-  ctx.lineWidth = 1;
-  ctx.fillText(txt, x, y);
+  txtRendering(txt, x, y);
 
 }
 
@@ -639,21 +676,10 @@ function printPhase() {
       let txt = subtitles[phase][i];
       if (phase == 0 && txt.length > 0) txt = '[' + txt + ']';
       
-      ctx.fillStyle = 'white';
+      txtRendering(txt, _x, _y);
       
-      if (img) {
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = Math.ceil(fontsize/10.0);//ctx.lineWidth = 4;
-        ctx.strokeText(txt, _x, _y);
-      }
+      if (i == line && song > 0) drawIdxHint(10, _y);
       
-      ctx.fillText(txt, _x, _y);
-      
-      if (i == line && song > 0) {
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = 'white';
-        ctx.strokeRect (10, _y, canvas.width/60, canvas.height/60);
-      }
     }
   } else { //mode 1, 3
     let _x = canvas.width * 0.1;
@@ -662,28 +688,19 @@ function printPhase() {
       let _y = (i + 1) * gap + fontsize/2;
       let txt = subtitles[phase][i];
       if (phase == 0 && txt.length > 0) txt = '[' + txt + ']';
-      ctx.fillStyle = doblank == 1?'rgb(0,240,0)':'white';
-
-      
+      if (doblank == 1) {
+        ctx.fillStyle = doblank == 1?'rgb(0,240,0)':'white';
         ctx.strokeStyle = doblank == 1?'rgba(0,240,0, 0)':'black';
-        ctx.lineWidth = Math.ceil(fontsize/10.0);//ctx.lineWidth = 4;
-        ctx.strokeText(txt, _x, _y);  
-      
-      
-      ctx.fillText(txt, _x, _y);
-
-      
-      if (i == line && song > 0) {
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = doblank == 1?'rgb(0,240,0)':'white';
-        ctx.strokeRect (10, _y, canvas.width/60, canvas.height/60);
+        ctx.fillText(txt, _x, _y);
+      } else {
+        txtRendering(txt, _x, _y);
       }
       
-
+      if (i == line && song > 0) drawIdxHint(10, _y);
+    
     }
   } 
 
-  
   if (song > 0 && phase > 0) {
 
     //ctx.fillStyle = mode == 2?'yellow':'rgb(0,240,0)';
@@ -694,7 +711,6 @@ function printPhase() {
                  mode == 2?canvas.width/2:canvas.width * 0.1, 
                  fontsize/2);
   }
-  
 
 }
 
@@ -732,14 +748,6 @@ function printPhaseChart() {
   }
 
   ctx.lineWidth = 3;
-
-  /*
-  if (mode == 2) {
-    ctx.strokeStyle = "rgb(100,100,200)";
-  } else {
-    ctx.strokeStyle = "rgb(150,150,150, 0.5)";
-  }
-  */
 
   ctx.strokeStyle = "rgba(255,255,255, 0.33)";
 
@@ -858,11 +866,10 @@ function keyboard(e) {
           }
           break;
       case 83: displayProgress = displayProgress == 1?0:1; break; //'s'
-      case 68: dword = dword == 0?1:0; break;
-      case 67: //'c' jump to coda last one phase
-          phase = subtitles.length - 1;
-          line = 0;
-          break;
+      case 68: dword = dword == 0?1:0; break; //'D'
+      case 67: fontColorType = (fontColorType + 1)%4; break; //'c'
+      //case 67: //'c' jump to coda last one phase
+      //phase = subtitles.length - 1; line = 0; break;
       case 80:
           if (animSwh == 0) {
             mode = (mode+1)%4;
