@@ -868,13 +868,12 @@ function keyboard(e) {
       case 83: displayProgress = displayProgress == 1?0:1; break; //'s'
       case 68: dword = dword == 0?1:0; break; //'D'
       case 67: fontColorType = (fontColorType + 1)%4; break; //'c'
-      //case 67: //'c' jump to coda last one phase
-      //phase = subtitles.length - 1; line = 0; break;
+      //case 67: phase = subtitles.length - 1; line = 0; break; //'c' jump to coda last one phase
       case 80:
-          if (animSwh == 0) {
-            mode = (mode+1)%4;
-          }
+          if (animSwh == 0) mode = (mode+1)%4;
           animSwh = 0;
+          if (mode == 0 || mode == 1 || mode == 3) fontColorType = 1;
+          if (mode == 2) fontColorType = 0;
           break; //'p' ppt mode
       case 72: //'h 
           helpSwitch = helpSwitch == 0?1:0;
@@ -969,6 +968,7 @@ function keyboard(e) {
           doblank = 0;
           helpSwitch = 0;
           displayProgress = 0;
+          fontColorType = 0;
           dword = 0;
           break;
         //case 32: canvas.requestFullscreen(); break;
