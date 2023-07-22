@@ -32,7 +32,7 @@
                         }
                     }
                  },
-    "frame_f3" : { "src" : "./dashboard.html", 
+    "frame_f5" : { "src" : "./dashboard.html", 
                     "obj" : {
                         "info": {
                             "posize" :  [1, 1, 4, 32],

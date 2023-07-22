@@ -357,9 +357,6 @@ const args = process.argv;//.slice(1);
 if (args.length > 2) port = parseInt(args[2]);
 
 server.listen(port, () => {
-  console.log(`Server is running...`); //console.log(`Server is running on port ${port}`);
-  if (port  == 80)
-    console.log('http://' + addresses[0]);
-  else 
-    console.log('http://' + addresses[0] + ':' + port);
+  console.log('Server is running...'); //console.log(`Server is running on port ${port}`);
+  console.log('http://' + addresses[0] + ((port == 80)?'':':'+port));
 });
