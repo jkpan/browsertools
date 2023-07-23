@@ -8,13 +8,16 @@
                     "obj" : {
                         "list" : [
 
-                            "新歌頌揚325",
-                            "讚美之泉111",
-                            "救恩172",
-                            "讚美之泉82",
-                            "新歌頌揚194",
-
-                            "讚美之泉46",
+                            "短歌171",
+                            "其他107",
+                            "其他108",
+                            "新歌頌揚59",
+                            "其他109",
+                            "短歌70",
+                            "讚美之泉113",
+                            "讚美之泉114",
+                            "讚美之泉7",
+                            "短歌1",
 
                             "主禱文", 
                             "使徒信經", 
@@ -25,11 +28,21 @@
                         "fontfactor" : 10
                     }
              },
-    "frame_f3" : { "src" : "./subtitle_b.html",
+    "frame_f3" : { "src" : "./newurl.html",
+                   "obj" : {
+                        "url"  : "https://www.youtube.com/embed/R24cP7M9Sr0"
+                    } 
+                },
+    "frame_f15" : { "src" : "./dashboard.html",
+                   "obj" : {
+                    "B/G" : "B"
+                   } 
+                },
+
+    "frame_f10" : { "src" : "./subtitle_b.html",
                    "obj" : {
                         "color"  : 2, 
                         "fontfactor": 12
                     } 
-                },
-    "frame_f4" : { "src" : "./newurl.html" }
+                }
 }
