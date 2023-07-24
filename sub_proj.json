@@ -1,10 +1,51 @@
 {
-    "frame_f1" : { "src" : "./newurl.html",
-                   "obj" : {
-                        "url" : ""
+    "frame_f1" : { "src" : "./dashboard.html", 
+                   "obj": {
+                        "ppt_1": {
+                            "posize" :  [19, 18, 14, 14],
+                            "perspective" : false,
+                            "obj" : {
+                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vTrd9CmlQmMu8bt0v0VlryonEWqJ-OY0QuLuV5GqQ23TJ_cIFnF8o8WJlZwjMj5TQ/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                            }
+                        },
+                        "ppt_2": {
+                            "posize" :  [19, 2, 14, 14],
+                            "perspective" : false,
+                            "obj" : {
+                                "url" : "https://www.youtube.com/embed/R24cP7M9Sr0"
+                            }
+                        },
+                        "hymn" : {
+                            "posize" :  [1, 18, 14, 14],
+                            "perspective" : false,
+                            "obj" : {
+                                "list" : [
+
+                                    "短歌171",
+                                    "其他107",
+                                    "其他108",
+                                    "新歌頌揚59",
+                                    "其他109",
+                                    "短歌70",
+                                    "讚美之泉113",
+                                    "讚美之泉114",
+                                    "讚美之泉7",
+                                    "短歌1"
+
+                                ],
+                                "mode"  : 2,
+                                "fontfactor": 10
+                            }
+                        },
+                        "B/G" : "B"
                     }
+    },
+    "frame_f21" : { "src" : "./newurl.html",
+                   "obj" : {
+                        "url"  : "https://www.youtube.com/embed/R24cP7M9Sr0"
+                    } 
                 },
-    "frame_f2" : { "src" : "./subtitle.html",
+    "frame_f22" : { "src" : "./subtitle.html",
                     "obj" : {
                         "list" : [
 
@@ -28,11 +69,6 @@
                         "fontfactor" : 10
                     }
              },
-    "frame_f3" : { "src" : "./newurl.html",
-                   "obj" : {
-                        "url"  : "https://www.youtube.com/embed/R24cP7M9Sr0"
-                    } 
-                },
     "frame_f15" : { "src" : "./dashboard.html",
                    "obj" : {
                     "B/G" : "B"
