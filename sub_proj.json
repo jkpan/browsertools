@@ -5,14 +5,14 @@
                             "posize" :  [19, 18, 14, 14],
                             "perspective" : false,
                             "obj" : {
-                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vTrd9CmlQmMu8bt0v0VlryonEWqJ-OY0QuLuV5GqQ23TJ_cIFnF8o8WJlZwjMj5TQ/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vSldgCFsQRxDkYBkaVaVd-rkp2fl-LFiEC9TNlTQuA9ASiFS0iW2dQcbJI3vQACYQ/embed?start=false&loop=false&delayms=3000&rm=minimal"
                             }
                         },
                         "ppt_2": {
                             "posize" :  [19, 2, 14, 14],
                             "perspective" : false,
                             "obj" : {
-                                "url" : "https://www.youtube.com/embed/R24cP7M9Sr0"
+                                "url" : ""
                             }
                         },
                         "hymn" : {
@@ -21,10 +21,15 @@
                             "obj" : {
                                 "list" : [
 
-                                    "短歌171",
-                                    "其他107",
                                     "其他108",
                                     "新歌頌揚59",
+                                    "讚美之泉30",
+                                    "讚美之泉85",
+                                    "短歌175",
+
+                                    "短歌171",
+                                    "其他107",                                    
+                                    
                                     "其他109",
                                     "短歌70",
                                     "讚美之泉113",
@@ -49,20 +54,6 @@
                     "obj" : {
                         "list" : [
 
-                            "短歌171",
-                            "其他107",
-                            "其他108",
-                            "新歌頌揚59",
-                            "其他109",
-                            "短歌70",
-                            "讚美之泉113",
-                            "讚美之泉114",
-                            "讚美之泉7",
-                            "短歌1",
-
-                            "主禱文", 
-                            "使徒信經", 
-                            "救恩300"
                         ],
                         "master"     : 1,
                         "mode"       : 2,
