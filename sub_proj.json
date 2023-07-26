@@ -5,17 +5,17 @@
                             "posize" :  [19, 18, 14, 14],
                             "perspective" : false,
                             "obj" : {
-                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vSldgCFsQRxDkYBkaVaVd-rkp2fl-LFiEC9TNlTQuA9ASiFS0iW2dQcbJI3vQACYQ/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vTjfiFJLzfB8qKtpUmA8GEWDW1YdJ6HfPyE79eb_R46axQHdY8QuWGgRp2EmdZ-Og/embed?start=false&loop=false&delayms=3000&rm=minimal"
                             }
                         },
-                        "ppt_2": {
+                        "ppt_22": {
                             "posize" :  [19, 2, 14, 14],
                             "perspective" : false,
                             "obj" : {
                                 "url" : ""
                             }
                         },
-                        "ppt_3": {
+                        "ppt_33": {
                             "posize" :  [2, 2, 14, 14],
                             "perspective" : false,
                             "obj" : {
