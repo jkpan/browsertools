@@ -827,54 +827,44 @@ function _createFrame(keyname) {
   switch(keyname) {
     case 'hymn': {
       createFrame(keyname, 'subtitle.html');
-      let app = new Applet({x:1, y:14, w:15, h:18, keyname:'hymn'});
+      let app = new Applet({x:1, y:14, w:15, h:18, keyname:keyname});
       applets.push(app);
       return app;
     } break;
     case 'Bible': {
       createFrame(keyname, 'subtitle_b.html');
-      let app = new Applet({x:17, y:14, w:16, h:18, keyname:'Bible'});
+      let app = new Applet({x:17, y:14, w:16, h:18, keyname:keyname});
       applets.push(app);
       return app;
     } break;
-    case 'ppt_1': {
-      createFrame(keyname, 'newurl.html');
-      let app = new Applet({x:6, y:1, w:6, h:8, keyname:'ppt_1'});
-      applets.push(app);
-      return app;
-    } break;
-    case 'ppt_2': {
-      createFrame(keyname, 'newurl.html');
-      let app = new Applet({x:8, y:3, w:6, h:8, keyname:'ppt_2'});
-      applets.push(app);
-      return app;
-    } break;
+    case 'ppt_1': 
+    case 'ppt_2': 
     case 'ppt_3': {
       createFrame(keyname, 'newurl.html');
-      let app = new Applet({x:10, y:5, w:6, h:8, keyname:'ppt_3'});
+      let app = new Applet({x:6, y:1, w:6, h:8, keyname:keyname});
       applets.push(app);
+      return app;
     } break;
     case 'info': {
       createFrame(keyname, 'marquee_v.html');
-      let app = new Applet({x:1, y:1, w:4, h:32, keyname:'info'});
+      let app = new Applet({x:1, y:1, w:4, h:32, keyname:keyname});
       applets.push(app);
       return app;
     } break;
     case 'effect': {
       createFrame(keyname, 'effect.html');
-      let app = new Applet({x:18, y:2, w:4, h:4, keyname:'effect'});
+      let app = new Applet({x:18, y:2, w:4, h:4, keyname:keyname});
       applets.push(app);
       return app;
     } break;
     case 'time': {
       createFrame(keyname, 'clock.html');
-      let app = new Applet({x:24, y:2, w:11, h:10, keyname:'time'});
+      let app = new Applet({x:24, y:2, w:11, h:10, keyname:keyname});
       applets.push(app);
       return app;
     } break;
     default:
       return null;
-
   }
   
 }
