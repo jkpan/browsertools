@@ -15,24 +15,18 @@ public class ReadParseNiv {
     int preverse = -1;
     String name = "";
 
-    public void preHandleLine(String line, String prefix) {
-    
-    }
+    public void preReadline(String prefix, String next) {
 
-    public void preReadline(String prefix) {
-
-        currentLine = "";
-        preLine = null;
-
+        currentLine = null;
+        //int count = 0;
         try {
 
             BufferedReader br = new BufferedReader(new FileReader("NIV_Bible.txt"));
             
             String line = null;
-
-            //int count = 0;
             do {
                 line = br.readLine();
+                count++;
                 try {
                     Integer.parseInt(line.trim());
                     //System.out.print(line);
@@ -43,23 +37,29 @@ public class ReadParseNiv {
 
                 if (line != null) {
                     if (line.startsWith(prefix)) {
-                        currentLine = currentLine.trim();
-                        System.out.println(currentLine);
+                        if (currentLine != null) {
+                            System.out.println(currentLine.trim());
+                            currentLine = null;
+                        }
                         currentLine = line;
                         continue;
+                    } else if (line.startsWith(next.toUpperCase())) {
+                        if (currentLine != null) {
+                            System.out.println(currentLine.trim());
+                            currentLine = null;
+                        }
+                        break;
                     } else if (line.startsWith("CHAPTER") && line.length() <= 15) {
-                        //System.out.println(currentLine);
                         continue;
                     } else if (line.length() == 0) {
-                        //System.out.print("#");
                         continue;
-                    } else if (line.length() == 1) { // {
-                        //System.out.print(line);
-                        continue;
-                    } else if(line.equals(" ")) {
+                    } else if (line.equals(" ")) {
                         continue;
                     } else {
-                        currentLine += line;
+                        if (currentLine != null)
+                            currentLine += line;
+                        else 
+                            System.out.println("Exception!!!!!!!!");
                     }
 
                     //count++;System.out.println(line);
@@ -70,8 +70,6 @@ public class ReadParseNiv {
                     break;
                 }
             } while (true);
-
-            System.out.println(currentLine);
 
             br.close();
 
@@ -183,75 +181,74 @@ public class ReadParseNiv {
         //new ReadParse("詩篇").readline("詩");
         //return;
         
-        new ReadParseNiv("Genesis").preReadline("Ge.");
-        /*
-        new ReadParseNiv("Exodus").readline("Ex.");
-        new ReadParseNiv("Leviticus").readline("Le.");
-        new ReadParseNiv("Numbers").readline("Nu.");
-        new ReadParseNiv("Deuteronomy").readline("De.");
-        new ReadParseNiv("Joshua").readline("Jo.");
-        new ReadParseNiv("Judges").readline("Ju.");
-        new ReadParseNiv("Ruth").readline("Ru.");
-        new ReadParseNiv("1 Samuel").readline("1Sa.");
-        new ReadParseNiv("2 Samuel").readline("2Sa.");
-        new ReadParseNiv("1 Kings").readline("1Kg.");
-        new ReadParseNiv("2 Kings").readline("2Kg.");
-        new ReadParseNiv("1 Chronicles").readline("1Ch.");
-        new ReadParseNiv("2 Chronicles").readline("2Ch.");
-        new ReadParseNiv("Ezra").readline("Ezra");
-        new ReadParseNiv("Nehemiah").readline("Nehemiah");
-        new ReadParseNiv("Esther").readline("Esther");
-        new ReadParseNiv("Job").readline("Job");
-        new ReadParseNiv("Psalms").readline("Psalms");
-        new ReadParseNiv("Proverbs").readline("Proverbs");
-        new ReadParseNiv("Ecclesiastes").readline("Ecclesiastes");
-        new ReadParseNiv("Song of Songs").readline("Song of Songs");
-        new ReadParseNiv("Isaiah").readline("Isaiah");
-        new ReadParseNiv("Jeremiah").readline("Jeremiah");
-        new ReadParseNiv("Lamentations").readline("Lamentations");
-        new ReadParseNiv("Ezekiel").readline("Ezekiel");
-        new ReadParseNiv("Daniel").readline("Daniel");
-        new ReadParseNiv("Hosea").readline("Hosea");
-        new ReadParseNiv("Joel").readline("Joel");
-        new ReadParseNiv("Amos").readline("Amos");
-        new ReadParseNiv("Obadiah").readline("Obadiah");
-        new ReadParseNiv("Jonah").readline("Jonah");
-        new ReadParseNiv("Micah").readline("Micah");
-        new ReadParseNiv("Nahum").readline("Nahum");
-        new ReadParseNiv("Habakkuk").readline("Habakkuk");
-        new ReadParseNiv("Zephaniah").readline("Zephaniah");
-        new ReadParseNiv("Haggai").readline("Haggai");
-        new ReadParseNiv("Zechariah").readline("Zechariah");
-        new ReadParseNiv("Malachi").readline("Malachi");
+        new ReadParseNiv("Genesis").preReadline("Ge.", "Exodus");
+        new ReadParseNiv("Exodus").preReadline("Ex.", "Leviticus");
+        new ReadParseNiv("Leviticus").preReadline("Le.", "Numbers");
+        new ReadParseNiv("Numbers").preReadline("Nu.", "Deuteronomy");
+        new ReadParseNiv("Deuteronomy").preReadline("De.", "Joshua");
+        new ReadParseNiv("Joshua").preReadline("Jo.", "Judges");
+        new ReadParseNiv("Judges").preReadline("Ju.", "Ruth");
+        new ReadParseNiv("Ruth").preReadline("Ru.", "1 Samuel");
+        new ReadParseNiv("1 Samuel").preReadline("1Sa.", "2 Samuel");
+        new ReadParseNiv("2 Samuel").preReadline("2Sa.", "1 Kings");
+        new ReadParseNiv("1 Kings").preReadline("1Kg.", "2 Kings");
+        new ReadParseNiv("2 Kings").preReadline("2Kg.", "1 Chronicles");
+        new ReadParseNiv("1 Chronicles").preReadline("1Ch.", "2 Chronicles");
+        new ReadParseNiv("2 Chronicles").preReadline("2Ch.", "Ezra");
+        new ReadParseNiv("Ezra").preReadline("Ezr.", "Nehemiah");
+        new ReadParseNiv("Nehemiah").preReadline("Ne.", "Esther");
+        new ReadParseNiv("Esther").preReadline("Es.", "Job");
+        new ReadParseNiv("Job").preReadline("Job", "Psalms");
+        new ReadParseNiv("Psalms").preReadline("Ps.", "Proverbs");
+        new ReadParseNiv("Proverbs").preReadline("Pr.", "Ecclesiastes");
+        new ReadParseNiv("Ecclesiastes").preReadline("Ec.", "SONG OF SOLOMON");
+        new ReadParseNiv("Song of Songs").preReadline("So.", "Isaiah");
+        new ReadParseNiv("Isaiah").preReadline("Isaiah", "Jeremiah");
+        new ReadParseNiv("Jeremiah").preReadline("Jeremiah", "Lamentations");
+        new ReadParseNiv("Lamentations").preReadline("Lamentations", "Ezekiel");
+        new ReadParseNiv("Ezekiel").preReadline("Ezekiel", "Daniel");
+        new ReadParseNiv("Daniel").preReadline("Daniel", "Hosea");
+        new ReadParseNiv("Hosea").preReadline("Hosea", "Joel");
+        new ReadParseNiv("Joel").preReadline("Joel", "Amos");
+        new ReadParseNiv("Amos").preReadline("Amos", "Obadiah");
+        new ReadParseNiv("Obadiah").preReadline("Obadiah", "Jonah");
+        new ReadParseNiv("Jonah").preReadline("Jonah", "Micah");
+        new ReadParseNiv("Micah").preReadline("Micah", "Nahum");
+        new ReadParseNiv("Nahum").preReadline("Nahum", "Habakkuk");
+        new ReadParseNiv("Habakkuk").preReadline("Habakkuk", "Zephaniah");
+        new ReadParseNiv("Zephaniah").preReadline("Zephaniah", "Haggai");
+        new ReadParseNiv("Haggai").preReadline("Haggai", "Zechariah");
+        new ReadParseNiv("Zechariah").preReadline("Zechariah", "Malachi");
+        new ReadParseNiv("Malachi").preReadline("Mal.", "Matthew");
         
         
-        new ReadParseNiv("Matthew").readline("Matthew");
-        new ReadParseNiv("Mark").readline("Mark");
-        new ReadParseNiv("Luke").readline("Luke");
-        new ReadParseNiv("John").readline("John");
-        new ReadParseNiv("Acts").readline("Acts");
-        new ReadParseNiv("Romans").readline("Romans");
-        new ReadParseNiv("1 Corinthians").readline("1 Corinthians");
-        new ReadParseNiv("2 Corinthians").readline("2 Corinthians");
-        new ReadParseNiv("Galatians").readline("Galatians");
-        new ReadParseNiv("Ephesians").readline("Ephesians");
-        new ReadParseNiv("Philippians").readline("Philippians");
-        new ReadParseNiv("Colossians").readline("Colossians");
-        new ReadParseNiv("1 Thessalonians").readline("1 Thessalonians");
-        new ReadParseNiv("2 Thessalonians").readline("2 Thessalonians");
-        new ReadParseNiv("1 Timothy").readline("1 Timothy");
-        new ReadParseNiv("2 Timothy").readline("2 Timothy");
-        new ReadParseNiv("Titus").readline("Titus");
-        new ReadParseNiv("Philemon").readline("Philemon");
-        new ReadParseNiv("Hebrews").readline("Hebrews");
-        new ReadParseNiv("James").readline("James");
-        new ReadParseNiv("1 Peter").readline("1 Peter");
-        new ReadParseNiv("2 Peter").readline("2 Peter");
-        new ReadParseNiv("1 John").readline("1 John");
-        new ReadParseNiv("2 John").readline("2 John");
-        new ReadParseNiv("3 John").readline("3 John");
-        new ReadParseNiv("Jude").readline("Jude");
-        new ReadParseNiv("Revelation").readline("Revelation");
-        */
+        new ReadParseNiv("Matthew").preReadline("Matthew", "Mark");
+        new ReadParseNiv("Mark").preReadline("Mark", "Luke");
+        new ReadParseNiv("Luke").preReadline("Luke", "John");
+        new ReadParseNiv("John").preReadline("John", "Acts");
+        new ReadParseNiv("Acts").preReadline("Acts", "Romans");
+        new ReadParseNiv("Romans").preReadline("Romans", "1 Corinthians");
+        new ReadParseNiv("1 Corinthians").preReadline("1 Corinthians", "2 Corinthians");
+        new ReadParseNiv("2 Corinthians").preReadline("2 Corinthians", "Galatians");
+        new ReadParseNiv("Galatians").preReadline("Galatians", "Ephesians");
+        new ReadParseNiv("Ephesians").preReadline("Ephesians", "Philippians");
+        new ReadParseNiv("Philippians").preReadline("Philippians", "Colossians");
+        new ReadParseNiv("Colossians").preReadline("Colossians", "1 Thessalonians");
+        new ReadParseNiv("1 Thessalonians").preReadline("1 Thessalonians", "2 Thessalonians");
+        new ReadParseNiv("2 Thessalonians").preReadline("2 Thessalonians", "1 Timothy");
+        new ReadParseNiv("1 Timothy").preReadline("1 Timothy", "2 Timothy");
+        new ReadParseNiv("2 Timothy").preReadline("2 Timothy", "Titus");
+        new ReadParseNiv("Titus").preReadline("Titus", "Philemon");
+        new ReadParseNiv("Philemon").preReadline("Philemon", "Hebrews");
+        new ReadParseNiv("Hebrews").preReadline("Hebrews", "James");
+        new ReadParseNiv("James").preReadline("James", "1 Peter");
+        new ReadParseNiv("1 Peter").preReadline("1 Peter", "2 Peter");
+        new ReadParseNiv("2 Peter").preReadline("2 Peter", "1 John");
+        new ReadParseNiv("1 John").preReadline("1 John", "2 John");
+        new ReadParseNiv("2 John").preReadline("2 John", "3 John");
+        new ReadParseNiv("3 John").preReadline("3 John", "Jude");
+        new ReadParseNiv("Jude").preReadline("Jude", "Revelation");
+        new ReadParseNiv("Revelation").preReadline("Revelation", "END.");
+        
     }
 }
