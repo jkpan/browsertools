@@ -202,9 +202,9 @@ public class ReadParseNiv {
         new ReadParseNiv("Proverbs").preReadline("Pr.", "Ecclesiastes");
         new ReadParseNiv("Ecclesiastes").preReadline("Ec.", "SONG OF SOLOMON");
         new ReadParseNiv("Song of Songs").preReadline("So.", "Isaiah");
-        new ReadParseNiv("Isaiah").preReadline("Isaiah", "Jeremiah");
-        new ReadParseNiv("Jeremiah").preReadline("Jeremiah", "Lamentations");
-        new ReadParseNiv("Lamentations").preReadline("Lamentations", "Ezekiel");
+        new ReadParseNiv("Isaiah").preReadline("Is.", "Jeremiah");
+        new ReadParseNiv("Jeremiah").preReadline("Je.", "Lamentations");
+        new ReadParseNiv("Lamentations").preReadline("La.", "Ezekiel");
         new ReadParseNiv("Ezekiel").preReadline("Ezekiel", "Daniel");
         new ReadParseNiv("Daniel").preReadline("Daniel", "Hosea");
         new ReadParseNiv("Hosea").preReadline("Hosea", "Joel");
