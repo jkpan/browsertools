@@ -18,18 +18,17 @@ public class ReadParseNiv {
     public void preReadline(String prefix, String next) {
 
         currentLine = null;
-        //int count = 0;
+
         try {
 
             BufferedReader br = new BufferedReader(new FileReader("NIV_Bible.txt"));
-            
+
             String line = null;
+
             do {
                 line = br.readLine();
-                count++;
                 try {
                     Integer.parseInt(line.trim());
-                    //System.out.print(line);
                     continue;
                 } catch(Exception e) {
                     
