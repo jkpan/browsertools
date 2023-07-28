@@ -15,6 +15,73 @@ public class ReadParseNiv {
     int preverse = -1;
     String name = "";
 
+    public void preHandleLine(String line, String prefix) {
+    
+    }
+
+    public void preReadline(String prefix) {
+
+        currentLine = "";
+        preLine = null;
+
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader("NIV_Bible.txt"));
+            
+            String line = null;
+
+            //int count = 0;
+            do {
+                line = br.readLine();
+                try {
+                    Integer.parseInt(line.trim());
+                    //System.out.print(line);
+                    continue;
+                } catch(Exception e) {
+                    
+                }
+
+                if (line != null) {
+                    if (line.startsWith(prefix)) {
+                        currentLine = currentLine.trim();
+                        System.out.println(currentLine);
+                        currentLine = line;
+                        continue;
+                    } else if (line.startsWith("CHAPTER") && line.length() <= 15) {
+                        //System.out.println(currentLine);
+                        continue;
+                    } else if (line.length() == 0) {
+                        //System.out.print("#");
+                        continue;
+                    } else if (line.length() == 1) { // {
+                        //System.out.print(line);
+                        continue;
+                    } else if(line.equals(" ")) {
+                        continue;
+                    } else {
+                        currentLine += line;
+                    }
+
+                    //count++;System.out.println(line);
+                    //preHandleLine(line, prefix);
+                    //preLine = currentLine;
+
+                } else {
+                    break;
+                }
+            } while (true);
+
+            System.out.println(currentLine);
+
+            br.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            
+        }
+    }
+
     public void readline(String prefix) {
 
         currentLine = null;
@@ -116,7 +183,8 @@ public class ReadParseNiv {
         //new ReadParse("詩篇").readline("詩");
         //return;
         
-        new ReadParseNiv("Genesis").readline("Ge.");
+        new ReadParseNiv("Genesis").preReadline("Ge.");
+        /*
         new ReadParseNiv("Exodus").readline("Ex.");
         new ReadParseNiv("Leviticus").readline("Le.");
         new ReadParseNiv("Numbers").readline("Nu.");
@@ -184,6 +252,6 @@ public class ReadParseNiv {
         new ReadParseNiv("3 John").readline("3 John");
         new ReadParseNiv("Jude").readline("Jude");
         new ReadParseNiv("Revelation").readline("Revelation");
-        
+        */
     }
 }
