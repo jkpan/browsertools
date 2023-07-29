@@ -207,10 +207,11 @@ public class ReadParseNiv {
         currentLine = null;
         preLine = null;
 
+        prefix += " ";
+
         try {
 
-            BufferedReader br = new BufferedReader(new FileReader("bible.txt"));
-            //BufferedReader br = new BufferedReader(new FileReader("約翰福音.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("NIV_Bible.txt"));
             
             String line = null;
 
