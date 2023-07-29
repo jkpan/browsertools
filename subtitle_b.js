@@ -2414,3 +2414,14 @@ function restoreActionFromLocal() {
 
   setMsg_O();
 
+  /*
+  for (let v = 1;v < SONGS.length;v++) {
+    let a = '[';
+    for(let c = 1;c < SONGS[v].length;c++) {
+      a += (SONGS[v][c].length-1) + ', ';
+    }
+    a += ']';
+    console.log(a);
+  }
+  */
+ 
