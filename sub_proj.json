@@ -5,21 +5,14 @@
                             "posize" :  [19, 18, 14, 14],
                             "perspective" : false,
                             "obj" : {
-                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vTjfiFJLzfB8qKtpUmA8GEWDW1YdJ6HfPyE79eb_R46axQHdY8QuWGgRp2EmdZ-Og/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                                "url" : ""
                             }
                         },
                         "ppt_2": {
                             "posize" :  [19, 2, 14, 14],
                             "perspective" : false,
                             "obj" : {
-                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vTD8WVoW1LUuCdM6it7bLxd6XA-eHJuk83NYFB1T1aMKxHhvPn__RDtBg-uVT5SEw/embed?start=false&loop=false&delayms=3000&rm=minimal"
-                            }
-                        },
-                        "ppt_33": {
-                            "posize" :  [2, 2, 14, 14],
-                            "perspective" : false,
-                            "obj" : {
-                                "url" : ""
+                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vQK7YvQqx-eNp46Ms5RK_ubkTz7Hy4NK6vyhknd8o40tvZZyl-2qvVYMF7RrylFgQ/embed?start=false&loop=false&delayms=3000&rm=minimal"
                             }
                         },
                         "hymn" : {
@@ -28,21 +21,17 @@
                             "obj" : {
                                 "list" : [
 
-                                    "其他108",
-                                    "新歌頌揚59",
-                                    "讚美之泉30",
-                                    "讚美之泉85",
-                                    "短歌175",
+                                    "救恩4",
+                                    "救恩45",
+                                    "救恩123",
+                                    "救恩174",
+                                    "救恩219",
+                                    "救恩233",
 
-                                    "短歌171",
-                                    "其他107",                                    
-                                    
-                                    "其他109",
-                                    "短歌70",
-                                    "讚美之泉113",
-                                    "讚美之泉114",
-                                    "讚美之泉7",
-                                    "短歌1"
+
+                                    "主禱文", 
+                                    "使徒信經", 
+                                    "救恩300"
 
                                 ],
                                 "mode"  : 2,
