@@ -168,11 +168,11 @@ public class ReadParseNiv {
             int verse = 1;
             boolean start = false;
 
-            int count = 0;
+            //int count = 0;
 
             do {
                 line = br.readLine();
-                count++;
+                //count++;
                 if (line == null) break;
                 if (line.trim().length() == 0) continue;
                 if (next != null && line.equals(next)) break;
@@ -211,7 +211,7 @@ public class ReadParseNiv {
 
         try {
 
-            BufferedReader br = new BufferedReader(new FileReader("NIV_Bible.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("niv_raw.txt"));
             
             String line = null;
 
@@ -222,8 +222,6 @@ public class ReadParseNiv {
                     //count++;System.out.println(line);
                     handleLine(line, prefix);
                     preLine = currentLine;
-                    
-
                 } else {
                     break;
                 }
@@ -233,18 +231,6 @@ public class ReadParseNiv {
 
             System.out.println(currentLine);
             System.out.println("} </script>");
-
-            //System.out.println("count: "+count);
-        
-            /*
-            StringBuilder sb = new StringBuilder();
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            String everything = sb.toString();
-            */
 
             br.close();
 
@@ -257,20 +243,26 @@ public class ReadParseNiv {
 
     public void handleLine(String line, String prefix) {
         if (!line.startsWith(prefix)) return;
+        line = line.substring(prefix.length());
+        //
+        //return;
         StringTokenizer st = new StringTokenizer(line, " ");
         int chapter = -1;
         int verse = -1;
         if (st.hasMoreElements()) {
             String title = st.nextToken();
-            StringTokenizer st2 = new StringTokenizer(title.substring(prefix.length()), ":");
+            StringTokenizer st2 = new StringTokenizer(title, ":");
             try {
                 chapter = Integer.parseInt(st2.nextToken());
                 verse = Integer.parseInt(st2.nextToken());
+                //System.out.print("(" + chapter+" # "+verse + ")");
             } catch(NumberFormatException ne) {
                 return;
             }
-        
-            currentLine = line.substring(title.length() + 1);
+            
+            currentLine = line.substring(title.length() + 1).trim();
+            //System.out.println(currentLine);
+
             currentLine = "\"" + currentLine + "\"";
 
             if (preLine == null) {
@@ -294,6 +286,7 @@ public class ReadParseNiv {
             
             prechapter = chapter;
             
+            
             //System.out.println(chapter + ":" + verse +" "+content);
         }
         
@@ -306,8 +299,11 @@ public class ReadParseNiv {
 
         //new ReadParseNiv("").preReadline(4);
 
-        for (int i=0;i<volumns.length;i++) new ReadParseNiv("").preReadline(i);
-        
+        //for (int i=0;i<volumns.length;i++) new ReadParseNiv("").preReadline(i);
+
+        //new ReadParseNiv(volumns[0]).readline(volumns[0]);
+
+        for (int i=0;i<volumns.length;i++) new ReadParseNiv(volumns[i]).readline(volumns[i]);
 
         /*
         new ReadParseNiv("Genesis").preReadline("Ge.", "Exodus");
