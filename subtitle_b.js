@@ -753,7 +753,7 @@ function restoreActionFromLocal() {
   function getTxtArray(txt, wRatio) {
     let substrings = [];
     let idx = 0;
-    let mwidth = canvas.width * wRatio;
+    let mwidth = canvas.width * wRatio - fontsize/2;
     do {
         if (ctx.measureText(txt).width > mwidth) {
           let ratio = mwidth/ctx.measureText(txt).width;
@@ -770,6 +770,24 @@ function restoreActionFromLocal() {
       } while(true);
       
     return substrings;
+  }
+
+  /*
+  function isEnglishCharacter(char) {
+    return !!char.match(/[A-Za-z]/);
+  }
+  */
+
+  function isEnglishCharacter(char) {
+    return /^[A-Za-z]$/.test(char);
+  }
+
+  function islastChar(str) {
+    return isEnglishCharacter(str[str.length - 1]);
+  }
+
+  function is0Char(str) {
+    return isEnglishCharacter(str[0]);
   }
   
   function verseobj() {
@@ -918,13 +936,19 @@ function restoreActionFromLocal() {
           if (this.level == 0) {
             let y = this.fs * 0.25;
             for (let i=0;i<this.substrings.length;i++) {
-              _drawSdwtxt(this.substrings[i], x, y);
+              if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
+                _drawSdwtxt(this.substrings[i]+'-', x, y);
+              else 
+                _drawSdwtxt(this.substrings[i], x, y);
               y += this.fs;
             }
           } else {
             let y = 0;//fontsize * 0.25;
             for (let i=0;i<this.substrings.length;i++) {
-              _drawtxt(this.substrings[i], x, y, this.opacity);
+              if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
+                _drawtxt(this.substrings[i]+'-', x, y, this.opacity);
+              else
+                _drawtxt(this.substrings[i], x, y, this.opacity);
               y += this.fs;
             }
             ctx.font = this.fs * 0.7 + "px " + fontFamily;

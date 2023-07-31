@@ -331,6 +331,8 @@ public class ReadParseNiv {
             }
             
             currentLine = line.substring(title.length() + 1).trim();
+            //currentLine = currentLine.replaceAll("\"", "\\\"");
+            currentLine = currentLine.replace("\"", "\\\"");
             //System.out.println(currentLine);
 
             currentLine = "\"" + currentLine + "\"";
@@ -373,10 +375,24 @@ public class ReadParseNiv {
 
         //new ReadParseNiv(volumns[0]).readline(volumns[0]);
 
+        
         for (int i=0;i<volumns.length;i++) {
             IDX = i;
             new ReadParseNiv(volumns[i]).readline(volumns[i]);
         }
+        
+
+
+        //String currentLine = "\"this is a book\"";
+        //System.out.println(currentLine);
+        //currentLine = currentLine.replaceAll("\"", "\\");
+        //System.out.println(currentLine);
+        
+        //String originalString = "代\"換成\"\"\"\"";
+        //System.out.println("原始字符串: " + originalString);
+        //originalString = originalString.replace("\"", "\\\"");
+        //System.out.println("替換後的字符串: " + originalString);
+
 
         /*
         new ReadParseNiv("Genesis").preReadline("Ge.", "Exodus");
