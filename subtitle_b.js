@@ -111,8 +111,8 @@ var presetVerse = [
   } 
   
   var SONGS = [ [['']] ];
-  
-  var abbr = ['', 
+    
+  const chineseAbbr = ['', 
   
   '創', '出', '利', '民', '申',
   '書', '士', '得', '撒上', '撒下', '王上', '王下', '代上', '代下', '拉', '尼', '斯',
@@ -128,7 +128,7 @@ var presetVerse = [
   
   ];
   
-  var fullname = ['',
+  var chineseFullname = ['',
   '創世記', '出埃及記', '利未記', '民數記', '申命記',
   '約書亞記', '士師記', '路得記', '撒母耳記上', '撒母耳記下', 
   //'列王記上', '列王記下',
@@ -147,21 +147,107 @@ var presetVerse = [
   '約翰壹書', '約翰貳書', '約翰參書',
   //'約翰一書', '約翰二書', '約翰三書', 
   '猶大書', '啟示錄'];
+
+  const engAbbr = ["", 
+        "Gen", "Exo", "Lev", "Num", "Deu",
+        "Jos", "Jug", "Rut", "1 Sa", "2 Sa", "1 Ki", "2 Ki", "1 Ch", "2 Ch", "Ezr", "Neh", "Est", 
+        "Job", "Psm", "Pro", "Ecc", "Son",
+        "Isa", "Jer", "Lam", "Eze", "Dan",
+        "Hos", "Joe", "Amo", "Oba", "Jon", "Mic", "Nah", "Hab", "Zep", "Hag", "Zec", "Mal",//).preReadline("Mal.", "Matthew");
+
+        "Mat", "Mak", "Luk", "Jhn", "Act",
+        "Rom", "1 Co", "2 Co", "Gal", "Eph", "Phl", "Col", "1 Ts", "2 Ts",
+        "1 Ti", "2 Ti", "Tit", "Phm",
+        "Heb", "Jas", "1 Pe", "2 Pe", "1 Jn", "2 Jn", "3 Jn", "Jud", "Rev"
+    ];
+
+    const engFullname = ["",
+                    "Genesis",//).preReadline("Ge.", "Exodus");
+                     "Exodus",//).preReadline("Ex.", "Leviticus");
+                     "Leviticus",//).preReadline("Le.", "Numbers");
+                     "Numbers",//).preReadline("Nu.", "Deuteronomy");
+                     "Deuteronomy",//).preReadline("De.", "Joshua");
+                     "Joshua",//).preReadline("Jo.", "Judges");
+                     "Judges",//).preReadline("Ju.", "Ruth");
+                     "Ruth",//).preReadline("Ru.", "1 Samuel");
+                     "1 Samuel",//).preReadline("1Sa.", "2 Samuel");
+                     "2 Samuel",//).preReadline("2Sa.", "1 Kings");
+                     "1 Kings",//).preReadline("1Kg.", "2 Kings");
+                     "2 Kings",//).preReadline("2Kg.", "1 Chronicles");
+                     "1 Chronicles",//).preReadline("1Ch.", "2 Chronicles");
+                     "2 Chronicles",//).preReadline("2Ch.", "Ezra");
+                     "Ezra",//).preReadline("Ezr.", "Nehemiah");
+                     "Nehemiah",//).preReadline("Ne.", "Esther");
+                     "Esther",//).preReadline("Es.", "Job");
+                     "Job",//).preReadline("Job", "Psalms");
+                     "Psalms",//).preReadline("Ps.", "Proverbs");
+                     "Proverbs",//).preReadline("Pr.", "Ecclesiastes");
+                     "Ecclesiastes",//).preReadline("Ec.", "SONG OF SOLOMON");
+                     "Song of Songs",//).preReadline("So.", "Isaiah");
+                     "Isaiah",//).preReadline("Is.", "Jeremiah");
+                     "Jeremiah",//).preReadline("Je.", "Lamentations");
+                     "Lamentations",//).preReadline("La.", "Ezekiel");
+                     "Ezekiel",//).preReadline("Ezekiel", "Daniel");
+                     "Daniel",//).preReadline("Daniel", "Hosea");
+                     "Hosea",//).preReadline("Hosea", "Joel");
+                     "Joel",//).preReadline("Joel", "Amos");
+                     "Amos",//).preReadline("Amos", "Obadiah");
+                     "Obadiah",//).preReadline("Obadiah", "Jonah");
+                     "Jonah",//).preReadline("Jonah", "Micah");
+                     "Micah",//).preReadline("Micah", "Nahum");
+                     "Nahum",//).preReadline("Nahum", "Habakkuk");
+                     "Habakkuk",//).preReadline("Habakkuk", "Zephaniah");
+                     "Zephaniah",//).preReadline("Zephaniah", "Haggai");
+                     "Haggai",//).preReadline("Haggai", "Zechariah");
+                     "Zechariah",//).preReadline("Zechariah", "Malachi");
+                     "Malachi",//).preReadline("Mal.", "Matthew");
+
+                     "Matthew",//).preReadline("Matthew", "Mark");
+                     "Mark",//).preReadline("Mark", "Luke");
+                     "Luke",//).preReadline("Luke", "John");
+                     "John",//).preReadline("John", "Acts");
+                     "Acts",//).preReadline("Acts", "Romans");
+                     "Romans",//).preReadline("Romans", "1 Corinthians");
+                     "1 Corinthians",//).preReadline("1 Corinthians", "2 Corinthians");
+                     "2 Corinthians",//).preReadline("2 Corinthians", "Galatians");
+                     "Galatians",//).preReadline("Galatians", "Ephesians");
+                     "Ephesians",//).preReadline("Ephesians", "Philippians");
+                     "Philippians",//).preReadline("Philippians", "Colossians");
+                     "Colossians",//).preReadline("Colossians", "1 Thessalonians");
+                     "1 Thessalonians",//).preReadline("1 Thessalonians", "2 Thessalonians");
+                     "2 Thessalonians",//).preReadline("2 Thessalonians", "1 Timothy");
+                     "1 Timothy",//).preReadline("1 Timothy", "2 Timothy");
+                     "2 Timothy",//).preReadline("2 Timothy", "Titus");
+                     "Titus",//).preReadline("Titus", "Philemon");
+                     "Philemon",//).preReadline("Philemon", "Hebrews");
+                     "Hebrews",//).preReadline("Hebrews", "James");
+                     "James",//).preReadline("James", "1 Peter");
+                     "1 Peter",//).preReadline("1 Peter", "2 Peter");
+                     "2 Peter",//).preReadline("2 Peter", "1 John");
+                     "1 John",//).preReadline("1 John", "2 John");
+                     "2 John",//).preReadline("2 John", "3 John");
+                     "3 John",//).preReadline("3 John", "Jude");
+                     "Jude",//).preReadline("Jude", "Revelation");
+                     "Revelation"
+    ];
   
-  /*
-  var abbr_eng = ['', 
-  'gen', 'exo', 'lev', 'num', 'deu',
-  'jos', 'jug', 'rut', '1sa', '2sa', '1ki', '2ki', '1ch', '2ch', 'ezr', 'neh', 'est',
-  'job', 'psm', 'pro', 'ecc', 'son',
-  'isa', 'jer', 'lam', 'eze', 'dan',
-  'hos', 'joe', 'amo', 'oba', 'jon', 'mic', 'nah', 'hab', 'zeo', 'hag', 'zec', 'mal',
-  
-  'mat', 'mak', 'luk', 'jhn', 'act',
-  'rom', '1co', '2co', 'gal', 'eph', 'phl', 'col', '1ts', '2ts',
-  '1ti', '2ti', 'tit', 'phm',
-  'heb', 'jas', '1pe', '2pe', '1jn', '2jn', '3jn', 'jud', 'rev'
-  ];
-  */
+    var abbr = chineseAbbr;
+    var fullname = chineseFullname;
+
+    var doLanguageSwitch = false;
+    function switchLang() {
+      if (!doLanguageSwitch) return;
+      if (abbr == chineseAbbr) {
+        abbr = engAbbr;
+        fullname = engFullname;
+      } else {
+        abbr = chineseAbbr;
+        fullname = chineseFullname;
+      }
+      for(let i=1;i<abbr.length;i++) SONGS[i] = getSong(abbr[i]);
+      subtitles = SONGS[song];
+      _repaint();
+    }
   
   const MAX_VERSES_GREEN = 2;
   const MAX_VERSES_NORMAL = 7;
@@ -1584,6 +1670,9 @@ function restoreActionFromLocal() {
       //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
             
       switch (e.keyCode) {
+        case 78:
+          switchLang();
+          break;
         //case 27: //'escape'
         //  document.parentElement.focus();
         //  break;
