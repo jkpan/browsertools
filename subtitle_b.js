@@ -2533,7 +2533,7 @@ function restoreActionFromLocal() {
     for(let c = 1;c < SONGS[v].length;c++) {
       a += (SONGS[v][c].length-1) + ', ';
     }
-    a += ']';
+    a += ']' ;
     console.log(a);
   }
   */
