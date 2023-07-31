@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <!--html, body {margin: 0; height: 100%; overflow: hidden;}-->
+    <style>
+      body {
+        margin: 0px;
+        height: 100%;
+        overflow: hidden;
+        background-color:green;
+      }
+      main {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      #chapter { 
+        border:0px solid blue; 
+        font-size: 48px;
+        color: rgb(180, 180, 180);
+      }
+      span { color:rgb(255, 255, 255); }
+    </style>
+  </head>
+
+  <script type="text/javascript" src="subtitle_b.js"></script>
+<script type="text/javascript" charset="UTF-8">
+    
+content_help = [[
+        "'左右' 上ㄧ節下ㄧ節  '上下' 上ㄧ章下ㄧ章",
+        "'-'上一卷  '='下一卷", 
+        "'1234567890' 跳至預存  'QWERTYUIOP' 儲存1-0", 
+        "'L' 選卷  'K' 選章  'J' 選節", 
+        "'A' 換顏色  'B' Blank  'C' 複製此節到剪貼簿 'M'文字模式",
+        "shift'ASDFG' 舊約分類  shift'ZXCV' 新約分類",
+        "shift'1234567890' 選章",
+        "shift'左右' 上十節下十節  shift'上下' 上十章下十章",
+        "shift'=-' 字大小  'esc' 跳回預設樣式",
+        "按住'space' 語音辨識(Chrome, 網路連線)",
+        "'F2'被控方 'F3'遠端被控方(使用node.js)"
+      ]];
+
+    abbr = ["", 
+        "Gen", "Exo", "Lev", "Num", "Deu",
+        "Jos", "Jug", "Rut", "1 Sa", "2 Sa", "1 Ki", "2 Ki", "1 Ch", "2 Ch", "Ezr", "Neh", "Est", 
+        "Job", "Psm", "Pro", "Ecc", "Son",
+        "Isa", "Jer", "Lam", "Eze", "Dan",
+        "Hos", "Joe", "Amo", "Oba", "Jon", "Mic", "Nah", "Hab", "Zep", "Hag", "Zec", "Mal",//).preReadline("Mal.", "Matthew");
+
+        "Mat", "Mak", "Luk", "Jhn", "Act",
+        "Rom", "1 Co", "2 Co", "Gal", "Eph", "Phl", "Col", "1 Ts", "2 Ts",
+        "1 Ti", "2 Ti", "Tit", "Phm",
+        "Heb", "Jas", "1 Pe", "2 Pe", "1 Jn", "2 Jn", "3 Jn", "Jud", "Rev"
+    ];
+
+    fullname = ["",
+                    "Genesis",//).preReadline("Ge.", "Exodus");
+                     "Exodus",//).preReadline("Ex.", "Leviticus");
+                     "Leviticus",//).preReadline("Le.", "Numbers");
+                     "Numbers",//).preReadline("Nu.", "Deuteronomy");
+                     "Deuteronomy",//).preReadline("De.", "Joshua");
+                     "Joshua",//).preReadline("Jo.", "Judges");
+                     "Judges",//).preReadline("Ju.", "Ruth");
+                     "Ruth",//).preReadline("Ru.", "1 Samuel");
+                     "1 Samuel",//).preReadline("1Sa.", "2 Samuel");
+                     "2 Samuel",//).preReadline("2Sa.", "1 Kings");
+                     "1 Kings",//).preReadline("1Kg.", "2 Kings");
+                     "2 Kings",//).preReadline("2Kg.", "1 Chronicles");
+                     "1 Chronicles",//).preReadline("1Ch.", "2 Chronicles");
+                     "2 Chronicles",//).preReadline("2Ch.", "Ezra");
+                     "Ezra",//).preReadline("Ezr.", "Nehemiah");
+                     "Nehemiah",//).preReadline("Ne.", "Esther");
+                     "Esther",//).preReadline("Es.", "Job");
+                     "Job",//).preReadline("Job", "Psalms");
+                     "Psalms",//).preReadline("Ps.", "Proverbs");
+                     "Proverbs",//).preReadline("Pr.", "Ecclesiastes");
+                     "Ecclesiastes",//).preReadline("Ec.", "SONG OF SOLOMON");
+                     "Song of Songs",//).preReadline("So.", "Isaiah");
+                     "Isaiah",//).preReadline("Is.", "Jeremiah");
+                     "Jeremiah",//).preReadline("Je.", "Lamentations");
+                     "Lamentations",//).preReadline("La.", "Ezekiel");
+                     "Ezekiel",//).preReadline("Ezekiel", "Daniel");
+                     "Daniel",//).preReadline("Daniel", "Hosea");
+                     "Hosea",//).preReadline("Hosea", "Joel");
+                     "Joel",//).preReadline("Joel", "Amos");
+                     "Amos",//).preReadline("Amos", "Obadiah");
+                     "Obadiah",//).preReadline("Obadiah", "Jonah");
+                     "Jonah",//).preReadline("Jonah", "Micah");
+                     "Micah",//).preReadline("Micah", "Nahum");
+                     "Nahum",//).preReadline("Nahum", "Habakkuk");
+                     "Habakkuk",//).preReadline("Habakkuk", "Zephaniah");
+                     "Zephaniah",//).preReadline("Zephaniah", "Haggai");
+                     "Haggai",//).preReadline("Haggai", "Zechariah");
+                     "Zechariah",//).preReadline("Zechariah", "Malachi");
+                     "Malachi",//).preReadline("Mal.", "Matthew");
+
+                     "Matthew",//).preReadline("Matthew", "Mark");
+                     "Mark",//).preReadline("Mark", "Luke");
+                     "Luke",//).preReadline("Luke", "John");
+                     "John",//).preReadline("John", "Acts");
+                     "Acts",//).preReadline("Acts", "Romans");
+                     "Romans",//).preReadline("Romans", "1 Corinthians");
+                     "1 Corinthians",//).preReadline("1 Corinthians", "2 Corinthians");
+                     "2 Corinthians",//).preReadline("2 Corinthians", "Galatians");
+                     "Galatians",//).preReadline("Galatians", "Ephesians");
+                     "Ephesians",//).preReadline("Ephesians", "Philippians");
+                     "Philippians",//).preReadline("Philippians", "Colossians");
+                     "Colossians",//).preReadline("Colossians", "1 Thessalonians");
+                     "1 Thessalonians",//).preReadline("1 Thessalonians", "2 Thessalonians");
+                     "2 Thessalonians",//).preReadline("2 Thessalonians", "1 Timothy");
+                     "1 Timothy",//).preReadline("1 Timothy", "2 Timothy");
+                     "2 Timothy",//).preReadline("2 Timothy", "Titus");
+                     "Titus",//).preReadline("Titus", "Philemon");
+                     "Philemon",//).preReadline("Philemon", "Hebrews");
+                     "Hebrews",//).preReadline("Hebrews", "James");
+                     "James",//).preReadline("James", "1 Peter");
+                     "1 Peter",//).preReadline("1 Peter", "2 Peter");
+                     "2 Peter",//).preReadline("2 Peter", "1 John");
+                     "1 John",//).preReadline("1 John", "2 John");
+                     "2 John",//).preReadline("2 John", "3 John");
+                     "3 John",//).preReadline("3 John", "Jude");
+                     "Jude",//).preReadline("Jude", "Revelation");
+                     "Revelation"
+    ];
+
+  //建構整本聖經
+  for(let i=1;i<abbr.length;i++) 
+    SONGS[i] = getSong(abbr[i]);
+
+    song = 0;
+    subtitles = SONGS[song];
+
+    jumpTo1();
+    _repaint();
+
+    setMsg_O();
+
+</script>

@@ -26,7 +26,7 @@ var presetVerse = [
     
     ];
 
-    const content_help = [[
+    var content_help = [[
         "'左右' 上ㄧ節下ㄧ節  '上下' 上ㄧ章下ㄧ章",
         "'-'上一卷  '='下一卷", 
         "'1234567890' 跳至預存  'QWERTYUIOP' 儲存1-0", 

@@ -72,6 +72,74 @@ public class ReadParseNiv {
                      "Jude",//).preReadline("Jude", "Revelation");
                      "Revelation"};//).preReadline("Revelation", "END.");
 
+  static String abbr[] = { "Gen",//).preReadline("Ge.", "Exodus");
+                     "Exo",//).preReadline("Ex.", "Leviticus");
+                     "Lev",//).preReadline("Le.", "Numbers");
+                     "Num",//).preReadline("Nu.", "Deuteronomy");
+                     "Deu",//).preReadline("De.", "Joshua");
+                     "Jos",//).preReadline("Jo.", "Judges");
+                     "Jug",//).preReadline("Ju.", "Ruth");
+                     "Rut",//).preReadline("Ru.", "1 Samuel");
+                     "1 Sa",//).preReadline("1Sa.", "2 Samuel");
+                     "2 Sa",//).preReadline("2Sa.", "1 Kings");
+                     "1 Ki",//).preReadline("1Kg.", "2 Kings");
+                     "2 Ki",//).preReadline("2Kg.", "1 Chronicles");
+                     "1 Ch",//).preReadline("1Ch.", "2 Chronicles");
+                     "2 Ch",//).preReadline("2Ch.", "Ezra");
+                     "Ezr",//).preReadline("Ezr.", "Nehemiah");
+                     "Neh",//).preReadline("Ne.", "Esther");
+                     "Est",//).preReadline("Es.", "Job");
+                     "Job",//).preReadline("Job", "Psalms");
+                     "Psm",//).preReadline("Ps.", "Proverbs");
+                     "Pro",//).preReadline("Pr.", "Ecclesiastes");
+                     "Ecc",//).preReadline("Ec.", "SONG OF SOLOMON");
+                     "Son",//).preReadline("So.", "Isaiah");
+                     "Isa",//).preReadline("Is.", "Jeremiah");
+                     "Jer",//).preReadline("Je.", "Lamentations");
+                     "Lam",//).preReadline("La.", "Ezekiel");
+                     "Eze",//).preReadline("Ezekiel", "Daniel");
+                     "Dan",//).preReadline("Daniel", "Hosea");
+                     "Hos",//).preReadline("Hosea", "Joel");
+                     "Joe",//).preReadline("Joel", "Amos");
+                     "Amo",//).preReadline("Amos", "Obadiah");
+                     "Oba",//).preReadline("Obadiah", "Jonah");
+                     "Jon",//).preReadline("Jonah", "Micah");
+                     "Mic",//).preReadline("Micah", "Nahum");
+                     "Nah",//).preReadline("Nahum", "Habakkuk");
+                     "Hab",//).preReadline("Habakkuk", "Zephaniah");
+                     "Zep",//).preReadline("Zephaniah", "Haggai");
+                     "Hag",//).preReadline("Haggai", "Zechariah");
+                     "Zec",//).preReadline("Zechariah", "Malachi");
+                     "Mal",//).preReadline("Mal.", "Matthew");
+
+                     "Mat",//).preReadline("Matthew", "Mark");
+                     "Mak",//).preReadline("Mark", "Luke");
+                     "Luk",//).preReadline("Luke", "John");
+                     "Jhn",//).preReadline("John", "Acts");
+                     "Act",//).preReadline("Acts", "Romans");
+                     "Rom",//).preReadline("Romans", "1 Corinthians");
+                     "1 Co",//).preReadline("1 Corinthians", "2 Corinthians");
+                     "2 Co",//).preReadline("2 Corinthians", "Galatians");
+                     "Gal",//).preReadline("Galatians", "Ephesians");
+                     "Eph",//).preReadline("Ephesians", "Philippians");
+                     "Phl",//).preReadline("Philippians", "Colossians");
+                     "Col",//).preReadline("Colossians", "1 Thessalonians");
+                     "1 Ts",//).preReadline("1 Thessalonians", "2 Thessalonians");
+                     "2 Ts",//).preReadline("2 Thessalonians", "1 Timothy");
+                     "1 Ti",//).preReadline("1 Timothy", "2 Timothy");
+                     "2 Ti",//).preReadline("2 Timothy", "Titus");
+                     "Tit",//).preReadline("Titus", "Philemon");
+                     "Phm",//).preReadline("Philemon", "Hebrews");
+                     "Heb",//).preReadline("Hebrews", "James");
+                     "Jas",//).preReadline("James", "1 Peter");
+                     "1 Pe",//).preReadline("1 Peter", "2 Peter");
+                     "2 Pe",//).preReadline("2 Peter", "1 John");
+                     "1 Jn",//).preReadline("1 John", "2 John");
+                     "2 Jn",//).preReadline("2 John", "3 John");
+                     "3 Jn",//).preReadline("3 John", "Jude");
+                     "Jud",//).preReadline("Jude", "Revelation");
+                     "Rev"};//).preReadline("Revelation", "END.");
+
  static int[][] cv = {{31, 25, 24, 26, 32, 22, 24, 22, 29, 32, 32, 20, 18, 24, 21, 16, 27, 33, 38, 18, 34, 24, 20, 67, 34, 35, 46, 22, 35, 43, 55, 32, 20, 31, 29, 43, 36, 30, 23, 23, 57, 38, 34, 34, 28, 34, 31, 22, 33, 26, },
                {22, 25, 22, 31, 23, 30, 25, 32, 35, 29, 10, 51, 22, 31, 27, 36, 16, 27, 25, 26, 36, 31, 33, 18, 40, 37, 21, 43, 46, 38, 18, 35, 23, 35, 35, 38, 29, 31, 43, 38, },
                {17, 16, 17, 35, 19, 30, 38, 36, 24, 20, 47, 8, 59, 57, 33, 34, 16, 30, 37, 27, 24, 33, 44, 23, 55, 46, 34, },
@@ -150,6 +218,8 @@ public class ReadParseNiv {
     int preverse = -1;
     String name = "";
 
+    static int IDX = 0;
+
     public void preReadline(int v) {
 
         currentLine = null;
@@ -211,7 +281,7 @@ public class ReadParseNiv {
 
         try {
 
-            BufferedReader br = new BufferedReader(new FileReader("niv_raw.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("bible_niv.txt"));
             
             String line = null;
 
@@ -266,7 +336,7 @@ public class ReadParseNiv {
             currentLine = "\"" + currentLine + "\"";
 
             if (preLine == null) {
-                System.out.println("<script id=\"" +prefix + "\" name=\"" + name +"\" type=\"application/json\" charset=\"UTF-8\"> {");
+                System.out.println("<script id=\"" +abbr[IDX] + "\" name=\"" + name +"\" type=\"application/json\" charset=\"UTF-8\"> {");
                 System.out.println("\"content\" : [[\"" + name + "\"],");
                 System.out.println("[\"" + name + " " + chapter + "\",");
                 //currentLine = "[" +currentLine;
@@ -303,7 +373,10 @@ public class ReadParseNiv {
 
         //new ReadParseNiv(volumns[0]).readline(volumns[0]);
 
-        for (int i=0;i<volumns.length;i++) new ReadParseNiv(volumns[i]).readline(volumns[i]);
+        for (int i=0;i<volumns.length;i++) {
+            IDX = i;
+            new ReadParseNiv(volumns[i]).readline(volumns[i]);
+        }
 
         /*
         new ReadParseNiv("Genesis").preReadline("Ge.", "Exodus");
