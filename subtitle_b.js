@@ -130,13 +130,17 @@ var presetVerse = [
   
   var chineseFullname = ['',
   '創世記', '出埃及記', '利未記', '民數記', '申命記',
+
   '約書亞記', '士師記', '路得記', '撒母耳記上', '撒母耳記下', 
   //'列王記上', '列王記下',
   '列王紀上', '列王紀下', 
   '歷代志上', '歷代志下', 
   '以斯拉記', '尼希米記', '以斯帖記',
+
   '約伯記', '詩篇', '箴言', '傳道書', '雅歌', 
+
   '以賽亞書', '耶利米書', '耶利米哀歌', '以西結書', '但以理書', 
+  
   '何西阿書', '約珥書', '阿摩司書', '俄巴底亞書', '約拿書', '彌迦書', '那鴻書', '哈巴谷書', '西番雅書', 
   '哈該書', '撒迦利亞書', '瑪拉基書',
   
@@ -162,73 +166,26 @@ var presetVerse = [
     ];
 
     const engFullname = ["",
-                    "Genesis",//).preReadline("Ge.", "Exodus");
-                     "Exodus",//).preReadline("Ex.", "Leviticus");
-                     "Leviticus",//).preReadline("Le.", "Numbers");
-                     "Numbers",//).preReadline("Nu.", "Deuteronomy");
-                     "Deuteronomy",//).preReadline("De.", "Joshua");
-                     "Joshua",//).preReadline("Jo.", "Judges");
-                     "Judges",//).preReadline("Ju.", "Ruth");
-                     "Ruth",//).preReadline("Ru.", "1 Samuel");
-                     "1 Samuel",//).preReadline("1Sa.", "2 Samuel");
-                     "2 Samuel",//).preReadline("2Sa.", "1 Kings");
-                     "1 Kings",//).preReadline("1Kg.", "2 Kings");
-                     "2 Kings",//).preReadline("2Kg.", "1 Chronicles");
-                     "1 Chronicles",//).preReadline("1Ch.", "2 Chronicles");
-                     "2 Chronicles",//).preReadline("2Ch.", "Ezra");
-                     "Ezra",//).preReadline("Ezr.", "Nehemiah");
-                     "Nehemiah",//).preReadline("Ne.", "Esther");
-                     "Esther",//).preReadline("Es.", "Job");
-                     "Job",//).preReadline("Job", "Psalms");
-                     "Psalms",//).preReadline("Ps.", "Proverbs");
-                     "Proverbs",//).preReadline("Pr.", "Ecclesiastes");
-                     "Ecclesiastes",//).preReadline("Ec.", "SONG OF SOLOMON");
-                     "Song of Songs",//).preReadline("So.", "Isaiah");
-                     "Isaiah",//).preReadline("Is.", "Jeremiah");
-                     "Jeremiah",//).preReadline("Je.", "Lamentations");
-                     "Lamentations",//).preReadline("La.", "Ezekiel");
-                     "Ezekiel",//).preReadline("Ezekiel", "Daniel");
-                     "Daniel",//).preReadline("Daniel", "Hosea");
-                     "Hosea",//).preReadline("Hosea", "Joel");
-                     "Joel",//).preReadline("Joel", "Amos");
-                     "Amos",//).preReadline("Amos", "Obadiah");
-                     "Obadiah",//).preReadline("Obadiah", "Jonah");
-                     "Jonah",//).preReadline("Jonah", "Micah");
-                     "Micah",//).preReadline("Micah", "Nahum");
-                     "Nahum",//).preReadline("Nahum", "Habakkuk");
-                     "Habakkuk",//).preReadline("Habakkuk", "Zephaniah");
-                     "Zephaniah",//).preReadline("Zephaniah", "Haggai");
-                     "Haggai",//).preReadline("Haggai", "Zechariah");
-                     "Zechariah",//).preReadline("Zechariah", "Malachi");
-                     "Malachi",//).preReadline("Mal.", "Matthew");
+                    "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
 
-                     "Matthew",//).preReadline("Matthew", "Mark");
-                     "Mark",//).preReadline("Mark", "Luke");
-                     "Luke",//).preReadline("Luke", "John");
-                     "John",//).preReadline("John", "Acts");
-                     "Acts",//).preReadline("Acts", "Romans");
-                     "Romans",//).preReadline("Romans", "1 Corinthians");
-                     "1 Corinthians",//).preReadline("1 Corinthians", "2 Corinthians");
-                     "2 Corinthians",//).preReadline("2 Corinthians", "Galatians");
-                     "Galatians",//).preReadline("Galatians", "Ephesians");
-                     "Ephesians",//).preReadline("Ephesians", "Philippians");
-                     "Philippians",//).preReadline("Philippians", "Colossians");
-                     "Colossians",//).preReadline("Colossians", "1 Thessalonians");
-                     "1 Thessalonians",//).preReadline("1 Thessalonians", "2 Thessalonians");
-                     "2 Thessalonians",//).preReadline("2 Thessalonians", "1 Timothy");
-                     "1 Timothy",//).preReadline("1 Timothy", "2 Timothy");
-                     "2 Timothy",//).preReadline("2 Timothy", "Titus");
-                     "Titus",//).preReadline("Titus", "Philemon");
-                     "Philemon",//).preReadline("Philemon", "Hebrews");
-                     "Hebrews",//).preReadline("Hebrews", "James");
-                     "James",//).preReadline("James", "1 Peter");
-                     "1 Peter",//).preReadline("1 Peter", "2 Peter");
-                     "2 Peter",//).preReadline("2 Peter", "1 John");
-                     "1 John",//).preReadline("1 John", "2 John");
-                     "2 John",//).preReadline("2 John", "3 John");
-                     "3 John",//).preReadline("3 John", "Jude");
-                     "Jude",//).preReadline("Jude", "Revelation");
-                     "Revelation"
+                     "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings",
+                     "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther",
+
+                     "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Songs",
+
+                     "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel",
+
+                     "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk",
+                     "Zephaniah", "Haggai", "Zechariah", "Malachi",
+
+                     "Matthew", "Mark", "Luke", "John", "Acts",
+
+                     "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians",
+                     "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
+
+                     "1 Timothy", "2 Timothy", "Titus", "Philemon",
+
+                     "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"
     ];
   
     var abbr = chineseAbbr;
@@ -2365,15 +2322,15 @@ function restoreActionFromLocal() {
     RecogResult = RecogResult.replace('約翰三', '約翰參');
   
     for (var i = 1;i<SONGS.length;i++) {
-      //if (RecogResult.startsWith(SONGS[i][0][0])) {
-      if (RecogResult.startsWith(fullname[i])) {
+      if (RecogResult.startsWith(chineseFullname[i])) {
+      //if (RecogResult.startsWith(fullname[i])) {
   
           result[0] = SONGS[i][0][0];
           jump2preset(result);
           _repaint();
           //window.requestAnimationFrame(_repaint);
   
-          let cut = SONGS[i][0][0].length;
+          let cut = chineseFullname[i].length;
           RecogResult = RecogResult.substr(cut, RecogResult.length - cut);
           RecogResult = RecogResult.trim();
           if (RecogResult.length == 0) return;
