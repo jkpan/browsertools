@@ -723,7 +723,24 @@ function openProfile() {
   document.getElementById('profile').click();
 }
 
-function getElmState() {
+function toObj() {
+  let obj = {};
+  for (let i=0;i<applets.length;i++) {
+    obj[applets[i].keyname] = {};
+    obj[applets[i].keyname]['posize'] = [applets[i].x, applets[i].y, applets[i].w, applets[i].h];
+    obj[applets[i].keyname]['perspective'] = applets[i].t_rotateY != 0;
+    try {
+      if (applets[i].elm.contentWindow.toObj() != null) {
+        obj[applets[i].keyname]['obj'] = applets[i].elm.contentWindow.toObj();
+      }
+    } catch (e) {
+      
+    }    
+  }
+  console.log(JSON.stringify(obj));
+}
+
+function getElmState() { 
   for (let i=0;i<applets.length;i++) {
     console.log(applets[i].keyname + ' : ' + 
                 applets[i].x + ', ' + applets[i].y + ', ' + 
@@ -752,6 +769,7 @@ function getElmState() {
 var _openWin = null;
 
 function openCtrl() {
+  //toObj(); return;
   if (_openWin) 
     _openWin.close();
   _openWin = window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=100,height=250,top="+(screen.height-400)+",left="+(screen.width-840));

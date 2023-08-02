@@ -2387,6 +2387,12 @@ function restoreActionFromLocal() {
     return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
   }
 
+  function toObj() {
+    let obj = {};
+    obj['saved'] = presetVerse;
+    return obj;
+  }
+
   //
   var recogResult = '';
   var recognizing = false;

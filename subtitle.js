@@ -1132,6 +1132,12 @@ function blank() {
   */
 }
 
+function toObj() {
+  let obj = {};
+  obj['list'] = list;
+  return obj;
+}
+
 //generate HTML
 createCanvas();
 createBGHiddenFile();
