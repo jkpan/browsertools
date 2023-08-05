@@ -27,17 +27,35 @@
                             "posize" :  [19, 18, 14, 14],
                             "perspective" : true,
                             "obj" : {
-                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vQK7YvQqx-eNp46Ms5RK_ubkTz7Hy4NK6vyhknd8o40tvZZyl-2qvVYMF7RrylFgQ/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                                "url" : ""
                             }
                         }
                     }
                  },
+    "frame_f3": {   "src": "./dashboard.html",
+                    "obj": {
+                        "ppt_1": {
+                            "posize": [2, 20, 11, 11],
+                            "perspective": false,
+                            "obj": {
+                                "url": "https://docs.google.com/presentation/d/e/2PACX-1vSjwQVMW0FqAqolCWckiTo0SzuxT9J68NwMiDgZFq1PDm7OS1efIslhpUEvLkFK6VnnawHvXgUpUV_U/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                            }
+                        },
+                        "ppt_2": {
+                            "posize": [21, 20, 11, 11],
+                            "perspective": false,
+                            "obj": {
+                                "url": ""
+                            }
+                        }
+                    }
+                },
     "frame_f5" : { "src" : "./dashboard.html", 
                     "obj" : {
                         "info": {
                             "posize" :  [1, 1, 4, 32],
                             "obj" : {
-                                "des" : "🏓渴慕盃八月十二🏓"
+                                "des" : "🏓渴慕盃週六登場🏓 執事會下週主日"
                             }
                         },
                         "ppt_1": {

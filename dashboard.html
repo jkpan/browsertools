@@ -734,7 +734,7 @@ function toObj() {
         obj[applets[i].keyname]['obj'] = applets[i].elm.contentWindow.toObj();
       }
     } catch (e) {
-      
+      obj[applets[i].keyname]['obj'] = { "url" : ""}
     }    
   }
   //console.log(JSON.stringify(obj));

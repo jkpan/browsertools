@@ -2389,6 +2389,8 @@ function restoreActionFromLocal() {
 
   function toObj() {
     let obj = {};
+    obj['color'] = color_selection;
+    obj['fontfactor'] = fontfactor;
     obj['saved'] = presetVerse;
     return obj;
   }

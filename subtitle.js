@@ -1134,6 +1134,8 @@ function blank() {
 
 function toObj() {
   let obj = {};
+  obj['mode'] = mode;
+  obj['fontfactor'] = fontfactor;
   obj['list'] = list;
   return obj;
 }

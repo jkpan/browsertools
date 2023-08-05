@@ -193,11 +193,11 @@ function toObj() {
         frameObj['obj'] = _obj;
       }
     } catch (e) {
-      
+      //frameObj['obj'] = { "url" : "xx" }
     }
   }
 
-  let str = JSON.stringify(obj);
+  let str = JSON.stringify(obj, null, "\t");
   console.log(str);
 
   var downloadLink = document.createElement("a");

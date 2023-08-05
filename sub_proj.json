@@ -1,68 +1,57 @@
 {
-    "frame_f1" : { "src" : "./dashboard.html", 
-                   "obj": {
-                        "ppt_1": {
-                            "posize" :  [19, 18, 14, 14],
-                            "perspective" : false,
-                            "obj" : {
-                                "url" : ""
-                            }
-                        },
-                        "ppt_2": {
-                            "posize" :  [19, 2, 14, 14],
-                            "perspective" : false,
-                            "obj" : {
-                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vQK7YvQqx-eNp46Ms5RK_ubkTz7Hy4NK6vyhknd8o40tvZZyl-2qvVYMF7RrylFgQ/embed?start=false&loop=false&delayms=3000&rm=minimal"
-                            }
-                        },
-                        "hymn" : {
-                            "posize" :  [1, 18, 14, 14],
-                            "perspective" : false,
-                            "obj" : {
-                                "list" : [
-
-                                    "其他111",
-                                    "其他112",
-                                    "救恩261",
-                                    "新歌頌揚180",
-
-                                    "主禱文", 
-                                    "使徒信經", 
-                                    "救恩300"
-
-                                ],
-                                "mode"  : 2,
-                                "fontfactor": 10
-                            }
-                        },
-                        "B/G" : "B"
-                    }
-    },
-    "frame_f21" : { "src" : "./newurl.html",
-                   "obj" : {
-                        "url"  : "https://www.youtube.com/embed/R24cP7M9Sr0"
+    "frame_f1" : { 
+                    "src" : "./newurl.html",
+                    "obj" : {
+                        "url"  : ""
                     } 
                 },
-    "frame_f22" : { "src" : "./subtitle.html",
+    "frame_f2" : { 
+                    "src" : "./subtitle.html",
                     "obj" : {
                         "list" : [
+                            "其他111",
+                            "其他112",
+                            "救恩261",
+                            "新歌頌揚180",
 
+                            "主禱文", 
+                            "使徒信經", 
+                            "救恩300"
                         ],
                         "master"     : 1,
                         "mode"       : 2,
                         "fontfactor" : 10
                     }
              },
-    "frame_f15" : { "src" : "./dashboard.html",
-                   "obj" : {
-                    "B/G" : "B"
-                   } 
-                },
-
-    "frame_f10" : { "src" : "./subtitle_b.html",
-                   "obj" : {
-                        "color"  : 2, 
-                        "fontfactor": 12
-                    } 
+    "frame_f3" : { 
+                "src" : "./Bible_play",
+                "obj" : {
+                    "color"  : 2, 
+                    "fontfactor": 10,
+                    "saved": [ 
+                        ["詩篇", 133, 1],[""],
+                        [""],[""],[""],[""],[""],[""],[""],[""]
+                    ]
+                }
+            },
+    "frame_f4": {   
+                    "src": "./dashboard.html",
+                    "obj": {
+                        "B/G" : "B",
+                        "ppt_1": {
+                            "posize": [1, 20, 15, 11],
+                            "perspective": false,
+                            "obj": {
+                                "url": "https://docs.google.com/presentation/d/e/2PACX-1vSjwQVMW0FqAqolCWckiTo0SzuxT9J68NwMiDgZFq1PDm7OS1efIslhpUEvLkFK6VnnawHvXgUpUV_U/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                            }
+                        },
+                        "ppt_2": {
+                            "posize": [18, 20, 15, 11],
+                            "perspective": false,
+                            "obj": {
+                                "url": ""
+                            }
+                        }
+                    }
                 }
 }
