@@ -151,7 +151,7 @@
     <button class="okbutton" onclick="preload('./sub_slave.json')">#2</button>
     <button class="okbutton" onclick="preload('./sub_proj.json')">#3</button>
     <button class="okbutton" onclick="loadJson()">#</button>
-    <button class="okbutton" onclick="toObj()">exp</button>   
+    <button class="okbutton" onclick="downloadExpJson()">exp</button>   
     <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
     <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
   </div>
@@ -196,19 +196,20 @@ function toObj() {
       //frameObj['obj'] = { "url" : "xx" }
     }
   }
+  return obj;
+}
 
-  let str = JSON.stringify(obj, null, "\t");
+function downloadExpJson() {
+  let str = JSON.stringify(toObj(), null, "\t");
   console.log(str);
-
   var downloadLink = document.createElement("a");
   downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + str);
-  downloadLink.setAttribute("download", "mysetting.json"); // 设置下载文件的名称，此处为myFile.txt
-
+  downloadLink.setAttribute("download", "sub_setting.json"); // 设置下载文件的名称，此处为myFile.txt
   // 4. 使用JavaScript模拟用户点击下载链接，从而触发下载
   downloadLink.click();
-
-  //return obj;
 }
+
+
 
 function preload(url) {
   fetch(url).then((response) => { // 
@@ -417,6 +418,15 @@ div.addEventListener('mouseenter', e => {
 });
 div.addEventListener('mouseleave', e => {
   showPane(div, false);
+});
+
+window.addEventListener('message', function(event) {
+
+  //console.log('message: ' + event);
+  
+  let frame = document.getElementById('frame_' + tab);
+  frame.src = event.data;
+
 });
 
 </script>

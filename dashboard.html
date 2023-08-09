@@ -594,7 +594,8 @@ class Applet {
       <button class="btn" onclick="colorSwitch()">B/G</button>
       <button class="btn" onclick="openCtrl()">Ctrl</button>
       <button class="btn" onclick="openProfile()">Profile</button>
-      <button class="btn" id="oxBtn" onclick="sendOX()">o</button>
+      <!--button class="btn" id="oxBtn" onclick="sendOX()">o</button-->
+      <button class="btn" onclick="downloadExpJson()">exp</button>  
       <input type="file" id="profile" accept=".json" hidden="true" onchange="selectProfile(event)" />
     </div>
     
@@ -604,6 +605,15 @@ class Applet {
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function downloadExpJson() {
+  let str = JSON.stringify(toObj(), null, "\t");
+  var downloadLink = document.createElement("a");
+  downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + str);
+  downloadLink.setAttribute("download", "dashboard_setting.json"); // 设置下载文件的名称，此处为myFile.txt
+  // 4. 使用JavaScript模拟用户点击下载链接，从而触发下载
+  downloadLink.click();
+}
 
 /*
 window.addEventListener('keyup', e => {
@@ -730,6 +740,7 @@ function toObj() {
     obj[applets[i].keyname] = {};
     obj[applets[i].keyname]['posize'] = [applets[i].x, applets[i].y, applets[i].w, applets[i].h];
     obj[applets[i].keyname]['perspective'] = applets[i].t_rotateY != 0;
+
     try {
       if (applets[i].elm.contentWindow.toObj() != null) {
         obj[applets[i].keyname]['obj'] = applets[i].elm.contentWindow.toObj();
@@ -738,6 +749,8 @@ function toObj() {
       obj[applets[i].keyname]['obj'] = { "url" : ""}
     }    
   }
+  let div = document.getElementById("mainDiv");
+  obj['B/G'] = div.style.backgroundColor == 'black'?'B':'G';
   //console.log(JSON.stringify(obj));
   return obj;
 }
