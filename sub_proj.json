@@ -9,10 +9,13 @@
                     "src" : "./subtitle.html",
                     "obj" : {
                         "list" : [
-                            "其他111",
-                            "其他112",
-                            "救恩261",
-                            "新歌頌揚180",
+                            
+                            "短歌68",
+                            "短歌51",
+                            "救恩194",
+                            "短歌92",
+                            "短歌36",
+                            "救恩64", 
 
                             "主禱文", 
                             "使徒信經", 
@@ -35,23 +38,9 @@
                 }
             },
     "frame_f4": {   
-                    "src": "./dashboard.html",
-                    "obj": {
-                        "B/G" : "B",
-                        "ppt_1": {
-                            "posize": [1, 20, 15, 11],
-                            "perspective": false,
-                            "obj": {
-                                "url": "https://docs.google.com/presentation/d/e/2PACX-1vSjwQVMW0FqAqolCWckiTo0SzuxT9J68NwMiDgZFq1PDm7OS1efIslhpUEvLkFK6VnnawHvXgUpUV_U/embed?start=false&loop=false&delayms=3000&rm=minimal"
-                            }
-                        },
-                        "ppt_2": {
-                            "posize": [18, 20, 15, 11],
-                            "perspective": false,
-                            "obj": {
-                                "url": ""
-                            }
-                        }
-                    }
+                    "src" : "./newurl.html",
+                    "obj" : {
+                        "url"  : ""
+                    } 
                 }
 }

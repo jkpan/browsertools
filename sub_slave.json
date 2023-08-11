@@ -40,22 +40,15 @@
                             "obj": {
                                 "url": ""
                             }
-                        },
-                        "ppt_2": {
-                            "posize": [21, 20, 11, 11],
-                            "perspective": false,
-                            "obj": {
-                                "url": ""
-                            }
                         }
                     }
                 },
-    "frame_f5" : { "src" : "./dashboard.html", 
+    "frame_f55" : { "src" : "./dashboard.html", 
                     "obj" : {
                         "info": {
                             "posize" :  [1, 1, 4, 32],
                             "obj" : {
-                                "des" : "🏓渴慕盃週六登場🏓 執事會下週主日"
+                                "des" : ""
                             }
                         },
                         "ppt_1": {

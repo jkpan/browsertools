@@ -154,15 +154,15 @@ var presetVerse = [
 
   const engAbbr = ["", 
         "Gen", "Exo", "Lev", "Num", "Deu",
-        "Jos", "Jug", "Rut", "1 Sa", "2 Sa", "1 Ki", "2 Ki", "1 Ch", "2 Ch", "Ezr", "Neh", "Est", 
+        "Jos", "Jug", "Rut", "1Sa", "2Sa", "1Ki", "2Ki", "1Ch", "2Ch", "Ezr", "Neh", "Est", 
         "Job", "Psm", "Pro", "Ecc", "Son",
         "Isa", "Jer", "Lam", "Eze", "Dan",
         "Hos", "Joe", "Amo", "Oba", "Jon", "Mic", "Nah", "Hab", "Zep", "Hag", "Zec", "Mal",//).preReadline("Mal.", "Matthew");
 
         "Mat", "Mak", "Luk", "Jhn", "Act",
-        "Rom", "1 Co", "2 Co", "Gal", "Eph", "Phl", "Col", "1 Ts", "2 Ts",
-        "1 Ti", "2 Ti", "Tit", "Phm",
-        "Heb", "Jas", "1 Pe", "2 Pe", "1 Jn", "2 Jn", "3 Jn", "Jud", "Rev"
+        "Rom", "1Co", "2Co", "Gal", "Eph", "Phl", "Col", "1Ts", "2Ts",
+        "1Ti", "2Ti", "Tit", "Phm",
+        "Heb", "Jas", "1Pe", "2Pe", "1Jn", "2Jn", "3Jn", "Jud", "Rev"
     ];
 
     const engFullname = ["",
