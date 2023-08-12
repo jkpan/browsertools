@@ -42,7 +42,7 @@
                     }
                 },
     "frame_f5": {
-                    "src": "http://localhost/dashboard.html",
+                    "src": "./dashboard.html",
                     "obj": {
                         "Bible": {
                             "posize": [1, 1, 16, 32],
