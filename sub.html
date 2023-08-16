@@ -164,22 +164,6 @@
 
 <script type="text/javascript" charset="UTF-8">
 
-function downloadString() {
-      // 1. 创建包含所需内容的字符串
-      var content = "这是要下载的字符串内容。Hello, world!";
-
-      // 2. 将字符串编码为URI组件
-      var encodedContent = encodeURIComponent(content);
-
-      // 3. 创建一个隐藏的下载链接，并将编码后的字符串作为链接的href属性
-      var downloadLink = document.createElement("a");
-      downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + encodedContent);
-      downloadLink.setAttribute("download", "myFile.txt"); // 设置下载文件的名称，此处为myFile.txt
-
-      // 4. 使用JavaScript模拟用户点击下载链接，从而触发下载
-      downloadLink.click();
-    }
-
 function toObj() {
   let obj = {}
   for (let i=1;i<=5;i++) {

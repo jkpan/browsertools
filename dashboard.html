@@ -608,6 +608,7 @@ class Applet {
 
 function downloadExpJson() {
   let str = JSON.stringify(toObj(), null, "\t");
+  console.log(str);
   var downloadLink = document.createElement("a");
   downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + str);
   downloadLink.setAttribute("download", "dashboard_setting.json"); // 设置下载文件的名称，此处为myFile.txt
