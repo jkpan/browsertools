@@ -1,77 +1,47 @@
 <!DOCTYPE html>
-<html>
-    <head>
-      <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
-      <style>
-      body {
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  .container {
+    display: flex;
+    height: 100vh; /* 设置容器高度为视窗高度的100% */
+  }
+  body {
         margin: 0px;
         background-color: rgb(0, 128, 0);
       }
-      ::-webkit-scrollbar {
+    ::-webkit-scrollbar {
         display: none;
       }
-.wrapper {
-    display: grid;
-    gap: 0px;
-    
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
-    width: 100%;
-    height: 100vh;
+  .column {
+    flex: 1;
+    padding: 10px;
+    border: 0px solid #ccc;
+    box-sizing: border-box;
+    overflow: auto;
   }
-  .left {
-    
-    grid-column: 1 / 15;
-    grid-row: 1 / 33;
-
-    user-select: none;
-
-  }
-  .mid {
-    
-    grid-column: 15 / 25;
-    grid-row: 1 / 33;
-
-    user-select: none;
-  }
-  .right {
-    
-    grid-column: 25 / 33;
-    grid-row: 1 / 33;
-
-    user-select: none;
-
-  }
-
-      button {
+  button {
             font-size: 16px;
             background-color: transparent;
             color: #00ff00;
             /*margin: 2% 2%;*/
-            width: 30%;
+            width: 33%;
             border: 1px solid;
             vertical-align: middle;
           }
-      </style>
-    </head>
-    <body>
-        
-        <div id="mainDiv" class="wrapper" style="background-color: #007000; opacity: 1.0;">
-
-        <div class="left" id="volumn">
-
-        </div>
-
-        <div class="mid" id="chapters">
-
-        </div>
-
-        <div class="right" id="verses">
-
-        </div>
-      
-    </body>
+</style>
+<title>Three Independent Columns with Full Viewport Height</title>
+</head>
+<body>
+  <div id="mainDiv" class="container">
+    <div id="volumn" class="column"></div>
+    <div id="chapters" class="column"></div>
+    <div id="verses" class="column"></div>
+  </div>
+</body>
 </html>
 
 <script type="text/javascript" charset="UTF-8">

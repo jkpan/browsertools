@@ -9,13 +9,7 @@
                     "src" : "./subtitle.html",
                     "obj" : {
                         "list" : [
-                            
-                            "救恩266",
-                            "讚美之泉47",
-                            "讚美之泉5",
-                            "讚美之泉66",
-                            "救恩213",
-                            
+                                                        
                             "主禱文", 
                             "使徒信經",
                             "救恩300"
@@ -26,7 +20,7 @@
                     }
              },
     "frame_f3" : { 
-                "src" : "./Bible_play",
+                "src" : "./subtitle.html",
                 "obj" : {
                     "color"  : 2, 
                     "fontfactor": 10,
