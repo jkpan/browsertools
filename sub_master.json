@@ -8,6 +8,11 @@
                             "救恩214",
                             "讚美之泉102",
 
+                            "其他113",
+                            "其他114",
+                            "其他5",
+                            "新歌頌揚241",
+
                             "主禱文", 
                             "使徒信經",
                             "救恩300"
@@ -24,13 +29,13 @@
                             "obj" : {
                                 "color"  : 2, 
                                 "fontfactor": 10,
-                                "saved": [ [""],[""], [""],[""],[""],[""],[""],[""],[""],[""] ]
+                                "saved": [ ["士師記", 3, 1],[""], [""],[""],[""],[""],[""],[""],[""],[""] ]
                             }
                         },
                         "ppt_1": {
                             "posize" :  [2, 19, 11, 12],
                             "obj" : {
-                                "url" : ""
+                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vSwAJL8wqVWFt_iCNvkmZ1Bux5DgRbwSV6YOZCsquTwfkxmDIXV8JUiSONBH9T2Bg/embed?start=false&loop=false&delayms=3000&rm=minimal"
                             }
                         },
                         "B/G" : "B"
