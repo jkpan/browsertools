@@ -2492,6 +2492,35 @@ function restoreActionFromLocal() {
 
   setMsg_O();
 
+  window.addEventListener("beforeunload", function() {    
+    obj = {"song": song, "phase": phase, "line" : line};
+    document.cookie = "last=" + JSON.stringify(obj) + "; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/";
+  });
+
+  function cookieStuff() {
+    const allCookies = document.cookie;
+    if (allCookies == null) return;
+    const cookiesArray = allCookies.split(";");
+    cookiesArray.forEach(cookie => {
+      const [name, value] = cookie.trim().split("=");
+      if (name == 'last') {
+        const v = decodeURIComponent(value);
+        //cookiesObject[name] = 
+        let obj = JSON.parse(v);
+        console.log(obj);
+
+        song = obj['song'];
+        subtitles = SONGS[song];
+        phase = obj['phase'];
+        line = obj['line'];
+        _repaint();
+        return;
+      }
+    });
+  }
+
+  cookieStuff();
+  
   /*
   for (let v = 1;v < SONGS.length;v++) {
     let a = '[';

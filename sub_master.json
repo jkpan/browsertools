@@ -3,11 +3,6 @@
                    "obj" : {
                         "list" : [
                         
-                            "新歌頌揚220",
-                            "讚美之泉4",
-                            "救恩214",
-                            "讚美之泉102",
-
                             "其他113",
                             "其他114",
                             "其他5",
@@ -29,13 +24,13 @@
                             "obj" : {
                                 "color"  : 2, 
                                 "fontfactor": 10,
-                                "saved": [ ["士師記", 3, 1],[""], [""],[""],[""],[""],[""],[""],[""],[""] ]
+                                "saved": [ [""], [""], [""], [""], [""], [""], [""], [""], [""], [""] ]
                             }
                         },
                         "ppt_1": {
                             "posize" :  [2, 19, 11, 12],
                             "obj" : {
-                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vSwAJL8wqVWFt_iCNvkmZ1Bux5DgRbwSV6YOZCsquTwfkxmDIXV8JUiSONBH9T2Bg/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                                "url" : ""
                             }
                         },
                         "B/G" : "B"
