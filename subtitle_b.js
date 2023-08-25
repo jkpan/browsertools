@@ -369,11 +369,17 @@ var presetVerse = [
     }
     if (sync_type == 2) return;
 
+    _saveAction2Local();
+
+  }
+
+  function _saveAction2Local() {
     let key = 'save action';  //localStorage.removeItem(key);
     let value = song + ' ' + phase + ' ' + line + ' ' + target_doblank;
     localStorage.setItem(key, value);
     console.log('saveAction2Local:' + value);
   }
+
   
   //判斷是不是要卷軸動畫
   function restoreAnim(volumn, chapter, verse, _doblank) {
@@ -2492,11 +2498,15 @@ function restoreActionFromLocal() {
 
   setMsg_O();
 
-  window.addEventListener("beforeunload", function() {    
-    obj = {"song": song, "phase": phase, "line" : line};
-    document.cookie = "last=" + JSON.stringify(obj) + "; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/";
+  window.addEventListener("beforeunload", function() {
+    _saveAction2Local();
+    //obj = {"song": song, "phase": phase, "line" : line};
+    //document.cookie = "last=" + JSON.stringify(obj) + "; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/";
   });
 
+  restoreActionFromLocal();
+
+  /*
   function cookieStuff() {
     const allCookies = document.cookie;
     if (allCookies == null) return;
@@ -2518,8 +2528,8 @@ function restoreActionFromLocal() {
       }
     });
   }
-
   cookieStuff();
+  */
   
   /*
   for (let v = 1;v < SONGS.length;v++) {
