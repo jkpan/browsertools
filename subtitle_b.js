@@ -1784,22 +1784,27 @@ function restoreActionFromLocal() {
           case 189: //'-'
             helpSwitch = 0;
             if (canvas.hidden) break;
-            if (song > 1) {
+            if (song > 1) 
               song = song - 1;
-              subtitles = SONGS[song];
-              phase = 0;
-              line = 0;
-            }
+            else 
+              song = SONGS.length -1;
+            subtitles = SONGS[song];
+            phase = 0;
+            line = 0;
+            
             break;
           case 187: //'='
             helpSwitch = 0;
             if (canvas.hidden) break;
-            if (song < SONGS.length -1) {
+            if (song < SONGS.length -1) 
               song = song + 1;
-              subtitles = SONGS[song];
-              phase = 0;
-              line = 0;
-            }
+            else 
+              song = 1;
+              
+            subtitles = SONGS[song];
+            phase = 0;
+            line = 0;
+
             break;
           /*
           case 48:
