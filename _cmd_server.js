@@ -5,6 +5,15 @@ const urltool = require('url');
 const os = require('os');
 //const cluster = require('cluster');
 
+const playCode = 
+`<script type="text/javascript" charset="UTF-8"> 
+  color_selection = 2; 
+  colorSwitch(); 
+  setMsg_play(); 
+  removeTEvent(); 
+  addFontSizeTouchEvent(); 
+</script>`;
+
 console.log('cpu ' + os.cpus().length + ' cores');
 
 function print(msg) {
@@ -304,14 +313,11 @@ const server = http.createServer((req, res) => {
 
     case '/Bible_play': {
       url = '/subtitle_b.html';
-      responseFile(`.${url}`, res,
-        `<script type="text/javascript" charset="UTF-8"> 
-          color_selection = 2; 
-          colorSwitch(); 
-          setMsg_play(); 
-          removeTEvent(); 
-          addFontSizeTouchEvent(); 
-        </script>`);
+      responseFile(`.${url}`, res, playCode);
+    } return;
+    case '/Bible_play_niv': {
+      url = '/subtitle_niv.html';
+      responseFile(`.${url}`, res, playCode);
     } return;
     default:
         if (req.url.startsWith('/cmd')) {
