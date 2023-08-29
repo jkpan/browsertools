@@ -336,7 +336,7 @@ const server = http.createServer((req, res) => {
   }
 
   if (url === '/') {
-    url = '/index.html';
+    url = '/index_nodejs.html';
   }
 
   const filePath = `.${url}`;
