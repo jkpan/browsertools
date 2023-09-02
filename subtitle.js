@@ -54,7 +54,6 @@ function json2List(fileContent) {
   // 進行 JSON 資料的處理
 
   if (!jsonData.list || jsonData.list.length == 0) {
-    //syncListFromController();
     if (jsonData.master && jsonData.master == 1) 
       saveListFromController();
   } else {
@@ -184,8 +183,6 @@ function ajax_restore() {
       let _doblank = res.blank;
 
       if (_song == song && _phase == phase && _line == line && _doblank == doblank) return;
-
-      //if (_song >= SONGS.length) {        syncListFromController();     return;       }
       
       song = _song;
       subtitles = SONGS[song];
@@ -197,9 +194,7 @@ function ajax_restore() {
         syncListFromController();
         return;
       }
-    
-      //if (line >= subtitles[phase].length) {      syncListFromController();     return;    }
-    
+        
       doblank = _doblank;
 
       _repaint();
@@ -317,8 +312,6 @@ function syncListFromController() {
   if (!value) return;
   var array = JSON.parse(value);
   getSongsFromList(array);
-  //console.log('syncListFromController.' + );
-  //alert(list + 'syncListFromController : ' + value);
 }
 
 function saveListFromController() {
