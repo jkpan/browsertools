@@ -1167,6 +1167,7 @@ function receiveMessage(e) {
     stopActionInterval();
   } else {
     console.log('Message received! ' + e.data);
+    console.trace();
     json2List(e.data);
   }
   _repaint();

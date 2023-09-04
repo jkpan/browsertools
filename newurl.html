@@ -27,6 +27,7 @@ body {
   grid-column: 1 / 13;
   grid-row: 1 / 13;
   user-select: none;
+  border: none;
 }
 .ui {
     grid-column: 2 / 12;
@@ -86,6 +87,7 @@ img {
         
         <!--embed-->
         <iframe width="100%" height="100%" hidden="true" class="full" id="pdf-viewer" type="application/pdf"></iframe>
+        <iframe width="100%" height="100%" hidden="true" class="full" id="web"></iframe>
         <video class="full" id="vsrc" width="100%" height="100%" controls="controls" hidden="true"></video>
         <div class="full" id="image_container" hidden="true"></div>
 
@@ -100,9 +102,13 @@ img {
                 let value = document.getElementById("ppt_url").value;
                 value = value.trim();
                 if (value.length == 0) return;
-                //if (value.includes('google')) value += '&rm=minimal';
-                window.location.href = value;
-                document.querySelector('body').style.background = 'transparent';
+
+                document.getElementById("ui").hidden = true;
+                document.getElementById("web").hidden = false;
+                document.getElementById("web").src = value;
+
+                //window.location.href = value;
+                //document.querySelector('body').style.background = 'transparent';
               }
               function iframeGo() {
 
@@ -228,7 +234,7 @@ function playVideo(event) {
 
 window.addEventListener('message', (e) => {
 
-  if (e.data.trim().length == 0) reutrn;
+  if (e.data.trim().length < 2) reutrn;
 
   const jsonData = JSON.parse(e.data);
 

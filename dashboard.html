@@ -594,7 +594,7 @@ class Applet {
       <button class="btn" onclick="colorSwitch()">B/G</button>
       <button class="btn" onclick="openCtrl()">Ctrl</button>
       <button class="btn" onclick="openProfile()">Profile</button>
-      <!--button class="btn" id="oxBtn" onclick="sendOX()">o</button-->
+      <button class="btn" id="oxBtn" onclick="sendOX()">o</button>
       <button class="btn" onclick="downloadExpJson()">exp</button>  
       <input type="file" id="profile" accept=".json" hidden="true" onchange="selectProfile(event)" />
     </div>
@@ -1185,6 +1185,19 @@ canvas.addEventListener('mousedown', (e) =>{
 
     if (applet.isClickHide(mouseX, mouseY)) {
       
+      //console.log('isClickHide');
+      
+
+      //var divToReload = document.getElementById('yourDivId'); // 用你的<div>的实际ID替换'yourDivId'
+      //divToReload.innerHTML = divToReload.innerHTML;
+
+      //console.log('----------');
+      //console.log(applets[selectIdx].elm);
+      //console.log('----------');
+
+      //applets[selectIdx].elm.setAttribute('src', "newurl.html");
+      //return;
+
       //if (applet.isHide()) applet.showSelf(); else applet.hideSelf();
       switchVisible4iframe(applets[selectIdx].keyname);
       return;
