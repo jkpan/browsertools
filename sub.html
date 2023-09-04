@@ -152,7 +152,7 @@
     <button class="okbutton" onclick="preload('./sub_proj.json')">#3</button>
     <button class="okbutton" onclick="loadJson()">#</button>
     <button class="okbutton" onclick="downloadExpJson()">exp</button>
-    <button class="okbutton" onclick="reloadFrame()">rl</button>   
+    <button class="okbutton" onclick="reloadFrame()">R</button>   
     <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
     <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
   </div>
@@ -168,9 +168,9 @@
 function reloadFrame() {
   
   let src = document.getElementById('frame_'+tab).getAttribute('src');
-  console.log('tab:' + tab + ': ' + src);
+  //console.log('tab:' + tab + ': ' + src);
   document.getElementById('frame_'+tab).setAttribute('src', src);
-  
+
 }
 
 function toObj() {
@@ -399,7 +399,7 @@ window.addEventListener('keydown', function(e) {
 function showPane(elm, show) {
   //div.hidden = !show;
   if (show) {
-    elm.style.opacity = '0.6';
+    elm.style.opacity = '0.8';
   } else {
     elm.style.opacity = '0.0';
   }

@@ -16,22 +16,36 @@ body {
   display: grid;
   gap: 0px;
     
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
   width: 100%;
   height: 100vh;
 
 }
 .full {    
-  grid-column: 1 / 13;
-  grid-row: 1 / 13;
+  grid-column: 1 / 25;
+  grid-row: 1 / 25;
   user-select: none;
   border: none;
 }
+.reload {
+
+  grid-column: 24 / 25;
+  grid-row: 3 / 4;
+  border: none;
+  opacity: 25%;
+
+  font-size: 24px;
+  background-color: rgb(0, 150, 0);
+  color: #00ff00;
+  
+  vertical-align: middle;
+
+}
 .ui {
-    grid-column: 2 / 12;
-    grid-row: 2 / 12;
+    grid-column: 2 / 24;
+    grid-row: 2 / 24;
 }
 
 ::-webkit-scrollbar {
@@ -88,6 +102,7 @@ img {
         <!--embed-->
         <iframe width="100%" height="100%" hidden="true" class="full" id="pdf-viewer" type="application/pdf"></iframe>
         <iframe width="100%" height="100%" hidden="true" class="full" id="web"></iframe>
+        <button class="reload" hidden="true" id="reload" type="button" onclick="reload()">R</button>
         <video class="full" id="vsrc" width="100%" height="100%" controls="controls" hidden="true"></video>
         <div class="full" id="image_container" hidden="true"></div>
 
@@ -106,6 +121,7 @@ img {
                 document.getElementById("ui").hidden = true;
                 document.getElementById("web").hidden = false;
                 document.getElementById("web").src = value;
+                document.getElementById("reload").hidden = false;
 
                 //window.location.href = value;
                 //document.querySelector('body').style.background = 'transparent';
@@ -122,6 +138,10 @@ img {
                 //let div = document.getElementById("ppt_container");
                 //div.innerHTML = value;
                 //div.hidden = false;
+              }
+              function reload() {
+                let d = document.getElementById("web");
+                document.getElementById("web").src = d.src;
               }
 
             </script>
