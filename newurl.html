@@ -32,7 +32,7 @@ body {
 .reload {
 
   grid-column: 24 / 25;
-  grid-row: 3 / 4;
+  grid-row: 22 / 23;
   border: none;
   opacity: 25%;
 
@@ -91,6 +91,9 @@ img {
   display: block;
   margin: 0 auto;
 }
+a {
+  color: #00ff00;
+}
 </style>
 </head>
     <body>
@@ -108,11 +111,11 @@ img {
 
         <div class="ui" id="ui">
           嵌入Google簡報, Canva簡報, Youtube影片...:
-          <textarea id="ppt_url" name="mytext" rows="5">
-          </textarea>
+          <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
-              document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal";
-              document.getElementById("ppt_url").select();
+              //document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal";
+              //document.getElementById("ppt_url").value = "&rm=minimal";
+              //document.getElementById("ppt_url").select();
               function urlGo() {
                 let value = document.getElementById("ppt_url").value;
                 value = value.trim();
@@ -149,10 +152,9 @@ img {
           <button class="okbutton" type="button" onclick="urlGo()">OK</button>
           <!--button class="okbutton" type="button" onclick="iframeGo()">OK (embedded whole iframe)</button-->
           <br/>
-            * Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal', 此時若要打開speaker notes按's'
-            <br/>
-            * Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上
-          
+            <a href="javascript:googleSlidesRemoveBar()"> * Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a> <br/>
+            * Google簡報要打開speaker notes按's'<br/>
+            * Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上<br/>
           <hr size="4" width="100%" color="#00ff00"/>
           本機檔案<br/>
           <P></P>
@@ -172,6 +174,13 @@ img {
 </html>
   
 <script type="text/javascript" charset="UTF-8">
+
+function googleSlidesRemoveBar() {
+  let value = document.getElementById("ppt_url").value;
+  value = value.trim();
+  value += '&rm=minimal';
+  document.getElementById("ppt_url").value = value;
+}
 
 function openFile(elmid) {
   document.getElementById(elmid).click();
@@ -266,8 +275,10 @@ window.addEventListener('message', (e) => {
 }, false);
 
 function toObj() {
+  if (!document.getElementById("web").hidden)
+    return { "url": document.getElementById("web").src };
+  //else return { "url": document.getElementById("ppt_url").value };
   return { "url": "" };
-  //return { "url": document.getElementById("ppt_url").value };
 }
 
 /*

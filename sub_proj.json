@@ -1,10 +1,23 @@
 {
-    "frame_f1" : { 
-                    "src" : "./newurl.html",
+    "frame_f1": {   
+                    "src" : "./dashboard.html",
                     "obj" : {
-                        "url"  : ""
-                    } 
-                },
+                        "ppt_1": {
+                            "posize" :  [3, 19, 11, 12],
+                            "obj" : {
+                                "url" : "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                            }
+                        },
+                        "ppt_2": {
+                            "posize" :  [20, 19, 11, 12],
+                            "obj" : {
+                                "url" : ""
+                            }
+                        },
+                        "B/G" : "B"
+                    }
+                    
+                }, 
     "frame_f2" : { 
                     "src" : "./subtitle.html",
                     "obj" : {
@@ -35,10 +48,10 @@
                     ]
                 }
             },
-    "frame_f4": {   
-                    "src" : "./newurl.html",
-                    "obj" : {
-                        "url"  : ""
-                    } 
-                }
+    "frame_f4" : { 
+                "src" : "./newurl.html",
+                "obj" : {
+                    "url"  : ""
+                } 
+            }
 }
