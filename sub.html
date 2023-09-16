@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <script type="text/javascript" charset="UTF-8">
 
-  const tabCount = 5;
+  const tabCount = 7;
 
   var tool_Bible = 'subtitle_b.html';
   var tool_index = 'tools.html';//'effect.html';
@@ -135,12 +135,28 @@
     </script>
   </div>
 
+  <div id="content_f6" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_f6" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_f6").src = tool_index;
+    </script>
+  </div>
+
+  <div id="content_f7" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+    <iframe id="frame_f7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    <script type="text/javascript" charset="UTF-8">
+      document.getElementById("frame_f7").src = tool_index;
+    </script>
+  </div>
+
   <div class="ctrl" id="ctrlBtns">
-    <button id="btn_f1" class="button" onclick="switchFunction('f1')">.</button>
-    <button id="btn_f2" class="button" onclick="switchFunction('f2')">.</button>
-    <button id="btn_f3" class="button" onclick="switchFunction('f3')">.</button>
-    <button id="btn_f4" class="button" onclick="switchFunction('f4')">.</button>
-    <button id="btn_f5" class="button" onclick="switchFunction('f5')">.</button>
+    <button id="btn_f1" class="button" onclick="switchFunction('f1')">1</button>
+    <button id="btn_f2" class="button" onclick="switchFunction('f2')">2</button>
+    <button id="btn_f3" class="button" onclick="switchFunction('f3')">3</button>
+    <button id="btn_f4" class="button" onclick="switchFunction('f4')">4</button>
+    <button id="btn_f5" class="button" onclick="switchFunction('f5')">5</button>
+    <button id="btn_f6" class="button" onclick="switchFunction('f6')">6</button>
+    <button id="btn_f7" class="button" onclick="switchFunction('f7')">7</button>
     &nbsp;
     &nbsp;
     <button class="okbutton" onclick="openCtrl()">c</button>
@@ -175,7 +191,7 @@ function reloadFrame() {
 
 function toObj() {
   let obj = {}
-  for (let i=1;i<=5;i++) {
+  for (let i=1;i<=tabCount;i++) {
     obj['frame_f'+i] = {};
     let frameObj = obj['frame_f'+i];
     frameObj['src'] = document.getElementById('frame_f'+i).src;
@@ -225,7 +241,7 @@ function handleProfile(jsonData) {
   //const fileContent = event.target.result;
   //const jsonData = JSON.parse(fileContent);
   //console.log(fileContent);
-  for (let i=1;i<=5;i++) {
+  for (let i=1;i<=tabCount;i++) {
       let _f = 'frame_f' + i;
       if (!jsonData[_f]) continue;
       let frame = document.getElementById(_f);

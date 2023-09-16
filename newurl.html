@@ -110,7 +110,7 @@ a {
         <div class="full" id="image_container" hidden="true"></div>
 
         <div class="ui" id="ui">
-          嵌入Google簡報, Canva簡報, Youtube影片...:
+          嵌入Google簡報, Canva簡報, Youtube影片...
           <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
               //document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal";
@@ -277,8 +277,8 @@ window.addEventListener('message', (e) => {
 function toObj() {
   if (!document.getElementById("web").hidden)
     return { "url": document.getElementById("web").src };
-  //else return { "url": document.getElementById("ppt_url").value };
-  return { "url": "" };
+  let _url = document.getElementById("ppt_url").value.trim();
+  return { "url": _url };
 }
 
 /*

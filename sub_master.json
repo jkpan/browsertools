@@ -43,7 +43,7 @@
                         "B/G" : "B"
                     }
                 },
-    "frame_f5": {
+    "frame_f10": {
                     "src": "./dashboard.html",
                     "obj": {
                         "Bible": {
