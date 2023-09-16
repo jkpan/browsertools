@@ -6,12 +6,21 @@ const os = require('os');
 //const cluster = require('cluster');
 
 const playCode = 
-`<script type="text/javascript" charset="UTF-8"> 
+`<script type="text/javascript" charset="UTF-8">
+
   color_selection = 2; 
   colorSwitch(); 
   setMsg_play(); 
   removeTEvent(); 
-  addFontSizeTouchEvent(); 
+  addFontSizeTouchEvent();
+  
+  //downsizeFS();
+
+  fontfactor += 5;
+  init();
+  
+  _repaint();
+
 </script>`;
 
 console.log('cpu ' + os.cpus().length + ' cores');
