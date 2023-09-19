@@ -1,0 +1,34 @@
+{
+    "frame_f1" : { 
+                "src" : "./newurl.html",
+                "obj" : {
+                    "url"  : ""
+                } 
+            },
+    "frame_f2" : {
+                    "src" : "./subtitle.html",
+                    "obj" : {
+                        "list" : [
+
+                            "主禱文", 
+                            "使徒信經",
+                            "救恩300"
+                        ],
+                        "master"     : 1,
+                        "mode"       : 2,
+                        "fontfactor" : 10
+                    }
+             },    
+    "frame_f3" : { 
+                "src" : "./newurl.html",
+                "obj" : {
+                    "url"  : ""
+                } 
+            },
+    "frame_f4" : {
+                "src" : "./newurl.html",
+                "obj" : {
+                    "url"  : ""
+                } 
+            }
+}

@@ -163,9 +163,9 @@
     <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
     &nbsp;
     &nbsp;
-    <button class="okbutton" onclick="preload('./sub_master.json')">#1</button>
-    <button class="okbutton" onclick="preload('./sub_slave.json')">#2</button>
-    <button class="okbutton" onclick="preload('./sub_proj.json')">#3</button>
+    <button class="okbutton" onclick="preload('./json_master.json')">#1</button>
+    <button class="okbutton" onclick="preload('./json_slave.json')">#2</button>
+    <button class="okbutton" onclick="preload('./json_proj.json')">#3</button>
     <button class="okbutton" onclick="loadJson()">#</button>
     <button class="okbutton" onclick="downloadExpJson()">exp</button>
     <button class="okbutton" onclick="reloadFrame()">R</button>
@@ -213,7 +213,7 @@ function downloadExpJson() {
   console.log(str);
   var downloadLink = document.createElement("a");
   downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + str);
-  downloadLink.setAttribute("download", "sub_setting.json"); // 设置下载文件的名称，此处为myFile.txt
+  downloadLink.setAttribute("download", "json_setting.json"); // 设置下载文件的名称，此处为myFile.txt
   // 4. 使用JavaScript模拟用户点击下载链接，从而触发下载
   downloadLink.click();
 }

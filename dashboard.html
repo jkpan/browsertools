@@ -438,7 +438,16 @@ class Applet {
     
     ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
     ctx.fillText('_', _x + _gap_w + _gap_w/2, _y + _gap_h + _gap_h/2);
-    
+
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.font = _gap_w + "px Arial";
+    ctx.fillStyle = 'rgb(50, 255, 50)';//"rgb(0,180,0)";
+    let pos = this.getPosition();
+    ctx.fillText(this.keyname, pos[0], pos[1]);
+    //ctx.fillStyle = 'rgb(50, 255, 50)';//"rgb(0,180,0)";
+    ctx.fillText(this.x +', '+ this.y +', '+ this.w +', '+ this.h , pos[0], pos[1] + _gap_w);
   }
 
   getPosition() {
@@ -1026,7 +1035,7 @@ function _repaint() {
     applets[selectIdx].drawSelRect();
   }
 
-  
+  /*
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.font = gap_w + "px Arial";
@@ -1036,6 +1045,7 @@ function _repaint() {
     //ctx.fillText(' ' + i, pos[0], pos[1]);
     ctx.fillText(applets[i].keyname, pos[0], pos[1]);
   }
+  */
   
 
 }
