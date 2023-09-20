@@ -102,51 +102,51 @@
   
   <div id="content_f1" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
     <iframe id="frame_f1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
-      <script type="text/javascript" charset="UTF-8">
+      <!--script type="text/javascript" charset="UTF-8">
         document.getElementById("frame_f1").src = tool_index;
-      </script>
+      </script-->
   </div>
 
   <div id="content_f2" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
     <iframe id="frame_f2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      <script type="text/javascript" charset="UTF-8">
+      <!--script type="text/javascript" charset="UTF-8">
         document.getElementById("frame_f2").src = tool_index;
-      </script>
+      </script-->
   </div>
 
   <div id="content_f3" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
     <iframe id="frame_f3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_f3").src = tool_index;
-    </script>
+      <!--script type="text/javascript" charset="UTF-8">
+        document.getElementById("frame_f3").src = tool_index;
+      </script-->
   </div>
 
   <div id="content_f4" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
     <iframe id="frame_f4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
+    <!--script type="text/javascript" charset="UTF-8">
       document.getElementById("frame_f4").src = tool_index;
-    </script>
+    </script-->
   </div>
 
   <div id="content_f5" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
     <iframe id="frame_f5" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
+    <!--script type="text/javascript" charset="UTF-8">
       document.getElementById("frame_f5").src = tool_index;
-    </script>
+    </script-->
   </div>
 
   <div id="content_f6" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
     <iframe id="frame_f6" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
+    <!--script type="text/javascript" charset="UTF-8">
       document.getElementById("frame_f6").src = tool_index;
-    </script>
+    </script-->
   </div>
 
   <div id="content_f7" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
     <iframe id="frame_f7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <script type="text/javascript" charset="UTF-8">
+    <!--script type="text/javascript" charset="UTF-8">
       document.getElementById("frame_f7").src = tool_index;
-    </script>
+    </script-->
   </div>
 
   <div class="ctrl" id="ctrlBtns">
@@ -180,6 +180,11 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function resetFrame() {
+  for (let i=1;i<=tabCount;i++) 
+    document.getElementById('frame_f'+i).src = tool_index;
+}
 
 function reloadFrame() {
   
@@ -241,6 +246,7 @@ function handleProfile(jsonData) {
   //const fileContent = event.target.result;
   //const jsonData = JSON.parse(fileContent);
   //console.log(fileContent);
+  resetFrame();
   for (let i=1;i<=tabCount;i++) {
       let _f = 'frame_f' + i;
       if (!jsonData[_f]) continue;
@@ -254,6 +260,7 @@ function handleProfile(jsonData) {
           frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/'); 
         } 
   }
+  switchFunction('f1');
 }
 
 function selectSetting(event) {
@@ -400,6 +407,7 @@ function _switchFunction(idx) {
 
 }
 
+resetFrame();
 switchFunction('f1');
 
 var keylock = false;

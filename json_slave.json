@@ -32,33 +32,6 @@
                         }
                     }
                  },
-    "frame_f3": {
-                    "src": "./dashboard.html",
-                    "obj": {
-                        "ppt_1": {
-                            "posize": [2, 20, 11, 11],
-                            "perspective": false,
-                            "obj": {
-                                "url": "https://docs.google.com/presentation/d/e/2PACX-1vQWPJF6cwdikS42MTM_VjTm_EYZw6yZU-Mw7e3ktVFvENHQxWCkGgCvda8Ot05T_Q/embed?start=false&loop=false&delayms=3000&rm=minimal"
-                            }
-                        },
-                        "ppt_2": {
-                            "posize": [ 2, 10, 11, 8],
-                            "perspective": false,
-                            "obj": {
-                                "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBcDaKYEkFneHK2gDXwXx0FssiI9tvYeIt0Y80JwSIG0uw7z6dRjKObkcuY-tr0A/pubhtml?widget=true&amp;headers=false"
-                            }
-                        },
-                        "ppt_3": {
-                            "posize": [ 19, 20, 13, 11],
-                            "perspective": false,
-                            "obj": {
-                                "url": "https://docs.google.com/presentation/d/e/2PACX-1vTuJZBQ0ulyLtm662M7KRanP3Gx6cN60hCP6Bf2aNo_7Kw3Izi9E-i9ryBZC4c6Qg/embed?start=false&loop=false&delayms=3000&rm=minimal"
-                            }
-                        },
-                        "B/G": "G"
-                    }
-                },
     "frame_f55" : { "src" : "./dashboard.html", 
                     "obj" : {
                         "info": {

@@ -2,10 +2,16 @@
     "frame_f1" : { 
                 "src" : "./newurl.html",
                 "obj" : {
-                    "url"  : ""
-                } 
+                    "url"  : "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+                }
             },
-    "frame_f2" : {
+    "frame_f2" : { 
+                "src" : "./newurl.html",
+                "obj" : {
+                    "url"  : ""
+                }
+            },
+    "frame_f3" : {
                     "src" : "./subtitle.html",
                     "obj" : {
                         "list" : [
@@ -19,16 +25,35 @@
                         "fontfactor" : 10
                     }
              },    
-    "frame_f3" : { 
+    "frame_f4" : { "src" : "./dashboard.html", 
+             "obj" : {
+                  "Bible": {
+                      "posize" :  [15, 15, 18, 18], 
+                      "obj" : {
+                          "color"  : 2, 
+                          "fontfactor": 10,
+                          "saved": [ [""], [""], [""], [""], [""], [""], [""], [""], [""], [""] ]
+                      }
+                  },
+                  "ppt_1": {
+                      "posize" :  [2, 19, 11, 12],
+                      "obj" : {
+                          "url" : ""
+                      }
+                  },
+                  "B/G" : "B"
+              }
+          },
+    "frame_f5" : {
+            "src" : "./newurl.html",
+            "obj" : {
+                "url"  : ""
+            } 
+        },
+    "frame_f6" : {
                 "src" : "./newurl.html",
                 "obj" : {
-                    "url"  : ""
-                } 
-            },
-    "frame_f4" : {
-                "src" : "./newurl.html",
-                "obj" : {
-                    "url"  : ""
+                    "url"  : "https://docs.google.com/presentation/d/e/2PACX-1vR3t2qRf_NEqqZvQfMEtMt7ioBdZOKUpE4no1gHT8Q9VtlGUvHIPhiD3UtvbOOwVA/embed?start=false&loop=false&delayms=3000&rm=minimal"
                 } 
             }
 }

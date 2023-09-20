@@ -700,7 +700,7 @@ function handleProfile(fileContent) {
       div.style.backgroundColor = 'black';
       colorSwitch();
     }
-  }    
+  }
 
   for (let i=0;i<APPS.length;i++) {
     if (!jsonData[APPS[i]]) continue;
@@ -722,7 +722,16 @@ function handleProfile(fileContent) {
       }
     }
   }
-  _repaint();    
+
+  _repaint();
+
+  /*
+  if (jsonData['ctrl'] && jsonData['ctrl'] == 1) {
+    focus();
+    openCtrl();
+  } 
+  */
+
 }
 
 function selectProfile(event) {
@@ -797,6 +806,7 @@ function openCtrl() {
   //toObj(); return;
   if (_openWin) 
     _openWin.close();
+  console.log('openCtrl!');
   _openWin = window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=100,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
 }
 
@@ -1087,12 +1097,10 @@ function showCtrlPane(show) {
 }
 
 let div = document.getElementById("controlDiv");
-div.addEventListener('mouseenter', e => {
-//document.addEventListener('mouseenter', e => {
+div.addEventListener('mouseenter', e => { 
   showCtrlPane(true);
 });
-div.addEventListener('mouseleave', e => {
-//document.addEventListener('mouseleave', e => {
+div.addEventListener('mouseleave', e => { 
   showCtrlPane(false);
 });
 
