@@ -9,7 +9,9 @@
 
 <!DOCTYPE html>
 <html>
-  <style>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
 .container {
   height: 100vh;
   width: 100vw;
@@ -187,6 +189,25 @@ mouseOverContainer.onmousemove = function(e) {
     //"perspective(100px) " + "   rotateX(" + calcX + "deg) " + "   rotateY("+ calcY +"deg) ";
   });
 };
+
+function getGoogleSheetData() {
+  //const url = "https://docs.google.com/spreadsheets/d/1wJBqYt8OerwUyUUnO8GIuIIuFu7tj2HPWg1CKATZ-MY/edit?usp=sharing";
+  const url = "https://docs.google.com/spreadsheets/d/1wJBqYt8OerwUyUUnO8GIuIIuFu7tj2HPWg1CKATZ-MY/export?format=csv";
+  fetch(url).then((response) => { // 
+        return response.text();//.json();
+    }).then( (txt) => {
+        //console.log(json);//http://localhost/list.json
+        //handleProfile(json);
+        console.log(txt);
+        alert(txt);
+    }).catch((error) => {
+      alert('Error' + error);
+      console.log(`Error: ${error}`);
+      getSongsFromList();
+    });
+}
+
+getGoogleSheetData();
 
 </script>
 

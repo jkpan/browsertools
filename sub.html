@@ -223,13 +223,18 @@ function downloadExpJson() {
   downloadLink.click();
 }
 
+//const json1 = 'https://drive.google.com/file/d/1yMLJpNHcHp0ieegK8_tHQ58EAtPHbPRj/view?usp=sharing';
+//const json2 = 'https://drive.google.com/file/d/1yMLJpNHcHp0ieegK8_tHQ58EAtPHbPRj/export?download';
+//const json3 = 'https://docs.google.com/document/d/1Ygg0zosS_4POte8KR98hribQS6AwvtiWp2gruUmP0Bo/export?format=txt';
+//const json3 = 'https://drive.google.com/uc?export=download&id=1yMLJpNHcHp0ieegK8_tHQ58EAtPHbPRj';
 
 
 function preload(url) {
-  fetch(url).then((response) => { // 
+  //url = json1;
+  fetch(url).then((response) => { //
+        //console.log(response);
         return response.json();
     }).then( (json) => {
-        //console.log(json);//http://localhost/list.json
         handleProfile(json);
     }).catch((error) => {
       alert('Error' + error);
