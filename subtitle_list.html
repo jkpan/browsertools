@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  .container {
+    display: flex;
+    height: 100vh; /* 设置容器高度为视窗高度的100% */
+  }
+  body {
+        margin: 0px;
+        background-color: rgb(0, 128, 0);
+      }
+    ::-webkit-scrollbar {
+        display: none;
+      }
+
+  .column {
+    flex: 1;
+    padding: 10px;
+    border: 0px solid #ccc;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+  button {
+            font-size: 14px;
+            background-color: transparent;
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            /*width: 33%;*/
+            border: 1px solid;
+            vertical-align: middle;
+          }
+</style>
+<title>Three Independent Columns with Full Viewport Height</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+//window.opener.
+
+function _createEmptyBtn() {
+  var button = document.createElement('button');
+  //button.innerHTML = ' <br/> ';
+  button.style.width = '172px'; // setting the width to 200px
+  button.style.height = '25px'; // setting the height to 200px
+  //button.style.background = 'teal'; // setting the background color to teal
+  //button.style.color = 'white'; // setting the color to white
+  button.style.fontSize = '14px'; // setting the font size to 20px
+  //document.body.appendChild(button);
+  return button;
+}
+
+function _createBtn(idtxt, attr) {
+  var button = document.createElement('button');
+  button.innerHTML = idtxt + '<br/>' + attr;// + ' ' + getSong(idtxt)[0][0];
+  button.id = 'btn' + idtxt;
+
+  button.style.width = '172px'; // setting the width to 200px
+  button.style.height = '75px'; // setting the height to 200px
+  //button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
+  //button.style.color = 'rgb(0,255,0)'; // setting the color to white
+  button.style.fontSize = '14px'; // setting the font size to 20px
+
+  button.onclick = function() {
+    
+    window.opener.list.push(idtxt);
+    window.opener.saveListFromController();
+
+    window.opener.SONGS[window.opener.SONGS.length] = window.opener.getSong(idtxt);
+    window.opener.song = window.opener.SONGS.length - 1;
+    window.opener.phase = 0;
+    window.opener.line = 0;
+    window.opener.subtitles = window.opener.SONGS[window.opener.song];
+    //alert(idtxt + ' ' + subtitles[0][0]);
+    //hideCanvas();
+    window.opener._repaint();
+    return false;
+  };
+  //document.body.appendChild(button);
+  return button;
+}
+
+function _songBtn(id) {
+  var exist = window.opener.document.getElementById(id);
+  var btn;
+  if (exist) {
+      var attr = exist.getAttribute("name");
+      if (!attr) attr = ''; 
+      btn = _createBtn(id, attr);
+  } else {
+      btn = _createEmptyBtn();
+  }
+  return btn;
+}
+
+function createBtns() {
+
+  var div = document.createElement('div');
+  div.id = 'btns';
+  document.body.appendChild(div);
+
+  //'VOLUMN'
+  let VOLUMN = window.opener.getSong('VOLUMN');
+
+  for (let pf = 0;pf<VOLUMN.length;pf++) {
+
+    var span = document.createElement('span');
+    span.style.color = 'rgb(0,255,0)' // apply your style
+    span.appendChild(document.createTextNode(VOLUMN[pf][3]));
+    div.appendChild(span);
+    div.insertAdjacentHTML('beforeend', '<p></p>');
+
+    for (var i=1;i<=VOLUMN[pf][1];i++) {
+      var btn = _songBtn(VOLUMN[pf][0]+i);
+      if (pf%2 == 0) {
+        btn.style.background = '#005500';//window.opener.COLORS_CK[0]; // setting the background color to teal
+      }
+      
+      if (btn.innerHTML.length > 0 || VOLUMN[pf][2]) {
+        div.appendChild(btn);
+      }
+    }
+
+    div.insertAdjacentHTML('beforeend', '<p></p>');
+  }
+
+  let EVENTS = window.opener.getSong('EVENTS');
+
+  for (let pf = 0;pf<EVENTS.length;pf++) {
+
+    var span = document.createElement('span');
+    span.style.color = 'rgb(0,255,0)' // apply your style
+    span.appendChild(document.createTextNode(EVENTS[pf]));
+    div.appendChild(span);
+    div.insertAdjacentHTML('beforeend', '<p></p>');
+    
+    let toolList = window.opener.getSong(EVENTS[pf]);
+
+    for(let i = 0;i<toolList.length;i++) {
+      var btn = _songBtn(toolList[i]);
+      btn.style.background = '#009900';
+      div.appendChild(btn);
+    }
+
+    div.insertAdjacentHTML('beforeend', '<p></p>');
+
+  }
+
+}
+
+createBtns();
+
+</script>

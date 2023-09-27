@@ -323,6 +323,7 @@ function saveListFromController() {
   //console.log('saveListFromController : ' + value);
 }
 
+/*
 function _createEmptyBtn() {
   var button = document.createElement('button');
   //button.innerHTML = ' <br/> ';
@@ -455,7 +456,17 @@ function removeBtns() {
   }
   return;
 }
+*/
 
+var selector = null;
+function openSelector() {
+  if (selector) 
+    selector.close();
+  console.log('openCtrl!');
+  selector = window.open("subtitle_list.html", "_blank", 'width=800, height=600, left=100, top=100');
+}
+
+/*
 function hideCanvas() {
   
   if (canvas.hidden) {
@@ -466,6 +477,7 @@ function hideCanvas() {
     canvas.hidden = true;
   }
 }
+*/
 
 function prepareImage() {
   img = new Image();
@@ -871,7 +883,8 @@ function keyboard(e) {
       case 72: //'h 
           helpSwitch = helpSwitch == 0?1:0;
           break;
-      case 76: hideCanvas(); break; //'l'
+      //case 76: hideCanvas(); break; //'l'
+      case 76: openSelector(); break; //'l'
       case 38: //'ArrowUp'
           if (phase > 0) {
             phase = phase - 1;  
@@ -954,7 +967,7 @@ function keyboard(e) {
         //case 13: //'enter' 
         case 27: //'escape'
           mode = 0;
-          removeBtns();
+          //removeBtns();
           canvas.hidden = false;
           animSwh = 0;
           animIdx = 0;
