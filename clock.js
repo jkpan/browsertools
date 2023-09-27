@@ -1,7 +1,7 @@
 
 class ClockObj {
 
-    fontColor = "rgb(180, 180, 180)";
+    fontColor = "rgb(220, 220, 220)";
     bgColor = "rgba(0, 0, 0, 0.5)";
     frequence = -1;
     
@@ -158,13 +158,17 @@ class ClockObj {
         _ctx.lineWidth = Math.ceil(fs/14.0);
         _ctx.strokeStyle = this.fontColor;
         
-        _ctx.strokeText(_time, fs, fs);      
-        _ctx.fillText(_time, fs, fs);
+        let x = c.width/2;
+        let y = c.height/2;
+        _ctx.textAlign = "center";
+
+        _ctx.strokeText(_time, x, y);      
+        _ctx.fillText(_time, x, y);
         
         _ctx.font = (fs/1.5) + "px Monospace";
         
-        _ctx.strokeText(_date, fs, fs + fs/1.5);
-        _ctx.fillText(  _date, fs, fs + fs/1.5);
+        _ctx.strokeText(_date, x, y + fs/1.5);
+        _ctx.fillText(  _date, x, y + fs/1.5);
       
     }
 
