@@ -5,17 +5,7 @@
 
   var tool_Bible = 'subtitle_b.html';
   var tool_index = 'tools.html';//'effect.html';
-  
-  /*
-  const URL_HELP = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';
-  //var demo = 'https://docs.google.com/presentation/d/e/2PACX-1vQF2IcPH9tSgDnQVPQm_EbE_ZXAHZj-9lX4-Gb9zsdAhlyiC8LhQrTwHs0f-5OZ2g/embed?start=false&loop=false&delayms=3000';
-  var ppt = [URL_HELP,
-             '', 
-             '', 
-             ''];
-  var pptype = [0, 0, 0, 0];
-  */
-  
+    
 </script>
 <html>
 <head>
@@ -30,53 +20,43 @@
   ::-webkit-scrollbar {
     display: none;
   }
-  input[type=text] {
-        width:60%;
-        border:2px solid #0d0;
-        border-radius: 4px;
-        margin: 2% 2%;
-        outline: none;
-        padding: 8px;
-        box-sizing: border-box;
-  }
-  input[type=text]:focus {
-        border-color: #00ff00;
-        box-shadow: 0 0 8px 0 #007000;
-  }
-  ::selection {
-    color: #007000;
-    background: #00ff00;
-    border-color: #00ff00;
-    box-shadow: 0 0 8px 0 #007000;
-  }
-  .select {
-            font-size: 28px;
-            height: 40px;
-            border: none;
-            border-radius: 3px;
-            vertical-align: middle;
-            margin: 2% 2%;
-            color: #00ff00;
-
-        }
   .wrapper {
     display: grid;
     gap: 0px;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 22fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 100fr;
     grid-template-rows: 1fr 100fr;
     width: 100%;
     height: 100vh;
+    overflow: hidden;
+    position: fixed;
   }
   .ctrl {
-    grid-column: 1 / 12;
+    grid-column: 1 / 3;
     grid-row: 1 / 2;
     background-color: #007000;
     z-index: 90;
   }
   .content {
-    grid-column: 1 /12;
+    grid-column: 1 /3;
     grid-row: 1 / 3;
   }
+  .container {
+
+        width: 100%;
+        height: 100%;
+
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        display: flex;
+
+        /* 过渡动画 1s */
+        transition: all 0.5s;
+
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
   .button {
     font-size: 16px;
     background-color:transparent;
@@ -99,79 +79,61 @@
 <body>
 
 <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
+
+    <div class="ctrl" id="ctrlBtns">
+        <button id="btn_1" class="button" onclick="switchFunction(1)">1</button>
+        <button id="btn_2" class="button" onclick="switchFunction(2)">2</button>
+        <button id="btn_3" class="button" onclick="switchFunction(3)">3</button>
+        <button id="btn_4" class="button" onclick="switchFunction(4)">4</button>
+        <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
+        <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
+        <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
+        &nbsp;
+        &nbsp;
+        <button class="okbutton" onclick="openCtrl()">c</button>
+        <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
+        <button id="aBtn" class="okbutton" onclick="setSlideAnim()">&lt;&gt;</button>
+        &nbsp;
+        <button class="okbutton" onclick="preload('./json_master.json')">#1</button>
+        <button class="okbutton" onclick="preload('./json_slave.json')">#2</button>
+        <button class="okbutton" onclick="preload('./json_proj.json')">#3</button>
+        <button class="okbutton" onclick="loadJson()">#</button>
+        <button class="okbutton" onclick="downloadExpJson()">exp</button>
+        <button class="okbutton" onclick="reloadFrame()">R</button>
+        <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
+        <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
+      </div>
+
+    <div class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+        <div id="content_1" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+            <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
+        </div>
+        
+        <div id="content_2" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+            <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+        </div>
+        
+        <div id="content_3" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+            <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+        </div>
+        
+        <div id="content_4" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+            <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+        </div>
+        
+        <div id="content_5" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+            <iframe id="frame_5" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+        </div>
+        
+        <div id="content_6" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+            <iframe id="frame_6" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+        </div>
+        
+        <div id="content_7" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+            <iframe id="frame_7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+        </div>
+    </div>
   
-  <div id="content_f1" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_f1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
-      <!--script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_f1").src = tool_index;
-      </script-->
-  </div>
-
-  <div id="content_f2" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_f2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      <!--script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_f2").src = tool_index;
-      </script-->
-  </div>
-
-  <div id="content_f3" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_f3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      <!--script type="text/javascript" charset="UTF-8">
-        document.getElementById("frame_f3").src = tool_index;
-      </script-->
-  </div>
-
-  <div id="content_f4" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_f4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <!--script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_f4").src = tool_index;
-    </script-->
-  </div>
-
-  <div id="content_f5" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_f5" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <!--script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_f5").src = tool_index;
-    </script-->
-  </div>
-
-  <div id="content_f6" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_f6" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <!--script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_f6").src = tool_index;
-    </script-->
-  </div>
-
-  <div id="content_f7" class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-    <iframe id="frame_f7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-    <!--script type="text/javascript" charset="UTF-8">
-      document.getElementById("frame_f7").src = tool_index;
-    </script-->
-  </div>
-
-  <div class="ctrl" id="ctrlBtns">
-    <button id="btn_f1" class="button" onclick="switchFunction('f1')">1</button>
-    <button id="btn_f2" class="button" onclick="switchFunction('f2')">2</button>
-    <button id="btn_f3" class="button" onclick="switchFunction('f3')">3</button>
-    <button id="btn_f4" class="button" onclick="switchFunction('f4')">4</button>
-    <button id="btn_f5" class="button" onclick="switchFunction('f5')">5</button>
-    <button id="btn_f6" class="button" onclick="switchFunction('f6')">6</button>
-    <button id="btn_f7" class="button" onclick="switchFunction('f7')">7</button>
-    &nbsp;
-    &nbsp;
-    <button class="okbutton" onclick="openCtrl()">c</button>
-    <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
-    &nbsp;
-    &nbsp;
-    <button class="okbutton" onclick="preload('./json_master.json')">#1</button>
-    <button class="okbutton" onclick="preload('./json_slave.json')">#2</button>
-    <button class="okbutton" onclick="preload('./json_proj.json')">#3</button>
-    <button class="okbutton" onclick="loadJson()">#</button>
-    <button class="okbutton" onclick="downloadExpJson()">exp</button>
-    <button class="okbutton" onclick="reloadFrame()">R</button>
-    <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
-    <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
-  </div>
   
 </div>
 
@@ -182,8 +144,11 @@
 <script type="text/javascript" charset="UTF-8">
 
 function resetFrame() {
-  for (let i=1;i<=tabCount;i++) 
-    document.getElementById('frame_f'+i).src = tool_index;
+  for (let i=1;i<=tabCount;i++) {
+    document.getElementById('frame_'+i).src = tool_index;
+    //document.getElementById('content_'+i).style.left = (i-1) * window.innerWidth + "px";
+    //console.log(window.innerWidth + ', ' + window.innerHeight);.left = index * width * -1 + "px";
+  }
 }
 
 function reloadFrame() {
@@ -197,12 +162,12 @@ function reloadFrame() {
 function toObj() {
   let obj = {}
   for (let i=1;i<=tabCount;i++) {
-    obj['frame_f'+i] = {};
-    let frameObj = obj['frame_f'+i];
-    frameObj['src'] = document.getElementById('frame_f'+i).src;
+    obj['frame_'+i] = {};
+    let frameObj = obj['frame_'+i];
+    frameObj['src'] = document.getElementById('frame_'+i).src;
     frameObj['obj'] = {};
     try {
-      let _obj = document.getElementById('frame_f'+i).contentWindow.toObj();
+      let _obj = document.getElementById('frame_'+i).contentWindow.toObj();
       if (_obj) {
         frameObj['obj'] = _obj;
       }
@@ -223,19 +188,9 @@ function downloadExpJson() {
   downloadLink.click();
 }
 
-//const json1 = 'https://drive.google.com/file/d/1yMLJpNHcHp0ieegK8_tHQ58EAtPHbPRj/view?usp=sharing';
-//const json2 = 'https://drive.google.com/file/d/1yMLJpNHcHp0ieegK8_tHQ58EAtPHbPRj/export?download';
-//const json3 = 'https://docs.google.com/document/d/1Ygg0zosS_4POte8KR98hribQS6AwvtiWp2gruUmP0Bo/export?format=txt';
-//const json3 = 'https://docs.google.com/document/d/e/2PACX-1vRvMKhdp-0EWmW2-2EaLhx4vRkthtQeWivfJrnx3JNooj5XdH4N6mS2UJHa62izKHXo1ItJ0fuShtxJ/pub';
-//'https://drive.google.com/uc?export=download&id=1yMLJpNHcHp0ieegK8_tHQ58EAtPHbPRj';
-//const json3 = 'https://docs.google.com/document/d/e/2PACX-1vRvMKhdp-0EWmW2-2EaLhx4vRkthtQeWivfJrnx3JNooj5XdH4N6mS2UJHa62izKHXo1ItJ0fuShtxJ/text';
-
-
 function preload(url) {
-  fetch(url).then((response) => { //
-        //let jsons = response.text();
-        //console.log(jsons);
-        return response.json(); //JSON.parse(jsons);// .
+  fetch(url).then((response) => {
+        return response.json();
     }).then( (json) => {
         handleProfile(json);
     }).catch((error) => {
@@ -255,19 +210,21 @@ function handleProfile(jsonData) {
   //console.log(fileContent);
   resetFrame();
   for (let i=1;i<=tabCount;i++) {
-      let _f = 'frame_f' + i;
+      let _f = 'frame_' + i;
+      console.log('1 handle : ' + _f);
       if (!jsonData[_f]) continue;
       let frame = document.getElementById(_f);
       if (jsonData[_f]['src'])
         frame.src = jsonData[_f]['src'];
       else 
         continue;
+      console.log('2 handle : ' + jsonData[_f]['obj']);
       if (jsonData[_f]['obj']) 
         frame.onload = function() { 
           frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/'); 
         } 
   }
-  switchFunction('f1');
+  switchFunction(1);
 }
 
 function selectSetting(event) {
@@ -310,6 +267,26 @@ var tab;
 var funcInterval;
 var intervalType = 0;
 
+function setSlideAnim() {
+    var b = document.getElementById('aBtn');
+    let caption = b.textContent;
+    if (caption === '<>') {
+        b.textContent = '--';
+    } else {
+        b.textContent = '<>';
+    }
+    
+    for(let i=1;i<=tabCount;i++) {
+        let t = document.getElementById("content_"+i).style.transition;
+        if (caption === '--') {
+            document.getElementById("content_"+i).style.transition = 'all 0.5s';
+        } else { 
+            document.getElementById("content_"+i).style.transition = 'none';
+        }
+    }
+    
+}
+
 function startRestoreInterval() {
 
   if (funcInterval) {
@@ -324,8 +301,8 @@ function startRestoreInterval() {
   b.textContent = 'x';
 
   for(let i=1;i<=tabCount;i++) {
-    if (document.getElementById("frame_f"+i).contentWindow)
-      document.getElementById("frame_f"+i).contentWindow.postMessage('x', '/');
+    if (document.getElementById("frame_"+i).contentWindow)
+      document.getElementById("frame_"+i).contentWindow.postMessage('x', '/');
   }
 
 }
@@ -339,8 +316,8 @@ function stopTabInterval() {
   b.textContent = 'o';
 
   for(let i=1;i<=tabCount;i++) {
-    if (document.getElementById("frame_f"+i).contentWindow)
-      document.getElementById("frame_f"+i).contentWindow.postMessage('o', '/');
+    if (document.getElementById("frame_"+i).contentWindow)
+      document.getElementById("frame_"+i).contentWindow.postMessage('o', '/');
   }
 
 }
@@ -398,24 +375,29 @@ function switchFunction(idx) {
   tab = idx;
   _switchFunction(idx);
   if (keylock) return;
-  saveTab2Local(); 
+  saveTab2Local();
 }
 
 function _switchFunction(idx) {
       
-  for(let i=1;i<=tabCount;i++) {
-    document.getElementById('content_f' + i).hidden = true;
-    document.getElementById('btn_f' + i).style.background = "rgb(0,112,0)";
+  for(let i=1;i<=tabCount;i++) { //console.log('' + i +' set hidden'); 
+    //document.getElementById('content_' + i).hidden = true;
+    //document.getElementById('content_' + i).style.left = index * width * -1 + "px";
+    document.getElementById('btn_' + i).style.background = "rgb(0,112,0)";
+    document.getElementById('content_'+i).style.left = (i-idx) * window.innerWidth + "px";
+    //document.getElementById('content_'+i).style.top = "0px";
+    
   }
+
   document.getElementById('btn_'+idx).style.background = "rgb(0,128,0)";
-  document.getElementById('content_'+idx).hidden = false;
+  //document.getElementById('content_'+idx).hidden = false;
   document.getElementById('frame_'+idx).focus();
   return document.getElementById('frame_'+idx);
 
 }
 
 resetFrame();
-switchFunction('f1');
+switchFunction(1);
 
 var keylock = false;
 
@@ -448,9 +430,22 @@ window.addEventListener('message', function(event) {
 
   console.log('message: ' + event);
   
+  handleProfile(JSON.parse(event.data));
+  /*
   let frame = document.getElementById('frame_' + tab);
+  console.log(event.data + ' :::: ' + 'frame_' + tab);
   frame.src = event.data;
+  */
 
 });
+
+//大小變化
+window.addEventListener('resize', function() {
+    //console.log('resize : window.innerWidth : ' + window.innerWidth);
+    for(let i=1;i<=tabCount;i++) {
+        document.getElementById('content_'+i).style.left = (i-tab) * window.innerWidth + "px";
+    }
+});
+
 
 </script>

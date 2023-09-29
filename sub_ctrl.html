@@ -26,13 +26,13 @@
     <body>
                   
         <div id="controlWin" class="controlPart">
-            <button id="f1" onclick="controlParent('f1')">1</button>
-            <button id="f2" onclick="controlParent('f2')">2</button>
-            <button id="f3" onclick="controlParent('f3')">3</button>
-            <button id="f4" onclick="controlParent('f4')">4</button>
-            <button id="f5" onclick="controlParent('f5')">5</button>
-            <button id="f6" onclick="controlParent('f6')">6</button>
-            <button id="f7" onclick="controlParent('f7')">7</button>
+            <button id="f1" onclick="controlParent(1)">1</button>
+            <button id="f2" onclick="controlParent(2)">2</button>
+            <button id="f3" onclick="controlParent(3)">3</button>
+            <button id="f4" onclick="controlParent(4)">4</button>
+            <button id="f5" onclick="controlParent(5)">5</button>
+            <button id="f6" onclick="controlParent(6)">6</button>
+            <button id="f7" onclick="controlParent(7)">7</button>
             <button onclick="closeWin()">close</button>
         </div>
       
@@ -43,8 +43,8 @@
 
 var elm;
 
-function controlParent(keyname) {
-    elm = window.opener.switchFunction(keyname);
+function controlParent(idx) {
+    elm = window.opener.switchFunction(idx);
     //document.getElementById(keyname).blur();
     //window.blur();
     //elm.focus();

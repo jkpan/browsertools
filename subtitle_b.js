@@ -248,7 +248,7 @@ var presetVerse = [
   
     document.body.style.display = false;
     document.body.style.margin = 0;
-    document.body.style.backgroundColor = 'green';
+    //document.body.style.backgroundColor = 'green';
   }
 
   createCanvas();
@@ -1915,8 +1915,16 @@ function restoreActionFromLocal() {
   }
   
   function _layer0() {
-    ctx.fillStyle = bgcolor_pointer;//'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //console.log('mode : ' + color_selection);
+    if (color_selection == 0) {
+      //ctx.fillStyle = 'rgb(255,0,0)';//'green';
+      //ctx.fillRect(0, 0, canvas.width, canvas.height); 
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = bgcolor_pointer;//'green';
+      ctx.fillRect(0, 0, canvas.width, canvas.height); 
+    }
+
     if (img) {
         ctx.drawImage(img,0,0, canvas.width, canvas.height);
     }

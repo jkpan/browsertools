@@ -8,6 +8,7 @@ class ClockObj {
     hourColor = "rgb(0, 200, 200)";
     minColor = "rgb(255, 255, 50)";
     secColor = "rgb(255, 50, 50)";
+    mode = 0;
 
     constructor() {
   
@@ -25,9 +26,15 @@ class ClockObj {
           case 0.5: this.frequence = -1; break;
         }
     }
+
+    switchDisplayMode() {
+      this.mode = (this.mode + 1) % 3;
+    }
   
     update(c, _ctx) {
-  
+
+        if (this.mode == 2) return;
+
         let x = c.width/2.0;
         let y = c.height/2.0;
         let len = Math.min(c.width, c.height)/5.0;
@@ -135,7 +142,9 @@ class ClockObj {
     }
 
     printDatetime(c, _ctx) {
-        
+
+        if (this.mode == 0) return;
+
         let date = new Date();
         
         let h = date.getHours();
@@ -150,7 +159,7 @@ class ClockObj {
                     (date.getMonth() + 1) +'/' + 
                     date.getDate();
               
-        let fs = c.width/16;
+        let fs = c.width/10;
         _ctx.font = fs + "px Monospace";
         
         _ctx.fillStyle = 'rgb(0,0,0)';

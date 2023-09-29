@@ -42,9 +42,6 @@ var c_obj;
 
 //var pre = 0;
 var scale = 1.0;//1.0/2.0;
-var showNumber = false;
-
-//var particles = [];
 
 function init() {
 
@@ -81,8 +78,7 @@ function anim_update(elapse) {
   //xscale, xskew, yscale, yskew, xoffset, yoffset
 
   c_obj.update(canvas, ctx);
-  if (showNumber)
-    c_obj.printDatetime(canvas, ctx);
+  c_obj.printDatetime(canvas, ctx);
 
   ctx.resetTransform();
 
@@ -114,7 +110,7 @@ window.addEventListener('keydown', function(e) {
 
   switch(e.keyCode) {
     case 78: //n
-      showNumber = !showNumber;
+      c_obj.switchDisplayMode();
       break;
     case 70://f
       c_obj.changeFreq();
