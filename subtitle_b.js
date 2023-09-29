@@ -1245,6 +1245,8 @@ function restoreActionFromLocal() {
       ctx.fillText(subtitles[0][0], 10, 2);
       let gap = ctx.measureText(subtitles[0][0]).width + 20;
       ctx.font = (fs-4) + 'px Arial';
+
+      //if (color_selection != 4) 
       for (let idx = 1;idx <= presetVerse.length;idx++) {
         if (presetVerse[idx%10][0].length == 0)
           continue;
@@ -1257,6 +1259,7 @@ function restoreActionFromLocal() {
         ctx.fillStyle = color_pointer[0];
         ctx.fillRect(0, 0, canvas.width, fs * 2);
       }
+
       ctx.fillStyle = color_pointer[2];
       ctx.textAlign = "right";
       ctx.fillText(recogResult, canvas.width, 2); 
@@ -1916,7 +1919,8 @@ function restoreActionFromLocal() {
   
   function _layer0() {
     //console.log('mode : ' + color_selection);
-    if (color_selection == 0) {
+    /*
+    if (color_selection == 4) {
       //ctx.fillStyle = 'rgb(255,0,0)';//'green';
       //ctx.fillRect(0, 0, canvas.width, canvas.height); 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1924,6 +1928,11 @@ function restoreActionFromLocal() {
       ctx.fillStyle = bgcolor_pointer;//'green';
       ctx.fillRect(0, 0, canvas.width, canvas.height); 
     }
+    */
+   
+    ctx.fillStyle = bgcolor_pointer;//'green';
+    ctx.fillRect(0, 0, canvas.width, canvas.height); 
+    
 
     if (img) {
         ctx.drawImage(img,0,0, canvas.width, canvas.height);

@@ -430,12 +430,13 @@ window.addEventListener('message', function(event) {
 
   console.log('message: ' + event);
   
-  handleProfile(JSON.parse(event.data));
-  /*
-  let frame = document.getElementById('frame_' + tab);
-  console.log(event.data + ' :::: ' + 'frame_' + tab);
-  frame.src = event.data;
-  */
+  try {
+    handleProfile(JSON.parse(event.data));
+  } catch (e) {
+    let frame = document.getElementById('frame_' + tab);
+    console.log(event.data + ' :::: ' + 'frame_' + tab);
+    frame.src = event.data;
+  }
 
 });
 
