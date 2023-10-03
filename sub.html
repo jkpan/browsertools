@@ -51,8 +51,8 @@
 
         display: flex;
 
-        /* 过渡动画 1s */
-        transition: all 0.5s;
+        /* 过渡动画 */
+        transition: opacity 0.5s;
 
         overflow-y: hidden;
         overflow-x: hidden;
@@ -92,7 +92,7 @@
         &nbsp;
         <button class="okbutton" onclick="openCtrl()">c</button>
         <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
-        <button id="aBtn" class="okbutton" onclick="setSlideAnim()">&lt;&gt;</button>
+        <button id="aBtn" class="okbutton" onclick="setSlideAnim()">&lt;1&gt;</button>
         &nbsp;
         <button class="okbutton" onclick="preload('./json_master.json')">#1</button>
         <button class="okbutton" onclick="preload('./json_slave.json')">#2</button>
@@ -266,24 +266,30 @@ var action = '';
 var tab;
 var funcInterval;
 var intervalType = 0;
+var animType = 1;
 
 function setSlideAnim() {
+
+  animType = (animType + 1) % 4;
+
     var b = document.getElementById('aBtn');
     let caption = b.textContent;
-    if (caption === '<>') {
+    if (animType == 0) {
         b.textContent = '--';
     } else {
-        b.textContent = '<>';
+        b.textContent = '<' + animType + '>';
     }
     
     for(let i=1;i<=tabCount;i++) {
-        let t = document.getElementById("content_"+i).style.transition;
-        if (caption === '--') {
-            document.getElementById("content_"+i).style.transition = 'all 0.5s';
-        } else { 
-            document.getElementById("content_"+i).style.transition = 'none';
-        }
+      switch(animType) {
+        case 0: document.getElementById("content_"+i).style.transition = 'none'; break;
+        case 1: document.getElementById("content_"+i).style.transition = 'opacity 0.5s'; break;
+        case 2: 
+        case 3: document.getElementById("content_"+i).style.transition = 'all 0.5s'; break;
+      }
     }
+
+    framePos();
     
 }
 
@@ -367,32 +373,68 @@ function restoreTabFromLocal() {
   if (_tab == tab) return;
 
   tab = _tab;
-  _switchFunction(_tab);
+  _switchFunction();
 
 }
 
 function switchFunction(idx) {
   tab = idx;
-  _switchFunction(idx);
+  _switchFunction();
   if (keylock) return;
   saveTab2Local();
 }
 
-function _switchFunction(idx) {
+function framePos() {
+  switch (animType) {
+    case 0:
+    case 2:
+      for(let i=1;i<=tabCount;i++) {
+        document.getElementById('content_'+i).style.opacity = 1.0;
+        document.getElementById('content_'+i).style.left = (i-tab) * window.innerWidth + "px";
+        document.getElementById('content_'+i).style.top = "0px";
+      }
+      break;
+    case 3:
+      for(let i=1;i<=tabCount;i++) {
+        document.getElementById('content_'+i).style.opacity = 1.0;
+        document.getElementById('content_'+i).style.left = "0px";
+        document.getElementById('content_'+i).style.top = (i-tab) * window.innerHeight + "px";
+      }
+      break;
+    case 1:
+      for(let i=1;i<=tabCount;i++) {
+        let div = document.getElementById('content_'+i);
+        if (i == tab) {
+          div.style.left = "0px";
+          div.style.top = "0px";
+          div.style.opacity = 1.0;
+          setTimeout(function () {
+            div.style.left = "0px";
+          }, 510);
+        } else {
+          div.style.opacity = 0;
+          div.style.top = "0px";
+          setTimeout(function () {
+            div.style.left = window.innerWidth + "px";
+          }, 500);
+        }
+      }
+      break;
+  }
+}
+
+function _switchFunction() {
       
-  for(let i=1;i<=tabCount;i++) { //console.log('' + i +' set hidden'); 
-    //document.getElementById('content_' + i).hidden = true;
-    //document.getElementById('content_' + i).style.left = index * width * -1 + "px";
+  for(let i=1;i<=tabCount;i++) {
     document.getElementById('btn_' + i).style.background = "rgb(0,112,0)";
-    document.getElementById('content_'+i).style.left = (i-idx) * window.innerWidth + "px";
-    //document.getElementById('content_'+i).style.top = "0px";
-    
   }
 
-  document.getElementById('btn_'+idx).style.background = "rgb(0,128,0)";
+  framePos();
+
+  document.getElementById('btn_'+tab).style.background = "rgb(0,128,0)";
   //document.getElementById('content_'+idx).hidden = false;
-  document.getElementById('frame_'+idx).focus();
-  return document.getElementById('frame_'+idx);
+  document.getElementById('frame_'+tab).focus();
+  return document.getElementById('frame_'+tab);
 
 }
 
@@ -434,7 +476,6 @@ window.addEventListener('message', function(event) {
     handleProfile(JSON.parse(event.data));
   } catch (e) {
     let frame = document.getElementById('frame_' + tab);
-    console.log(event.data + ' :::: ' + 'frame_' + tab);
     frame.src = event.data;
   }
 
@@ -442,10 +483,7 @@ window.addEventListener('message', function(event) {
 
 //大小變化
 window.addEventListener('resize', function() {
-    //console.log('resize : window.innerWidth : ' + window.innerWidth);
-    for(let i=1;i<=tabCount;i++) {
-        document.getElementById('content_'+i).style.left = (i-tab) * window.innerWidth + "px";
-    }
+    framePos();
 });
 
 

@@ -182,6 +182,7 @@ a {
 function googleSlidesRemoveBar() {
   let value = document.getElementById("ppt_url").value;
   value = value.trim();
+  if (value.length == 0) return;
   value += '&rm=minimal';
   document.getElementById("ppt_url").value = value;
 }
@@ -267,7 +268,8 @@ function playVideo(event) {
 
 window.addEventListener('message', (e) => {
 
-  if (e.data.trim().length < 2) reutrn;
+  //console.log('e:' + JSON.stringify(e));
+  if (e.data && e.data.trim().length < 2) return;
 
   const jsonData = JSON.parse(e.data);
 
@@ -307,5 +309,6 @@ https://www.canva.com/design/DAFY964Fw6Q/view
 =
 https://www.canva.com/design/DAFY964Fw6Q/view?embed
 */
+
 </script>
 
