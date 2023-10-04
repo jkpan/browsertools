@@ -26,6 +26,9 @@
     <body>
                   
         <div id="controlWin" class="controlPart">
+            <button id="sub" onclick="controlParent('sub')">整合</button>
+                <button id="sub_v" onclick="switchVisible('sub')">.</button>
+                <button id="sub_p" onclick="perspective('sub')">.</button>
             <button id="hymn" onclick="controlParent('hymn')">歌詞</button>
                 <button id="hymn_v" onclick="switchVisible('hymn')">.</button>
                 <button id="hymn_p" onclick="perspective('hymn')">.</button>
@@ -62,9 +65,10 @@
 <script type="text/javascript" charset="UTF-8">
 
 function reloadState() {
-    let stateArray = window.opener.getElmState()
+    let stateArray = window.opener.getElmState();
     console.log(stateArray);
     for (let key in stateArray) {
+        console.log(key);
         let b = document.getElementById(key);
         let b_v = document.getElementById(key + '_v');
         switch(stateArray[key]) {

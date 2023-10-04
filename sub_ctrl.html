@@ -33,6 +33,7 @@
             <button id="f5" onclick="controlParent(5)">5</button>
             <button id="f6" onclick="controlParent(6)">6</button>
             <button id="f7" onclick="controlParent(7)">7</button>
+            <button onclick="reload()">reload</button>
             <button onclick="closeWin()">close</button>
         </div>
       
@@ -45,6 +46,7 @@ var elm;
 
 function controlParent(idx) {
     elm = window.opener.switchFunction(idx);
+    reload();
     //document.getElementById(keyname).blur();
     //window.blur();
     //elm.focus();
@@ -54,6 +56,20 @@ function controlParent(idx) {
 function closeWin() {
   window.close();
 }
+
+function reload() {
+  let active = window.opener.tab;
+  console.log('tab:' + active+'/'+window.opener.tabCount);
+  for(let i=1;i<=window.opener.tabCount;i++) {
+    let b = document.getElementById('f'+i);
+    if (i == active) 
+      b.style.background = "rgb(0,0,0)";
+    else 
+      b.style.background = "transparent";
+  }
+}
+
+reload();
 
 /*
 window.onbeforeunload = function(evt) {

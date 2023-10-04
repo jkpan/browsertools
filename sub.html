@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <script type="text/javascript" charset="UTF-8">
 
-  const tabCount = 7;
+  var tabCount = 7;
 
   var tool_Bible = 'subtitle_b.html';
   var tool_index = 'tools.html';//'effect.html';
@@ -211,14 +211,12 @@ function handleProfile(jsonData) {
   resetFrame();
   for (let i=1;i<=tabCount;i++) {
       let _f = 'frame_' + i;
-      console.log('1 handle : ' + _f);
       if (!jsonData[_f]) continue;
       let frame = document.getElementById(_f);
       if (jsonData[_f]['src'])
         frame.src = jsonData[_f]['src'];
       else 
         continue;
-      console.log('2 handle : ' + jsonData[_f]['obj']);
       if (jsonData[_f]['obj']) 
         frame.onload = function() { 
           frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/'); 
@@ -248,7 +246,7 @@ var _openWin = null;
 function openCtrl() {
   
   if (_openWin) _openWin.close();
-  _openWin = window.open("sub_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=200,top="+(screen.height-400)+",left="+(screen.width-840));
+  _openWin = window.open("sub_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
   //window.focus();
   //let div = document.getElementById('ctrlBtns');
   //div.hidden = true;
