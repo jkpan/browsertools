@@ -157,15 +157,15 @@ function createBtns() {
 createBtns();
 
 window.addEventListener('keyup', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    //e.preventDefault();
+    //e.stopPropagation();
     window.opener.keyboard(e);
 }, false);
   
   
 window.addEventListener('keydown', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    //e.preventDefault();
+    //e.stopPropagation();
     if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
       window.opener.keylock = true;
     }
