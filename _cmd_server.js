@@ -23,6 +23,20 @@ const playCode =
 
 </script>`;
 
+const ctrlCode = 
+`<script type="text/javascript" charset="UTF-8">
+
+  color_selection = 2; 
+  colorSwitch(); 
+  setMsg_ctrl();
+  
+  fontfactor += 5;
+  init();
+  
+  _repaint();
+
+</script>`;
+
 console.log('cpu ' + os.cpus().length + ' cores');
 
 function print(msg) {
@@ -319,7 +333,10 @@ const server = http.createServer((req, res) => {
     case '/synclyrics':       synclyrics(req, res);       return;
 
     case '/initui':           initui(req, res);           return;
-
+    case '/Bible_ctrl': {
+      url = '/subtitle_b.html';
+      responseFile(`.${url}`, res, ctrlCode);
+    } return;
     case '/Bible_play': {
       url = '/subtitle_b.html';
       responseFile(`.${url}`, res, playCode);

@@ -103,10 +103,10 @@ a {
       <div class="wrapper">
         
         <!--embed-->
-        <iframe width="100%" height="100%" hidden="true" class="full" id="pdf-viewer" type="application/pdf"></iframe>
+        <!--iframe width="100%" height="100%" hidden="true" class="full" id="pdf-viewer" type="application/pdf"></iframe-->
         <iframe width="100%" height="100%" hidden="true" class="full" id="web"></iframe>
         <button class="reload" hidden="true" id="reload" type="button" onclick="reload()">R</button>
-        <video class="full" id="vsrc" width="100%" height="100%" controls="controls" hidden="true"></video>
+        <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls loop></video></video>
         <div class="full" id="image_container" hidden="true"></div>
 
         <!--iframe src="https://onedrive.live.com/embed?resid=A9C489AB715D78A%21237&amp;authkey=!AMd1wONLe7THB_E&amp;em=2&amp;wdAr=1.7777777777777777" width="476px" height="288px" frameborder="0">這是 <a target="_blank" href="https://office.com/webapps">Office</a> 提供的內嵌 <a target="_blank" href="https://office.com">Microsoft Office</a> 簡報。</iframe-->
@@ -132,13 +132,18 @@ a {
                 //window.location.href = value;
                 //document.querySelector('body').style.background = 'transparent';
               }
-
+              
+              function reload() {
+                let d = document.getElementById("web");
+                document.getElementById("web").src = d.src;
+              }
+              
+              /*
               function iframeGo() {
 
                 document.querySelector('body').style.background = 'transparent';
 
                 document.getElementById("ui").hidden = true;
-
               
                 let value = document.getElementById("ppt_url").value;
                 document.querySelector('body').innerHTML = value;
@@ -146,10 +151,9 @@ a {
                 //div.innerHTML = value;
                 //div.hidden = false;
               }
-              function reload() {
-                let d = document.getElementById("web");
-                document.getElementById("web").src = d.src;
-              }
+              */
+
+              
 
             </script>
           <br/>

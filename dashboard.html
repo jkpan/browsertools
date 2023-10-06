@@ -527,6 +527,9 @@ class Applet {
 
     user-select: none;
     z-index: 90;
+    
+    
+
   }
   .controlPart {
     grid-column: 1 / 33;
@@ -535,6 +538,7 @@ class Applet {
     background-color:#006600;
     color:black;
     z-index: 99;
+    transition: all 0.3s ease;
   } 
   input[type=text] {
         border:2px solid rgb(0, 128, 0);
@@ -1099,7 +1103,7 @@ function showCtrlPane(show) {
   if (show) {
     div.style.opacity = '0.8';
   } else {
-    div.style.opacity = '0.2';
+    div.style.opacity = '0.1';
   }
 }
 

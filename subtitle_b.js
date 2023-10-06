@@ -513,6 +513,11 @@ function restoreActionFromLocal() {
     sync_type = 5;
     synctrls();
   }
+
+  function setMsg_ctrl() {
+    sync_type = 2;
+    synctrls();
+  }
   
   function createCtrlBtn() {
     removeDiv();
@@ -1960,7 +1965,7 @@ function restoreActionFromLocal() {
     ui_rectFill(canvas.width * 0.66, 0, canvas.width * 0.33, canvas.height * 0.25, '字大');
   
     ui_rectFill(0,                   canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '上一卷');
-    ui_rectFill(canvas.width * 0.33, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '選經文');
+    //ui_rectFill(canvas.width * 0.33, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '選經文');
     ui_rectFill(canvas.width * 0.66, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '下一卷');
   
     ui_rectFill(canvas.width * 0.33, canvas.height * 0.5,  canvas.width * 0.33, canvas.height * 0.25, '上一章');
@@ -2169,6 +2174,7 @@ function restoreActionFromLocal() {
   var touchMoveState = 0;
   const touchOffset = 8;
   var sumOffset = 0;
+  var colState = 0;
   
   function touchstart(evt) {
     evt.preventDefault();
@@ -2177,6 +2183,14 @@ function restoreActionFromLocal() {
     touchPY = evt.changedTouches[0].clientY;//touches.y;
     touchMoveState = 0;
     sumOffset = 0;
+    colState = 0;
+    if (touchPX < canvas.width/3) 
+      colState = 1;
+    else if (touchPX < canvas.width * 2/3) 
+      colState = 2;
+    else 
+      colState = 3;
+
   }
   canvas.addEventListener("touchstart", touchstart, false);
   
@@ -2224,11 +2238,14 @@ function restoreActionFromLocal() {
       keyboard({keyCode : 189});
       return;
     }
+
+    /*
     //select volumn 
     if (gw == 1 && gh == 1) {//keyboard({keyCode : 76});
       openSelDiv();
       return;
     }
+    */
     
     //next volumn
     if (gw == 2 && gh == 1) {
@@ -2270,17 +2287,22 @@ function restoreActionFromLocal() {
     let dy = touch.clientY - touchPY;
     
     sumOffset += dy;
-    
+
     if (sumOffset >= touchOffset) {//往下 
-      //sumOffset -= touchOffset;
       sumOffset = 0;
-      keyboard({keyCode : 33});
+      switch(colState) {
+        case 1: keyboard({keyCode : 189}); break;
+        case 2: keyboard({keyCode : 38});break;
+        case 3: keyboard({keyCode : 33}); break;
+      }
       touchMoveState = 1;
-    }
-    if (sumOffset <= -touchOffset) {//往下
-      //sumOffset += touchOffset;
+    } else if (sumOffset <= -touchOffset) {//往下
       sumOffset = 0;
-      keyboard({keyCode : 34});
+      switch(colState) {
+        case 1: keyboard({keyCode : 187}); break;
+        case 2: keyboard({keyCode : 40}); break; 
+        case 3: keyboard({keyCode : 34}); break;
+      }
       touchMoveState = 1;
     }
     
