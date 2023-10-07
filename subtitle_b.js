@@ -377,7 +377,7 @@ var presetVerse = [
     let key = 'save action';  //localStorage.removeItem(key);
     let value = song + ' ' + phase + ' ' + line + ' ' + target_doblank;
     localStorage.setItem(key, value);
-    console.log('saveAction2Local:' + value);
+    //console.log('saveAction2Local:' + value);
   }
 
   
@@ -1576,6 +1576,8 @@ function restoreActionFromLocal() {
   }
   
   function jump2preset(ps) {
+    jump2preset4Anim(ps);
+    return;
     for (var i = 1;i<SONGS.length;i++) {
       if (ps[0] == SONGS[i][0][0]) {
           song = i;
@@ -1586,6 +1588,79 @@ function restoreActionFromLocal() {
       }
     }
     saveAction2Local();
+    _repaint();
+  }
+
+  function _targetAnim() {
+    let step = 1;
+    if (song != t_song) {
+      //song = ;//Math.ceil(song + (t_song - song) * 0.25);
+      if (Math.abs(t_song - song) >= 10) step = 10;
+      if (song > t_song) { 
+        song -= step;
+      } else { 
+        song += step;
+      }
+      subtitles = SONGS[song];
+      //console.log('s:' + song + ', ' + phase + ', '+ line);
+      _repaint();
+      window.requestAnimationFrame(_targetAnim);
+      return;
+    }
+
+    if (phase != t_phase) {
+      if (Math.abs(t_phase - phase) >= 10) step = 10;
+      if (phase > t_phase) 
+        phase -= step;
+      else 
+        phase += step;
+      //console.log('p:' + song + ', ' + phase + ', '+ line);
+      _repaint();
+      window.requestAnimationFrame(_targetAnim);
+      return;
+    } 
+    
+    if (line != t_line) {
+      if (Math.abs(t_line - line) >= 10) step = 10;
+      if (line > t_line) 
+          line -= step;
+        else 
+          line += step;
+      //console.log('l:' + song + ', ' + phase + ', '+ line);
+      _repaint();
+      window.requestAnimationFrame(_targetAnim);
+      return;
+    }
+    
+    saveAction2Local();
+    _repaint();
+  }
+
+  var t_song = 0;
+  var t_phase = 0;
+  var t_line = 0;
+
+  function jump2preset4Anim(ps) {
+    for (var i = 1;i<SONGS.length;i++) {
+      if (ps[0] == SONGS[i][0][0]) {
+          t_song = i;
+          //subtitles = SONGS[i];//presetVerse[value][0]
+          t_phase = ps[1];
+          t_line =  ps[2];
+          break;
+      }
+    }
+
+    if (song != t_song) {
+      phase = 0;
+      line =  0;
+    } else { //song == t_song
+      if (phase != t_phase) 
+        line = 0;
+    }
+
+    window.requestAnimationFrame(_targetAnim);
+        
   }
   
   function colorSwitch() {
@@ -1833,7 +1908,7 @@ function restoreActionFromLocal() {
               canvas.hidden = true;
               plaintxtMode();
             }
-            break;
+            return;
           case 81: 
             presetVerse[1][0] = subtitles[0][0];
             presetVerse[1][1] = phase;
@@ -1974,14 +2049,19 @@ function restoreActionFromLocal() {
   
     ui_rectFill(0,                   canvas.height * 0.5, canvas.width * 0.33, canvas.height * 0.5, '上一節');
     ui_rectFill(canvas.width * 0.66, canvas.height * 0.5, canvas.width * 0.33, canvas.height * 0.5, '下一節');
-  
+
+      
+    ui_rectFill(canvas.width * 0, 0, canvas.width/3, canvas.height, '滑動卷', 'rgba(255, 0,0,0.5)', 'rgba(255, 0,0, 1.0)');
+    ui_rectFill(canvas.width * 1.0/3.0, 0, canvas.width/3, canvas.height, '滑動章', 'rgba(255, 0,0,0.5)', 'rgba(255, 0,0, 1.0)');
+    ui_rectFill(canvas.width * 2.0/3.0, 0, canvas.width/3, canvas.height, '滑動節', 'rgba(255, 0,0,0.5)', 'rgba(255, 0,0, 1.0)');
+
     ctx.textAlign = "left";
   }
   
-  function ui_rectFill(x, y, w, h, des) {
-    ctx.fillStyle = color_pointer[2];
+  function ui_rectFill(x, y, w, h, des, c2, c0) {
+    ctx.fillStyle = c2?c2:color_pointer[2];
     ctx.fillRect(x + w * 0.05, y + h * 0.05, w * 0.9, h * 0.9);
-    ctx.fillStyle = color_pointer[0];
+    ctx.fillStyle = c0?c0:color_pointer[0];
     ctx.font = fontsize_sml+'px '+fontFamily;
     ctx.fillText(des, x + w/2, y + h/2);
     //ctx.strokeStyle = color_pointer[3];
@@ -2548,7 +2628,7 @@ function restoreActionFromLocal() {
     //document.cookie = "last=" + JSON.stringify(obj) + "; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/";
   });
 
-  restoreActionFromLocal();
+   restoreActionFromLocal();
 
   /*
   function cookieStuff() {
