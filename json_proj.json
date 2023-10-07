@@ -1,65 +1,136 @@
 {
-    "frame_1" : { 
-                "src" : "./newurl.html",
-                "obj" : {
-                    "url"  : "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
-                }
-            },
-    "frame_2" : { 
-                "src" : "./newurl.html",
-                "obj" : {
-                    "url"  : ""
-                }
-            },
-    "frame_3" : {
-                    "src" : "./subtitle.html",
-                    "obj" : {
-                        "list" : [
-
-                            "新歌頌揚145",
-                            "新歌頌揚380",
-                            "其他60",
-                            "讚美之泉87",
-                            "救恩221",
-
-                            "主禱文", 
-                            "使徒信經",
-                            "救恩300"
-                        ],
-                        "master"     : 1,
-                        "mode"       : 2,
-                        "fontfactor" : 10
-                    }
-             },    
-    "frame_4" : { "src" : "./dashboard.html", 
-             "obj" : {
-                  "Bible": {
-                      "posize" :  [15, 15, 18, 18], 
-                      "obj" : {
-                          "color"  : 2, 
-                          "fontfactor": 10,
-                          "saved": [ [""], [""], [""], [""], [""], [""], [""], [""], [""], [""] ]
-                      }
-                  },
-                  "ppt_1": {
-                      "posize" :  [2, 19, 11, 12],
-                      "obj" : {
-                          "url" : ""
-                      }
-                  },
-                  "B/G" : "B"
-              }
-          },
-    "frame_5" : {
-            "src" : "./newurl.html",
-            "obj" : {
-                "url"  : ""
-            } 
-        },
-    "frame_6" : {
-                "src" : "./newurl.html",
-                "obj" : {
-                    "url"  : "https://docs.google.com/presentation/d/e/2PACX-1vR3t2qRf_NEqqZvQfMEtMt7ioBdZOKUpE4no1gHT8Q9VtlGUvHIPhiD3UtvbOOwVA/embed?start=false&loop=false&delayms=3000&rm=minimal"
-                } 
-            }
+	"frame_1": {
+		"src": "http://localhost/dashboard.html",
+		"obj": {
+			"ppt_1": {
+				"posize": [
+					2,
+					19,
+					11,
+					12
+				],
+				"perspective": false,
+				"obj": {
+					"url": "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+				}
+			},
+			"ppt_2": {
+				"posize": [
+					20,
+					20,
+					12,
+					10
+				],
+				"perspective": false,
+				"obj": {
+					"url": ""
+				}
+			},
+			"B/G": "B"
+		}
+	},
+	"frame_2": {
+		"src": "http://localhost/newurl.html",
+		"obj": {
+			"url": ""
+		}
+	},
+	"frame_3": {
+		"src": "http://localhost/subtitle.html",
+		"obj": {
+			"mode": 2,
+			"fontfactor": 10,
+			"list": [
+				"新歌頌揚145",
+				"新歌頌揚380",
+				"其他60",
+				"讚美之泉87",
+				"救恩221",
+				"主禱文",
+				"使徒信經",
+				"救恩300"
+			]
+		}
+	},
+	"frame_4": {
+		"src": "http://localhost/dashboard.html",
+		"obj": {
+			"Bible": {
+				"posize": [
+					15,
+					15,
+					18,
+					18
+				],
+				"perspective": false,
+				"obj": {
+					"color": 2,
+					"fontfactor": 10,
+					"saved": [
+						[
+							""
+						],
+						[
+							"啟示錄",
+							11,
+							1
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						]
+					]
+				}
+			},
+			"ppt_1": {
+				"posize": [
+					2,
+					19,
+					11,
+					12
+				],
+				"perspective": false,
+				"obj": {
+					"url": ""
+				}
+			},
+			"B/G": "B"
+		}
+	},
+	"frame_5": {
+		"src": "http://localhost/newurl.html",
+		"obj": {
+			"url": ""
+		}
+	},
+	"frame_6": {
+		"src": "http://localhost/newurl.html",
+		"obj": {
+			"url": "https://docs.google.com/presentation/d/e/2PACX-1vR3t2qRf_NEqqZvQfMEtMt7ioBdZOKUpE4no1gHT8Q9VtlGUvHIPhiD3UtvbOOwVA/embed?start=false&loop=false&delayms=3000&rm=minimal"
+		}
+	},
+	"frame_7": {
+		"src": "http://localhost/tools.html",
+		"obj": {}
+	}
 }
