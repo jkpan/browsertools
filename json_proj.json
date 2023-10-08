@@ -1,6 +1,6 @@
 {
 	"frame_1": {
-		"src": "http://localhost/dashboard.html",
+		"src": "./dashboard.html",
 		"obj": {
 			"ppt_1": {
 				"posize": [
@@ -30,13 +30,13 @@
 		}
 	},
 	"frame_2": {
-		"src": "http://localhost/newurl.html",
+		"src": "./newurl.html",
 		"obj": {
 			"url": ""
 		}
 	},
 	"frame_3": {
-		"src": "http://localhost/subtitle.html",
+		"src": "./subtitle.html",
 		"obj": {
 			"mode": 2,
 			"fontfactor": 10,
@@ -53,7 +53,7 @@
 		}
 	},
 	"frame_4": {
-		"src": "http://localhost/dashboard.html",
+		"src": "./dashboard.html",
 		"obj": {
 			"Bible": {
 				"posize": [
@@ -118,19 +118,19 @@
 		}
 	},
 	"frame_5": {
-		"src": "http://localhost/newurl.html",
+		"src": "./newurl.html",
 		"obj": {
 			"url": ""
 		}
 	},
 	"frame_6": {
-		"src": "http://localhost/newurl.html",
+		"src": "./newurl.html",
 		"obj": {
 			"url": "https://docs.google.com/presentation/d/e/2PACX-1vR3t2qRf_NEqqZvQfMEtMt7ioBdZOKUpE4no1gHT8Q9VtlGUvHIPhiD3UtvbOOwVA/embed?start=false&loop=false&delayms=3000&rm=minimal"
 		}
 	},
 	"frame_7": {
-		"src": "http://localhost/tools.html",
+		"src": "./tools.html",
 		"obj": {}
 	}
 }

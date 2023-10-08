@@ -1,5 +1,5 @@
 var presetVerse = [
-
+      
       [''], //0
       [''], //1
       [''], //2
@@ -10,7 +10,7 @@ var presetVerse = [
       [''], //7
       [''], //8
       [''], //9
-
+      
       /*
       ['', 0, 0],         //0
       ['創世記', 0, 0],    //1
@@ -2176,8 +2176,8 @@ function restoreActionFromLocal() {
 
       if (jsonData.saved && jsonData.saved.length > 0) {
         for (let i=0;i<jsonData.saved.length;i++) {
-          if (i >= 10) break;
-          presetVerse[(i+1)%10] = jsonData.saved[i];
+          if (i >= 10) return;
+          presetVerse[i] = jsonData.saved[i];
         }
         keyboard({keyCode : 49});
       }
