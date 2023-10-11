@@ -37,7 +37,7 @@ var presetVerse = [
         "shift'左右' 上十節下十節  shift'上下' 上十章下十章",
         "shift'=-' 字大小  'esc' 跳回預設樣式",
         "按住'space' 語音辨識(Chrome, 網路連線)",
-        "'F2'被控方 'F3'遠端被控方(使用node.js)"
+        "'Enter'控制同步選項"
       ]];
 
   //function flow() {}
@@ -227,7 +227,7 @@ var presetVerse = [
   var canvas;
   var ctx;
   
-  var color_selection = 0;
+  var color_selection = 1;
   
   var uisel = 0;
   var uisel_start = 0;
@@ -300,13 +300,11 @@ var presetVerse = [
         ver: line,
         blank: target_doblank
     }, 
-    //'http://192.168.0.71/synscripture', 
-    //'http://localhost/synscripture', 
     '/synscripture', 
     (res)=>{
         console.log(JSON.stringify(res));
     }, ()=>{
-      console.log('exception');
+        console.log('exception');
     });
   }
 
@@ -314,14 +312,10 @@ var presetVerse = [
     _ajax({
         "action": "restore"
     }, 
-    //'http://192.168.0.71/restorescripture', 
-    //'http://localhost/restorescripture', 
     '/restorescripture', 
     (res)=>{
-        console.log(JSON.stringify(res));
-        //jump4external(res.vlm, res.chp, res.ver);
-        ////
-        let volumn = res.vlm;//array[0];
+        //console.log(JSON.stringify(res));
+        let volumn = res.vlm;
         let chapter = res.chp;
         let verse = res.ver;
         let _doblank = res.blank;
@@ -798,6 +792,7 @@ function restoreActionFromLocal() {
   }
   
   function drawHlight(yy, hh) {
+    if (color_selection == 0) return;
     if (doblank != 1 && phase >= 1) {
         ctx.fillStyle = hlight_pointer;
         ctx.fillRect (0, yy, canvas.width, hh);
@@ -1167,8 +1162,8 @@ function restoreActionFromLocal() {
     
     let x = canvas.width * 0.1;
   
-    let fixy = color_selection == 0?canvas.height * 0.6:canvas.height * 0.33;
-    
+    let fixy = //color_selection == 0?canvas.height * 0.6:canvas.height * 0.33;
+               canvas.height * 0.33;
     let offY = fixy;
   
     /////
@@ -1237,7 +1232,7 @@ function restoreActionFromLocal() {
       
     }
   
-    if (animSwh == 0) { //print saved versus
+    if (color_selection > 0 && animSwh == 0) { //print saved versus
       ctx.textBaseline = 'top';
       let fs = Math.min(fontsize_sml_sml, 24);
       ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
@@ -1350,7 +1345,7 @@ function restoreActionFromLocal() {
   
   function _drawSdwtxt(txt, x, y) {
   
-    if (doblank == 1 && color_selection <= 1) {
+    if (doblank == 1 && color_selection == 1) {
       ctx.fillStyle = color_pointer[3];//'rgb(0, 220, 0)';
       ctx.lineWidth = 1;
       ctx.fillText(txt, x, y);
@@ -1371,7 +1366,7 @@ function restoreActionFromLocal() {
   
   function _drawtxt(txt, x, y, a) {
       
-    if (doblank == 1 && color_selection <= 1) {
+    if (doblank == 1 && color_selection == 1) {
       ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
     } else {
       ctx.fillStyle = txt_fill + a + ')';
@@ -1686,6 +1681,13 @@ function restoreActionFromLocal() {
         txt_fill = txt_fillStyle;
         txt_stroke = txt_strokeStyle; 
         break;
+      case 0:
+        bgcolor_pointer = 'rgba(0,0,0,0)';
+        color_pointer = 'rgba(0,0,0,0)';
+        hlight_pointer = 'rgba(255, 255, 255, 0.5)';//hlightStyle;
+        txt_fill = txt_fillStyle;
+        txt_stroke = txt_strokeStyle; 
+        break;
       default: //0, 1
         bgcolor_pointer = bgStyle;
         color_pointer = COLORS_CK;
@@ -1738,7 +1740,7 @@ function restoreActionFromLocal() {
         //case 114: save2Local(); break; case 115: restoreLocal(); break;
         case 66: //'b'
           //console.log('b press');
-          if (color_selection <= 1) {
+          if (color_selection == 1) {
             animElapse = 0;
             if (doblank == 0) {
               target_doblank = 1;
@@ -1998,6 +2000,7 @@ function restoreActionFromLocal() {
   }
   
   function _layer0() {
+
     //console.log('mode : ' + color_selection);
     /*
     if (color_selection == 4) {
@@ -2010,9 +2013,13 @@ function restoreActionFromLocal() {
     }
     */
    
-    ctx.fillStyle = bgcolor_pointer;//'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height); 
-    
+    if (color_selection == 0) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = bgcolor_pointer;//'green';
+      ctx.fillRect(0, 0, canvas.width, canvas.height); 
+    }
+   
 
     if (img) {
         ctx.drawImage(img,0,0, canvas.width, canvas.height);
