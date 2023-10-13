@@ -31,10 +31,6 @@ var fontsize_sml_sml = 24;
 var FONT_SML_SML = fontsize_sml_sml + "px " + fontFamily;
 
 
-var bgStyle = "rgba(255, 255, 255, 0.0)";//"rgb(0, 0, 0, 0.5)";
-var hlightStyle = 'rgba(0, 0, 0, 0.33)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
-
 var txt_strokeStyle = 'black';
 var txt_fillStyle = 'rgba(255, 255, 255, ';
 
@@ -43,9 +39,9 @@ var txt_fillStyle_white = 'rgba(0, 0, 0, ';
 
 
 /////
-var bgcolor_pointer = bgStyle;
-var color_pointer = COLORS_CK;
-var hlight_pointer = hlightStyle;
+var bgcolor_pointer = "rgba(255, 255, 255, 0.33)";
+var color_pointer = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];;
+var hlight_pointer = 'rgba(0, 0, 0, 0.33)';
 
 var txt_fill = txt_fillStyle;
 var txt_stroke = txt_strokeStyle;
@@ -98,7 +94,7 @@ var animSwh = 0;
 var animIdx = 0;
 
 var doblank = 0;
-var target_doblank = 0;
+//var target_doblank = 0;
 var helpSwitch = 0;
 
 var imgurl = '';//'./Icon-1024.png';
@@ -155,6 +151,7 @@ function prepareImage() {
   img.onload = function() {};
 }
 
+/*
 function printSideTxt(i, j, x, y, a) {
 
   let txt = "";
@@ -172,6 +169,7 @@ function printSideTxt(i, j, x, y, a) {
   _drawtxt(txt, x, y, a);
 
 }
+*/
 
 function drawHlight(yy, hh) {
   if (doblank != 1 && phase >= 1) {
@@ -228,8 +226,8 @@ function verseobj() {
     fs: 0,
     opacity: 1.0,
 
-    //o_fs: 0,
-    //o_transY : 0,
+    //gap_fs: 0,
+    //gap_transY : 0,
           
     initial: function(volumn, c, v, level) {
       this.volumn = volumn;
@@ -273,13 +271,17 @@ function verseobj() {
         this.fs = this.targetFs;
         this.transY = this.targetTransY;
         fs = this.fs;
-      } if (progress == -2) { 
+      } else if (progress == -2) { 
         fs = this.targetFs;
+        //this.gap_fs =  (this.targetFs.toFixed(2) - this.fs.toFixed(2))/animTotal.toFixed(2);
       } else {
-        this.fs = this.fs + (this.targetFs - this.fs) * progress;
+        //this.fs += this.gap_fs;//this.fs + (this.targetFs - this.fs) * progress/4.0;
+        //fs = this.fs;
+        //this.transY += this.gap_transY;//this.transY + (this.targetTransY - this.transY) * progress/4.0;
+        let _p = animElapse == animTotal?1.0:progress/3.0;//console.log(_p);
+        this.fs = this.fs + (this.targetFs - this.fs) * _p;
         fs = this.fs;
-        //if (this.level == 0) 
-        this.transY = this.transY + (this.targetTransY - this.transY) * progress;
+        this.transY = this.transY + (this.targetTransY - this.transY)  * _p;
       }
     
       if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
@@ -328,11 +330,15 @@ function verseobj() {
 
       //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
 
-      if (color_selection <= 1) 
-        return this.level == 0? this.substrings.length * fs + fs * 0.5:
-                                this.substrings.length * fs + fs * 0.2;
-      else 
-        return this.substrings.length * fs + fs * 0.5;
+      if (color_selection <= 1) {
+        let r = this.level == 0? this.substrings.length * fs + fs * 0.5: this.substrings.length * fs + fs * 0.2
+        //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
+        return r;
+      } else {
+        let r = this.substrings.length * fs + fs * 0.5;
+        //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
+        return r;
+      }
     },
 
     draw: function() {
@@ -389,17 +395,15 @@ function verseobj() {
   return obj;
 }
 
-const animTotal = 60;
+const animTotal = 30;
 var animElapse = 0; //var savePre = 0;
 function verse_update(elapse) {
 
-  //if (Math.random() < 0.05) 
-  //console.log('dt: ' + 0.001 * (elapse - savePre));
-  //savePre = elapse;
+  //console.log(elapse + ': ' + animElapse);
+  //console.log(animElapse+' / '+animTotal + '=' + animElapse.toFixed(2)/animTotal.toFixed(2));
 
   render(animElapse.toFixed(2)/animTotal.toFixed(2));
   
-  console.log(animElapse+' / '+animTotal + '=' + animElapse.toFixed(2)/animTotal.toFixed(2));
   
   if (animElapse < animTotal) {
     animElapse++;
@@ -413,8 +417,9 @@ function verse_update(elapse) {
 function getQueuePre() {
   if (queue.length == 0) return null;
   let obj = queue[0];
-  let c = getPreChapter(obj.chapter, obj.verse);
-  let v = getPreVerse(obj.chapter, obj.verse);
+  let cv = getPreCV(obj.chapter, obj.verse);
+  let c = cv[0];//getPreChapter(obj.chapter, obj.verse);
+  let v = cv[1];//getPreVerse(obj.chapter, obj.verse);
   obj = verseobj();
   obj.initial(song, c, v, 1);
   return obj;
@@ -423,8 +428,9 @@ function getQueuePre() {
 function getQueueNext() {
   if (queue.length == 0) return null;
   let obj = queue[queue.length -1];
-  let c = getNextChapter(obj.chapter, obj.verse);
-  let v = getNextVerse(obj.chapter, obj.verse);
+  let cv = getNextCV(obj.chapter, obj.verse);
+  let c = cv[0];//getNextChapter(obj.chapter, obj.verse);
+  let v = cv[1];//getNextVerse(obj.chapter, obj.verse);
   obj = verseobj();
   obj.initial(song, c, v, 1);
   return obj;
@@ -506,7 +512,9 @@ function _render(progress) {
   let fixy = canvas.height * 0.33;
   let offY = fixy;
 
-  /////
+/////
+//console.log('::::' + animElapse);
+
   for (let i = 0;i<queue.length;i++) {
     let obj = queue[i];
     if (obj.chapter == phase && obj.verse == line) {
@@ -588,9 +596,12 @@ function printMain(chapter, verse) {
 
   for (let k = 1;k<=amount;k++) {
 
-      let _i = getPreChapter(i, j);
-      j = getPreVerse(i, j);
-      i = _i;
+      let cv = getPreCV(i, j);
+      i = cv[0];
+      j = cv[1];
+      //let _i = getPreChapter(i, j);
+      //j = getPreVerse(i, j);
+      //i = _i;
 
       let obj = verseobj();
       if (color_selection <= 1) {
@@ -609,9 +620,14 @@ function printMain(chapter, verse) {
   i = chapter;
   j = verse;
   for (let k = 1;k <= amount;k++) {
-      let _i = getNextChapter(i, j);
-      j = getNextVerse(i, j);
-      i = _i;
+
+    let cv = getNextCV(i, j);
+    i = cv[0];
+    j = cv[1];
+
+    //  let _i = getNextChapter(i, j);
+    //  j = getNextVerse(i, j);
+    //  i = _i;
 
       let obj = verseobj();
       if (color_selection <= 1) {
@@ -627,15 +643,63 @@ function printMain(chapter, verse) {
 
 }
 
+
+/*
+function txtRendering(txt, x, y) {
+
+  //fontColorType = 3;
+
+  ctx.lineWidth = Math.ceil(fontsize/12.0);
+
+  switch (fontColorType) {
+    case 0:
+      ctx.fillStyle = 'white';
+      break;
+    case 1:
+      ctx.fillStyle = 'white';
+      ctx.strokeStyle = 'black';
+      ctx.strokeText(txt, x, y);
+      break;
+    case 2:
+      ctx.fillStyle = 'black';
+      break;
+    case 3:
+      ctx.fillStyle = 'black';
+      ctx.strokeStyle = 'white';
+      ctx.strokeText(txt, x, y);
+      break;
+  }
+  
+  ctx.fillText(txt, x, y);
+
+}
+*/
+
+var fontColorType = 0;
+
 function _drawSdwtxt(txt, x, y) {
 
-  if (doblank == 0) {
-    ctx.strokeStyle = txt_stroke;//'black';//'rgb(0, 0, 0, ' + a + ')';
-    ctx.lineWidth = Math.ceil(fontsize/10.0);
-    ctx.strokeText(txt, x, y);
-  }
+    switch (fontColorType) {
+        case 0:
+          ctx.fillStyle = 'white';
+          break;
+        case 1:
+          ctx.fillStyle = 'white';
+          ctx.strokeStyle = 'black';
+          ctx.lineWidth = Math.ceil(fontsize/12.0);
+          ctx.strokeText(txt, x, y);
+          break;
+        case 2:
+          ctx.fillStyle = 'black';
+          break;
+        case 3:
+          ctx.fillStyle = 'black';
+          ctx.strokeStyle = 'white';
+          ctx.lineWidth = Math.ceil(fontsize/12.0);
+          ctx.strokeText(txt, x, y);
+          break;
+      }
 
-  ctx.fillStyle = txt_fill + 1.0 + ')';//'white';//'rgb(255, 255, 255, ' + a + ')';
   ctx.lineWidth = 1;
   ctx.fillText(txt, x, y);
 
@@ -643,7 +707,28 @@ function _drawSdwtxt(txt, x, y) {
 
 function _drawtxt(txt, x, y, a) {
 
-  ctx.fillStyle = txt_fill + a + ')';
+    switch (fontColorType) {
+        case 0:
+          ctx.fillStyle = 'white';
+          break;
+        case 1:
+          ctx.fillStyle = 'white';
+          ctx.strokeStyle = 'black';
+          //ctx.lineWidth = Math.ceil(fontsize/10.0);
+          //ctx.strokeText(txt, x, y);
+          break;
+        case 2:
+          ctx.fillStyle = 'black';
+          break;
+        case 3:
+          ctx.fillStyle = 'black';
+          ctx.strokeStyle = 'white';
+          //ctx.lineWidth = Math.ceil(fontsize/10.0);
+          //ctx.strokeText(txt, x, y);
+          break;
+      }
+
+  //ctx.fillStyle = txt_fill + a + ')';
 
   ctx.lineWidth = 1;
   ctx.fillText(txt, x, y);
@@ -659,44 +744,13 @@ function getPreCV(chapter, verse) {
 }
 
 function getNextCV(chapter, verse) {
+    if (chapter < 0) return [-1, -1];
     if (verse < subtitles[chapter].length - 1)
         return [chapter, verse + 1];
     if (chapter < subtitles.length - 1) 
         return [chapter + 1, 0];
     return [-1, -1];
 }
-
-
-function getPreChapter(chapter, verse) {
-  if (chapter <= 0) return -1;
-  if (verse > 0) return chapter;
-  return chapter - 1;
-}
-
-function getPreVerse(chapter, verse) {
-  if (verse > 0) return verse - 1;
-  if (chapter > 0) return subtitles[chapter - 1].length - 1;
-  return subtitles[0].length - 1;
-}
-
-function getNextChapter(chapter, verse) {
-  if (chapter == -1) return -1;
-  if (verse < subtitles[chapter].length - 1)
-    return chapter;
-  if (chapter < subtitles.length - 1) 
-    return chapter + 1;
-  return -1;
-}
-
-function getNextVerse(chapter, verse) {
-  if (chapter == -1) return -1;
-  if (verse < subtitles[chapter].length - 1)
-    return verse + 1;
-  if (chapter < subtitles.length - 1) 
-    return 0;
-  return -1;
-}
-
 
 function sortjump(start, end) {
   if (canvas.hidden) return;
@@ -905,37 +959,6 @@ function jump2preset4Anim(ps) {
       
 }
 
-var fontColorType = 0;
-
-function txtRendering(txt, x, y) {
-
-  //fontColorType = 3;
-
-  ctx.lineWidth = Math.ceil(fontsize/12.0);
-
-  switch (fontColorType) {
-    case 0:
-      ctx.fillStyle = 'white';
-      break;
-    case 1:
-      ctx.fillStyle = 'white';
-      ctx.strokeStyle = 'black';
-      ctx.strokeText(txt, x, y);
-      break;
-    case 2:
-      ctx.fillStyle = 'black';
-      break;
-    case 3:
-      ctx.fillStyle = 'black';
-      ctx.strokeStyle = 'white';
-      ctx.strokeText(txt, x, y);
-      break;
-  }
-  
-  ctx.fillText(txt, x, y);
-
-}
-
 function keyboard(e) { //key up
 
     //alert(e.keyCode);
@@ -988,10 +1011,10 @@ function keyboard(e) { //key up
           //////
       case 33: //'page up'
       case 37: { //'ArrowLeft'
-          
           helpSwitch = 0;
-          let _phase = getPreChapter(phase, line);
-          let _line = getPreVerse(phase, line);
+          let cv = getPreCV(phase, line);
+          let _phase = cv[0];//getPreChapter(phase, line);
+          let _line = cv[1];//getPreVerse(phase, line);
           if (_phase >= 0 && (phase != _phase || line != _line)) {
             phase = _phase;
             line = _line;
@@ -1006,9 +1029,9 @@ function keyboard(e) { //key up
       case 34: //'page down' 
       case 39: { //'ArrowRight'
           helpSwitch = 0;
-          let _phase = getNextChapter(phase, line);
-          let _line = getNextVerse(phase, line);
-          
+          let cv = getNextCV(phase, line);
+          let _phase = cv[0];//getNextChapter(phase, line);
+          let _line = cv[1];//getNextVerse(phase, line);
           if (_phase >=0 && (phase != _phase || line != _line)) {
             phase = _phase;
             line  = _line;
@@ -1206,13 +1229,6 @@ function keydownAction(e) {
     _repaint();
     return;
   }
-  
-  if (e.keyCode == 32) { //space
-    if (recognition && !recognizing) {
-      recognition.start();
-    }
-    return;
-  }
 
 }
 
@@ -1252,3 +1268,34 @@ jumpTo1();
 
 _repaint();
 
+/*
+function getPreChapter(chapter, verse) {
+    if (chapter <= 0) return -1;
+    if (verse > 0) return chapter;
+    return chapter - 1;
+  }
+  
+  function getPreVerse(chapter, verse) {
+    if (verse > 0) return verse - 1;
+    if (chapter > 0) return subtitles[chapter - 1].length - 1;
+    return subtitles[0].length - 1;
+  }
+  
+  function getNextChapter(chapter, verse) {
+    if (chapter == -1) return -1;
+    if (verse < subtitles[chapter].length - 1)
+      return chapter;
+    if (chapter < subtitles.length - 1) 
+      return chapter + 1;
+    return -1;
+  }
+  
+  function getNextVerse(chapter, verse) {
+    if (chapter == -1) return -1;
+    if (verse < subtitles[chapter].length - 1)
+      return verse + 1;
+    if (chapter < subtitles.length - 1) 
+      return 0;
+    return -1;
+  }
+  */

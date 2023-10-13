@@ -820,13 +820,13 @@ function restoreActionFromLocal() {
           this.fs = this.targetFs;
           this.transY = this.targetTransY;
           fs = this.fs;
-        } if (progress == -2) { 
+        } else if (progress == -2) { 
           fs = this.targetFs;
         } else {
-          this.fs = this.fs + (this.targetFs - this.fs) * progress;
+          let _p = animElapse == animTotal?1.0:progress/3.0;
+          this.fs = this.fs + (this.targetFs - this.fs) * _p;
           fs = this.fs;
-          //if (this.level == 0) 
-          this.transY = this.transY + (this.targetTransY - this.transY) * progress;
+          this.transY = this.transY + (this.targetTransY - this.transY) * _p;
         }
       
         if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
