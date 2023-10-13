@@ -30,8 +30,8 @@ var presetVerse = [
         "'左右' 上ㄧ節下ㄧ節  '上下' 上ㄧ章下ㄧ章",
         "'-'上一卷  '='下一卷", 
         "'1234567890' 跳至預存  'QWERTYUIOP' 儲存1-0", 
-        "'L' 選卷  'K' 選章  'J' 選節", 
-        "'A' 換顏色  'B' Blank  'C' 複製此節到剪貼簿 'M'文字模式",
+        "'L' 開啟選單 'C' 複製此節 'M'文字模式", 
+        "'A' 換顏色  'B' Blank",
         "shift'ASDFG' 舊約分類  shift'ZXCV' 新約分類",
         "shift'1234567890' 選章",
         "shift'左右' 上十節下十節  shift'上下' 上十章下十章",
@@ -67,9 +67,6 @@ var presetVerse = [
   var hlightStyle = 'rgb(0, 60, 0)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
   
-  //strokeStyle = 'black';//'rgb(0, 0, 0, ' + a + ')';
-  //ctx.fillStyle
-
   var bgStyle_green = bgStyle;//'blue';
   var hlightStyle_green = hlightStyle;//'rgb(0, 0, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_green = COLORS_CK;//["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
@@ -92,7 +89,6 @@ var presetVerse = [
   var txt_strokeStyle_white = 'rgb(255,255,255)';
   var txt_fillStyle_white = 'rgba(0, 0, 0, '; 
 
-
   /////
   var bgcolor_pointer = bgStyle;
   var color_pointer = COLORS_CK;
@@ -111,88 +107,18 @@ var presetVerse = [
   } 
   
   var SONGS = [ [['']] ];
+  
+  var chineseAbbr = getSong('中文縮寫');
+  var chineseFullname = getSong('中文全名');
+  var engAbbr = getSong('英文縮寫');
+  var engFullname = getSong('英文全名');
+
+  var abbr = chineseAbbr;
+  var fullname = chineseFullname;
+
+  var doLanguageSwitch = false;
     
-  const chineseAbbr = ['', 
-  
-  '創', '出', '利', '民', '申',
-  '書', '士', '得', '撒上', '撒下', '王上', '王下', '代上', '代下', '拉', '尼', '斯',
-  '伯', '詩', '箴', '傳', '歌',
-  '賽', '耶', '哀', '結', '但',
-  '何', '珥', '摩', '俄', '拿', '彌', '鴻', '哈', '番', '該', '亞', '瑪',
-  
-  '太', '可', '路', '約', '徒',
-  '羅', '林前', '林後', '加', '弗', '腓', '西', '帖前', '帖後',
-  '提前', '提後', '多', '門',
-  '來', '雅', '彼前', '彼後', '約一', '約二', '約三', '猶',
-  '啟'
-  
-  ];
-  
-  var chineseFullname = ['',
-  '創世記', '出埃及記', '利未記', '民數記', '申命記',
-
-  '約書亞記', '士師記', '路得記', '撒母耳記上', '撒母耳記下', 
-  //'列王記上', '列王記下',
-  '列王紀上', '列王紀下', 
-  '歷代志上', '歷代志下', 
-  '以斯拉記', '尼希米記', '以斯帖記',
-
-  '約伯記', '詩篇', '箴言', '傳道書', '雅歌', 
-
-  '以賽亞書', '耶利米書', '耶利米哀歌', '以西結書', '但以理書', 
-  
-  '何西阿書', '約珥書', '阿摩司書', '俄巴底亞書', '約拿書', '彌迦書', '那鴻書', '哈巴谷書', '西番雅書', 
-  '哈該書', '撒迦利亞書', '瑪拉基書',
-  
-  '馬太福音', '馬可福音', '路加福音', '約翰福音', '使徒行傳',
-  '羅馬書', '哥林多前書', '哥林多後書', '加拉太書', '以弗所書', '腓立比書', '歌羅西書', '帖撒羅尼迦前書', '帖撒羅尼迦後書',
-  '提摩太前書', '提摩太後書', '提多書', '腓利門書', 
-  '希伯來書', '雅各書', '彼得前書', '彼得後書', 
-  '約翰壹書', '約翰貳書', '約翰參書',
-  //'約翰一書', '約翰二書', '約翰三書', 
-  '猶大書', '啟示錄'];
-
-  const engAbbr = ["", 
-        "Gen", "Exo", "Lev", "Num", "Deu",
-        "Jos", "Jug", "Rut", "1Sa", "2Sa", "1Ki", "2Ki", "1Ch", "2Ch", "Ezr", "Neh", "Est", 
-        "Job", "Psm", "Pro", "Ecc", "Son",
-        "Isa", "Jer", "Lam", "Eze", "Dan",
-        "Hos", "Joe", "Amo", "Oba", "Jon", "Mic", "Nah", "Hab", "Zep", "Hag", "Zec", "Mal",//).preReadline("Mal.", "Matthew");
-
-        "Mat", "Mak", "Luk", "Jhn", "Act",
-        "Rom", "1Co", "2Co", "Gal", "Eph", "Phl", "Col", "1Ts", "2Ts",
-        "1Ti", "2Ti", "Tit", "Phm",
-        "Heb", "Jas", "1Pe", "2Pe", "1Jn", "2Jn", "3Jn", "Jud", "Rev"
-    ];
-
-    const engFullname = ["",
-                    "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
-
-                     "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel", "1 Kings", "2 Kings",
-                     "1 Chronicles", "2 Chronicles", "Ezra", "Nehemiah", "Esther",
-
-                     "Job", "Psalms", "Proverbs", "Ecclesiastes", "Song of Songs",
-
-                     "Isaiah", "Jeremiah", "Lamentations", "Ezekiel", "Daniel",
-
-                     "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk",
-                     "Zephaniah", "Haggai", "Zechariah", "Malachi",
-
-                     "Matthew", "Mark", "Luke", "John", "Acts",
-
-                     "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians",
-                     "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
-
-                     "1 Timothy", "2 Timothy", "Titus", "Philemon",
-
-                     "Hebrews", "James", "1 Peter", "2 Peter", "1 John", "2 John", "3 John", "Jude", "Revelation"
-    ];
-  
-    var abbr = chineseAbbr;
-    var fullname = chineseFullname;
-
-    var doLanguageSwitch = false;
-    function switchLang() {
+  function switchLang() {
       if (!doLanguageSwitch) return;
       if (abbr == chineseAbbr) {
         abbr = engAbbr;
@@ -204,7 +130,7 @@ var presetVerse = [
       for(let i=1;i<abbr.length;i++) SONGS[i] = getSong(abbr[i]);
       subtitles = SONGS[song];
       _repaint();
-    }
+  }
   
   const MAX_VERSES_GREEN = 2;
   const MAX_VERSES_NORMAL = 7;
@@ -1152,7 +1078,6 @@ function restoreActionFromLocal() {
   function render(progress) {
     _layer0();
     _render(progress);
-    _layer2();
     _layerui();
   }
   
@@ -2075,20 +2000,16 @@ function restoreActionFromLocal() {
     //ctx.strokeRect(x, y, w, h);
   }
   
-  function _layer1() {
-    printMain(phase, line);
-  }
+  //function _layer1() {}//function _layer2() {}
   
-  function _layer2() {
+  function _layerui() {
+
     if (helpSwitch == 1) {
       userhelp(); 
     } else if (helpSwitch == 2) {
       _phoneUi();
     }
-  }
-  
-  function _layerui() {
-    
+        
     if (uisel == 0) return;
     ctx.fillStyle = bgcolor_pointer;//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2102,7 +2023,7 @@ function restoreActionFromLocal() {
       ctx.fillStyle = color_pointer[(i == song?3:2)];
       if (i == song) {
         ctx.strokeStyle = color_pointer[2];
-        ctx.lineWidth = Math.ceil(fontsize/4.0);
+        ctx.lineWidth = Math.ceil(fontsize/8.0);
         ctx.strokeText(SONGS[i][0][0], x - (i == song?fontsize_sml/2:0) , y);      
       }
       ctx.fillText(SONGS[i][0][0], x - (i == song?fontsize_sml/2:0) , y);
@@ -2118,8 +2039,7 @@ function restoreActionFromLocal() {
     //ctx.globalCompositeOperation='difference';
     //ctx.filter = 'invert(1)';
     _layer0();
-    _layer1();
-    _layer2();
+    printMain(phase, line);//_layer1();//_layer2();
     _layerui();
   }
   
@@ -2622,7 +2542,6 @@ function restoreActionFromLocal() {
   for(let i=1;i<abbr.length;i++) SONGS[i] = getSong(abbr[i]);
 
   song = 0;
-  subtitles = SONGS[song];
   
   jumpTo1();
   _repaint();
@@ -2635,7 +2554,7 @@ function restoreActionFromLocal() {
     //document.cookie = "last=" + JSON.stringify(obj) + "; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/";
   });
 
-   restoreActionFromLocal();
+  restoreActionFromLocal();
 
   /*
   function cookieStuff() {
@@ -2672,4 +2591,3 @@ function restoreActionFromLocal() {
     console.log(a);
   }
   */
- 
