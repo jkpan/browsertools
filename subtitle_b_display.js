@@ -1,15 +1,16 @@
 var presetVerse = [
       
     [''], //0
-    [''], //1
-    [''], //2
+    ['詩篇', 23], //1
+    ['詩篇', 1, 2], //2
     [''], //3
     [''], //4
     [''], //5
     [''], //6
     [''], //7
     [''], //8
-    [''], //9  
+    [''], //9
+
   ];
 
 //function flow() {}
@@ -90,8 +91,6 @@ var subtitles;
 var phase = 0;
 var line = 0;
 var mode = 0;
-var animSwh = 0;
-var animIdx = 0;
 
 var doblank = 0;
 //var target_doblank = 0;
@@ -172,10 +171,21 @@ function printSideTxt(i, j, x, y, a) {
 */
 
 function drawHlight(yy, hh) {
-  if (doblank != 1 && phase >= 1) {
-      ctx.fillStyle = hlight_pointer;
+    if (doblank == 1 || phase < 1) return;
+
+    switch (fontColorType) {
+        case 0:
+        case 1:
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.33)';
+            break;
+        case 2:
+        case 3:
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
+            break;
+      }
+
       ctx.fillRect (0, yy, canvas.width, hh);
-  }
+  
 }
 
 function getTxtArray(txt, wRatio) {
@@ -475,16 +485,6 @@ function operateQuene(queueType, doanim) {
     for (let _sel = 2;;_sel++)
       if (queue.length > sel + _sel) queue[sel + _sel].setLevel(_sel);
       else break;
-    /*
-    if (sel >= 2)
-      queue[sel - 2].setLevel(2);
-    if (queue.length > sel + 2)
-      queue[sel + 2].setLevel(2);
-    if (sel >= 3)
-      queue[sel - 3].setLevel(3);
-    if (queue.length > sel + 3)
-      queue[sel + 3].setLevel(3);
-      */
   }
 
   if (doanim > 0) {
@@ -709,22 +709,12 @@ function _drawtxt(txt, x, y, a) {
 
     switch (fontColorType) {
         case 0:
-          ctx.fillStyle = 'white';
-          break;
         case 1:
           ctx.fillStyle = 'white';
-          ctx.strokeStyle = 'black';
-          //ctx.lineWidth = Math.ceil(fontsize/10.0);
-          //ctx.strokeText(txt, x, y);
           break;
         case 2:
-          ctx.fillStyle = 'black';
-          break;
         case 3:
           ctx.fillStyle = 'black';
-          ctx.strokeStyle = 'white';
-          //ctx.lineWidth = Math.ceil(fontsize/10.0);
-          //ctx.strokeText(txt, x, y);
           break;
       }
 
@@ -884,8 +874,39 @@ function jumpTo1() {
   }
 }
 
+function anim1() {
+    if (animType != 1) return;
+    keyboard({keyCode : 39});
+    setTimeout(anim1, subtitles[phase][line].length * 50);
+}
+
+function jumpwoanim(ps) {
+    for (var i = 1;i<SONGS.length;i++) {
+      if (ps[0] == SONGS[i][0][0]) {
+          song = i;
+          subtitles = SONGS[i];//presetVerse[value][0]
+          phase = ps[1];
+          line =  ps[2];
+          break;
+      }
+    }
+    _repaint();
+}
+
+var animType = 0;
+
 function jump2preset(ps) {
-  jump2preset4Anim(ps);
+    if (ps.length == 2) {
+        animType = 1;
+        jumpwoanim([ps[0], ps[1], 0]);
+        setTimeout(anim1, subtitles[phase][line].length * 50);
+        return;
+    }
+    if (ps.length == 3) {
+        animType = 0;
+        jump2preset4Anim(ps);
+        return;
+    }
 }
 
 function _targetAnim() {
@@ -1069,6 +1090,7 @@ function keyboard(e) { //key up
           line = 0;
 
           break;
+        
         case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
         //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
           var value = e.keyCode - 48;
@@ -1076,6 +1098,7 @@ function keyboard(e) { //key up
           if (presetVerse[value][0].length == 0) break;
           jump2preset(presetVerse[value]);
           return;
+        /*
         case 81: 
           presetVerse[1][0] = subtitles[0][0];
           presetVerse[1][1] = phase;
@@ -1126,14 +1149,12 @@ function keyboard(e) { //key up
           presetVerse[0][1] = phase;
           presetVerse[0][2] = line;
           break; 
-        //case 32: canvas.requestFullscreen(); break;
-        case 13: //'enter'
-          
-          break;
+          */
+        case 32: animType = 0; break;
+        //case 13: //'enter' break;
         case 27: //'escape'
+          animType = 0;
           mode = 0;
-          animSwh = 0;
-          animIdx = 0;
           doblank = 0;
           uisel = 0;
           break;

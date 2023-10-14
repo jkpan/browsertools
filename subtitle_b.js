@@ -141,9 +141,7 @@ var presetVerse = [
   var phase = 0;
   var line = 0;
   var mode = 0;
-  var animSwh = 0;
-  var animIdx = 0;
-  
+    
   var doblank = 0;
   var target_doblank = 0;
   var helpSwitch = 0;
@@ -1157,7 +1155,7 @@ function restoreActionFromLocal() {
       
     }
   
-    if (color_selection > 0 && animSwh == 0) { //print saved versus
+    if (color_selection > 0) { //print saved versus
       ctx.textBaseline = 'top';
       let fs = Math.min(fontsize_sml_sml, 24);
       ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
@@ -1694,10 +1692,7 @@ function restoreActionFromLocal() {
                 break;
             }
             if (song == 0 || phase == 0) break;
-            if (animSwh == 0) {
-              mode = mode == 0?1:0;
-            }
-            animSwh = 0;
+            mode = mode == 0?1:0;
             if (mode == 1) {
               removeDiv();
               canvas.hidden = true;
@@ -1895,8 +1890,6 @@ function restoreActionFromLocal() {
             mode = 0;
             removeDiv();
             canvas.hidden = false;
-            animSwh = 0;
-            animIdx = 0;
             doblank = 0;
             helpSwitch = 0;
             uisel = 0;
