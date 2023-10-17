@@ -2,7 +2,7 @@ var presetVerse = [
       
     [''], //0
     ['詩篇', 23], //1
-    ['詩篇', 1, 2], //2
+    ['詩篇', 1, 2, '詩篇', 2, 3], //2
     [''], //3
     [''], //4
     [''], //5
@@ -15,9 +15,11 @@ var presetVerse = [
 
 //function flow() {}
 
-const LEV_1_OPC = 0.9;
-const LEV_2_OPC = 0.8;
-const LEV_3_OPC = 0.7;
+const WORD_DELAY = 100;
+
+const LEV_1_OPC = 0.8;
+const LEV_2_OPC = 0.7;
+const LEV_3_OPC = 0.6;
 
 var fontfactor = 14.0;
 var fontFamily = "Monospace";
@@ -150,26 +152,6 @@ function prepareImage() {
   img.onload = function() {};
 }
 
-/*
-function printSideTxt(i, j, x, y, a) {
-
-  let txt = "";
-
-  if (i == 0 && j == 0) {
-    txt = "";
-  } else if (j == 0) {
-    //txt = '['+subtitles[0][0] + ' ' + i + ']';
-    txt = '[' + subtitles[i][j] + ']';
-  } else {
-    txt = subtitles[i][j];
-    _drawtxt('   ' + j, 10, y, a);
-  }
-
-  _drawtxt(txt, x, y, a);
-
-}
-*/
-
 function drawHlight(yy, hh) {
     if (doblank == 1 || phase < 1) return;
 
@@ -227,9 +209,9 @@ function verseobj() {
     volumn: 0,
     chapter: 0,
     verse: 0,
-    wratio: 0.9,
+    wratio: 0.95,
     substrings: [],
-    frontxt: '',
+    //frontxt: '',
     level: 0,
     
     transY: -100,
@@ -297,7 +279,7 @@ function verseobj() {
       if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
        
       let txt = '';
-      this.frontxt = '';
+      //this.frontxt = '';
 
       if (this.chapter == 0) {   //print volumn only
         if (this.level == 0)
@@ -306,25 +288,25 @@ function verseobj() {
         txt = '[' + subtitles[this.chapter][0] + ']';
       } else {                     //normal verse
         txt = subtitles[this.chapter][this.verse];
-        this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':'';// + this.verse;
+        //this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':'';// + this.verse;
       }
 
       if (this.level == 0) {
-        this.wratio = 0.9;
+        //this.wratio = 0.9;
         this.opacity = 1.0;
         if (this.chapter > 0 && this.verse > 0) {
           ctx.font = (fs * 0.7) + "px " + fontFamily;//FONT_SML;
-          let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width/canvas.width);
-          this.wratio = 1.0 - frontGap;
+          //let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width/canvas.width);
+          //this.wratio = 1.0 - frontGap;
         }
       } else if (this.level == 1) {
-        this.wratio = 0.9;
+        //this.wratio = 0.9;
         this.opacity = LEV_1_OPC;//0.85;
       } else if (this.level == 2) {
-        this.wratio = 0.9;
+        //this.wratio = 0.9;
         this.opacity = LEV_2_OPC;//0.7;
       } else {
-        this.wratio = 0.9;
+        //this.wratio = 0.9;
         this.opacity = LEV_3_OPC;//0.55;
       }
 
@@ -364,9 +346,11 @@ function verseobj() {
           drawHlight(0, this.targetRect);//rectH);
           //draw chapter verse
           if (this.chapter > 0 && this.verse > 0) {
-            ctx.font = (this.targetFs * 0.7) + "px " + fontFamily;//FONT_SML;
-            _drawSdwtxt(' '+abbr[this.volumn], 0, 0);
-            _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
+            let fsize = this.targetFs * 0.4;
+            ctx.font = fsize + "px " + fontFamily;//FONT_SML;
+            _drawSdwtxt((abbr[this.volumn].length==1?' ':'') + abbr[this.volumn], 0, 0);
+            _drawSdwtxt(' ' + this.chapter, 0, fsize);
+            _drawSdwtxt(' ' + this.verse, 0, fsize * 2);
           }
         ctx.resetTransform();
       }
@@ -387,15 +371,17 @@ function verseobj() {
           }
         } else {
           let y = 0;//fontsize * 0.25;
-          for (let i=0;i<this.substrings.length;i++) {
-            if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
-              _drawtxt(this.substrings[i]+'-', x, y, this.opacity);
-            else
-              _drawtxt(this.substrings[i], x, y, this.opacity);
-            y += this.fs;
+          if (animType == 0 || checkBetweenHeadTail([song, this.chapter, this.verse]) >= 0) {
+            for (let i=0;i<this.substrings.length;i++) {
+                if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
+                  _drawtxt(this.substrings[i]+'-', x, y, this.opacity);
+                else
+                  _drawtxt(this.substrings[i], x, y, this.opacity);
+                y += this.fs;
+            }
+            //ctx.font = this.fs * 0.7 + "px " + fontFamily;
+            //_drawtxt(this.frontxt, 0, 0, this.opacity);
           }
-          ctx.font = this.fs * 0.7 + "px " + fontFamily;
-          _drawtxt(this.frontxt, 0, 0, this.opacity);
         }
 
       ctx.resetTransform();    
@@ -405,7 +391,7 @@ function verseobj() {
   return obj;
 }
 
-const animTotal = 30;
+const animTotal = 60;
 var animElapse = 0; //var savePre = 0;
 function verse_update(elapse) {
 
@@ -558,10 +544,9 @@ function _render(progress) {
       
       for (let k = i + 1;k<queue.length;k++) {
         let o = queue[k];
-        //o.transY = offY;
         o.preDraw(progress);
+        if (o.transY + o.substrings.length * o.fs > canvas.height) break;
         o.draw();
-        if (o.transY > canvas.height) break;
       }
       
       //offY = obj.transY;
@@ -569,10 +554,8 @@ function _render(progress) {
       for (let k = i - 1;k >= 0;k--) {
         let o = queue[k];
         o.preDraw(progress);
-        //if (o.transY <= 0) break;
+        if (o.transY < 0) break;
         o.draw();
-        if (offY <= 0) break;
-        offY = o.transY;
       }
       
       break;
@@ -643,38 +626,6 @@ function printMain(chapter, verse) {
 
 }
 
-
-/*
-function txtRendering(txt, x, y) {
-
-  //fontColorType = 3;
-
-  ctx.lineWidth = Math.ceil(fontsize/12.0);
-
-  switch (fontColorType) {
-    case 0:
-      ctx.fillStyle = 'white';
-      break;
-    case 1:
-      ctx.fillStyle = 'white';
-      ctx.strokeStyle = 'black';
-      ctx.strokeText(txt, x, y);
-      break;
-    case 2:
-      ctx.fillStyle = 'black';
-      break;
-    case 3:
-      ctx.fillStyle = 'black';
-      ctx.strokeStyle = 'white';
-      ctx.strokeText(txt, x, y);
-      break;
-  }
-  
-  ctx.fillText(txt, x, y);
-
-}
-*/
-
 var fontColorType = 0;
 
 function _drawSdwtxt(txt, x, y) {
@@ -710,11 +661,11 @@ function _drawtxt(txt, x, y, a) {
     switch (fontColorType) {
         case 0:
         case 1:
-          ctx.fillStyle = 'white';
+          ctx.fillStyle = 'rgba(255,255,255,' + a + ')';//'white';
           break;
         case 2:
         case 3:
-          ctx.fillStyle = 'black';
+          ctx.fillStyle = 'rgba(0,0,0,' + a + ')';//'black';
           break;
       }
 
@@ -876,13 +827,49 @@ function jumpTo1() {
 
 function anim1() {
     if (animType != 1) return;
-    keyboard({keyCode : 39});
-    setTimeout(anim1, subtitles[phase][line].length * 50);
+    
+    if (checkBeforeTail([song, phase, line]))
+        keyboard({keyCode : 39});
+    else { //jumpwoanim(head);
+        jump2preset4Anim(head);
+        timeoutID = setTimeout(anim1, subtitles[head[1]][head[2]].length * WORD_DELAY);
+        return;
+    }
+        
+    timeoutID = setTimeout(anim1, subtitles[phase][line].length * WORD_DELAY);
+}
+
+let head = [];
+let tail = [];
+
+function checkBetweenHeadTail(ps) {
+    if (checkAfterHead(ps) && checkBeforeTail(ps)) return 1;
+    if (ps[0] == head[0] && ps[1] == head[1] && ps[2] == head[2])
+        return 0;
+    if (ps[0] == tail[0] && ps[1] == tail[1] && ps[2] == tail[2])
+        return 2;
+    return -1;
+}
+
+function checkAfterHead(ps) {
+    if (ps[0] < head[0]) return false;
+    if (ps[1] < head[1]) return false;
+    //目前是同卷書 此章之後
+    if (ps[1] == head[1] && ps[2] <= head[2]) return false;
+    return true;
+}
+
+function checkBeforeTail(ps) {
+    if (ps[0] > tail[0]) return false;
+    if (ps[1] > tail[1]) return false;
+    //目前是同卷書 此章之前
+    if (ps[1] == tail[1] && ps[2] >= tail[2]) return false;
+    return true;
 }
 
 function jumpwoanim(ps) {
     for (var i = 1;i<SONGS.length;i++) {
-      if (ps[0] == SONGS[i][0][0]) {
+      if (ps[0] == SONGS[i][0][0] || ps[0] == i) {
           song = i;
           subtitles = SONGS[i];//presetVerse[value][0]
           phase = ps[1];
@@ -894,17 +881,36 @@ function jumpwoanim(ps) {
 }
 
 var animType = 0;
+var timeoutID = -1;
+
+function stopAnim() {
+    animType = 0;
+    window.clearTimeout(timeoutID);
+}
 
 function jump2preset(ps) {
+    if (timeoutID > 0) stopAnim();
     if (ps.length == 2) {
         animType = 1;
         jumpwoanim([ps[0], ps[1], 0]);
-        setTimeout(anim1, subtitles[phase][line].length * 50);
+        head = [song, phase, line];
+        tail = [song, phase, subtitles[phase].length-1];
+        timeoutID = setTimeout(anim1, subtitles[phase][line].length * 50);
         return;
     }
     if (ps.length == 3) {
         animType = 0;
         jump2preset4Anim(ps);
+        return;
+    }
+    if (ps.length == 6) {
+        animType = 1;
+        jumpwoanim([ps[3], ps[4], ps[5]]);
+        tail = [song, phase, line];
+        jumpwoanim([ps[0], ps[1], ps[2]]);
+        head = [song, phase, line];
+        console.log(head +'::::'+ tail);
+        timeoutID = setTimeout(anim1, subtitles[phase][line].length * 50);
         return;
     }
 }
@@ -959,7 +965,7 @@ var t_line = 0;
 
 function jump2preset4Anim(ps) {
   for (var i = 1;i<SONGS.length;i++) {
-    if (ps[0] == SONGS[i][0][0]) {
+    if (ps[0] == SONGS[i][0][0] || ps[0] == i) {
         t_song = i;
         //subtitles = SONGS[i];//presetVerse[value][0]
         t_phase = ps[1];
@@ -1017,7 +1023,7 @@ function keyboard(e) { //key up
           if (canvas.hidden) break;
           helpSwitch = 0;
           if (phase > 0) 
-            phase--; 
+            phase--;
           else  
             phase = 0;
           line = 0;
@@ -1098,59 +1104,7 @@ function keyboard(e) { //key up
           if (presetVerse[value][0].length == 0) break;
           jump2preset(presetVerse[value]);
           return;
-        /*
-        case 81: 
-          presetVerse[1][0] = subtitles[0][0];
-          presetVerse[1][1] = phase;
-          presetVerse[1][2] = line;
-          break;//Q
-        case 87: 
-          presetVerse[2][0] = subtitles[0][0];
-          presetVerse[2][1] = phase;
-          presetVerse[2][2] = line;
-          break;//W
-        case 69:
-          presetVerse[3][0] = subtitles[0][0];
-          presetVerse[3][1] = phase;
-          presetVerse[3][2] = line;
-          break;//E
-        case 82: 
-          presetVerse[4][0] = subtitles[0][0];
-          presetVerse[4][1] = phase;
-          presetVerse[4][2] = line;
-          break;//R
-        case 84: 
-          presetVerse[5][0] = subtitles[0][0];
-          presetVerse[5][1] = phase;
-          presetVerse[5][2] = line;
-          break;//T
-        case 89: 
-          presetVerse[6][0] = subtitles[0][0];
-          presetVerse[6][1] = phase;
-          presetVerse[6][2] = line;
-          break;//Y
-        case 85: 
-          presetVerse[7][0] = subtitles[0][0];
-          presetVerse[7][1] = phase;
-          presetVerse[7][2] = line;
-          break;//U
-        case 73: 
-          presetVerse[8][0] = subtitles[0][0];
-          presetVerse[8][1] = phase;
-          presetVerse[8][2] = line;
-          break;//I
-        case 79: 
-          presetVerse[9][0] = subtitles[0][0];
-          presetVerse[9][1] = phase;
-          presetVerse[9][2] = line;
-          break;//O
-        case 80: //'p' ppt mode
-          presetVerse[0][0] = subtitles[0][0];
-          presetVerse[0][1] = phase;
-          presetVerse[0][2] = line;
-          break; 
-          */
-        case 32: animType = 0; break;
+        case 32: stopAnim(); break;
         //case 13: //'enter' break;
         case 27: //'escape'
           animType = 0;
@@ -1209,21 +1163,6 @@ function _repaint() {
   printMain(phase, line);//_layer1();_layer2();
   _layerui();
 }
-
-/*
-var _openWin = null;
-function openCtrl() {
-  if (_openWin) 
-    _openWin.close();
-  _openWin = window.open("subtitle_b_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=500,height=400,top="+(screen.height-400)+",left="+(screen.width-840));
-}
-
-function closeCtrl() {
-  if (_openWin) 
-    _openWin.close();
-  _openWin = null;
-}
-*/
 
 init();
 
@@ -1319,4 +1258,128 @@ function getPreChapter(chapter, verse) {
       return 0;
     return -1;
   }
+  */
+
+  /*
+  function createParticle() {
+    particles[i] = newParticle_txt(i, total);//();
+    particles[i].initial(canvas);
+  }
+
+  function newParticle_txt(sequence, total) {
+    let p = {
+      x: 0,
+      y: 0,
+    idx: 0,
+    txt: "",
+    array: [],
+    size:0,
+    seq:sequence,
+    ttl:total,
+    idxlen:0,
+    elapse:0,
+    gap : 0.1,
+    lev:0,
+      release: function() {
+        this.txt = '';
+        this.array = [];
+        this.array.length = 0;
+      },
+      initial: function (c) {
+  
+        //this.txt += String.fromCharCode(Math.floor(65 + Math.random() * 26));
+  
+        let chapter = 1 + Math.floor(Math.random() * (subtitle.length - 1));
+        let verse = 1 + Math.floor(Math.random() * (subtitle[chapter].length - 1));
+        this.txt = subtitle[chapter][verse];
+  
+        //this.size = Math.floor(10 + (this.seq/this.ttl) * 20);
+        this.size = 20 + 4 * Math.floor(this.seq/5);
+        
+        
+        this.lev = Math.floor(this.ttl - this.seq)/5;
+        if (this.lev < 3) {
+          this.x = Math.floor(this.ttl - this.seq)%5 * c.width/5 + 2 * this.lev * c.width/this.ttl;
+        } else {
+          this.x = c.width * Math.random();
+        }
+        //this.x = this.seq * c.width/this.ttl;
+        //console.log(':'+this.size);
+  
+        this.array = Array.from(this.txt);
+        
+        this.y = 10 + Math.random() * c.height/4;
+        this.idxlen = Math.max(2, Math.floor(this.array.length * 0.8));//10 + 10 * Math.random();
+        this.elapse = 0;
+        this.idx = 0;
+        this.gap = 0.06 + Math.random() * 0.15;
+        //console.log('___  ' + this.gap);
+      },
+  
+      update: function (c, _ctx, dt) {
+        
+        if (dt > 1000) dt = 16;
+  
+        this.size += 0.05 * this.size * dt * 0.001;
+        this.y -= this.size * dt * 0.001;
+  
+        _ctx.textAlign = "left";
+  
+        var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"Noto Serif TC";"標楷體";
+        _ctx.font = this.size + "px "+ fontFamily;
+  
+        this.elapse += dt * 0.001;
+        if (this.elapse > this.gap) {
+          this.idx++;
+          if (this.idx - this.idxlen + 1 >= this.array.length) {
+            this.initial(c);
+            return;
+          }
+          this.elapse = 0;
+        }
+  
+        //console.log(this.idx + '/' + this.array.length);
+  
+        let _len = this.idxlen;
+        for (var i = this.idx;i>=0;i--) {
+          
+          if (i < this.array.length) {
+            
+            let cl = Math.floor(150 * _len/this.idxlen);
+  
+            let _r = PT_R == 0?cl:255;
+            let _g = PT_G == 0?cl:255;
+            let _b = PT_B == 0?cl:255;
+            
+            if (i == this.idx) {
+              
+              if (this.lev >= 2) {
+                _ctx.fillStyle = 'rgb(' + (PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(200, 200, 200, 0.8)';
+              } else {
+                _ctx.strokeStyle = 'rgb(' +(PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(255, 0, 0, 1.0)';
+                _ctx.lineWidth = 6;
+                _ctx.fillStyle = 'rgb(0,0,0,1.0)';
+                _ctx.strokeText(this.array[i], this.x, this.y + (i * this.size));
+              }      
+              
+            } else {
+  
+              let opa = _len/this.idxlen;
+              if (this.lev >= 2) {
+                opa *= 0.5;
+              }
+              _ctx.fillStyle = 'rgb(' + _r + ',' + _g + ',' + _b + ',' + opa + ')';
+            }
+            _ctx.fillText(this.array[i], this.x, this.y + (i * this.size)); 
+            //_ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
+          }  
+          _len--;
+          if (_len == 0) break;
+        }
+        
+      }
+    }
+    return p;
+  }
+
   */
