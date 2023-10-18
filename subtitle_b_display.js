@@ -204,35 +204,35 @@ function is0Char(str) {
   return isEnglishCharacter(str[0]);
 }
 
-function verseobj() {
-  let obj = {
-    volumn: 0,
-    chapter: 0,
-    verse: 0,
-    wratio: 0.95,
-    substrings: [],
+class VerseObj {
+
+    volumn = 0;
+    chapter = 0;
+    verse = 0;
+    wratio = 0.95;
+    substrings = [];
     //frontxt: '',
-    level: 0,
+    level = 0;
     
-    transY: -100,
-    fs: 0,
-    opacity: 1.0,
+    transY = -100;
+    fs = 0;
+    opacity = 1.0;
 
     //gap_fs: 0,
     //gap_transY : 0,
           
-    initial: function(volumn, c, v, level) {
+    initial(volumn, c, v, level) {
       this.volumn = volumn;
       this.chapter = c;
       this.verse = v;
       this.setLevel(level);
       this.fs = this.targetFs;
-    },
+    }
 
-    targetRect:0,
-    targetFs: 0,
+    targetRect = 0;
+    targetFs = 0;
 
-    setLevel: function(level) {
+    setLevel(level) {
       this.level = level;
       if (this.level == 0)
         this.targetFs = fontsize;
@@ -244,18 +244,18 @@ function verseobj() {
         this.targetFs = fontsize_sml_sml * 0.8;
 
       //this.o_fs = this.fs;
-    },
+    }
 
-    targetTransY: 0,
-    setTargetTransY: function(_transY) {
+    targetTransY = 0;
+    setTargetTransY(_transY) {
       this.targetTransY = _transY;
       if (this.transY < -50) {
         this.transY = this.targetTransY;
       }
       //this.o_transY = this.transY;
-    }, 
+    }
 
-    preDraw: function(progress) {
+    preDraw(progress) {
     
       let fs = this.fs;
 
@@ -331,9 +331,9 @@ function verseobj() {
         //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
         return r;
       }
-    },
+    }
 
-    draw: function() {
+    draw() {
 
       if (!this.substrings) return;
 
@@ -387,9 +387,8 @@ function verseobj() {
       ctx.resetTransform();    
 
     }
-  }
-  return obj;
 }
+
 
 const animTotal = 60;
 var animElapse = 0; //var savePre = 0;
@@ -416,7 +415,7 @@ function getQueuePre() {
   let cv = getPreCV(obj.chapter, obj.verse);
   let c = cv[0];//getPreChapter(obj.chapter, obj.verse);
   let v = cv[1];//getPreVerse(obj.chapter, obj.verse);
-  obj = verseobj();
+  obj = new VerseObj();
   obj.initial(song, c, v, 1);
   return obj;
 }
@@ -427,7 +426,7 @@ function getQueueNext() {
   let cv = getNextCV(obj.chapter, obj.verse);
   let c = cv[0];//getNextChapter(obj.chapter, obj.verse);
   let v = cv[1];//getNextVerse(obj.chapter, obj.verse);
-  obj = verseobj();
+  obj = new VerseObj();
   obj.initial(song, c, v, 1);
   return obj;
 }
@@ -586,7 +585,7 @@ function printMain(chapter, verse) {
       //j = getPreVerse(i, j);
       //i = _i;
 
-      let obj = verseobj();
+      let obj = new VerseObj();
       if (color_selection <= 1) {
         obj.initial(song, i, j, k);
       } else {
@@ -596,7 +595,7 @@ function printMain(chapter, verse) {
       queue.unshift(obj);
   }
 
-  let obj = verseobj();
+  let obj = new VerseObj();
   obj.initial(song, chapter, verse, 0);
   queue.push(obj);
 
@@ -612,7 +611,7 @@ function printMain(chapter, verse) {
     //  j = getNextVerse(i, j);
     //  i = _i;
 
-      let obj = verseobj();
+      let obj = new VerseObj();
       if (color_selection <= 1) {
         obj.initial(song, i, j, k);
       } else {
@@ -832,11 +831,11 @@ function anim1() {
         keyboard({keyCode : 39});
     else { //jumpwoanim(head);
         jump2preset4Anim(head);
-        timeoutID = setTimeout(anim1, subtitles[head[1]][head[2]].length * WORD_DELAY);
+        timeoutID = setTimeout(anim1, conutWord(subtitles[head[1]][head[2]]) * WORD_DELAY);
         return;
     }
         
-    timeoutID = setTimeout(anim1, subtitles[phase][line].length * WORD_DELAY);
+    timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
 }
 
 let head = [];
@@ -888,6 +887,14 @@ function stopAnim() {
     window.clearTimeout(timeoutID);
 }
 
+function conutWord(word) {
+    if (abbr == chineseAbbr) {
+        return word.length;
+      } else {
+        return word.split(' ').length + 2;
+      }
+}
+
 function jump2preset(ps) {
     if (timeoutID > 0) stopAnim();
     if (ps.length == 2) {
@@ -895,7 +902,8 @@ function jump2preset(ps) {
         jumpwoanim([ps[0], ps[1], 0]);
         head = [song, phase, line];
         tail = [song, phase, subtitles[phase].length-1];
-        timeoutID = setTimeout(anim1, subtitles[phase][line].length * 50);
+        
+        timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
         return;
     }
     if (ps.length == 3) {
@@ -910,7 +918,7 @@ function jump2preset(ps) {
         jumpwoanim([ps[0], ps[1], ps[2]]);
         head = [song, phase, line];
         console.log(head +'::::'+ tail);
-        timeoutID = setTimeout(anim1, subtitles[phase][line].length * 50);
+        timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
         return;
     }
 }
@@ -1227,6 +1235,8 @@ song = 0;
 jumpTo1();
 
 _repaint();
+
+
 
 /*
 function getPreChapter(chapter, verse) {
