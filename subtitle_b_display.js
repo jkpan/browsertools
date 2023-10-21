@@ -1,3 +1,285 @@
+
+class VerseVertical {
+    volumn = 0;
+    chapter = 0;
+    verse = 0;
+    txt = '';
+    hlx = 0;
+        
+    initial(c, v) {
+        this.chapter = c;
+        this.verse = v;
+        this.txt = subtitles[this.chapter][this.verse];
+        this.hlx = 0;
+    }
+
+    drawHlight() {
+
+        //if (doblank == 1 || phase < 1) return;
+    
+        switch (fontColorType) {
+            case 0:
+            case 1:
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.33)';
+                break;
+            case 2:
+            case 3:
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
+                break;
+          }
+    
+          ctx.fillRect(this.hlx, 0, canvas.width, canvas.height);
+      
+    }
+
+    draw(progress) {
+
+        this.drawHlight();
+
+        ctx.font = fontsize + "px " + fontFamily;
+        ctx.textBaseline = 'top'; //'alphabetic';
+        ctx.textAlign = 'right'; //'left' 'center'
+
+        let count = Math.ceil(this.txt.length * progress);
+        const mg_x = canvas.width * 0.95;
+        const mg_y = canvas.height * 0.05;
+        let x = mg_x;
+        let y = mg_y;
+        for (let i=0;i<count;i++) {
+            //ctx.fillText(this.txt.charAt(i), canvas.width/2, 0);
+            //if (fontColorType == 1 || fontColorType == 3) ctx.strokeText(txt, x, y);
+            _drawSdwtxt(this.txt.charAt(i), x, y);
+            //console.log(this.txt.charAt(i) + '::::' + x + ', ' + y);
+            y += fontsize;
+            
+            if (y + fontsize > canvas.height) {
+                x -= fontsize;
+                y = mg_y;
+            }
+            
+        }
+        //for (let i=0;i<this.txt.length;i++) {
+        //    ctx.fillText(this.txt.charAt(i), canvas.width/2, 0);
+        //}
+
+        ctx.textBaseline = 'alphabetic';
+        ctx.textAlign = 'left';// 'center'
+
+    }
+}
+
+var v_vertical = new VerseVertical();
+
+function render_vertical(progress) {
+    _layer0();
+    
+    for (let i = 0;i<queue.length;i++) {
+        let obj = queue[i];
+        if (obj.chapter == phase && obj.verse == line) {
+            if (v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
+                v_vertical.initial(obj.chapter, obj.verse);
+            }
+
+            //console.log(v_vertical.chapter +', '+ v_vertical.verse);
+            
+            v_vertical.draw(progress);
+          //obj.setTargetTransY(offY);
+          //offY += obj.preDraw(-2);
+          //offY += fontsize_sml_sml/2.0;
+          break;
+        }
+    }    
+
+    //_render(progress);
+    _layerui();
+}
+
+class VerseObj {
+
+    volumn = 0;
+    chapter = 0;
+    verse = 0;
+    wratio = 0.95;
+    substrings = [];
+    //frontxt: '',
+    level = 0;
+    
+    transY = -100;
+    fs = 0;
+    opacity = 1.0;
+
+    //gap_fs: 0,
+    //gap_transY : 0,
+          
+    initial(volumn, c, v, level) {
+      this.volumn = volumn;
+      this.chapter = c;
+      this.verse = v;
+      this.setLevel(level);
+      this.fs = this.targetFs;
+    }
+
+    targetRect = 0;
+    targetFs = 0;
+
+    setLevel(level) {
+      this.level = level;
+      if (this.level == 0)
+        this.targetFs = fontsize;
+      else if (this.level == 1)
+        this.targetFs = fontsize_sml;
+      else if (this.level == 2)
+        this.targetFs = fontsize_sml_sml;
+      else 
+        this.targetFs = fontsize_sml_sml * 0.8;
+
+      //this.o_fs = this.fs;
+    }
+
+    targetTransY = 0;
+    setTargetTransY(_transY) {
+      this.targetTransY = _transY;
+      if (this.transY < -50) {
+        this.transY = this.targetTransY;
+      }
+      //this.o_transY = this.transY;
+    }
+
+    preDraw(progress) {
+    
+      let fs = this.fs;
+
+      if (progress == -1) {
+        this.fs = this.targetFs;
+        this.transY = this.targetTransY;
+        fs = this.fs;
+      } else if (progress == -2) { 
+        fs = this.targetFs;
+        //this.gap_fs =  (this.targetFs.toFixed(2) - this.fs.toFixed(2))/animTotal.toFixed(2);
+      } else {
+        //this.fs += this.gap_fs;//this.fs + (this.targetFs - this.fs) * progress/4.0;
+        //fs = this.fs;
+        //this.transY += this.gap_transY;//this.transY + (this.targetTransY - this.transY) * progress/4.0;
+        let _p = animElapse == animTotal?1.0:progress/3.0;//console.log(_p);
+        this.fs = this.fs + (this.targetFs - this.fs) * _p;
+        fs = this.fs;
+        this.transY = this.transY + (this.targetTransY - this.transY)  * _p;
+      }
+    
+      if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
+       
+      let txt = '';
+      //this.frontxt = '';
+
+      if (this.chapter == 0) {   //print volumn only
+        if (this.level == 0)
+          txt = subtitles[0][0];
+      } else if (this.verse == 0) { //print volumn with chapter
+        txt = '[' + subtitles[this.chapter][0] + ']';
+      } else {                     //normal verse
+        txt = subtitles[this.chapter][this.verse];
+        //this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':'';// + this.verse;
+      }
+
+      if (this.level == 0) {
+        //this.wratio = 0.9;
+        this.opacity = 1.0;
+        if (this.chapter > 0 && this.verse > 0) {
+          ctx.font = (fs * 0.7) + "px " + fontFamily;//FONT_SML;
+          //let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width/canvas.width);
+          //this.wratio = 1.0 - frontGap;
+        }
+      } else if (this.level == 1) {
+        //this.wratio = 0.9;
+        this.opacity = LEV_1_OPC;//0.85;
+      } else if (this.level == 2) {
+        //this.wratio = 0.9;
+        this.opacity = LEV_2_OPC;//0.7;
+      } else {
+        //this.wratio = 0.9;
+        this.opacity = LEV_3_OPC;//0.55;
+      }
+
+      ctx.font = fs + "px " + fontFamily;
+
+      this.substrings.length = 0;
+      this.substrings = [];
+      this.substrings = getTxtArray(txt, this.wratio);
+
+      if (progress < 0) {
+        this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+      }
+
+      //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
+
+      if (color_selection <= 1) {
+        let r = this.level == 0? this.substrings.length * fs + fs * 0.5: this.substrings.length * fs + fs * 0.2
+        //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
+        return r;
+      } else {
+        let r = this.substrings.length * fs + fs * 0.5;
+        //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
+        return r;
+      }
+    }
+
+    draw() {
+
+      if (!this.substrings) return;
+
+      ctx.textBaseline = 'top';
+
+      if (this.level == 0) {
+        ctx.transform(1,0,0,1,0,this.targetTransY);
+          //draw hilight rectangle
+          //let rectH = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+          drawHlight(0, this.targetRect);//rectH);
+          //draw chapter verse
+          if (this.chapter > 0 && this.verse > 0) {
+            let fsize = this.targetFs * 0.4;
+            ctx.font = fsize + "px " + fontFamily;//FONT_SML;
+            _drawSdwtxt((abbr[this.volumn].length==1?' ':'') + abbr[this.volumn], 0, 0);
+            _drawSdwtxt(' ' + this.chapter, 0, fsize);
+            _drawSdwtxt(' ' + this.verse, 0, fsize * 2);
+          }
+        ctx.resetTransform();
+      }
+        
+      ctx.transform(1,0,0,1,0,this.transY);
+      
+        ctx.font = this.fs + "px " + fontFamily;
+        let x = canvas.width * (1 - this.wratio);
+
+        if (this.level == 0) {
+          let y = this.fs * 0.25;
+          for (let i=0;i<this.substrings.length;i++) {
+            if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
+              _drawSdwtxt(this.substrings[i]+'-', x, y);
+            else 
+              _drawSdwtxt(this.substrings[i], x, y);
+            y += this.fs;
+          }
+        } else {
+          let y = 0;//fontsize * 0.25;
+          if (animType == 0 || checkBetweenHeadTail([song, this.chapter, this.verse]) >= 0) {
+            for (let i=0;i<this.substrings.length;i++) {
+                if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
+                  _drawtxt(this.substrings[i]+'-', x, y, this.opacity);
+                else
+                  _drawtxt(this.substrings[i], x, y, this.opacity);
+                y += this.fs;
+            }
+            //ctx.font = this.fs * 0.7 + "px " + fontFamily;
+            //_drawtxt(this.frontxt, 0, 0, this.opacity);
+          }
+        }
+
+      ctx.resetTransform();    
+
+    }
+}
+
+
 var presetVerse = [
       
     [''], //0
@@ -204,201 +486,19 @@ function is0Char(str) {
   return isEnglishCharacter(str[0]);
 }
 
-class VerseObj {
-
-    volumn = 0;
-    chapter = 0;
-    verse = 0;
-    wratio = 0.95;
-    substrings = [];
-    //frontxt: '',
-    level = 0;
-    
-    transY = -100;
-    fs = 0;
-    opacity = 1.0;
-
-    //gap_fs: 0,
-    //gap_transY : 0,
-          
-    initial(volumn, c, v, level) {
-      this.volumn = volumn;
-      this.chapter = c;
-      this.verse = v;
-      this.setLevel(level);
-      this.fs = this.targetFs;
-    }
-
-    targetRect = 0;
-    targetFs = 0;
-
-    setLevel(level) {
-      this.level = level;
-      if (this.level == 0)
-        this.targetFs = fontsize;
-      else if (this.level == 1)
-        this.targetFs = fontsize_sml;
-      else if (this.level == 2)
-        this.targetFs = fontsize_sml_sml;
-      else 
-        this.targetFs = fontsize_sml_sml * 0.8;
-
-      //this.o_fs = this.fs;
-    }
-
-    targetTransY = 0;
-    setTargetTransY(_transY) {
-      this.targetTransY = _transY;
-      if (this.transY < -50) {
-        this.transY = this.targetTransY;
-      }
-      //this.o_transY = this.transY;
-    }
-
-    preDraw(progress) {
-    
-      let fs = this.fs;
-
-      if (progress == -1) {
-        this.fs = this.targetFs;
-        this.transY = this.targetTransY;
-        fs = this.fs;
-      } else if (progress == -2) { 
-        fs = this.targetFs;
-        //this.gap_fs =  (this.targetFs.toFixed(2) - this.fs.toFixed(2))/animTotal.toFixed(2);
-      } else {
-        //this.fs += this.gap_fs;//this.fs + (this.targetFs - this.fs) * progress/4.0;
-        //fs = this.fs;
-        //this.transY += this.gap_transY;//this.transY + (this.targetTransY - this.transY) * progress/4.0;
-        let _p = animElapse == animTotal?1.0:progress/3.0;//console.log(_p);
-        this.fs = this.fs + (this.targetFs - this.fs) * _p;
-        fs = this.fs;
-        this.transY = this.transY + (this.targetTransY - this.transY)  * _p;
-      }
-    
-      if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
-       
-      let txt = '';
-      //this.frontxt = '';
-
-      if (this.chapter == 0) {   //print volumn only
-        if (this.level == 0)
-          txt = subtitles[0][0];
-      } else if (this.verse == 0) { //print volumn with chapter
-        txt = '[' + subtitles[this.chapter][0] + ']';
-      } else {                     //normal verse
-        txt = subtitles[this.chapter][this.verse];
-        //this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':'';// + this.verse;
-      }
-
-      if (this.level == 0) {
-        //this.wratio = 0.9;
-        this.opacity = 1.0;
-        if (this.chapter > 0 && this.verse > 0) {
-          ctx.font = (fs * 0.7) + "px " + fontFamily;//FONT_SML;
-          //let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width/canvas.width);
-          //this.wratio = 1.0 - frontGap;
-        }
-      } else if (this.level == 1) {
-        //this.wratio = 0.9;
-        this.opacity = LEV_1_OPC;//0.85;
-      } else if (this.level == 2) {
-        //this.wratio = 0.9;
-        this.opacity = LEV_2_OPC;//0.7;
-      } else {
-        //this.wratio = 0.9;
-        this.opacity = LEV_3_OPC;//0.55;
-      }
-
-      ctx.font = fs + "px " + fontFamily;
-
-      this.substrings.length = 0;
-      this.substrings = [];
-      this.substrings = getTxtArray(txt, this.wratio);
-
-      if (progress < 0) {
-        this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-      }
-
-      //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
-
-      if (color_selection <= 1) {
-        let r = this.level == 0? this.substrings.length * fs + fs * 0.5: this.substrings.length * fs + fs * 0.2
-        //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
-        return r;
-      } else {
-        let r = this.substrings.length * fs + fs * 0.5;
-        //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
-        return r;
-      }
-    }
-
-    draw() {
-
-      if (!this.substrings) return;
-
-      ctx.textBaseline = 'top';
-
-      if (this.level == 0) {
-        ctx.transform(1,0,0,1,0,this.targetTransY);
-          //draw hilight rectangle
-          //let rectH = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-          drawHlight(0, this.targetRect);//rectH);
-          //draw chapter verse
-          if (this.chapter > 0 && this.verse > 0) {
-            let fsize = this.targetFs * 0.4;
-            ctx.font = fsize + "px " + fontFamily;//FONT_SML;
-            _drawSdwtxt((abbr[this.volumn].length==1?' ':'') + abbr[this.volumn], 0, 0);
-            _drawSdwtxt(' ' + this.chapter, 0, fsize);
-            _drawSdwtxt(' ' + this.verse, 0, fsize * 2);
-          }
-        ctx.resetTransform();
-      }
-        
-      ctx.transform(1,0,0,1,0,this.transY);
-      
-        ctx.font = this.fs + "px " + fontFamily;
-        let x = canvas.width * (1 - this.wratio);
-
-        if (this.level == 0) {
-          let y = this.fs * 0.25;
-          for (let i=0;i<this.substrings.length;i++) {
-            if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
-              _drawSdwtxt(this.substrings[i]+'-', x, y);
-            else 
-              _drawSdwtxt(this.substrings[i], x, y);
-            y += this.fs;
-          }
-        } else {
-          let y = 0;//fontsize * 0.25;
-          if (animType == 0 || checkBetweenHeadTail([song, this.chapter, this.verse]) >= 0) {
-            for (let i=0;i<this.substrings.length;i++) {
-                if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
-                  _drawtxt(this.substrings[i]+'-', x, y, this.opacity);
-                else
-                  _drawtxt(this.substrings[i], x, y, this.opacity);
-                y += this.fs;
-            }
-            //ctx.font = this.fs * 0.7 + "px " + fontFamily;
-            //_drawtxt(this.frontxt, 0, 0, this.opacity);
-          }
-        }
-
-      ctx.resetTransform();    
-
-    }
-}
-
-
+var display_mode = 1;
 const animTotal = 60;
 var animElapse = 0; //var savePre = 0;
 function verse_update(elapse) {
 
-  //console.log(elapse + ': ' + animElapse);
-  //console.log(animElapse+' / '+animTotal + '=' + animElapse.toFixed(2)/animTotal.toFixed(2));
-
-  render(animElapse.toFixed(2)/animTotal.toFixed(2));
-  
+    switch(display_mode) {
+        case 0:
+            render(animElapse.toFixed(2)/animTotal.toFixed(2));
+            break;
+        case 1:
+            render_vertical(animElapse.toFixed(2)/animTotal.toFixed(2));
+            break;
+    }
   
   if (animElapse < animTotal) {
     animElapse++;
@@ -473,7 +573,6 @@ function operateQuene(queueType, doanim) {
   }
 
   if (doanim > 0) {
-    //if (animElapse == 0) window.requestAnimationFrame(verse_update);
     animElapse = 0;
     window.requestAnimationFrame(verse_update);
   } else {
@@ -496,9 +595,6 @@ function _render(progress) {
 
   let fixy = canvas.height * 0.33;
   let offY = fixy;
-
-/////
-//console.log('::::' + animElapse);
 
   for (let i = 0;i<queue.length;i++) {
     let obj = queue[i];
@@ -902,7 +998,7 @@ function jump2preset(ps) {
         jumpwoanim([ps[0], ps[1], 0]);
         head = [song, phase, line];
         tail = [song, phase, subtitles[phase].length-1];
-        
+        _repaint();
         timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
         return;
     }
@@ -911,13 +1007,14 @@ function jump2preset(ps) {
         jump2preset4Anim(ps);
         return;
     }
-    if (ps.length == 6) {
+    if (ps.length == 6) {        
         animType = 1;
         jumpwoanim([ps[3], ps[4], ps[5]]);
         tail = [song, phase, line];
         jumpwoanim([ps[0], ps[1], ps[2]]);
         head = [song, phase, line];
         console.log(head +'::::'+ tail);
+        _repaint();
         timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
         return;
     }
@@ -1235,7 +1332,6 @@ song = 0;
 jumpTo1();
 
 _repaint();
-
 
 
 /*
