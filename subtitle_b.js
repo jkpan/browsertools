@@ -1,3 +1,172 @@
+class Verseobj {
+  volumn = 0;
+  chapter = 0;
+  verse = 0;
+  wratio = 0.9;
+  substrings = [];
+  frontxt = '';
+  level = 0;
+      
+  transY = -100;
+  fs = 0;
+  opacity = 1.0;
+      
+  targetRect = 0;
+  targetFs = 0;
+  targetTransY = 0;
+  
+  initial(volumn, c, v, level) {
+
+    this.volumn = volumn;
+    this.chapter = c;
+    this.verse = v;
+    this.setLevel(level);
+    this.fs = this.targetFs;
+  
+  }
+  
+  setLevel(level) {
+        this.level = level;
+        if (this.level == 0)
+          this.targetFs = fontsize;
+        else if (this.level == 1)
+          this.targetFs = fontsize_sml;
+        else if (this.level == 2)
+          this.targetFs = fontsize_sml_sml;
+        else 
+          this.targetFs = fontsize_sml_sml * 0.8;
+  }  
+      
+  setTargetTransY(_transY) {
+      this.targetTransY = _transY;
+      if (this.transY < -50) {
+          this.transY = this.targetTransY;
+      }
+  } 
+  
+  preDraw(progress) {
+      
+        let fs = this.fs;
+  
+        if (progress == -1) {
+          this.fs = this.targetFs;
+          this.transY = this.targetTransY;
+          fs = this.fs;
+        } else if (progress == -2) { 
+          fs = this.targetFs;
+        } else {
+          let _p = animElapse == animTotal?1.0:progress/3.0;
+          this.fs = this.fs + (this.targetFs - this.fs) * _p;
+          fs = this.fs;
+          this.transY = this.transY + (this.targetTransY - this.transY) * _p;
+        }
+      
+        if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
+         
+        let txt = '';
+        this.frontxt = '';
+  
+        if (this.chapter == 0) {   //print volumn only
+          if (this.level == 0)
+            txt = subtitles[0][0];
+        } else if (this.verse == 0) { //print volumn with chapter
+          txt = '[' + subtitles[this.chapter][0] + ']';
+        } else {                     //normal verse
+          txt = subtitles[this.chapter][this.verse];
+          this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':
+                                         ' ' + this.verse;
+        }
+  
+        if (this.level == 0) {
+          this.wratio = 0.9;
+          this.opacity = 1.0;
+          if (this.chapter > 0 && this.verse > 0) {
+            ctx.font = (fs * 0.6) + "px " + fontFamily;//FONT_SML;
+            let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width/canvas.width);
+            this.wratio = 1.0 - frontGap;
+          }
+        } else if (this.level == 1) {
+          this.wratio = 0.9;
+          this.opacity = LEV_1_OPC;//0.85;
+        } else if (this.level == 2) {
+          this.wratio = 0.9;
+          this.opacity = LEV_2_OPC;//0.7;
+        } else {
+          this.wratio = 0.9;
+          this.opacity = LEV_3_OPC;//0.55;
+        }
+  
+        ctx.font = fs + "px " + fontFamily;
+  
+        this.substrings.length = 0;
+        this.substrings = [];
+        this.substrings = getTxtArray(txt, this.wratio);
+  
+        if (progress < 0) {
+          this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+        }
+  
+        //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
+  
+        if (color_selection <= 1) 
+          return this.level == 0? this.substrings.length * fs + fs * 0.5:
+                                  this.substrings.length * fs + fs * 0.2;
+        else 
+          return this.substrings.length * fs + fs * 0.5;
+  }
+  
+  draw() {
+  
+        if (!this.substrings) return;
+  
+        ctx.textBaseline = 'top';
+  
+        if (this.level == 0) {
+          ctx.transform(1,0,0,1,0,this.targetTransY);
+            //draw hilight rectangle
+            //let rectH = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+            drawHlight(0, this.targetRect);//rectH);
+            //draw chapter verse
+            if (this.chapter > 0 && this.verse > 0) {
+              ctx.font = (this.targetFs * 0.6) + "px " + fontFamily;//FONT_SML;
+              _drawSdwtxt(' '+abbr[this.volumn], 0, 0);
+              _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
+            }
+          ctx.resetTransform();
+        }
+          
+        ctx.transform(1,0,0,1,0,this.transY);
+        
+          ctx.font = this.fs + "px " + fontFamily;
+          let x = canvas.width * (1 - this.wratio);
+  
+          if (this.level == 0) {
+            let y = this.fs * 0.25;
+            for (let i=0;i<this.substrings.length;i++) {
+              if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
+                _drawSdwtxt(this.substrings[i]+'-', x, y);
+              else 
+                _drawSdwtxt(this.substrings[i], x, y);
+              y += this.fs;
+            }
+          } else {
+            let y = 0;//fontsize * 0.25;
+            for (let i=0;i<this.substrings.length;i++) {
+              if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
+                _drawtxt(this.substrings[i]+'-', x, y, this.opacity);
+              else
+                _drawtxt(this.substrings[i], x, y, this.opacity);
+              y += this.fs;
+            }
+            ctx.font = this.fs * 0.7 + "px " + fontFamily;
+            _drawtxt(this.frontxt, 0, 0, this.opacity);
+          }
+  
+        ctx.resetTransform();    
+  
+  }
+}
+
 var presetVerse = [
       
       [''], //0
@@ -763,178 +932,6 @@ function restoreActionFromLocal() {
     return isEnglishCharacter(str[0]);
   }
   
-  function verseobj() {
-    let obj = {
-      volumn: 0,
-      chapter: 0,
-      verse: 0,
-      wratio: 0.9,
-      substrings: [],
-      frontxt: '',
-      level: 0,
-      
-      transY: -100,
-      fs: 0,
-      opacity: 1.0,
-      
-      //targetsize: fontsize,
-            
-      initial: function(volumn, c, v, level) {
-        this.volumn = volumn;
-        this.chapter = c;
-        this.verse = v;
-        this.setLevel(level);
-        this.fs = this.targetFs;
-      },
-  
-      targetRect:0,
-      targetFs: 0,
-  
-      setLevel: function(level) {
-        this.level = level;
-        if (this.level == 0)
-          this.targetFs = fontsize;
-        else if (this.level == 1)
-          this.targetFs = fontsize_sml;
-        else if (this.level == 2)
-          this.targetFs = fontsize_sml_sml;
-        else 
-          this.targetFs = fontsize_sml_sml * 0.8;
-      },
-  
-      targetTransY: 0,
-      setTargetTransY: function(_transY) {
-        this.targetTransY = _transY;
-        if (this.transY < -50) {
-          this.transY = this.targetTransY;
-        }
-      }, 
-  
-      preDraw: function(progress) {
-      
-        let fs = this.fs;
-  
-        if (progress == -1) {
-          this.fs = this.targetFs;
-          this.transY = this.targetTransY;
-          fs = this.fs;
-        } else if (progress == -2) { 
-          fs = this.targetFs;
-        } else {
-          let _p = animElapse == animTotal?1.0:progress/3.0;
-          this.fs = this.fs + (this.targetFs - this.fs) * _p;
-          fs = this.fs;
-          this.transY = this.transY + (this.targetTransY - this.transY) * _p;
-        }
-      
-        if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
-         
-        let txt = '';
-        this.frontxt = '';
-  
-        if (this.chapter == 0) {   //print volumn only
-          if (this.level == 0)
-            txt = subtitles[0][0];
-        } else if (this.verse == 0) { //print volumn with chapter
-          txt = '[' + subtitles[this.chapter][0] + ']';
-        } else {                     //normal verse
-          txt = subtitles[this.chapter][this.verse];
-          this.frontxt = this.level == 0?' ' + this.chapter + ':' + this.verse + ' ':
-                                         ' ' + this.verse;
-        }
-  
-        if (this.level == 0) {
-          this.wratio = 0.9;
-          this.opacity = 1.0;
-          if (this.chapter > 0 && this.verse > 0) {
-            ctx.font = (fs * 0.7) + "px " + fontFamily;//FONT_SML;
-            let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width/canvas.width);
-            this.wratio = 1.0 - frontGap;
-          }
-        } else if (this.level == 1) {
-          this.wratio = 0.9;
-          this.opacity = LEV_1_OPC;//0.85;
-        } else if (this.level == 2) {
-          this.wratio = 0.9;
-          this.opacity = LEV_2_OPC;//0.7;
-        } else {
-          this.wratio = 0.9;
-          this.opacity = LEV_3_OPC;//0.55;
-        }
-  
-        ctx.font = fs + "px " + fontFamily;
-  
-        this.substrings.length = 0;
-        this.substrings = [];
-        this.substrings = getTxtArray(txt, this.wratio);
-  
-        if (progress < 0) {
-          this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-        }
-  
-        //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
-  
-        if (color_selection <= 1) 
-          return this.level == 0? this.substrings.length * fs + fs * 0.5:
-                                  this.substrings.length * fs + fs * 0.2;
-        else 
-          return this.substrings.length * fs + fs * 0.5;
-      },
-  
-      draw: function() {
-  
-        if (!this.substrings) return;
-  
-        ctx.textBaseline = 'top';
-  
-        if (this.level == 0) {
-          ctx.transform(1,0,0,1,0,this.targetTransY);
-            //draw hilight rectangle
-            //let rectH = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-            drawHlight(0, this.targetRect);//rectH);
-            //draw chapter verse
-            if (this.chapter > 0 && this.verse > 0) {
-              ctx.font = (this.targetFs * 0.7) + "px " + fontFamily;//FONT_SML;
-              _drawSdwtxt(' '+abbr[this.volumn], 0, 0);
-              _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
-            }
-          ctx.resetTransform();
-        }
-          
-        ctx.transform(1,0,0,1,0,this.transY);
-        
-          ctx.font = this.fs + "px " + fontFamily;
-          let x = canvas.width * (1 - this.wratio);
-  
-          if (this.level == 0) {
-            let y = this.fs * 0.25;
-            for (let i=0;i<this.substrings.length;i++) {
-              if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
-                _drawSdwtxt(this.substrings[i]+'-', x, y);
-              else 
-                _drawSdwtxt(this.substrings[i], x, y);
-              y += this.fs;
-            }
-          } else {
-            let y = 0;//fontsize * 0.25;
-            for (let i=0;i<this.substrings.length;i++) {
-              if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
-                _drawtxt(this.substrings[i]+'-', x, y, this.opacity);
-              else
-                _drawtxt(this.substrings[i], x, y, this.opacity);
-              y += this.fs;
-            }
-            ctx.font = this.fs * 0.7 + "px " + fontFamily;
-            _drawtxt(this.frontxt, 0, 0, this.opacity);
-          }
-  
-        ctx.resetTransform();    
-  
-      }
-    }
-    return obj;
-  }
-  
   function blankend_update(elapse) {
   
     render(-1);
@@ -996,7 +993,7 @@ function restoreActionFromLocal() {
     let obj = queue[0];
     let c = getPreChapter(obj.chapter, obj.verse);
     let v = getPreVerse(obj.chapter, obj.verse);
-    obj = verseobj();
+    obj = new Verseobj();
     obj.initial(song, c, v, 1);
     return obj;
   }
@@ -1006,7 +1003,7 @@ function restoreActionFromLocal() {
     let obj = queue[queue.length -1];
     let c = getNextChapter(obj.chapter, obj.verse);
     let v = getNextVerse(obj.chapter, obj.verse);
-    obj = verseobj();
+    obj = new Verseobj();
     obj.initial(song, c, v, 1);
     return obj;
   }
@@ -1231,7 +1228,7 @@ function restoreActionFromLocal() {
         j = getPreVerse(i, j);
         i = _i;
   
-        let obj = verseobj();
+        let obj = new Verseobj();
         if (color_selection <= 1) {
           obj.initial(song, i, j, k);
         } else {
@@ -1241,7 +1238,7 @@ function restoreActionFromLocal() {
         queue.unshift(obj);
     }
   
-    let obj = verseobj();
+    let obj = new Verseobj();
     obj.initial(song, chapter, verse, 0);
     queue.push(obj);
   
@@ -1252,7 +1249,7 @@ function restoreActionFromLocal() {
         j = getNextVerse(i, j);
         i = _i;
   
-        let obj = verseobj();
+        let obj = new Verseobj();
         if (color_selection <= 1) {
           obj.initial(song, i, j, k);
         } else {

@@ -1,21 +1,22 @@
 
 class VerseVertical {
-    volumn = 0;
-    chapter = 0;
-    verse = 0;
+    volumn = -1;
+    chapter = -1;
+    verse = -1;
     txt = '';
-    hlx = 0;
+    line = 0;
         
-    initial(c, v) {
+    initial(s, c, v) {
+        this.volumn = s;
         this.chapter = c;
         this.verse = v;
         this.txt = subtitles[this.chapter][this.verse];
-        this.hlx = 0;
+        this.line = 0;
     }
 
     drawHlight() {
 
-        //if (doblank == 1 || phase < 1) return;
+        if (doblank == 1) return;
     
         switch (fontColorType) {
             case 0:
@@ -28,42 +29,58 @@ class VerseVertical {
                 break;
           }
     
-          ctx.fillRect(this.hlx, 0, canvas.width, canvas.height);
+          ctx.fillRect(canvas.width * 0.95, 0, -(this.line) * fontsize, canvas.height);
       
     }
 
-    draw(progress) {
+    draw(progress) {                
 
-        this.drawHlight();
-
-        ctx.font = fontsize + "px " + fontFamily;
+        ctx.font = (fontsize * 0.9) + "px " + fontFamily;
         ctx.textBaseline = 'top'; //'alphabetic';
         ctx.textAlign = 'right'; //'left' 'center'
 
-        let count = Math.ceil(this.txt.length * progress);
+        let count = progress < 0?this.txt.length:Math.ceil(this.txt.length * progress);
+        let opa = progress < 0?1.0:progress;
+
+        this.line = Math.ceil(count/(canvas.height * 0.9/fontsize)) + 1;
+        this.drawHlight();
+
         const mg_x = canvas.width * 0.95;
         const mg_y = canvas.height * 0.05;
         let x = mg_x;
         let y = mg_y;
+
         for (let i=0;i<count;i++) {
-            //ctx.fillText(this.txt.charAt(i), canvas.width/2, 0);
-            //if (fontColorType == 1 || fontColorType == 3) ctx.strokeText(txt, x, y);
-            _drawSdwtxt(this.txt.charAt(i), x, y);
-            //console.log(this.txt.charAt(i) + '::::' + x + ', ' + y);
+            
+            _drawSdwtxt(this.txt.charAt(i), x, y, opa);
             y += fontsize;
             
-            if (y + fontsize > canvas.height) {
+            if (y + fontsize >= canvas.height * 0.95) {
                 x -= fontsize;
                 y = mg_y;
             }
-            
         }
+
+        ctx.textAlign = 'left';// 'center'
+
+        if (this.chapter > 0 && this.verse > 0) {
+            let fs = fontsize * 0.5;
+            ctx.font = fs + "px " + fontFamily;
+            x = mg_x - this.line * fontsize;
+            let _abbr = abbr[song];
+            _drawSdwtxt(_abbr.charAt(0), x, canvas.height - 5 * fs, opa);
+            if (_abbr.length > 1)
+                _drawSdwtxt(_abbr.charAt(1), x, canvas.height - 4 * fs, opa);
+            _drawSdwtxt('' + this.chapter, x, canvas.height - 3 * fs, opa);
+            _drawSdwtxt('' + this.verse, x, canvas.height - 2 * fs, opa);
+        }
+
         //for (let i=0;i<this.txt.length;i++) {
         //    ctx.fillText(this.txt.charAt(i), canvas.width/2, 0);
         //}
 
         ctx.textBaseline = 'alphabetic';
-        ctx.textAlign = 'left';// 'center'
+        
 
     }
 }
@@ -72,25 +89,18 @@ var v_vertical = new VerseVertical();
 
 function render_vertical(progress) {
     _layer0();
-    
     for (let i = 0;i<queue.length;i++) {
         let obj = queue[i];
         if (obj.chapter == phase && obj.verse == line) {
-            if (v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
-                v_vertical.initial(obj.chapter, obj.verse);
+            if (v_vertical.volumn != obj.volumn || 
+                v_vertical.chapter != obj.chapter || 
+                v_vertical.verse != obj.verse) {
+                v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
             }
-
-            //console.log(v_vertical.chapter +', '+ v_vertical.verse);
-            
             v_vertical.draw(progress);
-          //obj.setTargetTransY(offY);
-          //offY += obj.preDraw(-2);
-          //offY += fontsize_sml_sml/2.0;
-          break;
+            break;
         }
-    }    
-
-    //_render(progress);
+    }
     _layerui();
 }
 
@@ -238,9 +248,9 @@ class VerseObj {
           if (this.chapter > 0 && this.verse > 0) {
             let fsize = this.targetFs * 0.4;
             ctx.font = fsize + "px " + fontFamily;//FONT_SML;
-            _drawSdwtxt((abbr[this.volumn].length==1?' ':'') + abbr[this.volumn], 0, 0);
-            _drawSdwtxt(' ' + this.chapter, 0, fsize);
-            _drawSdwtxt(' ' + this.verse, 0, fsize * 2);
+            _drawSdwtxt((abbr[this.volumn].length==1?' ':'') + abbr[this.volumn], 0, 0, 1.0);
+            _drawSdwtxt(' ' + this.chapter, 0, fsize, 1.0);
+            _drawSdwtxt(' ' + this.verse, 0, fsize * 2, 1.0);
           }
         ctx.resetTransform();
       }
@@ -254,9 +264,9 @@ class VerseObj {
           let y = this.fs * 0.25;
           for (let i=0;i<this.substrings.length;i++) {
             if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
-              _drawSdwtxt(this.substrings[i]+'-', x, y);
+              _drawSdwtxt(this.substrings[i]+'-', x, y, 1.0);
             else 
-              _drawSdwtxt(this.substrings[i], x, y);
+              _drawSdwtxt(this.substrings[i], x, y, 1.0);
             y += this.fs;
           }
         } else {
@@ -279,12 +289,45 @@ class VerseObj {
     }
 }
 
+function loadBgImg(event) {
+    var files = event.target.files;
+    var file;
+    if (files && files.length > 0) {
+      file = files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function(e) {
+        var _img = new Image();
+        _img.onload = function() {
+          img = _img;
+          startImgAnim();
+          _repaint();
+        }
+        _img.src = e.target.result;
+      }
+    }
+}
+  
+function createBGHiddenFile() {
+    let _file = document.createElement('input');
+    _file.type = "file";
+    _file.id = "img";
+    _file.hidden = "true";
+    _file.accept = "image/png, image/gif, image/jpeg";
+    _file.onchange = loadBgImg;
+    let body = document.getElementsByTagName("body")[0];
+    body.appendChild(_file);
+    //<input id="img" type="file" hidden="true"/>
+}
+
+
+
 
 var presetVerse = [
       
     [''], //0
-    ['詩篇', 23], //1
-    ['詩篇', 1, 2, '詩篇', 2, 3], //2
+    ['詩篇', 1], //2
+    ['創世記', 1, 0, '創世記', 50, 26], //1
     [''], //3
     [''], //4
     [''], //5
@@ -407,9 +450,11 @@ function createCanvas() {
   document.body.style.display = false;
   document.body.style.margin = 0;
   //document.body.style.backgroundColor = 'green';
+  
 }
 
 createCanvas();
+createBGHiddenFile();
 
 function init() {
     canvas = document.getElementById("canvas");
@@ -486,7 +531,7 @@ function is0Char(str) {
   return isEnglishCharacter(str[0]);
 }
 
-var display_mode = 1;
+var display_mode = 0;
 const animTotal = 60;
 var animElapse = 0; //var savePre = 0;
 function verse_update(elapse) {
@@ -634,8 +679,24 @@ function _render(progress) {
     let obj = queue[i];
     if (obj.chapter == phase && obj.verse == line) {
       
-      obj.preDraw(progress);
-      obj.draw();
+        switch(display_mode) {
+            case 0:
+                obj.preDraw(progress);
+                obj.draw();
+                break;
+            case 1:
+                //render_vertical(progress);//animElapse.toFixed(2)/animTotal.toFixed(2));
+                if (v_vertical.volumn != obj.volumn || v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
+                    v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
+                }
+    
+                //console.log(v_vertical.chapter +', '+ v_vertical.verse);
+                
+                v_vertical.draw(progress);
+                return;
+            }
+
+      
       
       for (let k = i + 1;k<queue.length;k++) {
         let o = queue[k];
@@ -723,24 +784,24 @@ function printMain(chapter, verse) {
 
 var fontColorType = 0;
 
-function _drawSdwtxt(txt, x, y) {
-
+function _drawSdwtxt(txt, x, y, opa) {
+    
     switch (fontColorType) {
         case 0:
-          ctx.fillStyle = 'white';
+          ctx.fillStyle = 'rgba(255,255,255,' + opa + ')';//'white';
           break;
         case 1:
-          ctx.fillStyle = 'white';
-          ctx.strokeStyle = 'black';
+          ctx.fillStyle = 'rgba(255,255,255,' + opa + ')';
+          ctx.strokeStyle = 'rgba(0,0,0,' + opa + ')';
           ctx.lineWidth = Math.ceil(fontsize/12.0);
           ctx.strokeText(txt, x, y);
           break;
         case 2:
-          ctx.fillStyle = 'black';
+          ctx.fillStyle = 'rgba(0,0,0,' + opa + ')';
           break;
         case 3:
-          ctx.fillStyle = 'black';
-          ctx.strokeStyle = 'white';
+          ctx.fillStyle = 'rgba(0,0,0,' + opa + ')';
+          ctx.strokeStyle = 'rgba(255,255,255,' + opa + ')';
           ctx.lineWidth = Math.ceil(fontsize/12.0);
           ctx.strokeText(txt, x, y);
           break;
@@ -1111,7 +1172,18 @@ function keyboard(e) { //key up
     //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
           
     switch (e.keyCode) {
+      case 77:
+          img = null;
+          document.getElementById('img').click();
+          break;
       case 65: //a
+        if (color_selection == 2 && display_mode == 0) {
+            display_mode = 1;
+            break;
+        }
+        if (display_mode == 1) {
+            display_mode = 0;
+        }
         color_selection = (color_selection + 1) % 3;
         break;
       case 67: //'c'
@@ -1228,16 +1300,53 @@ function keyboard(e) { //key up
 function _layer0() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
- 
+  
+  /*
+    img w      x
+  -------- = --------
+    img h      c h
+
+    x = c h * img w /img h
+
+    img w      c w
+  -------- = --------
+    img h      y
+
+    y = c w * img h /img w
+
+    */
+
   if (img) {
-      ctx.drawImage(img,0,0, canvas.width, canvas.height);
+    if (img.width/img.height > canvas.width/canvas.height) { //圖比較寬 佔滿canvas的高
+        ctx.drawImage(img,0,0, canvas.height * img.width/img.height, canvas.height);
+    } else { //畫布比較寬 佔滿canvas的寬
+        ctx.drawImage(img,0,0, canvas.width, canvas.width * img.height/img.width);
+    }
   }
+}
+
+function img_update(elapse) {
+ 
+    window.requestAnimationFrame(img_update);
+  
+    /*
+    if (animElapse < animTotal) {
+        animElapse++;
+    } else {
+        animElapse = 0;
+    }
+    */
+
+}
+
+function startImgAnim() {
+
 }
 
 function _layerui() {
   
   if (uisel == 0) return;
-  ctx.fillStyle = bgcolor_pointer;//'green';
+  ctx.fillStyle = 'green';//bgcolor_pointer;//;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.lineWidth = 1;
   ctx.font = FONT;
@@ -1333,7 +1442,7 @@ jumpTo1();
 
 _repaint();
 
-
+//let v = "5"-"2";console.log(typeof v);
 /*
 function getPreChapter(chapter, verse) {
     if (chapter <= 0) return -1;
