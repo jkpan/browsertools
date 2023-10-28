@@ -28,9 +28,10 @@
   </style>
 <body>
 
-  <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000" frameborder="0" width="auto" height="auto" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-  <iframe src="https://onedrive.live.com/embed?resid=A9C489AB715D78A%21237&amp;authkey=!AMd1wONLe7THB_E&amp;em=2&amp;wdAr=1.7777777777777777" width="476px" height="288px" frameborder="0">這是 <a target="_blank" href="https://office.com/webapps">Office</a> 提供的內嵌 <a target="_blank" href="https://office.com">Microsoft Office</a> 簡報。</iframe>
-<!--object data="subtitle.html"></object-->
+  <!--iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&delayms=3000" frameborder="0" width="auto" height="auto" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+  <iframe src="https://onedrive.live.com/embed?resid=A9C489AB715D78A%21237&amp;authkey=!AMd1wONLe7THB_E&amp;em=2&amp;wdAr=1.7777777777777777" width="476px" height="288px" frameborder="0">這是 <a target="_blank" href="https://office.com/webapps">Office</a> 提供的內嵌 <a target="_blank" href="https://office.com">Microsoft Office</a> 簡報。</iframe-->
+
+    <!--object data="subtitle.html"></object-->
 
 <p>地震能量 (logE = 4.8 + 1.5M) </p>
 
@@ -53,7 +54,7 @@
 <!--p id="demo"></p-->
 
 <p></p>
-  <canvas id="canvas" width="400" height="500"></canvas>
+  <canvas id="canvas" width="500" height="500"></canvas>
 <br/>
 <p></p>
 
@@ -68,6 +69,42 @@
   
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
+
+function easeInOut(t) {
+    const p0 = 0;
+    const p1 = 0.001;
+    const p2 = 0.999;
+    const p3 = 1;
+
+    let _t = 1-t;
+    
+    let b = p0 * _t * _t * _t +
+            p1 * 3 * t * _t * _t +
+            p2 * 3 * t * t * _t +
+            p3 * t * t * t;
+    return b;
+}
+
+function makeCurve() {
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+    ctx.font = "10px Arial";
+    ctx.textAlign = 'center';
+    ctx.strokeStyle = "rgb(255,255,255)";
+    ctx.lineWidth = 1;
+
+    ctx.fillStyle = "rgb(100,100,255)";
+    for (let i=0;i<1.0;i+=0.001) {
+      let v = easeInOut(i);
+      ctx.fillRect(i * canvas.width, 0, 1, v * canvas.height);
+    }
+}
+
+makeCurve();
     
   function makeChart(thism) {
     
@@ -138,7 +175,7 @@
       return v;
   }
     
-  makeChart(-1);
+  //makeChart(-1);
 
     /*
     document.getElementById("demo").innerHTML =
@@ -149,7 +186,7 @@
     parseFloat("He was 40");
     */
 
-
+/*
 let constrain = 20;
 let mouseOverContainer = document.getElementById("ex1");
 let ex1Layer = document.getElementById("ex1-layer");
@@ -189,7 +226,9 @@ mouseOverContainer.onmousemove = function(e) {
     //"perspective(100px) " + "   rotateX(" + calcX + "deg) " + "   rotateY("+ calcY +"deg) ";
   });
 };
+*/
 
+/*
 function getGoogleSheetData() {
   //const url = "https://docs.google.com/spreadsheets/d/1wJBqYt8OerwUyUUnO8GIuIIuFu7tj2HPWg1CKATZ-MY/edit?usp=sharing";
   const url = "https://docs.google.com/spreadsheets/d/1wJBqYt8OerwUyUUnO8GIuIIuFu7tj2HPWg1CKATZ-MY/export?format=csv";
@@ -208,5 +247,6 @@ function getGoogleSheetData() {
 }
 
 getGoogleSheetData();
+*/
 
 </script>

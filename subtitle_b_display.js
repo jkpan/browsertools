@@ -50,16 +50,33 @@ class VerseVertical {
         let x = mg_x;
         let y = mg_y;
 
-        for (let i=0;i<count;i++) {
+        if (this.chapter > 0 && this.verse == 0) {
+            let fs = fontsize * 0.7;
+            ctx.font = fs + "px " + fontFamily;
+            this.txt = subtitles[0][0];
+            for (let i=0;i<this.txt.length;i++) {
+                _drawSdwtxt(this.txt.charAt(i), x, y, opa);
+                y += fontsize;
+                if (y + fontsize >= canvas.height * 0.95) {
+                    x -= fontsize;
+                    y = mg_y;
+                }
+            }
+            _drawSdwtxt(''+this.chapter, x, y, opa);
+        } else {
+            for (let i=0;i<count;i++) {
             
-            _drawSdwtxt(this.txt.charAt(i), x, y, opa);
-            y += fontsize;
-            
-            if (y + fontsize >= canvas.height * 0.95) {
-                x -= fontsize;
-                y = mg_y;
+                _drawSdwtxt(this.txt.charAt(i), x, y, opa);
+                y += fontsize;
+                
+                if (y + fontsize >= canvas.height * 0.95) {
+                    x -= fontsize;
+                    y = mg_y;
+                }
             }
         }
+
+
 
         ctx.textAlign = 'left';// 'center'
 
@@ -533,7 +550,7 @@ function is0Char(str) {
 
 var display_mode = 0;
 const animTotal = 60;
-var animElapse = 0; //var savePre = 0;
+var animElapse = -1; //var savePre = 0;
 function verse_update(elapse) {
 
     switch(display_mode) {
@@ -549,7 +566,7 @@ function verse_update(elapse) {
     animElapse++;
     window.requestAnimationFrame(verse_update);
   } else {
-    animElapse = 0;
+    animElapse = -1;
   }
 
 }
@@ -1157,10 +1174,11 @@ function keyboard(e) { //key up
     //alert(e.keyCode);
 
     if (e.keyCode == 16) { //} || e.keyCode == 17) { //key up release lock
-      keylock = 0;
-      uisel = 0;
-      _repaint();
-      return;
+        stopAnim();
+        keylock = 0;
+        uisel = 0;
+        _repaint();
+        return;
     }
 
     if (keylock == 1) {
@@ -1172,7 +1190,7 @@ function keyboard(e) { //key up
     //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
           
     switch (e.keyCode) {
-      case 77:
+      case 77: //m
           img = null;
           document.getElementById('img').click();
           break;
@@ -1318,16 +1336,127 @@ function _layer0() {
 
   if (img) {
     if (img.width/img.height > canvas.width/canvas.height) { //圖比較寬 佔滿canvas的高
-        ctx.drawImage(img,0,0, canvas.height * img.width/img.height, canvas.height);
+        ctx.drawImage(img, img_idx, 0, canvas.height * img.width/img.height, canvas.height);
     } else { //畫布比較寬 佔滿canvas的寬
-        ctx.drawImage(img,0,0, canvas.width, canvas.width * img.height/img.width);
+        ctx.drawImage(img,0,img_idx, canvas.width, canvas.width * img.height/img.width);
     }
   }
 }
 
+var img_step = -1;//10;
+var img_idx = 0;
+//var img_move = img_step;
+var pre_elapse = 0;
+var elapse = 0;
+
+const during = 10;
+var _during = 0;
+
+/*
+function easeInOut(t) {
+    return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+}
+*/
+
+function easeInOut(t) {
+    const p0 = 0;
+    const p1 = 0.001;
+    const p2 = 0.999;
+    const p3 = 1;
+
+    let _t = 1-t;
+    
+    let b = p0 * _t * _t * _t +
+            p1 * 3 * t * _t * _t +
+            p2 * 3 * t * t * _t +
+            p3 * t * t * t;
+    return b;
+}
+
 function img_update(elapse) {
  
+    
+    let dt = (elapse - pre_elapse)/1000.0;
+    if (dt > 1) dt = 0.008; 
+    pre_elapse = elapse;
+
+    _during += dt;
+    if (_during > during) {
+        _during = 0;
+        img_step = -img_step;
+    }
+        
+    if (img.width/img.height > canvas.width/canvas.height) { //圖比較寬 佔滿canvas的高
+        
+        let w = canvas.height * img.width/img.height;
+        let h = canvas.height;
+        let range = Math.abs(w - canvas.width);
+
+        if (img_step < 0)
+            img_idx = img_step * range * easeInOut(_during/during);// += img_move * dt;
+        else 
+            img_idx = -range + range * easeInOut(_during/during);
+        
+    } else { //畫布比較寬 佔滿canvas的寬
+
+        let w = canvas.width;
+        let h = canvas.width * img.height/img.width;
+        let range = Math.abs(h - canvas.height);
+
+        if (img_step < 0)
+            img_idx = img_step * range * easeInOut(_during/during);// += img_move * dt;
+        else 
+            img_idx = -range + range * easeInOut(_during/during);
+
+    }
+
+    /*
+    if (img.width/img.height > canvas.width/canvas.height) { //圖比較寬 佔滿canvas的高
+        
+        let w = canvas.height * img.width/img.height;
+        let h = canvas.height;
+
+        img_idx += img_move * dt;
+        if (img_idx > 0) img_move = -img_step;
+        if (img_idx < -(w - canvas.width)) img_move = img_step;
+        //ctx.drawImage(img, img_idx, 0, canvas.height * img.width/img.height, canvas.height);
+    } else { //畫布比較寬 佔滿canvas的寬
+
+        let w = canvas.width;
+        let h = canvas.width * img.height/img.width;
+
+        img_idx += img_move * dt;
+        if (img_idx > 0) img_move = -img_step;
+        if (img_idx < -(h - canvas.height)) img_move = img_step;
+        //ctx.drawImage(img,0,img_idx, canvas.width, canvas.width * img.height/img.width);
+    }
+    */
+
+    if (animElapse >= 0) {
+        render(animElapse.toFixed(2)/animTotal.toFixed(2));
+    } else {
+        render(-1);
+    }
+
+    /*
+    for (let i = 0;i<queue.length;i++) {
+        let obj = queue[i];
+        if (obj.chapter == phase && obj.verse == line) {
+            if (v_vertical.volumn != obj.volumn || 
+                v_vertical.chapter != obj.chapter || 
+                v_vertical.verse != obj.verse) {
+                v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
+            }
+            v_vertical.draw(progress);
+            break;
+        }
+    }
+    */
+
+    
+
     window.requestAnimationFrame(img_update);
+
   
     /*
     if (animElapse < animTotal) {
@@ -1340,7 +1469,8 @@ function img_update(elapse) {
 }
 
 function startImgAnim() {
-
+    img_move = 1;
+    window.requestAnimationFrame(img_update);
 }
 
 function _layerui() {
