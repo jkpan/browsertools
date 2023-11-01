@@ -337,7 +337,19 @@ function createBGHiddenFile() {
     //<input id="img" type="file" hidden="true"/>
 }
 
+function loadUrlImg() {
 
+    var imageUrl = 'https://cdn-news.readmoo.com/wp-content/uploads/2018/08/jerusalem-news.jpg';
+
+    var image = new Image();
+    image.src = imageUrl;
+
+    image.onload = function() {
+        img = image;
+        startImgAnim();
+        _repaint();
+    };
+}
 
 
 var presetVerse = [
@@ -1073,7 +1085,7 @@ function jump2preset(ps) {
     if (timeoutID > 0) stopAnim();
     if (ps.length == 2) {
         animType = 1;
-        jumpwoanim([ps[0], ps[1], 0]);
+        jumpwoanim([ps[0], ps[1], 1]);
         head = [song, phase, line];
         tail = [song, phase, subtitles[phase].length-1];
         _repaint();
@@ -1193,6 +1205,8 @@ function keyboard(e) { //key up
       case 77: //m
           img = null;
           document.getElementById('img').click();
+          //loadUrlImg();
+          //connect2Data();
           break;
       case 65: //a
         if (color_selection == 2 && display_mode == 0) {
@@ -1360,8 +1374,8 @@ function easeInOut(t) {
 
 function easeInOut(t) {
     const p0 = 0;
-    const p1 = 0.001;
-    const p2 = 0.999;
+    const p1 = 0.0001;
+    const p2 = 0.9999;
     const p3 = 1;
 
     let _t = 1-t;
@@ -1410,50 +1424,11 @@ function img_update(elapse) {
 
     }
 
-    /*
-    if (img.width/img.height > canvas.width/canvas.height) { //圖比較寬 佔滿canvas的高
-        
-        let w = canvas.height * img.width/img.height;
-        let h = canvas.height;
-
-        img_idx += img_move * dt;
-        if (img_idx > 0) img_move = -img_step;
-        if (img_idx < -(w - canvas.width)) img_move = img_step;
-        //ctx.drawImage(img, img_idx, 0, canvas.height * img.width/img.height, canvas.height);
-    } else { //畫布比較寬 佔滿canvas的寬
-
-        let w = canvas.width;
-        let h = canvas.width * img.height/img.width;
-
-        img_idx += img_move * dt;
-        if (img_idx > 0) img_move = -img_step;
-        if (img_idx < -(h - canvas.height)) img_move = img_step;
-        //ctx.drawImage(img,0,img_idx, canvas.width, canvas.width * img.height/img.width);
-    }
-    */
-
     if (animElapse >= 0) {
         render(animElapse.toFixed(2)/animTotal.toFixed(2));
     } else {
         render(-1);
-    }
-
-    /*
-    for (let i = 0;i<queue.length;i++) {
-        let obj = queue[i];
-        if (obj.chapter == phase && obj.verse == line) {
-            if (v_vertical.volumn != obj.volumn || 
-                v_vertical.chapter != obj.chapter || 
-                v_vertical.verse != obj.verse) {
-                v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
-            }
-            v_vertical.draw(progress);
-            break;
-        }
-    }
-    */
-
-    
+    }    
 
     window.requestAnimationFrame(img_update);
 
@@ -1562,6 +1537,52 @@ function toObj() {
   obj['saved'] = presetVerse;
   return obj;
 }
+
+
+function _ajax(json, url, cb, errorcb) {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(json)
+    }).then((response) => {
+      if (response.ok) {
+        return response.json(); // 解析JSON回應
+      } else {
+        throw new Error("請求失敗：" + response.status);
+      }
+    }).then((data) => {
+      // 在這裡處理解析後的JSON物件 //console.log(data);
+      cb(data)
+    }).catch((error) => {
+      // 處理錯誤
+      console.log('' + error);
+      errorcb();
+    });
+}
+
+function connect2Data() {
+    const url = 'https://script.google.com/macros/s/AKfycbzM3r3hUmQa-PUNlNQsZkKj8OsuKt5ImtuF4VMZpjrnnuGOhAI6_AW608Y_8pMzoqdF/exec';
+    _ajax({}, url, 
+        (res)=>{
+            console.log(JSON.stringify(res));
+            //console.log(res);
+        }, 
+        () => {
+            console.log('error:');
+        });
+}
+
+
+/*
+function connect2Data() {
+    const url = 'https://script.google.com/macros/s/AKfycbzM3r3hUmQa-PUNlNQsZkKj8OsuKt5ImtuF4VMZpjrnnuGOhAI6_AW608Y_8pMzoqdF/exec';
+    fetch(url, { method: 'POST'})
+              .then(response => alert("You have successfully submitted."))
+              .catch(error => console.error('Error!', error.message))
+}
+*/
 
 //建構整本聖經
 for(let i=1;i<abbr.length;i++) SONGS[i] = getSong(abbr[i]);
