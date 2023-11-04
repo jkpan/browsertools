@@ -23,8 +23,8 @@
   .wrapper {
     display: grid;
     gap: 0px;
-    grid-template-columns: 1fr 100fr;
-    grid-template-rows: 1fr 100fr;
+    grid-template-columns: 1fr 49fr 48fr 2fr;
+    grid-template-rows: 1fr 49fr 49fr 1fr;
     width: 100%;
     height: 100vh;
     overflow: hidden;
@@ -33,6 +33,13 @@
   .ctrl {
     grid-column: 1 / 3;
     grid-row: 1 / 2;
+    background-color: #007000;
+    z-index: 90;
+    transition: all 0.3s ease;
+  }
+  .ctrl2 {
+    grid-column: 4 / 5;
+    grid-row: 2 / 3;
     background-color: #007000;
     z-index: 90;
     transition: all 0.3s ease;
@@ -62,8 +69,10 @@
     font-size: 16px;
     background-color:transparent;
     color: #00ff00;
+    
     width: 50px;
     height:100%;
+    
     border: none;
     vertical-align: middle;
   }
@@ -71,8 +80,11 @@
       font-size: 16px;
       background-color:rgb(0, 100, 0);
       color: #00ff00;
-      width: 60px;
-      height: 75%;
+      
+      width: 100%;
+      
+      height: 50px;
+      
       border: 1px;
   }
   </style>
@@ -82,6 +94,8 @@
 <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
 
     <div class="ctrl" id="ctrlBtns">
+      &nbsp;
+      &nbsp;
         <button id="btn_1" class="button" onclick="switchFunction(1)">1</button>
         <button id="btn_2" class="button" onclick="switchFunction(2)">2</button>
         <button id="btn_3" class="button" onclick="switchFunction(3)">3</button>
@@ -89,20 +103,34 @@
         <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
         <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
         <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
-        &nbsp;
-        &nbsp;
-        <button class="okbutton" onclick="openCtrl()">c</button>
-        <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
-        <button id="aBtn" class="okbutton" onclick="setSlideAnim()">&lt;1&gt;</button>
+        
+        <!--
         &nbsp;
         <button class="okbutton" onclick="preload('./json_master.json')">#1</button>
         <button class="okbutton" onclick="preload('./json_slave.json')">#2</button>
         <button class="okbutton" onclick="preload('./json_proj.json')">#3</button>
         <button class="okbutton" onclick="loadJson()">#</button>
         <button class="okbutton" onclick="downloadExpJson()">exp</button>
-        <button class="okbutton" onclick="reloadFrame()">R</button>
+        -->
+        
         <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
         <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
+      </div>
+
+      <div class="ctrl2" id="ctrlBtns2">
+        <button class="okbutton" onclick="reloadFrame()">R</button></br>
+        &nbsp;</br>
+        <button class="okbutton" onclick="openCtrl()">c</button></br>
+        &nbsp;</br>
+        <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button></br>
+        &nbsp;</br>
+        <button id="aBtn" class="okbutton" onclick="setSlideAnim()">&lt;1&gt;</button></br>
+        &nbsp;</br>
+        <button class="okbutton" onclick="preload('./json_master.json')">#1</button></br>
+        <button class="okbutton" onclick="preload('./json_slave.json')">#2</button></br>
+        <button class="okbutton" onclick="preload('./json_proj.json')">#3</button></br>
+        <button class="okbutton" onclick="loadJson()">#</button></br>
+        <button class="okbutton" onclick="downloadExpJson()">exp</button></br>
       </div>
 
     <div class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
@@ -465,6 +493,14 @@ div.addEventListener('mouseenter', e => {
 });
 div.addEventListener('mouseleave', e => {
   showPane(div, false);
+});
+
+let div2 = document.getElementById("ctrlBtns2");
+div2.addEventListener('mouseenter', e => {
+  showPane(div2, true);
+});
+div2.addEventListener('mouseleave', e => {
+  showPane(div2, false);
 });
 
 window.addEventListener('message', function(event) {

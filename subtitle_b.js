@@ -1362,7 +1362,7 @@ function restoreActionFromLocal() {
   
   function combineKey(e) {
     var jump = 10;
-    switch (e.keyCode) {    
+    switch (e.keyCode) {
         case 65: sortjump( 1,  5); break;
         case 83: sortjump( 6, 17); break;
         case 68: sortjump(18, 22); break;
@@ -1618,9 +1618,7 @@ function restoreActionFromLocal() {
     }
   }
   
-  function keyboard(e) { //key up
-  
-      //alert(e.keyCode);
+  function keyboard(e) { //key up //alert(e.keyCode);
   
       if (e.keyCode == 16) { //} || e.keyCode == 17) { //key up release lock
         keylock = 0;
@@ -1984,8 +1982,18 @@ function restoreActionFromLocal() {
     ctx.fillStyle = c2?c2:color_pointer[2];
     ctx.fillRect(x + w * 0.05, y + h * 0.05, w * 0.9, h * 0.9);
     ctx.fillStyle = c0?c0:color_pointer[0];
-    ctx.font = fontsize_sml+'px '+fontFamily;
+    ctx.font = fontsize_sml + 'px '+fontFamily;
     ctx.fillText(des, x + w/2, y + h/2);
+    //ctx.strokeStyle = color_pointer[3];
+    //ctx.strokeRect(x, y, w, h);
+  }
+
+  function ui_rectFill2(x, y, w, h, des, c2, c0) {
+    ctx.fillStyle = c2?c2:color_pointer[2];
+    ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = c0?c0:color_pointer[0];
+    ctx.font = fontsize_sml_sml + 'px '+fontFamily;
+    ctx.fillText(des, x, y);
     //ctx.strokeStyle = color_pointer[3];
     //ctx.strokeRect(x, y, w, h);
   }
@@ -1999,6 +2007,8 @@ function restoreActionFromLocal() {
     } else if (helpSwitch == 2) {
       _phoneUi();
     }
+
+    phoneScrollVolumn();
         
     if (uisel == 0) return;
     ctx.fillStyle = bgcolor_pointer;//'green';
@@ -2195,7 +2205,16 @@ function restoreActionFromLocal() {
       
     evt.preventDefault();
 
-    if (touchMoveState != 0) return;
+    sumOffset = 0;
+    colState = 0;
+
+    if (touchMoveState != 0) {
+      touchMoveState = 0;  
+      _repaint();
+      return;
+    }
+    
+    touchMoveState = 0;
 
     var touches = {x:evt.changedTouches[0].clientX, 
                    y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
@@ -2277,18 +2296,41 @@ function restoreActionFromLocal() {
 
   canvas.addEventListener("touchend", touchend, false);
   
+  const tb_ratio = 0.05;
+
   function touchmove(evt) {
     evt.preventDefault();
     var touch = evt.touches[0];
     
     let dy = touch.clientY - touchPY;
     
-    sumOffset += dy;
 
+    if (colState == 1) {
+      sumOffset += Math.abs(dy);
+      if (sumOffset >= touchOffset) {
+        
+        let _height = canvas.height * (1 - tb_ratio * 2);
+        let gap = _height/66.0;
+        let _song = Math.ceil((touch.clientY - canvas.height * tb_ratio)/gap);
+        if (_song < 1) _song = 1;
+        if (_song > 66) _song = 66; //console.log(' : '+ _song);
+  
+        song = _song;
+        subtitles = SONGS[song];
+        phase = 0;
+        line = 0;
+        _repaint();
+        touchMoveState = 1;
+        return;
+      }
+    }
+
+    sumOffset += dy;
+    
     if (sumOffset >= touchOffset) {//往下 
       sumOffset = 0;
       switch(colState) {
-        case 1: keyboard({keyCode : 189}); break;
+        //case 1: keyboard({keyCode : 189}); break;
         case 2: keyboard({keyCode : 38});break;
         case 3: keyboard({keyCode : 33}); break;
       }
@@ -2296,7 +2338,7 @@ function restoreActionFromLocal() {
     } else if (sumOffset <= -touchOffset) {//往下
       sumOffset = 0;
       switch(colState) {
-        case 1: keyboard({keyCode : 187}); break;
+        //case 1: keyboard({keyCode : 187}); break;
         case 2: keyboard({keyCode : 40}); break; 
         case 3: keyboard({keyCode : 34}); break;
       }
@@ -2307,12 +2349,47 @@ function restoreActionFromLocal() {
     touchPY = touch.clientY;
   
   }
+  
   canvas.addEventListener("touchmove", touchmove, false);
+
+  function phoneScrollVolumn() {
+   
+    if (touchMoveState == 0) return;
+    if (colState != 1) return;
+    
+    drawVolumn( 1,  5, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolumn( 6, 17, 'rgba(0, 0, 255, 0.22)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolumn(18, 22, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolumn(23, 27, 'rgba(0, 0, 255, 0.22)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolumn(28, 39, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
+        
+    drawVolumn(40, 44, 'rgba(255, 0,0,0.22)', 'rgba(255, 0,0, 1.0)');
+    drawVolumn(45, 53, 'rgba(255, 0,0,0.33)', 'rgba(255, 0,0, 1.0)');
+    drawVolumn(54, 57, 'rgba(255, 0,0,0.22)', 'rgba(255, 0,0, 1.0)');
+    drawVolumn(58, 66, 'rgba(255, 0,0,0.33)', 'rgba(255, 0,0, 1.0)');         
+    
+  
+  }
+
+  function drawVolumn(f, e, c0, c1) {
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    let _height = canvas.height * (1 - tb_ratio * 2);
+    let gap = _height/66.0;
+    ui_rectFill2(0, canvas.height * tb_ratio + (f-1) * gap, 
+                canvas.width/3, gap * (e - f + 1),  
+                SONGS[f][0][0], c0, c1);
+    //ctx.textAlign = "left";
+    ctx.textBaseline = 'alphabetic';
+  }
+
+
   function removeTEvent() {
     canvas.removeEventListener('touchstart', touchstart);
     canvas.removeEventListener('touchend', touchend);
     canvas.removeEventListener('touchmove', touchmove);
   }
+
   function addFontSizeTouchEvent() {
     console.log('addFontSizeTouchEvent : ');
     canvas.addEventListener("touchend", (evt) => {

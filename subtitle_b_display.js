@@ -1,3 +1,17 @@
+var presetVerse = [
+      
+  [''], //0
+  [''], //2
+  ['創世記', 1, 0, '創世記', 4, 26, 'https://cdn-news.readmoo.com/wp-content/uploads/2018/08/jerusalem-news.jpg'], //1
+  ['詩篇', 1, 1, '詩篇', 2, 12], //3
+  [''], //4
+  [''], //5
+  [''], //6
+  [''], //7
+  [''], //8
+  [''], //9
+
+];
 
 class VerseVertical {
     volumn = -1;
@@ -337,9 +351,9 @@ function createBGHiddenFile() {
     //<input id="img" type="file" hidden="true"/>
 }
 
-function loadUrlImg() {
+function loadUrlImg(imageUrl) {
 
-    var imageUrl = 'https://cdn-news.readmoo.com/wp-content/uploads/2018/08/jerusalem-news.jpg';
+    //var imageUrl = 'https://cdn-news.readmoo.com/wp-content/uploads/2018/08/jerusalem-news.jpg';
 
     var image = new Image();
     image.src = imageUrl;
@@ -350,22 +364,6 @@ function loadUrlImg() {
         _repaint();
     };
 }
-
-
-var presetVerse = [
-      
-    [''], //0
-    ['詩篇', 1], //2
-    ['創世記', 1, 0, '創世記', 50, 26], //1
-    [''], //3
-    [''], //4
-    [''], //5
-    [''], //6
-    [''], //7
-    [''], //8
-    [''], //9
-
-  ];
 
 //function flow() {}
 
@@ -1083,6 +1081,7 @@ function conutWord(word) {
 
 function jump2preset(ps) {
     if (timeoutID > 0) stopAnim();
+    /*
     if (ps.length == 2) {
         animType = 1;
         jumpwoanim([ps[0], ps[1], 1]);
@@ -1092,12 +1091,15 @@ function jump2preset(ps) {
         timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
         return;
     }
+    */
+    //跳至章節
     if (ps.length == 3) {
         animType = 0;
         jump2preset4Anim(ps);
         return;
     }
-    if (ps.length == 6) {        
+    //自動播放
+    if (ps.length >= 6) {
         animType = 1;
         jumpwoanim([ps[3], ps[4], ps[5]]);
         tail = [song, phase, line];
@@ -1106,6 +1108,10 @@ function jump2preset(ps) {
         console.log(head +'::::'+ tail);
         _repaint();
         timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
+        //背景圖
+        if (ps.length > 6 && ps[6]) {
+          loadUrlImg(ps[6]);
+        }
         return;
     }
 }
@@ -1186,7 +1192,6 @@ function keyboard(e) { //key up
     //alert(e.keyCode);
 
     if (e.keyCode == 16) { //} || e.keyCode == 17) { //key up release lock
-        stopAnim();
         keylock = 0;
         uisel = 0;
         _repaint();
@@ -1313,7 +1318,9 @@ function keyboard(e) { //key up
           if (presetVerse[value][0].length == 0) break;
           jump2preset(presetVerse[value]);
           return;
-        case 32: stopAnim(); break;
+        case 32: 
+          stopAnim(); 
+          break;
         //case 13: //'enter' break;
         case 27: //'escape'
           animType = 0;
