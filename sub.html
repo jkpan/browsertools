@@ -33,14 +33,14 @@
   .ctrl {
     grid-column: 1 / 3;
     grid-row: 1 / 2;
-    background-color: #007000;
+    background-color: #00700080;
     z-index: 90;
     transition: all 0.3s ease;
   }
   .ctrl2 {
     grid-column: 4 / 5;
-    grid-row: 2 / 3;
-    background-color: #007000;
+    grid-row: 3 / 4;
+    background-color: transparent;
     z-index: 90;
     transition: all 0.3s ease;
   }
@@ -65,6 +65,7 @@
         overflow-y: hidden;
         overflow-x: hidden;
     }
+  /*
   .button {
     font-size: 16px;
     background-color:transparent;
@@ -76,6 +77,40 @@
     border: none;
     vertical-align: middle;
   }
+  */
+  .button {
+    background-color: transparent;
+    border-color: #00ff00;
+    color: rgb(0, 80, 0);
+    border-radius: 8px;
+
+    font-size: 12px;
+    height: 90%;
+
+    text-align: center;
+    text-decoration: none;
+
+    padding: 10px;
+    border: none;
+    display: inline-block;
+  }
+  .okbutton {
+    background-color: rgb(0, 100, 0);
+    border-color: #00ff00;
+    color: rgb(0, 255, 0);
+    border-radius: 8px;
+
+    font-size: 16px;
+    margin: 2px 2px;
+    width: 90%;
+
+    text-align: center;
+    text-decoration: none;
+
+    padding: 10px;    
+    display: inline-block;    
+  }
+  /*
   .okbutton {
       font-size: 16px;
       background-color:rgb(0, 100, 0);
@@ -87,6 +122,7 @@
       
       border: 1px;
   }
+  */
   </style>
 </head>
 <body>
@@ -119,12 +155,9 @@
 
       <div class="ctrl2" id="ctrlBtns2">
         <button class="okbutton" onclick="reloadFrame()">R</button></br>
-        &nbsp;</br>
         <button class="okbutton" onclick="openCtrl()">c</button></br>
-        &nbsp;</br>
         <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button></br>
-        &nbsp;</br>
-        <button id="aBtn" class="okbutton" onclick="setSlideAnim()">&lt;1&gt;</button></br>
+        <button id="aBtn" class="okbutton" onclick="setSlideAnim()">A1</button></br>
         &nbsp;</br>
         <button class="okbutton" onclick="preload('./json_master.json')">#1</button></br>
         <button class="okbutton" onclick="preload('./json_slave.json')">#2</button></br>
@@ -304,7 +337,7 @@ function setSlideAnim() {
     if (animType == 0) {
         b.textContent = '--';
     } else {
-        b.textContent = '<' + animType + '>';
+        b.textContent = 'A' + animType;//  <> ^v
     }
     
     for(let i=1;i<=tabCount;i++) {
@@ -454,11 +487,16 @@ function _switchFunction() {
       
   for(let i=1;i<=tabCount;i++) {
     document.getElementById('btn_' + i).style.background = "rgb(0,112,0)";
+    document.getElementById('btn_'+ i).style.color = "rgb(0,80,0)";
+    document.getElementById('btn_'+ i).style.fontSize = '12px';
   }
 
   framePos();
 
   document.getElementById('btn_'+tab).style.background = "rgb(0,128,0)";
+  document.getElementById('btn_'+tab).style.color = "rgb(0,255,0)";
+  document.getElementById('btn_'+tab).style.fontSize = '16px';
+
   //document.getElementById('content_'+idx).hidden = false;
   document.getElementById('frame_'+tab).focus();
   return document.getElementById('frame_'+tab);

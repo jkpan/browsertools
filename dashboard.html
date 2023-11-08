@@ -578,8 +578,13 @@ class Applet {
   .btn {
     background-color:transparent;
     color: #00ff00;
-    border: none;
+    
     vertical-align: middle;
+
+
+    border-color: #00ee00;
+    border-radius: 4px;
+
   }
   </style>
 </head>
@@ -593,7 +598,10 @@ class Applet {
 
     <div id="controlDiv" class="controlPart">
       <button class="btn" id="editbtn" onclick="switchEditMode()">Edit mode</button>
-      <button class="btn">|</button>
+      <!--button class="btn">|</button-->
+      &nbsp;
+      <label style="color: #00ee00;">|</label>
+      &nbsp;
       <button class="btn" onclick="spot2iframe('sub')">整合</button>
       <button class="btn" onclick="spot2iframe('hymn')">歌詞</button><!--button onclick="switchVisible4iframe('hymn')">.</button-->
       <button class="btn" onclick="spot2iframe('Bible')">聖經</button>
@@ -604,7 +612,10 @@ class Applet {
       <button class="btn" onclick="spot2iframe('info')">Info</button>
       <button class="btn" onclick="spot2iframe('effect')">Effect</button>
       <button class="btn" onclick="spot2iframe('time')">Time</button>
-      <button class="btn">|</button>
+      <!--button class="btn">|</button-->
+      &nbsp;
+      <label style="color: #00ee00;">|</label>
+      &nbsp;
       <button class="btn" onclick="colorSwitch()">B/G</button>
       <button class="btn" onclick="openCtrl()">Ctrl</button>
       <button class="btn" id="oxBtn" onclick="sendOX()">o</button>
