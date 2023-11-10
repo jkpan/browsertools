@@ -2070,8 +2070,7 @@ function restoreActionFromLocal() {
   var _openWin = null;
   
   function openCtrl() {
-    if (_openWin) 
-      _openWin.close();
+    closeCtrl();
     _openWin = window.open("subtitle_b_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=500,height=400,top="+(screen.height-400)+",left="+(screen.width-840));
   }
   
@@ -2154,6 +2153,10 @@ function restoreActionFromLocal() {
   window.addEventListener('resize', function() {
     init();
     _repaint();
+  });
+
+  window.addEventListener('beforeunload', function (e) {
+    closeCtrl();
   });
 
   // 滑鼠滾輪...

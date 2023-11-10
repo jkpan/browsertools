@@ -460,15 +460,18 @@ function removeBtns() {
 
 var selector = null;
 function openSelector() {
-  if (selector) 
-    selector.close();
-  console.log('openCtrl!');
+  closeSelector();
   selector = window.open("subtitle_list.html", "_blank", 'width=800, height=600, left=100, top=100');
 }
 
+function closeSelector() {
+  if (selector) 
+    selector.close();
+  selector = null;
+}
+
 /*
-function hideCanvas() {
-  
+function hideCanvas() {  
   if (canvas.hidden) {
     removeBtns();
     canvas.hidden = false;
@@ -1203,6 +1206,10 @@ window.addEventListener('keydown', function(e) {
 window.addEventListener('resize', function() {
   init();
   _repaint();
+});
+
+window.addEventListener('beforeunload', function (e) {
+  closeSelector();
 });
 
 /*

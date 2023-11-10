@@ -527,19 +527,9 @@ class Applet {
 
     user-select: none;
     z-index: 90;
-    
-    
 
   }
-  .controlPart {
-    grid-column: 1 / 33;
-    grid-row: 32 / 33;
-    user-select: none;
-    background-color:#006600;
-    color:black;
-    z-index: 99;
-    transition: all 0.3s ease;
-  } 
+  /*
   input[type=text] {
         border:2px solid rgb(0, 128, 0);
         border-radius: 2px;
@@ -558,6 +548,7 @@ class Applet {
     background: rgb(0, 150, 0);
     color: rgb(0, 255, 0);    
   }
+  */
   /*
   .okbutton {
         font-size: 24px;
@@ -571,21 +562,52 @@ class Applet {
   */
   .btn_sel {
     background-color: #00ff00;
-    color: #00aa00;
-    border: none;
+    color: #008800;
     vertical-align: middle;
+    border-color: #00ee00;
+    border-radius: 4px;
+    height: 90%;
   }
   .btn {
     background-color:transparent;
     color: #00ff00;
-    
     vertical-align: middle;
-
-
     border-color: #00ee00;
     border-radius: 4px;
-
+    height: 90%;
   }
+  .btn2 {
+    background-color:transparent;
+    color: #00ff00;
+    vertical-align: middle;
+    border-color: #008800;
+    border-radius: 8px;
+    height: 90%;
+  }
+  .sideMenu {
+    position: fixed;
+    top: 100%;
+    left: 0px; /* 初始位置在左侧屏幕外 */
+    width: 100%;
+    height: 50px;
+    background-color: rgb(0,90,0);
+    color: #fff;
+    
+    transition: top 0.3s; /* 添加过渡效果 */
+    z-index: 99;
+  }
+  .menuButton {
+    background-color: transparent;
+    border-color: #00ff00;
+    color: rgb(0, 255, 0);
+    border-radius: 4px;
+
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            z-index: 100;
+    }
+
   </style>
 </head>
 <body>
@@ -596,22 +618,26 @@ class Applet {
       <canvas id="canvas" width="100" height="100"></canvas>
     </div>
 
-    <div id="controlDiv" class="controlPart">
+    <button class="menuButton" onclick="sideClick()">=</button>
+
+    <div id="sideMenu" class="sideMenu">
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      &nbsp;
       <button class="btn" id="editbtn" onclick="switchEditMode()">Edit mode</button>
-      <!--button class="btn">|</button-->
-      &nbsp;
       <label style="color: #00ee00;">|</label>
-      &nbsp;
-      <button class="btn" onclick="spot2iframe('sub')">整合</button>
-      <button class="btn" onclick="spot2iframe('hymn')">歌詞</button><!--button onclick="switchVisible4iframe('hymn')">.</button-->
-      <button class="btn" onclick="spot2iframe('Bible')">聖經</button>
-      <button class="btn" onclick="spot2iframe('NIV')">NIV</button>
-      <button class="btn" onclick="spot2iframe('ppt_1')">PPT 1</button>
-      <button class="btn" onclick="spot2iframe('ppt_2')">PPT 2</button>
-      <button class="btn" onclick="spot2iframe('ppt_3')">PPT 3</button>
-      <button class="btn" onclick="spot2iframe('info')">Info</button>
-      <button class="btn" onclick="spot2iframe('effect')">Effect</button>
-      <button class="btn" onclick="spot2iframe('time')">Time</button>
+      <button class="btn2" onclick="spot2iframe('sub')">整合</button>
+      <button class="btn2" onclick="spot2iframe('hymn')">歌詞</button><!--button onclick="switchVisible4iframe('hymn')">.</button-->
+      <button class="btn2" onclick="spot2iframe('Bible')">聖經</button>
+      <button class="btn2" onclick="spot2iframe('NIV')">NIV</button>
+      <button class="btn2" onclick="spot2iframe('ppt_1')">PPT 1</button>
+      <button class="btn2" onclick="spot2iframe('ppt_2')">PPT 2</button>
+      <button class="btn2" onclick="spot2iframe('ppt_3')">PPT 3</button>
+      <button class="btn2" onclick="spot2iframe('info')">Info</button>
+      <button class="btn2" onclick="spot2iframe('effect')">Effect</button>
+      <button class="btn2" onclick="spot2iframe('time')">Time</button>
       <!--button class="btn">|</button-->
       &nbsp;
       <label style="color: #00ee00;">|</label>
@@ -623,6 +649,19 @@ class Applet {
       <button class="btn" onclick="downloadExpJson()">exp</button>
       <input type="file" id="profile" accept=".json" hidden="true" onchange="selectProfile(event)" />
     </div>
+    <script>
+      let sideMenu = document.getElementById('sideMenu');
+      sideMenu.style.top = window.innerHeight + 'px';
+      function sideClick() {
+        let sideMenu = document.getElementById('sideMenu');
+        if (sideMenu.style.top === (window.innerHeight - 50) + 'px') {
+            sideMenu.style.top = window.innerHeight + 'px';
+        } else {
+            sideMenu.style.top = (window.innerHeight - 50) + 'px';
+        }
+      }
+    </script>
+
     
 </div>
 
@@ -741,12 +780,14 @@ function handleProfile(fileContent) {
 
   _repaint();
 
-  /*
+  //setTimeout(openCtrl, 5000);
+  //openCtrl();
+  
   if (jsonData['ctrl'] && jsonData['ctrl'] == 1) {
-    focus();
+    //focus();
     openCtrl();
-  } 
-  */
+  }
+  
 
 }
 
@@ -819,10 +860,7 @@ function getElmState() {
 var _openWin = null;
 
 function openCtrl() {
-  //toObj(); return;
-  if (_openWin) 
-    _openWin.close();
-  console.log('openCtrl!');
+  closeCtrl();
   _openWin = window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=200,height=320,top="+(screen.height-400)+",left="+(screen.width-840));
 }
 
@@ -1046,6 +1084,9 @@ function init() {
       initContent();      
     }
 
+    let sideMenu = document.getElementById('sideMenu');
+    sideMenu.style.top = window.innerHeight + 'px';
+
 }
 
 function _repaint() {
@@ -1118,12 +1159,18 @@ function showCtrlPane(show) {
   }
 }
 
+/*
 let div = document.getElementById("controlDiv");
 div.addEventListener('mouseenter', e => { 
   showCtrlPane(true);
 });
 div.addEventListener('mouseleave', e => { 
   showCtrlPane(false);
+});
+*/
+
+window.addEventListener('beforeunload', function (e) {
+  closeCtrl();
 });
 
 canvas.addEventListener('mousemove', e => {
@@ -1208,6 +1255,7 @@ canvas.addEventListener('mousemove', e => {
     return true;
 
 });
+
 
 canvas.addEventListener('mousedown', (e) =>{
   

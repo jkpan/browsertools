@@ -14,7 +14,8 @@
                     }
                 },
     "frame_2" : { "src" : "./dashboard.html", 
-                    "obj" : {
+                  "obj" : {
+                        "ctrl": 1,
                         "Bible": {
                             "posize" :  [1, 15, 20, 18],
                             "perspective" : true,
@@ -30,8 +31,8 @@
                                 "url" : ""
                             }
                         }
-                    }
-                 },
+                  }
+                },
     "frame_55" : { "src" : "./dashboard.html", 
                     "obj" : {
                         "info": {
