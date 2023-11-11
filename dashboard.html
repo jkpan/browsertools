@@ -988,6 +988,24 @@ function _createFrame(keyname) {
   
 }
 
+function closeApp(keyname) {
+  let idx = -1;
+  for (let i=0;i<applets.length;i++) {
+    if (keyname == applets[i].keyname) {
+      idx = i;
+      break;
+    }
+  }
+
+  if (idx == -1) return;
+
+  let app = applets[idx];
+  applets.splice(idx, 1);
+  app.removeSelf();
+  _repaint();
+
+}
+
 function switchVisible4iframe(keyname) {
 
   let idx = -1;
@@ -1295,7 +1313,7 @@ canvas.addEventListener('mousedown', (e) =>{
       applet.removeSelf();
       selectIdx = -1;
       _repaint();
-      return;      
+      return;
     } else if (applet.isClickOntop(mouseX, mouseY)) {
       //applet.enlargeSelf();
       applet.onTop();
