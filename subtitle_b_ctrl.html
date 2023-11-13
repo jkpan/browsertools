@@ -123,7 +123,8 @@ function createBtnChapter() {
     let div = document.getElementById('chapters');
     div.innerHTML = '';
 
-    var len = window.opener.subtitles.length;
+    var len = window.opener.SONGS[_song].length;
+    //window.opener.subtitles.length;
     
     for (var i=1;i<=len-1;i++) {
         let button = _newBtn();//document.createElement('button');
@@ -154,7 +155,9 @@ function createBtnVerse() {
     let div = document.getElementById('verses');
     div.innerHTML = '';
 
-    var len = window.opener.subtitles[window.opener.phase].length;
+    var len = window.opener.SONGS[_song][_phase].length;
+    //window.opener.subtitles[window.opener.phase].length;
+
     for (var i=1;i<=len-1;i++) {
         let button = _newBtn();//document.createElement('button');
         button.innerHTML = '' + i;

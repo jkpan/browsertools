@@ -233,7 +233,7 @@ var presetVerse = [
   
 
   var bgStyle = 'green';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)";
-  var hlightStyle = 'rgb(0, 60, 0)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle = 'rgba(0, 60, 0, 0.66)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
   
   var bgStyle_green = bgStyle;//'blue';
@@ -241,15 +241,15 @@ var presetVerse = [
   const COLORS_green = COLORS_CK;//["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
   var bgStyle_blue = 'blue';
-  var hlightStyle_blue = 'rgb(0, 0, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_blue = 'rgba(0, 0, 180, 0.66)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_blue = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
   var bgStyle_black = 'black';
-  var hlightStyle_black = 'rgb(80, 80, 80)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_black = 'rgba(80, 80, 80, 0.66)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_black = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
   var bgStyle_white = 'white';
-  var hlightStyle_white = 'rgb(180, 180, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_white = 'rgba(180, 180, 180, 0.66)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_white = ["rgb(255, 255, 255)", "rgb(180, 180, 180)", "rgb(120, 128, 128)", "rgb(80, 80, 80)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
   var txt_strokeStyle = 'black';
@@ -1334,12 +1334,16 @@ function restoreActionFromLocal() {
   }
   
   function jump4external(_song, _phase, _line) {
+    jump2preset4Anim([fullname[_song], _phase, _line]);
+    /*
+    return;
     song = _song;
     subtitles = SONGS[song];
     phase = _phase;
     line = _line;
     saveAction2Local();
     _repaint();
+    */
   }
 
   function sortjump(start, end) {
@@ -1937,6 +1941,9 @@ function restoreActionFromLocal() {
     if (img) {
         ctx.drawImage(img,0,0, canvas.width, canvas.height);
     }
+
+    _layerBg();
+
   }
   
   function _phoneUi() {
@@ -2034,11 +2041,42 @@ function restoreActionFromLocal() {
       }
     }
   }
+
+  function ui_block(x, y, w, h, c0) {
+    ctx.fillStyle = c0;//c2?c2:color_pointer[2];
+    ctx.fillRect(x, y, w, h);
+    //ctx.fillStyle = c0;//?c0:color_pointer[0];
+    //ctx.font = fontsize_sml + 'px '+fontFamily;
+    //ctx.fillText(des, x + w/2, y + h/2);
+    //ctx.strokeStyle = color_pointer[3];
+    //ctx.strokeRect(x, y, w, h);
+  }
+
+  function _layerBg() {
+    
+    if (!supportTouch) return;
+    
+    ui_block(0, 0, canvas.width/3, canvas.height/4, 'rgba(128, 0,0, 0.33)');
+    ui_block(canvas.width/3, 0, canvas.width/3, canvas.height/4, 'rgba(255, 0,0, 0.33)');
+    ui_block(canvas.width * 2/3, 0, canvas.width/3, canvas.height/4, 'rgba(128, 0,0, 0.33)');
+
+    ui_block(0, canvas.height/4, canvas.width/3, canvas.height/4, 'rgba(255, 0,0, 0.33)');
+    //ui_block(canvas.width/3, canvas.height/4, canvas.width/3, canvas.height/4, 'rgba(128, 0,0, 0.33)');
+    ui_block(canvas.width * 2/3, canvas.height/4, canvas.width/3, canvas.height/4, 'rgba(255, 0,0, 0.33)');
+
+    ui_block(0, canvas.height/2, canvas.width/3, canvas.height/2, 'rgba(128, 0,0, 0.33)');
+    ui_block(canvas.width * 2/3, canvas.height/2, canvas.width/3, canvas.height/2, 'rgba(128, 0,0, 0.33)');
+    
+    ui_block(canvas.width/3, canvas.height/2, canvas.width/3, canvas.height/4, 'rgba(255, 0,0, 0.33)');
+
+
+  }
   
   function _repaint() {
     //ctx.globalCompositeOperation='difference';
     //ctx.filter = 'invert(1)';
     _layer0();
+    //_layerBg();
     printMain(phase, line);//_layer1();//_layer2();
     _layerui();
   }
@@ -2169,6 +2207,12 @@ function restoreActionFromLocal() {
     }
   });
   
+  let supportTouch = false;
+  if ('ontouchstart' in window || navigator.maxTouchPoints) {
+    // 支持触摸事件
+    supportTouch = true;
+  }
+
   /*
    * 手機觸控相關... START
    */  

@@ -92,14 +92,15 @@
     color: rgb(0, 255, 0);
     border-radius: 8px;
 
-    font-size: 16px;
+    font-size: 14px;
     margin: 2px 2px;
     width: 90%;
 
     text-align: center;
     text-decoration: none;
 
-    padding: 10px;    
+    padding: 4px;
+
     display: inline-block;
   }
   .sideMenu {
@@ -116,10 +117,10 @@
   }
   .menuButton {
     background-color: transparent;
-    border-color: #00ff00;
+    border-color: #008000;
     color: rgb(0, 255, 0);
     border-radius: 4px;
-
+    opacity: 0.33;
             position: fixed;
             top: 10px;
             left: 10px;
@@ -170,7 +171,7 @@
   <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
 </div>
 
-<button class="menuButton" onclick="sideClick()">=</button>
+<button id="menubtn" class="menuButton" onclick="sideClick()">&nbsp</button>
 
 <div class="sideMenu" id="sideMenu">
   &nbsp;</br>
@@ -213,6 +214,18 @@
         closeSideMenu();
     }
   }
+
+  let mbtn = document.getElementById("menubtn");
+  mbtn.addEventListener('mouseenter', e => {
+    openSideMenu();
+  });
+  let mbar = document.getElementById("sideMenu");
+  mbar.addEventListener('mouseleave', e => {
+    closeSideMenu();
+  });
+
+
+
 </script>
 
 </body>
@@ -451,7 +464,7 @@ function switchFunction(idx) {
   _switchFunction();
   if (keylock) return;
   saveTab2Local();
-  closeSideMenu();
+  //closeSideMenu();
 }
 
 function framePos() {
