@@ -167,6 +167,129 @@ class Verseobj {
   }
 }
 
+class VerseVertical {
+  volumn = -1;
+  chapter = -1;
+  verse = -1;
+  txt = '';
+  line = 0;
+      
+  initial(s, c, v) {
+      this.volumn = s;
+      this.chapter = c;
+      this.verse = v;
+      this.txt = subtitles[this.chapter][this.verse];
+      this.line = 0;
+  }
+
+  drawHlight() {
+
+      if (doblank == 1) return;
+  
+      switch (fontColorType) {
+          case 0:
+          case 1:
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.33)';
+              break;
+          case 2:
+          case 3:
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
+              break;
+        }
+  
+        //ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
+        ctx.fillRect(canvas.width * 0.95, 0, -(this.line) * fontsize, canvas.height);
+    
+  }
+
+  draw(progress) {                
+
+      ctx.font = (fontsize * 0.9) + "px " + fontFamily;
+      ctx.textBaseline = 'top'; //'alphabetic';
+      ctx.textAlign = 'right'; //'left' 'center'
+
+      let count = progress < 0?this.txt.length:Math.ceil(this.txt.length * progress);
+      let opa = progress < 0?1.0:progress;
+
+      this.line = Math.ceil(count/(canvas.height * 0.9/fontsize)) + 1;
+      this.drawHlight();
+
+      const mg_x = canvas.width * 0.95;
+      const mg_y = canvas.height * 0.05;
+      let x = mg_x;
+      let y = mg_y;
+
+      if (this.chapter > 0 && this.verse == 0) {
+          let fs = fontsize * 0.7;
+          ctx.font = fs + "px " + fontFamily;
+          this.txt = subtitles[0][0];
+          for (let i=0;i<this.txt.length;i++) {
+              _drawSdwtxt(this.txt.charAt(i), x, y, opa);
+              y += fontsize;
+              if (y + fontsize >= canvas.height * 0.95) {
+                  x -= fontsize;
+                  y = mg_y;
+              }
+          }
+          _drawSdwtxt(''+this.chapter, x, y, opa);
+      } else {
+          for (let i=0;i<count;i++) {
+          
+              _drawSdwtxt(this.txt.charAt(i), x, y, opa);
+              y += fontsize;
+              
+              if (y + fontsize >= canvas.height * 0.95) {
+                  x -= fontsize;
+                  y = mg_y;
+              }
+          }
+      }
+
+
+
+      ctx.textAlign = 'left';// 'center'
+
+      if (this.chapter > 0 && this.verse > 0) {
+          let fs = fontsize * 0.5;
+          ctx.font = fs + "px " + fontFamily;
+          x = mg_x - this.line * fontsize;
+          let _abbr = abbr[song];
+          _drawSdwtxt(_abbr.charAt(0), x, canvas.height - 5 * fs, opa);
+          if (_abbr.length > 1)
+              _drawSdwtxt(_abbr.charAt(1), x, canvas.height - 4 * fs, opa);
+          _drawSdwtxt('' + this.chapter, x, canvas.height - 3 * fs, opa);
+          _drawSdwtxt('' + this.verse, x, canvas.height - 2 * fs, opa);
+      }
+
+      //for (let i=0;i<this.txt.length;i++) {
+      //    ctx.fillText(this.txt.charAt(i), canvas.width/2, 0);
+      //}
+
+      ctx.textBaseline = 'alphabetic';
+      
+
+  }
+}
+
+var v_vertical = new VerseVertical();
+
+function render_vertical(progress) {
+  _layer0();
+  for (let i = 0;i<queue.length;i++) {
+      let obj = queue[i];
+      if (obj.chapter == phase && obj.verse == line) {
+          if (v_vertical.volumn != obj.volumn || 
+              v_vertical.chapter != obj.chapter || 
+              v_vertical.verse != obj.verse) {
+              v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
+          }
+          v_vertical.draw(progress);
+          break;
+      }
+  }
+  _layerui();
+}
+
 var presetVerse = [
       
       [''], //0
@@ -967,18 +1090,24 @@ function restoreActionFromLocal() {
   
   }
   
+  var display_mode = 0;
   const animTotal = 30;
   var animElapse = 0; //var savePre = 0;
   function verse_update(elapse) {
   
 
-    //if (Math.random() < 0.05) 
-    //console.log('dt: ' + 0.001 * (elapse - savePre));
-    //savePre = elapse;
-
-    render(animElapse/animTotal);
-    //console.log(elapse + ' : ' + animElapse/animTotal);
+    //render(animElapse/animTotal);
     
+    switch(display_mode) {
+      case 0:
+          render(animElapse/animTotal);
+          break;
+      case 1:
+          render_vertical(animElapse/animTotal);
+          break;
+    }
+    
+
     if (animElapse < animTotal) {
       animElapse++;
       window.requestAnimationFrame(verse_update);
@@ -1125,8 +1254,25 @@ function restoreActionFromLocal() {
       let obj = queue[i];
       if (obj.chapter == phase && obj.verse == line) {
         
-        obj.preDraw(progress);
-        obj.draw();
+        //obj.preDraw(progress);
+        //obj.draw();
+
+        switch(display_mode) {
+          case 0:
+              obj.preDraw(progress);
+              obj.draw();
+              break;
+          case 1:
+              //render_vertical(progress);//animElapse.toFixed(2)/animTotal.toFixed(2));
+              if (v_vertical.volumn != obj.volumn || v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
+                  v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
+              }
+  
+              //console.log(v_vertical.chapter +', '+ v_vertical.verse);
+              
+              v_vertical.draw(progress);
+              return;
+          }
         
         for (let k = i + 1;k<queue.length;k++) {
           let o = queue[k];
@@ -1263,6 +1409,8 @@ function restoreActionFromLocal() {
   
   }
   
+  var fontColorType = 0;
+
   function _drawSdwtxt(txt, x, y) {
   
     if (doblank == 1 && color_selection == 1) {
@@ -1277,6 +1425,28 @@ function restoreActionFromLocal() {
       ctx.lineWidth = Math.ceil(fontsize/10.0);
       ctx.strokeText(txt, x, y);
     }
+
+    switch (fontColorType) {
+      case 0:
+        ctx.fillStyle = 'rgb(255,255,255)';//'rgba(255,255,255,' + opa + ')';//'white';
+        break;
+      case 1:
+        ctx.fillStyle = 'rgb(255,255,255)';//'rgba(255,255,255,' + opa + ')';
+        ctx.strokeStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
+        ctx.lineWidth = Math.ceil(fontsize/12.0);
+        ctx.strokeText(txt, x, y);
+        break;
+      case 2:
+        ctx.fillStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
+        break;
+      case 3:
+        ctx.fillStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
+        ctx.strokeStyle = 'rgba(255,255,255)';//'rgba(255,255,255,' + opa + ')';
+        ctx.lineWidth = Math.ceil(fontsize/12.0);
+        ctx.strokeText(txt, x, y);
+        break;
+    }
+
   
     ctx.fillStyle = txt_fill + 1.0 + ')';//'white';//'rgb(255, 255, 255, ' + a + ')';
     ctx.lineWidth = 1;
@@ -1706,10 +1876,28 @@ function restoreActionFromLocal() {
         case 74://'J'
         */
         case 65: //a
+            /*
             helpSwitch = 0;
             if (canvas.hidden) break;
             color_selection = (color_selection + 1) % 5;
-            colorSwitch();          
+            colorSwitch();
+            */
+
+            helpSwitch = 0;
+
+            if (color_selection == 0 && display_mode == 0) {
+              display_mode = 1;
+              break;
+            }
+            if (display_mode == 1) {
+              display_mode = 0;
+            }
+
+            color_selection = (color_selection + 1) % 5;
+            colorSwitch();
+
+      
+
             break;
         case 72: //'H'
             if (canvas.hidden) {
@@ -2043,8 +2231,11 @@ function restoreActionFromLocal() {
   }
 
   function ui_block(x, y, w, h, c0) {
-    ctx.fillStyle = c0;//c2?c2:color_pointer[2];
+
+    ctx.fillStyle = 'rgba(255, 255, 0, ' + c0 + ')';
     ctx.fillRect(x, y, w, h);
+    //ctx.strokeStyle = 'rgba(255, 255, 0, ' + c0 + ')';
+    //ctx.strokeRect(x, y, w, h);
     //ctx.fillStyle = c0;//?c0:color_pointer[0];
     //ctx.font = fontsize_sml + 'px '+fontFamily;
     //ctx.fillText(des, x + w/2, y + h/2);
@@ -2056,18 +2247,16 @@ function restoreActionFromLocal() {
     
     if (!supportTouch) return;
     
-    ui_block(0, 0, canvas.width/3, canvas.height/4, 'rgba(128, 0,0, 0.33)');
-    ui_block(canvas.width/3, 0, canvas.width/3, canvas.height/4, 'rgba(255, 0,0, 0.33)');
-    ui_block(canvas.width * 2/3, 0, canvas.width/3, canvas.height/4, 'rgba(128, 0,0, 0.33)');
+    ui_block(0, 0, canvas.width/3, canvas.height/4, 0.33);
+    ui_block(canvas.width/3, 0, canvas.width/3, canvas.height/4, 0.20);
+    ui_block(canvas.width * 2/3, 0, canvas.width/3, canvas.height/4, 0.33);
 
-    ui_block(0, canvas.height/4, canvas.width/3, canvas.height/4, 'rgba(255, 0,0, 0.33)');
-    //ui_block(canvas.width/3, canvas.height/4, canvas.width/3, canvas.height/4, 'rgba(128, 0,0, 0.33)');
-    ui_block(canvas.width * 2/3, canvas.height/4, canvas.width/3, canvas.height/4, 'rgba(255, 0,0, 0.33)');
+    ui_block(0, canvas.height/4, canvas.width/3, canvas.height/4, 0.20);
+    ui_block(canvas.width * 2/3, canvas.height/4, canvas.width/3, canvas.height/4, 0.20);
 
-    ui_block(0, canvas.height/2, canvas.width/3, canvas.height/2, 'rgba(128, 0,0, 0.33)');
-    ui_block(canvas.width * 2/3, canvas.height/2, canvas.width/3, canvas.height/2, 'rgba(128, 0,0, 0.33)');
-    
-    ui_block(canvas.width/3, canvas.height/2, canvas.width/3, canvas.height/4, 'rgba(255, 0,0, 0.33)');
+    ui_block(0, canvas.height/2, canvas.width/3, canvas.height/2, 0.33);
+    ui_block(canvas.width * 2/3, canvas.height/2, canvas.width/3, canvas.height/2, 0.33);
+    ui_block(canvas.width/3, canvas.height/2, canvas.width/3, canvas.height/4, 0.20);
 
 
   }

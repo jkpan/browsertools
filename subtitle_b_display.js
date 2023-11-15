@@ -565,10 +565,10 @@ function verse_update(elapse) {
 
     switch(display_mode) {
         case 0:
-            render(animElapse.toFixed(2)/animTotal.toFixed(2));
+            render(animElapse/animTotal);//(animElapse.toFixed(2)/animTotal.toFixed(2));
             break;
         case 1:
-            render_vertical(animElapse.toFixed(2)/animTotal.toFixed(2));
+            render_vertical(animElapse/animTotal);
             break;
     }
   
@@ -1432,7 +1432,7 @@ function img_update(elapse) {
     }
 
     if (animElapse >= 0) {
-        render(animElapse.toFixed(2)/animTotal.toFixed(2));
+        render(animElapse/animTotal);
     } else {
         render(-1);
     }    
