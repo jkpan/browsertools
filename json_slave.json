@@ -1,53 +1,31 @@
 {
-    "frame_1" : { "src" : "./dashboard.html", 
-                   "obj" : {
-                        "hymn" : {
-                            "posize" :  [1, 3, 18, 29],
-                            "perspective" : false,
-                            "obj" : {
-                                "list" : [],
-                                "mode"  : 1,
-                                "fontfactor": 10
-                            }
-                        },
-                        "time"  : { "posize" :  [24, 2, 9, 10] }
-                    }
-                },
-    "frame_2" : { "src" : "./dashboard.html", 
-                  "obj" : {
-                        "ctrl": 1,
-                        "Bible": {
-                            "posize" :  [1, 15, 20, 18],
-                            "perspective" : true,
-                            "obj" : {
-                                "color" : 1,
-                                "fontfactor" : 10
-                            }
-                        },
-                        "ppt_1": {
-                            "posize" :  [19, 18, 14, 14],
-                            "perspective" : true,
-                            "obj" : {
-                                "url" : ""
-                            }
-                        }
-                  }
-                },
-    "frame_55" : { "src" : "./dashboard.html", 
-                    "obj" : {
-                        "info": {
-                            "posize" :  [1, 1, 4, 32],
-                            "obj" : {
-                                "des" : ""
-                            }
-                        },
-                        "ppt_1": {
-                            "posize" :  [6, 2, 26, 30],
-                            "obj" : {
-                                "url" : ""
-                            }
-                        }
-                    }
-                },
-    "emoji" : "😊😀😂👍🤣😢⭐🎂🏓⚽⚾🏀🎸🚌🎉🔧🌏🌲🌼🐖"
+	"frame_1": {
+		"src": "./dashboard.html",
+		"obj": {
+            "ctrl" : 1,
+			"hymn": {
+				"posize": [20, 17, 13, 15],
+				"perspective": false,
+				"obj": {
+					"mode": 3,
+					"fontfactor": 12,
+					"list": [
+                        
+						"主禱文",
+						"使徒信經",
+						"救恩300"
+					]
+				}
+			},
+			"Bible": {
+				"posize": [1, 15, 18, 18],
+				"perspective": true,
+				"obj": {
+					"color": 1,
+					"fontfactor": 10.5
+				}
+			},
+			"B/G": "G"
+		}
+	}
 }

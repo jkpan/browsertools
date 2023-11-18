@@ -1,19 +1,20 @@
 #!/bin/bash
 
 # 設定要移動的檔案和目標目錄
-files_to_move=("/Users/jkpan/Downloads/bg00.png" 
-               "/Users/jkpan/Downloads/bg01.png" 
-               "/Users/jkpan/Downloads/bg02.png" 
-               "/Users/jkpan/Downloads/bg03.png" 
-               "/Users/jkpan/Downloads/bg04.png" 
-               "/Users/jkpan/Downloads/bg05.png" 
-               "/Users/jkpan/Downloads/bg06.png" 
-               "/Users/jkpan/Downloads/bg07.png" 
-               "/Users/jkpan/Downloads/bg08.png" 
-               "/Users/jkpan/Downloads/bg09.png" 
-               "/Users/jkpan/Downloads/bg10.png")
+files_to_move=("/Users/jungkuangpan/Downloads/bg00.png" 
+               "/Users/jungkuangpan/Downloads/bg01.png" 
+               "/Users/jungkuangpan/Downloads/bg02.png" 
+               "/Users/jungkuangpan/Downloads/bg03.png" 
+               "/Users/jungkuangpan/Downloads/bg04.png" 
+               "/Users/jungkuangpan/Downloads/bg05.png" 
+               "/Users/jungkuangpan/Downloads/bg06.png" 
+               "/Users/jungkuangpan/Downloads/bg07.png" 
+               "/Users/jungkuangpan/Downloads/bg08.png" 
+               "/Users/jungkuangpan/Downloads/bg09.png" 
+               "/Users/jungkuangpan/Downloads/bg10.png")
 
-target_directory="/Users/jkpan/Documents/PlanetAsteroid/Resources"
+target_directory="/Users/jungkuangpan/Documents/PlanetAsteroid/Resources"
+#"/Users/jkpan/Documents/PlanetAsteroid/Resources"
 
 # 確認目標目錄存在，如果不存在就建立它
 if [ ! -d "$target_directory" ]; then

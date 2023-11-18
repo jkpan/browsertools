@@ -186,6 +186,7 @@ class VerseVertical {
 
       if (doblank == 1) return;
   
+      /*
       switch (fontColorType) {
           case 0:
           case 1:
@@ -196,8 +197,11 @@ class VerseVertical {
               ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
               break;
         }
-  
+        */
         //ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
+        
+        ctx.fillStyle = hlight_pointer;
+        console.log('vdraw: ' + ctx.fillStyle);
         ctx.fillRect(canvas.width * 0.95, 0, -(this.line) * fontsize, canvas.height);
     
   }
@@ -212,6 +216,7 @@ class VerseVertical {
       let opa = progress < 0?1.0:progress;
 
       this.line = Math.ceil(count/(canvas.height * 0.9/fontsize)) + 1;
+      
       this.drawHlight();
 
       const mg_x = canvas.width * 0.95;
@@ -356,7 +361,7 @@ var presetVerse = [
   
 
   var bgStyle = 'green';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)";
-  var hlightStyle = 'rgba(0, 60, 0, 0.66)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle = 'rgba(0, 60, 0, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
   
   var bgStyle_green = bgStyle;//'blue';
@@ -364,15 +369,15 @@ var presetVerse = [
   const COLORS_green = COLORS_CK;//["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
   var bgStyle_blue = 'blue';
-  var hlightStyle_blue = 'rgba(0, 0, 180, 0.66)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_blue = 'rgba(0, 0, 180, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_blue = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
   var bgStyle_black = 'black';
-  var hlightStyle_black = 'rgba(80, 80, 80, 0.66)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_black = 'rgba(100, 100, 100, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_black = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
   var bgStyle_white = 'white';
-  var hlightStyle_white = 'rgba(180, 180, 180, 0.66)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_white = 'rgba(200, 200, 200, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_white = ["rgb(255, 255, 255)", "rgb(180, 180, 180)", "rgb(120, 128, 128)", "rgb(80, 80, 80)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
   var txt_strokeStyle = 'black';
@@ -1778,7 +1783,7 @@ function restoreActionFromLocal() {
       case 0:
         bgcolor_pointer = 'rgba(0,0,0,0)';
         color_pointer = 'rgba(0,0,0,0)';
-        hlight_pointer = 'rgba(255, 255, 255, 0.5)';//hlightStyle;
+        hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
         txt_fill = txt_fillStyle;
         txt_stroke = txt_strokeStyle; 
         break;
@@ -1790,6 +1795,9 @@ function restoreActionFromLocal() {
         txt_stroke = txt_strokeStyle; 
         break;
     }
+
+    console.log(hlight_pointer);
+
   }
   
   function keyboard(e) { //key up //alert(e.keyCode);
@@ -1885,7 +1893,7 @@ function restoreActionFromLocal() {
 
             helpSwitch = 0;
 
-            if (color_selection == 0 && display_mode == 0) {
+            if (color_selection == 1 && display_mode == 0) {
               display_mode = 1;
               break;
             }

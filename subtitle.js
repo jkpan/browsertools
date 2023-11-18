@@ -689,9 +689,18 @@ function printPhase() {
       if (i == line && song > 0) drawIdxHint(10, _y);
       
     }
+
+    if (song > 0 && phase > 0) {
+      ctx.fillStyle = 'rgb(0,200,0)';      
+      ctx.font = fontsize/2 + "px Arial";
+      ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', 
+                   _x, fontsize/2);
+    }
+
+
   } else { //mode 1, 3
-    let _x = canvas.width * 0.1;
-    ctx.textAlign = 'left';
+    let _x = mode == 1?canvas.width * 0.1:canvas.width * 0.9;
+    ctx.textAlign = mode == 1?'left':'right';
     for (let i=0;i<subtitles[phase].length;i++) {
       let _y = (i + 1) * gap + fontsize/2;
       let txt = subtitles[phase][i];
@@ -707,19 +716,19 @@ function printPhase() {
       if (i == line && song > 0) drawIdxHint(10, _y);
     
     }
+
+    if (song > 0 && phase > 0) {
+
+      //ctx.fillStyle = mode == 2?'yellow':'rgb(0,240,0)';
+      ctx.fillStyle = 'rgb(0,200,0)';
+      
+      ctx.font = fontsize/2 + "px Arial";
+      ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', 
+                   _x, fontsize/2);
+    }
+
   } 
-
-  if (song > 0 && phase > 0) {
-
-    //ctx.fillStyle = mode == 2?'yellow':'rgb(0,240,0)';
-    ctx.fillStyle = 'rgb(0,200,0)';
-    
-    ctx.font = fontsize/2 + "px Arial";
-    ctx.fillText('['+subtitles[0][0]+ ' ' + phase + '/' + (subtitles.length - 1) +']', 
-                 mode == 2?canvas.width/2:canvas.width * 0.1, 
-                 fontsize/2);
-  }
-
+  
 }
 
 function printPhaseChart() {
