@@ -122,8 +122,6 @@
     border-radius: 4px;
     opacity: 0.33;
             position: fixed;
-            top: 10px;
-            left: 10px;
             z-index: 91;
     }
   </style>
@@ -171,7 +169,7 @@
   <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
 </div>
 
-<button id="menubtn" class="menuButton" onclick="sideClick()">&nbsp</button>
+<button id="menubtn" class="menuButton" style="top:10px;left:10px;" onclick="sideClick()">&nbsp</button>
 
 <div class="sideMenu" id="sideMenu">
   &nbsp;</br>
@@ -194,18 +192,24 @@
   <button class="okbutton" onclick="preload('./json_proj.json')">#3</button></br>
   <button class="okbutton" onclick="loadJson()">#</button></br>
   <button class="okbutton" onclick="downloadExpJson()">exp</button></br>
+  &nbsp;</br>
+  &nbsp;<button class="menuButton" onclick="sideClick()">x</button></br>
 </div>
 <script>
+
   let sideMenu = document.getElementById('sideMenu');
   sideMenu.style.left = '-50px';
+
   function openSideMenu() {
     let sideMenu = document.getElementById('sideMenu');
     sideMenu.style.left = '0';
   }
+
   function closeSideMenu() {
     let sideMenu = document.getElementById('sideMenu');
     sideMenu.style.left = '-50px';
   }
+
   function sideClick() {
     let sideMenu = document.getElementById('sideMenu');
     if (sideMenu.style.left == '-50px') {
@@ -217,13 +221,21 @@
 
   let mbtn = document.getElementById("menubtn");
   mbtn.addEventListener('mouseenter', e => {
-    openSideMenu();
+    sideClick();
   });
+
+  /*
+  sideMenu.addEventListener('mouseup', (e) =>{
+    closeSideMenu();
+  });
+  */
+
+  /*
   let mbar = document.getElementById("sideMenu");
   mbar.addEventListener('mouseleave', e => {
     closeSideMenu();
   });
-
+  */
 
 
 </script>

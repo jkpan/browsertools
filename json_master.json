@@ -1,22 +1,21 @@
 {
 	"frame_1": {
-		"src": "./dashboard.html",
+		"src": "dashboard.html",
 		"obj": {
+            "ctrl": 1,
 			"hymn": {
-				"posize": [1, 5, 15, 27],
+				"posize": [1, 18, 10, 15],
 				"perspective": false,
 				"obj": {
-					"mode": 1,
+                    "master": 1,
+					"mode": 2,
 					"fontfactor": 12,
-                    "master"    : 1,
 					"list": [
-
-                        "讚美之泉121",
-                        "讚美之泉36",
-                        "讚美之泉122",
-                        "其他119",
-                        "救恩103",
-
+						"救恩74",
+						"救恩194",
+						"救恩201",
+						"救恩25",
+                        
 						"主禱文",
 						"使徒信經",
 						"救恩300"
@@ -24,23 +23,30 @@
 				}
 			},
 			"Bible": {
-				"posize": [17, 5, 16, 27],
+				"posize": [23, 18, 10, 15],
 				"perspective": false,
 				"obj": {
 					"color": 2,
 					"fontfactor": 14,
 					"saved": [
 						[""],
-						["馬可福音", 4, 35],
-						["馬可福音", 4, 41],
 						[""],
 						[""],
 						[""],
+                        [""],
 						[""],
+                        [""],
 						[""],
-						[""],
+                        [""],
 						[""]
 					]
+				}
+			},
+			"ppt_1": {
+				"posize": [12, 18, 10, 15],
+				"perspective": false,
+				"obj": {
+					"url": ""
 				}
 			},
 			"B/G": "B"

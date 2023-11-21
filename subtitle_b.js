@@ -2267,6 +2267,7 @@ function restoreActionFromLocal() {
     ui_block(canvas.width/3, canvas.height/2, canvas.width/3, canvas.height/4, 0.20);
 
 
+
   }
   
   function _repaint() {
@@ -2612,7 +2613,21 @@ function restoreActionFromLocal() {
     drawVolumn(54, 57, 'rgba(255, 0,0,0.22)', 'rgba(255, 0,0, 1.0)');
     drawVolumn(58, 66, 'rgba(255, 0,0,0.33)', 'rgba(255, 0,0, 1.0)');         
     
-  
+    /*
+    ctx.textBaseline = 'bottom';
+
+    let _height = canvas.height * (1 - tb_ratio * 2);
+    let gap = _height/66.0;
+    let _y = canvas.height * tb_ratio + gap * (song - 1);
+    //let _song = Math.ceil((touch.clientY - canvas.height * tb_ratio)/gap);
+    ui_rectFill2(0, _y, 
+                 canvas.width, fontsize * 2,  
+                 fullname[song], 'rgb(200, 200, 200)', 'rgb(5, 5, 5)');
+      */
+
+                 
+    ctx.textBaseline = 'alphabetic';
+
   }
 
   function drawVolumn(f, e, c0, c1) {
@@ -2624,7 +2639,7 @@ function restoreActionFromLocal() {
                 canvas.width/3, gap * (e - f + 1),  
                 SONGS[f][0][0], c0, c1);
     //ctx.textAlign = "left";
-    ctx.textBaseline = 'alphabetic';
+    
   }
 
 

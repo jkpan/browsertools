@@ -595,6 +595,9 @@ class Applet {
     
     transition: top 0.3s; /* 添加过渡效果 */
     z-index: 99;
+
+    /* justify-content: center; 水平方向上居中 */
+    align-items: center; /* 垂直方向上居中 */
   }
   .menuButton {
     background-color: transparent;
@@ -602,10 +605,7 @@ class Applet {
     color: rgb(0, 255, 0);
     border-radius: 4px;
     opacity: 0.33;
-
             position: fixed;
-            bottom: 10px;
-            left: 10px;
             z-index: 100;
     }
 
@@ -619,7 +619,7 @@ class Applet {
       <canvas id="canvas" width="100" height="100"></canvas>
     </div>
 
-    <button id="menubtn" class="menuButton" onclick="sideClick()">=</button>
+    <button id="menubtn" class="menuButton" style="bottom:10px;left:10px;" onclick="sideClick()">=</button>
 
     <div id="sideMenu" class="sideMenu">
       &nbsp;
@@ -649,6 +649,9 @@ class Applet {
       <button class="btn" onclick="openProfile()">#</button>
       <button class="btn" onclick="downloadExpJson()">exp</button>
       <input type="file" id="profile" accept=".json" hidden="true" onchange="selectProfile(event)" />
+      &nbsp;
+      <label id="closebar" style="color: #00ee00;">x</label>
+      &nbsp;
     </div>
     <script>
       let sideMenu = document.getElementById('sideMenu');
@@ -671,15 +674,16 @@ class Applet {
             openSideMenu();
         }
       }
+
       let mbtn = document.getElementById("menubtn");
       mbtn.addEventListener('mouseenter', e => {
-        openSideMenu();
-      });
-      let mbar = document.getElementById("sideMenu");
-      mbar.addEventListener('mouseleave', e => {
-        closeSideMenu();
+        sideClick();
       });
 
+      let closebar = document.getElementById("closebar");
+      closebar.addEventListener('mousedown', e => {
+        sideClick();
+      });
 
     </script>
 
