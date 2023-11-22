@@ -1893,6 +1893,11 @@ function restoreActionFromLocal() {
 
             helpSwitch = 0;
 
+            if (color_selection == 0 && display_mode == 0) {
+              display_mode = 1;
+              break;
+            }
+
             if (color_selection == 1 && display_mode == 0) {
               display_mode = 1;
               break;
@@ -2625,7 +2630,7 @@ function restoreActionFromLocal() {
                  fullname[song], 'rgb(200, 200, 200)', 'rgb(5, 5, 5)');
       */
 
-                 
+
     ctx.textBaseline = 'alphabetic';
 
   }
