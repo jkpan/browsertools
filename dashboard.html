@@ -650,8 +650,7 @@ class Applet {
       <button class="btn" onclick="downloadExpJson()">exp</button>
       <input type="file" id="profile" accept=".json" hidden="true" onchange="selectProfile(event)" />
       &nbsp;
-      <label id="closebar" style="color: #00ee00;">x</label>
-      &nbsp;
+      <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
     </div>
     <script>
       let sideMenu = document.getElementById('sideMenu');
@@ -677,11 +676,6 @@ class Applet {
 
       let mbtn = document.getElementById("menubtn");
       mbtn.addEventListener('mouseenter', e => {
-        sideClick();
-      });
-
-      let closebar = document.getElementById("closebar");
-      closebar.addEventListener('mousedown', e => {
         sideClick();
       });
 
@@ -985,7 +979,7 @@ function _createFrame(keyname) {
     case 'ppt_2': 
     case 'ppt_3': {
       createFrame(keyname, 'newurl.html');
-      let app = new Applet({x:6, y:1, w:6, h:8, keyname:keyname});
+      let app = new Applet({x:6, y:1, w:10, h:16, keyname:keyname});
       applets.push(app);
       return app;
     } break;

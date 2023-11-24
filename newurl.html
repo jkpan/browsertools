@@ -94,18 +94,27 @@ img {
 a {
   color: #00ff00;
 }
+.drop-area {
+        width: 300px;
+        height: 300px;
+        border: 2px dashed #0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+}
+
 </style>
 </head>
     <body>
 
       <!--hr size="8" width="100%" color="#00ff00"/-->    
-
+      
       <div class="wrapper">
-        
-        <!--embed-->
-        <!--iframe width="100%" height="100%" hidden="true" class="full" id="pdf-viewer" type="application/pdf"></iframe-->
-        <iframe width="100%" height="100%" hidden="true" class="full" id="web"></iframe>
+
+        <iframe width="100%" height="100%" hidden="true" id="web" class="full"></iframe>
         <button class="reload" hidden="true" id="reload" type="button" onclick="reload()">R</button>
+
         <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls loop></video></video>
         <div class="full" id="image_container" hidden="true"></div>
 
@@ -117,43 +126,25 @@ a {
           <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
               //document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal";
-              //document.getElementById("ppt_url").value = "&rm=minimal";
               //document.getElementById("ppt_url").select();
               function urlGo() {
+
                 let value = document.getElementById("ppt_url").value;
                 value = value.trim();
                 if (value.length == 0) return;
 
                 document.getElementById("ui").hidden = true;
                 document.getElementById("web").hidden = false;
-                document.getElementById("web").src = value;
-                document.getElementById("reload").hidden = false;
-
-                //window.location.href = value;
                 document.querySelector('body').style.background = 'transparent';
+                document.getElementById("reload").hidden = false;
+                document.getElementById("web").src = value;
+                //window.location.href = value;
               }
               
               function reload() {
                 let d = document.getElementById("web");
                 document.getElementById("web").src = d.src;
               }
-              
-              /*
-              function iframeGo() {
-
-                document.querySelector('body').style.background = 'transparent';
-
-                document.getElementById("ui").hidden = true;
-              
-                let value = document.getElementById("ppt_url").value;
-                document.querySelector('body').innerHTML = value;
-                //let div = document.getElementById("ppt_container");
-                //div.innerHTML = value;
-                //div.hidden = false;
-              }
-              */
-              
-
             </script>
           <br/>
           <button class="okbutton" type="button" onclick="urlGo()">OK</button>
@@ -165,15 +156,11 @@ a {
           <hr size="4" width="100%" color="#00ff00"/>
           本機檔案<br/>
           <P></P>
-            <button class="okbutton" type="button" onclick="openFile('filepdf')">PDF</button>
-            <input id="filepdf" type="file" hidden="true" accept=".pdf" onchange="selectPDF(event)"/><br/>
-          <P></P>
-            <button class="okbutton" type="button" onclick="openFile('fileimage')">Image</button>
-            <input id="fileimage" type="file" hidden="true" onchange="selectImg(event)"/><br/>
-          <P></P>
-            <button class="okbutton" type="button" onclick="openFile('filevideo')">Video</button>
-            <input id="filevideo" type="file" hidden="true" accept="video/*" onchange="playVideo(event)"/>
-          
+            <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" onclick="openFile('allfile')">
+              <p>PDF 圖片 影片</p>
+            </div>
+            <input id="allfile" type="file" hidden="true" onchange="selectFile(event)"/>
+          <p></p>
         </div>
       </div>
 
@@ -181,6 +168,28 @@ a {
 </html>
   
 <script type="text/javascript" charset="UTF-8">
+
+function selectFile(event) {
+  let file = event.target.files[0];
+  /*
+  var fileInfo = "檔案名稱: " + file.name + "<br>" +
+                               "檔案類型: " + file.type + "<br>" +
+                               "檔案大小: " + file.size + " bytes";
+  alert(fileInfo);
+  */
+  if (file.type.startsWith('image/')) {
+    displayImageFile(file);
+    return;
+  }
+  if (file.type.startsWith('video/')) {
+    displayVideoFile(file);
+    return;
+  }
+  if (file.type.startsWith('application/pdf')) {
+    displayPDFFile(file);
+    return;
+  }
+}
 
 function googleSlidesRemoveBar() {
   let value = document.getElementById("ppt_url").value;
@@ -194,79 +203,50 @@ function openFile(elmid) {
   document.getElementById(elmid).click();
 }
 
-function selectImg(event) {
-  //document.style.opacity = '0.0';
-  //document.style.opacity = "0.0";
-  // 取得所選檔案
+function displayImageFile(file) {
+
   document.querySelector('body').style.background = 'transparent';
-
-  var selectedFile = event.target.files[0];
-			
-			// 檢查檔案是否為圖片檔
-			if (!selectedFile.type.match('image.*')) {
-				alert("選擇的檔案不是圖片檔！");
-				return;
-			}
+  document.getElementById("ui").hidden = true;;
+  
+  // 讀取檔案並將其轉換成Data URL
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      var imageUrl = event.target.result;
+      let img = new Image();
+      img.src = imageUrl;
+      img.onload = function() {
+        var width = img.width;
+        var height = img.height;//window.location.href = imageUrl; return;
+        let div = document.getElementById("image_container");
+        div.hidden = false;
+        if (width >= height) 
+          div.innerHTML = '<img width="100%" height="auto" aligh="center" src="' + imageUrl + '" />';
+        else 
+          div.innerHTML = '<img width="auto" height="100%" aligh="center" src="' + imageUrl + '" />';
+      };
       
-      let ui = document.getElementById("ui");
-      ui.hidden = true;
-
-			// 讀取檔案並將其轉換成Data URL
-			var reader = new FileReader();
-			reader.onload = function(event) {
-				var imageUrl = event.target.result;
-        let img = new Image();
-        img.src = imageUrl;
-        img.onload = function() {
-          var width = img.width;
-          var height = img.height;//window.location.href = imageUrl; return;
-          let div = document.getElementById("image_container");
-          div.hidden = false;
-          if (width > height) 
-            div.innerHTML = '<img width="100%" height="auto" aligh="center" src="' + imageUrl + '" />';
-          else 
-            div.innerHTML = '<img width="auto" height="100%" aligh="center" src="' + imageUrl + '" />';
-        };
-				
-			};
-			reader.readAsDataURL(selectedFile);
-      
+    };
+    reader.readAsDataURL(file);
 }
 
-function selectPDF(event) {
-
+function displayPDFFile(file) {
   document.querySelector('body').style.background = 'transparent';
-
-  let ui = document.getElementById("ui");
-  ui.hidden = true;
-
-  const file = event.target.files[0];//input.files[0];
-	const fileURL = URL.createObjectURL(file);
-
-  //let viewer = document.getElementById('pdf-viewer');
-	//viewer.setAttribute('src', fileURL);
-  //viewer.hidden = false;
-
+  document.getElementById("ui").hidden = true;
+  const fileURL = URL.createObjectURL(file);
   window.location.href = fileURL;
-
 }
 
-function playVideo(event) {
+function displayVideoFile(file) {
 
   document.querySelector('body').style.background = 'transparent';
+  document.getElementById("ui").hidden = true;
 
-  let ui = document.getElementById("ui");
-  ui.hidden = true;
-
-  const file = event.target.files[0];
+  //const file = event.target.files[0];
   const videoURL = URL.createObjectURL(file);
 
   const video = document.getElementById("vsrc");
   video.src = videoURL;
   video.hidden = false;
-
-  //window.location.href = videoURL;
-
 }
 
 window.addEventListener('message', (e) => {
@@ -290,6 +270,41 @@ function toObj() {
   return { "url": _url };
 }
 
+function dropHandler(event) {
+    
+    event.preventDefault();
+
+    // 檢查是否有拖拉的檔案
+    if (event.dataTransfer.items) {
+        // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
+        for (var i = 0; i < event.dataTransfer.items.length; i++) {
+            if (event.dataTransfer.items[i].kind === 'file') {
+                var file = event.dataTransfer.items[i].getAsFile();
+                if (file.type.startsWith('image/')) {
+                    // 顯示圖片
+                    displayImageFile(file);
+                    return;
+                }
+                if (file.type === 'application/pdf') {
+                    // 顯示PDF
+                    //displayPDF(file);
+                    displayPDFFile(file);
+                    return;
+                }
+                if (event.dataTransfer.items[i].type.indexOf("video") !== -1) {
+                    //var file = event.dataTransfer.items[i].getAsFile();
+                    displayVideoFile(file);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+function dragOverHandler(event) {
+    event.preventDefault();
+}
+
 /*
 edit:
 https://www.canva.com/design/DAFY964Fw6Q/h7INsnBvo-q1ZBllt6OeCg/edit?utm_content=DAFY964Fw6Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
@@ -311,7 +326,22 @@ https://www.canva.com/design/DAFY964Fw6Q/view
 +?embed
 =
 https://www.canva.com/design/DAFY964Fw6Q/view?embed
+
+              function iframeGo() {
+
+                document.querySelector('body').style.background = 'transparent';
+
+                document.getElementById("ui").hidden = true;
+              
+                let value = document.getElementById("ppt_url").value;
+                document.querySelector('body').innerHTML = value;
+                //let div = document.getElementById("ppt_container");
+                //div.innerHTML = value;
+                //div.hidden = false;
+              }
 */
+
+//function displayImgFile(file) {}
 
 </script>
 

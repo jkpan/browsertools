@@ -81,7 +81,9 @@
 
     font-size: 16px;
     margin: 2px 2px;
-    width: 90%;
+    
+    width: 36px;
+    height: 90%;
 
     text-align: center;
     padding: 4px;
@@ -92,9 +94,11 @@
     color: rgb(0, 255, 0);
     border-radius: 8px;
 
-    font-size: 14px;
+    font-size: 16px;
     margin: 2px 2px;
-    width: 90%;
+    
+    width: 36px;
+    height: 90%;
 
     text-align: center;
     text-decoration: none;
@@ -106,13 +110,13 @@
   .sideMenu {
     position: fixed;
     top: 0;
-    left: -50px; /* 初始位置在左侧屏幕外 */
-    width: 50px;
-    height: 100%;
+    left: 0px; /* 初始位置在左侧屏幕外 */
+    width: 100%;
+    height: 50px;
     background-color: rgb(0,90,0);
     color: #fff;
     
-    transition: left 0.3s; /* 添加过渡效果 */
+    transition: top 0.3s; /* 添加过渡效果 */
     z-index: 90;
   }
   .menuButton {
@@ -172,47 +176,50 @@
 <button id="menubtn" class="menuButton" style="top:10px;left:10px;" onclick="sideClick()">&nbsp</button>
 
 <div class="sideMenu" id="sideMenu">
-  &nbsp;</br>
-  &nbsp;</br>
-  <button id="btn_1" class="button" onclick="switchFunction(1)">1</button></br>
-  <button id="btn_2" class="button" onclick="switchFunction(2)">2</button></br>
-  <button id="btn_3" class="button" onclick="switchFunction(3)">3</button></br>
-  <button id="btn_4" class="button" onclick="switchFunction(4)">4</button></br>
-  <button id="btn_5" class="button" onclick="switchFunction(5)">5</button></br>
-  <button id="btn_6" class="button" onclick="switchFunction(6)">6</button></br>
-  <button id="btn_7" class="button" onclick="switchFunction(7)">7</button></br>
-  &nbsp;</br>
-  <button class="okbutton" onclick="reloadFrame()">R</button></br>
-  <button class="okbutton" onclick="openCtrl()">c</button></br>
-  <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button></br>
-  <button id="aBtn" class="okbutton" onclick="setSlideAnim()">A1</button></br>
-  &nbsp;</br>
-  <button class="okbutton" onclick="preload('./json_master.json')">#1</button></br>
-  <button class="okbutton" onclick="preload('./json_slave.json')">#2</button></br>
-  <button class="okbutton" onclick="preload('./json_proj.json')">#3</button></br>
-  <button class="okbutton" onclick="loadJson()">#</button></br>
-  <button class="okbutton" onclick="downloadExpJson()">exp</button></br>
-  &nbsp;</br>
-  &nbsp;<button class="menuButton" onclick="sideClick()">x</button></br>
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  <button id="btn_1" class="button" onclick="switchFunction(1)">1</button>
+  <button id="btn_2" class="button" onclick="switchFunction(2)">2</button>
+  <button id="btn_3" class="button" onclick="switchFunction(3)">3</button>
+  <button id="btn_4" class="button" onclick="switchFunction(4)">4</button>
+  <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
+  <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
+  <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
+  &nbsp;
+  <button class="okbutton" onclick="reloadFrame()">R</button>
+  <button class="okbutton" onclick="openCtrl()">c</button>
+  <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
+  <button id="aBtn" class="okbutton" onclick="setSlideAnim()">A1</button>
+  &nbsp;
+  <button class="okbutton" onclick="preload('./json_master.json')">#1</button>
+  <button class="okbutton" onclick="preload('./json_slave.json')">#2</button>
+  <button class="okbutton" onclick="preload('./json_proj.json')">#3</button>
+  <button class="okbutton" onclick="loadJson()">#</button>
+  <button class="okbutton" onclick="downloadExpJson()">exp</button>
+  &nbsp;
+      <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
+  &nbsp;
 </div>
 <script>
 
   let sideMenu = document.getElementById('sideMenu');
-  sideMenu.style.left = '-50px';
+  sideMenu.style.top = '0px';
 
   function openSideMenu() {
     let sideMenu = document.getElementById('sideMenu');
-    sideMenu.style.left = '0';
+    sideMenu.style.top = '0';
   }
 
   function closeSideMenu() {
     let sideMenu = document.getElementById('sideMenu');
-    sideMenu.style.left = '-50px';
+    sideMenu.style.top = '-50px';
   }
 
   function sideClick() {
     let sideMenu = document.getElementById('sideMenu');
-    if (sideMenu.style.left == '-50px') {
+    if (sideMenu.style.top == '-50px') {
         openSideMenu();
     } else {
         closeSideMenu();
