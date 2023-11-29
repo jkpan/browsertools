@@ -201,7 +201,6 @@ class VerseVertical {
         //ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
         
         ctx.fillStyle = hlight_pointer;
-        console.log('vdraw: ' + ctx.fillStyle);
         ctx.fillRect(canvas.width * 0.95, 0, -(this.line) * fontsize, canvas.height);
     
   }
@@ -297,16 +296,7 @@ function render_vertical(progress) {
 
 var presetVerse = [
       
-      [''], //0
-      [''], //1
-      [''], //2
-      [''], //3
-      [''], //4
-      [''], //5
-      [''], //6
-      [''], //7
-      [''], //8
-      [''], //9
+      [''], [''], [''], [''], [''], [''], [''], [''], [''], ['']
       
       /*
       ['', 0, 0],         //0
@@ -327,8 +317,8 @@ var presetVerse = [
         "'左右' 上ㄧ節下ㄧ節  '上下' 上ㄧ章下ㄧ章",
         "'-'上一卷  '='下一卷", 
         "'1234567890' 跳至預存  'QWERTYUIOP' 儲存1-0", 
-        "'L' 開啟選單 'C' 複製此節 'M'文字模式", 
-        "'A' 換顏色  'B' Blank",
+        "'L' 開啟選單 'X' 複製此節 'M'文字模式", 
+        "'A' 換顏色 'B' Blank 'C' 字顏色",
         "shift'ASDFG' 舊約分類  shift'ZXCV' 新約分類",
         "shift'1234567890' 選章",
         "shift'左右' 上十節下十節  shift'上下' 上十章下十章",
@@ -380,19 +370,10 @@ var presetVerse = [
   var hlightStyle_white = 'rgba(200, 200, 200, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_white = ["rgb(255, 255, 255)", "rgb(180, 180, 180)", "rgb(120, 128, 128)", "rgb(80, 80, 80)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
-  var txt_strokeStyle = 'black';
-  var txt_fillStyle = 'rgba(255, 255, 255, '; 
-
-  var txt_strokeStyle_white = 'rgb(255,255,255)';
-  var txt_fillStyle_white = 'rgba(0, 0, 0, '; 
-
   /////
   var bgcolor_pointer = bgStyle;
   var color_pointer = COLORS_CK;
   var hlight_pointer = hlightStyle;
-
-  var txt_fill = txt_fillStyle;
-  var txt_stroke = txt_strokeStyle;
 
   function getSong(jsonid) {
     var json_elm = document.getElementById(jsonid);
@@ -1013,7 +994,6 @@ function restoreActionFromLocal() {
   }
   
   function drawHlight(yy, hh) {
-    if (color_selection == 0) return;
     if (doblank != 1 && phase >= 1) {
         ctx.fillStyle = hlight_pointer;
         ctx.fillRect (0, yy, canvas.width, hh);
@@ -1195,8 +1175,7 @@ function restoreActionFromLocal() {
     }
   
     if (doanim > 0) {
-      //if (animElapse == 0) window.requestAnimationFrame(verse_update);
-      animElapse = 0;
+      if (display_mode == 0) animElapse = 0;
       window.requestAnimationFrame(verse_update);
     } else {
       render(-1);
@@ -1414,37 +1393,31 @@ function restoreActionFromLocal() {
   
   }
   
-  var fontColorType = 0;
+  var fontColorType = 1;
 
   function _drawSdwtxt(txt, x, y) {
   
     if (doblank == 1 && color_selection == 1) {
-      ctx.fillStyle = color_pointer[3];//'rgb(0, 220, 0)';
+      ctx.fillStyle = 'rgb(0, 220, 0)';//color_pointer[3];
       ctx.lineWidth = 1;
       ctx.fillText(txt, x, y);
       return;
     }
-  
-    if (doblank == 0) {
-      ctx.strokeStyle = txt_stroke;//'black';//'rgb(0, 0, 0, ' + a + ')';
-      ctx.lineWidth = Math.ceil(fontsize/10.0);
-      ctx.strokeText(txt, x, y);
-    }
 
     switch (fontColorType) {
-      case 0:
+      case 0://白字黑邊
         ctx.fillStyle = 'rgb(255,255,255)';//'rgba(255,255,255,' + opa + ')';//'white';
         break;
-      case 1:
+      case 1://白字
         ctx.fillStyle = 'rgb(255,255,255)';//'rgba(255,255,255,' + opa + ')';
         ctx.strokeStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
         ctx.lineWidth = Math.ceil(fontsize/12.0);
         ctx.strokeText(txt, x, y);
         break;
-      case 2:
+      case 2://黑字
         ctx.fillStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
         break;
-      case 3:
+      case 3://黑字白邊
         ctx.fillStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
         ctx.strokeStyle = 'rgba(255,255,255)';//'rgba(255,255,255,' + opa + ')';
         ctx.lineWidth = Math.ceil(fontsize/12.0);
@@ -1452,8 +1425,15 @@ function restoreActionFromLocal() {
         break;
     }
 
+    /*
+    if (doblank == 0) {
+      //ctx.strokeStyle = txt_stroke;//'black';//'rgb(0, 0, 0, ' + a + ')';
+      ctx.lineWidth = Math.ceil(fontsize/10.0);
+      ctx.strokeText(txt, x, y);
+    }
+    */
   
-    ctx.fillStyle = txt_fill + 1.0 + ')';//'white';//'rgb(255, 255, 255, ' + a + ')';
+    //ctx.fillStyle = txt_fill + 1.0 + ')';//'white';//'rgb(255, 255, 255, ' + a + ')';
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
   
@@ -1462,11 +1442,23 @@ function restoreActionFromLocal() {
   function _drawtxt(txt, x, y, a) {
       
     if (doblank == 1 && color_selection == 1) {
-      ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
-    } else {
-      ctx.fillStyle = txt_fill + a + ')';
+      ctx.fillStyle = 'rgb(0, 200, 0)';//color_pointer[2];//'rgb(0, 200, 0)';
+      ctx.fillText(txt, x, y);
+      return;
     }
+    //else ctx.fillStyle = txt_fill + a + ')';
   
+    switch (fontColorType) {
+      case 0://白字
+      case 1://白字
+        ctx.fillStyle = 'rgba(255,255,255,' + a + ')';//'rgba(255,255,255,' + opa + ')';
+        break;
+      case 2://黑字
+      case 3://黑字
+        ctx.fillStyle = 'rgba(0,0,0, ' + a + ')';//'rgba(0,0,0,' + opa + ')';
+        break;
+    }
+
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
   
@@ -1763,40 +1755,28 @@ function restoreActionFromLocal() {
         bgcolor_pointer = bgStyle_black;
         color_pointer = COLORS_black;
         hlight_pointer = hlightStyle_black;
-        txt_fill = txt_fillStyle;
-        txt_stroke = txt_strokeStyle; 
         break;
       case 3:
         bgcolor_pointer = bgStyle_white;
         color_pointer = COLORS_white;
         hlight_pointer = hlightStyle_white;
-        txt_fill = txt_fillStyle_white;
-        txt_stroke = txt_strokeStyle_white; 
         break;
       case 4:
         bgcolor_pointer = bgStyle_blue;
         color_pointer = COLORS_blue;
         hlight_pointer = hlightStyle_blue;
-        txt_fill = txt_fillStyle;
-        txt_stroke = txt_strokeStyle; 
         break;
       case 0:
         bgcolor_pointer = 'rgba(0,0,0,0)';
         color_pointer = 'rgba(0,0,0,0)';
         hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
-        txt_fill = txt_fillStyle;
-        txt_stroke = txt_strokeStyle; 
         break;
       default: //0, 1
         bgcolor_pointer = bgStyle;
         color_pointer = COLORS_CK;
         hlight_pointer = hlightStyle;
-        txt_fill = txt_fillStyle;
-        txt_stroke = txt_strokeStyle; 
         break;
     }
-
-    console.log(hlight_pointer);
 
   }
   
@@ -1838,6 +1818,9 @@ function restoreActionFromLocal() {
           createCtrlBtn();
           break;
         //case 114: save2Local(); break; case 115: restoreLocal(); break;
+        case 67: //'c'
+          fontColorType = (fontColorType + 1)%4; 
+          break;
         case 66: //'b'
           //console.log('b press');
           if (color_selection == 1) {
@@ -1857,7 +1840,7 @@ function restoreActionFromLocal() {
           doblank = doblank == 0?1:0;
           target_doblank = doblank;
           break;
-        case 67: // 'c' copy
+        case 88: // 'x' copy
           copyToClickBoard(); 
           break; 
         case 77: //'M' ppt mode

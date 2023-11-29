@@ -150,14 +150,23 @@ a {
           <button class="okbutton" type="button" onclick="urlGo()">OK</button>
           <!--button class="okbutton" type="button" onclick="iframeGo()">OK (embedded whole iframe)</button-->
           <br/>
-            <a href="javascript:googleSlidesRemoveBar()"> * Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a> <br/>
-            * Google簡報要打開speaker notes按's'<br/>
-            * Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上<br/>
+          <ul>
+            <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a></li>
+            <li>Google簡報要打開speaker notes按's'</li>
+            <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
+          </ul>
+            
           <hr size="4" width="100%" color="#00ff00"/>
           本機檔案<br/>
           <P></P>
             <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" onclick="openFile('allfile')">
-              <p>PDF 圖片 影片</p>
+              <p>
+                <ul>
+                  <li>PDF</li>
+                  <li>圖片</li>
+                  <li>影片</li>
+                </ul>
+              </p>
             </div>
             <input id="allfile" type="file" hidden="true" onchange="selectFile(event)"/>
           <p></p>
