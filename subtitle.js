@@ -728,7 +728,7 @@ function printPhase() {
     }
 
   } 
-  
+
 }
 
 function printPhaseChart() {
@@ -1087,7 +1087,8 @@ function _layer2() {
   if (funcInterval) {
     ctx.fillStyle = COLORS_CK[2];
     let _r = 4;
-    ctx.fillRect(0, 0, _r * 2, _r * 2);
+    ctx.fillRect(0, 0, _r * 2, fontsize/2);
+    console.log('_layer2 funcInterval');
   }
 
   if (helpSwitch == 1) 

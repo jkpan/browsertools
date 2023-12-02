@@ -95,6 +95,15 @@ class Applet {
     this.t_Opacity = 0.0;
   }
 
+  doFix() {
+    this.t_x = this.x;
+    this.t_y = this.y;
+    this.t_w = this.w;
+    this.t_h = this.h;
+    this.t_Opacity = this.elm.hidden?0.0:1.0;
+    this.t_rotateY = this.ry;
+  }
+
   enlargeSelf() {
     this.t_x = 1;
     this.t_y = 1;
@@ -457,6 +466,31 @@ class Applet {
   }
 
   onTop() {
+    /*
+    for (let i=0;i<applets.length;i++) {
+      let order = parseInt(applets[i].elm.style.zIndex);
+      console.log(applets[i].name + '' + order);
+    }
+    return;
+    */
+        
+    //先移除自己
+    for (let i=0;i<applets.length;i++) 
+      if (applets[i].elm == this.elm) {
+        applets.splice(i, 1);
+        break;
+      }
+    //設定別的
+    for (let i=0;i<applets.length;i++) {
+      applets[i].elm.style.zIndex = '' + i;
+    }
+    //加回自己
+    applets.push(this);
+    this.elm.style.zIndex = '' + applets.length;
+
+    //_repaint();
+    return;
+    /*
     for (let i=0;i<applets.length;i++) {
       if (applets[i].elm == this.elm) {
         applets[i].elm.style.zIndex = '' + applets.length;
@@ -472,7 +506,7 @@ class Applet {
         }
       }
     }
-    //this.elm.parentNode.appendChild(this.elm);
+    */
   }
 
   getPos() {
@@ -517,7 +551,7 @@ class Applet {
 
     user-select: none;
 
-    border-radius: 4%;
+    border-radius: 10px;
 
     /*transform-origin: left center;*/
 
@@ -751,7 +785,7 @@ function sendOX() {
 }
 
 function json2Perspective(app) {
-  recoverAll();
+  //recoverAll();
   app.progress_perspective_Self();
   anim_update(-1);
 
@@ -787,6 +821,7 @@ function handleProfile(fileContent) {
     app.h = jsonData[APPS[i]]['posize'][3];
     app.presave();
     app.settle();
+    app.recover();
     let name = APPS[i];
     if (jsonData[name].obj) {
       app.elm.onload = function() {
@@ -800,15 +835,10 @@ function handleProfile(fileContent) {
   }
 
   _repaint();
-
-  //setTimeout(openCtrl, 5000);
-  //openCtrl();
   
   if (jsonData['ctrl'] && jsonData['ctrl'] == 1) {
-    //focus();
     openCtrl();
   }
-  
 
 }
 
@@ -912,7 +942,7 @@ var mouseDownPos;
 
 var applets = null;
 
-var keysel = -1;
+//var keysel = -1;
 
 function anim_update(elapse) {
 
@@ -933,9 +963,13 @@ function anim_update(elapse) {
 
 function recoverAll() {
   //enlargeLock = false;
-  for (let i=0;i<applets.length;i++) {
+  for (let i=0;i<applets.length;i++) 
     applets[i].recover();
-  }
+}
+
+function fixAll() {
+  for (let i=0;i<applets.length;i++) 
+    applets[i].doFix();  
 }
 
 function createFrame(id, url) {
@@ -957,24 +991,28 @@ function _createFrame(keyname) {
       createFrame(keyname, 'sub.html');
       let app = new Applet({x:2, y:7, w:16, h:10, keyname:keyname});
       applets.push(app);
+      app.onTop();
       return app;
     } break;
     case 'hymn': {
       createFrame(keyname, 'subtitle.html');
       let app = new Applet({x:1, y:14, w:15, h:18, keyname:keyname});
       applets.push(app);
+      app.onTop();
       return app;
     } break;
     case 'Bible': {
       createFrame(keyname, 'subtitle_b.html');
       let app = new Applet({x:17, y:14, w:16, h:18, keyname:keyname});
       applets.push(app);
+      app.onTop();
       return app;
     } break;
     case 'NIV': {
       createFrame(keyname, 'subtitle_niv.html');
       let app = new Applet({x:17, y:14, w:16, h:18, keyname:keyname});
       applets.push(app);
+      app.onTop();
       return app;
     } break;
     case 'ppt_1': 
@@ -983,24 +1021,28 @@ function _createFrame(keyname) {
       createFrame(keyname, 'newurl.html');
       let app = new Applet({x:6, y:1, w:10, h:16, keyname:keyname});
       applets.push(app);
+      app.onTop();
       return app;
     } break;
     case 'info': {
       createFrame(keyname, 'marquee_v.html');
       let app = new Applet({x:1, y:1, w:4, h:32, keyname:keyname});
       applets.push(app);
+      app.onTop();
       return app;
     } break;
     case 'effect': {
       createFrame(keyname, 'effect.html');
       let app = new Applet({x:18, y:2, w:4, h:4, keyname:keyname});
       applets.push(app);
+      app.onTop();
       return app;
     } break;
     case 'time': {
       createFrame(keyname, 'clock.html');
       let app = new Applet({x:24, y:2, w:11, h:10, keyname:keyname});
       applets.push(app);
+      app.onTop();
       return app;
     } break;
     default:
@@ -1039,7 +1081,7 @@ function switchVisible4iframe(keyname) {
 
   if (idx == -1) return;
   
-  recoverAll();
+  //recoverAll();
   applets[idx].progress_hide_show_Self();
   anim_update(-1);
 
@@ -1057,9 +1099,11 @@ function perspective4iframe(keyname) {
 
   if (idx == -1) return;
 
-  recoverAll();
+  fixAll();
   applets[idx].progress_perspective_Self();
   anim_update(-1);
+  
+
 
 }
 
@@ -1076,30 +1120,27 @@ function spot2iframe(keyname) {
     _createFrame(keyname);
     recoverAll();
     anim_update(-1);
-    //closeCtrl();
+    console.log('00000');
     return;
   }
 
-  if (keysel == idx) {
-    recoverAll();
-    keysel = -1;
+  let app = applets[idx];
+  if (app.x == 1 && app.y == 1 && app.w == GRID_W && app.h == GRID_H) {
+    applets[idx].recover();
     anim_update(-1);
+    console.log('11111');
     return;
-  } else {
-    recoverAll();
-    if (idx >= applets.length) {
-      keysel = -1;
-      anim_update(-1);
-      return;
-    }
-    keysel = idx;
-    for (let i=0;i<applets.length;i++) {
-        applets[i].tmpHide();
-    }
-    applets[keysel].enlargeSelf();
-    applets[keysel].elm.focus();
-    anim_update(-1);
   }
+
+  //keysel = idx;
+  //recoverAll();
+  fixAll();
+  app.onTop();
+  app.enlargeSelf();
+  //applets[idx].elm.focus();
+  anim_update(-1);
+  console.log('22222');
+
 }
 
 function init() {
@@ -1223,7 +1264,7 @@ canvas.addEventListener('mousemove', e => {
         return;
       }
       selectIdx = -1;
-      for (let i=0;i<applets.length;i++) {
+      for (let i=applets.length-1;i>=0;i--) {
         if (applets[i].checkInside(mouseX, mouseY)) { //&& !applets[i].isHide()
           selectIdx = i;
           break;

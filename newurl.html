@@ -104,6 +104,15 @@ a {
         cursor: pointer;
 }
 
+.centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: block;
+}
+
+
 </style>
 </head>
     <body>
@@ -169,10 +178,8 @@ a {
               </p>
             </div>
             <input id="allfile" type="file" hidden="true" onchange="selectFile(event)"/>
-          <p></p>
         </div>
       </div>
-
     </body>
 </html>
   
@@ -229,9 +236,9 @@ function displayImageFile(file) {
         let div = document.getElementById("image_container");
         div.hidden = false;
         if (width >= height) 
-          div.innerHTML = '<img width="100%" height="auto" aligh="center" src="' + imageUrl + '" />';
+          div.innerHTML = '<img class="centered" width="100%" height="auto" src="' + imageUrl + '" />';
         else 
-          div.innerHTML = '<img width="auto" height="100%" aligh="center" src="' + imageUrl + '" />';
+          div.innerHTML = '<img class="centered" width="auto" height="100%" src="' + imageUrl + '" />';
       };
       
     };

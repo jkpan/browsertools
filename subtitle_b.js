@@ -128,9 +128,15 @@ class Verseobj {
             drawHlight(0, this.targetRect);//rectH);
             //draw chapter verse
             if (this.chapter > 0 && this.verse > 0) {
-              ctx.font = (this.targetFs * 0.6) + "px " + fontFamily;//FONT_SML;
+              let fs = this.targetFs * 0.6;
+              ctx.font = fs + "px " + fontFamily;//FONT_SML;
               _drawSdwtxt(' '+abbr[this.volumn], 0, 0);
               _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
+              //ctx.font = fs + "px " + fontFamily;
+              //_drawSdwtxt(' ' + abbr[this.volumn], 0, 0);
+              //_drawSdwtxt(' ' + this.chapter, 0, fs);
+              //_drawSdwtxt(' ' + this.verse, 0, fs * 2, 1.0);
+
             }
           ctx.resetTransform();
         }
@@ -687,6 +693,7 @@ function restoreActionFromLocal() {
     button.style.fontSize = '20px'; // setting the font size to 20px
   
     button.style.borderColor = color_pointer[3];
+    button.style.borderRadius = '10px';
   
     //button.style.border = 'none';
     
@@ -1319,8 +1326,7 @@ function restoreActionFromLocal() {
     if (sync_type == 4 || sync_type == 5) { //if (funcInterval) {
       ctx.fillStyle = color_pointer[2];
       let _r = 4;//fontsize_sml_sml/5;
-      ctx.fillRect(0, 0, _r * 2, _r * 2);
-      //ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
+      ctx.fillRect(0, 0, _r * 2, fontsize_sml_sml);
     }
   
     /*
