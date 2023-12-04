@@ -690,7 +690,7 @@ class Applet {
     </div>
     <script>
       let sideMenu = document.getElementById('sideMenu');
-      sideMenu.style.top = window.innerHeight + 'px';
+      sideMenu.style.top = (window.innerHeight-50) + 'px';
       
       function openSideMenu() {
         let sideMenu = document.getElementById('sideMenu');
@@ -710,10 +710,8 @@ class Applet {
         }
       }
 
-      let mbtn = document.getElementById("menubtn");
-      mbtn.addEventListener('mouseenter', e => {
-        sideClick();
-      });
+      //let mbtn = document.getElementById("menubtn");
+      //mbtn.addEventListener('mouseenter', e => {sideClick();});
 
     </script>
 
@@ -839,6 +837,8 @@ function handleProfile(fileContent) {
   if (jsonData['ctrl'] && jsonData['ctrl'] == 1) {
     openCtrl();
   }
+
+  closeSideMenu();
 
 }
 
@@ -1405,11 +1405,13 @@ canvas.addEventListener('mousedown', (e) =>{
   }
   
 });
+
 canvas.addEventListener('mouseup', () =>{
   mouseDown = -1;
   return true;
 });
 
+openSideMenu();
 //win.document.body.innerHTML = "<button type=\"button\" onclick=\"window.parent.spot2iframe('hymn')\">歌詞</button>";
   
 </script>

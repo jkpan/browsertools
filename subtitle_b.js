@@ -589,7 +589,10 @@ var presetVerse = [
     if (volumn == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
     
     fake_doblank = _doblank;
-    if (_doblank != doblank) keyboard({keyCode : 66});
+    if (_doblank != doblank) {
+      keyboard({keyCode : 66});
+      return;
+    }
   
     if (volumn == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
       keyboard({keyCode : 37}); //left
@@ -605,7 +608,20 @@ var presetVerse = [
     subtitles = SONGS[song];
     phase = chapter;
     line = verse;
-    _repaint();
+
+    if (display_mode == 0)
+      _repaint();
+    else 
+      __repaint();
+    
+    /*
+    if (display_mode == 0)
+      _repaint();
+    else {
+      animElapse = 0;
+      window.requestAnimationFrame(verse_update);
+    }
+    */
 }
 
 function restoreActionFromLocal() {
@@ -729,6 +745,7 @@ function restoreActionFromLocal() {
     let div = document.createElement('div');
     div.id = 'ctrl';
     document.body.appendChild(div);
+    div.style.backgroundColor = 'rgba(0,0,0,0.33)';
 
     var btn_none = _newBtn();
     btn_none.innerHTML = 'none';
@@ -1138,8 +1155,8 @@ function restoreActionFromLocal() {
     //push 往後加 shift 從頭砍
     //unshift 往前加 pop 從後砍 
     switch (queueType) {
-      case 0: 
-        printMain(phase, line); 
+      case 0:
+        printMain(phase, line, false); 
         return;
       case 1: //move next
         queue.shift();
@@ -1186,6 +1203,14 @@ function restoreActionFromLocal() {
       window.requestAnimationFrame(verse_update);
     } else {
       render(-1);
+      /*
+      if (display_mode == 0) 
+        render(-1);        
+      else {
+        animElapse = 0;
+        window.requestAnimationFrame(verse_update);
+      }
+      */
     }
     
   }
@@ -1348,7 +1373,7 @@ function restoreActionFromLocal() {
   
   }
   
-  function printMain(chapter, verse) {
+  function printMain(chapter, verse, doanim) {
   
     queue.length = 0;
     queue = [];
@@ -1394,8 +1419,12 @@ function restoreActionFromLocal() {
   
         queue.push(obj);   
     }
-  
-    _render(-1);
+
+    if (doanim) {
+      window.requestAnimationFrame(verse_update);
+    } else {
+      _render(-1);
+    } 
   
   }
   
@@ -1670,17 +1699,21 @@ function restoreActionFromLocal() {
   function jump2preset(ps) {
     jump2preset4Anim(ps);
     return;
-    for (var i = 1;i<SONGS.length;i++) {
-      if (ps[0] == SONGS[i][0][0]) {
-          song = i;
-          subtitles = SONGS[i];//presetVerse[value][0]
-          phase = ps[1];
-          line =  ps[2];
-          break;
+    if (display_mode == 0) {
+      jump2preset4Anim(ps);
+    } else {
+      for (var i = 1;i<SONGS.length;i++) {
+        if (ps[0] == SONGS[i][0][0]) {
+            song = i;
+            subtitles = SONGS[i];//presetVerse[value][0]
+            phase = ps[1];
+            line =  ps[2];
+            break;
+        }
       }
+      saveAction2Local();
+      _repaint();
     }
-    saveAction2Local();
-    _repaint();
   }
 
   function _targetAnim() {
@@ -2272,7 +2305,17 @@ function restoreActionFromLocal() {
     printMain(phase, line);//_layer1();//_layer2();
     _layerui();
   }
-  
+
+  function __repaint() {
+    //ctx.globalCompositeOperation='difference';
+    //ctx.filter = 'invert(1)';
+    _layer0();
+    //_layerBg();
+    printMain(phase, line, true);//_layer1();//_layer2();
+    _layerui();
+  }
+
+
   function userhelp() {
     
     //let helps = getSong('help');
