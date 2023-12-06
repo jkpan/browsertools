@@ -745,7 +745,7 @@ function restoreActionFromLocal() {
     let div = document.createElement('div');
     div.id = 'ctrl';
     document.body.appendChild(div);
-    div.style.backgroundColor = 'rgba(0,0,0,0.33)';
+    div.style.backgroundColor = 'rgba(0,255,0,0.33)';
 
     var btn_none = _newBtn();
     btn_none.innerHTML = 'none';

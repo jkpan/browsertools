@@ -187,12 +187,19 @@ a {
 
 function selectFile(event) {
   let file = event.target.files[0];
+  
   /*
   var fileInfo = "檔案名稱: " + file.name + "<br>" +
                                "檔案類型: " + file.type + "<br>" +
                                "檔案大小: " + file.size + " bytes";
   alert(fileInfo);
   */
+  
+  if (file.type.startsWith('text/html')) {
+    displayHTMLFile(file);
+    return;
+  }
+
   if (file.type.startsWith('image/')) {
     displayImageFile(file);
     return;
@@ -205,6 +212,7 @@ function selectFile(event) {
     displayPDFFile(file);
     return;
   }
+
 }
 
 function googleSlidesRemoveBar() {
@@ -217,6 +225,29 @@ function googleSlidesRemoveBar() {
 
 function openFile(elmid) {
   document.getElementById(elmid).click();
+}
+
+function displayHTMLFile(file) {
+
+  document.querySelector('body').style.background = 'transparent';
+  document.getElementById("ui").hidden = true;;
+
+  // 讀取檔案並將其轉換成Data URL
+  var reader = new FileReader();
+  reader.onload = function(event) {
+    var imageUrl = event.target.result;
+    fetch(imageUrl)
+            .then(response => response.text())
+            .then(data => {
+                // 将加载的 HTML 内容插入到目标 div 中
+                let div = document.getElementById("image_container");
+                div.hidden = false;
+                div.innerHTML = data;//'<img class="centered" width="auto" height="100%" src="' + imageUrl + '" />';
+            })
+            .catch(error => console.error('Error:', error));
+    //div.innerHTML = '';//'<img class="centered" width="auto" height="100%" src="' + imageUrl + '" />';
+  };
+  reader.readAsDataURL(file);
 }
 
 function displayImageFile(file) {
@@ -296,6 +327,10 @@ function dropHandler(event) {
         for (var i = 0; i < event.dataTransfer.items.length; i++) {
             if (event.dataTransfer.items[i].kind === 'file') {
                 var file = event.dataTransfer.items[i].getAsFile();
+                if (file.type.startsWith('text/html')) {
+                  displayHTMLFile(file);
+                  return;
+                }
                 if (file.type.startsWith('image/')) {
                     // 顯示圖片
                     displayImageFile(file);
