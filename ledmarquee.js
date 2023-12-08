@@ -173,13 +173,14 @@ function anim_update(elapse) {
     }
     */
 
-    if (backEffect)
+    if (backEffect) 
       backEffect.update(canvas, ctx, dt);
 
+    
     for (var i = 0;i<particlesAnim.length;i++) {
       particlesAnim[i].update(canvas, ctx, dt);
     }
-
+    
     for (var i = 0;i<particles.length;i++) {
       particles[i].update(canvas, ctx, dt);
     }
@@ -331,7 +332,14 @@ function initAnim() {
           particlesAnim[i].initial(canvas);
         }
         break;
-      case 8:
+      case 8: 
+        particlesAnim[0] = new SpotLightObj(1);
+        particlesAnim[1] = new SpotLightObj(2);
+        particlesAnim[2] = new SpotLightObj(3);
+        particlesAnim[3] = new SpotLightObj(4);
+        particlesAnim[4] = new SpotLightObj(5);
+        break;
+      case 9:
         particlesAnim[0] = new ClockObj();// newClock();
         particlesAnim[0].initial(canvas);
         break;

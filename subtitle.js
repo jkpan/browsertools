@@ -1378,10 +1378,17 @@ function initAnim(idx) {
       particles[i].initial(canvas);
     }
   } else if (idx == 7) {
+    particles[0] = new SpotLightObj(1);
+    particles[1] = new SpotLightObj(2);
+    particles[2] = new SpotLightObj(3);
+    particles[3] = new SpotLightObj(4);
+    particles[4] = new SpotLightObj(5);
+    /*
     for (var i = 0;i<20;i++) {
       particles[i] = newParticle_rect();
       particles[i].initial(canvas);
     }
+    */
   } else if (idx == 8) {
     particles[0] = newParticle_skylight_background();
     for (var i = 1;i<100;i++) {

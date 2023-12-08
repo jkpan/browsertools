@@ -748,7 +748,7 @@ function newParticle_casual() {
       }
     }
   
-    update(c, _ctx) {    
+    update(c, _ctx) {
   
       let x = c.width/2.0;
       let y = c.height/2.0;
@@ -901,3 +901,148 @@ function newParticle_casual() {
   
   }
   
+  class SpotLightObj {
+  
+    pos = {x:0, y:0};
+    a_start;
+    a_end;
+    elapse;
+    range;
+    preoid;
+    radius;
+    type;
+    color;
+
+    constructor(_type) {
+      
+      this.elapse = Math.random();
+      this.type = _type;
+      this.preoid = 2 + Math.random();
+
+      switch(this.type) {
+        case 1:
+          this.color = 'rgba(255,255,255,';
+          break;
+        case 2:
+          this.color = 'rgba(80,255,80,';
+          break;
+        case 3:
+          this.color = 'rgba(255,255,80,';
+          break;
+        case 4:
+          this.color = 'rgba(255,80,255,';
+          break;
+        case 5:
+          this.color = 'rgba(80,255,255,';
+          break;
+      }
+
+    }
+
+    release() { }
+
+    goline(t) {
+      if (t < 0.5) return t * 2;
+      return  -2 * t + 2;
+    }
+
+    getStepVelue(_elapse, _range, _peroid) {
+      return _range * this.goline(_elapse/_peroid);
+    }
+
+    D2R(x) {
+      return x * 0.01745329252;
+    }
+    //M_PI / 180.0)
+    
+    R2D(x) {
+      return x * 57.29577951;
+    }
+    //180.0 / M_PI)
+
+    R_POS(_pos, angle, len) {
+      angle = this.D2R(angle);
+      let _x = _pos.x + Math.cos(angle) * len;
+      let _y = _pos.y + Math.sin(angle) * len;
+      return {x: _x, y:_y};
+    }
+  
+    update(c, _ctx, dt) {
+
+      this.radius = c.height * 0.8;
+      switch(this.type) {
+        case 1:
+          this.pos.x = c.width/2;
+          this.pos.y = -c.height/10;
+          this.a_start = 70;
+          this.range = 40;
+          break;
+        case 2:
+          this.pos.x = c.width / 4;
+          this.pos.y = -c.height/10;
+          this.a_start = 90;
+          this.range = -30;
+          break;
+        case 3:
+          this.pos.x = c.width * 0.75;
+          this.pos.y = -c.height/10;
+          this.a_start = 90;
+          this.range = 30;
+          break;
+        case 4:
+          this.pos.x = c.width/3;
+          this.pos.y = c.height * 1.1;
+          this.a_start = -90;
+          this.range = 20;
+          break;
+        case 5:
+          this.pos.x = c.width * 2 / 3;
+          this.pos.y = c.height * 1.1;
+          this.a_start = -90;
+          this.range = -20;
+          break;
+      }
+      //console.log(dt);
+
+      dt = dt/1000.0;
+      
+      //this.a_end = this.a_start + this.range;
+
+
+      this.elapse += dt;
+      if (this.elapse > this.preoid) this.elapse = 0;
+      let value = this.a_start + this.getStepVelue(this.elapse, this.range, this.preoid);
+
+      let end_pos = this.R_POS(this.pos, value, this.radius);
+      let v = { x: end_pos.x - this.pos.x, 
+                y:end_pos.y - this.pos.y};
+      
+      let r = c.width/8;
+      let v_norm = r / Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2));
+      let p1 = {x:end_pos.x + v.y * v_norm,
+                y:end_pos.y - v.x * v_norm};
+      let p2 = {x:end_pos.x - v.y * v_norm,
+                y:end_pos.y + v.x * v_norm};
+
+
+      // 绘制三角形并应用渐变
+      _ctx.beginPath();
+      _ctx.moveTo(this.pos.x, this.pos.y);    // 起始点
+      _ctx.lineTo(p1.x, p1.y);   // 第一个顶点
+      _ctx.lineTo(p2.x, p2.y);  // 第二个顶点
+      _ctx.closePath();       // 封闭路径
+
+            // 创建线性渐变对象
+            let gradient = _ctx.createLinearGradient(
+              this.pos.x, this.pos.y, 
+              end_pos.x, end_pos.y);
+            gradient.addColorStop(0, this.color + '0.8)');      // 起始颜色为红色
+            //gradient.addColorStop(0.5, 'rgba(0,0,0, 0.5)');  // 中间颜色为绿色
+            gradient.addColorStop(1.0, this.color + '0.0)');     // 结束颜色为蓝色
+
+      _ctx.fillStyle = gradient;  // 设置填充样式为渐变
+      _ctx.fill();               // 填充三角形
+
+    }
+
+  }
