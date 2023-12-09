@@ -45,5 +45,30 @@
 			},
 			"B/G": "G"
 		}
+	}, 
+	"frame_2": {
+		"src": "dashboard.html",
+		"obj": {
+			"Bible": {
+				"posize": [13, 2, 19, 30],
+				"perspective": false,
+				"obj": {
+					"color": 1,
+					"fontfactor": 12,
+					"saved": [
+						[""],
+						[""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""]
+					]
+				}
+			}
+		}
 	}
 }
