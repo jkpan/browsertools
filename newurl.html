@@ -296,9 +296,11 @@ function displayVideoFile(file) {
   video.hidden = false;
 }
 
+/*
+  url: 
+ */
 window.addEventListener('message', (e) => {
 
-  //console.log('e:' + JSON.stringify(e));
   if (e.data && e.data.trim().length < 2) return;
 
   const jsonData = JSON.parse(e.data);

@@ -15,7 +15,7 @@ function createCanvas() {
 
   document.body.style.display = false;
   document.body.style.margin = 0;
-  document.body.style.backgroundColor = 'green';
+  document.body.style.backgroundColor = 'transparent';
 }
 
 function loadBgImg(event) {
@@ -48,6 +48,12 @@ function createBGHiddenFile() {
   //<input id="img" type="file" hidden="true"/>
 }
 
+/*
+  list : (list)
+  mode : (mode)
+  fontfactor: (fontfactor)
+  master : 1 
+ */
 function json2List(fileContent) {
 
   const jsonData = JSON.parse(fileContent);
@@ -699,7 +705,7 @@ function printPhase() {
 
 
   } else { //mode 1, 3
-    let _x = mode == 1?canvas.width * 0.1:canvas.width * 0.9;
+    let _x = mode == 1?canvas.width * 0.05:canvas.width * 0.95;
     ctx.textAlign = mode == 1?'left':'right';
     for (let i=0;i<subtitles[phase].length;i++) {
       let _y = (i + 1) * gap + fontsize/2;
@@ -761,7 +767,6 @@ function printPhaseChart() {
       ctx.fillStyle = "rgba(0,0,0, 0.2)";
     }
     ctx.fillRect((i-1) * gap + (gap - _gap)/2, y, _gap, _h);
-    //ctx.fillRect((i-1) * gap, y, gap, _h);
   }
 
   ctx.lineWidth = 3;
@@ -797,7 +802,6 @@ function combineKey(e) {
 
 function keyboard(e) {
 
-    
     //alert(e.keyCode);
     if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
       keylock = false;
@@ -885,6 +889,7 @@ function keyboard(e) {
       case 83: displayProgress = displayProgress == 1?0:1; break; //'s'
       case 68: dword = dword == 0?1:0; break; //'D'
       case 67: fontColorType = (fontColorType + 1)%4; break; //'c'
+      case 90: makeTransparent = !makeTransparent; break; //'z'
       //case 67: phase = subtitles.length - 1; line = 0; break; //'c' jump to coda last one phase
       case 80:
           if (animSwh == 0) mode = (mode+1)%4;
@@ -999,7 +1004,14 @@ function keyboard(e) {
 
 }
 
+var makeTransparent = false;
+
 function _layer0() {
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (makeTransparent) return;
+
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1012,22 +1024,6 @@ function _layer0() {
 
     if (img) ctx.drawImage(img,0,0, canvas.width, canvas.height);
     
-    /*
-    if (img) {
-      let ratio = img.width/img.height;
-      let _ratio = canvas.width/canvas.height; 
-      if (ratio > _ratio) {  //camera太寬 canvas 太方
-        ctx.drawImage(img, 0, 0, img.width, img.height,
-                           0, 0, canvas.width, canvas.width * img.height/img.width);
-      } else {
-        ctx.drawImage(img, 0, 0, img.width, img.height,
-                           0, 0, canvas.height * img.width/img.height, canvas.height);
-      }
-    } 
-    */
-
-
-
   } 
 }
 
@@ -1050,8 +1046,6 @@ function _layer1() {
     if ( mode == 1 && displayProgress == 1) 
       printFullChart();
 
-    //if (doblank == 1) return;
-    
     let _scale = mode == 1?0.5:1.0;
     let _gap = 0; //canvas.width/100;
 
@@ -1068,7 +1062,6 @@ function _layer1() {
       ctx.fillStyle = COLOR_PPT_SML;
     }
   
-    //ctx.fillRect(0, 0, canvas.width, canvas.height);
     printPhase();
 
     //if (displayProgress == 1) printPhaseChart();
@@ -1088,7 +1081,6 @@ function _layer2() {
     ctx.fillStyle = COLORS_CK[2];
     let _r = 4;
     ctx.fillRect(0, 0, _r * 2, fontsize/2);
-    console.log('_layer2 funcInterval');
   }
 
   if (helpSwitch == 1) 
@@ -1108,7 +1100,7 @@ function _repaint() {
 
 function userhelp() {
 
-  ctx.fillStyle = COLORS_CK[1];//'green'; //"rgb(0,0,255)"//ctx.fillRect(0, 0, c.width, c.height);
+  ctx.fillStyle = COLORS_CK[1];//'green';
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.font = fontsize/2 + "px Arial";
@@ -1125,30 +1117,14 @@ function userhelp() {
 }
 
 function blank() {
-  /*
-  if (mode == 0) {
-    
-    ctx.fillStyle = 'green'; //"rgb(0,0,255)"
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    return;
-  }
-  */
   animSwh = 0;
   if (animSwh == 1 || mode == 2) {
     //ctx.globalCompositeOperation='difference';
     //ctx.filter = 'blur()';//'invert(1)';
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "rgba(0,0,0, 0.5)"
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     return;
   }
-
-  /* 
-  else {
-    ctx.fillStyle = 'green'; //"rgb(0,0,255)"
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-  */
 }
 
 function toObj() {
@@ -1297,17 +1273,19 @@ function anim_update(elapse) {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (mode == 0) {
-    ctx.fillStyle = COLORS_CK[1];//'green';
-  } else {
-    ctx.fillStyle = 'black';
-  }
+  if (!makeTransparent) {
+    if (mode == 0) {
+      ctx.fillStyle = COLORS_CK[1];//'green';
+    } else {
+      ctx.fillStyle = 'black';
+    }
+    
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  if (img) {
-    ctx.drawImage(img,0,0, canvas.width, canvas.height);
-  } 
+    if (img) {
+      ctx.drawImage(img,0,0, canvas.width, canvas.height);
+    }
+  }
 
   let dt = elapse - pre;
   pre = elapse;

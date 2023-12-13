@@ -21,11 +21,27 @@
             /*width:45%;*/
             border: 1px solid;
             vertical-align: middle;
+            z-index: 10;
           }
+        .fixed-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16em;
+            color: rgba(128, 128, 128, 0.2); /* 文本颜色 */
+            z-index: -1;
+            background-color: transparent; /* 背景色，使用rgba来设置背景色透明度 */
+        }
         </style>
     </head>
 <body>
-<hr size="8" width="100%" color="#ffffff">
+<div class="fixed-text">台北市中心神召會</div>
+<hr size="8" align="left" width="33%" color="#aaaaaa">
 <p></p>
 <p></p>
 <button onclick="location.href='./sub.html'">整合投影</button><p></p>
@@ -41,12 +57,12 @@
     <a href="./camera.html">Camera</a><p></p>
     </blockquote>
   </blockquote>
-<hr size="8" width="100%" color="#ffffff"><p></p>
+<hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
 <a href="./marquee.html">LED Board</a><p></p>
 <a href="./led_generator.html">LED&Pixel產生器</a><p></p>
 <a href="./matrix_psalms.html">詩篇 - matrix effect</a><p></p>
 <a href="./matrix_proverbs.html">箴言 - matrix effect</a><p></p>
-<hr size="8" width="100%" color="#ffffff"><p></p>
+<hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
 <a href="https://sites.google.com/site/instantfunmobile/">阿榮娛樂</a><p></p>
 </body>
 </html>

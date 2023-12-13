@@ -360,12 +360,12 @@ var presetVerse = [
   var hlightStyle = 'rgba(0, 60, 0, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
   
-  var bgStyle_green = bgStyle;//'blue';
+  var bgStyle_green = bgStyle;
   var hlightStyle_green = hlightStyle;//'rgb(0, 0, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_green = COLORS_CK;//["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
-  var bgStyle_blue = 'blue';
-  var hlightStyle_blue = 'rgba(0, 0, 180, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var bgStyle_blue = 'transparent';//'blue';
+  var hlightStyle_blue = 'rgba(100, 100, 100, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_blue = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
   var bgStyle_black = 'black';
@@ -373,7 +373,7 @@ var presetVerse = [
   const COLORS_black = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
   var bgStyle_white = 'white';
-  var hlightStyle_white = 'rgba(200, 200, 200, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_white = 'rgba(100, 100, 100, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_white = ["rgb(255, 255, 255)", "rgb(180, 180, 180)", "rgb(120, 128, 128)", "rgb(80, 80, 80)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
   /////
@@ -456,7 +456,7 @@ var presetVerse = [
   
     document.body.style.display = false;
     document.body.style.margin = 0;
-    //document.body.style.backgroundColor = 'green';
+    document.body.style.backgroundColor = 'transparent';
   }
 
   createCanvas();
@@ -1314,7 +1314,7 @@ function restoreActionFromLocal() {
       
     }
   
-    if (color_selection > 0) { //print saved versus
+    if (color_selection > 0 && color_selection != 4) { //print saved versus
       ctx.textBaseline = 'top';
       let fs = Math.min(fontsize_sml_sml, 24);
       ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
@@ -2152,6 +2152,8 @@ function restoreActionFromLocal() {
       ctx.fillRect(0, 0, canvas.width, canvas.height); 
     }
     */
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
    
     if (color_selection == 0) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2356,6 +2358,11 @@ function restoreActionFromLocal() {
   //canvas init
   init();
   
+  /*
+    color : (color_selection)
+    fontfactor : (fontfactor)
+    saved : (presetVerse)
+   */
   // message 事件
   function receiveMessage(e) {
     if (e.data == 'x') { //alert(e.data);

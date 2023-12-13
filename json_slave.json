@@ -70,5 +70,11 @@
 				}
 			}
 		}
+	}, 
+	"frame_3": {
+		"src": "marquee_v.html",
+		"obj": {
+			"des" : "聖誕午會"
+		}
 	}
 }

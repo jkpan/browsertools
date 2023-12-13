@@ -311,6 +311,11 @@ function loadJson() {
   document.getElementById('jsonfile').click();
 }
 
+/*
+  frame_1:
+    src : 
+    obj 
+*/
 function handleProfile(jsonData) {
   //const fileContent = event.target.result;
   //const jsonData = JSON.parse(fileContent);
@@ -364,7 +369,6 @@ function closeCtrl() {
 var action = '';
 var tab;
 var funcInterval;
-var intervalType = 0;
 var animType = 1;
 
 function setSlideAnim() {
@@ -400,30 +404,30 @@ function startRestoreInterval() {
   }
 
   funcInterval = window.setInterval(restoreTabFromLocal, 500);
-  intervalType = -1;
 
   var b = document.getElementById('oxBtn');
   b.textContent = 'x';
 
-  for(let i=1;i<=tabCount;i++) {
+  /*
+  for(let i=1;i<=tabCount;i++) 
     if (document.getElementById("frame_"+i).contentWindow)
       document.getElementById("frame_"+i).contentWindow.postMessage('x', '/');
-  }
+  */
 
 }
 
 function stopTabInterval() {
   if (funcInterval) clearInterval(funcInterval);
   funcInterval = null;
-  intervalType = 0;
 
   var b = document.getElementById('oxBtn');
   b.textContent = 'o';
 
-  for(let i=1;i<=tabCount;i++) {
+  /*
+  for(let i=1;i<=tabCount;i++) 
     if (document.getElementById("frame_"+i).contentWindow)
       document.getElementById("frame_"+i).contentWindow.postMessage('o', '/');
-  }
+  */
 
 }
 
@@ -585,13 +589,17 @@ div2.addEventListener('mouseleave', e => {
 
 window.addEventListener('message', function(event) {
 
-  console.log('message: ' + event);
-  
-  try {
-    handleProfile(JSON.parse(event.data));
-  } catch (e) {
-    let frame = document.getElementById('frame_' + tab);
-    frame.src = event.data;
+  console.log('message: ' + event.data);
+
+  if (event.data == 'x' || event.data == 'o') {
+    //startRestoreInterval();
+  } else {
+    try {
+      handleProfile(JSON.parse(event.data));
+    } catch (e) {
+      let frame = document.getElementById('frame_' + tab);
+      frame.src = event.data;
+    }
   }
 
 });

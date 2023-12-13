@@ -1,6 +1,6 @@
 <script type="text/javascript" charset="UTF-8">
 
-const APPS = ['sub', 'hymn', 'Bible', 'NIV', 'ppt_1', 'ppt_2', 'ppt_3', 'info', 'effect', 'time'];
+const APPS = ['hymn', 'Bible', 'NIV', 'ppt_1', 'ppt_2', 'ppt_3', 'info', 'effect', 'time', 'dBoard', 'sub'];
 
 const GRID_W = 32;
 const GRID_H = 32;
@@ -666,8 +666,7 @@ class Applet {
       &nbsp;
       <button class="btn" id="editbtn" onclick="switchEditMode()">Edit mode</button>
       <label style="color: #00ee00;">|</label>
-      <button class="btn2" onclick="spot2iframe('sub')">整合</button>
-      <button class="btn2" onclick="spot2iframe('hymn')">歌詞</button><!--button onclick="switchVisible4iframe('hymn')">.</button-->
+      <button class="btn2" onclick="spot2iframe('hymn')">歌詞</button>
       <button class="btn2" onclick="spot2iframe('Bible')">聖經</button>
       <button class="btn2" onclick="spot2iframe('NIV')">NIV</button>
       <button class="btn2" onclick="spot2iframe('ppt_1')">PPT 1</button>
@@ -676,11 +675,24 @@ class Applet {
       <button class="btn2" onclick="spot2iframe('info')">Info</button>
       <button class="btn2" onclick="spot2iframe('effect')">Effect</button>
       <button class="btn2" onclick="spot2iframe('time')">Time</button>
-      <!--button class="btn">|</button-->
-      &nbsp;
       <label style="color: #00ee00;">|</label>
-      &nbsp;
+      <button class="btn2" onclick="spot2iframe('dBoard')">dBoard</button>
+      <button class="btn2" onclick="spot2iframe('sub')">整合</button>
+      <label style="color: #00ee00;">|</label>
       <button class="btn" onclick="colorSwitch()">B/G</button>
+      <input type="color" id="colorPicker" name="colorPicker" hidden="true"/>
+      <script>
+        // 获取colorPicker元素
+        const colorPicker = document.getElementById('colorPicker');
+    
+        // 监听颜色选择器的变化
+        colorPicker.addEventListener('input', function() {
+          const selectedColor = colorPicker.value;
+          let div = document.getElementById("mainDiv");
+          div.style.backgroundColor = selectedColor;
+        });
+
+      </script>
       <button class="btn" onclick="openCtrl()">Ctrl</button>
       <button class="btn" id="oxBtn" onclick="sendOX()">o</button>
       <button class="btn" onclick="openProfile()">#</button>
@@ -790,6 +802,12 @@ function json2Perspective(app) {
 
 }
 
+/*
+  B/G: B b
+  ctrl: 1
+    perspective: true, false
+    posize : [,,,]
+*/
 function handleProfile(fileContent) {
 
   const jsonData = JSON.parse(fileContent);
@@ -839,7 +857,7 @@ function handleProfile(fileContent) {
     openCtrl();
   }
 
-  closeSideMenu();
+  //closeSideMenu();
 
 }
 
@@ -892,9 +910,10 @@ function getElmState() {
   //var array = {id1: 100, id2: 200, "tag with spaces": 300};
   //array.id3 = 400;
   //array["id4"] = 500;
-  let stateArray = {sub:-1, hymn:-1, Bible:-1, NIV:-1,
+  let stateArray = {hymn:-1, Bible:-1, NIV:-1,
                     ppt_1:-1, ppt_2:-1, ppt_3:-1,
-                    info:-1, effect:-1, time:-1};
+                    info:-1, effect:-1, time:-1,
+                    dBoard:-1, sub:-1};
   for (let key in stateArray) {
     for (let i=0;i<applets.length;i++) {
       if (key == applets[i].keyname) {
@@ -913,7 +932,7 @@ var _openWin = null;
 
 function openCtrl() {
   closeCtrl();
-  _openWin = window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=200,height=320,top="+(screen.height-400)+",left="+(screen.width-840));
+  _openWin = window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=300,height=320,top="+(screen.height-400)+",left="+(screen.width-840));
 }
 
 function closeCtrl() {
@@ -925,12 +944,18 @@ function closeCtrl() {
 function colorSwitch() {
   
   let div = document.getElementById("mainDiv");
+  const colorPicker = document.getElementById('colorPicker');
 
-  if (div.style.backgroundColor == 'black') {
-    div.style.backgroundColor = 'rgb(0, 112, 0)';
-  } else {
+  
+  if (div.style.backgroundColor != 'black') {
     div.style.backgroundColor = 'black';
+    colorPicker.hidden = false;
+  } else if (div.style.backgroundColor == 'black') {
+    div.style.backgroundColor = 'rgb(0, 112, 0)';
+    colorPicker.hidden = true;
   }
+  
+  
 
 }
 
@@ -990,6 +1015,13 @@ function _createFrame(keyname) {
   switch(keyname) {
     case 'sub': {
       createFrame(keyname, 'sub.html');
+      let app = new Applet({x:2, y:7, w:16, h:10, keyname:keyname});
+      applets.push(app);
+      app.onTop();
+      return app;
+    } break;
+    case 'dBoard': {
+      createFrame(keyname, 'dashboard.html');
       let app = new Applet({x:2, y:7, w:16, h:10, keyname:keyname});
       applets.push(app);
       app.onTop();
@@ -1121,26 +1153,22 @@ function spot2iframe(keyname) {
     _createFrame(keyname);
     recoverAll();
     anim_update(-1);
-    console.log('00000');
     return;
   }
 
   let app = applets[idx];
   if (app.x == 1 && app.y == 1 && app.w == GRID_W && app.h == GRID_H) {
-    applets[idx].recover();
+    app.onTop();
+    app.recover();
     anim_update(-1);
-    console.log('11111');
     return;
   }
 
-  //keysel = idx;
-  //recoverAll();
   fixAll();
   app.onTop();
   app.enlargeSelf();
-  //applets[idx].elm.focus();
+  applets[idx].elm.focus();
   anim_update(-1);
-  console.log('22222');
 
 }
 

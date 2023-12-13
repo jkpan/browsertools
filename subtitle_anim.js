@@ -507,8 +507,8 @@ function newParticle_casual() {
       update: function (c, _ctx, dt) {
   
         var grd = _ctx.createLinearGradient(0, 0, c.width, c.height);
-        grd.addColorStop(0, 'rgb(200, 128, 0,1.0)');
-        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
+        grd.addColorStop(0, 'rgba(200, 128, 0, 0.8)');
+        grd.addColorStop(1, 'rgba(0,0,0, 0)');
   
         // Fill with gradient
         _ctx.fillStyle = grd;
@@ -601,16 +601,16 @@ function newParticle_casual() {
       update: function (c, _ctx, dt) {
   
         var grd = _ctx.createLinearGradient(0, c.height/2, 0, 0);
-        grd.addColorStop(0, 'rgb(255, 128, 0,1.0)');
-        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
+        grd.addColorStop(0, 'rgba(255, 128, 0,1.0)');
+        grd.addColorStop(1, 'rgba(0,0,0,0)');
   
         // Fill with gradient
         _ctx.fillStyle = grd;
         _ctx.fillRect(0, 0, c.width, c.height/2);
   
         grd = _ctx.createLinearGradient(0, c.height/2, 0, c.height);
-        grd.addColorStop(0, 'rgb(255, 128, 0,1.0)');
-        grd.addColorStop(1, 'rgb(0,0,0,1.0)');
+        grd.addColorStop(0, 'rgba(255, 128, 0,1.0)');
+        grd.addColorStop(1, 'rgba(0,0,0,0)');
   
         // Fill with gradient
         _ctx.fillStyle = grd;
@@ -981,25 +981,25 @@ function newParticle_casual() {
           this.pos.x = c.width / 4;
           this.pos.y = -c.height/10;
           this.a_start = 90;
-          this.range = -30;
+          this.range = -40;
           break;
         case 3:
           this.pos.x = c.width * 0.75;
           this.pos.y = -c.height/10;
           this.a_start = 90;
-          this.range = 30;
+          this.range = 40;
           break;
         case 4:
           this.pos.x = c.width/3;
           this.pos.y = c.height * 1.1;
           this.a_start = -90;
-          this.range = 20;
+          this.range = 40;
           break;
         case 5:
           this.pos.x = c.width * 2 / 3;
           this.pos.y = c.height * 1.1;
           this.a_start = -90;
-          this.range = -20;
+          this.range = -40;
           break;
       }
       //console.log(dt);
