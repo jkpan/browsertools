@@ -9,6 +9,7 @@ var criteria = dot_none;// * 2 / 3;//dot_none/2;
 var _r = 0;//dot_r;// * Math.random();
 var _g = 0;//dot_g;// * Math.random();
 var _b = 0;//dot_b;// * Math.random();
+var _a = 0;
 
 //verticle
 var jumpLine = 0;//(side + dots) * fsize * 4;
@@ -63,11 +64,11 @@ function initLED(x, y, w, h) {
 }
 
 
-function setPixColor(data, idx, r, g, b) {
+function setPixColor(data, idx, r, g, b, a) {
   data[idx]     = r;
   data[idx + 1] = g;
   data[idx + 2] = b;
-  data[idx + 3] = 255;
+  data[idx + 3] = a;
 }
 
 function generateMask(w, h, s, d) {
@@ -225,6 +226,7 @@ function computeAverage(data, idx, _size) {
   _r = 0;
   _g = 0;
   _b = 0;
+  _a = 0;
 
   /*
   if (_size > 2) {
@@ -239,6 +241,7 @@ function computeAverage(data, idx, _size) {
       _r += data[__idx];
       _g += data[__idx+1];
       _b += data[__idx+2];
+      _a += data[__idx+3];
     }
   }  
 
@@ -251,6 +254,7 @@ function computeAverage(data, idx, _size) {
   _r = _r/(_size * _size);
   _g = _g/(_size * _size);
   _b = _b/(_size * _size);
+  _a = _a/(_size * _size);
 
   filter();
 
@@ -263,7 +267,7 @@ function computeAverage(data, idx, _size) {
   for (let i = 0;i<_size;i++) {
     for (let j = 0;j<_size;j++) {
       let __idx = idx + i * gapP + j * gapL;
-      setPixColor(data, __idx, _r, _g, _b);
+      setPixColor(data, __idx, _r, _g, _b, _a);
     }
   }
 
@@ -295,13 +299,13 @@ function setPix4Still_3(data, k) {
   _b = data[k+2];
 
   //左上
-  setPixColor(data, k - gapP - gapL, _r * 2/3, _g * 2/3, _b * 2/3);
+  setPixColor(data, k - gapP - gapL, _r * 2/3, _g * 2/3, _b * 2/3, _a);
   //右上
-  setPixColor(data, k + gapP - gapL, _r * 2/3, _g * 2/3, _b * 2/3);
+  setPixColor(data, k + gapP - gapL, _r * 2/3, _g * 2/3, _b * 2/3, _a);
   //右下
-  setPixColor(data, k + gapP + gapL, _r * 2/3, _g * 2/3, _b * 2/3);
+  setPixColor(data, k + gapP + gapL, _r * 2/3, _g * 2/3, _b * 2/3, _a);
   //左下
-  setPixColor(data, k - gapP + gapL, _r * 2/3, _g * 2/3, _b * 2/3);
+  setPixColor(data, k - gapP + gapL, _r * 2/3, _g * 2/3, _b * 2/3, _a);
 
 }
 
@@ -311,14 +315,14 @@ function setPix4Still_4(data, k) {
   computeAverage(data, _k, 4);
   if (side == 0 || !makeRound) return;
 
-  setPixColor(data, k - gapP - gapL, 0, 0, 0);//左上
+  setPixColor(data, k - gapP - gapL, 0, 0, 0, _a);//左上
 
   _k = k + gapP + gapL + gapP + gapL;
   setPixColor(data, _k, 0, 0, 0);
 
-  setPixColor(data, _k - gapL - gapL - gapL, 0, 0, 0);
+  setPixColor(data, _k - gapL - gapL - gapL, 0, 0, 0, _a);
 
-  setPixColor(data, _k - gapP - gapP - gapP, 0, 0, 0);
+  setPixColor(data, _k - gapP - gapP - gapP, 0, 0, 0, _a);
 
 }
 
@@ -329,13 +333,13 @@ function setPix4Still_5(data, k) {
   computeAverage(data, _k, 5);
   if (side == 0 || !makeRound) return;
 
-  setPixColor(data, _k, 0, 0, 0);
+  setPixColor(data, _k, 0, 0, 0, _a);
     
-  setPixColor(data, _k + 4 * gapL, 0, 0, 0);
+  setPixColor(data, _k + 4 * gapL, 0, 0, 0, _a);
     
-  setPixColor(data, _k + 4 * gapP, 0, 0, 0);
+  setPixColor(data, _k + 4 * gapP, 0, 0, 0, _a);
     
-  setPixColor(data, _k + 4 * gapL + 4 * gapP, 0, 0, 0);
+  setPixColor(data, _k + 4 * gapL + 4 * gapP, 0, 0, 0, _a);
   
 }
 
@@ -345,13 +349,13 @@ function setPix4Still_6(data, k) {
   computeAverage(data, _k, 6);
   if (side == 0 || !makeRound) return;
 
-  setPixColor(data, _k, 0, 0, 0);
+  setPixColor(data, _k, 0, 0, 0, _a);
 
-  setPixColor(data, _k + 5 * gapL, 0, 0, 0);
+  setPixColor(data, _k + 5 * gapL, 0, 0, 0, _a);
 
-  setPixColor(data, _k + 5 * gapP, 0, 0, 0);
+  setPixColor(data, _k + 5 * gapP, 0, 0, 0, _a);
 
-  setPixColor(data, _k + 5 * gapL + 5 * gapP, 0, 0, 0);
+  setPixColor(data, _k + 5 * gapL + 5 * gapP, 0, 0, 0, _a);
 
 }
 
@@ -365,17 +369,17 @@ function setPix4Still_7(data, k) {
   _g = data[k+1];
   _b = data[k+2];
 
-  setPixColor(data, _k, 0, 0, 0);
-    setPixColor(data, _k + gapL, _r/2, _g/2, _b/2);
-    setPixColor(data, _k + gapP, _r/2, _g/2, _b/2);
-  setPixColor(data, _k + 6 * gapL, 0, 0, 0);
-    setPixColor(data, _k + 5 * gapL, _r/2, _g/2, _b/2);
-    setPixColor(data, _k + 6 * gapL + gapP, _r/2, _g/2, _b/2);
-  setPixColor(data, _k + 6 * gapP, 0, 0, 0);
-    setPixColor(data, _k + 5 * gapP, _r/2, _g/2, _b/2);
-    setPixColor(data, _k + 6 * gapP + gapL, _r/2, _g/2, _b/2);
-  setPixColor(data, _k + 6 * gapL + 6 * gapP, 0, 0, 0);
-    setPixColor(data, _k + 5 * gapL + 6 * gapP, _r/2, _g/2, _b/2);
-    setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2);
+  setPixColor(data, _k, 0, 0, 0, _a);
+    setPixColor(data, _k + gapL, _r/2, _g/2, _b/2, _a);
+    setPixColor(data, _k + gapP, _r/2, _g/2, _b/2, _a);
+  setPixColor(data, _k + 6 * gapL, 0, 0, 0, _a);
+    setPixColor(data, _k + 5 * gapL, _r/2, _g/2, _b/2, _a);
+    setPixColor(data, _k + 6 * gapL + gapP, _r/2, _g/2, _b/2, _a);
+  setPixColor(data, _k + 6 * gapP, 0, 0, 0, _a);
+    setPixColor(data, _k + 5 * gapP, _r/2, _g/2, _b/2, _a);
+    setPixColor(data, _k + 6 * gapP + gapL, _r/2, _g/2, _b/2, _a);
+  setPixColor(data, _k + 6 * gapL + 6 * gapP, 0, 0, 0, _a);
+    setPixColor(data, _k + 5 * gapL + 6 * gapP, _r/2, _g/2, _b/2, _a);
+    setPixColor(data, _k + 6 * gapL + 5 * gapP, _r/2, _g/2, _b/2, _a);
 
 }

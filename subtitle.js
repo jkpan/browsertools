@@ -1,24 +1,45 @@
 
-//Complete Html Page
-function createCanvas() {
-  
-  let _canvas = document.createElement('canvas');
-  _canvas.id = "canvas";
-  _canvas.width = 100;
-  _canvas.height = 100;
-  //_canvas.style.zIndex = 8;
-  //_canvas.style.position = "absolute";
-  //_canvas.style.border = "1px solid";
+function dropHandler(event) {
 
-  let body = document.getElementsByTagName("body")[0];
-  body.appendChild(_canvas);
+  event.preventDefault();
 
-  document.body.style.display = false;
-  document.body.style.margin = 0;
-  document.body.style.backgroundColor = 'transparent';
+  // 檢查是否有拖拉的檔案
+  if (event.dataTransfer.items) {
+      // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
+      for (var i = 0; i < event.dataTransfer.items.length; i++) {
+          if (event.dataTransfer.items[i].kind === 'file') {
+              var file = event.dataTransfer.items[i].getAsFile();
+              if (file.type.startsWith('image/')) {
+                
+                //////loadBgImg(event);
+                img = null;
+                _repaint();
+
+                var reader = new FileReader();
+                 // 读取文件内容
+                reader.onload = function (event) {
+                  var _img = new Image();
+                  _img.onload = function () {
+                    img = _img;
+                    _repaint(); 
+                  };
+                  _img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+                //// 
+
+              }
+          }
+      }
+  }
+}
+
+function dragOverHandler(event) {
+  event.preventDefault();
 }
 
 function loadBgImg(event) {
+  //console.log(event);
   var files = event.target.files;
   var file;
   if (files && files.length > 0) {
@@ -35,6 +56,31 @@ function loadBgImg(event) {
     }
   }
 }
+
+//Complete Html Page
+function createCanvas() {
+  
+  let _canvas = document.createElement('canvas');
+  _canvas.id = "canvas";
+  _canvas.width = 100;
+  _canvas.height = 100;
+  _canvas.setAttribute('ondrop', 'dropHandler(event)');
+  _canvas.setAttribute('ondragover', 'dragOverHandler(event)');
+  //_canvas.style.zIndex = 8;
+  //_canvas.style.position = "absolute";
+  //_canvas.style.border = "1px solid";
+
+  let body = document.getElementsByTagName("body")[0];
+  body.appendChild(_canvas);
+
+  document.body.style.display = false;
+  document.body.style.margin = 0;
+  document.body.style.backgroundColor = 'transparent';
+
+  
+}
+
+
 
 function createBGHiddenFile() {
   let _file = document.createElement('input');

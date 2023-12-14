@@ -24,8 +24,11 @@
       </style>
     </head>
     <body>
-                  
         <div id="controlWin" class="controlPart">
+            <button onclick="reca()">reca</button>
+            <button onclick="inva()">inva</button>
+            <button onclick="shwa()">shwa</button>
+            <hr size="4" width="100%" color="#007000">
             <button id="hymn" onclick="controlParent('hymn')">歌詞</button>
                 <button id="hymn_v" onclick="switchVisible('hymn')">V</button>
                 <button id="hymn_p" onclick="perspective('hymn')">P</button>
@@ -62,16 +65,16 @@
                 <button id="time_v" onclick="switchVisible('time')">V</button>
                 <button id="time_p" onclick="perspective('time')">P</button>
                 <button onclick="closeApp('time')">x</button>
-        <hr size="8" width="100%" color="#007000">
-            <button id="sub" onclick="controlParent('dBoard')">dboard</button>
-                <button id="sub_v" onclick="switchVisible('dBoard')">V</button>
-                <button id="sub_p" onclick="perspective('dBoard')">P</button>
+        <hr size="4" width="100%" color="#007000">
+            <button id="dBoard" onclick="controlParent('dBoard')">dboard</button>
+                <button id="dBoard_v" onclick="switchVisible('dBoard')">V</button>
+                <button id="dBoard_p" onclick="perspective('dBoard')">P</button>
                 <button onclick="closeApp('dBoard')">x</button>
             <button id="sub" onclick="controlParent('sub')">整合</button>
                 <button id="sub_v" onclick="switchVisible('sub')">V</button>
                 <button id="sub_p" onclick="perspective('sub')">P</button>
                 <button onclick="closeApp('sub')">x</button>
-        <hr size="8" width="100%" color="#007000">
+        <hr size="4" width="100%" color="#007000">
             <button onclick="reloadState()">reload</button>
         </div>
       
@@ -79,6 +82,21 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+function reca() {
+    window.opener.recoverAll();
+    reloadState();
+}
+function inva() {
+    window.opener.recoverAll();
+    window.opener.hideAll();
+    reloadState();
+}
+function shwa() {
+    window.opener.recoverAll();
+    window.opener.showAll();
+    reloadState();
+}
 
 function closeApp(keyname) {
     window.opener.closeApp(keyname);
@@ -94,16 +112,16 @@ function reloadState() {
         let b_v = document.getElementById(key + '_v');
         switch(stateArray[key]) {
             case -1:
-                b.style.background = "transparent";
-                b_v.style.background = "transparent";
+                b.style.backgroundColor = "transparent";
+                b_v.style.backgroundColor = "transparent";
                 break;
             case 0:
-                b.style.background = "rgb(0,0,0)";
-                b_v.style.background = "transparent";
+                b.style.backgroundColor = "rgb(0,0,0)";
+                b_v.style.backgroundColor = "transparent";
                 break;
             case 1:
-                b.style.background = "rgb(0,0,0)";
-                b_v.style.background = "rgb(0,0,0)";
+                b.style.backgroundColor = "rgb(0,0,0)";
+                b_v.style.backgroundColor = "rgb(0,0,0)";
                 break;
         }
     }
