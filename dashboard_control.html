@@ -26,7 +26,7 @@
     <body>
         <div id="controlWin" class="controlPart">
             <button onclick="reca()">reca</button>
-            <button onclick="inva()">inva</button>
+            <button onclick="hida()">hida</button>
             <button onclick="shwa()">shwa</button>
             <hr size="4" width="100%" color="#007000">
             <button id="hymn" onclick="controlParent('hymn')">歌詞</button>
@@ -66,11 +66,11 @@
                 <button id="time_p" onclick="perspective('time')">P</button>
                 <button onclick="closeApp('time')">x</button>
         <hr size="4" width="100%" color="#007000">
-            <button id="dBoard" onclick="controlParent('dBoard')">dboard</button>
+            <button id="dBoard" onclick="controlParent('dBoard')">客制</button>
                 <button id="dBoard_v" onclick="switchVisible('dBoard')">V</button>
                 <button id="dBoard_p" onclick="perspective('dBoard')">P</button>
                 <button onclick="closeApp('dBoard')">x</button>
-            <button id="sub" onclick="controlParent('sub')">整合</button>
+            <button id="sub" onclick="controlParent('sub')">頁籤</button>
                 <button id="sub_v" onclick="switchVisible('sub')">V</button>
                 <button id="sub_p" onclick="perspective('sub')">P</button>
                 <button onclick="closeApp('sub')">x</button>
@@ -87,7 +87,7 @@ function reca() {
     window.opener.recoverAll();
     reloadState();
 }
-function inva() {
+function hida() {
     window.opener.recoverAll();
     window.opener.hideAll();
     reloadState();
