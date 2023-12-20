@@ -572,25 +572,25 @@ class SpotLightObj {
         this.pos.x = c.width / 4;
         this.pos.y = -c.height/10;
         this.a_start = 90;
-        this.range = -30;
+        this.range = -40;
         break;
       case 3:
         this.pos.x = c.width * 0.75;
         this.pos.y = -c.height/10;
         this.a_start = 90;
-        this.range = 30;
+        this.range = 40;
         break;
       case 4:
         this.pos.x = c.width/3;
         this.pos.y = c.height * 1.1;
         this.a_start = -90;
-        this.range = 20;
+        this.range = 40;
         break;
       case 5:
         this.pos.x = c.width * 2 / 3;
         this.pos.y = c.height * 1.1;
         this.a_start = -90;
-        this.range = -20;
+        this.range = -40;
         break;
     }
     //console.log(dt);
@@ -615,7 +615,7 @@ class SpotLightObj {
     let p2 = {x:end_pos.x - v.y * v_norm,
               y:end_pos.y + v.x * v_norm};
 
-    
+
     // 绘制三角形并应用渐变
     _ctx.beginPath();
     _ctx.moveTo(this.pos.x, this.pos.y);    // 起始点
@@ -633,7 +633,7 @@ class SpotLightObj {
 
     _ctx.fillStyle = gradient;  // 设置填充样式为渐变
     _ctx.fill();               // 填充三角形
-    
+
   }
 
 }

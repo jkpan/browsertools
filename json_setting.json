@@ -2,7 +2,7 @@
 	"frame_1": {
 		"src": "./dashboard.html",
 		"obj": {
-			"ppt_1": {
+			"url_1": {
 				"posize": [
 					2,
 					19,
@@ -14,7 +14,7 @@
 					"url": "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
 				}
 			},
-			"ppt_2": {
+			"url_2": {
 				"posize": [
 					20,
 					20,
@@ -107,7 +107,7 @@
 					]
 				}
 			},
-			"ppt_1": {
+			"url_1": {
 				"posize": [
 					2,
 					19,

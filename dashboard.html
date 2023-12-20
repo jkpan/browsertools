@@ -1,6 +1,6 @@
 <script type="text/javascript" charset="UTF-8">
 
-const APPS = ['hymn', 'Bible', 'NIV', 'ppt_1', 'ppt_2', 'ppt_3', 'info', 'effect', 'time', 'dBoard', 'sub'];
+const APPS = ['hymn', 'Bible', 'NIV', 'url_1', 'url_2', 'file_1', 'file_2', 'info', 'effect', 'time', 'dBoard', 'sub'];
 
 const GRID_W = 32;
 const GRID_H = 32;
@@ -638,9 +638,10 @@ class Applet {
       <button class="btn2" onclick="spot2iframe('hymn')">歌詞</button>
       <button class="btn2" onclick="spot2iframe('Bible')">聖經</button>
       <button class="btn2" onclick="spot2iframe('NIV')">NIV</button>
-      <button class="btn2" onclick="spot2iframe('ppt_1')">PPT 1</button>
-      <button class="btn2" onclick="spot2iframe('ppt_2')">PPT 2</button>
-      <button class="btn2" onclick="spot2iframe('ppt_3')">PPT 3</button>
+      <button class="btn2" onclick="spot2iframe('url_1')">URL 1</button>
+      <button class="btn2" onclick="spot2iframe('url_2')">URL 2</button>
+      <button class="btn2" onclick="spot2iframe('file_1')">檔案1</button>
+      <button class="btn2" onclick="spot2iframe('file_2')">檔案2</button>
       <button class="btn2" onclick="spot2iframe('info')">Info</button>
       <button class="btn2" onclick="spot2iframe('effect')">Effect</button>
       <button class="btn2" onclick="spot2iframe('time')">Time</button>
@@ -884,7 +885,7 @@ function getElmState() {
   //array.id3 = 400;
   //array["id4"] = 500;
   let stateArray = {hymn:-1, Bible:-1, NIV:-1,
-                    ppt_1:-1, ppt_2:-1, ppt_3:-1,
+                    url_1:-1, url_2:-1, file_1:-1, file_2:-1, 
                     info:-1, effect:-1, time:-1,
                     dBoard:-1, sub:-1};
   for (let key in stateArray) {
@@ -1033,10 +1034,17 @@ function _createFrame(keyname) {
       app.onTop();
       return app;
     } break;
-    case 'ppt_1': 
-    case 'ppt_2': 
-    case 'ppt_3': {
+    case 'url_1': 
+    case 'url_2': {
       createFrame(keyname, 'newurl.html');
+      let app = new Applet({x:6, y:1, w:10, h:16, keyname:keyname});
+      applets.push(app);
+      app.onTop();
+      return app;
+    } break;
+    case 'file_1':
+    case 'file_2': {
+      createFrame(keyname, 'newfile.html');
       let app = new Applet({x:6, y:1, w:10, h:16, keyname:keyname});
       applets.push(app);
       app.onTop();
