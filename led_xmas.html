@@ -25,10 +25,14 @@
 
 function _initData() {
 
-    side = 4;
-    dots = 6;
+    let _all = Math.max(7, Math.floor(window.innerHeight/50));
+    dots = Math.ceil(_all * 0.66);
+    side = _all - dots;
     
-    makeRound = true;
+    //side = 5;
+    //dots = 10; //alert('' + window.innerWidth + ' side:' + side +', dots:' + dots);
+    
+    makeRound = false;
 
     swing = 1;
     swing1 = 0;
@@ -44,7 +48,7 @@ function _initData() {
 
     subtitle[1] = ["🌟聖誕🔔快樂🎄"];
     subtitle[2] = ["在至高之處榮耀歸與神！在地上平安歸與他所喜悅的人"];
-    
+        
     init();
     initAnim();
  
@@ -54,8 +58,8 @@ function _initData() {
 _initData();
 
 window.addEventListener('resize', function() {
-    init();
-    initAnim();
+    //init(); //initAnim();
+    _initData();
 });
 
 function getTouchPos(canvasDom, touchEvent) {

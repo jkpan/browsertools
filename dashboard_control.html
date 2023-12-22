@@ -28,58 +28,72 @@
             <button onclick="reca()">reca</button>
             <button onclick="hida()">hida</button>
             <button onclick="shwa()">shwa</button>
+            <button onclick="reloadState()">reld</button>
+            <hr size="4" width="100%" color="#007000">
+        <button onclick="controlParent('hymn')">歌詞</button>
+        <button onclick="controlParent('Bible')">聖經</button>
+        <button onclick="controlParent('NIV')">NIV</button>
+        <button onclick="controlParent('url_1')">URL 1</button>
+        <button onclick="controlParent('url_2')">URL 2</button>
+        <button onclick="controlParent('file_1')">檔案1</button>
+        <button onclick="controlParent('file_2')">檔案2</button>
+        <button onclick="controlParent('info')">Info</button>
+        <button onclick="controlParent('effect')">Effect</button>
+        <button onclick="controlParent('time')">Time</button>
+        <button onclick="controlParent('dBoard')">客制</button>
+        <button onclick="controlParent('sub')">頁籤</button>
+            
             <hr size="4" width="100%" color="#007000">
             <button id="hymn" onclick="controlParent('hymn')">歌詞</button>
                 <button id="hymn_v" onclick="switchVisible('hymn')">V</button>
                 <button id="hymn_p" onclick="perspective('hymn')">P</button>
-                <button onclick="closeApp('hymn')">x</button>
+                <button id="hymn_x" onclick="closeApp('hymn')">x</button>
             <button id="Bible" onclick="controlParent('Bible')">聖經</button>
                 <button id="Bible_v" onclick="switchVisible('Bible')">V</button>
                 <button id="Bible_p" onclick="perspective('Bible')">P</button>
-                <button onclick="closeApp('Bible')">x</button>
+                <button id="Bible_x" onclick="closeApp('Bible')">x</button>
             <button id="NIV" onclick="controlParent('NIV')">NIV</button>
                 <button id="NIV_v" onclick="switchVisible('NIV')">V</button>
                 <button id="NIV_p" onclick="perspective('NIV')">P</button>
-                <button onclick="closeApp('NIV')">x</button>
+                <button id="NIV_x" onclick="closeApp('NIV')">x</button>
             <button id="url_1" onclick="controlParent('url_1')">URL 1</button>
                 <button id="url_1_v" onclick="switchVisible('url_1')">V</button>
                 <button id="url_1_p" onclick="perspective('url_1')">P</button>
-                <button onclick="closeApp('url_1')">x</button>
+                <button id="url_1_x" onclick="closeApp('url_1')">x</button>
             <button id="url_2" onclick="controlParent('url_2')">URL 2</button>
                 <button id="url_2_v" onclick="switchVisible('url_2')">V</button>
                 <button id="url_2_p" onclick="perspective('url_2')">P</button>
-                <button onclick="closeApp('url_2')">x</button>
+                <button id="url_2_x" onclick="closeApp('url_2')">x</button>
             <button id="file_1" onclick="controlParent('file_1')">檔案1</button>
                 <button id="file_1_v" onclick="switchVisible('file_1')">V</button>
                 <button id="file_1_p" onclick="perspective('file_1')">P</button>
-                <button onclick="closeApp('file_1')">x</button>
+                <button id="file_1_x" onclick="closeApp('file_1')">x</button>
             <button id="file_2" onclick="controlParent('file_2')">檔案2</button>
                 <button id="file_2_v" onclick="switchVisible('file_2')">V</button>
                 <button id="file_2_p" onclick="perspective('file_2')">P</button>
-                <button onclick="closeApp('file_2')">x</button>
+                <button id="file_2_x" onclick="closeApp('file_2')">x</button>
             <button id="info" onclick="controlParent('info')">Info</button>
                 <button id="info_v" onclick="switchVisible('info')">V</button>
                 <button id="info_p" onclick="perspective('info')">P</button>
-                <button onclick="closeApp('info')">x</button>
+                <button id="info_x" onclick="closeApp('info')">x</button>
             <button id="effect" onclick="controlParent('effect')">Effect</button>
                 <button id="effect_v" onclick="switchVisible('effect')">V</button>
                 <button id="effect_p" onclick="perspective('effect')">P</button>
-                <button onclick="closeApp('effect')">x</button>
+                <button id="effect_x" onclick="closeApp('effect')">x</button>
             <button id="time" onclick="controlParent('time')">Time</button>
                 <button id="time_v" onclick="switchVisible('time')">V</button>
                 <button id="time_p" onclick="perspective('time')">P</button>
-                <button onclick="closeApp('time')">x</button>
+                <button id="time_x" onclick="closeApp('time')">x</button>
         <hr size="4" width="100%" color="#007000">
             <button id="dBoard" onclick="controlParent('dBoard')">客制</button>
                 <button id="dBoard_v" onclick="switchVisible('dBoard')">V</button>
                 <button id="dBoard_p" onclick="perspective('dBoard')">P</button>
-                <button onclick="closeApp('dBoard')">x</button>
+                <button id="dBoard_x" onclick="closeApp('dBoard')">x</button>
             <button id="sub" onclick="controlParent('sub')">頁籤</button>
                 <button id="sub_v" onclick="switchVisible('sub')">V</button>
                 <button id="sub_p" onclick="perspective('sub')">P</button>
-                <button onclick="closeApp('sub')">x</button>
-        <hr size="4" width="100%" color="#007000">
-            <button onclick="reloadState()">reload</button>
+                <button id="sub_x" onclick="closeApp('sub')">x</button>
+            
         </div>
       
     </body>
@@ -114,10 +128,20 @@ function reloadState() {
         console.log(key);
         let b = document.getElementById(key);
         let b_v = document.getElementById(key + '_v');
+        let b_p = document.getElementById(key + '_p');
+        let b_x = document.getElementById(key + '_x');
+        b.hidden = false;
+        b_v.hidden = false;
+        b_p.hidden = false;
+        b_x.hidden = false;
         switch(stateArray[key]) {
             case -1:
                 b.style.backgroundColor = "transparent";
                 b_v.style.backgroundColor = "transparent";
+                b.hidden = true;
+                b_v.hidden = true;
+                b_p.hidden = true;
+                b_x.hidden = true;
                 break;
             case 0:
                 b.style.backgroundColor = "rgb(0,0,0)";

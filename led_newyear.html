@@ -27,10 +27,14 @@
 
 function _initData() {
 
-    side = 3;
-    dots = 4;
+    let _all = Math.max(7, Math.floor(window.innerHeight/50));
+    dots = Math.ceil(_all * 0.66);
+    side = _all - dots;
+
+    //side = 3;
+    //dots = 4;
     
-    makeRound = true;
+    makeRound = false;
 
     swing = 1;
     swing1 = 0;
@@ -44,7 +48,7 @@ function _initData() {
     animIdx = 7;//parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
     bgIdx = 0;
 
-    subtitle[1] = ["癸卯🐰HappyNewYear🎉"];
+    subtitle[1] = [" 🦖新年快樂2024🎉 "];
     subtitle[2] = ["從歲首到年終 耶和華 你神的眼目時常看顧那地"];//[申11:12]
       
     init();
@@ -56,8 +60,8 @@ function _initData() {
 _initData();
 
 window.addEventListener('resize', function() {
-    init();
-    initAnim();
+    //init();//initAnim();
+    _initData();
 });
 
 function getTouchPos(canvasDom, touchEvent) {

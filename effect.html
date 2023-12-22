@@ -6,7 +6,7 @@
       body {
         margin: 0px;
         height: 100%;
-        background-color:rgb(112, 112, 112);
+        background-color:transparent;
       }
       main {
         position: fixed;
@@ -32,10 +32,9 @@ var ctx;
 
 function init() {
     canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
-    
+    ctx = canvas.getContext("2d");
 }
 
 ////
@@ -101,22 +100,25 @@ function canvasResize() {
 
 function _update() {
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  if (!makeTransparent) {
     ctx.fillStyle = 'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }  
 
-    if (funcInterval) {
-      ctx.fillStyle = 'rgb(0,255,0)';
-      let _r = 8;
-      ctx.fillRect(0, 0, _r * 2, _r * 2);
-    }
+  if (funcInterval) {
+    ctx.fillStyle = 'rgb(0,255,0)';
+    let _r = 8;
+    ctx.fillRect(0, 0, _r * 2, _r * 2);
+  }
 
 }
 
 var pre = 0;
 var particles = [];
 var animSwh = 0;
+var makeTransparent = false;
 
 function keyboard(e) {
 
@@ -217,10 +219,12 @@ function keyboard(e) {
             if (e.keyCode == 72) particles[len].initial(canvas, '🚌');
             initAnim(1);
             break;
-        case 90: //'Z' 
-            particles[len] = animframe();
-            particles[len].initial(canvas, ['🌏', '🌍', '🌎']);
-            initAnim(1);
+        case 90: //'Z'  
+            makeTransparent = !makeTransparent;
+            _update();
+            //particles[len] = animframe();
+            //particles[len].initial(canvas, ['🌏', '🌍', '🌎']);
+            //initAnim(1);
             break;
         case 88: //'X'
             particles[len] = animframe();
@@ -234,9 +238,11 @@ function keyboard(e) {
             break;
         case 86:
             particles[len] = animframe();
-            particles[len].initial(canvas, ['⚽', '🏀', '⚾', '🥎', '🎾', '🏐', '🎱', '🏈']);
+            particles[len].initial(canvas, ['🌏', '🌍', '🌎']);//['⚽', '🏀', '⚾', '🥎', '🎾', '🏐', '🎱', '🏈']);
             initAnim(1);
             break;
+        //case 32: // 'space'
+            
     }
     if (!funcInterval) 
       saveAction2Local(e.keyCode);
