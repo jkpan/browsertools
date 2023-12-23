@@ -14,10 +14,16 @@
 						"讚美之泉41", 
 						"讚美之泉24",
 						"救恩274",
+
+						"spec1",
 						
+                        
 						"主禱文",
 						"使徒信經",
-						"救恩300"
+						"救恩300",
+
+						"spec2",
+						"救恩276"
 					]
 				}
 			},
@@ -44,16 +50,10 @@
 			"ctrl" : 1
 		}
 	},
-	"frame_2": {
-		"src": "./newurl.html",
-		"obj": {
-			
-		}
-	},
 	"frame_3": {
 		"src": "./newurl.html",
 		"obj": {
-			"url" : "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+			"url" : "https://www.youtube.com/embed/ZYhbnGY90pE"
 		}
 	}
 	
