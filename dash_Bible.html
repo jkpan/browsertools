@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+  <style>
+  body {
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(50, 50, 50);
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .wrapper {
+    display: grid;
+    gap: 0px;
+    
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+    width: 100%;
+    height: 100vh;
+  }
+  .full {
+    
+    grid-column: 1 / 33;
+    grid-row: 1 / 33;
+
+    user-select: none;
+
+    border-radius: 10px;
+
+    /*transform-origin: left center;*/
+
+  }
+  .ctrlfull {
+    
+    grid-column: 1 / 33;
+    grid-row: 1 / 33;
+
+    user-select: none;
+    z-index: 90;
+
+  }
+  </style>
+</head>
+<body>
+
+<div id="mainDiv" class="wrapper" style="background-color: #007000; opacity: 1.0;">
+
+    <!--div id="content_control" class="ctrlfull" style="background-color: rgba(0, 0, 0, 0);margin: 0px;opacity: 0.5;">
+      <canvas id="canvas" width="100" height="100"></canvas>
+    </div-->
+    
+</div>
+
+</body>
+</html>
+<script type="text/javascript" src="dashboard.js" charset="UTF-8"></script>
+<script>
+
+    preload('./json/dash_Bible.json');
+
+</script>
