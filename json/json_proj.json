@@ -32,7 +32,8 @@
 				"posize": [2, 18, 9, 14],
 				"perspective": false,
 				"obj": {
-					"url": "https://docs.google.com/presentation/d/e/2PACX-1vTJ0OjsRkfknb4ggMGfe-sA3lwq-LgM0Gx2ZHbey-Uedw_P_oR0nKp8kUPiE-83pQ/embed?start=false&loop=false&delayms=3000"
+					"url": "",
+					"trigger": false
 				}
 			},
 			"B/G": "B",
@@ -42,7 +43,8 @@
 	"frame_2": {
 		"src": "./newurl.html",
 		"obj": {
-			"url" : "https://www.youtube.com/embed/MNtQevTHpGY"
+			"url" : "https://www.youtube.com/embed/MNtQevTHpGY",
+			"trigger": false
 		}
 	},
 	"frame_7": {

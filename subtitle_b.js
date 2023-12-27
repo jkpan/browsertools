@@ -2362,6 +2362,7 @@ function restoreActionFromLocal() {
     color : (color_selection)
     fontfactor : (fontfactor)
     saved : (presetVerse)
+    syncType : sync_type
    */
   // message 事件
   function receiveMessage(e) {
@@ -2379,6 +2380,10 @@ function restoreActionFromLocal() {
       }
       if (jsonData.fontfactor) 
         setFontFactor(jsonData.fontfactor);
+      if (jsonData.syncType) {
+        sync_type = jsonData.syncType;
+        synctrls();
+      }
 
       if (jsonData.saved && jsonData.saved.length > 0) {
         for (let i=0;i<jsonData.saved.length;i++) {
@@ -2819,6 +2824,7 @@ function restoreActionFromLocal() {
     obj['color'] = color_selection;
     obj['fontfactor'] = fontfactor;
     obj['saved'] = presetVerse;
+    obj['syncType'] = sync_type;
     return obj;
   }
 

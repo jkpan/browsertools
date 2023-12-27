@@ -196,6 +196,7 @@ function googleSlidesRemoveBar() {
 
 /*
   url: 
+  trigger:
  */
 window.addEventListener('message', (e) => {
 
@@ -206,7 +207,8 @@ window.addEventListener('message', (e) => {
   if (!jsonData.url) return;
   if (jsonData.url.trim().length == 0) return;
   document.getElementById("ppt_url").value = jsonData.url.trim();
-  //urlGo();
+  if (jsonData.trigger) 
+    urlGo();
 
 }, false);
 

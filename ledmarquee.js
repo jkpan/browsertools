@@ -3,9 +3,9 @@ var subtitle = [ [''],
                  ['']];
     
 var fsize = 128;
-var fontFamily = "標楷體";
+var fontFamily = 'Monospace';//"標楷體";
 
-var FONT = fsize + "px 標楷體";//黑體-繁";//宋體-繁";
+var FONT = fsize + "px " + fontFamily;//標楷體";//黑體-繁";//宋體-繁";
 
 var speed = 160;
 var speed1 = 160;
