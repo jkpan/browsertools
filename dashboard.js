@@ -1047,162 +1047,7 @@ function downloadExpJson() {
       div.style.opacity = '0.1';
     }
   }
-  
-  /*
-  let div = document.getElementById("controlDiv");
-  div.addEventListener('mouseenter', e => { 
-    showCtrlPane(true);
-  });
-  div.addEventListener('mouseleave', e => { 
-    showCtrlPane(false);
-  });
-  */
-  
-  window.addEventListener('beforeunload', function (e) {
-    closeCtrl();
-  });
-  
-  canvas.addEventListener('mousemove', e => {
-  
-      mouseX = e.x;
-      mouseY = e.y;
-      
-      if (mouseDown < 0) {
-        if (selectIdx >= 0 && applets[selectIdx].checkInside(mouseX, mouseY)) {
-          _repaint();
-          return;
-        }
-        selectIdx = -1;
-        for (let i=applets.length-1;i>=0;i--) {
-          if (applets[i].checkInside(mouseX, mouseY)) {
-            selectIdx = i;
-            break;
-          }
-        }
-        _repaint();
-        return;
-      }
-  
-      if (selectIdx < 0) return;
-  
-      let _gap_w = canvas.width/GRID_W;
-      let _gap_h = canvas.height/GRID_H;
-  
-      let applet = applets[selectIdx];
-      let pos = applet.getPos();
-      
-      let _px = pos[0] + mouseX - mouseDownPos[0];
-      let _py = pos[1] + mouseY - mouseDownPos[1];
-  
-      //move
-      let _x = Math.floor((_px + _gap_w/2)/_gap_w) + 1;//Math.ceil(_px/_gap_w);
-      let _y = Math.floor((_py + _gap_h/2)/_gap_h) + 1;//Math.ceil(_py/_gap_h);
-      
-      switch(mouseDown) {
-        case 0:
-          if (_x != applet.x || _y != applet.y) {
-            if (applet.moveBody(_x, _y)) {
-              mouseDownPos = [mouseX, mouseY];
-            }
-          }
-          break;
-        case 1:
-          if (_x != applet.x) {
-            if (applet.moveX_(_x)) {
-              mouseDownPos = [mouseX, mouseY];
-            }
-          }
-          break;
-        case 2:
-          _px =  pos[0] + applet.w * _gap_w + mouseX - mouseDownPos[0];
-          _x = Math.floor((_px + _gap_w/2)/_gap_w) + 1;
-          if (_x != applet.x + applet.w) {
-            if (applet.move_X(_x)) {
-              mouseDownPos = [mouseX, mouseY];
-            }
-          }
-          break;
-        case 3:
-          if (_y != applet.y) {
-            if (applet.moveY_(_y)) {
-              mouseDownPos = [mouseX, mouseY];
-            }
-          }
-          break;
-        case 4:
-          _py = pos[1] + applet.h * _gap_h + mouseY - mouseDownPos[1];
-          _y = Math.floor((_py + _gap_h/2)/_gap_h) + 1;
-          if (_y != applet.y + applet.h) {
-            if (applet.move_Y(_y)) {
-              mouseDownPos = [mouseX, mouseY];
-            }
-          }
-          break;
-      }
-  
-      _repaint();
-      return true;
-  
-  });
-  
-  
-  canvas.addEventListener('mousedown', (e) =>{
     
-    mouseDownPos = [e.x, e.y];
-    
-    if (selectIdx >= 0) {
-  
-      mouseDown = 0;
-      
-      let _gap_w = canvas.width/GRID_W;
-      let _gap_h = canvas.height/GRID_H;
-  
-      let applet = applets[selectIdx];
-      let pos = applet.getPos();
-  
-      if (applet.isClickHide(mouseX, mouseY)) {
-        switchVisible4iframe(applets[selectIdx].keyname);
-        return;
-      } else if (applet.isClickRemove(mouseX, mouseY)) {
-        applets.splice(selectIdx, 1);
-        applet.removeSelf();
-        selectIdx = -1;
-        _repaint();
-        return;
-      } else if (applet.isClickOntop(mouseX, mouseY)) {
-        applet.onTop();
-        _repaint();
-        return;
-      }
-  
-      
-      if (applets[selectIdx].check_L_Edge(mouseX)) {
-        mouseDown = 1;
-        return;
-      } 
-      if (applets[selectIdx].check_R_Edge(mouseX)) {
-        mouseDown = 2;
-        return;
-      }
-  
-      if (applets[selectIdx].check_T_Edge(mouseY)) {
-        mouseDown = 3;
-        return;
-      } 
-      if (applets[selectIdx].check_B_Edge(mouseY)) {
-        mouseDown = 4;
-        return;
-      }
-  
-    }
-    
-  });
-  
-  canvas.addEventListener('mouseup', () =>{
-    mouseDown = -1;
-    return true;
-  });
-
   function openSideMenu() {
     let sideMenu = document.getElementById('sideMenu');
     if (sideMenu)
@@ -1214,6 +1059,158 @@ function downloadExpJson() {
         sideMenu.style.top = window.innerHeight + 'px';
   }
   
-  openSideMenu();
+  window.addEventListener('beforeunload', function (e) {
+    closeCtrl();
+  });
+  
+  function registerCanvasEvent() {
+    canvas.addEventListener('mousemove', e => {
+  
+        mouseX = e.x;
+        mouseY = e.y;
+        
+        if (mouseDown < 0) {
+          if (selectIdx >= 0 && applets[selectIdx].checkInside(mouseX, mouseY)) {
+            _repaint();
+            return;
+          }
+          selectIdx = -1;
+          for (let i=applets.length-1;i>=0;i--) {
+            if (applets[i].checkInside(mouseX, mouseY)) {
+              selectIdx = i;
+              break;
+            }
+          }
+          _repaint();
+          return;
+        }
+    
+        if (selectIdx < 0) return;
+    
+        let _gap_w = canvas.width/GRID_W;
+        let _gap_h = canvas.height/GRID_H;
+    
+        let applet = applets[selectIdx];
+        let pos = applet.getPos();
+        
+        let _px = pos[0] + mouseX - mouseDownPos[0];
+        let _py = pos[1] + mouseY - mouseDownPos[1];
+    
+        //move
+        let _x = Math.floor((_px + _gap_w/2)/_gap_w) + 1;//Math.ceil(_px/_gap_w);
+        let _y = Math.floor((_py + _gap_h/2)/_gap_h) + 1;//Math.ceil(_py/_gap_h);
+        
+        switch(mouseDown) {
+          case 0:
+            if (_x != applet.x || _y != applet.y) {
+              if (applet.moveBody(_x, _y)) {
+                mouseDownPos = [mouseX, mouseY];
+              }
+            }
+            break;
+          case 1:
+            if (_x != applet.x) {
+              if (applet.moveX_(_x)) {
+                mouseDownPos = [mouseX, mouseY];
+              }
+            }
+            break;
+          case 2:
+            _px =  pos[0] + applet.w * _gap_w + mouseX - mouseDownPos[0];
+            _x = Math.floor((_px + _gap_w/2)/_gap_w) + 1;
+            if (_x != applet.x + applet.w) {
+              if (applet.move_X(_x)) {
+                mouseDownPos = [mouseX, mouseY];
+              }
+            }
+            break;
+          case 3:
+            if (_y != applet.y) {
+              if (applet.moveY_(_y)) {
+                mouseDownPos = [mouseX, mouseY];
+              }
+            }
+            break;
+          case 4:
+            _py = pos[1] + applet.h * _gap_h + mouseY - mouseDownPos[1];
+            _y = Math.floor((_py + _gap_h/2)/_gap_h) + 1;
+            if (_y != applet.y + applet.h) {
+              if (applet.move_Y(_y)) {
+                mouseDownPos = [mouseX, mouseY];
+              }
+            }
+            break;
+        }
+    
+        _repaint();
+        return true;
+    
+    });
+
+    canvas.addEventListener('mousedown', (e) =>{
+    
+        mouseDownPos = [e.x, e.y];
+        
+        if (selectIdx >= 0) {
+      
+          mouseDown = 0;
+          
+          let _gap_w = canvas.width/GRID_W;
+          let _gap_h = canvas.height/GRID_H;
+      
+          let applet = applets[selectIdx];
+          let pos = applet.getPos();
+      
+          if (applet.isClickHide(mouseX, mouseY)) {
+            switchVisible4iframe(applets[selectIdx].keyname);
+            return;
+          } else if (applet.isClickRemove(mouseX, mouseY)) {
+            applets.splice(selectIdx, 1);
+            applet.removeSelf();
+            selectIdx = -1;
+            _repaint();
+            return;
+          } else if (applet.isClickOntop(mouseX, mouseY)) {
+            applet.onTop();
+            _repaint();
+            return;
+          }
+      
+          
+          if (applets[selectIdx].check_L_Edge(mouseX)) {
+            mouseDown = 1;
+            return;
+          } 
+          if (applets[selectIdx].check_R_Edge(mouseX)) {
+            mouseDown = 2;
+            return;
+          }
+      
+          if (applets[selectIdx].check_T_Edge(mouseY)) {
+            mouseDown = 3;
+            return;
+          } 
+          if (applets[selectIdx].check_B_Edge(mouseY)) {
+            mouseDown = 4;
+            return;
+          }
+      
+        }
+        
+      });
+
+      canvas.addEventListener('mouseup', () =>{
+        mouseDown = -1;
+        return true;
+      });  
+
+  }
+
+  if (canvas) 
+    registerCanvasEvent();
+ 
+openSideMenu();  
+
+
   //win.document.body.innerHTML = "<button type=\"button\" onclick=\"window.parent.spot2iframe('hymn')\">歌詞</button>";
 

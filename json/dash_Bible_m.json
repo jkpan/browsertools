@@ -1,11 +1,10 @@
 {
 	"Bible": {
-		"posize": [2, 4, 13, 28],
+		"posize": [1, 12, 32, 17],
 		"perspective": false,
 		"obj": {
 			"color": 1,
-			"fontfactor": 16.5,
-			"syncType" : 1,
+			"fontfactor": 14,
 			"saved": [
 				[""],
 				[""],
@@ -17,16 +16,16 @@
 				[""],
                 [""],
 				[""]
-			]
+			],
+			"syncType": 1
 		}
 	},
 	"NIV": {
-		"posize": [16, 4, 16, 28],
+		"posize": [1, 1, 32, 11],
 		"perspective": false,
 		"obj": {
 			"color": 2,
 			"fontfactor": 20,
-			"syncType" : 4,
 			"saved": [
 				[""],
 				[""],
@@ -38,13 +37,9 @@
 				[""],
                 [""],
 				[""]
-			]
+			],
+			"syncType": 4
 		}
 	},
-	"time": {
-		"posize": [28, 1, 5, 9],
-		"perspective": false
-	},
-
-	"B/G": "G"
+	"B/G": "B"
 }

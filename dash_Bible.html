@@ -45,6 +45,41 @@
 <script type="text/javascript" src="dashboard.js" charset="UTF-8"></script>
 <script>
 
+function detectDevice() {
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+    if (isMobile) {
+        console.log('This is a mobile device.');
+        return true;
+    } else {
+        console.log('This is a desktop device.');
+        return false;
+    }
+}
+
+if (detectDevice())
+    preload('./json/dash_Bible_m.json');
+else 
     preload('./json/dash_Bible.json');
+
+//while (applets.length == 0) console.log('wait');
+
+//applets[0].elm.focus();
+
+var itv = null;
+
+function waitMsg() {
+    console.log('wait! ' + applets.length);
+    if (applets.length > 0) {
+        clearInterval(itv);
+        applets[0].elm.focus();
+    }
+}
+
+itv = window.setInterval(waitMsg, 200);
+
+
+
+
 
 </script>

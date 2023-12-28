@@ -2615,6 +2615,7 @@ function restoreActionFromLocal() {
         line = 0;
         _repaint();
         touchMoveState = 1;
+        saveAction2Local();
         return;
       }
     }
