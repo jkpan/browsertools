@@ -1,57 +1,62 @@
 {
+	"ctrl": 1,
 	"frame_1": {
-		"src": "dashboard.html",
+		"src": "./dashboard.html",
 		"obj": {
-            "ctrl": 1,
+			"ctrl" : 1,
 			"hymn": {
-				"posize": [1, 18, 10, 15],
+				"posize": [22, 20, 10, 11],
 				"perspective": false,
 				"obj": {
-                    "master": 1,
+					"master": 1,
 					"mode": 2,
 					"fontfactor": 12,
 					"list": [
-
-						"新歌頌揚1", 
-						"新歌頌揚110", 
-						"短歌105", 
+						
+						"新歌頌揚1",
+						"新歌頌揚110",
+						"短歌105",
 						"新歌頌揚97",
 						"救恩213",
-						
-                        
+
 						"主禱文",
 						"使徒信經",
 						"救恩300"
-
 					]
 				}
 			},
 			"Bible": {
-				"posize": [23, 18, 10, 15],
+				"posize": [2, 2, 26, 17],
 				"perspective": false,
 				"obj": {
 					"color": 2,
-					"fontfactor": 14,
+					"fontfactor": 11,
 					"saved": [
 						[""],
-						[""],
-						[""],
-						[""],
+						["傳道書", 3, 1],
                         [""],
-						[""],
                         [""],
-						[""],
                         [""],
-						[""]
-					]
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""]
+					],
+					"syncType": 1
 				}
 			},
 			"url_1": {
-				"posize": [12, 18, 10, 15],
+				"posize": [2, 20, 11, 11],
 				"perspective": false,
 				"obj": {
 					"url": ""
 				}
+			},
+			"file_1": {
+				"posize": [14, 20, 7, 11],
+				"perspective": false,
+				"obj": {}
 			},
 			"B/G": "B"
 		}

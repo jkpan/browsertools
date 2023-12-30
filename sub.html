@@ -334,6 +334,9 @@ function handleProfile(jsonData) {
         } 
   }
   switchFunction(1);
+  if (jsonData['ctrl'] && jsonData['ctrl'] == 1) {
+    openCtrl();
+  }
 }
 
 function selectSetting(event) {
