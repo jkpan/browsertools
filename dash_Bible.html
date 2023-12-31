@@ -45,6 +45,22 @@
 <script type="text/javascript" src="dashboard.js" charset="UTF-8"></script>
 <script>
 
+function readParam(param) {
+    // 获取当前页面的URL
+    var currentURL = window.location.href;
+
+    // 通过URLSearchParams对象解析URL参数
+    var urlParams = new URLSearchParams(window.location.search);
+
+    // 获取特定参数的值
+    var parameterValue = urlParams.get(param);//'参数名');
+
+    // 输出参数值到控制台
+    console.log('参数值为：', parameterValue);
+
+    return parameterValue;
+}
+
 function detectDevice() {
     var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
@@ -57,14 +73,18 @@ function detectDevice() {
     }
 }
 
+
 if (detectDevice())
     preload('./json/dash_Bible_m.json');
 else 
     preload('./json/dash_Bible.json');
 
-//while (applets.length == 0) console.log('wait');
-
-//applets[0].elm.focus();
+/*
+let jsonfile = readParam('param');
+console.log('jsonfile:' + jsonfile);
+alert(jsonfile);
+if (jsonfile) preload(jsonfile);
+*/
 
 var itv = null;
 
@@ -77,9 +97,5 @@ function waitMsg() {
 }
 
 itv = window.setInterval(waitMsg, 200);
-
-
-
-
 
 </script>

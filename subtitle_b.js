@@ -147,12 +147,19 @@ class Verseobj {
           let x = canvas.width * (1 - this.wratio);
   
           if (this.level == 0) {
-            let y = this.fs * 0.25;
+            let y = this.fs * 0.25; //console.log(animElapse);
             for (let i=0;i<this.substrings.length;i++) {
-              if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
-                _drawSdwtxt(this.substrings[i]+'-', x, y);
-              else 
-                _drawSdwtxt(this.substrings[i], x, y);
+              if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) {
+                if (animElapse == animTotal || animElapse == -1)
+                  _drawSdwtxt(this.substrings[i]+'-', x, y);
+                else
+                  _drawtxt(this.substrings[i]+'-', x, y, 1.0);
+              } else { 
+                if (animElapse == animTotal || animElapse == -1)
+                  _drawSdwtxt(this.substrings[i], x, y);
+                else
+                  _drawtxt(this.substrings[i], x, y, 1.0);
+              }
               y += this.fs;
             }
           } else {
@@ -1101,7 +1108,7 @@ function restoreActionFromLocal() {
   
   var display_mode = 0;
   const animTotal = 30;
-  var animElapse = 0; //var savePre = 0;
+  var animElapse = -1; //var savePre = 0;
   function verse_update(elapse) {
   
 
@@ -1121,7 +1128,7 @@ function restoreActionFromLocal() {
       animElapse++;
       window.requestAnimationFrame(verse_update);
     } else {
-      animElapse = 0;
+      animElapse = -1;
     }
   
   }
