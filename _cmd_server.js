@@ -365,6 +365,14 @@ const server = http.createServer((req, res) => {
     url = '/index_nodejs.html';
   }
 
+  if (url.startsWith('/dash.html')) {
+    url = '/dash.html';
+  }
+
+  if (url.startsWith('/led_newyear.html')) {
+    url = '/led_newyear.html';
+  }
+
   const filePath = `.${url}`;
   responseFile(filePath, res, '');
 

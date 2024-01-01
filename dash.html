@@ -73,18 +73,32 @@ function detectDevice() {
     }
 }
 
-
-if (detectDevice())
-    preload('./json/dash_Bible_m.json');
-else 
-    preload('./json/dash_Bible.json');
-
 /*
-let jsonfile = readParam('param');
-console.log('jsonfile:' + jsonfile);
-alert(jsonfile);
-if (jsonfile) preload(jsonfile);
+// 获取 URL 中的参数
+function getParameterByName(name, url) {
+    if (!url) 
+        url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 */
+
+// 读取名为 "param" 的参数
+if (readParam('app') === '中英文聖經') {
+    if (detectDevice())
+        preload('./json/dash_Bible_m.json');
+    else 
+        preload('./json/dash_Bible.json');
+} else {
+    let value = readParam('json');
+    if (value) 
+        preload('./' + value);
+}
+
 
 var itv = null;
 

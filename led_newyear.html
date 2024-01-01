@@ -25,6 +25,22 @@
 
 <script type="text/javascript" charset="UTF-8">
 
+function readParam(param) {
+    // 获取当前页面的URL
+    var currentURL = window.location.href;
+
+    // 通过URLSearchParams对象解析URL参数
+    var urlParams = new URLSearchParams(window.location.search);
+
+    // 获取特定参数的值
+    var parameterValue = urlParams.get(param);//'参数名');
+
+    // 输出参数值到控制台
+    console.log('参数值为：', parameterValue);
+
+    return parameterValue;
+}
+
 function _initData() {
 
     let _all = Math.max(7, Math.floor(window.innerHeight/50));
@@ -49,9 +65,16 @@ function _initData() {
     bgIdx = 0;
 
     subtitle[1] = ["從歲首到年終 耶和華 你神的眼目時常看顧那地"];//[申11:12]
-    subtitle[2] = [" 2024🦖新年快樂🎉阿榮娛樂 "];
+    let cons = "新年快樂🎉阿榮娛樂";
+    subtitle[2] = [""];
     
-      
+    let year = readParam('year');
+    if (year) 
+        subtitle[2] = [year + cons];
+    else
+        subtitle[2] = ['2024🦖' + cons];
+    
+        
     init();
     initAnim();
  
