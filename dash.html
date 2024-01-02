@@ -87,19 +87,6 @@ function getParameterByName(name, url) {
 }
 */
 
-// 读取名为 "param" 的参数
-if (readParam('app') === '中英文聖經') {
-    if (detectDevice())
-        preload('./json/dash_Bible_m.json');
-    else 
-        preload('./json/dash_Bible.json');
-} else {
-    let value = readParam('json');
-    if (value) 
-        preload('./' + value);
-}
-
-
 var itv = null;
 
 function waitMsg() {
@@ -110,6 +97,24 @@ function waitMsg() {
     }
 }
 
-itv = window.setInterval(waitMsg, 200);
+function handleCb(msg) {
+    if (msg === 'done') {
+        itv = null;
+        itv = window.setInterval(waitMsg, 200);
+    } else {
+        console.log('error : handleCb');
+    }
+}
+// 读取名为 "param" 的参数
+if (readParam('app') === '中英文聖經') {
+    if (detectDevice())
+        preload('./json/dash_Bible_m.json', handleCb);
+    else 
+        preload('./json/dash_Bible.json', handleCb);
+} else {
+    let value = readParam('json');
+    if (value) 
+        preload('./' + value, handleCb);
+}
 
 </script>

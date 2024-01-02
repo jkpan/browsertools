@@ -554,14 +554,16 @@ function downloadExpJson() {
   
   }
   
-  function preload(url) {
+  function preload(url, doneCb) {
     fetch(url).then((response) => {
           return response.json();
       }).then( (json) => {
           handleProfile(JSON.stringify(json));
+          if (doneCb) doneCb('done');
       }).catch((error) => {
         alert('Error' + error);
         console.log(`Error: ${error}`);
+        if (doneCb) doneCb('error');
     });
   }
 
