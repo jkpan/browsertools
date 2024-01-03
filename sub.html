@@ -266,12 +266,23 @@ function reloadFrame() {
 
 }
 
+function relativeUrl(url) {
+  let domain = window.location.origin;
+  if (url.startsWith(domain)) {
+    let str = url.substr(domain.length, url.length - domain.length);
+    return str;
+  }
+  return url;
+}
+
 function toObj() {
   let obj = {}
   for (let i=1;i<=tabCount;i++) {
     obj['frame_'+i] = {};
     let frameObj = obj['frame_'+i];
-    frameObj['src'] = document.getElementById('frame_'+i).src;
+    let url = document.getElementById('frame_'+i).src;
+    url = relativeUrl(url);
+    frameObj['src'] = url;//document.getElementById('frame_'+i).src;
     frameObj['obj'] = {};
     try {
       let _obj = document.getElementById('frame_'+i).contentWindow.toObj();

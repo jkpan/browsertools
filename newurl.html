@@ -212,10 +212,20 @@ window.addEventListener('message', (e) => {
 
 }, false);
 
+function relativeUrl(url) {
+  //return url;
+  let domain = window.location.origin;
+  if (url.startsWith(domain)) {
+    let str = url.substr(domain.length, url.length - domain.length);
+    return str;
+  }  
+  return url;
+}
+
 function toObj() {
   if (!document.getElementById("web").hidden)
-    return { "url": document.getElementById("web").src };
-  let _url = document.getElementById("ppt_url").value.trim();
+    return { "url": relativeUrl(document.getElementById("web").src) };
+  let _url = relativeUrl(document.getElementById("ppt_url").value.trim());
   return { "url": _url };
 }
 
