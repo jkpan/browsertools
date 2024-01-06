@@ -111,9 +111,13 @@ function handleCb(msg) {
 // 读取名为 "param" 的参数
 if (readParam('app') === '中英文聖經') {
     if (detectDevice())
-        preload('./json/dash_Bible_m.json', handleCb);
+        preload('./json/dash_ce_Bible_m.json', handleCb);
     else 
-        preload('./json/dash_Bible.json', handleCb);
+        preload('./json/dash_ce_Bible.json', handleCb);
+} if (readParam('app') === '中文聖經') {
+    preload('./json/dash_c_Bible.json', handleCb);
+} if (readParam('app') === '英文聖經') {
+    preload('./json/dash_e_Bible.json', handleCb);
 } else {
     let value = readParam('json');
     if (value) 

@@ -1,0 +1,28 @@
+{
+	"Bible": {
+		"posize": [2, 2, 30, 30],
+		"perspective": false,
+		"obj": {
+			"color": 2,
+			"fontfactor": 14,
+			"saved": [
+				[""],
+				[""],
+				[""],
+				[""],
+                [""],
+				[""],
+                [""],
+				[""],
+                [""],
+				[""]
+			],
+			"syncType": 1
+		}
+	},
+	"time": {
+		"posize": [27, 1, 6, 8],
+		"perspective": false
+	},
+	"B/G": "G"
+}
