@@ -1,25 +1,20 @@
 {
-	"ctrl": 1,
 	"frame_1": {
 		"src": "./dashboard.html",
 		"obj": {
-			"ctrl" : 1,
 			"hymn": {
-				"posize": [22, 20, 10, 11],
+				"posize": [22, 21, 11, 11],
 				"perspective": false,
 				"obj": {
-					"master": 1,
 					"mode": 2,
 					"fontfactor": 12,
 					"list": [
-						
-						"讚美之泉27", 
-						"讚美之泉36", 
-						"讚美之泉34", 
-						"讚美之泉19", 
-						"救恩221", 
-						"救恩1", 
-
+						"讚美之泉27",
+						"讚美之泉36",
+						"讚美之泉34",
+						"讚美之泉19",
+						"救恩221",
+						"救恩1",
 						"主禱文",
 						"使徒信經",
 						"救恩300"
@@ -27,14 +22,14 @@
 				}
 			},
 			"Bible": {
-				"posize": [2, 2, 26, 17],
+				"posize": [1, 1, 22, 19],
 				"perspective": false,
 				"obj": {
 					"color": 2,
 					"fontfactor": 11,
 					"saved": [
 						[""],
-						["傳道書", 3, 1],
+						["羅馬書", 4, 17],
                         [""],
                         [""],
                         [""],
@@ -48,18 +43,36 @@
 				}
 			},
 			"url_1": {
-				"posize": [2, 20, 11, 11],
+				"posize": [23, 5, 10, 10],
 				"perspective": false,
 				"obj": {
 					"url": ""
 				}
 			},
 			"file_1": {
-				"posize": [14, 20, 7, 11],
+				"posize": [2, 21, 7, 11],
 				"perspective": false,
 				"obj": {}
 			},
 			"B/G": "B"
+		}
+	},
+	"frame_2": {
+		"src": "./newurl.html",
+		"obj": {
+			"url": "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+		}
+	},
+	"frame_3": {
+		"src": "./newurl.html",
+		"obj": {
+			"url": ""
+		}
+	},
+	"frame_4": {
+		"src": "./newurl.html",
+		"obj": {
+			"url": "https://docs.google.com/presentation/d/e/2PACX-1vR3t2qRf_NEqqZvQfMEtMt7ioBdZOKUpE4no1gHT8Q9VtlGUvHIPhiD3UtvbOOwVA/embed?start=false&loop=false&delayms=3000&rm=minimal"
 		}
 	}
 }

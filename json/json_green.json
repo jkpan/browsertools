@@ -1,7 +1,7 @@
 {
 	"ctrl": 1,
 	"frame_1": {
-		"src": "dashboard.html",
+		"src": "./dashboard.html",
 		"obj": {
             "ctrl": 1,
 			"hymn": {
@@ -48,7 +48,7 @@
 		}
 	}, 
 	"frame_2": {
-		"src": "dashboard.html",
+		"src": "./dashboard.html",
 		"obj": {
 			"Bible": {
 				"posize": [13, 2, 19, 30],
@@ -73,7 +73,7 @@
 		}
 	}, 
 	"frame_3": {
-		"src": "marquee_v.html",
+		"src": "./marquee_v.html",
 		"obj": {
 			"des" : ""
 		}
