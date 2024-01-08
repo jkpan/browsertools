@@ -3,18 +3,13 @@
 		"src": "./dashboard.html",
 		"obj": {
 			"hymn": {
-				"posize": [22, 21, 11, 11],
+				"posize": [19, 22, 10, 10],
 				"perspective": false,
 				"obj": {
 					"mode": 2,
 					"fontfactor": 12,
 					"list": [
-						"讚美之泉27",
-						"讚美之泉36",
-						"讚美之泉34",
-						"讚美之泉19",
-						"救恩221",
-						"救恩1",
+						
 						"主禱文",
 						"使徒信經",
 						"救恩300"
@@ -22,7 +17,7 @@
 				}
 			},
 			"Bible": {
-				"posize": [1, 1, 22, 19],
+				"posize": [1, 1, 20, 20],
 				"perspective": false,
 				"obj": {
 					"color": 2,
@@ -43,14 +38,14 @@
 				}
 			},
 			"url_1": {
-				"posize": [23, 5, 10, 10],
+				"posize": [22, 8, 11, 11],
 				"perspective": false,
 				"obj": {
 					"url": ""
 				}
 			},
 			"file_1": {
-				"posize": [2, 21, 7, 11],
+				"posize": [5, 22, 10, 10],
 				"perspective": false,
 				"obj": {}
 			},

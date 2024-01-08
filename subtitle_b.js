@@ -1,5 +1,5 @@
 class Verseobj {
-  volumn = 0;
+  volume = 0;
   chapter = 0;
   verse = 0;
   wratio = 0.9;
@@ -15,9 +15,9 @@ class Verseobj {
   targetFs = 0;
   targetTransY = 0;
   
-  initial(volumn, c, v, level) {
+  initial(volume, c, v, level) {
 
-    this.volumn = volumn;
+    this.volume = volume;
     this.chapter = c;
     this.verse = v;
     this.setLevel(level);
@@ -61,15 +61,15 @@ class Verseobj {
           this.transY = this.transY + (this.targetTransY - this.transY) * _p;
         }
       
-        if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
+        if (this.volume <= 0 || this.chapter < 0 || this.verse < 0) return 0;
          
         let txt = '';
         this.frontxt = '';
   
-        if (this.chapter == 0) {   //print volumn only
+        if (this.chapter == 0) {   //print volume only
           if (this.level == 0)
             txt = subtitles[0][0];
-        } else if (this.verse == 0) { //print volumn with chapter
+        } else if (this.verse == 0) { //print volume with chapter
           txt = '[' + subtitles[this.chapter][0] + ']';
         } else {                     //normal verse
           txt = subtitles[this.chapter][this.verse];
@@ -130,10 +130,10 @@ class Verseobj {
             if (this.chapter > 0 && this.verse > 0) {
               let fs = this.targetFs * 0.6;
               ctx.font = fs + "px " + fontFamily;//FONT_SML;
-              _drawSdwtxt(' '+abbr[this.volumn], 0, 0);
+              _drawSdwtxt(' '+abbr[this.volume], 0, 0);
               _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
               //ctx.font = fs + "px " + fontFamily;
-              //_drawSdwtxt(' ' + abbr[this.volumn], 0, 0);
+              //_drawSdwtxt(' ' + abbr[this.volume], 0, 0);
               //_drawSdwtxt(' ' + this.chapter, 0, fs);
               //_drawSdwtxt(' ' + this.verse, 0, fs * 2, 1.0);
 
@@ -150,12 +150,12 @@ class Verseobj {
             let y = this.fs * 0.25; //console.log(animElapse);
             for (let i=0;i<this.substrings.length;i++) {
               if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) {
-                if (animElapse == animTotal || animElapse == -1)
+                if (animElapse >= animTotal * 0.8 || animElapse == -1)
                   _drawSdwtxt(this.substrings[i]+'-', x, y);
                 else
                   _drawtxt(this.substrings[i]+'-', x, y, 1.0);
               } else { 
-                if (animElapse == animTotal || animElapse == -1)
+                if (animElapse >= animTotal * 0.8 || animElapse == -1)
                   _drawSdwtxt(this.substrings[i], x, y);
                 else
                   _drawtxt(this.substrings[i], x, y, 1.0);
@@ -181,14 +181,14 @@ class Verseobj {
 }
 
 class VerseVertical {
-  volumn = -1;
+  volume = -1;
   chapter = -1;
   verse = -1;
   txt = '';
   line = 0;
       
   initial(s, c, v) {
-      this.volumn = s;
+      this.volume = s;
       this.chapter = c;
       this.verse = v;
       this.txt = subtitles[this.chapter][this.verse];
@@ -295,10 +295,10 @@ function render_vertical(progress) {
   for (let i = 0;i<queue.length;i++) {
       let obj = queue[i];
       if (obj.chapter == phase && obj.verse == line) {
-          if (v_vertical.volumn != obj.volumn || 
+          if (v_vertical.volume != obj.volume || 
               v_vertical.chapter != obj.chapter || 
               v_vertical.verse != obj.verse) {
-              v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
+              v_vertical.initial(obj.volume, obj.chapter, obj.verse);
           }
           v_vertical.draw(progress);
           break;
@@ -530,12 +530,12 @@ var presetVerse = [
     '/restorescripture', 
     (res)=>{
         //console.log(JSON.stringify(res));
-        let volumn = res.vlm;
+        let volume = res.vlm;
         let chapter = res.chp;
         let verse = res.ver;
         let _doblank = res.blank;
 
-        restoreAnim(volumn, chapter, verse, _doblank);
+        restoreAnim(volume, chapter, verse, _doblank);
 
         console.log('succ: send');
         if (sync_type == 5) setTimeout(ajax_restore, 200);
@@ -591,9 +591,9 @@ var presetVerse = [
 
   
   //判斷是不是要卷軸動畫
-  function restoreAnim(volumn, chapter, verse, _doblank) {
+  function restoreAnim(volume, chapter, verse, _doblank) {
 
-    if (volumn == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
+    if (volume == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
     
     fake_doblank = _doblank;
     if (_doblank != doblank) {
@@ -601,17 +601,17 @@ var presetVerse = [
       return;
     }
   
-    if (volumn == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
+    if (volume == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
       keyboard({keyCode : 37}); //left
       return;
     }
     
-    if (volumn == song && chapter == getNextChapter(phase, line) && verse == getNextVerse(phase, line)) {
+    if (volume == song && chapter == getNextChapter(phase, line) && verse == getNextVerse(phase, line)) {
       keyboard({keyCode : 39}); //right
       return;
     }
 
-    song = volumn;
+    song = volume;
     subtitles = SONGS[song];
     phase = chapter;
     line = verse;
@@ -641,12 +641,12 @@ function restoreActionFromLocal() {
     value = value.trim();
     if (value && value.length == 0) return;
     let array = value.split(' ');
-    let volumn = parseInt(array[0]);//array[0];
+    let volume = parseInt(array[0]);//array[0];
     let chapter = parseInt(array[1]);
     let verse = parseInt(array[2]);
     let _doblank = parseInt(array[3]);
 
-    restoreAnim(volumn, chapter, verse, _doblank);
+    restoreAnim(volume, chapter, verse, _doblank);
   
   }
   
@@ -855,7 +855,7 @@ function restoreActionFromLocal() {
 
   }
   
-  function createBtnVolumn(elmid) {
+  function createBtnVolume(elmid) {
   
     let div = document.createElement('div');
     div.id = 'btns';
@@ -884,7 +884,7 @@ function restoreActionFromLocal() {
       if (i == 54) div.insertAdjacentHTML('beforeend', '<br/><br/>');
       if (i == 58) div.insertAdjacentHTML('beforeend', '<br/><br/>');
   
-      var button = _newBtn(); //_createVolumn(i);
+      var button = _newBtn(); //_createVolume(i);
       button.innerHTML = SONGS[i][0][0];
       button.id = 'vol ' + i;
       button.onclick = function() {
@@ -981,7 +981,7 @@ function restoreActionFromLocal() {
     canvas.hidden = true;
     switch(type) {
       case 0:
-        createBtnVolumn();
+        createBtnVolume();
         break;
       case 1:
         if (song == 0) {
@@ -1287,8 +1287,8 @@ function restoreActionFromLocal() {
               break;
           case 1:
               //render_vertical(progress);//animElapse.toFixed(2)/animTotal.toFixed(2));
-              if (v_vertical.volumn != obj.volumn || v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
-                  v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
+              if (v_vertical.volume != obj.volume || v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
+                  v_vertical.initial(obj.volume, obj.chapter, obj.verse);
               }
   
               //console.log(v_vertical.chapter +', '+ v_vertical.verse);
@@ -2247,7 +2247,7 @@ function restoreActionFromLocal() {
       _phoneUi();
     }
 
-    phoneScrollVolumn();
+    phoneScrollVolume();
         
     if (uisel == 0) return;
     ctx.fillStyle = bgcolor_pointer;//'green';
@@ -2550,21 +2550,21 @@ function restoreActionFromLocal() {
       return;
     }
     
-    //preious volumn
+    //preious volume
     if (gw == 0 && gh == 1) {
       keyboard({keyCode : 189});
       return;
     }
 
     /*
-    //select volumn 
+    //select volume
     if (gw == 1 && gh == 1) {//keyboard({keyCode : 76});
       openSelDiv();
       return;
     }
     */
     
-    //next volumn
+    //next volume
     if (gw == 2 && gh == 1) {
       keyboard({keyCode : 187});
       return;
@@ -2654,21 +2654,21 @@ function restoreActionFromLocal() {
   
   canvas.addEventListener("touchmove", touchmove, false);
 
-  function phoneScrollVolumn() {
+  function phoneScrollVolume() {
    
     if (touchMoveState == 0) return;
     if (colState != 1) return;
     
-    drawVolumn( 1,  5, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
-    drawVolumn( 6, 17, 'rgba(0, 0, 255, 0.22)', 'rgba(0, 0,255, 1.0)'); 
-    drawVolumn(18, 22, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
-    drawVolumn(23, 27, 'rgba(0, 0, 255, 0.22)', 'rgba(0, 0,255, 1.0)'); 
-    drawVolumn(28, 39, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolume( 1,  5, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolume( 6, 17, 'rgba(0, 0, 255, 0.22)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolume(18, 22, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolume(23, 27, 'rgba(0, 0, 255, 0.22)', 'rgba(0, 0,255, 1.0)'); 
+    drawVolume(28, 39, 'rgba(0, 0, 255, 0.33)', 'rgba(0, 0,255, 1.0)'); 
         
-    drawVolumn(40, 44, 'rgba(255, 0,0,0.22)', 'rgba(255, 0,0, 1.0)');
-    drawVolumn(45, 53, 'rgba(255, 0,0,0.33)', 'rgba(255, 0,0, 1.0)');
-    drawVolumn(54, 57, 'rgba(255, 0,0,0.22)', 'rgba(255, 0,0, 1.0)');
-    drawVolumn(58, 66, 'rgba(255, 0,0,0.33)', 'rgba(255, 0,0, 1.0)');         
+    drawVolume(40, 44, 'rgba(255, 0,0,0.22)', 'rgba(255, 0,0, 1.0)');
+    drawVolume(45, 53, 'rgba(255, 0,0,0.33)', 'rgba(255, 0,0, 1.0)');
+    drawVolume(54, 57, 'rgba(255, 0,0,0.22)', 'rgba(255, 0,0, 1.0)');
+    drawVolume(58, 66, 'rgba(255, 0,0,0.33)', 'rgba(255, 0,0, 1.0)');         
     
     /*
     ctx.textBaseline = 'bottom';
@@ -2687,7 +2687,7 @@ function restoreActionFromLocal() {
 
   }
 
-  function drawVolumn(f, e, c0, c1) {
+  function drawVolume(f, e, c0, c1) {
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     let _height = canvas.height * (1 - tb_ratio * 2);
@@ -2852,7 +2852,7 @@ function restoreActionFromLocal() {
   
     if(navigator.userAgent.indexOf("Chrome") != -1 ) {
       var speechRecognitionList = new webkitSpeechGrammarList();
-      var grammar = '#JSGF V1.0; grammar volumn; public <volumn> = ' + fullname.join(' | ') + ' ;';
+      var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
       speechRecognitionList.addFromString(grammar, 2);
       recognition.grammars = speechRecognitionList;
     }
@@ -2938,7 +2938,35 @@ function restoreActionFromLocal() {
     //document.cookie = "last=" + JSON.stringify(obj) + "; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/";
   });
 
+  function readParam(param) {
+    // 获取当前页面的URL
+    var currentURL = window.location.href;
+
+    //console.log('url: ' + currentURL);
+    //console.log(':' + window.location.origin);
+
+    // 通过URLSearchParams对象解析URL参数
+    var urlParams = new URLSearchParams(window.location.search);
+
+    // 获取特定参数的值
+    var parameterValue = urlParams.get(param);//'参数名');
+
+    // 输出参数值到控制台
+    console.log('参数值为：', parameterValue);
+
+    return parameterValue;
+}
+
+if (readParam('VOLUME')) {
+  let volume = readParam('VOLUME');//parseInt(array[0]);//array[0];
+  let chapter = readParam('CHAPTER')?parseInt(readParam('CHAPTER')):0;
+  let verse = readParam('VERSE')?parseInt(readParam('VERSE')):0;
+  //let _doblank = parseInt(array[3]);
+  jump2preset4Anim([volume, chapter, verse]);
+} else {
   restoreActionFromLocal();
+}
+
 
   /*
   function cookieStuff() {

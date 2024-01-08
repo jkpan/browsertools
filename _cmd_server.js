@@ -373,6 +373,10 @@ const server = http.createServer((req, res) => {
     url = '/led_newyear.html';
   }
 
+  if (url.startsWith('/subtitle_b.html')) {
+    url = '/subtitle_b.html';
+  }
+
   const filePath = `.${url}`;
   responseFile(filePath, res, '');
 

@@ -14,14 +14,14 @@ var presetVerse = [
 ];
 
 class VerseVertical {
-    volumn = -1;
+    volume = -1;
     chapter = -1;
     verse = -1;
     txt = '';
     line = 0;
         
     initial(s, c, v) {
-        this.volumn = s;
+        this.volume = s;
         this.chapter = c;
         this.verse = v;
         this.txt = subtitles[this.chapter][this.verse];
@@ -123,10 +123,10 @@ function render_vertical(progress) {
     for (let i = 0;i<queue.length;i++) {
         let obj = queue[i];
         if (obj.chapter == phase && obj.verse == line) {
-            if (v_vertical.volumn != obj.volumn || 
+            if (v_vertical.volume != obj.volume || 
                 v_vertical.chapter != obj.chapter || 
                 v_vertical.verse != obj.verse) {
-                v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
+                v_vertical.initial(obj.volume, obj.chapter, obj.verse);
             }
             v_vertical.draw(progress);
             break;
@@ -137,7 +137,7 @@ function render_vertical(progress) {
 
 class VerseObj {
 
-    volumn = 0;
+    volume = 0;
     chapter = 0;
     verse = 0;
     wratio = 0.95;
@@ -152,8 +152,8 @@ class VerseObj {
     //gap_fs: 0,
     //gap_transY : 0,
           
-    initial(volumn, c, v, level) {
-      this.volumn = volumn;
+    initial(volume, c, v, level) {
+      this.volume = volume;
       this.chapter = c;
       this.verse = v;
       this.setLevel(level);
@@ -207,15 +207,15 @@ class VerseObj {
         this.transY = this.transY + (this.targetTransY - this.transY)  * _p;
       }
     
-      if (this.volumn <= 0 || this.chapter < 0 || this.verse < 0) return 0;
+      if (this.volume <= 0 || this.chapter < 0 || this.verse < 0) return 0;
        
       let txt = '';
       //this.frontxt = '';
 
-      if (this.chapter == 0) {   //print volumn only
+      if (this.chapter == 0) {   //print volume only
         if (this.level == 0)
           txt = subtitles[0][0];
-      } else if (this.verse == 0) { //print volumn with chapter
+      } else if (this.verse == 0) { //print volume with chapter
         txt = '[' + subtitles[this.chapter][0] + ']';
       } else {                     //normal verse
         txt = subtitles[this.chapter][this.verse];
@@ -279,7 +279,7 @@ class VerseObj {
           if (this.chapter > 0 && this.verse > 0) {
             let fsize = this.targetFs * 0.4;
             ctx.font = fsize + "px " + fontFamily;//FONT_SML;
-            _drawSdwtxt((abbr[this.volumn].length==1?' ':'') + abbr[this.volumn], 0, 0, 1.0);
+            _drawSdwtxt((abbr[this.volume].length==1?' ':'') + abbr[this.volume], 0, 0, 1.0);
             _drawSdwtxt(' ' + this.chapter, 0, fsize, 1.0);
             _drawSdwtxt(' ' + this.verse, 0, fsize * 2, 1.0);
           }
@@ -294,20 +294,28 @@ class VerseObj {
         if (this.level == 0) {
           let y = this.fs * 0.25;
           for (let i=0;i<this.substrings.length;i++) {
-            if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
-              _drawSdwtxt(this.substrings[i]+'-', x, y, 1.0);
-            else 
-              _drawSdwtxt(this.substrings[i], x, y, 1.0);
+            if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) {
+              if (animElapse >= animTotal * 0.8 || animElapse == -1)
+                _drawSdwtxt(this.substrings[i]+'-', x, y, 1.0);
+              else 
+                _drawtxt(this.substrings[i]+'-', x, y, 1.0);
+            } else {
+              if (animElapse >= animTotal * 0.8 || animElapse == -1)
+                _drawSdwtxt(this.substrings[i], x, y, 1.0);
+              else 
+                _drawtxt(this.substrings[i], x, y, 1.0);
+            }
             y += this.fs;
           }
         } else {
           let y = 0;//fontsize * 0.25;
           if (animType == 0 || checkBetweenHeadTail([song, this.chapter, this.verse]) >= 0) {
             for (let i=0;i<this.substrings.length;i++) {
-                if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) 
+                if (islastChar(this.substrings[i]) && i+1<this.substrings.length && is0Char(this.substrings[i+1])) {
                   _drawtxt(this.substrings[i]+'-', x, y, this.opacity);
-                else
+                } else {
                   _drawtxt(this.substrings[i], x, y, this.opacity);
+                }
                 y += this.fs;
             }
             //ctx.font = this.fs * 0.7 + "px " + fontFamily;
@@ -713,8 +721,8 @@ function _render(progress) {
                 break;
             case 1:
                 //render_vertical(progress);//animElapse.toFixed(2)/animTotal.toFixed(2));
-                if (v_vertical.volumn != obj.volumn || v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
-                    v_vertical.initial(obj.volumn, obj.chapter, obj.verse);
+                if (v_vertical.volume != obj.volume || v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
+                    v_vertical.initial(obj.volume, obj.chapter, obj.verse);
                 }
     
                 //console.log(v_vertical.chapter +', '+ v_vertical.verse);
