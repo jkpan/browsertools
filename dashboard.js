@@ -682,7 +682,7 @@ function downloadExpJson() {
     let stateArray = {hymn:-1, Bible:-1, NIV:-1,
                       url_1:-1, url_2:-1, file_1:-1, file_2:-1, 
                       info:-1, effect:-1, time:-1,
-                      dBoard:-1, sub:-1};
+                      dBoard:-1, tabs:-1};
     for (let key in stateArray) {
       for (let i=0;i<applets.length;i++) {
         if (key == applets[i].keyname) {
