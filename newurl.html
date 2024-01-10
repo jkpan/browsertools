@@ -212,13 +212,19 @@ window.addEventListener('message', (e) => {
 
 }, false);
 
+function getRootUrl() {
+  let all = window.location.href; //console.log(all);
+  let root = all.substr(0, all.length - '/newurl.html'.length); //console.log('root:' + root);
+  return root;
+}
+
 function relativeUrl(url) {
-  //return url;
-  let domain = window.location.origin;
-  if (url.startsWith(domain)) {
-    let str = url.substr(domain.length, url.length - domain.length);
+  let root = getRootUrl();
+  //let domain = window.location.origin;
+  if (url.startsWith(root)) {
+    let str = url.substr(root.length, url.length - root.length);
     return str;
-  }  
+  }
   return url;
 }
 

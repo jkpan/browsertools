@@ -1,8 +1,9 @@
 const http = require('http');
-const fs = require('fs');
-//const qs = require('querystring');
+const fs = require('fs');//const qs = require('querystring');
+const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os');
+//const express = require('express');
 //const cluster = require('cluster');
 
 const playCode = 
@@ -53,7 +54,7 @@ const CAMERAS = 4;
 const msgs = ['.', 
               '.', '.', '.', '.'];
 
-var volumn = 1;
+var volume = 1;
 var chapter = 0;
 var verse = 0;
 var doblank = 0;
@@ -256,7 +257,7 @@ function restorescripture(req, res) {
     print('-');
     // 发送响应数据
     res.end(JSON.stringify({
-        vlm: volumn,
+        vlm: volume,
         chp: chapter,
         ver: verse,
         blank: doblank
@@ -279,12 +280,12 @@ function synscripture(req, res) {
       // 解析请求数据
       const requestData = JSON.parse(body);
       
-      volumn = requestData.vlm;
+      volume = requestData.vlm;
       chapter = requestData.chp;
       verse = requestData.ver;
       doblank = requestData.blank;
 
-      println('(Bible:' + volumn +', '+ chapter + ', ' + verse + ',' + doblank + ')');
+      println('(Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ')');
     
       res.setHeader('Content-Type', 'application/json');
       
@@ -361,8 +362,20 @@ const server = http.createServer((req, res) => {
         break;
   }
 
-  if (url === '/') {
-    url = '/index_nodejs.html';
+  if (url === '/' || url === '/index.html') {
+    //url = '/index_nodejs.html';
+
+    const redirect = '/index.html?server=nodejs';
+    // 执行重定向
+
+    res.writeHead(302, {Location: redirect});
+    res.end();
+
+    return;
+  }
+
+  if (url.startsWith('/index.html')) {
+    url = '/index.html';
   }
 
   if (url.startsWith('/dash.html')) {
@@ -374,6 +387,15 @@ const server = http.createServer((req, res) => {
   }
 
   if (url.startsWith('/subtitle_b.html')) {
+    /*
+    const parsedUrl = urltool.parse(url);
+    console.log(parsedUrl);
+    const queryParams = querystring.parse(parsedUrl.query);
+    console.log('------');
+    console.log(queryParams);
+    */
+    //queryParams.volume='創世紀';
+    //res.send(queryParams);console.log();
     url = '/subtitle_b.html';
   }
 

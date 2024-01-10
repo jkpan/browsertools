@@ -2957,10 +2957,10 @@ function restoreActionFromLocal() {
     return parameterValue;
 }
 
-if (readParam('VOLUME')) {
-  let volume = readParam('VOLUME');//parseInt(array[0]);//array[0];
-  let chapter = readParam('CHAPTER')?parseInt(readParam('CHAPTER')):0;
-  let verse = readParam('VERSE')?parseInt(readParam('VERSE')):0;
+if (readParam('volume')) {
+  let volume = readParam('volume');//parseInt(array[0]);//array[0];
+  let chapter = readParam('chapter')?parseInt(readParam('chapter')):0;
+  let verse = readParam('verse')?parseInt(readParam('verse')):0;
   //let _doblank = parseInt(array[3]);
   jump2preset4Anim([volume, chapter, verse]);
 } else {

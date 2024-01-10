@@ -44,12 +44,19 @@
 <hr size="8" align="left" width="33%" color="#aaaaaa">
 <p></p>
 <p></p>
-<button onclick="location.href='./sub.html'">整合投影</button><p></p>
+<button onclick="location.href='./tabs.html'">整合投影</button><p></p>
   <blockquote>
   <button onclick="location.href='./dashboard.html'">Dashboard客製綠幕</button><p></p>
     <blockquote>
     <a href="./subtitle_b.html">聖經字幕工具</a><p></p>
+      <blockquote>
+      <a id="bplay" hidden="true" href="./Bible_play" style="background-color: black;">幫你翻聖經 (聖經手機同步服務)</a><p></p>
+      <a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a><p></p>
+      </blockquote>
     <a href="./subtitle_niv.html">Bible niv </a><p></p>
+      <blockquote>
+      <a id="nivsync" hidden="true" href="./Bible_play_niv" style="background-color: black;">NIV聖經手機同步服務 (nodejs)</a><p></p>
+      </blockquote>
     <a href="./subtitle.html">詩歌字幕工具</a><p></p>
     <a href="./effect.html">綜藝效果</a><p></p>
     <a href="./clock.html">小時鐘</a><p></p>
@@ -63,7 +70,37 @@
 <a href="./matrix_proverbs.html">箴言 - matrix effect</a><p></p>
 <a href="./marquee.html">LED Board</a><p></p>
 <a href="./led_generator.html">LED&Pixel產生器</a><p></p>
+<a id="icom" hidden="true" href="./_cmd_client.html" style="background-color: black;">text intercom (nodejs)</a><p></p>
 <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
 <a href="https://sites.google.com/site/instantfunmobile/">阿榮娛樂</a><p></p>
 </body>
 </html>
+
+<script type="text/javascript" charset="UTF-8">
+function readParam(param) {
+    // 获取当前页面的URL
+    var currentURL = window.location.href;
+
+    //console.log('url: ' + currentURL);
+    //console.log(':' + window.location.origin);
+
+    // 通过URLSearchParams对象解析URL参数
+    var urlParams = new URLSearchParams(window.location.search);
+
+    // 获取特定参数的值
+    var parameterValue = urlParams.get(param);//'参数名');
+
+    // 输出参数值到控制台
+    console.log('参数值为：', parameterValue);
+
+    return parameterValue;
+}
+
+if (readParam('server') === 'nodejs') {
+  document.getElementById("bplay").hidden = false;
+  document.getElementById("bctrl").hidden = false;
+  document.getElementById("nivsync").hidden = false;
+  document.getElementById("icom").hidden = false;
+} 
+
+</script>

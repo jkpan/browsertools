@@ -173,7 +173,7 @@
   <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
 </div>
 
-<button id="menubtn" class="menuButton" style="top:10px;left:10px;" onclick="sideClick()">&nbsp</button>
+<button id="menubtn" class="menuButton" style="top:10px;left:10px;" onclick="sideClick()">-</button>
 
 <div class="sideMenu" id="sideMenu">
   &nbsp;
@@ -259,17 +259,21 @@ function resetFrame() {
 }
 
 function reloadFrame() {
-  
-  let src = document.getElementById('frame_'+tab).getAttribute('src');
-  //console.log('tab:' + tab + ': ' + src);
+  let src = document.getElementById('frame_'+tab).getAttribute('src');//console.log('tab:' + tab + ': ' + src);
   document.getElementById('frame_'+tab).setAttribute('src', src);
+}
 
+function getRootUrl() {
+  let all = window.location.href; //console.log(all);
+  let root = all.substr(0, all.length - '/tabs.html'.length); //console.log('root:' + root);
+  return root;
 }
 
 function relativeUrl(url) {
-  let domain = window.location.origin;
-  if (url.startsWith(domain)) {
-    let str = url.substr(domain.length, url.length - domain.length);
+  let root = getRootUrl();//let domain = window.location.origin;
+  if (url.startsWith(root)) {
+    let str = url.substr(root.length, url.length - root.length);
+    console.log(str);
     return str;
   }
   return url;
@@ -370,7 +374,7 @@ function selectSetting(event) {
 var _openWin = null;
 function openCtrl() { 
   closeCtrl();
-  _openWin = window.open("sub_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
+  _openWin = window.open("tabs_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
 }
 
 function closeCtrl() {

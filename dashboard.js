@@ -1,4 +1,4 @@
-const APPS = ['hymn', 'Bible', 'NIV', 'url_1', 'url_2', 'file_1', 'file_2', 'info', 'effect', 'time', 'dBoard', 'sub'];
+const APPS = ['hymn', 'Bible', 'NIV', 'url_1', 'url_2', 'file_1', 'file_2', 'info', 'effect', 'time', 'dBoard', 'tabs'];
 
 const GRID_W = 32;
 const GRID_H = 32;
@@ -791,8 +791,8 @@ function downloadExpJson() {
   
   function _createFrame(keyname) {
     switch(keyname) {
-      case 'sub': {
-        createFrame(keyname, 'sub.html');
+      case 'tabs': {
+        createFrame(keyname, 'tabs.html');
         let app = new Applet({x:2, y:7, w:16, h:10, keyname:keyname});
         applets.push(app);
         app.onTop();
