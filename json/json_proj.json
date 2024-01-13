@@ -2,50 +2,57 @@
 	"frame_1": {
 		"src": "./dashboard.html",
 		"obj": {
+			"ctrl": 0,
 			"hymn": {
-				"posize": [19, 22, 10, 10],
+				"posize": [2, 22, 10, 10],
 				"perspective": false,
 				"obj": {
 					"mode": 2,
 					"fontfactor": 12,
 					"list": [
 						
+						"其他120",
+						"讚美之泉56",
+						"讚美之泉66",
+						"新歌頌揚212",
+
 						"主禱文",
+
+						"其他121",
+						
+						"救恩293",
+						"救恩297",
+						"其他64",
+						
 						"使徒信經",
 						"救恩300"
+
 					]
 				}
 			},
 			"Bible": {
-				"posize": [1, 1, 20, 20],
+				"posize": [2, 1, 30, 19],
 				"perspective": false,
 				"obj": {
 					"color": 2,
-					"fontfactor": 11,
+					"fontfactor": 10,
 					"saved": [
-						[""],
-						["羅馬書", 4, 17],
-                        [""],
-                        [""],
-                        [""],
-                        [""],
-                        [""],
-                        [""],
-                        [""],
-                        [""]
+						[""], ["哥林多後書", 1, 3], [""], [""],
+                        [""], [""], [""], [""],
+                        [""], [""]
 					],
 					"syncType": 1
 				}
 			},
 			"url_1": {
-				"posize": [22, 8, 11, 11],
+				"posize": [22, 22, 10, 10],
 				"perspective": false,
 				"obj": {
 					"url": ""
 				}
 			},
 			"file_1": {
-				"posize": [5, 22, 10, 10],
+				"posize": [13, 24, 8, 8],
 				"perspective": false,
 				"obj": {}
 			},
@@ -69,5 +76,6 @@
 		"obj": {
 			"url": "https://docs.google.com/presentation/d/e/2PACX-1vR3t2qRf_NEqqZvQfMEtMt7ioBdZOKUpE4no1gHT8Q9VtlGUvHIPhiD3UtvbOOwVA/embed?start=false&loop=false&delayms=3000&rm=minimal"
 		}
-	}
+	},
+	"ctrl": 0
 }
