@@ -3,7 +3,7 @@ var dots = 3;
 
 var pixFunc;
 
-var dot_none = 33;
+var dot_none = 24;
 var criteria = dot_none * 2;//dot_none/2;
 
 var _r = 0;//dot_r;// * Math.random();
@@ -81,10 +81,9 @@ function asciiAction4Still(_canvas, _ctx) {
       if (_w > maskWidth) break;
       if (_h != h) break;
   
-      //pixFunc(data, k);
-      computeAverage(data, k, dots);
+      pickColor(data, k, dots);
+      //computeAverage(data, k, dots);
       
-      //array[h/dots] = array[h/dots] + ascii[Math.floor(_g/b)];
       array[h/dots][idx] = ascii[Math.floor(_g/b)];
       idx++;
 
@@ -240,7 +239,8 @@ function ledAction4Still(_canvas, _ctx) {
       if (_w > maskWidth) break;
       if (_h != h) break;
   
-      computeAverage(data, k, dots);
+      pickColor(data, k, dots);
+      //computeAverage(data, k, dots);
       fillArea(data, k, dots);
 
     }
@@ -284,6 +284,18 @@ function filter() {
   //filter_gray(16);
 }
 
+function pickColor(data, idx, _size) {
+  idx = idx + Math.floor(_size/2) * gapP + Math.floor(_size/2) * gapL;
+  _r = data[idx];
+  _g = data[idx+1];
+  _b = data[idx+2];
+  
+  if (side > 0 && (_r < criteria && _g < criteria && _b < criteria)) {
+    _r = dot_none;
+    _g = dot_none;
+    _b = dot_none;
+  }
+}
 
 function computeAverage(data, idx, _size) {
   

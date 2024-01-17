@@ -387,16 +387,12 @@ const server = http.createServer((req, res) => {
   }
 
   if (url.startsWith('/subtitle_b.html')) {
-    /*
-    const parsedUrl = urltool.parse(url);
-    console.log(parsedUrl);
-    const queryParams = querystring.parse(parsedUrl.query);
-    console.log('------');
-    console.log(queryParams);
-    */
-    //queryParams.volume='創世紀';
-    //res.send(queryParams);console.log();
     url = '/subtitle_b.html';
+  }
+
+  if (url.startsWith('/led.html')) {
+    url = '/led.html';
+    println('led.html CALL');
   }
 
   const filePath = `.${url}`;
@@ -415,8 +411,6 @@ Object.keys(networkInterfaces).forEach(interfaceName => {
     }
   });
 });
-
-//console.log(addresses[0]);
 
 let port = 80;
 const args = process.argv;//.slice(1);

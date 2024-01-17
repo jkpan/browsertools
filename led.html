@@ -36,7 +36,7 @@ function readParam(param) {
     var parameterValue = urlParams.get(param);//'参数名');
 
     // 输出参数值到控制台
-    console.log('参数值为：', parameterValue);
+    console.log(param + ' 参数值为：', parameterValue);
 
     return parameterValue;
 }
@@ -52,39 +52,33 @@ function _initData() {
     
     makeRound = false;
 
-    swing = 0;
-    swing1 = 1;
+    swing = readParam('mtype1') === '1'?1:0;
+    swing1 = readParam('mtype2') === '1'?1:0;
 
     speed = 300;
-    color_0 = "rgb(255, 255, 50)";
+    color_0 = readParam('color1') != null?readParam('color1'):"rgb(255, 255, 50)";
         
     speed1 = 150;
-    color_1 = "rgb(255, 50, 50)";
+    color_1 = readParam('color2') != null?readParam('color2'):"rgb(255, 50, 50)";
 
-    animIdx = 7;//parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
+    animIdx = readParam('anim') != null?parseInt(readParam('anim')):7;//parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
     bgIdx = 0;
 
-    subtitle[1] = ["從歲首到年終 耶和華 你神的眼目時常看顧那地"];//[申11:12]
-    let cons = "🎉新年快樂🎉";
-    subtitle[2] = [""];
-    
-    let year = readParam('year');
-    if (year) 
-        subtitle[2] = [year + cons];
-    else
-        subtitle[2] = ['2024🦖阿榮娛樂' + cons];
-    
+    subtitle[1] = readParam('str1') != null?[readParam('str1')]:[''];//["從歲首到年終 耶和華 你神的眼目時常看顧那地"];//[申11:12]
+    //let cons = "🎉新年快樂🎉";
+    subtitle[2] = readParam('str2') != null?[readParam('str2')]:[''];  
         
     init();
     initAnim();
  
     window.scroll(0, 0);
+
+    //led.html?color1=rgb(255,80,80)&color2=rgb(80,255,80)&mtype1=1&mtype2=0&str1=2024新年快樂&str2=從歲首到年終 耶和華 你神的眼目時常看顧那地&anim=6
 }
 
 _initData();
 
-window.addEventListener('resize', function() {
-    //init();//initAnim();
+window.addEventListener('resize', function() {//init();//initAnim();
     _initData();
 });
 

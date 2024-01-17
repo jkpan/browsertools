@@ -1,29 +1,23 @@
 {
+	"ctrl": 1,
 	"frame_1": {
 		"src": "./dashboard.html",
 		"obj": {
-			"ctrl": 0,
+			"ctrl": 1,
 			"hymn": {
 				"posize": [2, 22, 10, 10],
 				"perspective": false,
 				"obj": {
+					"master": 1,
 					"mode": 2,
 					"fontfactor": 12,
 					"list": [
 						
-						"其他120",
-						"讚美之泉56",
-						"讚美之泉66",
-						"新歌頌揚212",
-
+						"救恩210",
+						"救恩211",
+						"救恩215",
+						
 						"主禱文",
-
-						"其他121",
-						
-						"救恩293",
-						"救恩297",
-						"其他64",
-						
 						"使徒信經",
 						"救恩300"
 
@@ -76,6 +70,5 @@
 		"obj": {
 			"url": "https://docs.google.com/presentation/d/e/2PACX-1vR3t2qRf_NEqqZvQfMEtMt7ioBdZOKUpE4no1gHT8Q9VtlGUvHIPhiD3UtvbOOwVA/embed?start=false&loop=false&delayms=3000&rm=minimal"
 		}
-	},
-	"ctrl": 0
+	}
 }

@@ -199,7 +199,7 @@ function newParticle_txt_verticle(_p, _idx, xx, yy) {
       if (this.y > c.height + fsize)
         return;
 
-      _ctx.textAlign = "left";
+      _ctx.textAlign = "center";//"left";
       _ctx.font = FONT;// + "px 標楷體";
       
       _ctx.strokeStyle = 'black';
@@ -244,8 +244,9 @@ function newParticle_txt_verticle(_p, _idx, xx, yy) {
 }
 
 function clear_update() {
-  ctx.fillStyle = 'green';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //ctx.fillStyle = 'green';
+  //ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function anim_update(elapse) {
@@ -314,7 +315,7 @@ function initAnim() {
   particles = [];
 
   //verticle
-  let xx = left_gap;
+  let xx = left_gap + boardWidth/2;
   let yy = c.height + fsize;
   let _idx = 0;
   var total = subtitle[phase].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
@@ -389,6 +390,13 @@ function keyboard(e) {
             switch2Marquee();
           }
           break;
+        case 90: //'z'
+          console.log('z : ' + document.querySelector('body').style.background);
+          if (document.querySelector('body').style.background == 'transparent')
+            document.querySelector('body').style.background = 'green';
+          else 
+            document.querySelector('body').style.background = 'transparent';
+          break; 
 
     }
 
