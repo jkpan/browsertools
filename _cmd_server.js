@@ -382,10 +382,6 @@ const server = http.createServer((req, res) => {
     url = '/dash.html';
   }
 
-  if (url.startsWith('/led_newyear.html')) {
-    url = '/led_newyear.html';
-  }
-
   if (url.startsWith('/subtitle_b.html')) {
     url = '/subtitle_b.html';
   }

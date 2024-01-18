@@ -82,8 +82,8 @@
     font-size: 16px;
     margin: 2px 2px;
     
-    width: 36px;
-    height: 90%;
+    width: 28px;
+    height: 80%;
 
     text-align: center;
     padding: 4px;
@@ -189,9 +189,9 @@
   <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
   &nbsp;
   <button class="okbutton" onclick="reloadFrame()">R</button>
-  <button class="okbutton" onclick="openCtrl()">c</button>
-  <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">o</button>
-  <button id="aBtn" class="okbutton" onclick="setSlideAnim()">A1</button>
+  <button class="okbutton" onclick="openCtrl()">C</button>
+  <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">O</button>
+  <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
   &nbsp;
   <button class="okbutton" onclick="preload('./json/json_proj.json')">#投影</button>
   <button class="okbutton" onclick="preload('./json/json_green.json')">#綠幕</button>
@@ -396,7 +396,7 @@ function setSlideAnim() {
     if (animType == 0) {
         b.textContent = '--';
     } else {
-        b.textContent = 'A' + animType;//  <> ^v
+        b.textContent = 'a' + animType;//  <> ^v
     }
     
     for(let i=1;i<=tabCount;i++) {
@@ -422,7 +422,7 @@ function startRestoreInterval() {
   funcInterval = window.setInterval(restoreTabFromLocal, 500);
 
   var b = document.getElementById('oxBtn');
-  b.textContent = 'x';
+  b.textContent = 'X';
 
   /*
   for(let i=1;i<=tabCount;i++) 
@@ -437,7 +437,7 @@ function stopTabInterval() {
   funcInterval = null;
 
   var b = document.getElementById('oxBtn');
-  b.textContent = 'o';
+  b.textContent = 'O';
 
   /*
   for(let i=1;i<=tabCount;i++) 

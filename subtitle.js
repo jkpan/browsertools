@@ -117,6 +117,7 @@ function json2List(fileContent) {
 
   if (jsonData.mode) mode = jsonData.mode;
   if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
+  if (jsonData.fontColorType) fontColorType = jsonData.fontColorType;
 
   _repaint();
   //console.log(jsonData.list);
@@ -1178,6 +1179,7 @@ function toObj() {
   obj['mode'] = mode;
   obj['fontfactor'] = fontfactor;
   obj['list'] = list;
+  obj['fontColorType'] = fontColorType;
   return obj;
 }
 

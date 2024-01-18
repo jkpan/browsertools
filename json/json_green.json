@@ -5,11 +5,12 @@
 		"obj": {
             "ctrl": 1,
 			"hymn": {
-				"posize": [20, 17, 13, 15],
-				"perspective": false,
+				"posize": [18, 17, 15, 15],
+				"perspective": 1,
 				"obj": {
 					"mode": 3,
-					"fontfactor": 12,
+					"fontColorType": 1,
+					"fontfactor": 10,
 					"list": [
 						"主禱文",
 						"使徒信經",
@@ -18,8 +19,8 @@
 				}
 			},
 			"Bible": {
-				"posize": [1, 15, 19, 18],
-				"perspective": true,
+				"posize": [1, 15, 21, 18],
+				"perspective": 1,
 				"obj": {
 					"color": 1,
 					"fontfactor": 10.5,
@@ -32,7 +33,7 @@
 			},
 			"url_1": {
 				"posize": [20, 1, 13, 15],
-				"perspective": false,
+				"perspective": 1,
 				"obj": {
 					"url": ""
 				}
