@@ -1,0 +1,112 @@
+<script type="text/javascript" charset="UTF-8">
+    const LEDURL = 'https://jkpan.github.io/browsertools/led.html?color1=rgb(255,80,80)&color2=rgb(80,255,80)&mtype1=1&mtype2=0&str1=2024新年快樂&str2=從歲首到年終 耶和華 你神的眼目時常看顧那地&anim=7';
+    const BIBLEURL = 'https://jkpan.github.io/browsertools/subtitle_b.html?volume=啟示錄&chapter=2&verse=7';
+
+    const BIBLE_CE_URL = 'https://jkpan.github.io/browsertools/dash.html?app=中英文聖經';
+    const MATRIX_PSALMS_URL = 'https://jkpan.github.io/browsertools/matrix_psalms.html';
+    const MATRIX_PROVERBS_URL = 'https://jkpan.github.io/browsertools/matrix_proverbs.html';
+  
+</script>
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+  <style>
+  body {
+            margin: 10px;
+            height: 100%;
+            width: 100%;
+            background-color: rgb(104, 104, 104);
+            color: #00ff00;
+  }
+  a {
+              color: #ffffff;
+  }
+  button {
+              font-size: 16px;
+              background-color: rgb(100, 100, 100);
+              color: #ffffff;
+              /*margin: 2% 2%;*/
+              /*width:45%;*/
+              border: 1px solid;
+              vertical-align: middle;
+              z-index: 10;
+  }
+  .slides {
+      position: fixed;
+      top: 10%;
+      left: 40%; /* 初始位置在左侧屏幕外 */
+      width: 55%;
+      height: 70%;
+      background-color: rgb(0,0,0);
+      color: #fff;
+      transition: top 0.3s; /* 添加过渡效果 */
+      z-index: 90;
+      border: none;
+  }
+  </style>
+  </head>
+  <body>
+  <hr size="8" align="left" width="33%" color="#aaaaaa">
+  <div class="slides" id="slidesDiv" hidden="true">
+    <iframe style="border: none;" width="100%" height="100%" id="slidesFrame"></iframe>
+  </div>
+  <p></p>
+  <p></p>
+  <a href="javascript:embeddedUrl(BIBLE_CE_URL)">和合本NIV中英連動聖經</a> <button type="button" onclick="_copyToClickBoard(BIBLE_CE_URL)">Copy url</button><p></p>
+  <p></p>
+  <a href="javascript:embeddedUrl(MATRIX_PSALMS_URL)">詩篇 - matrix effect</a> <button type="button" onclick="_copyToClickBoard(MATRIX_PSALMS_URL)">Copy url</button><p></p>
+  <p></p>
+  <a href="javascript:embeddedUrl(MATRIX_PROVERBS_URL)">箴言 - matrix effect</a> <button type="button" onclick="_copyToClickBoard(MATRIX_PROVERBS_URL)">Copy url</button><p></p>
+  <p></p>
+  <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
+  LED祝福面板參數:
+  <button type="button" onclick="urlGo('led_url')">Try</button>
+  <button type="button" onclick="copyToClickBoard('led_url')">Copy url</button>
+  <p></p>
+  <textarea style="border: none;" id="led_url" rows="10" cols="50"></textarea><br/>
+  <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
+  經文參數:
+  <button type="button" onclick="urlGo('Bible_url')">Try</button>
+  <button type="button" onclick="copyToClickBoard('Bible_url')">Copy url</button><p></p>
+  <p></p>
+  <textarea style="border: none;" id="Bible_url" rows="10" cols="50"></textarea><br/>
+  <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
+  <a href="./marquee.html">LED Board</a><p></p>
+  <a href="./led_generator.html">LED&Pixel產生器</a><p></p>
+  <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
+  </body>
+  </html>  
+  <script type="text/javascript" charset="UTF-8">
+  document.getElementById("led_url").value = LEDURL;
+  document.getElementById("Bible_url").value = BIBLEURL;
+  //document.getElementById("ppt_url").select();
+  function urlGo(id) {
+  
+    let value = document.getElementById(id).value;
+    value = value.trim();
+    if (value.length == 0) return;
+    embeddedUrl(value);
+  }
+  
+  function embeddedUrl(url) {
+    document.getElementById('slidesDiv').hidden = false;
+    let frame = document.getElementById('slidesFrame');
+    frame.src = url;
+  }
+
+  function _copyToClickBoard(value) {
+    navigator.clipboard.writeText(value).then(() => {
+          //console.log("Text copied to clipboard...")
+      }).catch(err => {
+          console.log('Something went wrong', err);
+      });
+  }
+
+  function copyToClickBoard(id) {
+      var content = document.getElementById(id).value;
+      _copyToClickBoard(content);
+  }
+    
+  </script>
+  

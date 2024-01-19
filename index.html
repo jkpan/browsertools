@@ -1,5 +1,4 @@
 <script type="text/javascript" charset="UTF-8">
-  const LEDURL = 'https://jkpan.github.io/browsertools/led.html?color1=rgb(255,80,80)&color2=rgb(80,255,80)&mtype1=1&mtype2=0&str1=2024新年快樂&str2=從歲首到年終 耶和華 你神的眼目時常看顧那地&anim=7';
   const HELPURL = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//&rm=minimal';
 </script>
 <!DOCTYPE html>
@@ -87,31 +86,15 @@ button {
 <a href="javascript:embeddedUrl(HELPURL)">說明投影片</a>
 <p></p>
 <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
-<a href="./dash.html?app=中英文聖經">和合本NIV中英連動聖經</a><p></p>
-<a href="./matrix_psalms.html">詩篇 - matrix effect</a><p></p>
-<a href="./matrix_proverbs.html">箴言 - matrix effect</a><p></p>
-<a href="./marquee.html">LED Board</a><p></p>
-<a href="./led_generator.html">LED&Pixel產生器</a><p></p>
 <!--a href="">LED參數範例</a><p></p-->
-<textarea style="border: none;" id="led_url" name="mytext" rows="10" cols="50"></textarea>
-<button type="button" onclick="urlGo()">OK</button><p></p>
 <!--a href="javascript:embeddedUrl(LEDURL)">LED參數範例</a><p></p-->
 <a id="icom" hidden="true" href="./_cmd_client.html" style="background-color: black;">text intercom (nodejs)</a><p></p>
-<hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
+<a href="./index_others.html">others</a><p></p>
 <a href="https://sites.google.com/site/instantfunmobile/">阿榮娛樂</a><p></p>
 </body>
 </html>
 
 <script type="text/javascript" charset="UTF-8">
-document.getElementById("led_url").value = LEDURL;
-    //document.getElementById("ppt_url").select();
-function urlGo() {
-
-  let value = document.getElementById("led_url").value;
-  value = value.trim();
-  if (value.length == 0) return;
-  embeddedUrl(value);
-}
 
 function embeddedUrl(url) {
   document.getElementById('slidesDiv').hidden = false;
