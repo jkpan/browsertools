@@ -53,11 +53,11 @@
   </div>
   <p></p>
   <p></p>
-  <a href="javascript:embeddedUrl(BIBLE_CE_URL)">和合本NIV中英連動聖經</a> <button type="button" onclick="_copyToClickBoard(BIBLE_CE_URL)">Copy url</button><p></p>
+  <a href="javascript:embeddedUrl(BIBLE_CE_URL)">和合本NIV中英連動聖經</a> <button type="button" onclick="copyToBoard(BIBLE_CE_URL)">Copy url</button><p></p>
   <p></p>
-  <a href="javascript:embeddedUrl(MATRIX_PSALMS_URL)">詩篇 - matrix effect</a> <button type="button" onclick="_copyToClickBoard(MATRIX_PSALMS_URL)">Copy url</button><p></p>
+  <a href="javascript:embeddedUrl(MATRIX_PSALMS_URL)">詩篇 - matrix effect</a> <button type="button" onclick="copyToBoard(MATRIX_PSALMS_URL)">Copy url</button><p></p>
   <p></p>
-  <a href="javascript:embeddedUrl(MATRIX_PROVERBS_URL)">箴言 - matrix effect</a> <button type="button" onclick="_copyToClickBoard(MATRIX_PROVERBS_URL)">Copy url</button><p></p>
+  <a href="javascript:embeddedUrl(MATRIX_PROVERBS_URL)">箴言 - matrix effect</a> <button type="button" onclick="copyToBoard(MATRIX_PROVERBS_URL)">Copy url</button><p></p>
   <p></p>
   <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
   LED面板參數:
@@ -76,7 +76,9 @@
   <a href="./led_generator.html">LED&Pixel產生器</a><p></p>
   <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
   </body>
-  </html>  
+  </html>
+
+  <script type="text/javascript" src="common.js" charset="UTF-8"></script>
   <script type="text/javascript" charset="UTF-8">
   document.getElementById("led_url").value = LEDURL;
   document.getElementById("Bible_url").value = BIBLEURL;
@@ -95,17 +97,9 @@
     frame.src = url;
   }
 
-  function _copyToClickBoard(value) {
-    navigator.clipboard.writeText(value).then(() => {
-          //console.log("Text copied to clipboard...")
-      }).catch(err => {
-          console.log('Something went wrong', err);
-      });
-  }
-
   function copyToClickBoard(id) {
       var content = document.getElementById(id).value;
-      _copyToClickBoard(content);
+      copyToBoard(content);
   }
     
   </script>

@@ -1,3 +1,5 @@
+//import '/common.js';
+
 class Verseobj {
   volume = 0;
   chapter = 0;
@@ -2937,25 +2939,6 @@ function restoreActionFromLocal() {
     //obj = {"song": song, "phase": phase, "line" : line};
     //document.cookie = "last=" + JSON.stringify(obj) + "; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/";
   });
-
-  function readParam(param) {
-    // 获取当前页面的URL
-    var currentURL = window.location.href;
-
-    //console.log('url: ' + currentURL);
-    //console.log(':' + window.location.origin);
-
-    // 通过URLSearchParams对象解析URL参数
-    var urlParams = new URLSearchParams(window.location.search);
-
-    // 获取特定参数的值
-    var parameterValue = urlParams.get(param);//'参数名');
-
-    // 输出参数值到控制台
-    console.log('参数值为：', parameterValue);
-
-    return parameterValue;
-}
 
 if (readParam('volume')) {
   let volume = readParam('volume');//parseInt(array[0]);//array[0];

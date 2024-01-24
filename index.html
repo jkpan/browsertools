@@ -94,28 +94,13 @@ button {
 </body>
 </html>
 
+<script type="text/javascript" src="common.js" charset="UTF-8"></script>
 <script type="text/javascript" charset="UTF-8">
 
 function embeddedUrl(url) {
   document.getElementById('slidesDiv').hidden = false;
   let frame = document.getElementById('slidesFrame');
   frame.src = url;
-}
-
-function readParam(param) {
-    // 获取当前页面的URL
-    var currentURL = window.location.href;
-
-    // 通过URLSearchParams对象解析URL参数
-    var urlParams = new URLSearchParams(window.location.search);
-
-    // 获取特定参数的值
-    var parameterValue = urlParams.get(param);//'参数名');
-
-    // 输出参数值到控制台
-    console.log('参数值为：', parameterValue);
-
-    return parameterValue;
 }
 
 if (readParam('server') === 'nodejs') {
