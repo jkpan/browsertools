@@ -139,8 +139,8 @@ function generateMask(w, h, s, d) {
   var mask = tempCtx.createImageData(w, h);
   var data = mask.data;
 
-  let center = s + d/2.0;
-  let rr = d * d/4.0;
+  let center = s + d/2.0 - 0.5;
+  //let rr = d * d/4.0;
 
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
@@ -163,8 +163,17 @@ function generateMask(w, h, s, d) {
         if (_x >= s && _y >= s && x < maskWidth && y < maskHeight) { //d
           data[idx + 3] = 0;
           //if (Math.abs(_x - s - center) <= 2 && Math.abs(_y - center) <= 2) data[idx + 3] = 255;
-          if (makeRound && d > 1 && (Math.abs(_x - center) * Math.abs(_x - center) + Math.abs(_y - center) * Math.abs(_y - center)) > rr) {
-              data[idx + 3] = 255;
+          if (makeRound && d > 1 ) {
+            //&& (Math.abs(_x - center) * Math.abs(_x - center) + Math.abs(_y - center) * Math.abs(_y - center)) > rr) {
+              let dist = Math.sqrt(Math.abs(_x - center) * Math.abs(_x - center) + 
+                                   Math.abs(_y - center) * Math.abs(_y - center));
+              let diff = dist - d/2.0;
+              if (diff > 0.5)
+                data[idx + 3] = 255;
+              else if (diff < -0.5) 
+                data[idx + 3] = 0;
+              else 
+                data[idx + 3] = Math.floor(255 * (diff + 0.5));
           }
         }
     }

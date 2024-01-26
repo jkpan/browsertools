@@ -100,13 +100,14 @@
   
     function showLEDLegend() {
     
-      var sel_gap = document.getElementById('Gap');
-      var sel_lsize = document.getElementById('Lsize');
-      var gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
-      var lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
+      let sel_gap = document.getElementById('Gap');
+      let sel_lsize = document.getElementById('Lsize');
+      let gap = parseInt(sel_gap.options[sel_gap.options.selectedIndex].value, 10);
+      let lsz = parseInt(sel_lsize.options[sel_lsize.options.selectedIndex].value, 10);
     
-      var size = parseInt(document.getElementById('banner_size').value, 10)
-      var text = document.getElementById('banner_text').value;
+      //var size = parseInt(document.getElementById('banner_size').value, 10);
+      let size = detectDevice()?64:84;
+      let text = document.getElementById('banner_text').value;
       
       makeRound = document.getElementById("round").checked;
       
@@ -197,28 +198,39 @@
     document.getElementById('btn_anim').style.backgroundColor = leftColor;
     document.getElementById('btn_bg').style.backgroundColor = leftColor;
   
+    
     document.getElementById('content_txt').hidden = true;
     document.getElementById('content_txt2').hidden = true;
     document.getElementById('content_anim').hidden = true;
     document.getElementById('content_bg').hidden = true;
+    /*
+    document.getElementById('content_txt').style.opacity = 0.0;
+    document.getElementById('content_txt2').style.opacity = 0.0;
+    document.getElementById('content_anim').style.opacity = 0.0;
+    document.getElementById('content_bg').style.opacity = 0.0;
+    */
   
     switch(idx) {
       case 1:
         document.getElementById('content_txt').style.color = workingColor;
         document.getElementById('btn_txt').style.backgroundColor = workingColor;
         document.getElementById('content_txt').hidden = false;
+        //document.getElementById('content_txt').style.opacity = 1.0;
         break;
       case 2:
         document.getElementById('btn_txt2').style.backgroundColor = workingColor;
         document.getElementById('content_txt2').hidden = false;
+        //document.getElementById('content_txt2').style.opacity = 1.0;
         break;
       case 3:
         document.getElementById('btn_anim').style.backgroundColor = workingColor;
         document.getElementById('content_anim').hidden = false;
+        //document.getElementById('content_anim').style.opacity = 1.0;
         break;
       case 4:
         document.getElementById('btn_bg').style.backgroundColor = workingColor;
         document.getElementById('content_bg').hidden = false;
+        //document.getElementById('content_bg').style.opacity = 1.0;
         break;
     }
   }
@@ -285,9 +297,9 @@
             width: 40px;
             height: 40px;
             vertical-align: middle;
-            margin: 2% 2%;
+            margin: 1% 1%;
         }
-        .label {
+        label {
             color:#ffffff;
             font-size: 24px;
             vertical-align: middle;
@@ -318,6 +330,7 @@
       .banner {
         grid-column: 1 / 3;
         grid-row: 1 / 2;
+        background-color:rgb(0, 0, 0);
       }
       .go {
         grid-column: 3 / 4;
@@ -325,10 +338,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color:rgb(0, 0, 255);
       }
       .ledoption {
         grid-column: 1 / 4;
         grid-row: 2 / 3;
+        background-color:rgb(50, 50, 50);
       }
       .txt1 {
         grid-column: 1 / 2;
@@ -362,6 +377,7 @@
         grid-column: 2 / 4;
         grid-row: 3 / 7;
         background-color: transparent;
+        /* 过渡动画 transition: opacity 0.2s; */
       }
       </style>
       </head>   
@@ -369,7 +385,7 @@
 
     <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
 
-    <input id="banner_size" type="hidden" value="64" />
+    <!--input id="banner_size" type="hidden" value="64" /-->
     <input id="banner_text" type="hidden" value="LED-Board😎" />
 
     <div id="ui">
@@ -385,44 +401,30 @@
       </div>
       
       <div class="ledoption">       
-        <label class="label"> LED Size</label>
+        <label>&nbsp;LED Size</label>
         <select class="select" name="Lsize" id="Lsize" onchange="showLEDLegend()"></select>
           <script>
-            var select = document.getElementById("Lsize");
+            let selectL = document.getElementById("Lsize");
             for (var i = 1; i <= 20; i++) {
               var option = document.createElement("option");
               option.text = '' + i;
               option.setAttribute("value", option.text);
-              select.add(option);
+              selectL.add(option);
             }
-            /*
-            if (detectDevice()) {
-              select.options.selectedIndex = 4;
-            } else {
-              select.options.selectedIndex = 8;
-            }
-            */
           </script>
-        <label class="label">Gap</label>
+        <label>Gap</label>
         <select class="select" name="Gap" id="Gap" onchange="showLEDLegend()"></select>
         <script>
-          var select = document.getElementById("Gap");
+          let selectG = document.getElementById("Gap");
           for (var i = 0; i <= 20; i++) {
             var option = document.createElement("option");
             option.text = '' + i;
             option.setAttribute("value", option.text);
-            select.add(option);
-          }
-          /*
-          if (detectDevice()) {
-            select.options.selectedIndex = 2;
-          } else {
-            select.options.selectedIndex = 4;
-          }
-          */
+            selectG.add(option);
+          }         
         </script>
         <input type="checkbox" id="round" value="0" onchange="showLEDLegend()" class="largerCheckbox" checked />
-        <label for="cbox1" class="label">Round</label>
+        <label>Round</label>
         &nbsp;&nbsp;
         <button type="button" class="btn2" onclick="getLEDLink()">Copy LED URL</button>
       </div>  <!--LED options-->
@@ -446,15 +448,15 @@
         <br/>
         
         <input type="color" id="txtc_0" value="#ffffff" class="largerColorSel" />
-        <label class="label">Color</label>
+        <label>Color</label>
         <br/>
         
         <input type="range" min="20" max="400" step="20" value="120" id="speed" onchange="" />
-        <label class="label">Speed</label>
+        <label>Speed</label>
         <br/>
         
         <input type="checkbox" id="swing" value="0" class="largerCheckbox" checked />
-        <label for="cbox1" class="label">Swing</label>
+        <label>Swing</label>
 
       </div> <!--content-->
 
@@ -464,15 +466,15 @@
         <br/>
         
         <input type="color" id="txtc_1" value="#ffffff" class="largerColorSel" />
-        <label class="label">Color</label>
+        <label>Color</label>
         <br/>
         
         <input type="range" min="20" max="400" step="20" value="120" id="speed1" onchange="" />
-        <label class="label">Speed</label>
+        <label>Speed</label>
         <br/>
         
         <input type="checkbox" id="swing1" value="0" class="largerCheckbox" checked />
-        <label for="cbox1" class="label">Swing</label>
+        <label>Swing</label>
 
       </div> <!--content-->
 
@@ -494,15 +496,15 @@
       <div class="content" id="content_bg">
   
         <input type="checkbox" id="backlight" value="0" class="largerCheckbox" onchange="backLightAction()"/>
-        <label class="label">BackLight</label>
+        <label>BackLight</label>
         <br/>
         
         <div id="back_options">
             <input type="color" id="back_color" value="#000000" class="largerColorSel"/>
-            <label class="label">Color</label>
+            <label>Color</label>
             <br/> 
             <input type="range" min="0" max="10" step="1" value="0" id="back_speed" onchange="" />
-            <label class="label">Flash/sec</label>
+            <label>Flash/sec</label>
             <br/>
         </div>
       </div> <!--content-->
@@ -618,39 +620,41 @@ function getLEDLink() {
       if (_x > canvas.width * (1 - controlRatio) && _y < canvas.height * controlRatio) { //右上
         ledSwitch();
         return;
-      }
-      /*
-      if (_x < canvas.width * controlRatio && _y > canvas.height * (1 - controlRatio)) { //左下
-        canvas.requestFullscreen();
-        return;
-      }
-      if (_x < canvas.width * controlRatio && _y < canvas.height * controlRatio) { //左上
-    
-      }
-      */
+      } 
+      //canvas.requestFullscreen(); return;
     }
     
-    document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
-              //canvas.requestFullscreen();
-    
-              if (canvas.hidden) return;
-    
-              //evt.preventDefault();
-              var touches = getTouchPos(canvas, evt);
+    if (detectDevice()) {
+      document.getElementsByTagName("canvas")[0].addEventListener("touchstart", function(evt) {
+        //canvas.requestFullscreen();
+        if (canvas.hidden) return;
+        //evt.preventDefault();
+        var touches = getTouchPos(canvas, evt);
+        touchAction(touches.x, touches.y);
+      });
+    } else {
+      document.getElementsByTagName("canvas")[0].addEventListener('mousedown', (e) =>{
+        touchAction(e.x, e.y);
+      });
+    }
 
-              touchAction(touches.x, touches.y);
-    
-    });
 
-    
-    document.getElementsByTagName("canvas")[0].addEventListener('mousedown', (e) =>{
-      touchAction(e.x, e.y);
-    });
+
     
     
     initCanvas();
     switch2Input();
     switchFunction(1);
+
+
+    //let select_L = document.getElementById("Lsize");
+    //let select_G = document.getElementById("Gap");
+    if (!detectDevice()) {
+      selectL.selectedIndex = 5;
+      selectG.selectedIndex = 4;
+      document.getElementById("round").checked = false;
+      showLEDLegend();
+    }
 
     
 </script>
