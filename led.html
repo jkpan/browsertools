@@ -30,8 +30,8 @@
 function _initData() {
 
     let _all = Math.max(7, Math.floor(window.innerHeight/50));
-    dots = Math.ceil(_all * 0.66);
-    side = _all - dots;
+    dots = Math.ceil(_all * 0.7);
+    side = Math.max(1, _all - dots);
 
     //side = 3;
     //dots = 4;

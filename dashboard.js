@@ -713,14 +713,10 @@ function downloadExpJson() {
   function colorSwitch() {
     
     let div = document.getElementById("mainDiv");
-    const colorPicker = document.getElementById('colorPicker');
-    
     if (div.style.backgroundColor != 'black') {
       div.style.backgroundColor = 'black';
-      if (colorPicker) colorPicker.hidden = false;
     } else if (div.style.backgroundColor == 'black') {
       div.style.backgroundColor = 'rgb(0, 112, 0)';
-      if (colorPicker) colorPicker.hidden = true;
     }   
   
   }

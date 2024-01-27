@@ -129,9 +129,26 @@
       <button class="btn2" onclick="spot2iframe('dBoard')">客制</button>
       <button class="btn2" onclick="spot2iframe('tabs')">頁籤</button>
       <label style="color: #00ee00;">|</label>
-      <button class="btn" onclick="colorSwitch()">B/G</button>
+      <button class="btn" onclick="_colorSwitch()">B/G</button>
       <input type="color" id="colorPicker" name="colorPicker" hidden="true"/>
       <script>
+          function _colorSwitch() {
+    
+            let div = document.getElementById("mainDiv");
+            const colorPicker = document.getElementById('colorPicker');
+            //let sideMenu = document.getElementById('sideMenu');
+
+            if (div.style.backgroundColor != 'black') {
+              div.style.backgroundColor = 'black';
+              //sideMenu.style.backgroundColor = 'black';
+              if (colorPicker) colorPicker.hidden = false;
+            } else if (div.style.backgroundColor == 'black') {
+              div.style.backgroundColor = 'rgb(0, 112, 0)';
+              //sideMenu.style.backgroundColor = 'rgb(0, 112, 0)';
+              if (colorPicker) colorPicker.hidden = true;
+            }
+          }
+
         // 获取colorPicker元素
         const colorPicker = document.getElementById('colorPicker');
     
@@ -140,6 +157,8 @@
           const selectedColor = colorPicker.value;
           let div = document.getElementById("mainDiv");
           div.style.backgroundColor = selectedColor;
+          //let sideMenu = document.getElementById('sideMenu');
+          //sideMenu.style.backgroundColor = selectedColor;
         });
 
       </script>
