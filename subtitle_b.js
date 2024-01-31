@@ -1578,6 +1578,45 @@ function restoreActionFromLocal() {
   function combineKey(e) {
     var jump = 10;
     switch (e.keyCode) {
+        case 33: { //'ArrowLeft'
+          helpSwitch = 0;
+          let _phase = getPreChapter(phase, line);
+          let _line = getPreVerse(phase, line);
+          phase = _phase;
+          line = _line;
+          _repaint();
+          return;
+          /*
+          if (_phase >= 0 && (phase != _phase || line != _line)) {
+            phase = _phase;
+            line = _line;
+            if (mode == 0 && queue.length > 0) {
+              operateQuene(2, 0);
+            }
+          }
+          */
+        }
+          break;
+        case 34:{ //'ArrowRight'
+          helpSwitch = 0;
+          let _phase = getNextChapter(phase, line);
+          let _line = getNextVerse(phase, line);
+          phase = _phase;
+          line  = _line;
+          _repaint();
+          return;
+          /*
+          if (_phase >=0 && (phase != _phase || line != _line)) {
+            phase = _phase;
+            line  = _line;
+            if (mode == 0 && queue.length > 0) {
+              operateQuene(1, 0);
+            }
+          }
+          */
+
+        }
+          break;
         case 65: sortjump( 1,  5); break;
         case 83: sortjump( 6, 17); break;
         case 68: sortjump(18, 22); break;
@@ -2017,7 +2056,7 @@ function restoreActionFromLocal() {
           }
             break;
         
-          case 189: //'-'
+        case 189: //'-'
             helpSwitch = 0;
             if (canvas.hidden) break;
             if (song > 1) 
@@ -2415,6 +2454,10 @@ function restoreActionFromLocal() {
   function keyupAction(e) {
     //e.preventDefault();
     //e.stopPropagation();
+    if (e.keyCode == 16) {
+      saveAction2Local();
+    }
+
     if (recognition && recognizing) {
         recognition.stop();
     }

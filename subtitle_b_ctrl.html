@@ -4,35 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  .container {
+.container {
     display: flex;
     height: 100vh; /* 设置容器高度为视窗高度的100% */
-  }
-  body {
-        margin: 0px;
-        background-color: rgb(0, 128, 0);
-      }
-    ::-webkit-scrollbar {
-        display: none;
-      }
-
-  .column {
+}
+body {
+    margin: 0px;
+    background-color: rgb(0, 0, 0);
+}
+::-webkit-scrollbar {
+    display: none;
+}
+.column {
     flex: 1;
     padding: 10px;
     border: 0px solid #ccc;
     box-sizing: border-box;
     overflow: auto;
-  }
-  button {
-            font-size: 16px;
-            background-color: transparent;
-            color: #00ff00;
-            /*margin: 2% 2%;*/
-            width: 33%;
-            border: 1px solid;
-            vertical-align: middle;
-            border-radius: 4px;
-          }
+}
+button {
+    font-size: 16px;
+    background-color: transparent;
+    color: #00ff00;
+    /*margin: 2% 2%;*/
+    width: 33%;
+    border: 1px solid;
+    vertical-align: middle;
+    border-radius: 4px;
+}
 </style>
 <title>Three Independent Columns with Full Viewport Height</title>
 </head>
@@ -66,18 +65,43 @@ function createBtnVolumn() {
     document.getElementById('verses').innerHTML = '';
 
     let div = document.getElementById('volumn');
+
+    let color_idx = 200;
         
     for (var i=1;i<=66;i++) {
 
-        if (i == 6) div.insertAdjacentHTML('beforeend',  '<br/><br/>');
-        if (i == 18) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-        if (i == 23) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-        if (i == 28) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-        if (i == 40) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-        if (i == 45) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-        if (i == 54) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-        if (i == 58) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-
+        if (i == 6) {
+            color_idx = 0;
+            div.insertAdjacentHTML('beforeend',  '<br/><br/>');
+        }
+        if (i == 18) {
+            color_idx = 200;
+            div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        }
+        if (i == 23) {
+            color_idx = 0;
+            div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        }
+        if (i == 28) {
+            color_idx = 200;
+            div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        }
+        if (i == 40) {
+            color_idx = 255;
+            div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        }
+        if (i == 45) {
+            color_idx = 180;
+            div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        }
+        if (i == 54) {
+            color_idx = 255;
+            div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        }
+        if (i == 58) {
+            color_idx = 180;
+            div.insertAdjacentHTML('beforeend', '<br/><br/>');
+        }
         var button = _newBtn(); //_createVolumn(i);
         button.innerHTML = window.opener.SONGS[i][0][0];
         button.id = 'vol ' + i;
@@ -87,10 +111,6 @@ function createBtnVolumn() {
             
             if (document.getElementById('vol ' + _song)) 
                 document.getElementById('vol ' + _song).style.background = 'transparent';
-
-            //window.opener.song = _song = idx;
-            //window.opener.phase = _phase = 0;
-            //window.opener.line = _line = 0;
             _song = idx;
             _phase = 0;
             _line = 0;
@@ -108,7 +128,14 @@ function createBtnVolumn() {
             return false;
         };
         
-        if (i > 39) button.style.color = 'rgb(255, 255, 255)'; // setting the color to white
+        if (i > 39) 
+            button.style.color = 'rgb(' + color_idx + ',' + 
+                                          color_idx + ',' + 
+                                          color_idx + ')'; // setting the color to white
+        else 
+            button.style.color = 'rgb(' + color_idx + ',' + 
+                                          255 + ',' + 
+                                          color_idx + ')';
   
         div.appendChild(button);
         
