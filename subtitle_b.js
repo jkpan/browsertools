@@ -9,7 +9,7 @@ class Verseobj {
   frontxt = '';
   level = 0;
       
-  transY = -100;
+  transY = -1000;
   fs = 0;
   opacity = 1.0;
       
@@ -26,6 +26,14 @@ class Verseobj {
     this.fs = this.targetFs;
   
   }
+
+  set2Top(pre) {
+    this.transY = - canvas.height * 0.2;
+  }
+
+  set2Bottom() {
+    this.transY = canvas.height * 1.1;
+  }
   
   setLevel(level) {
         this.level = level;
@@ -41,9 +49,6 @@ class Verseobj {
       
   setTargetTransY(_transY) {
       this.targetTransY = _transY;
-      if (this.transY < -50) {
-          this.transY = this.targetTransY;
-      }
   } 
   
   preDraw(progress) {
@@ -1142,6 +1147,7 @@ function restoreActionFromLocal() {
     let v = getPreVerse(obj.chapter, obj.verse);
     obj = new Verseobj();
     obj.initial(song, c, v, 1);
+    obj.set2Top();
     return obj;
   }
   
@@ -1152,6 +1158,7 @@ function restoreActionFromLocal() {
     let v = getNextVerse(obj.chapter, obj.verse);
     obj = new Verseobj();
     obj.initial(song, c, v, 1);
+    obj.set2Bottom();
     return obj;
   }
   
@@ -1234,13 +1241,14 @@ function restoreActionFromLocal() {
   
   function _render(progress) {
     
-    let x = canvas.width * 0.1;
+    //let x = canvas.width * 0.1;
   
     let fixy = //color_selection == 0?canvas.height * 0.6:canvas.height * 0.33;
                canvas.height * 0.33;
     let offY = fixy;
   
-    /////
+    
+    if (progress <= 0)/////
     for (let i = 0;i<queue.length;i++) {
       let obj = queue[i];
       if (obj.chapter == phase && obj.verse == line) {
@@ -1261,7 +1269,7 @@ function restoreActionFromLocal() {
           o.setTargetTransY(offY);
           offY += o.preDraw(-2);
         }
-        
+
         offY = fixy;
         for (let k = i - 1;k >= 0;k--) {
           let o = queue[k];
@@ -1303,19 +1311,17 @@ function restoreActionFromLocal() {
           let o = queue[k];
           //o.transY = offY;
           o.preDraw(progress);
+          if (o.transY > canvas.height) continue;
           o.draw();
-          if (o.transY > canvas.height) break;
         }
         
-        //offY = obj.transY;
-        offY = fixy; 
+        //offY = fixy; 
         for (let k = i - 1;k >= 0;k--) {
           let o = queue[k];
           o.preDraw(progress);
-          //if (o.transY <= 0) break;
           o.draw();
-          if (offY <= 0) break;
-          offY = o.transY;
+          //offY = o.transY;
+          if (o.transY < 0) break;
         }
         
         break;

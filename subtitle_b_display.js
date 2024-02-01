@@ -145,10 +145,10 @@ class VerseObj {
     //frontxt: '',
     level = 0;
     
-    transY = -100;
+    transY = -1000;
     fs = 0;
     opacity = 1.0;
-
+    targetTransY = 0;
     //gap_fs: 0,
     //gap_transY : 0,
           
@@ -158,6 +158,14 @@ class VerseObj {
       this.verse = v;
       this.setLevel(level);
       this.fs = this.targetFs;
+    }
+
+    set2Top(pre) {
+      this.transY = - canvas.height * 0.2;
+    }
+  
+    set2Bottom() {
+      this.transY = canvas.height * 1.1;
     }
 
     targetRect = 0;
@@ -177,13 +185,8 @@ class VerseObj {
       //this.o_fs = this.fs;
     }
 
-    targetTransY = 0;
     setTargetTransY(_transY) {
       this.targetTransY = _transY;
-      if (this.transY < -50) {
-        this.transY = this.targetTransY;
-      }
-      //this.o_transY = this.transY;
     }
 
     preDraw(progress) {
@@ -597,6 +600,7 @@ function getQueuePre() {
   let v = cv[1];//getPreVerse(obj.chapter, obj.verse);
   obj = new VerseObj();
   obj.initial(song, c, v, 1);
+  obj.set2Top();
   return obj;
 }
 
@@ -608,6 +612,7 @@ function getQueueNext() {
   let v = cv[1];//getNextVerse(obj.chapter, obj.verse);
   obj = new VerseObj();
   obj.initial(song, c, v, 1);
+  obj.set2Bottom();
   return obj;
 }
 
@@ -671,11 +676,12 @@ var queue = [];
 
 function _render(progress) {
   
-  let x = canvas.width * 0.1;
+  //let x = canvas.width * 0.1;
 
   let fixy = canvas.height * 0.33;
   let offY = fixy;
 
+  if (progress <= 0)
   for (let i = 0;i<queue.length;i++) {
     let obj = queue[i];
     if (obj.chapter == phase && obj.verse == line) {
@@ -736,17 +742,17 @@ function _render(progress) {
       for (let k = i + 1;k<queue.length;k++) {
         let o = queue[k];
         o.preDraw(progress);
-        if (o.transY + o.substrings.length * o.fs > canvas.height) break;
+        if (o.transY + o.substrings.length * o.fs > canvas.height) continue;
         o.draw();
       }
       
       //offY = obj.transY;
-      offY = fixy; 
+      //offY = fixy; 
       for (let k = i - 1;k >= 0;k--) {
         let o = queue[k];
         o.preDraw(progress);
-        if (o.transY < 0) break;
         o.draw();
+        if (o.transY < 0) break;
       }
       
       break;
