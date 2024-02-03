@@ -22,7 +22,7 @@
 				"posize": [1, 15, 21, 18],
 				"perspective": 1,
 				"obj": {
-					"color": 1,
+					"color": 0,
 					"fontfactor": 10.5,
 					"saved": [
 						[""], [""], [""], [""],

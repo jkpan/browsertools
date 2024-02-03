@@ -14,14 +14,21 @@
 					"list": [
 						
 						"讚美之泉71", 
-						"讚美之泉44", 
+						"讚美之泉88", 
 						"其他20", 
 						"讚美之泉6", 
 						"讚美之泉53",
 
+						"救恩162",
+
+						"救恩105",
+
+						"救恩293", 
+						"救恩297", 
+						"其他64",
+
 						"其他115",
 						"讚美之泉125",
-
 						"主禱文",
 						"使徒信經",
 						"救恩300"
@@ -61,19 +68,28 @@
 	"frame_2": {
 		"src": "./newurl.html",
 		"obj": {
+			"trigger": 0,
 			"url": "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
 		}
 	},
 	"frame_3": {
 		"src": "./newurl.html",
 		"obj": {
-			"url": ""
+			"trigger": 0,
+			"url": "https://docs.google.com/presentation/d/e/2PACX-1vR0onym5FdX_yJnG_N_ZS1vFIYjtpEF_sdA0-b4rYHTYFqhADMFz0hKY-hGJbaSCw/embed?start=false&loop=false&delayms=3000&rm=minimal"
 		}
 	},
 	"frame_4": {
 		"src": "./newurl.html",
 		"obj": {
+			"url": ""
+		}
+	},
+	"frame_5": {
+		"src": "./newurl.html",
+		"obj": {
 			"url": "https://docs.google.com/presentation/d/e/2PACX-1vR3t2qRf_NEqqZvQfMEtMt7ioBdZOKUpE4no1gHT8Q9VtlGUvHIPhiD3UtvbOOwVA/embed?start=false&loop=false&delayms=3000&rm=minimal"
 		}
 	}
+	
 }

@@ -378,10 +378,6 @@ var presetVerse = [
   var hlightStyle_green = hlightStyle;//'rgb(0, 0, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_green = COLORS_CK;//["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
-  var bgStyle_blue = 'transparent';//'blue';
-  var hlightStyle_blue = 'rgba(100, 100, 100, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-  const COLORS_blue = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
-
   var bgStyle_black = 'black';
   var hlightStyle_black = 'rgba(100, 100, 100, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_black = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
@@ -461,6 +457,10 @@ var presetVerse = [
     _canvas.id = "canvas";
     _canvas.width = 100;
     _canvas.height = 100;
+
+    _canvas.setAttribute('ondrop', 'dropHandler(event)');
+    _canvas.setAttribute('ondragover', 'dragOverHandler(event)');
+
     //_canvas.style.zIndex = 8;
     //_canvas.style.position = "absolute";
     //_canvas.style.border = "1px solid";
@@ -474,6 +474,7 @@ var presetVerse = [
   }
 
   createCanvas();
+  createBGHiddenFile();
 
   function init() {
       canvas = document.getElementById("canvas");
@@ -1843,7 +1844,17 @@ function restoreActionFromLocal() {
   }
   
   function colorSwitch() {
-    switch(color_selection) {  
+    switch(color_selection) {
+      case 0:
+        bgcolor_pointer = 'rgba(0,0,0,0)';
+        color_pointer = 'rgba(0,0,0,0)';
+        hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
+        break;
+      case 1: //default: //0, 1
+        bgcolor_pointer = bgStyle;
+        color_pointer = COLORS_CK;
+        hlight_pointer = hlightStyle;
+        break;
       case 2:
         bgcolor_pointer = bgStyle_black;
         color_pointer = COLORS_black;
@@ -1854,21 +1865,20 @@ function restoreActionFromLocal() {
         color_pointer = COLORS_white;
         hlight_pointer = hlightStyle_white;
         break;
+        /*
       case 4:
         bgcolor_pointer = bgStyle_blue;
         color_pointer = COLORS_blue;
         hlight_pointer = hlightStyle_blue;
         break;
-      case 0:
-        bgcolor_pointer = 'rgba(0,0,0,0)';
-        color_pointer = 'rgba(0,0,0,0)';
-        hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
-        break;
+        */
+       /*
       default: //0, 1
         bgcolor_pointer = bgStyle;
         color_pointer = COLORS_CK;
         hlight_pointer = hlightStyle;
         break;
+        */
     }
 
   }
@@ -1982,10 +1992,8 @@ function restoreActionFromLocal() {
               display_mode = 0;
             }
 
-            color_selection = (color_selection + 1) % 5;
+            color_selection = (color_selection + 1) % 4;
             colorSwitch();
-
-      
 
             break;
         case 72: //'H'
@@ -2158,9 +2166,6 @@ function restoreActionFromLocal() {
             presetVerse[0][2] = line;
             break; 
           //case 32: canvas.requestFullscreen(); break;
-          case 13: //'enter'
-            
-            break;
           case 27: //'escape'
             jumpTo1();
             mode = 0;
@@ -2169,6 +2174,7 @@ function restoreActionFromLocal() {
             doblank = 0;
             helpSwitch = 0;
             uisel = 0;
+            img = null;
             break;
           default:
             break;
@@ -2194,31 +2200,15 @@ function restoreActionFromLocal() {
   }
   
   function _layer0() {
-
-    //console.log('mode : ' + color_selection);
-    /*
-    if (color_selection == 4) {
-      //ctx.fillStyle = 'rgb(255,0,0)';//'green';
-      //ctx.fillRect(0, 0, canvas.width, canvas.height); 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    } else {
-      ctx.fillStyle = bgcolor_pointer;//'green';
-      ctx.fillRect(0, 0, canvas.width, canvas.height); 
-    }
-    */
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
    
     if (color_selection == 0) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     } else {
       ctx.fillStyle = bgcolor_pointer;//'green';
-      ctx.fillRect(0, 0, canvas.width, canvas.height); 
-    }
-   
-
-    if (img) {
-        ctx.drawImage(img,0,0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (img) {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      }
     }
 
     _layerBg();
@@ -2226,15 +2216,6 @@ function restoreActionFromLocal() {
   }
   
   function _phoneUi() {
-    /*
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = color_pointer[2];
-    ctx.beginPath();
-      ctx.moveTo(canvas.width * 0.33, canvas.height/6.0);
-      ctx.lineTo(canvas.width * 0.66, canvas.height/6.0);
-      ctx.stroke();
-    ctx.closePath();
-    */
    
     ctx.fillStyle = bgcolor_pointer;//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2297,7 +2278,9 @@ function restoreActionFromLocal() {
     phoneScrollVolume();
         
     if (uisel == 0) return;
+
     ctx.fillStyle = bgcolor_pointer;//'green';
+    if (color_selection == 0) ctx.fillStyle = 'rgba(255,255,255, 0.66)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.lineWidth = 1;
     ctx.font = FONT;
@@ -2305,10 +2288,10 @@ function restoreActionFromLocal() {
     let y = canvas.height - fontsize_sml;
     ctx.font = fontsize_sml + 'px Arial';
     ctx.textBaseline = 'top';//'bottom';
+    ctx.strokeStyle = color_pointer[2];
     for (let i=uisel_start;i<=uisel_end;i++) {
       ctx.fillStyle = color_pointer[(i == song?3:2)];
       if (i == song) {
-        ctx.strokeStyle = color_pointer[2];
         ctx.lineWidth = Math.ceil(fontsize/8.0);
         ctx.strokeText(SONGS[i][0][0], x - (i == song?fontsize_sml/2:0) , y);      
       }
@@ -2428,10 +2411,12 @@ function restoreActionFromLocal() {
 
       const jsonData = JSON.parse(e.data);
     
-      if (jsonData.color) {
+      if (jsonData.color) 
         color_selection = jsonData.color;
-        colorSwitch();
-      }
+      else 
+        color_selection = 0;
+      colorSwitch();
+
       if (jsonData.fontfactor) 
         setFontFactor(jsonData.fontfactor);
       if (jsonData.syncType) {

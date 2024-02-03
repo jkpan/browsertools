@@ -307,7 +307,7 @@ function downloadExpJson() {
   console.log(str);
   var downloadLink = document.createElement("a");
   downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + str);
-  downloadLink.setAttribute("download", "json_setting.json"); // 设置下载文件的名称，此处为myFile.txt
+  downloadLink.setAttribute("download", "tabs_setting.json"); // 设置下载文件的名称，此处为myFile.txt
   // 4. 使用JavaScript模拟用户点击下载链接，从而触发下载
   downloadLink.click();
 }

@@ -1,62 +1,3 @@
-
-function dropHandler(event) {
-
-  event.preventDefault();
-
-  // 檢查是否有拖拉的檔案
-  if (event.dataTransfer.items) {
-      // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
-      for (var i = 0; i < event.dataTransfer.items.length; i++) {
-          if (event.dataTransfer.items[i].kind === 'file') {
-              var file = event.dataTransfer.items[i].getAsFile();
-              if (file.type.startsWith('image/')) {
-                
-                //////loadBgImg(event);
-                img = null;
-                _repaint();
-
-                var reader = new FileReader();
-                 // 读取文件内容
-                reader.onload = function (event) {
-                  var _img = new Image();
-                  _img.onload = function () {
-                    img = _img;
-                    _repaint(); 
-                  };
-                  _img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-                //// 
-
-              }
-          }
-      }
-  }
-}
-
-function dragOverHandler(event) {
-  event.preventDefault();
-}
-
-function loadBgImg(event) {
-  //console.log(event);
-  var files = event.target.files;
-  var file;
-  if (files && files.length > 0) {
-    file = files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
-      var _img = new Image();
-      _img.onload = function() {
-        img = _img;
-        _repaint(); 
-      }
-      _img.src = e.target.result;
-    }
-  }
-}
-
 //Complete Html Page
 function createCanvas() {
   
@@ -78,20 +19,6 @@ function createCanvas() {
   document.body.style.backgroundColor = 'transparent';
 
   
-}
-
-
-
-function createBGHiddenFile() {
-  let _file = document.createElement('input');
-  _file.type = "file";
-  _file.id = "img";
-  _file.hidden = "true";
-  _file.accept = "image/png, image/gif, image/jpeg";
-  _file.onchange = loadBgImg;
-  let body = document.getElementsByTagName("body")[0];
-  body.appendChild(_file);
-  //<input id="img" type="file" hidden="true"/>
 }
 
 /*
