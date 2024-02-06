@@ -23,7 +23,8 @@ function newParticle_casual() {
         this.G = 100 + 155 * Math.random();
         this.B = 100 + 155 * Math.random();
         this.A = Math.random();//0.5 + Math.random()/2.0;
-        this.radius = 10 + Math.random() * 10;
+        this.radius = (c.width + c.height)/2 * 0.02 * Math.random();
+        //Math.max(c.width, c.height) * 0.02 * Math.random();
         this.dir = Math.random() * 360 * Math.PI/180;
   
       },
@@ -38,7 +39,7 @@ function newParticle_casual() {
         _ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, true);
         _ctx.fill();
         _ctx.closePath();
-        
+
         //ctx.restore();
         
         this.A = this.A - 0.3 * dt * 0.001;
@@ -77,7 +78,7 @@ function newParticle_casual() {
         
         let short = Math.min(c.width, c.height);
         let long = Math.max(c.width, c.height) * 0.5;
-        let range = (Math.random() * short * 0.1);
+        let range = Math.random() * short * 0.1;
         let dir = Math.random() * 360 * Math.PI/180;
         
         this.x_stt = c.width/2 + range * Math.cos(dir);
@@ -91,7 +92,9 @@ function newParticle_casual() {
         this.B = 100 + 155 * Math.random();
         this.A = 1.0;//0.5 + Math.random()/2.0;
   
-        this.radius = 20 + Math.random() * 50;
+        this.radius = (c.width + c.height)/2 * 0.01 + Math.random() * 50;
+        //Math.max(c.width, c.height) * 0.01 + Math.random() * 50;
+        //20 + Math.random() * 50;
         this.elapse = 1.0 + 4.0 * (70 - this.radius) /70;
         this.t = 0;
   
@@ -159,7 +162,9 @@ function newParticle_casual() {
         this.B = 100 + 155 * Math.random();
         this.A = 1.0;//0.5 + Math.random()/2.0;
   
-        this.radius = 20 + Math.random() * 50;
+        this.radius = (c.width + c.height)/2 * 0.01 + Math.random() * 50;
+        //Math.max(c.width, c.height) * 0.01 + Math.random() * 50;
+        //20 + Math.random() * 50;
         this.elapse = 1.0 + 4.0 * (70 - this.radius) /70;
         this.t = 0;
   
@@ -238,7 +243,9 @@ function newParticle_casual() {
         this.B = 100 + 155 * Math.random();
         this.A = 1.0;//0.5 + Math.random()/2.0;
   
-        this.radius = 20 + Math.random() * 50;
+        this.radius = (c.width + c.height)/2 * 0.01 + Math.random() * 50;
+        //Math.max(c.width, c.height) * 0.01 + Math.random() * 50;
+        //20 + Math.random() * 50;
         this.elapse = 1.0;//1.0 + 4.0 * (70 - this.radius) /70;
         this.t = 0;
   
@@ -274,139 +281,142 @@ function newParticle_casual() {
     return p;
   }
   
-  function newParticle_firework_particle() {
-    let p = {
-      x_stt: 0,
-      y_stt: 0,
-      x_end: 0,
-      y_end: 0,
-      R: 0,
-      G: 0,
-      B: 0,
-      A: 0,
-      radius:10,
-      t:0,
-      elapse:0,
-      easein:function(_t) {
-        return _t * _t * _t;
-      },
-      easeout:function(_t) {
-        return -_t * _t + 2 * _t;
-      },
-      easeinout:function(_t) {
-        //console.log('sin('+ _t * Math.PI+(') = '+Math.sin(_t * Math.PI)));
-        return Math.sin(_t * Math.PI);
-      },
-      release: function() { },
-      colorDis: function(idx) {
-        let r0 = 155 * Math.random();
-        let r1 = 155 * Math.random();
-        let rc0 = 200 + 55 * Math.random();
-        let rc1 = 200 + 55 * Math.random();
-        switch(idx) {
-          case 0: this.R = rc0; this.G =  r0; this.B =  r1;  break;
-          case 1: this.R =  r0; this.G = rc0; this.B =  r1;  break;
-          case 2: this.R =  r0; this.G =  r1; this.B = rc0;  break;
-          case 3: this.R =  r0; this.G = rc0; this.B = rc1;  break;
-          case 4: this.R = rc0; this.G =  r0; this.B = rc1;  break;
-          case 5: this.R = rc0; this.G = rc1; this.B =  r0;  break;
-        }
-      },
-      initial: function (c, _x, _y, _range, _elapse, idx) {
-        
-        let r0 = Math.random();
-        while (Math.random() > r0/2.0) r0 = Math.random();
-        let range = r0 * _range;
-  
-        let dir = Math.random() * 360 * Math.PI/180;
-        
-        this.x_stt = _x;// + (short * 0.05 + range) * Math.cos(dir);
-        this.y_stt = _y;//c.height/2;// + (short * 0.05 + range) * Math.sin(dir);
-        
-        this.x_end = this.x_stt + range * Math.cos(dir);
-        this.y_end = this.y_stt + range * Math.sin(dir);
-        
-        this.colorDis(idx);
-        
-        this.A = 1.0;//0.5 + Math.random()/2.0;
-        
-        this.radius = 6 + 4 * (1- range/_range);// + Math.random() * 50;
-        this.elapse = _elapse;
-        this.t = 0;
-  
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.t += dt/1000.0;
-        let eout = this.easeout(this.t/this.elapse);
-        let x = this.x_stt + (this.x_end - this.x_stt) * eout;
-        let y = this.y_stt + (this.y_end - this.y_stt) * eout;
-        //console.log('t:' + this.t/this.elapse);
-        this.A = this.easeinout(this.t/this.elapse);
-        let r = 0.0 + (this.radius - 0) * eout;
-        if (r < 0) r = 0;
-        //ctx.save();
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
-        //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
-        _ctx.beginPath();
-        _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
-        _ctx.fill();
-        _ctx.closePath();
-        if (this.t > this.elapse) {
-          this.t = this.elapse;
-        }
+function newParticle_firework_particle() {
+  let p = {
+    x_stt: 0,
+    y_stt: 0,
+    x_end: 0,
+    y_end: 0,
+    R: 0,
+    G: 0,
+    B: 0,
+    A: 0,
+    radius:10,
+    t:0,
+    elapse:0,
+    easein:function(_t) {
+      return _t * _t * _t;
+    },
+    easeout:function(_t) {
+      return -_t * _t + 2 * _t;
+    },
+    easeinout:function(_t) {
+      //console.log('sin('+ _t * Math.PI+(') = '+Math.sin(_t * Math.PI)));
+      return Math.sin(_t * Math.PI);
+    },
+    release: function() { },
+    colorDis: function(idx) {
+      let r0 = 155 * Math.random();
+      let r1 = 155 * Math.random();
+      let rc0 = 200 + 55 * Math.random();
+      let rc1 = 200 + 55 * Math.random();
+      switch(idx) {
+        case 0: this.R = rc0; this.G =  r0; this.B =  r1;  break;
+        case 1: this.R =  r0; this.G = rc0; this.B =  r1;  break;
+        case 2: this.R =  r0; this.G =  r1; this.B = rc0;  break;
+        case 3: this.R =  r0; this.G = rc0; this.B = rc1;  break;
+        case 4: this.R = rc0; this.G =  r0; this.B = rc1;  break;
+        case 5: this.R = rc0; this.G = rc1; this.B =  r0;  break;
       }
-    }
-    return p;
-  }
-  
-  function newParticle_firework() {
-    let p = {
-      particles:[],
+    },
+    initial: function (c, _x, _y, _range, _elapse, idx) {
       
-      t:0,
-      elapse:0,
-      initial: function (c) {
-        
-        let x = c.width * (0.2 + Math.random() * 0.6);// + (short * 0.05 + range) * Math.cos(dir);
-        let y = c.height * (0.2 + Math.random() * 0.6);
-        let range = Math.max(c.width, c.height) * 0.2 * (0.5 + Math.random()/2.0);
-  
-        this.elapse = 0.7 + Math.random()/2.0;//1.0 + 4.0 * (70 - this.radius) /70;
-        this.t = 0;
-  
-        if (this.particles.length < 1) {
-          for (var i = 0;i<80;i++) {
-            this.particles[i] = newParticle_firework_particle();
-          }
-        }
-  
-        let idx = Math.floor(Math.random() * 6);
-        
-        for (var i = 0;i<this.particles.length;i++) {
-          this.particles[i].initial(c, x, y, range, this.elapse, idx);
-        }
-  
-      },
-      release: function() {
-        this.particles.length = 0;
-        this.particles = [];
-      },
-      update: function (c, _ctx, dt) {
-  
-        this.t += dt/1000.0;
-  
-        for (var i = 0;i<this.particles.length;i++) {
-          this.particles[i].update(c, _ctx, dt);
-        }
-  
-        if (this.t > this.elapse) {
-          this.initial(c);
-        }
+      let r0 = Math.random();
+      while (Math.random() > r0/2.0) r0 = Math.random();
+      let range = r0 * _range;
+
+      let dir = Math.random() * 360 * Math.PI/180;
+      
+      this.x_stt = _x;// + (short * 0.05 + range) * Math.cos(dir);
+      this.y_stt = _y;//c.height/2;// + (short * 0.05 + range) * Math.sin(dir);
+      
+      this.x_end = this.x_stt + range * Math.cos(dir);
+      this.y_end = this.y_stt + range * Math.sin(dir);
+      
+      this.colorDis(idx);
+      
+      this.A = 1.0;//0.5 + Math.random()/2.0;
+
+      //this.radius = 6 + 4 * (1- range/_range);// + Math.random() * 50;      
+      this.radius = (c.height/72) + (c.height/84) * (1- range/_range);// + Math.random() * 50;
+      this.elapse = _elapse;
+      this.t = 0;
+
+    },
+    update: function (c, _ctx, dt) {
+
+      this.t += dt/1000.0;
+      let eout = this.easeout(this.t/this.elapse);
+      let x = this.x_stt + (this.x_end - this.x_stt) * eout;
+      let y = this.y_stt + (this.y_end - this.y_stt) * eout;
+      //console.log('t:' + this.t/this.elapse);
+      this.A = this.easeinout(this.t/this.elapse);
+      //let r = 0.0 + (this.radius - 0) * eout;
+      let r = this.radius * this.A;
+      if (r < 0) r = 0;
+      //ctx.save();
+      _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ',' + this.A + ')';//"rgb(0,0,200)";
+      //ctx.fillRect (this.x - this.radius/2.0, this.y - this.radius/2.0, this.radius, this.radius);
+      _ctx.beginPath();
+      _ctx.arc(x, y, r, 0, 2 * Math.PI, true);
+      _ctx.fill();
+      _ctx.closePath();
+      
+      if (this.t > this.elapse) {
+        this.t = this.elapse;
       }
     }
-    return p;
   }
+  return p;
+}
+
+function newParticle_firework() {
+  let p = {
+    particles:[],
+    
+    t:0,
+    elapse:0,
+    initial: function (c) {
+      
+      let x = c.width * (0.2 + Math.random() * 0.6);// + (short * 0.05 + range) * Math.cos(dir);
+      let y = c.height * (0.2 + Math.random() * 0.6);
+      let range = Math.max(c.width, c.height) * 0.25 * (0.5 + Math.random()/2.0);
+
+      this.elapse = 0.7 + Math.random()/2.0;//1.0 + 4.0 * (70 - this.radius) /70;
+      this.t = 0;
+
+      if (this.particles.length < 1) {
+        for (var i = 0;i<80;i++) {
+          this.particles[i] = newParticle_firework_particle();
+        }
+      }
+
+      let idx = Math.floor(Math.random() * 6);
+      
+      for (var i = 0;i<this.particles.length;i++) {
+        this.particles[i].initial(c, x, y, range, this.elapse, idx);
+      }
+
+    },
+    release: function() {
+      this.particles.length = 0;
+      this.particles = [];
+    },
+    update: function (c, _ctx, dt) {
+
+      this.t += dt/1000.0;
+
+      for (var i = 0;i<this.particles.length;i++) {
+        this.particles[i].update(c, _ctx, dt);
+      }
+
+      if (this.t > this.elapse) {
+        this.initial(c);
+      }
+    }
+  }
+  return p;
+}
   
   function newParticle_rect() {
     let p = {
@@ -871,26 +881,32 @@ function newParticle_casual() {
     let p = {
       
       dot: 32,
-      R: 255,
-      G: 120,
-      B: 120,
+      R: 80,
+      G: 80,
+      B: 150,
       data: [[]],
 
       release: function() {
         console.log('newParticle_led release');
         data = [[]];
       },
+      lightProb : function() {
+        return Math.floor(10 + Math.random() * 5);
+      },
+      chgProb : function() {
+        return Math.floor(Math.random() * 50) == 0;
+      },
       initial: function (c) {
+        this.dot = Math.ceil((c.width + c.height)/2/10);
         console.log('newParticle_led initial');
         for (let i = 0; i * this.dot< c.width;i++) {
           this.data[i] = [];
           for (let j = 0;j * this.dot < c.height; j++) {
             if (Math.floor(Math.random() * 4) == 10) {
-              this.data[i][j] = 1;
+              this.data[i][j] = this.lightProb();
             } else {
               this.data[i][j] = 0;
             }
-            console.log(i+','+j+':'+this.data[i][j]); 
           }
         }
         //console.log('newParticle_led update: ' + this.data.length + ', ' + this.data[0].length);
@@ -898,21 +914,19 @@ function newParticle_casual() {
       },
       update: function (c, _ctx, dt) {
         //console.log('newParticle_led update: ' + this.data.length + ', ' + this.data[0].length);
-        _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ')'; //"rgb(0,0,200)";
-
         for (let i = 0; i < this.data.length;i++) {
           for (let j = 0;j < this.data[i].length; j++) {
-            if (this.data[i][j] == 1) {
-              if (Math.floor(Math.random() * 10) == 0) {
-                this.data[i][j] = 0;
-              }
-            } else {
-              if (Math.floor(Math.random() * 10) == 0) {
-                this.data[i][j] = 1;
-              }
-            }
-            if (this.data[i][j] == 1) 
+            if (this.data[i][j] > 0) 
+              this.data[i][j]--;
+            else 
+              if (this.chgProb()) this.data[i][j] = this.lightProb();
+            
+            if (this.data[i][j] > 0) {
+              let a = 0.3 + 0.4 * this.data[i][j]/15.0;
+              _ctx.fillStyle = 'rgba(' + this.R + ',' + this.G + ',' + this.B + ',' + (a) +')'; //"rgb(0,0,200)";
               _ctx.fillRect (i * this.dot, j * this.dot, this.dot, this.dot);
+            }
+              
           }
         }
         /*
