@@ -342,6 +342,11 @@ function initAnim() {
       case 9:
         particlesAnim[0] = new ClockObj();// newClock();
         particlesAnim[0].initial(canvas);
+        particlesAnim[0].setDarkmask();
+        break;
+      case 10:
+        particlesAnim[0] = newParticle_led();
+        particlesAnim[0].initial(canvas);
         break;
         
     }

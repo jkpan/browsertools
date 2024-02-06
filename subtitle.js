@@ -1293,7 +1293,7 @@ function initAnim(idx) {
   particles = [];
 
   if (idx < 0) {
-    animIdx = (animIdx + 1)%11;
+    animIdx = (animIdx + 1)%12;
     idx = animIdx;
   }
 
@@ -1356,11 +1356,16 @@ function initAnim(idx) {
     }
   } else if (idx == 10) {
     try {
+      
       particles[0] = new ClockObj();//newClock();
-      //particles[0].initial(canvas);
+      particles[0].setDarkmask();
+      
     } catch (e) {
       console.log("no clock obj included");
     }
+  } else if (idx == 11) {
+    particles[0] = newParticle_led();
+    particles[0].initial(canvas);
   }
 
   if (animSwh == 0) {

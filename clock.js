@@ -1,7 +1,7 @@
 
 class ClockObj {
 
-    fontColor = "rgb(220, 220, 220)";
+    fontColor = "rgb(200, 200, 200)";
     bgColor = "rgba(0, 0, 0, 0.5)";
     frequence = -1;
     
@@ -9,6 +9,7 @@ class ClockObj {
     minColor = "rgb(255, 255, 50)";
     secColor = "rgb(255, 50, 50)";
     mode = 0;
+    isDark = false;
 
     constructor() {
   
@@ -29,6 +30,14 @@ class ClockObj {
 
     switchDisplayMode() {
       this.mode = (this.mode + 1) % 3;
+    }
+
+    setDarkmask() {
+      this.isDark = true;
+    }
+
+    cancelDarkmask() {
+      this.isDark = false;
     }
   
     update(c, _ctx) {
@@ -139,6 +148,12 @@ class ClockObj {
         _ctx.arc(x, y, lw, 0, 2 * Math.PI, true);
         _ctx.fill();
         _ctx.closePath();
+
+        if (this.isDark) {
+          _ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+          _ctx.fillRect(0, 0, c.width, c.height);
+        }
+
     }
 
     printDatetime(c, _ctx) {

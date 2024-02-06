@@ -637,3 +637,61 @@ class SpotLightObj {
   }
 
 }
+
+function newParticle_led() {
+  let p = {
+    
+    dot: 32,
+    R: 120,
+    G: 120,
+    B: 120,
+    data: [[]],
+
+    release: function() {
+      data = [[]];
+    },
+    initial: function (c) {
+      for (let i = 0; i * this.dot< c.width;i++) {
+        this.data[i] = [];
+        for (let j = 0;j * this.dot < c.height; j++) {
+          if (Math.floor(Math.random() * 4) == 10) {
+            this.data[i][j] = 1;
+          } else {
+            this.data[i][j] = 0;
+          }
+        }
+      }
+      //console.log('newParticle_led update: ' + this.data.length + ', ' + this.data[0].length);
+      
+    },
+    update: function (c, _ctx, dt) {
+      //console.log('newParticle_led update: ' + this.data.length + ', ' + this.data[0].length);
+      _ctx.fillStyle = 'rgb(' + this.R + ',' + this.G + ',' + this.B + ')'; //"rgb(0,0,200)";
+
+      for (let i = 0; i < this.data.length;i++) {
+        for (let j = 0;j < this.data[i].length; j++) {
+          if (this.data[i][j] == 1) {
+            if (Math.floor(Math.random() * 10) == 0) {
+              this.data[i][j] = 0;
+            }
+          } else {
+            if (Math.floor(Math.random() * 10) == 0) {
+              this.data[i][j] = 1;
+            }
+          }
+          if (this.data[i][j] == 1) 
+            _ctx.fillRect (i * this.dot, j * this.dot, this.dot, this.dot);
+        }
+      }
+      /*
+      for (let x = 0;x < c.width;x += this.dot) {
+        for (let y = 0;y < c.height;y += this.dot) {
+          if (Math.floor(Math.random() * 4) == 1)
+            _ctx.fillRect (x, y, this.dot, this.dot);
+        }
+      }
+      */
+    }
+  }
+  return p;
+}

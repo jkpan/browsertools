@@ -59,12 +59,14 @@
   <p></p>
   <a href="javascript:embeddedUrl(MATRIX_PROVERBS_URL)">箴言 - matrix effect</a> <button type="button" onclick="copyToBoard(MATRIX_PROVERBS_URL)">Copy url</button><p></p>
   <p></p>
+<!--
   <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
   LED面板參數:
   <button type="button" onclick="urlGo('led_url')">Try</button>
   <button type="button" onclick="copyToClickBoard('led_url')">Copy url</button>
   <p></p>
   <textarea style="border: none;" id="led_url" rows="10" cols="50"></textarea><br/>
+-->
   <hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
   經文參數:
   <button type="button" onclick="urlGo('Bible_url')">Try</button>
@@ -80,11 +82,10 @@
 
   <script type="text/javascript" src="common.js" charset="UTF-8"></script>
   <script type="text/javascript" charset="UTF-8">
-  document.getElementById("led_url").value = LEDURL;
+  //document.getElementById("led_url").value = LEDURL;
   document.getElementById("Bible_url").value = BIBLEURL;
   //document.getElementById("ppt_url").select();
   function urlGo(id) {
-  
     let value = document.getElementById(id).value;
     value = value.trim();
     if (value.length == 0) return;

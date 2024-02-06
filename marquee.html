@@ -1,6 +1,7 @@
 <script type="text/javascript" src="common.js" charset="UTF-8"></script>
 <script type="text/javascript" src="led.js" charset="UTF-8"></script>
 <script type="text/javascript" src="marquee_anim.js" charset="UTF-8"></script>
+<!-- <script type="text/javascript" src="subtitle_anim.js" charset="UTF-8"></script> -->
 <script type="text/javascript" src="clock.js" charset="UTF-8"></script>
 <script type="text/javascript" src="ledmarquee.js" charset="UTF-8"></script>
 <script type="text/javascript" charset="UTF-8"> 
@@ -530,6 +531,7 @@ function getLEDLink() {
   url += '&str2=' + subtitle[2][0];
   url += '&anim=' + animIdx;
   url += '&round=' + (makeRound?1:0);
+  url = encodeURI(url);
   copyToBoard(url);
 }
 

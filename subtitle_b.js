@@ -862,108 +862,7 @@ function restoreActionFromLocal() {
     _repaint();
 
   }
-  
-  function createBtnVolume(elmid) {
-  
-    let div = document.createElement('div');
-    div.id = 'btns';
-    document.body.appendChild(div);
-  
-    /*
-    let div; 
-    if (elmid == null) {
-      div = document.createElement('div');
-      div.id = 'btns';
-      document.body.appendChild(div);
-    } else {
-      div = document.getElementById(elmid);
-      div.innerHTML = "";
-    }
-    */
-  
-    for (var i=1;i<=66;i++) {
-  
-      if (i == 6) div.insertAdjacentHTML('beforeend',  '<br/><br/>');
-      if (i == 18) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-      if (i == 23) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-      if (i == 28) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-      if (i == 40) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-      if (i == 45) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-      if (i == 54) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-      if (i == 58) div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  
-      var button = _newBtn(); //_createVolume(i);
-      button.innerHTML = SONGS[i][0][0];
-      button.id = 'vol ' + i;
-      button.onclick = function() {
-        let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
-        subtitles = SONGS[idx];
-        song = idx;
-        phase = 0;
-        line = 0;
-        removeDiv();
-        createBtnChapter();
-        return false;
-      };
-      if (i > 39) 
-        button.style.color = color_pointer[3];//'rgb(0,255,0)'; // setting the color to white
-      
-        div.appendChild(button);
-  
-      if (i == 39) 
-        div.insertAdjacentHTML('beforeend', '<br/>');
-    }
-  
-  }
-  
-  function createBtnChapter() {
-  
-    var div = document.createElement('div');
-    div.id = 'btns';
-    document.body.appendChild(div);
-  
-    var len = subtitles.length;
-    for (var i=1;i<=len-1;i++) {
-      let button = _newBtn();//document.createElement('button');
-      button.innerHTML = '第'+ i +'章';
-      button.id = 'chp ' + i;
-      button.onclick = function() {
-        let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
-        phase = idx;
-        line = 0;
-        removeDiv();
-        createBtnVerse();
-        return false;
-      };
-      div.appendChild(button);
-    }
-  
-  }
-  
-  function createBtnVerse() {
-  
-    var div = document.createElement('div');
-    div.id = 'btns';
-    document.body.appendChild(div);
-  
-    var len = subtitles[phase].length;
-    for (var i=1;i<=len-1;i++) {
-      let button = _newBtn();//document.createElement('button');
-      button.innerHTML = '第'+ i +'節';
-      button.id = 'ver ' + i;
-      button.onclick = function() {
-        let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
-        line = idx;
-        removeDiv();
-        canvas.hidden = false;
-        _repaint();
-        return false;
-      };
-      div.appendChild(button);
-    }
-  
-  }
-  
+    
   function removeDiv() {
     var buttons = document.getElementById('btns');
     if (buttons) {
@@ -978,34 +877,6 @@ function restoreActionFromLocal() {
     if (ctrl) document.body.removeChild(ctrl);
 
     return;
-  }
-  
-  function openSelection(type) {
-  
-    removeDiv();
-  
-    document.body.style.backgroundColor = bgcolor_pointer;
-  
-    canvas.hidden = true;
-    switch(type) {
-      case 0:
-        createBtnVolume();
-        break;
-      case 1:
-        if (song == 0) {
-          canvas.hidden = false;
-          return;
-        }
-        createBtnChapter();
-        break;
-      case 2:
-        if (song == 0 || phase == 0) {
-          canvas.hidden = false;
-          return;
-        }
-        createBtnVerse();
-        break;
-    }
   }
   
   function prepareImage() {
@@ -2185,20 +2056,7 @@ function restoreActionFromLocal() {
       _repaint();
   
   }
-  
-  function openSelDiv() {
-    helpSwitch = 0;
-    if (canvas.hidden) {
-      removeDiv();  
-      canvas.hidden = false;
-      mode = 0;
-      jumpTo1();
-    } else {
-      openSelection(0);
-    }
-    _repaint();
-  }
-  
+    
   function _layer0() {
    
     if (color_selection == 0) {
@@ -2591,14 +2449,6 @@ function restoreActionFromLocal() {
       keyboard({keyCode : 189});
       return;
     }
-
-    /*
-    //select volume
-    if (gw == 1 && gh == 1) {//keyboard({keyCode : 76});
-      openSelDiv();
-      return;
-    }
-    */
     
     //next volume
     if (gw == 2 && gh == 1) {
@@ -2985,6 +2835,7 @@ if (readParam('volume')) {
 }
 
 
+
   /*
   function cookieStuff() {
     const allCookies = document.cookie;
@@ -3018,5 +2869,137 @@ if (readParam('volume')) {
     }
     a += ']' ;
     console.log(a);
+  }
+  */
+
+  /*
+  function openSelDiv() {
+    helpSwitch = 0;
+    if (canvas.hidden) {
+      removeDiv();  
+      canvas.hidden = false;
+      mode = 0;
+      jumpTo1();
+    } else {
+      openSelection(0);
+    }
+    _repaint();
+  }
+
+  function openSelection(type) {
+  
+    removeDiv();
+  
+    document.body.style.backgroundColor = bgcolor_pointer;
+  
+    canvas.hidden = true;
+    switch(type) {
+      case 0:
+        createBtnVolume();
+        break;
+      case 1:
+        if (song == 0) {
+          canvas.hidden = false;
+          return;
+        }
+        createBtnChapter();
+        break;
+      case 2:
+        if (song == 0 || phase == 0) {
+          canvas.hidden = false;
+          return;
+        }
+        createBtnVerse();
+        break;
+    }
+  }
+  
+  function createBtnVolume(elmid) {
+  
+    let div = document.createElement('div');
+    div.id = 'btns';
+    document.body.appendChild(div);
+  
+    for (var i=1;i<=66;i++) {
+  
+      if (i == 6) div.insertAdjacentHTML('beforeend',  '<br/><br/>');
+      if (i == 18) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+      if (i == 23) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+      if (i == 28) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+      if (i == 40) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+      if (i == 45) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+      if (i == 54) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+      if (i == 58) div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  
+      var button = _newBtn(); //_createVolume(i);
+      button.innerHTML = SONGS[i][0][0];
+      button.id = 'vol ' + i;
+      button.onclick = function() {
+        let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+        subtitles = SONGS[idx];
+        song = idx;
+        phase = 0;
+        line = 0;
+        removeDiv();
+        createBtnChapter();
+        return false;
+      };
+      if (i > 39) 
+        button.style.color = color_pointer[3];//'rgb(0,255,0)'; // setting the color to white
+      
+        div.appendChild(button);
+  
+      if (i == 39) 
+        div.insertAdjacentHTML('beforeend', '<br/>');
+    }
+  
+  }
+  
+  function createBtnChapter() {
+  
+    var div = document.createElement('div');
+    div.id = 'btns';
+    document.body.appendChild(div);
+  
+    var len = subtitles.length;
+    for (var i=1;i<=len-1;i++) {
+      let button = _newBtn();//document.createElement('button');
+      button.innerHTML = '第'+ i +'章';
+      button.id = 'chp ' + i;
+      button.onclick = function() {
+        let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+        phase = idx;
+        line = 0;
+        removeDiv();
+        createBtnVerse();
+        return false;
+      };
+      div.appendChild(button);
+    }
+  
+  }
+  
+  function createBtnVerse() {
+  
+    var div = document.createElement('div');
+    div.id = 'btns';
+    document.body.appendChild(div);
+  
+    var len = subtitles[phase].length;
+    for (var i=1;i<=len-1;i++) {
+      let button = _newBtn();//document.createElement('button');
+      button.innerHTML = '第'+ i +'節';
+      button.id = 'ver ' + i;
+      button.onclick = function() {
+        let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+        line = idx;
+        removeDiv();
+        canvas.hidden = false;
+        _repaint();
+        return false;
+      };
+      div.appendChild(button);
+    }
+  
   }
   */

@@ -6,7 +6,7 @@
 <style>
 .container {
     display: flex;
-    height: 100vh; /* 设置容器高度为视窗高度的100% */
+    height: 100%; /* 设置容器高度为视窗高度的100% */
 }
 body {
     margin: 0px;
@@ -22,6 +22,54 @@ body {
     box-sizing: border-box;
     overflow: auto;
 }
+.volume {
+    box-sizing: border-box;
+    padding: 5px;
+      flex: 1;
+      overflow: auto;
+      position: fixed;
+      top: 0%;
+      left: 0%; /* 初始位置在左侧屏幕外 */
+      width: 50%;
+      height: 100%;
+      background-color: rgb(0,0,0);
+      color: #fff;
+      transition: top 0.3s; /* 添加过渡效果 */
+      z-index: 90;
+      border: none;
+  }
+.chapter {
+    box-sizing: border-box;
+    padding: 3px;
+      flex: 1;
+      overflow: auto;
+      position: fixed;
+      top: 0%;
+      left: 50%; /* 初始位置在左侧屏幕外 */
+      width: 25%;
+      height: 100%;
+      background-color: rgb(50,50,50);
+      color: #fff;
+      transition: top 0.3s; /* 添加过渡效果 */
+      z-index: 90;
+      border: none;
+  }
+.verse {
+    box-sizing: border-box;
+    padding: 3px;
+      flex: 1;
+      overflow: auto;
+      position: fixed;
+      top: 0%;
+      left: 75%; /* 初始位置在左侧屏幕外 */
+      width: 25%;
+      height: 100%;
+      background-color: rgb(80,80,80);
+      color: #fff;
+      transition: top 0.3s; /* 添加过渡效果 */
+      z-index: 90;
+      border: none;
+  }
 button {
     font-size: 16px;
     background-color: transparent;
@@ -32,14 +80,34 @@ button {
     vertical-align: middle;
     border-radius: 4px;
 }
+.btn_chapter {
+    font-size: 14px;
+    background-color: transparent;
+    color: #00ff00;
+    /*margin: 2% 2%;*/
+    width: 24%;
+    border: 1px solid;
+    vertical-align: middle;
+    border-radius: 3px;
+}
+.btn_verse {
+    font-size: 14px;
+    background-color: transparent;
+    color: #00ff00;
+    /*margin: 2% 2%;*/
+    width: 24%;
+    border: 1px solid;
+    vertical-align: middle;
+    border-radius: 3px;
+}
 </style>
 <title>Three Independent Columns with Full Viewport Height</title>
 </head>
 <body>
   <div id="mainDiv" class="container">
-    <div id="volumn" class="column"></div>
-    <div id="chapters" class="column"></div>
-    <div id="verses" class="column"></div>
+    <div id="volumn" class="volume"></div>
+    <div id="chapters" class="chapter"></div>
+    <div id="verses" class="verse"></div>
   </div>
 </body>
 </html>
@@ -156,6 +224,7 @@ function createBtnChapter() {
     
     for (var i=1;i<=len-1;i++) {
         let button = _newBtn();//document.createElement('button');
+        button.className = 'btn_chapter';
         button.innerHTML = '' + i;
         button.id = 'chp ' + i;
         button.onclick = function() {
@@ -188,6 +257,7 @@ function createBtnVerse() {
 
     for (var i=1;i<=len-1;i++) {
         let button = _newBtn();//document.createElement('button');
+        button.className = 'btn_verse';
         button.innerHTML = '' + i;
         button.id = 'ver ' + i;
         button.onclick = function() {
