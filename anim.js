@@ -881,10 +881,11 @@ function newParticle_firework() {
     let p = {
       
       dot: 32,
-      R: 80,
-      G: 80,
-      B: 150,
+      R: 100,
+      G: 100,
+      B: 180,
       data: [[]],
+      elapse:0,
 
       release: function() {
         console.log('newParticle_led release');
@@ -897,6 +898,7 @@ function newParticle_firework() {
         return Math.floor(Math.random() * 50) == 0;
       },
       initial: function (c) {
+        this.elapse = 0;
         this.dot = Math.ceil((c.width + c.height)/2/10);
         console.log('newParticle_led initial');
         for (let i = 0; i * this.dot< c.width;i++) {
@@ -913,14 +915,17 @@ function newParticle_firework() {
         
       },
       update: function (c, _ctx, dt) {
-        //console.log('newParticle_led update: ' + this.data.length + ', ' + this.data[0].length);
+        //
+        this.elapse += dt;
+        
         for (let i = 0; i < this.data.length;i++) {
           for (let j = 0;j < this.data[i].length; j++) {
-            if (this.data[i][j] > 0) 
-              this.data[i][j]--;
-            else 
-              if (this.chgProb()) this.data[i][j] = this.lightProb();
-            
+            if (this.elapse > 32) {
+              if (this.data[i][j] > 0) 
+                this.data[i][j]--;
+              else if (this.chgProb()) 
+                this.data[i][j] = this.lightProb();
+            }
             if (this.data[i][j] > 0) {
               let a = 0.3 + 0.4 * this.data[i][j]/15.0;
               _ctx.fillStyle = 'rgba(' + this.R + ',' + this.G + ',' + this.B + ',' + (a) +')'; //"rgb(0,0,200)";
@@ -929,6 +934,8 @@ function newParticle_firework() {
               
           }
         }
+        if (this.elapse > 32) 
+          this.elapse = 0;
         /*
         for (let x = 0;x < c.width;x += this.dot) {
           for (let y = 0;y < c.height;y += this.dot) {
