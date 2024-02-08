@@ -23,7 +23,7 @@ function newParticle_casual() {
         this.G = 100 + 155 * Math.random();
         this.B = 100 + 155 * Math.random();
         this.A = Math.random();//0.5 + Math.random()/2.0;
-        this.radius = (c.width + c.height)/2 * 0.02 * Math.random();
+        this.radius = (c.width + c.height)/2 * 0.03 * Math.random();
         //Math.max(c.width, c.height) * 0.02 * Math.random();
         this.dir = Math.random() * 360 * Math.PI/180;
   
@@ -92,7 +92,7 @@ function newParticle_casual() {
         this.B = 100 + 155 * Math.random();
         this.A = 1.0;//0.5 + Math.random()/2.0;
   
-        this.radius = (c.width + c.height)/2 * 0.01 + Math.random() * 50;
+        this.radius = (c.width + c.height)/2 * 0.03 + Math.random() * 50;
         //Math.max(c.width, c.height) * 0.01 + Math.random() * 50;
         //20 + Math.random() * 50;
         this.elapse = 1.0 + 4.0 * (70 - this.radius) /70;
@@ -162,7 +162,7 @@ function newParticle_casual() {
         this.B = 100 + 155 * Math.random();
         this.A = 1.0;//0.5 + Math.random()/2.0;
   
-        this.radius = (c.width + c.height)/2 * 0.01 + Math.random() * 50;
+        this.radius = (c.width + c.height)/2 * 0.03 + Math.random() * 50;
         //Math.max(c.width, c.height) * 0.01 + Math.random() * 50;
         //20 + Math.random() * 50;
         this.elapse = 1.0 + 4.0 * (70 - this.radius) /70;
@@ -243,7 +243,7 @@ function newParticle_casual() {
         this.B = 100 + 155 * Math.random();
         this.A = 1.0;//0.5 + Math.random()/2.0;
   
-        this.radius = (c.width + c.height)/2 * 0.01 + Math.random() * 50;
+        this.radius = (c.width + c.height)/2 * 0.03 + Math.random() * 50;
         //Math.max(c.width, c.height) * 0.01 + Math.random() * 50;
         //20 + Math.random() * 50;
         this.elapse = 1.0;//1.0 + 4.0 * (70 - this.radius) /70;
@@ -480,7 +480,7 @@ function newParticle_firework() {
         this.G = gray;
         this.B = gray;
         this.A = 0.5 + Math.random() * 0.5;//0.3 - 1.0 
-        this.radius = 0.02 * c.width * ((1 - this.A) + 0.1); //0.7 - 0
+        this.radius = 0.035 * (c.width + c.height)/2 * ((1 - this.A) + 0.1); //0.7 - 0
         this.v = 20 * this.radius;
   
       },
