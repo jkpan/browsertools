@@ -447,8 +447,9 @@ function switchLang() {
     _repaint();
 }
 
-const MAX_VERSES_GREEN = 2;
-const MAX_VERSES_NORMAL = 7;
+//const MAX_VERSES_GREEN = 2;
+//const MAX_VERSES_NORMAL = 7;
+var verseCount = 7;
 
 var song;
 var subtitles;
@@ -742,8 +743,8 @@ function _render(progress) {
       for (let k = i + 1;k<queue.length;k++) {
         let o = queue[k];
         o.preDraw(progress);
-        if (o.transY + o.substrings.length * o.fs > canvas.height) continue;
-        o.draw();
+        if (o.transY > canvas.height) continue;
+        if (verseCount > 0) o.draw();
       }
       
       //offY = obj.transY;
@@ -751,7 +752,7 @@ function _render(progress) {
       for (let k = i - 1;k >= 0;k--) {
         let o = queue[k];
         o.preDraw(progress);
-        o.draw();
+        if (verseCount > 0) o.draw();
         if (o.transY < 0) break;
       }
       
@@ -772,8 +773,8 @@ function printMain(chapter, verse) {
   let i = chapter;
   let j = verse;
 
-  let amount = color_selection <= 0? MAX_VERSES_GREEN : MAX_VERSES_NORMAL;
-
+  let amount = verseCount == 0?1:verseCount;//2, 7
+    
   for (let k = 1;k<=amount;k++) {
 
       let cv = getPreCV(i, j);
@@ -910,7 +911,15 @@ function sortjump(start, end) {
 
 function combineKey(e) {
   var jump = 10;
-  switch (e.keyCode) {    
+  switch (e.keyCode) {
+      case 219:
+          if (verseCount > 0) 
+            verseCount--;
+          break;
+      case 221:
+          if (verseCount < 10) 
+            verseCount++;
+          break;
       case 65: sortjump( 1,  5); break;
       case 83: sortjump( 6, 17); break;
       case 68: sortjump(18, 22); break;

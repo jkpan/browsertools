@@ -426,9 +426,11 @@ var presetVerse = [
       _repaint();
   }
   
-  const MAX_VERSES_GREEN = 2;
-  const MAX_VERSES_NORMAL = 7;
-  
+  //const MAX_VERSES_GREEN = 2;
+  //const MAX_VERSES_NORMAL = 7;
+  var verseCount = 7;
+  var printSaved = true;
+
   var song;
   var subtitles;
     
@@ -1184,14 +1186,14 @@ function restoreActionFromLocal() {
           //o.transY = offY;
           o.preDraw(progress);
           if (o.transY > canvas.height) continue;
-          o.draw();
+          if (verseCount > 0) o.draw();
         }
         
         //offY = fixy; 
         for (let k = i - 1;k >= 0;k--) {
           let o = queue[k];
           o.preDraw(progress);
-          o.draw();
+          if (verseCount > 0) o.draw();
           //offY = o.transY;
           if (o.transY < 0) break;
         }
@@ -1201,17 +1203,16 @@ function restoreActionFromLocal() {
       
     }
   
-    if (color_selection > 0 && color_selection != 4) { //print saved versus
+    if (printSaved && color_selection != 0) { //color_selection > 0 && color_selection != 4) { //print saved versus
       ctx.textBaseline = 'top';
       let fs = Math.min(fontsize_sml_sml, 24);
       ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
       ctx.fillRect(0, 0, canvas.width, fs * 2);
       ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
   
-      if (color_selection > 1) 
-        ctx.fillStyle = 'rgba(155, 155, 155, 0.66)';
+      //if (color_selection == 0) ctx.fillStyle = 'rgba(155, 155, 155, 1.0)';
       ctx.font = (fs * 1.2) + 'px Arial';
-      ctx.fillText(subtitles[0][0], 10, 2);
+      _drawtxt(subtitles[0][0], 10, 2, 0.5);
       let gap = ctx.measureText(subtitles[0][0]).width + 20;
       ctx.font = (fs-4) + 'px Arial';
 
@@ -1220,8 +1221,8 @@ function restoreActionFromLocal() {
         if (presetVerse[idx%10][0].length == 0)
           continue;
         let xx = gap + (idx-1) * (canvas.width - gap)/presetVerse.length;
-        ctx.fillText('['+(idx%10)+']'+presetVerse[idx%10][0], xx, 2);
-        ctx.fillText('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs-1);
+        _drawtxt('['+(idx%10)+']'+presetVerse[idx%10][0], xx, 2, 0.5);
+        _drawtxt('   '+presetVerse[idx%10][1]+':'+presetVerse[idx%10][2], xx, fs-1, 0.5);
       }
   
       if (recognition && recognizing) {
@@ -1268,8 +1269,9 @@ function restoreActionFromLocal() {
     let i = chapter;
     let j = verse;
   
-    let amount = color_selection <= 0? MAX_VERSES_GREEN : MAX_VERSES_NORMAL;
-  
+    let amount = verseCount == 0?1:verseCount;//2, 7
+    
+    //color_selection <= 0? MAX_VERSES_GREEN : MAX_VERSES_NORMAL;
     for (let k = 1;k<=amount;k++) {
   
         let _i = getPreChapter(i, j);
@@ -1456,6 +1458,14 @@ function restoreActionFromLocal() {
   function combineKey(e) {
     var jump = 10;
     switch (e.keyCode) {
+        case 219:
+          if (verseCount > 0) 
+            verseCount--;
+          break;
+        case 221:
+          if (verseCount < 10) 
+            verseCount++;
+          break;
         case 33: { //'ArrowLeft'
           helpSwitch = 0;
           let _phase = getPreChapter(phase, line);
@@ -1840,6 +1850,9 @@ function restoreActionFromLocal() {
         case 75://'K'
         case 74://'J'
         */
+        case 83: //s
+          printSaved = !printSaved;
+          break;
         case 65: //a
             /*
             helpSwitch = 0;
