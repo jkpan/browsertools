@@ -453,6 +453,8 @@ var presetVerse = [
   var uisel_start = 0;
   var uisel_end = 0;
   
+  var makeTransparent = false;
+
   function createCanvas() {
   
     let _canvas = document.createElement('canvas');
@@ -1728,6 +1730,7 @@ function restoreActionFromLocal() {
   }
   
   function colorSwitch() {
+    console.log('color_selection : '+color_selection);
     switch(color_selection) {
       case 0:
         bgcolor_pointer = 'rgba(0,0,0,0)';
@@ -1785,6 +1788,7 @@ function restoreActionFromLocal() {
       //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
             
       switch (e.keyCode) {
+        case 90: makeTransparent = !makeTransparent; break; //'z'
         case 78:
           switchLang();
           break;
@@ -2075,8 +2079,24 @@ function restoreActionFromLocal() {
     
   function _layer0() {
    
-    if (color_selection == 0) {
+    if (makeTransparent) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+    } else if (color_selection == 0) {
+      ctx.fillStyle = 'green';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = bgcolor_pointer;//'green';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    if (img) {
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+
+    /*
+    if (color_selection == 0) {
+      ctx.fillStyle = 'green';
+      //ctx.clearRect(0, 0, canvas.width, canvas.height);
     } else {
       ctx.fillStyle = bgcolor_pointer;//'green';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2084,6 +2104,9 @@ function restoreActionFromLocal() {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       }
     }
+    */
+
+    
 
     _layerBg();
 
