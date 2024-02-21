@@ -1,3 +1,8 @@
+function isKeepRatio() {
+  var checkbox = document.getElementById("keepratio");
+  var isChecked = checkbox.checked;
+  return isChecked;
+}
 
 function selectFile(event) {
     let file = event.target.files[0];
@@ -36,7 +41,7 @@ function selectFile(event) {
   function displayHTMLFile(file) {
   
     document.querySelector('body').style.background = 'transparent';
-    document.getElementById("ui").hidden = true;;
+    document.getElementById("ui").hidden = true;
   
     // 讀取檔案並將其轉換成Data URL
     var reader = new FileReader();
@@ -64,10 +69,14 @@ function selectFile(event) {
           var height = img.height;//window.location.href = imageUrl; return;
           let div = document.getElementById("image_container");
           div.hidden = false;
-          if (width >= height) 
-            div.innerHTML = '<img class="centered" width="100%" height="auto" src="' + imageUrl + '" />';
-          else 
-            div.innerHTML = '<img class="centered" width="auto" height="100%" src="' + imageUrl + '" />';
+          if (isKeepRatio()) {
+            if (width >= height) 
+              div.innerHTML = '<img class="centered" width="100%" height="auto" src="' + imageUrl + '" />';
+            else 
+              div.innerHTML = '<img class="centered" width="auto" height="100%" src="' + imageUrl + '" />';
+          } else {
+            div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + imageUrl + '" />';
+          }
         };
         
       };
