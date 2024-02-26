@@ -115,7 +115,7 @@ class Verseobj {
   
         //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
   
-        if (color_selection <= 1) 
+        if (color_selection == 0) 
           return this.level == 0? this.substrings.length * fs + fs * 0.5:
                                   this.substrings.length * fs + fs * 0.2;
         else 
@@ -205,23 +205,9 @@ class VerseVertical {
   drawHlight() {
 
       if (doblank == 1) return;
-  
-      /*
-      switch (fontColorType) {
-          case 0:
-          case 1:
-              ctx.fillStyle = 'rgba(0, 0, 0, 0.33)';
-              break;
-          case 2:
-          case 3:
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
-              break;
-        }
-        */
-        //ctx.fillStyle = 'rgba(255, 255, 255, 0.33)';
-        
-        ctx.fillStyle = hlight_pointer;
-        ctx.fillRect(canvas.width * 0.95, 0, -(this.line) * fontsize, canvas.height);
+          
+      ctx.fillStyle = hlight_pointer;
+      ctx.fillRect(canvas.width * 0.95, 0, -(this.line) * fontsize, canvas.height);
     
   }
 
@@ -371,25 +357,27 @@ var presetVerse = [
   
 
   var bgStyle = 'green';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)";
-  var hlightStyle = 'rgba(0, 60, 0, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
   
   var bgStyle_green = bgStyle;
-  var hlightStyle_green = hlightStyle;//'rgb(0, 0, 180)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_green = COLORS_CK;//["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];
 
   var bgStyle_black = 'black';
-  var hlightStyle_black = 'rgba(100, 100, 100, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_black = ["rgb(80, 80, 80)", "rgb(120, 128, 128)", "rgb(180, 180, 180)", "rgb(255, 255, 255)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
-  
+
   var bgStyle_white = 'white';
-  var hlightStyle_white = 'rgba(100, 100, 100, 0.8)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   const COLORS_white = ["rgb(255, 255, 255)", "rgb(180, 180, 180)", "rgb(120, 128, 128)", "rgb(80, 80, 80)"];//["rgb(80, 80, 80)", "rgb(0, 0, 0)", "rgb(150, 150, 150)", "rgb(200, 200, 200)"];
   
   /////
+  var hlightStyle_green = 'rgba(0, 70, 0, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_black = 'rgba(150, 150, 150, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_white = 'rgba(0, 0, 0, 0.2)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_none = 'rgba(0, 0, 0, 0.1)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  ////
+
   var bgcolor_pointer = bgStyle;
   var color_pointer = COLORS_CK;
-  var hlight_pointer = hlightStyle;
+  var hlight_pointer = hlightStyle_green;
 
   function getSong(jsonid) {
     var json_elm = document.getElementById(jsonid);
@@ -447,7 +435,8 @@ var presetVerse = [
   var canvas;
   var ctx;
   
-  var color_selection = 1;
+  var color_selection = 0;
+  var color_selection_hlight = 0;
   
   var uisel = 0;
   var uisel_start = 0;
@@ -958,14 +947,14 @@ function restoreActionFromLocal() {
   
     render(-1);
   
-    ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - animElapse/animTotal) + ')';//bgcolor_pointer;//'green';
+    ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - animElapse/animTotal) + ')'; //opacity 1.0 ~ 0
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   
     if (animElapse < animTotal) {
       animElapse++;
       window.requestAnimationFrame(blankend_update);
     } else {
-      animElapse = 0;
+      animElapse = -1;
       _repaint();
     }
   
@@ -983,7 +972,7 @@ function restoreActionFromLocal() {
       window.requestAnimationFrame(blank_update);
     } else {
       doblank = 1;
-      animElapse = 0;
+      animElapse = -1;
       _repaint();
     }
   
@@ -1071,7 +1060,7 @@ function restoreActionFromLocal() {
       }
     }
   
-    if (color_selection <= 1) {
+    if (color_selection == 0) {
       for (let _sel = 2;;_sel++)
         if (sel >= _sel) queue[sel - _sel].setLevel(_sel);
         else break;
@@ -1119,8 +1108,7 @@ function restoreActionFromLocal() {
     
     //let x = canvas.width * 0.1;
   
-    let fixy = //color_selection == 0?canvas.height * 0.6:canvas.height * 0.33;
-               canvas.height * 0.33;
+    let fixy = canvas.height * 0.33;
     let offY = fixy;
   
     
@@ -1205,7 +1193,7 @@ function restoreActionFromLocal() {
       
     }
   
-    if (printSaved && color_selection != 0) { //color_selection > 0 && color_selection != 4) { //print saved versus
+    if (printSaved && !makeTransparent) { //color_selection > 0 && color_selection != 4) { //print saved versus
       ctx.textBaseline = 'top';
       let fs = Math.min(fontsize_sml_sml, 24);
       ctx.fillStyle = bgcolor_pointer;//'rgb(0, 200, 0)';
@@ -1245,23 +1233,6 @@ function restoreActionFromLocal() {
 
     }
   
-    
-  
-    /*
-    if (intervalType != 0) {
-      ctx.fillStyle = color_pointer[2];
-      let _r = fontsize_sml_sml/4;
-      if (intervalType == 1) {
-        ctx.beginPath();
-        ctx.arc(canvas.width - _r, _r, _r, 0, 2 * Math.PI, true);
-        ctx.fill();
-        ctx.closePath();
-      } else { //intervalType == -1
-        ctx.fillRect(canvas.width - _r * 2, 0, _r * 2, _r * 2);
-      }
-    }
-    */
-  
     ctx.textBaseline = 'alphabetic';
   
   }
@@ -1284,7 +1255,7 @@ function restoreActionFromLocal() {
         i = _i;
   
         let obj = new Verseobj();
-        if (color_selection <= 1) {
+        if (color_selection == 0) {
           obj.initial(song, i, j, k);
         } else {
           obj.initial(song, i, j, 1);
@@ -1305,7 +1276,7 @@ function restoreActionFromLocal() {
         i = _i;
   
         let obj = new Verseobj();
-        if (color_selection <= 1) {
+        if (color_selection == 0) {
           obj.initial(song, i, j, k);
         } else {
           obj.initial(song, i, j, 1);
@@ -1326,7 +1297,7 @@ function restoreActionFromLocal() {
 
   function _drawSdwtxt(txt, x, y) {
   
-    if (doblank == 1 && color_selection == 1) {
+    if (doblank == 1 && color_selection == 0) {
       ctx.fillStyle = 'rgb(0, 220, 0)';//color_pointer[3];
       ctx.lineWidth = 1;
       ctx.fillText(txt, x, y);
@@ -1370,7 +1341,7 @@ function restoreActionFromLocal() {
   
   function _drawtxt(txt, x, y, a) {
       
-    if (doblank == 1 && color_selection == 1) {
+    if (doblank == 1 && color_selection == 0) {
       ctx.fillStyle = 'rgb(0, 200, 0)';//color_pointer[2];//'rgb(0, 200, 0)';
       ctx.fillText(txt, x, y);
       return;
@@ -1463,6 +1434,10 @@ function restoreActionFromLocal() {
   function combineKey(e) {
     var jump = 10;
     switch (e.keyCode) {
+        case 66: //'b'
+          color_selection_hlight = (color_selection_hlight + 1)%4;
+          colorSwitch_hlight();
+          break;
         case 219:
           if (verseCount > 0) 
             verseCount--;
@@ -1479,15 +1454,6 @@ function restoreActionFromLocal() {
           line = _line;
           _repaint();
           return;
-          /*
-          if (_phase >= 0 && (phase != _phase || line != _line)) {
-            phase = _phase;
-            line = _line;
-            if (mode == 0 && queue.length > 0) {
-              operateQuene(2, 0);
-            }
-          }
-          */
         }
           break;
         case 34:{ //'ArrowRight'
@@ -1498,16 +1464,6 @@ function restoreActionFromLocal() {
           line  = _line;
           _repaint();
           return;
-          /*
-          if (_phase >=0 && (phase != _phase || line != _line)) {
-            phase = _phase;
-            line  = _line;
-            if (mode == 0 && queue.length > 0) {
-              operateQuene(1, 0);
-            }
-          }
-          */
-
         }
           break;
         case 65: sortjump( 1,  5); break;
@@ -1729,28 +1685,50 @@ function restoreActionFromLocal() {
         
   }
   
+  function colorSwitch_hlight() {
+    //color_selection_hlight
+    //var hlightStyle_green = 'rgba(0, 70, 0, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+    //var hlightStyle_black = 'rgba(150, 150, 150, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+    //var hlightStyle_white = 'rgba(0, 0, 0, 0.2)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+    //var hlightStyle_none = 'rgba(0, 0, 0, 0.1)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+    switch(color_selection_hlight) {
+      case 0:
+        hlight_pointer = hlightStyle_green;
+        break;
+      case 1:
+        hlight_pointer = hlightStyle_black;
+        break;
+      case 2:
+        hlight_pointer = hlightStyle_white;
+        break;
+      case 3:
+        hlight_pointer = hlightStyle_none;
+        break;
+    }
+  }
+
   function colorSwitch() {
     console.log('color_selection : '+color_selection);
     switch(color_selection) {
       case 0:
-        bgcolor_pointer = 'rgba(0,0,0,0)';
-        color_pointer = 'rgba(0,0,0,0)';
-        hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
-        break;
-      case 1: //default: //0, 1
+        //bgcolor_pointer = 'rgba(0,0,0,0)';
+        //color_pointer = 'rgba(0,0,0,0)';
+        //hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
+        //break;
+        //case 1: //default: //0, 1
         bgcolor_pointer = bgStyle;
         color_pointer = COLORS_CK;
-        hlight_pointer = hlightStyle;
+        //hlight_pointer = hlightStyle;
         break;
-      case 2:
+      case 1:
         bgcolor_pointer = bgStyle_black;
         color_pointer = COLORS_black;
-        hlight_pointer = hlightStyle_black;
+        //hlight_pointer = hlightStyle_black;
         break;
-      case 3:
+      case 2:
         bgcolor_pointer = bgStyle_white;
         color_pointer = COLORS_white;
-        hlight_pointer = hlightStyle_white;
+        //hlight_pointer = hlightStyle_white;
         break;
         /*
       case 4:
@@ -1814,7 +1792,7 @@ function restoreActionFromLocal() {
           break;
         case 66: //'b'
           //console.log('b press');
-          if (color_selection == 1) {
+          if (color_selection == 0) {
             animElapse = 0;
             if (doblank == 0) {
               target_doblank = 1;
@@ -1861,29 +1839,20 @@ function restoreActionFromLocal() {
           printSaved = !printSaved;
           break;
         case 65: //a
-            /*
-            helpSwitch = 0;
-            if (canvas.hidden) break;
-            color_selection = (color_selection + 1) % 5;
-            colorSwitch();
-            */
 
             helpSwitch = 0;
-
+            
             if (color_selection == 0 && display_mode == 0) {
               display_mode = 1;
               break;
             }
+            
 
-            if (color_selection == 1 && display_mode == 0) {
-              display_mode = 1;
-              break;
-            }
             if (display_mode == 1) {
               display_mode = 0;
             }
 
-            color_selection = (color_selection + 1) % 4;
+            color_selection = (color_selection + 1) % 3;
             colorSwitch();
 
             break;
@@ -2177,7 +2146,8 @@ function restoreActionFromLocal() {
     if (uisel == 0) return;
 
     ctx.fillStyle = bgcolor_pointer;//'green';
-    if (color_selection == 0) ctx.fillStyle = 'rgba(255,255,255, 0.66)';
+    if (color_selection == 0) 
+      ctx.fillStyle = 'rgba(255,255,255, 0.66)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.lineWidth = 1;
     ctx.font = FONT;
@@ -2257,7 +2227,7 @@ function restoreActionFromLocal() {
     //let helps = getSong('help');
     //console.log(bgcolor_pointer);
 
-    ctx.fillStyle = bgcolor_pointer;//'green'; //"rgb(0,0,255)"//ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = bgcolor_pointer;//'green'; //"rgb(0,0,255)"
     //ctx.clearRect(0, 0, canvas.width/2, canvas.height/2);
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   
