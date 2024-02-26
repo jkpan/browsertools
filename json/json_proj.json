@@ -28,7 +28,7 @@
 				"posize": [2, 1, 30, 20],
 				"perspective": false,
 				"obj": {
-					"color": 2,
+					"color": 1,
 					"fontfactor": 10,
 					"saved": [
 						[""], ["路加福音", 9, 28], ["馬太福音", 17, 1], ["馬可福音", 9, 2],

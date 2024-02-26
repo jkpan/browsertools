@@ -1714,20 +1714,25 @@ function restoreActionFromLocal() {
         //bgcolor_pointer = 'rgba(0,0,0,0)';
         //color_pointer = 'rgba(0,0,0,0)';
         //hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
-        //break;
-        //case 1: //default: //0, 1
+        //break;//case 1: //default: //0, 1
         bgcolor_pointer = bgStyle;
         color_pointer = COLORS_CK;
+        color_selection_hlight = 0;
+        colorSwitch_hlight();
         //hlight_pointer = hlightStyle;
         break;
       case 1:
         bgcolor_pointer = bgStyle_black;
         color_pointer = COLORS_black;
+        color_selection_hlight = 1;
+        colorSwitch_hlight();
         //hlight_pointer = hlightStyle_black;
         break;
       case 2:
         bgcolor_pointer = bgStyle_white;
         color_pointer = COLORS_white;
+        color_selection_hlight = 2;
+        colorSwitch_hlight();
         //hlight_pointer = hlightStyle_white;
         break;
         /*
