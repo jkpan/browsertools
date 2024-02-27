@@ -137,13 +137,13 @@ class Verseobj {
             if (this.chapter > 0 && this.verse > 0) {
               let fs = this.targetFs * 0.6;
               ctx.font = fs + "px " + fontFamily;//FONT_SML;
-              _drawSdwtxt(' '+abbr[this.volume], 0, 0);
-              _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
-              //ctx.font = fs + "px " + fontFamily;
-              //_drawSdwtxt(' ' + abbr[this.volume], 0, 0);
-              //_drawSdwtxt(' ' + this.chapter, 0, fs);
-              //_drawSdwtxt(' ' + this.verse, 0, fs * 2, 1.0);
-
+              if (animElapse >= animTotal * 0.8 || animElapse == -1) {
+                _drawSdwtxt(' '+abbr[this.volume], 0, 0);
+                _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
+              } else {
+                _drawtxt(' '+abbr[this.volume], 0, 0, 1.0);
+                _drawtxt(this.frontxt, 0, this.targetFs * 0.7, 1.0);
+              }
             }
           ctx.resetTransform();
         }
@@ -356,6 +356,7 @@ var presetVerse = [
   var FONT_SML_SML = fontsize_sml_sml + "px " + fontFamily;
   
 
+  //color stuff
   var bgStyle = 'green';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)";
   const COLORS_CK = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];
   
@@ -378,6 +379,119 @@ var presetVerse = [
   var bgcolor_pointer = bgStyle;
   var color_pointer = COLORS_CK;
   var hlight_pointer = hlightStyle_green;
+
+  var fontColorType = 1;
+
+  function colorSwitch_hlight() {
+    switch(color_selection_hlight) {
+      case 0:
+        hlight_pointer = hlightStyle_green;
+        break;
+      case 1:
+        hlight_pointer = hlightStyle_black;
+        break;
+      case 2:
+        hlight_pointer = hlightStyle_white;
+        break;
+      case 3:
+        hlight_pointer = hlightStyle_none;
+        break;
+    }
+  }
+
+  function colorSwitch() {
+    console.log('color_selection : '+color_selection);
+    switch(color_selection) {
+      case 0:
+        //bgcolor_pointer = 'rgba(0,0,0,0)';
+        //color_pointer = 'rgba(0,0,0,0)';
+        //hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
+        //break;//case 1: //default: //0, 1
+        bgcolor_pointer = bgStyle;
+        color_pointer = COLORS_CK;
+        color_selection_hlight = 0;
+        colorSwitch_hlight();
+        fontColorType = 1;
+        //hlight_pointer = hlightStyle;
+        break;
+      case 1:
+        bgcolor_pointer = bgStyle_black;
+        color_pointer = COLORS_black;
+        color_selection_hlight = 1;
+        colorSwitch_hlight();
+        fontColorType = 1;
+        //hlight_pointer = hlightStyle_black;
+        break;
+      case 2:
+        bgcolor_pointer = bgStyle_white;
+        color_pointer = COLORS_white;
+        color_selection_hlight = 2;
+        colorSwitch_hlight();
+        fontColorType = 3;
+        //hlight_pointer = hlightStyle_white;
+        break;
+    }
+  }
+
+  function _drawSdwtxt(txt, x, y) {
+  
+    if (doblank == 1 && color_selection == 0) {
+      ctx.fillStyle = 'rgb(0, 220, 0)';//color_pointer[3];
+      ctx.lineWidth = 1;
+      ctx.fillText(txt, x, y);
+      return;
+    }
+
+    switch (fontColorType) {
+      case 0://白字
+        ctx.fillStyle = 'rgb(255,255,255)';//'rgba(255,255,255,' + opa + ')';//'white';
+        break;
+      case 1://白字黑邊
+        ctx.fillStyle = 'rgb(255,255,255)';//'rgba(255,255,255,' + opa + ')';
+        ctx.strokeStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
+        ctx.lineWidth = Math.ceil(fontsize/12.0);
+        ctx.strokeText(txt, x, y);
+        break;
+      case 2://黑字
+        ctx.fillStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
+        break;
+      case 3://黑字白邊
+        ctx.fillStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
+        ctx.strokeStyle = 'rgba(255,255,255)';//'rgba(255,255,255,' + opa + ')';
+        ctx.lineWidth = Math.ceil(fontsize/12.0);
+        ctx.strokeText(txt, x, y);
+        break;
+    }
+
+    //ctx.fillStyle = txt_fill + 1.0 + ')';//'white';//'rgb(255, 255, 255, ' + a + ')';
+    ctx.lineWidth = 1;
+    ctx.fillText(txt, x, y);
+  
+  }
+  
+  function _drawtxt(txt, x, y, a) {
+      
+    if (doblank == 1 && color_selection == 0) {
+      ctx.fillStyle = 'rgb(0, 200, 0)';//color_pointer[2];//'rgb(0, 200, 0)';
+      ctx.fillText(txt, x, y);
+      return;
+    }
+    //else ctx.fillStyle = txt_fill + a + ')';
+  
+    switch (fontColorType) {
+      case 0://白字
+      case 1://白字
+        ctx.fillStyle = 'rgba(255,255,255,' + a + ')';//'rgba(255,255,255,' + opa + ')';
+        break;
+      case 2://黑字
+      case 3://黑字
+        ctx.fillStyle = 'rgba(0,0,0, ' + a + ')';//'rgba(0,0,0,' + opa + ')';
+        break;
+    }
+
+    ctx.lineWidth = 1;
+    ctx.fillText(txt, x, y);
+  }
 
   function getSong(jsonid) {
     var json_elm = document.getElementById(jsonid);
@@ -712,11 +826,11 @@ function restoreActionFromLocal() {
     button.style.width = '200px'; // setting the width to 200px
     button.style.height = '75px'; // setting the height to 200px
   
-    button.style.background = color_pointer[2];//'rgb(0,180,0)'; // setting the background color to teal
-    button.style.color = bgcolor_pointer;//color_pointer[1];// 'green'; // setting the color to white
+    button.style.background = 'rgb(50,50,50)'; // setting the background color to teal
+    button.style.color = 'rgb(255,255,255)';//color_pointer[1];// 'green'; // setting the color to white
     button.style.fontSize = '20px'; // setting the font size to 20px
   
-    button.style.borderColor = color_pointer[3];
+    button.style.borderColor = 'rgb(255,255,255)';
     button.style.borderRadius = '10px';
   
     //button.style.border = 'none';
@@ -751,9 +865,14 @@ function restoreActionFromLocal() {
     canvas.hidden = true;
     
     let div = document.createElement('div');
+    div.style.position = "fixed";
+    div.style.top = "0";
+    div.style.left = "0";
+    div.style.width = "100%";
+    div.style.height = "100%";
     div.id = 'ctrl';
     document.body.appendChild(div);
-    div.style.backgroundColor = 'rgba(0,255,0,0.33)';
+    div.style.backgroundColor = 'rgba(0,0,0,1.0)';
 
     var btn_none = _newBtn();
     btn_none.innerHTML = 'none';
@@ -825,15 +944,12 @@ function restoreActionFromLocal() {
 
   function syntoggle() {
     for(let i=0;i<ctrls.length;i++) {
-      //bgcolor_pointer = bgStyle;
-      //color_pointer = COLORS_CK;
-      //hlight_pointer = hlightStyle;
       if (sync_type == i) {
-        ctrls[i].style.backgroundColor = hlight_pointer;
-        ctrls[i].style.color = bgcolor_pointer;
+        ctrls[i].style.backgroundColor = 'rgb(255, 255, 255)';
+        ctrls[i].style.color = 'rgb(0, 0, 0)';
       } else {
-        ctrls[i].style.backgroundColor = bgcolor_pointer;
-        ctrls[i].style.color = hlight_pointer;
+        ctrls[i].style.backgroundColor = 'rgb(50, 50, 50)';
+        ctrls[i].style.color = 'rgb(255, 255, 255)';
       }
     }
   }
@@ -1293,77 +1409,6 @@ function restoreActionFromLocal() {
   
   }
   
-  var fontColorType = 1;
-
-  function _drawSdwtxt(txt, x, y) {
-  
-    if (doblank == 1 && color_selection == 0) {
-      ctx.fillStyle = 'rgb(0, 220, 0)';//color_pointer[3];
-      ctx.lineWidth = 1;
-      ctx.fillText(txt, x, y);
-      return;
-    }
-
-    switch (fontColorType) {
-      case 0://白字黑邊
-        ctx.fillStyle = 'rgb(255,255,255)';//'rgba(255,255,255,' + opa + ')';//'white';
-        break;
-      case 1://白字
-        ctx.fillStyle = 'rgb(255,255,255)';//'rgba(255,255,255,' + opa + ')';
-        ctx.strokeStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
-        ctx.lineWidth = Math.ceil(fontsize/12.0);
-        ctx.strokeText(txt, x, y);
-        break;
-      case 2://黑字
-        ctx.fillStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
-        break;
-      case 3://黑字白邊
-        ctx.fillStyle = 'rgb(0,0,0)';//'rgba(0,0,0,' + opa + ')';
-        ctx.strokeStyle = 'rgba(255,255,255)';//'rgba(255,255,255,' + opa + ')';
-        ctx.lineWidth = Math.ceil(fontsize/12.0);
-        ctx.strokeText(txt, x, y);
-        break;
-    }
-
-    /*
-    if (doblank == 0) {
-      //ctx.strokeStyle = txt_stroke;//'black';//'rgb(0, 0, 0, ' + a + ')';
-      ctx.lineWidth = Math.ceil(fontsize/10.0);
-      ctx.strokeText(txt, x, y);
-    }
-    */
-  
-    //ctx.fillStyle = txt_fill + 1.0 + ')';//'white';//'rgb(255, 255, 255, ' + a + ')';
-    ctx.lineWidth = 1;
-    ctx.fillText(txt, x, y);
-  
-  }
-  
-  function _drawtxt(txt, x, y, a) {
-      
-    if (doblank == 1 && color_selection == 0) {
-      ctx.fillStyle = 'rgb(0, 200, 0)';//color_pointer[2];//'rgb(0, 200, 0)';
-      ctx.fillText(txt, x, y);
-      return;
-    }
-    //else ctx.fillStyle = txt_fill + a + ')';
-  
-    switch (fontColorType) {
-      case 0://白字
-      case 1://白字
-        ctx.fillStyle = 'rgba(255,255,255,' + a + ')';//'rgba(255,255,255,' + opa + ')';
-        break;
-      case 2://黑字
-      case 3://黑字
-        ctx.fillStyle = 'rgba(0,0,0, ' + a + ')';//'rgba(0,0,0,' + opa + ')';
-        break;
-    }
-
-    ctx.lineWidth = 1;
-    ctx.fillText(txt, x, y);
-  
-  }
-  
   function getPreChapter(chapter, verse) {
     if (chapter <= 0) return -1;
     if (verse > 0) 
@@ -1684,74 +1729,7 @@ function restoreActionFromLocal() {
     window.requestAnimationFrame(_targetAnim);
         
   }
-  
-  function colorSwitch_hlight() {
-    //color_selection_hlight
-    //var hlightStyle_green = 'rgba(0, 70, 0, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-    //var hlightStyle_black = 'rgba(150, 150, 150, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-    //var hlightStyle_white = 'rgba(0, 0, 0, 0.2)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-    //var hlightStyle_none = 'rgba(0, 0, 0, 0.1)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-    switch(color_selection_hlight) {
-      case 0:
-        hlight_pointer = hlightStyle_green;
-        break;
-      case 1:
-        hlight_pointer = hlightStyle_black;
-        break;
-      case 2:
-        hlight_pointer = hlightStyle_white;
-        break;
-      case 3:
-        hlight_pointer = hlightStyle_none;
-        break;
-    }
-  }
 
-  function colorSwitch() {
-    console.log('color_selection : '+color_selection);
-    switch(color_selection) {
-      case 0:
-        //bgcolor_pointer = 'rgba(0,0,0,0)';
-        //color_pointer = 'rgba(0,0,0,0)';
-        //hlight_pointer = 'rgba(0, 0, 0, 0.5)';//hlightStyle;
-        //break;//case 1: //default: //0, 1
-        bgcolor_pointer = bgStyle;
-        color_pointer = COLORS_CK;
-        color_selection_hlight = 0;
-        colorSwitch_hlight();
-        //hlight_pointer = hlightStyle;
-        break;
-      case 1:
-        bgcolor_pointer = bgStyle_black;
-        color_pointer = COLORS_black;
-        color_selection_hlight = 1;
-        colorSwitch_hlight();
-        //hlight_pointer = hlightStyle_black;
-        break;
-      case 2:
-        bgcolor_pointer = bgStyle_white;
-        color_pointer = COLORS_white;
-        color_selection_hlight = 2;
-        colorSwitch_hlight();
-        //hlight_pointer = hlightStyle_white;
-        break;
-        /*
-      case 4:
-        bgcolor_pointer = bgStyle_blue;
-        color_pointer = COLORS_blue;
-        hlight_pointer = hlightStyle_blue;
-        break;
-        */
-       /*
-      default: //0, 1
-        bgcolor_pointer = bgStyle;
-        color_pointer = COLORS_CK;
-        hlight_pointer = hlightStyle;
-        break;
-        */
-    }
-
-  }
   
   function keyboard(e) { //key up //alert(e.keyCode);
   
