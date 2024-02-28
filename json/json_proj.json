@@ -31,7 +31,7 @@
 					"color": 1,
 					"fontfactor": 10,
 					"saved": [
-						[""], ["路加福音", 9, 28], ["馬太福音", 17, 1], ["馬可福音", 9, 2],
+						[""], ["耶利米書", 14, 7], [""], [""],
                         [""], [""], [""], [""],
                         [""], [""]
 					],
@@ -40,15 +40,11 @@
 			},
 			"url_1": {
 				"posize": [22, 22, 10, 10],
-				"perspective": false,
-				"obj": {
-					"url": ""
-				}
+				"perspective": false
 			},
 			"file_1": {
 				"posize": [13, 22, 8, 8],
-				"perspective": false,
-				"obj": {}
+				"perspective": false
 			},
 			"B/G": "B"
 		}

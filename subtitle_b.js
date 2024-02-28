@@ -372,7 +372,7 @@ var presetVerse = [
   /////
   var hlightStyle_green = 'rgba(0, 70, 0, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   var hlightStyle_black = 'rgba(150, 150, 150, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-  var hlightStyle_white = 'rgba(0, 0, 0, 0.2)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+  var hlightStyle_white = 'rgba(0, 0, 0, 0.4)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   var hlightStyle_none = 'rgba(0, 0, 0, 0.1)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
   ////
 

@@ -127,8 +127,35 @@ a {
 
 
 function toObj() {
+  if (image_base64) {
+    let keep = isKeepRatio()?1:0;
+      return { 
+        "keepratio": keep,
+        "imageBase64": image_base64 
+      };
+  }
   return {};
 }
+
+window.addEventListener('message', (e) => {
+  
+  if (e.data && e.data.trim().length < 2) return;
+
+  const jsonData = JSON.parse(e.data);
+
+  if (jsonData.keepratio) {
+    document.getElementById("keepratio").checked = true;
+  } else {
+    document.getElementById("keepratio").checked = false;
+  }
+
+  if (jsonData.imageBase64) {
+    image_base64 = jsonData.imageBase64;
+    showImage();
+    return;
+  }
+
+}, false);
 
 </script>
 

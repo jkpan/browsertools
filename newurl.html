@@ -206,6 +206,18 @@ window.addEventListener('message', (e) => {
 
   const jsonData = JSON.parse(e.data);
 
+  if (jsonData.keepratio) {
+    document.getElementById("keepratio").checked = true;
+  } else {
+    document.getElementById("keepratio").checked = false;
+  }
+
+  if (jsonData.imageBase64) {
+    image_base64 = jsonData.imageBase64;
+    showImage();    
+    return;
+  }
+
   if (!jsonData.url) return;
   if (jsonData.url.trim().length == 0) return;
   document.getElementById("ppt_url").value = jsonData.url.trim();
@@ -231,10 +243,25 @@ function relativeUrl(url) {
 }
 
 function toObj() {
-  if (!document.getElementById("web").hidden)
+
+  if (!document.getElementById("web").hidden) { //已經連上
     return { "url": relativeUrl(document.getElementById("web").src) };
-  let _url = relativeUrl(document.getElementById("ppt_url").value.trim());
-  return { "url": _url };
+  } else {
+    let _url = relativeUrl(document.getElementById("ppt_url").value.trim());
+    if (_url.length > 0) {
+      return { "url": _url };
+    }
+    if (image_base64) {
+      let keep = isKeepRatio()?1:0;
+      return {
+        "keepratio": keep,
+        "imageBase64": image_base64 
+      };
+    }
+
+  }
+  //url還在欄位
+  
 }
 
 /*

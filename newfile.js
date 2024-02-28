@@ -1,3 +1,5 @@
+var image_base64 = null;
+
 function isKeepRatio() {
   var checkbox = document.getElementById("keepratio");
   var isChecked = checkbox.checked;
@@ -52,35 +54,41 @@ function selectFile(event) {
     };
     reader.readAsDataURL(file);
   }
+
+  function showImage() {
+    document.querySelector('body').style.background = 'transparent';
+    document.getElementById("ui").hidden = true;;
+    let img = new Image();
+    img.src = image_base64;
+    img.onload = function() {
+      var width = img.width;
+      var height = img.height;//window.location.href = imageUrl; return;
+      let div = document.getElementById("image_container");
+      div.hidden = false;
+      if (isKeepRatio()) {
+        if (width >= height) 
+          div.innerHTML = '<img class="centered" width="100%" height="auto" src="' + image_base64 + '" />';
+        else 
+          div.innerHTML = '<img class="centered" width="auto" height="100%" src="' + image_base64 + '" />';
+      } else {
+        div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
+      }
+    };
+  }
   
   function displayImageFile(file) {
   
-    document.querySelector('body').style.background = 'transparent';
-    document.getElementById("ui").hidden = true;;
-    
+    //document.querySelector('body').style.background = 'transparent';
+    //document.getElementById("ui").hidden = true;;
     // 讀取檔案並將其轉換成Data URL
-      var reader = new FileReader();
-      reader.onload = function(event) {
-        var imageUrl = event.target.result;
-        let img = new Image();
-        img.src = imageUrl;
-        img.onload = function() {
-          var width = img.width;
-          var height = img.height;//window.location.href = imageUrl; return;
-          let div = document.getElementById("image_container");
-          div.hidden = false;
-          if (isKeepRatio()) {
-            if (width >= height) 
-              div.innerHTML = '<img class="centered" width="100%" height="auto" src="' + imageUrl + '" />';
-            else 
-              div.innerHTML = '<img class="centered" width="auto" height="100%" src="' + imageUrl + '" />';
-          } else {
-            div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + imageUrl + '" />';
-          }
-        };
-        
-      };
-      reader.readAsDataURL(file);
+
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      image_base64 = event.target.result;//console.log('image_base64:' + image_base64);
+      showImage();
+    };
+    reader.readAsDataURL(file);
+
   }
   
   function displayPDFFile(file) {
