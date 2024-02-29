@@ -13,10 +13,13 @@
 					"fontfactor": 12,
 					"list": [
 								
-						"救恩214", 
-						"救恩170", 
-						"救恩219", 
+						"新歌頌揚324",
+						"讚美之泉91",
+						"讚美之泉105",
+						"讚美之泉9",
+						"救恩227",
 
+						
 						"主禱文",
 						"使徒信經",
 						"救恩300"
@@ -40,11 +43,17 @@
 			},
 			"url_1": {
 				"posize": [22, 22, 10, 10],
-				"perspective": false
+				"perspective": false,
+				"obj": {
+					"keepratio": 1
+				}
 			},
 			"file_1": {
 				"posize": [13, 22, 8, 8],
-				"perspective": false
+				"perspective": false,
+				"obj": {
+					"keepratio": 0
+				}
 			},
 			"B/G": "B"
 		}

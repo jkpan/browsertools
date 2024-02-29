@@ -548,7 +548,6 @@ function downloadExpJson() {
   }
   
   function json2Perspective(app) {
-    //recoverAll();
     app.progress_perspective_Self();
     anim_update(-1);
   
@@ -593,28 +592,31 @@ function downloadExpJson() {
         colorSwitch();
       }
     }
-  
-    for (let i=0;i<APPS.length;i++) {
-      if (!jsonData[APPS[i]]) continue;
-      let app = _createFrame(APPS[i]);
-      app.x = jsonData[APPS[i]]['posize'][0];
-      app.y = jsonData[APPS[i]]['posize'][1];
-      app.w = jsonData[APPS[i]]['posize'][2];
-      app.h = jsonData[APPS[i]]['posize'][3];
+
+    var keys = Object.keys(jsonData);
+
+    // 按照属性名数组的顺序遍历对象，并输出数据
+    keys.forEach(function(key) {
+      let app = _createFrame(key);
+      if (!app) return;
       app.presave();
-      app.settle();
-      app.recover();
-      let name = APPS[i];
-      if (jsonData[name].obj) {
+      app.x = jsonData[key]['posize'][0];
+      app.y = jsonData[key]['posize'][1];
+      app.w = jsonData[key]['posize'][2];
+      app.h = jsonData[key]['posize'][3];
+      app.presave();
+      app.settle();//app.recover();
+      app.doFix();
+      if (jsonData[key].obj) {
         app.elm.onload = function() {
           app.elm.onload = null;
-          app.elm.contentWindow.postMessage(JSON.stringify(jsonData[name].obj), '/');
-          if (jsonData[name]['perspective']) {
+          app.elm.contentWindow.postMessage(JSON.stringify(jsonData[key].obj), '/');
+          if (jsonData[key]['perspective']) {
             json2Perspective(app);
           }
         }
       }
-    }
+    });
   
     _repaint();
     
@@ -895,7 +897,6 @@ function downloadExpJson() {
   
     if (idx == -1) return;
     
-    //recoverAll();
     applets[idx].progress_hide_show_Self();
     anim_update(-1);
   
@@ -928,8 +929,7 @@ function downloadExpJson() {
       }
     }
     if (idx == -1) {
-      _createFrame(keyname);
-      recoverAll();
+      _createFrame(keyname);//recoverAll();
       return;
     }
   
