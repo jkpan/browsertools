@@ -276,7 +276,7 @@ function relativeUrl(url) {
   if (url.startsWith(root)) {
     let str = url.substr(root.length, url.length - root.length);
     console.log(str);
-    return str;
+    return '.' + str;
   }
   return url;
 }

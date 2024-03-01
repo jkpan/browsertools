@@ -237,7 +237,7 @@ function relativeUrl(url) {
   //let domain = window.location.origin;
   if (url.startsWith(root)) {
     let str = url.substr(root.length, url.length - root.length);
-    return str;
+    return '.' + str;
   }
   return url;
 }

@@ -655,8 +655,9 @@ function downloadExpJson() {
       obj[applets[i].keyname]['perspective'] = applets[i].t_rotateY != 0;
   
       try {
-        if (applets[i].elm.contentWindow.toObj() != null) {
-          obj[applets[i].keyname]['obj'] = applets[i].elm.contentWindow.toObj();
+        let _obj = applets[i].elm.contentWindow.toObj();
+        if (_obj != null) {
+          obj[applets[i].keyname]['obj'] = _obj;
         }
       } catch (e) {
         obj[applets[i].keyname]['obj'] = { "url" : ""}
