@@ -1069,10 +1069,12 @@ function downloadExpJson() {
         mouseY = e.y;
         
         if (mouseDown < 0) {
+          /*
           if (selectIdx >= 0 && applets[selectIdx].checkInside(mouseX, mouseY)) {
             _repaint();
             return;
           }
+          */
           selectIdx = -1;
           for (let i=applets.length-1;i>=0;i--) {
             if (applets[i].checkInside(mouseX, mouseY)) {
