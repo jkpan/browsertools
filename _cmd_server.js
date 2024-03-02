@@ -6,10 +6,11 @@ const os = require('os');
 //const express = require('express');
 //const cluster = require('cluster');
 
+/*
 const playCode = 
 `<script type="text/javascript" charset="UTF-8">
 
-  color_selection = 2; 
+  color_selection = 1; 
   colorSwitch(); 
   setMsg_play(); 
   removeTEvent(); 
@@ -27,7 +28,7 @@ const playCode =
 const ctrlCode = 
 `<script type="text/javascript" charset="UTF-8">
 
-  color_selection = 2; 
+  color_selection = 0; 
   colorSwitch(); 
   setMsg_ctrl();
   
@@ -37,6 +38,7 @@ const ctrlCode =
   _repaint();
 
 </script>`;
+*/
 
 console.log('cpu ' + os.cpus().length + ' cores');
 
@@ -334,6 +336,7 @@ const server = http.createServer((req, res) => {
     case '/synclyrics':       synclyrics(req, res);       return;
 
     case '/initui':           initui(req, res);           return;
+    /*
     case '/Bible_ctrl': {
       url = '/subtitle_b.html';
       responseFile(`.${url}`, res, ctrlCode);
@@ -346,6 +349,7 @@ const server = http.createServer((req, res) => {
       url = '/subtitle_niv.html';
       responseFile(`.${url}`, res, playCode);
     } return;
+    */
     default:
         if (req.url.startsWith('/cmd')) {
           if (req.url === '/cmd') {
@@ -360,6 +364,27 @@ const server = http.createServer((req, res) => {
           return;
         }
         break;
+  }
+
+  if (url === '/Bible_play') {
+    const redirect = '/subtitle_b.html?action=play';
+    res.writeHead(302, {Location: redirect});
+    res.end();
+    return;
+  }
+
+  if (url === '/Bible_play_niv') {
+    const redirect = '/subtitle_niv.html?action=play';
+    res.writeHead(302, {Location: redirect});
+    res.end();
+    return;
+  }
+
+  if (url === '/Bible_ctrl') {
+    const redirect = '/subtitle_b.html?action=ctrl';
+    res.writeHead(302, {Location: redirect});
+    res.end();
+    return;
   }
 
   if (url === '/' || url === '/index.html') {
@@ -386,9 +411,12 @@ const server = http.createServer((req, res) => {
     url = '/subtitle_b.html';
   }
 
+  if (url.startsWith('/subtitle_niv.html')) {
+    url = '/subtitle_niv.html';
+  }
+
   if (url.startsWith('/led.html')) {
     url = '/led.html';
-    println('led.html CALL');
   }
 
   const filePath = `.${url}`;

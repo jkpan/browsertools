@@ -567,9 +567,9 @@ function downloadExpJson() {
   }
 
   /*
-    B/G: B b
+    B/G: B b G g
     ctrl: 1
-      perspective: true, false
+      perspective: 1, 0
       posize : [,,,]
   */
   function handleProfile(fileContent) {
@@ -611,10 +611,10 @@ function downloadExpJson() {
         app.elm.onload = function() {
           app.elm.onload = null;
           app.elm.contentWindow.postMessage(JSON.stringify(jsonData[key].obj), '/');
-          if (jsonData[key]['perspective']) {
-            json2Perspective(app);
-          }
         }
+      }
+      if (jsonData[key]['perspective']) {
+        json2Perspective(app);
       }
     });
   
@@ -647,12 +647,19 @@ function downloadExpJson() {
     document.getElementById('profile').click();
   }
   
+  /*
+   
+   B/G : B, G
+   obj 
+      posize [x,y,w,h]
+      perspective 0, 1
+   */
   function toObj() {
     let obj = {};
     for (let i=0;i<applets.length;i++) {
       obj[applets[i].keyname] = {};
       obj[applets[i].keyname]['posize'] = [applets[i].x, applets[i].y, applets[i].w, applets[i].h];
-      obj[applets[i].keyname]['perspective'] = applets[i].t_rotateY != 0;
+      obj[applets[i].keyname]['perspective'] = applets[i].t_rotateY != 0?1:0;
   
       try {
         let _obj = applets[i].elm.contentWindow.toObj();

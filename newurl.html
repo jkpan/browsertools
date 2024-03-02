@@ -164,6 +164,8 @@ a {
             <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a></li>
             <li>Google簡報要打開speaker notes按's'</li>
             <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
+            <li><a href="javascript:animLED()">LED動畫</a></li>
+            0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
           </ul>
             
           <hr size="4" width="100%" color="#00ff00"/>
@@ -193,6 +195,13 @@ function googleSlidesRemoveBar() {
   value = value.trim();
   if (value.length == 0) return;
   value += '&rm=minimal';
+  document.getElementById("ppt_url").value = value;
+}
+
+function animLED() {
+  let value = document.getElementById("ppt_url").value;
+  value = value.trim();
+  value = './led.html?anim=7&round=0';
   document.getElementById("ppt_url").value = value;
 }
 
