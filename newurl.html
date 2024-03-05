@@ -44,6 +44,20 @@ body {
   vertical-align: middle;
 
 }
+.reloadP {
+
+grid-column: 24 / 25;
+grid-row: 23 / 24;
+border: none;
+opacity: 25%;
+
+font-size: 24px;
+background-color: rgb(0, 150, 0);
+color: #00ff00;
+
+vertical-align: middle;
+
+}
 .ui {
     grid-column: 2 / 24;
     grid-row: 2 / 24;
@@ -123,10 +137,12 @@ a {
       <div class="wrapper">
 
         <iframe width="100%" height="100%" hidden="true" id="web" class="full"></iframe>
-        <button class="reload" hidden="true" id="reload" type="button" onclick="reload()">R</button>
-
+        
         <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls></video></video>
         <div class="full" id="image_container" hidden="true"></div>
+
+        <button class="reload" hidden="true" id="reload" type="button" onclick="reload()">R</button>
+        <button class="reloadP" hidden="true" id="reloadPage" type="button" onclick="reloadPage()">&lt;</button>
 
         <!--iframe src="https://onedrive.live.com/embed?resid=A9C489AB715D78A%21237&amp;authkey=!AMd1wONLe7THB_E&amp;em=2&amp;wdAr=1.7777777777777777" width="476px" height="288px" frameborder="0">這是 <a target="_blank" href="https://office.com/webapps">Office</a> 提供的內嵌 <a target="_blank" href="https://office.com">Microsoft Office</a> 簡報。</iframe-->
         <!--https://onedrive.live.com/view.aspx?resid=A9C489AB715D78A!237&cid=0a9c489ab715d78a&wdo=2&authkey=!AMd1wONLe7THB_E-->
@@ -148,6 +164,8 @@ a {
                 document.querySelector('body').style.background = 'transparent';
                 document.getElementById("reload").hidden = false;
                 document.getElementById("web").src = value;
+                //if (document.getElementById("reloadPage"))
+                document.getElementById("reloadPage").hidden = false;
                 //window.location.href = value;
               }
               

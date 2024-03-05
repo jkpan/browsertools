@@ -57,7 +57,9 @@ function selectFile(event) {
 
   function showImage() {
     document.querySelector('body').style.background = 'transparent';
-    document.getElementById("ui").hidden = true;;
+    document.getElementById("ui").hidden = true;
+    if (document.getElementById("reloadPage"))
+      document.getElementById("reloadPage").hidden = false;
     let img = new Image();
     img.src = image_base64;
     img.onload = function() {
@@ -151,3 +153,8 @@ function selectFile(event) {
   function dragOverHandler(event) {
       event.preventDefault();
   }
+
+  function reloadPage() {
+    location.reload();
+  }
+  

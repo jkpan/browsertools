@@ -551,6 +551,7 @@ var presetVerse = [
   
   var color_selection = 0;
   var color_selection_hlight = 0;
+  //var fontsize_dist = 0;
   
   var uisel = 0;
   var uisel_start = 0;
@@ -2245,12 +2246,6 @@ function restoreActionFromLocal() {
   //canvas init
   init();
   
-  /*
-    color : (color_selection)
-    fontfactor : (fontfactor)
-    saved : (presetVerse)
-    syncType : sync_type
-   */
   // message 事件
   function receiveMessage(e) {
     if (e.data == 'x') { //alert(e.data);
@@ -2260,11 +2255,10 @@ function restoreActionFromLocal() {
     } else {
 
       const jsonData = JSON.parse(e.data);
+      if (jsonData.color) color_selection = jsonData.color; else color_selection = 0;
+      if (jsonData.verticle) display_mode = 1; else display_mode = 0;
+      if (jsonData.printSaved) printSaved = true; else printSaved = false;
     
-      if (jsonData.color) 
-        color_selection = jsonData.color;
-      else 
-        color_selection = 0;
       colorSwitch();
 
       if (jsonData.fontfactor) 
@@ -2280,6 +2274,12 @@ function restoreActionFromLocal() {
           presetVerse[i] = jsonData.saved[i];
         }
         keyboard({keyCode : 49});
+      }
+
+      if (jsonData.transparent) {
+        makeTransparent = true;
+      } else {
+        makeTransparent = false;
       }
     
     }
@@ -2705,12 +2705,30 @@ function restoreActionFromLocal() {
     return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
   }
 
+  /*
+    color : (color_selection)
+    fontfactor : (fontfactor)
+    verticle: 1,0
+    printSaved: 1,0
+    saved : (presetVerse)
+    transparent: (makeTransparent) 1,0
+    syncType : sync_type
+                  0: none
+                  1: local master
+                  2: web master
+                  3: local & web master
+                  4: local slave
+                  5: web slave
+   */
   function toObj() {
     let obj = {};
     obj['color'] = color_selection;
+    obj['verticle'] = display_mode;
     obj['fontfactor'] = fontfactor;
     obj['saved'] = presetVerse;
     obj['syncType'] = sync_type;
+    obj['transparent'] = makeTransparent?1:0;
+    obj['printSaved'] = printSaved?1:0;
     return obj;
   }
 

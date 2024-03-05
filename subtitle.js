@@ -25,7 +25,7 @@ function createCanvas() {
   list : (list)
   mode : (mode)
   fontfactor: (fontfactor)
-  master : 1 
+  //master : 1 
  */
 function json2List(fileContent) {
 
@@ -33,8 +33,8 @@ function json2List(fileContent) {
   // 進行 JSON 資料的處理
 
   if (!jsonData.list || jsonData.list.length == 0) {
-    if (jsonData.master && jsonData.master == 1) 
-      saveListFromController();
+    //if (jsonData.master && jsonData.master == 1) saveListFromController();
+    //empty
   } else {
     getSongsFromList(jsonData.list);
     if (!funcInterval) 
@@ -45,7 +45,10 @@ function json2List(fileContent) {
   if (jsonData.mode) mode = jsonData.mode;
   if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
   if (jsonData.fontColorType) fontColorType = jsonData.fontColorType;
-
+  if (jsonData.transparent) 
+    makeTransparent = true;
+  else 
+    makeTransparent = false;
   _repaint();
   //console.log(jsonData.list);
 
@@ -1107,6 +1110,7 @@ function toObj() {
   obj['fontfactor'] = fontfactor;
   obj['list'] = list;
   obj['fontColorType'] = fontColorType;
+  obj['transparent'] = makeTransparent?1:0;
   return obj;
 }
 
@@ -1143,8 +1147,8 @@ function receiveMessage(e) {
   } else if (e.data == 'o') { //alert(e.data);
     stopActionInterval();
   } else {
-    console.log('Message received! ' + e.data);
-    console.trace();
+    //console.log('Message received! ' + e.data);
+    //console.trace();
     json2List(e.data);
   }
   _repaint();
