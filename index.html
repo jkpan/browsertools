@@ -3,112 +3,138 @@
 </script>
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-<style>
-body {
-          margin: 10px;
-          height: 100%;
-          width: 100%;
-          background-color: rgb(104, 104, 104);
-          color: #00ff00;
-}
-a {
-            color: #ffffff;
-}
-button {
-            font-size: 16px;
-            background-color: rgb(100, 100, 100);
-            color: #ffffff;
-            /*margin: 2% 2%;*/
-            /*width:45%;*/
-            border: 1px solid;
-            vertical-align: middle;
-            z-index: 10;
-}
-.fixed-text {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16em;
-    color: rgba(128, 128, 128, 0.2); /* 文本颜色 */
-    z-index: -1;
-    background-color: transparent; /* 背景色，使用rgba来设置背景色透明度 */
-}
-.slides {
-    position: fixed;
-    top: 10%;
-    left: 40%; /* 初始位置在左侧屏幕外 */
-    width: 55%;
-    height: 55%;
-    background-color: rgb(0,0,0);
-    color: #fff;
-    transition: top 0.3s; /* 添加过渡效果 */
-    z-index: 90;
-    border: none;
-}
-</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+  <style>
+    body {
+      margin: 10px;
+      height: 100%;
+      width: 100%;
+      background-color: rgb(104, 104, 104);
+      color: #00ff00;
+    }
+
+    a {
+      color: #ffffff;
+    }
+
+    button {
+      font-size: 16px;
+      background-color: rgb(100, 100, 100);
+      color: #ffffff;
+      /*margin: 2% 2%;*/
+      /*width:45%;*/
+      border: 1px solid;
+      vertical-align: middle;
+      z-index: 10;
+    }
+
+    .fixed-text {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16em;
+      color: rgba(128, 128, 128, 0.2);
+      /* 文本颜色 */
+      z-index: -1;
+      background-color: transparent;
+      /* 背景色，使用rgba来设置背景色透明度 */
+    }
+
+    .slides {
+      position: fixed;
+      top: 10%;
+      left: 40%;
+      width: 55%;
+      height: 55%;
+      background-color: rgb(0, 0, 0);
+      color: #fff;
+      transition: top 0.3s;
+      z-index: 90;
+      border: none;
+    }
+  </style>
 </head>
+
 <body>
-<div class="fixed-text">台北市中心神召會</div>
-<hr size="8" align="left" width="33%" color="#aaaaaa">
-<div class="slides" id="slidesDiv" hidden="true">
-  <iframe style="border: none;" width="100%" height="100%" id="slidesFrame"></iframe>
-</div>
-<p></p>
-<p></p>
-<button onclick="location.href='./tabs.html'">整合投影</button><p></p>
+  <div class="fixed-text">台北市中心神召會</div>
+  <hr size="8" align="left" width="33%" color="#aaaaaa">
+  <div class="slides" id="slidesDiv" hidden="true">
+    <iframe style="border: none;" width="100%" height="100%" id="slidesFrame"></iframe>
+  </div>
+  <p></p>
+  <p></p>
+  <button onclick="location.href='./tabs.html'">整合投影</button>
+  <p></p>
   <blockquote>
-  <button onclick="location.href='./dashboard.html'">Dashboard客製綠幕</button><p></p>
+    <button onclick="location.href='./dashboard.html'">Dashboard客製綠幕</button>
+    <p></p>
     <blockquote>
-    <a href="./subtitle_b.html">聖經字幕工具</a><p></p>
+      <a href="./subtitle_b.html">聖經字幕工具</a>
+      <p></p>
       <blockquote>
-      <a id="bplay" hidden="true" href="./Bible_play" style="background-color: black;">幫你翻聖經 (聖經手機同步服務)</a><p></p>
-      <a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a><p></p>
+        <a id="bplay" hidden="true" href="./Bible_play" style="background-color: black;">幫你翻聖經 (聖經手機同步服務)</a>
+        <p></p>
+        <a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a>
+        <p></p>
       </blockquote>
-    <a href="./subtitle_niv.html">Bible niv </a><p></p>
+      <a href="./subtitle_niv.html">Bible niv </a>
+      <p></p>
       <blockquote>
-      <a id="nivsync" hidden="true" href="./Bible_play_niv" style="background-color: black;">NIV聖經手機同步服務 (nodejs)</a><p></p>
+        <a id="nivsync" hidden="true" href="./Bible_play_niv" style="background-color: black;">NIV聖經手機同步服務 (nodejs)</a>
+        <p></p>
       </blockquote>
-    <a href="./subtitle.html">詩歌字幕工具</a><p></p>
-    <a href="./effect.html">綜藝效果</a><p></p>
-    <a href="./clock.html">小時鐘</a><p></p>
-    <a href="./marquee_v.html">LED新聞跑馬燈</a><p></p>
-    <a href="./camera.html">Camera</a><p></p>
+      <a href="./subtitle.html">詩歌字幕工具</a>
+      <p></p>
+      <a href="./effect.html">綜藝效果</a>
+      <p></p>
+      <a href="./clock.html">小時鐘</a>
+      <p></p>
+      <a href="./marquee_v.html">LED新聞跑馬燈</a>
+      <p></p>
+      <a href="./camera.html">Camera</a>
+      <p></p>
     </blockquote>
   </blockquote>
-<p></p>
-<a href="javascript:embeddedUrl(HELPURL)">說明投影片</a>
-<p></p>
-<hr size="8" align="left" width="33%" color="#aaaaaa"><p></p>
-<!--a href="">LED參數範例</a><p></p-->
-<!--a href="javascript:embeddedUrl(LEDURL)">LED參數範例</a><p></p-->
-<a id="icom" hidden="true" href="./_cmd_client.html" style="background-color: black;">text intercom (nodejs)</a><p></p>
-<a href="./index_led.html">LED URL</a><p></p>
-<a href="./index_others.html">其他工具</a><p></p>
-<a href="https://sites.google.com/site/instantfunmobile/">阿榮娛樂</a><p></p>
+  <p></p>
+  <a href="javascript:embeddedUrl(HELPURL)">說明投影片</a>
+  <p></p>
+  <hr size="8" align="left" width="33%" color="#aaaaaa">
+  <p></p>
+  <!--a href="">LED參數範例</a><p></p-->
+  <!--a href="javascript:embeddedUrl(LEDURL)">LED參數範例</a><p></p-->
+  <a id="icom" hidden="true" href="./_cmd_client.html" style="background-color: black;">text intercom (nodejs)</a>
+  <p></p>
+  <a href="./index_led.html">LED URL</a>
+  <p></p>
+  <a href="./index_others.html">其他工具</a>
+  <p></p>
+  <a href="https://sites.google.com/site/instantfunmobile/">阿榮娛樂</a>
+  <p></p>
 </body>
+
 </html>
 
 <script type="text/javascript" src="common.js" charset="UTF-8"></script>
 <script type="text/javascript" charset="UTF-8">
 
-function embeddedUrl(url) {
-  document.getElementById('slidesDiv').hidden = false;
-  let frame = document.getElementById('slidesFrame');
-  frame.src = url;
-}
+  function embeddedUrl(url) {
+    document.getElementById('slidesDiv').hidden = false;
+    let frame = document.getElementById('slidesFrame');
+    frame.src = url;
+  }
 
-if (readParam('server') === 'nodejs') {
-  document.getElementById("bplay").hidden = false;
-  document.getElementById("bctrl").hidden = false;
-  document.getElementById("nivsync").hidden = false;
-  document.getElementById("icom").hidden = false;
-} 
+  if (readParam('server') === 'nodejs') {
+    document.getElementById("bplay").hidden = false;
+    document.getElementById("bctrl").hidden = false;
+    document.getElementById("nivsync").hidden = false;
+    document.getElementById("icom").hidden = false;
+  }
 
 </script>

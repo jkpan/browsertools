@@ -9,7 +9,9 @@
 			"mode": 3,
 			"fontfactor": 10,
 			"list": ["主禱文", "使徒信經", "救恩300"],
-			"fontColorType": 1
+			"fontColorType": 1,
+			"transparent": 0,
+			"slave": 1
 		  }
 		},
 		"Bible": {
@@ -17,17 +19,18 @@
 		  "perspective": 1,
 		  "obj": {
 			"color": 0,
+			"verticle": 0,
 			"fontfactor": 10,
 			"saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
-			"syncType": 1
+			"syncType": 4,
+			"transparent": 0,
+			"printSaved": 0,
+			"fsizedist": 0
 		  }
 		},
 		"url_1": {
 		  "posize": [20, 1, 13, 15],
-		  "perspective": 1,
-		  "obj": {
-			"keepratio": 1
-		  }
+		  "perspective": 1
 		},
 		"B/G": "G"
 	  }
@@ -39,11 +42,14 @@
 		  "posize": [13, 2, 19, 30],
 		  "perspective": 0,
 		  "obj": {
-			"verticle":1,
 			"color": 0,
+			"verticle": 1,
 			"fontfactor": 15,
 			"saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
-			"syncType": 1
+			"syncType": 4,
+			"transparent": 0,
+			"printSaved": 0,
+			"fsizedist": 0
 		  }
 		},
 		"B/G": "G"
