@@ -663,7 +663,7 @@ function ajax_restore() {
 var sync_type = 0;
 
 var funcInterval;
-var fake_doblank = 0;
+//var fake_doblank = 0;
 //function restoreActionFromServer() {ajax_restore();}
 function startRestoreFromServerInterval() {
   if (funcInterval) stopActionInterval();
@@ -699,17 +699,42 @@ function _saveAction2Local() {
   let key = 'save action';  //localStorage.removeItem(key);
   let value = song + ' ' + phase + ' ' + line + ' ' + target_doblank;
   localStorage.setItem(key, value);
-  //console.log('saveAction2Local:' + value);
 }
 
 
 //判斷是不是要卷軸動畫
 function restoreAnim(volume, chapter, verse, _doblank) {
 
-  if (volume == song && chapter == phase && verse == line && _doblank == fake_doblank) return;
+  /*
+  if (animElapse > 0) {
+    target_doblank = _doblank;
+    doblank = _doblank;
+    song = volume;
+    subtitles = SONGS[song];
+    phase = chapter;
+    line = verse;
+    if (display_mode == 0)
+     _repaint();
+    else
+     __repaint();
+    return;
+  }
+  */
 
-  fake_doblank = _doblank;
-  if (_doblank != doblank) {
+  //console.log('' +target_doblank+ ', '+'_do: ' + _doblank);
+
+  if (volume == song && chapter == phase && verse == line && _doblank == target_doblank && _doblank == doblank) return;
+
+  //check later
+  if (target_doblank != doblank) {
+    target_doblank = _doblank;
+    doblank = _doblank;
+    _repaint();
+    return;
+  }
+
+  //fake_doblank = _doblank;
+  if (_doblank != target_doblank) {
     keyboard({ keyCode: 66 });
     return;
   }
@@ -1057,7 +1082,7 @@ function is0Char(str) {
   return isEnglishCharacter(str[0]);
 }
 
-function blankend_update(elapse) {
+function blankend_update() {
 
   render(-1);
 
@@ -1074,7 +1099,7 @@ function blankend_update(elapse) {
 
 }
 
-function blank_update(elapse) {
+function blank_update() {
 
   render(-1);
 
@@ -1097,7 +1122,6 @@ const animTotal = 30;
 var animElapse = -1; //var savePre = 0;
 function verse_update(elapse) {
 
-
   //render(animElapse/animTotal);
 
   switch (display_mode) {
@@ -1108,7 +1132,6 @@ function verse_update(elapse) {
       render_vertical(animElapse / animTotal);
       break;
   }
-
 
   if (animElapse < animTotal) {
     animElapse++;
@@ -1194,7 +1217,12 @@ function operateQuene(queueType, doanim) {
   }
 
   if (doanim > 0) {
-    if (display_mode == 0) animElapse = 0;
+    //if (display_mode == 0) animElapse = 0;
+    if (display_mode == 0 && animElapse > 1) {// && animElapse < animTotal - 4) {
+        animElapse = -1;
+        render(-1);
+        return;
+    }
     window.requestAnimationFrame(verse_update);
   } else {
     render(-1);
@@ -1774,8 +1802,21 @@ function keyboard(e) { //key up //alert(e.keyCode);
     case 66: //'b'
       //console.log('b press');
       if (color_selection == 0) {
+        
+        if (animElapse > 0) {
+          animElapse = -1;
+          if (target_doblank == 0) {
+            target_doblank = 1;
+            doblank = 1;
+          } else {
+            target_doblank = 0;
+            doblank = 0;
+          }
+          break;
+        }
+        
         animElapse = 0;
-        if (doblank == 0) {
+        if (target_doblank == 0) {
           target_doblank = 1;
           saveAction2Local();
           window.requestAnimationFrame(blank_update);

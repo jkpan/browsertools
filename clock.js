@@ -182,10 +182,9 @@ class ClockObj {
     let fs = c.width / 10;
     _ctx.font = fs + "px Monospace";
 
-    _ctx.fillStyle = "rgb(0,0,0)";
-
+    _ctx.fillStyle = "rgb(200,200,200)";
+    _ctx.strokeStyle = "rgb(0,0,0)";//this.fontColor;
     _ctx.lineWidth = Math.ceil(fs / 14.0);
-    _ctx.strokeStyle = this.fontColor;
 
     let x = c.width / 2;
     let y = c.height / 2;
