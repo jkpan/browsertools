@@ -9,31 +9,6 @@
 			"keepratio":0
 		  }
 		},
-		"Bible": {
-		  "posize": [2, 1, 30, 20],
-		  "perspective": 0,
-		  "obj": {
-			"color": 1,
-			"verticle": 0,
-			"fontfactor": 10.5,
-			"saved": [
-			  [""],
-			  [""],
-			  [""],
-			  [""],
-			  [""],
-			  [""],
-			  [""],
-			  [""],
-			  [""],
-			  [""]
-			],
-			"syncType": 1,
-			"transparent": 0,
-			"printSaved": 0,
-			"fsizedist": 1
-		  }
-		},
 		"url_1": {
 		  "posize": [22, 22, 10, 10],
 		  "perspective": 0
@@ -46,16 +21,9 @@
 			"fontfactor": 10.5,
 			"list": [
 				
-				"讚美之泉55",
-				"救恩143",
-				"其他123",
-				"其他124",
-
-				"救恩75",
-				
-				"救恩293",
-				"救恩297",
-				"其他64",
+				"救恩170",
+				"救恩209",
+				"新歌頌揚194",
 
 			  "主禱文",
 			  "使徒信經",
@@ -66,6 +34,31 @@
 			"slave": 0
 		  }
 		},
+		"Bible": {
+			"posize": [2, 1, 30, 20],
+			"perspective": 0,
+			"obj": {
+			  "color": 1,
+			  "verticle": 0,
+			  "fontfactor": 20,
+			  "saved": [
+				[""],
+				[""],
+				[""],
+				[""],
+				[""],
+				[""],
+				[""],
+				[""],
+				[""],
+				[""]
+			  ],
+			  "syncType": 1,
+			  "transparent": 0,
+			  "printSaved": 0,
+			  "fsizedist": 0
+			}
+		  },
 		"B/G": "B"
 	  }
 	},

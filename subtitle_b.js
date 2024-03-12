@@ -28,7 +28,7 @@ class Verseobj {
   }
 
   set2Top(pre) {
-    this.transY = - canvas.height * 0.2;
+    this.transY = -canvas.height * 0.2;
   }
 
   set2Bottom() {
@@ -62,7 +62,7 @@ class Verseobj {
     } else if (progress == -2) {
       fs = this.targetFs;
     } else {
-      let _p = animElapse == animTotal ? 1.0 : progress / 3.0;
+      let _p = (animElapse%100) == animTotal ? 1.0 : progress / 3.0;
       this.fs = this.fs + (this.targetFs - this.fs) * _p;
       fs = this.fs;
       this.transY = this.transY + (this.targetTransY - this.transY) * _p;
@@ -137,7 +137,7 @@ class Verseobj {
       if (this.chapter > 0 && this.verse > 0) {
         let fs = this.targetFs * 0.6;
         ctx.font = fs + "px " + fontFamily;//FONT_SML;
-        if (animElapse >= animTotal * 0.8 || animElapse == -1) {
+        if ((animElapse%100) >= animTotal * 0.8 || animElapse == -1) {
           _drawSdwtxt(' ' + abbr[this.volume], 0, 0);
           _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
         } else {
@@ -154,15 +154,15 @@ class Verseobj {
     let x = canvas.width * (1 - this.wratio);
 
     if (this.level == 0) {
-      let y = this.fs * 0.25; //console.log(animElapse);
+      let y = this.fs * 0.25;
       for (let i = 0; i < this.substrings.length; i++) {
         if (islastChar(this.substrings[i]) && i + 1 < this.substrings.length && is0Char(this.substrings[i + 1])) {
-          if (animElapse >= animTotal * 0.8 || animElapse == -1)
+          if ((animElapse%100) >= animTotal * 0.8 || animElapse == -1)
             _drawSdwtxt(this.substrings[i] + '-', x, y);
           else
             _drawtxt(this.substrings[i] + '-', x, y, 1.0);
         } else {
-          if (animElapse >= animTotal * 0.8 || animElapse == -1)
+          if ((animElapse%100) >= animTotal * 0.8 || animElapse == -1)
             _drawSdwtxt(this.substrings[i], x, y);
           else
             _drawtxt(this.substrings[i], x, y, 1.0);
@@ -435,8 +435,8 @@ function colorSwitch() {
 
 function _drawSdwtxt(txt, x, y) {
 
-  if (doblank == 1 && color_selection == 0) {
-    ctx.fillStyle = 'rgb(0, 220, 0)';//color_pointer[3];
+  if (doblank == 1 && color_selection == 0 && animElapse < 100) { //綠幕專用
+    ctx.fillStyle = 'rgb(0, 220, 0)';
     ctx.lineWidth = 1;
     ctx.fillText(txt, x, y);
     return;
@@ -469,8 +469,8 @@ function _drawSdwtxt(txt, x, y) {
 
 function _drawtxt(txt, x, y, a) {
 
-  if (doblank == 1 && color_selection == 0) {
-    ctx.fillStyle = 'rgb(0, 200, 0)';//color_pointer[2];//'rgb(0, 200, 0)';
+  if (doblank == 1 && color_selection == 0 && animElapse < 100) { //綠幕專用
+    ctx.fillStyle = 'rgb(0, 200, 0)';
     ctx.fillText(txt, x, y);
     return;
   }
@@ -527,7 +527,7 @@ function switchLang() {
 
 //const MAX_VERSES_GREEN = 2;
 //const MAX_VERSES_NORMAL = 7;
-var verseCount = 7;
+var verseCount = 4;
 var printSaved = true;
 
 var song;
@@ -538,7 +538,6 @@ var line = 0;
 var mode = 0;
 
 var doblank = 0;
-var target_doblank = 0;
 var helpSwitch = 0;
 
 var imgurl = '';//'./Icon-1024.png';
@@ -626,7 +625,7 @@ function ajax_sync() {
     vlm: song,
     chp: phase,
     ver: line,
-    blank: target_doblank
+    blank: doblank
   },
     '/synscripture',
     (res) => {
@@ -663,7 +662,6 @@ function ajax_restore() {
 var sync_type = 0;
 
 var funcInterval;
-//var fake_doblank = 0;
 //function restoreActionFromServer() {ajax_restore();}
 function startRestoreFromServerInterval() {
   if (funcInterval) stopActionInterval();
@@ -697,7 +695,7 @@ function saveAction2Local() {
 
 function _saveAction2Local() {
   let key = 'save action';  //localStorage.removeItem(key);
-  let value = song + ' ' + phase + ' ' + line + ' ' + target_doblank;
+  let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
   localStorage.setItem(key, value);
 }
 
@@ -705,37 +703,9 @@ function _saveAction2Local() {
 //判斷是不是要卷軸動畫
 function restoreAnim(volume, chapter, verse, _doblank) {
 
-  /*
-  if (animElapse > 0) {
-    target_doblank = _doblank;
-    doblank = _doblank;
-    song = volume;
-    subtitles = SONGS[song];
-    phase = chapter;
-    line = verse;
-    if (display_mode == 0)
-     _repaint();
-    else
-     __repaint();
-    return;
-  }
-  */
-
-  //console.log('' +target_doblank+ ', '+'_do: ' + _doblank);
-
-  if (volume == song && chapter == phase && verse == line && _doblank == target_doblank && _doblank == doblank) return;
-
-  //check later
-  if (target_doblank != doblank) {
-    target_doblank = _doblank;
-    doblank = _doblank;
-    _repaint();
-    return;
-  }
-
-  //fake_doblank = _doblank;
-  if (_doblank != target_doblank) {
-    keyboard({ keyCode: 66 });
+  if (volume == song && chapter == phase && verse == line) {
+    if (_doblank != doblank) 
+      keyboard({ keyCode: 66 });
     return;
   }
 
@@ -754,19 +724,8 @@ function restoreAnim(volume, chapter, verse, _doblank) {
   phase = chapter;
   line = verse;
 
-  if (display_mode == 0)
-    _repaint();
-  else
-    __repaint();
+  _repaint();
 
-  /*
-  if (display_mode == 0)
-    _repaint();
-  else {
-    animElapse = 0;
-    window.requestAnimationFrame(verse_update);
-  }
-  */
 }
 
 function restoreActionFromLocal() {
@@ -1036,7 +995,7 @@ function printSideTxt(i, j, x, y, a) {
 }
 
 function drawHlight(yy, hh) {
-  if (doblank != 1 && phase >= 1) {
+  if (doblank == 0 && phase >= 1) {
     ctx.fillStyle = hlight_pointer;
     ctx.fillRect(0, yy, canvas.width, hh);
   }
@@ -1086,10 +1045,10 @@ function blankend_update() {
 
   render(-1);
 
-  ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - animElapse / animTotal) + ')'; //opacity 1.0 ~ 0
+  ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - (animElapse%100) / animTotal) + ')'; //opacity 1.0 ~ 0
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  if (animElapse < animTotal) {
+  if ((animElapse%100) < animTotal) {
     animElapse++;
     window.requestAnimationFrame(blankend_update);
   } else {
@@ -1099,18 +1058,19 @@ function blankend_update() {
 
 }
 
-function blank_update() {
+function blank_update(elapse) {
 
   render(-1);
 
-  ctx.fillStyle = 'rgba(0,128,0,' + (animElapse / animTotal) + ')';//bgcolor_pointer;//'green';
+  if (animElapse < 100) return;
+
+  ctx.fillStyle = 'rgba(0,128,0,' + ((animElapse%100) / animTotal) + ')';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  if (animElapse < animTotal) {
+  if ((animElapse%100) < animTotal) {
     animElapse++;
     window.requestAnimationFrame(blank_update);
   } else {
-    doblank = 1;
     animElapse = -1;
     _repaint();
   }
@@ -1120,20 +1080,21 @@ function blank_update() {
 var display_mode = 0;
 const animTotal = 30;
 var animElapse = -1; //var savePre = 0;
-function verse_update(elapse) {
 
-  //render(animElapse/animTotal);
+function verse_update(elapse) {
 
   switch (display_mode) {
     case 0:
-      render(animElapse / animTotal);
+      render((animElapse%100) / animTotal);
       break;
     case 1:
-      render_vertical(animElapse / animTotal);
+      render_vertical((animElapse%100) / animTotal);
       break;
   }
 
-  if (animElapse < animTotal) {
+  if(animElapse == -1) return;
+
+  if ((animElapse%100) < animTotal) {
     animElapse++;
     window.requestAnimationFrame(verse_update);
   } else {
@@ -1174,7 +1135,7 @@ function operateQuene(queueType, doanim) {
   //unshift 往前加 pop 從後砍 
   switch (queueType) {
     case 0:
-      printMain(phase, line, false);
+      printMain(phase, line);
       return;
     case 1: //move next
       queue.shift();
@@ -1217,23 +1178,11 @@ function operateQuene(queueType, doanim) {
   }
 
   if (doanim > 0) {
-    //if (display_mode == 0) animElapse = 0;
-    if (display_mode == 0 && animElapse > 1) {// && animElapse < animTotal - 4) {
-        animElapse = -1;
-        render(-1);
-        return;
-    }
+    animElapse = 0;
     window.requestAnimationFrame(verse_update);
   } else {
-    render(-1);
-    /*
-    if (display_mode == 0) 
-      render(-1);        
-    else {
-      animElapse = 0;
-      window.requestAnimationFrame(verse_update);
-    }
-    */
+    //render(-1);
+    _repaint();
   }
 
 }
@@ -1302,7 +1251,7 @@ function _render(progress) {
           obj.draw();
           break;
         case 1:
-          //render_vertical(progress);//animElapse.toFixed(2)/animTotal.toFixed(2));
+          //render_vertical(progress);//toFixed(2)/animTotal.toFixed(2));
           if (v_vertical.volume != obj.volume || v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
             v_vertical.initial(obj.volume, obj.chapter, obj.verse);
           }
@@ -1379,7 +1328,7 @@ function _render(progress) {
 
 }
 
-function printMain(chapter, verse, doanim) {
+function printMain(chapter, verse) {
 
   queue.length = 0;
   queue = [];
@@ -1402,6 +1351,7 @@ function printMain(chapter, verse, doanim) {
     } else {
       obj.initial(song, i, j, 1);
     }
+    obj.set2Top();
 
     queue.unshift(obj);
   }
@@ -1423,15 +1373,12 @@ function printMain(chapter, verse, doanim) {
     } else {
       obj.initial(song, i, j, 1);
     }
+    obj.set2Bottom();
 
     queue.push(obj);
   }
 
-  if (doanim) {
-    window.requestAnimationFrame(verse_update);
-  } else {
-    _render(-1);
-  }
+  _render(-1); 
 
 }
 
@@ -1801,35 +1748,25 @@ function keyboard(e) { //key up //alert(e.keyCode);
       break;
     case 66: //'b'
       //console.log('b press');
+      doblank = doblank == 0 ? 1 : 0;
       if (color_selection == 0) {
-        
+
         if (animElapse > 0) {
           animElapse = -1;
-          if (target_doblank == 0) {
-            target_doblank = 1;
-            doblank = 1;
-          } else {
-            target_doblank = 0;
-            doblank = 0;
-          }
           break;
         }
         
-        animElapse = 0;
-        if (target_doblank == 0) {
-          target_doblank = 1;
-          saveAction2Local();
+        //do animation
+        if (doblank == 1) {
+          animElapse = 100;
           window.requestAnimationFrame(blank_update);
         } else {
-          doblank = 0;
-          target_doblank = 0;
-          saveAction2Local();
+          animElapse = 0;
           window.requestAnimationFrame(blankend_update);
         }
+        saveAction2Local();
         return;
       }
-      doblank = doblank == 0 ? 1 : 0;
-      target_doblank = doblank;
       break;
     case 88: // 'x' copy
       copyToClickBoard();
@@ -2236,16 +2173,6 @@ function _repaint() {
   printMain(phase, line);//_layer1();//_layer2();
   _layerui();
 }
-
-function __repaint() {
-  //ctx.globalCompositeOperation='difference';
-  //ctx.filter = 'invert(1)';
-  _layer0();
-  //_layerBg();
-  printMain(phase, line, true);//_layer1();//_layer2();
-  _layerui();
-}
-
 
 function userhelp() {
 
@@ -2893,7 +2820,6 @@ if (readParam('volume')) {
   let volume = readParam('volume');//parseInt(array[0]);//array[0];
   let chapter = readParam('chapter') ? parseInt(readParam('chapter')) : 0;
   let verse = readParam('verse') ? parseInt(readParam('verse')) : 0;
-  //let _doblank = parseInt(array[3]);
   jump2preset4Anim([volume, chapter, verse]);
 } else {
   restoreActionFromLocal();
