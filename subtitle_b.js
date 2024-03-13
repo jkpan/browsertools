@@ -1,6 +1,8 @@
 //import '/common.js';
-
 class Verseobj {
+
+  static hilight_height = 0;
+
   volume = 0;
   chapter = 0;
   verse = 0;
@@ -109,11 +111,18 @@ class Verseobj {
     this.substrings = [];
     this.substrings = getTxtArray(txt, this.wratio);
 
-    if (progress < 0) {
-      this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+    if (this.level == 0) {
+      if (progress == -2) 
+        this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+      else if (progress == -1) 
+        Verseobj.hilight_height = this.targetRect;
+      else 
+        Verseobj.hilight_height = Verseobj.hilight_height + (this.targetRect - Verseobj.hilight_height) * progress;
     }
-
-    //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
+     
+    //Verseobj.hilight_height = this.targetRect;
+    
+      
 
     if (fontsize_dist == 1) //if (color_selection == 0) 
       return this.level == 0 ? this.substrings.length * fs + fs * 0.5 :
@@ -132,16 +141,18 @@ class Verseobj {
       ctx.transform(1, 0, 0, 1, 0, this.targetTransY);
       //draw hilight rectangle
       //let rectH = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-      drawHlight(0, this.targetRect);//rectH);
+      drawHlight(0, Verseobj.hilight_height);
       //draw chapter verse
       if (this.chapter > 0 && this.verse > 0) {
         let fs = this.targetFs * 0.6;
         ctx.font = fs + "px " + fontFamily;//FONT_SML;
         if ((animElapse%100) >= animTotal * 0.8 || animElapse == -1) {
           _drawSdwtxt(' ' + abbr[this.volume], 0, 0);
+          //ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
           _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
         } else {
           _drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);
+          //ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
           _drawtxt(this.frontxt, 0, this.targetFs * 0.7, 1.0);
         }
       }
