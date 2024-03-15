@@ -417,17 +417,19 @@ class Applet {
                    this.w * _gap_w, 
                    this.h * _gap_h);
 
-    //draw ^ ontop
-    ctx.fillStyle = 'rgb(0, 180, 0)';
     let _x = (this.x - 3 + this.w) * _gap_w;
     let _y = (this.y - 1) * _gap_h;
-    ctx.fillRect(_x, _y, _gap_w, _gap_h);
-
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = Math.floor(_gap_h * 0.75) + "px Arial";
+
+    /*
+    //draw ^ ontop
+    ctx.fillStyle = 'rgb(0, 180, 0)';
+    ctx.fillRect(_x, _y, _gap_w, _gap_h);
     ctx.fillStyle = 'rgb(0, 0, 0)';//"rgb(0,180,0)";
     ctx.fillText('^', _x + _gap_w/2, _y + _gap_h/2);
+    */
 
     //draw X remove
     ctx.fillStyle = 'rgb(0, 255, 0)';
@@ -448,11 +450,11 @@ class Applet {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.font = _gap_w + "px Arial";
-    ctx.fillStyle = 'rgb(50, 255, 50)';//"rgb(0,180,0)";
+    ctx.fillStyle = 'rgb(0, 88, 0)';//"rgb(0,180,0)";
     let pos = this.getPosition();
-    ctx.fillText(this.keyname, pos[0], pos[1]);
+    ctx.fillText(this.keyname, pos[0] + 4, pos[1]);
     //ctx.fillStyle = 'rgb(50, 255, 50)';//"rgb(0,180,0)";
-    ctx.fillText(this.x +', '+ this.y +', '+ this.w +', '+ this.h , pos[0], pos[1] + _gap_w);
+    ctx.fillText(this.x +', '+ this.y +', '+ this.w +', '+ this.h , pos[0] + 4, pos[1] + _gap_w);
   }
 
   getPosition() {
@@ -648,7 +650,6 @@ function downloadExpJson() {
   }
   
   /*
-   
    B/G : B, G
    obj 
       posize [x,y,w,h]
@@ -1178,12 +1179,14 @@ function downloadExpJson() {
             selectIdx = -1;
             _repaint();
             return;
-          } else if (applet.isClickOntop(mouseX, mouseY)) {
+          }
+          /* 
+          else if (applet.isClickOntop(mouseX, mouseY)) {
             applet.onTop();
             _repaint();
             return;
           }
-      
+          */
           
           if (applets[selectIdx].check_L_Edge(mouseX)) {
             mouseDown = 1;
@@ -1207,8 +1210,13 @@ function downloadExpJson() {
         
       });
 
-      canvas.addEventListener('mouseup', () =>{
+      canvas.addEventListener('mouseup', (e) => {
         mouseDown = -1;
+        let pos = [e.x, e.y];
+        if (Math.abs(mouseDownPos[0] - pos[0]) + Math.abs(mouseDownPos[1] - pos[1]) < 3) {
+          let applet = applets[selectIdx];
+          applet.onTop();
+        }
         return true;
       });  
 

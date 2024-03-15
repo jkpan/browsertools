@@ -55,6 +55,8 @@ class Verseobj {
 
   preDraw(progress) {
 
+    //if (progress > 0) progress = progress * progress;
+
     let fs = this.fs;
 
     if (progress == -1) {
@@ -117,7 +119,7 @@ class Verseobj {
       else if (progress == -1) 
         Verseobj.hilight_height = this.targetRect;
       else 
-        Verseobj.hilight_height = Verseobj.hilight_height + (this.targetRect - Verseobj.hilight_height) * progress;
+        Verseobj.hilight_height = Verseobj.hilight_height + (this.targetRect - Verseobj.hilight_height) * progress;//Math.pow(progress, 2);
     }
      
     //Verseobj.hilight_height = this.targetRect;
@@ -147,12 +149,10 @@ class Verseobj {
         let fs = this.targetFs * 0.6;
         ctx.font = fs + "px " + fontFamily;//FONT_SML;
         if ((animElapse%100) >= animTotal * 0.8 || animElapse == -1) {
-          _drawSdwtxt(' ' + abbr[this.volume], 0, 0);
-          //ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
+          _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
           _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
         } else {
-          _drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);
-          //ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
+          _drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
           _drawtxt(this.frontxt, 0, this.targetFs * 0.7, 1.0);
         }
       }
@@ -189,8 +189,10 @@ class Verseobj {
           _drawtxt(this.substrings[i], x, y, this.opacity);
         y += this.fs;
       }
-      ctx.font = this.fs * 0.7 + "px " + fontFamily;
-      _drawtxt(this.frontxt, 0, 0, this.opacity);
+      if (color_selection > 0) {
+        ctx.font = this.fs * 0.7 + "px " + fontFamily;
+        _drawtxt(this.frontxt, 0, 0, this.opacity * (animElapse<0?1:Math.pow(animElapse/animTotal, 2)));
+      }
     }
 
     ctx.resetTransform();
@@ -391,7 +393,14 @@ var bgcolor_pointer = bgStyle;
 var color_pointer = COLORS_CK;
 var hlight_pointer = hlightStyle_green;
 
+var makeTransparent = false;
+var fontsize_dist = 0;
+
+var printSaved = true;
+
+var verseCount = 4;
 var fontColorType = 1;
+//var print_ctx_vidx = 1;
 
 function colorSwitch_hlight() {
   switch (color_selection_hlight) {
@@ -538,8 +547,6 @@ function switchLang() {
 
 //const MAX_VERSES_GREEN = 2;
 //const MAX_VERSES_NORMAL = 7;
-var verseCount = 4;
-var printSaved = true;
 
 var song;
 var subtitles;
@@ -562,9 +569,6 @@ var color_selection_hlight = 0;
 var uisel = 0;
 var uisel_start = 0;
 var uisel_end = 0;
-
-var makeTransparent = false;
-var fontsize_dist = 0;
 
 function createCanvas() {
 
@@ -1009,6 +1013,12 @@ function drawHlight(yy, hh) {
   if (doblank == 0 && phase >= 1) {
     ctx.fillStyle = hlight_pointer;
     ctx.fillRect(0, yy, canvas.width, hh);
+    /*
+    ctx.beginPath();
+    ctx.roundRect(0, yy, canvas.width, hh, 5);
+    ctx.fill();
+    ctx.closePath();
+    */
   }
 }
 
@@ -2118,10 +2128,8 @@ function _layerui() {
 
   if (uisel == 0) return;
 
-  ctx.fillStyle = bgcolor_pointer;//'green';
-  if (color_selection == 0)
-    ctx.fillStyle = 'rgba(255,255,255, 0.66)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  _layer0();
+  
   ctx.lineWidth = 1;
   ctx.font = FONT;
   let x = fontsize_sml;
