@@ -1485,26 +1485,28 @@ function combineKey(e) {
       if (verseCount < 10)
         verseCount++;
       break;
-    case 33: { //'ArrowLeft'
+    case 33: { //page up
       helpSwitch = 0;
       let _phase = getPreChapter(phase, line);
       let _line = getPreVerse(phase, line);
-      phase = _phase;
-      line = _line;
+      if (_phase >= 0 && (phase != _phase || line != _line)) {
+        phase = _phase;
+        line = _line;
+      }
       _repaint();
       return;
     }
-      break;
-    case 34: { //'ArrowRight'
+    case 34: { //page down
       helpSwitch = 0;
       let _phase = getNextChapter(phase, line);
       let _line = getNextVerse(phase, line);
-      phase = _phase;
-      line = _line;
+      if (_phase >= 0 && (phase != _phase || line != _line)) {
+        phase = _phase;
+        line = _line;
+      }
       _repaint();
       return;
     }
-      break;
     case 65: sortjump(1, 5); break;
     case 83: sortjump(6, 17); break;
     case 68: sortjump(18, 22); break;
