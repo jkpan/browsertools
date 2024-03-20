@@ -66,7 +66,7 @@ class Verseobj {
     } else if (progress == -2) {
       fs = this.targetFs;
     } else {
-      let _p = (animElapse%100) == animTotal ? 1.0 : progress / 3.0;
+      let _p = (animElapse % 100) == animTotal ? 1.0 : progress / 3.0;
       this.fs = this.fs + (this.targetFs - this.fs) * _p;
       fs = this.fs;
       this.transY = this.transY + (this.targetTransY - this.transY) * _p;
@@ -114,17 +114,17 @@ class Verseobj {
     this.substrings = getTxtArray(txt, this.wratio);
 
     if (this.level == 0) {
-      if (progress == -2) 
+      if (progress == -2)
         this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-      else if (progress == -1) 
+      else if (progress == -1)
         Verseobj.hilight_height = this.targetRect;
-      else 
+      else
         Verseobj.hilight_height = Verseobj.hilight_height + (this.targetRect - Verseobj.hilight_height) * progress;//Math.pow(progress, 2);
     }
-     
+
     //Verseobj.hilight_height = this.targetRect;
-    
-      
+
+
 
     if (fontsize_dist == 1) //if (color_selection == 0) 
       return this.level == 0 ? this.substrings.length * fs + fs * 0.5 :
@@ -140,15 +140,25 @@ class Verseobj {
     ctx.textBaseline = 'top';
 
     if (this.level == 0) {
+
+      drawHlight(this.targetTransY, Verseobj.hilight_height);
+
+      /*
+      if (doblank == 0)
+        if (color_selection == 0)
+          gradientBg();
+        else
+          drawHlight(this.targetTransY, Verseobj.hilight_height);
+        */
+
+      //if (color_selection == 0 && doblank == 0)
       ctx.transform(1, 0, 0, 1, 0, this.targetTransY);
-      //draw hilight rectangle
-      //let rectH = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-      drawHlight(0, Verseobj.hilight_height);
+      
       //draw chapter verse
       if (this.chapter > 0 && this.verse > 0) {
         let fs = this.targetFs * 0.6;
         ctx.font = fs + "px " + fontFamily;//FONT_SML;
-        if ((animElapse%100) >= animTotal * 0.8 || animElapse == -1) {
+        if ((animElapse % 100) >= animTotal * 0.8 || animElapse == -1) {
           _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
           _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
         } else {
@@ -168,12 +178,12 @@ class Verseobj {
       let y = this.fs * 0.25;
       for (let i = 0; i < this.substrings.length; i++) {
         if (islastChar(this.substrings[i]) && i + 1 < this.substrings.length && is0Char(this.substrings[i + 1])) {
-          if ((animElapse%100) >= animTotal * 0.8 || animElapse == -1)
+          if ((animElapse % 100) >= animTotal * 0.8 || animElapse == -1)
             _drawSdwtxt(this.substrings[i] + '-', x, y);
           else
             _drawtxt(this.substrings[i] + '-', x, y, 1.0);
         } else {
-          if ((animElapse%100) >= animTotal * 0.8 || animElapse == -1)
+          if ((animElapse % 100) >= animTotal * 0.8 || animElapse == -1)
             _drawSdwtxt(this.substrings[i], x, y);
           else
             _drawtxt(this.substrings[i], x, y, 1.0);
@@ -191,7 +201,7 @@ class Verseobj {
       }
       if (color_selection > 0) {
         ctx.font = this.fs * 0.7 + "px " + fontFamily;
-        _drawtxt(this.frontxt, 0, 0, this.opacity * (animElapse<0?1:Math.pow(animElapse/animTotal, 2)));
+        _drawtxt(this.frontxt, 0, 0, this.opacity * (animElapse < 0 ? 1 : Math.pow(animElapse / animTotal, 2)));
       }
     }
 
@@ -415,6 +425,9 @@ function colorSwitch_hlight() {
       break;
     case 3:
       hlight_pointer = hlightStyle_none;
+      break;
+    case 4:
+      //gradient background
       break;
   }
 }
@@ -719,7 +732,7 @@ function _saveAction2Local() {
 function restoreAnim(volume, chapter, verse, _doblank) {
 
   if (volume == song && chapter == phase && verse == line) {
-    if (_doblank != doblank) 
+    if (_doblank != doblank)
       keyboard({ keyCode: 66 });
     return;
   }
@@ -1010,6 +1023,14 @@ function printSideTxt(i, j, x, y, a) {
 }
 
 function drawHlight(yy, hh) {
+  if (color_selection_hlight == 5 && doblank == 0) {
+    gradientBg();
+    return;
+  }
+  if (color_selection_hlight == 4 && doblank == 0) {
+    gradientBg2(yy, hh);
+    return;
+  }
   if (doblank == 0 && phase >= 1) {
     ctx.fillStyle = hlight_pointer;
     ctx.fillRect(0, yy, canvas.width, hh);
@@ -1066,10 +1087,10 @@ function blankend_update() {
 
   render(-1);
 
-  ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - (animElapse%100) / animTotal) + ')'; //opacity 1.0 ~ 0
+  ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - (animElapse % 100) / animTotal) + ')'; //opacity 1.0 ~ 0
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  if ((animElapse%100) < animTotal) {
+  if ((animElapse % 100) < animTotal) {
     animElapse++;
     window.requestAnimationFrame(blankend_update);
   } else {
@@ -1085,10 +1106,10 @@ function blank_update(elapse) {
 
   if (animElapse < 100) return;
 
-  ctx.fillStyle = 'rgba(0,128,0,' + ((animElapse%100) / animTotal) + ')';
+  ctx.fillStyle = 'rgba(0,128,0,' + ((animElapse % 100) / animTotal) + ')';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  if ((animElapse%100) < animTotal) {
+  if ((animElapse % 100) < animTotal) {
     animElapse++;
     window.requestAnimationFrame(blank_update);
   } else {
@@ -1106,16 +1127,16 @@ function verse_update(elapse) {
 
   switch (display_mode) {
     case 0:
-      render((animElapse%100) / animTotal);
+      render((animElapse % 100) / animTotal);
       break;
     case 1:
-      render_vertical((animElapse%100) / animTotal);
+      render_vertical((animElapse % 100) / animTotal);
       break;
   }
 
-  if(animElapse == -1) return;
+  if (animElapse == -1) return;
 
-  if ((animElapse%100) < animTotal) {
+  if ((animElapse % 100) < animTotal) {
     animElapse++;
     window.requestAnimationFrame(verse_update);
   } else {
@@ -1399,7 +1420,7 @@ function printMain(chapter, verse) {
     queue.push(obj);
   }
 
-  _render(-1); 
+  _render(-1);
 
 }
 
@@ -1474,7 +1495,7 @@ function combineKey(e) {
   var jump = 10;
   switch (e.keyCode) {
     case 66: //'b'
-      color_selection_hlight = (color_selection_hlight + 1) % 4;
+      color_selection_hlight = (color_selection_hlight + 1) % 6;
       colorSwitch_hlight();
       break;
     case 219:
@@ -1778,7 +1799,7 @@ function keyboard(e) { //key up //alert(e.keyCode);
           animElapse = -1;
           break;
         }
-        
+
         //do animation
         if (doblank == 1) {
           animElapse = 100;
@@ -2031,6 +2052,62 @@ function keyboard(e) { //key up //alert(e.keyCode);
 
 }
 
+function gradientBg2(yy, hh) {
+
+  const g_gap = canvas.height * 0.1;
+  let grd = ctx.createLinearGradient(0, yy, 0, yy - g_gap);
+  grd.addColorStop(0, hlightStyle_green);
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+  
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, yy - g_gap, canvas.width, g_gap);
+  
+
+  ctx.fillStyle = hlightStyle_green;//hlight_pointer;
+  ctx.fillRect(0, yy, canvas.width, hh);
+
+  
+  grd = ctx.createLinearGradient(0, yy + hh, 0, yy + hh + g_gap);
+  grd.addColorStop(0, hlightStyle_green);
+  grd.addColorStop(1, 'rgba(0,0,0,0)');
+
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, yy + hh, canvas.width, g_gap);
+  
+}
+
+function gradientBg() {
+  //return;
+  // 创建径向渐变
+  let radius = canvas.height * 0.5;
+  var gradient = ctx.createRadialGradient(
+    canvas.width / 2, canvas.height / 2, radius * 0.7, // 渐变圆心和起始半径
+    canvas.width / 2, canvas.height / 2, radius // 渐变圆心和结束半径
+  );
+  gradient.addColorStop(0, 'rgba(0, 0, 0, 0.6'); // 起始颜色
+  gradient.addColorStop(1, 'rgba(0, 0, 0, 0.0)'); // 结束颜色
+  ctx.fillStyle = gradient;
+  //ctx.fillRect(0,0,canvas.width, canvas.height);
+  printSaved = 0;
+  let _r = canvas.width / canvas.height;
+  let _t = (1 - _r) * canvas.width / 2;//-canvas.width/2 * _r + canvas.width/2;
+  ctx.transform(_r, 0, 0, 1, _t, 0);//canvas.width/canvas.height
+
+  // 画圆
+  ctx.beginPath();
+  /*
+  ctx.ellipse(canvas.width / 2, canvas.height / 2,
+              canvas.width / 2, canvas.height / 2,
+              0,0, 2 * Math.PI,);
+  */
+  ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, 2 * Math.PI, false);
+  //ctx.scale(1, canvas.height / canvas.width);
+  ctx.fillStyle = gradient; // 使用径向渐变作为填充样式
+  ctx.fill();
+  ctx.closePath();
+  ctx.resetTransform();
+}
+
 function _layer0() {
 
   if (makeTransparent) {
@@ -2059,8 +2136,6 @@ function _layer0() {
     }
   }
   */
-
-
 
   _layerBg();
 
@@ -2131,7 +2206,7 @@ function _layerui() {
   if (uisel == 0) return;
 
   _layer0();
-  
+
   ctx.lineWidth = 1;
   ctx.font = FONT;
   let x = fontsize_sml;
