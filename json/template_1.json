@@ -4,12 +4,16 @@
 	  "obj": {
 		"file_1": {
 		  "posize": [13, 22, 8, 8],
-		  "perspective": 0
+		  "perspective": 0,
+          "obj": {
+            "keepratio": 1
+          }
 		},
 		"url_1": {
 		  "posize": [22, 22, 10, 10],
 		  "perspective": 0, 
 		  "obj": {
+            "keepratio": 1,
 			"url" : ""
 		  }
 		},
@@ -20,13 +24,7 @@
 			"mode": 2,
 			"fontfactor": 10.5,
 			"list": [
-				
-				"新歌頌揚139",
-				"新歌頌揚136",
-				"新歌頌揚133",
-				"新歌頌揚129",
-				"救恩146",
-
+			
 			  "主禱文",
 			  "使徒信經",
 			  "救恩300"

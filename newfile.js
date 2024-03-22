@@ -15,6 +15,11 @@ function selectFile(event) {
                                  "檔案大小: " + file.size + " bytes";
     alert(fileInfo);
     */
+
+    if (file.type === 'application/json') {
+      getJsonObj(file);
+      return;
+    } 
     
     if (file.type.startsWith('text/html')) {
       displayHTMLFile(file);
@@ -114,6 +119,17 @@ function selectFile(event) {
   }
   
   //window.addEventListener('message', (e) => {}, false);
+
+  function getJsonObj(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const contents = e.target.result;
+      const jsonData = JSON.parse(contents);
+      console.log(JSON.stringify(jsonData));
+      handleProfile(JSON.stringify(jsonData));
+    };
+    reader.readAsText(file);
+  }
   
   function dropHandler(event) {
       
@@ -129,6 +145,10 @@ function selectFile(event) {
                     displayHTMLFile(file);
                     return;
                   }
+                  if (file.type === 'application/json') {
+                    getJsonObj(file);
+                    return;
+                  } 
                   if (file.type.startsWith('image/')) {
                       // 顯示圖片
                       displayImageFile(file);

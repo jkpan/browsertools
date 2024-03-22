@@ -127,9 +127,9 @@ class ClockObj {
     }
 
     //
-    _ctx.lineWidth = lw * 0.5;
-    dx = 1.7 * len * Math.cos(angle);
-    dy = -1.7 * len * Math.sin(angle);
+    _ctx.lineWidth = lw * 0.4;
+    dx = 2.0 * len * Math.cos(angle);
+    dy = -2.0 * len * Math.sin(angle);
     _ctx.beginPath();
     _ctx.moveTo(x + dx, y + dy);
     dx = 0.4 * len * Math.cos(angle + Math.PI);

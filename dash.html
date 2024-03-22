@@ -1,83 +1,176 @@
+<script>
+
+  function selectFile(event) {
+
+    let file = event.target.files[0];
+
+    if (file.type === 'application/json') {
+      getJsonObj(file);
+      return;
+    }
+
+  }
+
+  function getJsonObj(file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const contents = e.target.result;
+      const jsonData = JSON.parse(contents);
+      console.log(JSON.stringify(jsonData));
+      handleProfile(JSON.stringify(jsonData));
+      if (document.getElementById('ui')) {
+        //document.getElementById('ui').style.visibility = 'hidden';
+        //alert('ui div hidden');
+        document.getElementById('ui').hidden = true;
+        console.log('ui hidden true');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function openFile(elmid) {
+    document.getElementById(elmid).click();
+  }
+
+  function handleDragOver(event) {
+    event.preventDefault();
+  }
+
+  function handleDrop(event) {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file.type === 'application/json') {
+      getJsonObj(file);
+    } else {
+      alert('Please drop a JSON file.');
+    }
+  }
+
+  var itv = null;
+
+  function waitMsg() {
+    console.log('wait! ' + applets.length);
+    if (applets.length > 0) {
+      clearInterval(itv);
+      applets[0].elm.focus();
+    }
+  }
+
+  function handleCb(msg) {
+    if (msg === 'done') {
+      itv = null;
+      itv = window.setInterval(waitMsg, 200);
+    } else {
+      console.log('error : handleCb');
+    }
+  }
+
+</script>
+
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+  <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
+    charset="UTF-8" />
   <style>
-  body {
-    margin: 0px;
-    height: 100%;
-    width: 100%;
-    background-color: rgb(50, 50, 50);
-  }
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  .wrapper {
-    display: grid;
-    gap: 0px;
-    
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+      background-color: rgb(50, 50, 50);
+    }
 
-    width: 100%;
-    height: 100vh;
-  }
-  .full {
-    
-    grid-column: 1 / 33;
-    grid-row: 1 / 33;
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
-    user-select: none;
+    .wrapper {
+      display: grid;
+      gap: 0px;
 
-    border-radius: 10px;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
-    /*transform-origin: left center;*/
+      width: 100%;
+      height: 100vh;
 
-  }
-</style>
+    }
+
+    .full {
+
+      grid-column: 1 / 33;
+      grid-row: 1 / 33;
+
+      user-select: none;
+
+      border-radius: 10px;
+
+      /*transform-origin: left center;*/
+
+    }
+    .drop-area {
+      grid-column: 1 / 33;
+      grid-row: 1 / 33;
+      /* width: 300px; */
+      /* height: 200px; */
+      border: 2px dashed #fff;
+      border-radius: 20px;
+      text-align: center;
+      line-height: 200px;
+      font-size: 20px;
+      color: white;
+    }
+  </style>
 </head>
+
 <body>
 
-<div id="mainDiv" class="wrapper" style="background-color: #007000; opacity: 1.0;"></div>
+  <div id="mainDiv" class="wrapper" style="background-color: #007000; opacity: 1.0;">
+
+    <div hidden="false" class="drop-area" id="ui" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"
+      onclick="openFile('allfile')">
+      拖拉Dashboard設定.json檔案到這裡或是click選取
+    </div>
+
+
+  </div>
+
+
+  <!-- <div hidden="false" id="ui" class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
+      onclick="openFile('allfile')">
+      <ul>
+        <li>JSON</li>
+      </ul>
+  </div> -->
+  <input id="allfile" type="file" hidden="true" accept=".json" onchange="selectFile(event)" />
 
 </body>
+
 </html>
 <script type="text/javascript" src="common.js" charset="UTF-8"></script>
 <script type="text/javascript" src="dashboard.js" charset="UTF-8"></script>
 <script>
 
-var itv = null;
-
-function waitMsg() {
-    console.log('wait! ' + applets.length);
-    if (applets.length > 0) {
-        clearInterval(itv);
-        applets[0].elm.focus();
-    }
-}
-
-function handleCb(msg) {
-    if (msg === 'done') {
-        itv = null;
-        itv = window.setInterval(waitMsg, 200);
-    } else {
-        console.log('error : handleCb');
-    }
-}
-// 读取名为 "param" 的参数
-if (readParam('app') === '中英文聖經') {
+  // 读取名为 "param" 的参数
+  if (readParam('app') === '中英文聖經') {
     if (detectDevice())
-        preload('./json/dash_ce_Bible_m.json', handleCb);
-    else 
-        preload('./json/dash_ce_Bible.json', handleCb);
-} if (readParam('app') === '中文聖經') {
+      preload('./json/dash_ce_Bible_m.json', handleCb);
+    else
+      preload('./json/dash_ce_Bible.json', handleCb);
+  } else if (readParam('app') === '中文聖經') {
     preload('./json/dash_c_Bible.json', handleCb);
-} if (readParam('app') === '英文聖經') {
+  } else if (readParam('app') === '英文聖經') {
     preload('./json/dash_e_Bible.json', handleCb);
-} else {
+  } else if (readParam('json')) {
     let value = readParam('json');
-    if (value) 
-        preload('./' + value, handleCb);
-}
+    if (value)
+      preload('./' + value, handleCb);
+  } else {
+    document.getElementById('ui').hidden = false;
+  }
+
+  //window.setInterval(hidDiv, 2000);
 
 </script>
