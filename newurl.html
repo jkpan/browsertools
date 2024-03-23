@@ -270,22 +270,26 @@ function relativeUrl(url) {
 }
 
 function toObj() {
-
+  let obj = {};
   if (!document.getElementById("web").hidden) { //已經連上
     return { "url": relativeUrl(document.getElementById("web").src) };
   } else {
     let _url = relativeUrl(document.getElementById("ppt_url").value.trim());
     if (_url.length > 0) {
-      return { "url": _url };
+      obj = { "url": _url };
     }
     if (image_base64) {
       let keep = isKeepRatio()?1:0;
+      obj['keepratio'] = keep;
+      obj['imageBase64'] = image_base64;
+      /*
       return {
         "keepratio": keep,
         "imageBase64": image_base64 
       };
+      */
     }
-
+    return obj;
   }
   //url還在欄位
   
