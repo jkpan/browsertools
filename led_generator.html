@@ -98,7 +98,6 @@ function processImg() {
   if (uploadImage == null) return;
 
   document.getElementById("txt").value = "";
-  
 
   var sel_gap = document.getElementById('Gap');
   var sel_lsize = document.getElementById('Lsize');
@@ -134,9 +133,9 @@ function processImg() {
   
   tempCtx.fillStyle = 'black';
   tempCtx.fillRect(0, 0, fw, fh);
-  tempCtx.drawImage(uploadImage, 0, 0);
   //tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-
+  tempCtx.drawImage(uploadImage, 0, 0);
+  //
   maskimg.onload = function() {
     //console.log('mask generated 0! ' + maskimg.width + ', ' + maskimg.height);
     //ledAction(tempCanvas, tempCtx);

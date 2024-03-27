@@ -1,0 +1,71 @@
+{
+	"frame_1": {
+	  "src": "./dashboard.html",
+	  "obj": {
+		"hymn": {
+		  "posize": [18, 17, 15, 15],
+		  "perspective": 1,
+		  "obj": {
+			"mode": 3,
+			"fontfactor": 10,
+			"list": [
+			  
+			],
+			"fontColorType": 1,
+			"transparent": 0,
+			"slave": 1
+		  }
+		},
+		"Bible": {
+		  "posize": [1, 15, 22, 18],
+		  "perspective": 1,
+		  "obj": {
+			"color": 0,
+			"verticle": 0,
+			"fontfactor": 10,
+			"saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
+			"syncType": 4,
+			"transparent": 0,
+			"printSaved": 0,
+			"fsizedist": 1
+		  }
+		},
+		"url_1": {
+		  "posize": [20, 2, 13, 13],
+		  "perspective": 1,
+		  "obj": {
+				"keepratio": 0,
+				"url": ""
+			}
+		},
+		"B/G": "G"
+	  }
+	},
+	"frame_2": {
+	  "src": "./dashboard.html",
+	  "obj": {
+		"Bible": {
+		  "posize": [13, 2, 19, 30],
+		  "perspective": 0,
+		  "obj": {
+			"color": 0,
+			"verticle": 1,
+			"fontfactor": 15,
+			"saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
+			"syncType": 4,
+			"transparent": 0,
+			"printSaved": 0,
+			"fsizedist": 0
+		  }
+		},
+		"B/G": "G"
+	  }
+	},
+	"frame_3": {
+	  "src": "./marquee_v.html",
+	  "obj": {
+		"des": "😎中文跑馬燈"
+	  }
+	}
+  }
+  
