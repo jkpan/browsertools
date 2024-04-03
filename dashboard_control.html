@@ -50,100 +50,12 @@
         <button onclick="controlParent('tabs')">頁籤</button>
 
         <hr size="4" width="100%" color="#007000">
-        <button id="hymn" onclick="controlParent('hymn')">🎤</button>
+        
+        <!-- <button id="hymn" onclick="controlParent('hymn')">🎤</button>
         <button id="hymn_v" onclick="switchVisible('hymn')">V</button>
         <button id="hymn_p" onclick="perspective('hymn')">P</button>
         <button id="hymn_x" onclick="closeApp('hymn')">x</button>
-        <button id="hymn_l" onclick="lockApp('hymn')">🔓</button>
-
-        <br>
-
-        <button id="Bible" onclick="controlParent('Bible')">🎚️</button>
-        <button id="Bible_v" onclick="switchVisible('Bible')">V</button>
-        <button id="Bible_p" onclick="perspective('Bible')">P</button>
-        <button id="Bible_x" onclick="closeApp('Bible')">x</button>
-        <button id="Bible_l" onclick="lockApp('Bible')">🔓</button>
-
-        <br>
-
-        <button id="NIV" onclick="controlParent('NIV')">NIV</button>
-        <button id="NIV_v" onclick="switchVisible('NIV')">V</button>
-        <button id="NIV_p" onclick="perspective('NIV')">P</button>
-        <button id="NIV_x" onclick="closeApp('NIV')">x</button>
-        <button id="NIV_l" onclick="lockApp('NIV')">🔓</button>
-
-        <br>
-
-        <button id="url_1" onclick="controlParent('url_1')">🌐1</button>
-        <button id="url_1_v" onclick="switchVisible('url_1')">V</button>
-        <button id="url_1_p" onclick="perspective('url_1')">P</button>
-        <button id="url_1_x" onclick="closeApp('url_1')">x</button>
-        <button id="url_1_l" onclick="lockApp('url_1')">🔓</button>
-
-        <br>
-
-        <button id="url_2" onclick="controlParent('url_2')">🌐2</button>
-        <button id="url_2_v" onclick="switchVisible('url_2')">V</button>
-        <button id="url_2_p" onclick="perspective('url_2')">P</button>
-        <button id="url_2_x" onclick="closeApp('url_2')">x</button>
-        <button id="url_2_l" onclick="lockApp('url_2')">🔓</button>
-
-        <br>
-
-        <button id="file_1" onclick="controlParent('file_1')">📂1</button>
-        <button id="file_1_v" onclick="switchVisible('file_1')">V</button>
-        <button id="file_1_p" onclick="perspective('file_1')">P</button>
-        <button id="file_1_x" onclick="closeApp('file_1')">x</button>
-        <button id="file_1_l" onclick="lockApp('file_1')">🔓</button>
-
-        <br>
-
-        <button id="file_2" onclick="controlParent('file_2')">📂2</button>
-        <button id="file_2_v" onclick="switchVisible('file_2')">V</button>
-        <button id="file_2_p" onclick="perspective('file_2')">P</button>
-        <button id="file_2_x" onclick="closeApp('file_2')">x</button>
-        <button id="file_2_l" onclick="lockApp('file_2')">🔓</button>
-
-        <br>
-
-        <button id="info" onclick="controlParent('info')">Info</button>
-        <button id="info_v" onclick="switchVisible('info')">V</button>
-        <button id="info_p" onclick="perspective('info')">P</button>
-        <button id="info_x" onclick="closeApp('info')">x</button>
-        <button id="info_l" onclick="lockApp('info')">🔓</button>
-
-        <br>
-
-        <button id="effect" onclick="controlParent('effect')">Effect</button>
-        <button id="effect_v" onclick="switchVisible('effect')">V</button>
-        <button id="effect_p" onclick="perspective('effect')">P</button>
-        <button id="effect_x" onclick="closeApp('effect')">x</button>
-        <button id="effect_l" onclick="lockApp('effect')">🔓</button>
-
-        <br>
-
-        <button id="time" onclick="controlParent('time')">🕗</button>
-        <button id="time_v" onclick="switchVisible('time')">V</button>
-        <button id="time_p" onclick="perspective('time')">P</button>
-        <button id="time_x" onclick="closeApp('time')">x</button>
-        <button id="time_l" onclick="lockApp('time')">🔓</button>
-
-        <br>
-
-        <hr size="4" width="100%" color="#007000">
-        <button id="dBoard" onclick="controlParent('dBoard')">客制</button>
-        <button id="dBoard_v" onclick="switchVisible('dBoard')">V</button>
-        <button id="dBoard_p" onclick="perspective('dBoard')">P</button>
-        <button id="dBoard_x" onclick="closeApp('dBoard')">x</button>
-        <button id="dBoard_l" onclick="lockApp('dBoard')">🔓</button>
-
-        <br>
-
-        <button id="tabs" onclick="controlParent('tabs')">頁籤</button>
-        <button id="tabs_v" onclick="switchVisible('tabs')">V</button>
-        <button id="tabs_p" onclick="perspective('tabs')">P</button>
-        <button id="tabs_x" onclick="closeApp('tabs')">x</button>
-        <button id="tabs_l" onclick="lockApp('tabs')">🔓</button>
+        <button id="hymn_l" onclick="lockApp('hymn')">🔓</button> -->
 
     </div>
 
@@ -152,6 +64,65 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+    function removeBtns(key) {
+        let button = document.getElementById(key);
+        if (button) button.remove();
+        button = document.getElementById(key + '_v');
+        if (button) button.remove();
+        button = document.getElementById(key + '_p');
+        if (button) button.remove();
+        button = document.getElementById(key + '_x');
+        if (button) button.remove();
+        button = document.getElementById(key + '_l');
+        if (button) button.remove();
+    }
+
+    function createBtn(key_, cb, key) {
+
+        let div = document.getElementById('controlWin');
+        var button = document.createElement('button'); //_createVolumn(i);
+        switch (key_) {
+            case 'hymn': button.innerHTML = '🎤'; break;
+            case 'Bible': button.innerHTML = '🎚️'; break;
+            case 'NIV': button.innerHTML = 'NIV'; break;
+            case 'url_1': button.innerHTML = '🌐1'; break;
+            case 'url_2': button.innerHTML = '🌐2'; break;
+            case 'file_1': button.innerHTML = '📂1'; break;
+            case 'file_2': button.innerHTML = '📂2'; break;
+            case 'info': button.innerHTML = 'Info'; break;
+            case 'effect': button.innerHTML = 'Effect'; break;
+            case 'time': button.innerHTML = '🕗'; break;
+            case 'dBoard': button.innerHTML = '客制'; break;
+            case 'tabs': button.innerHTML = '頁籤'; break;
+        }
+
+        if (key_.endsWith('_v'))
+            button.innerHTML = 'V';
+        if (key_.endsWith('_p'))
+            button.innerHTML = 'P';
+        if (key_.endsWith('_x'))
+            button.innerHTML = 'X';
+        if (key_.endsWith('_l'))
+            button.innerHTML = '🔓';
+
+        //button.className = '';
+        button.id = key_;
+        button.onclick = function () {
+            cb(key);
+            return false;
+        };
+        div.appendChild(button);
+
+    }
+
+    function createBtns(key) {
+        createBtn(key, controlParent, key);
+        createBtn(key+'_v', switchVisible, key);
+        createBtn(key+'_p', perspective, key);
+        createBtn(key+'_x', closeApp, key);
+        createBtn(key+'_l', lockApp, key);
+    }
 
     function reca() {
         window.opener.recoverAll();
@@ -178,6 +149,35 @@
         reloadState();
     }
 
+    function reloadState() {
+        let stateArray = window.opener.getElmState();
+        for (let key in stateArray) {
+            removeBtns(key);
+            if (stateArray[key] == -1) continue;
+            createBtns(key);
+            let b = document.getElementById(key);
+            let b_v = document.getElementById(key + '_v');
+            let b_p = document.getElementById(key + '_p');
+            let b_x = document.getElementById(key + '_x');
+            let b_l = document.getElementById(key + '_l');
+            if (stateArray[key] % 10 == 0) {
+                b.style.backgroundColor = "rgb(0,0,0)";
+                b_v.style.backgroundColor = "transparent";
+            } else {
+                b.style.backgroundColor = "rgb(0,0,0)";
+                b_v.style.backgroundColor = "rgb(0,0,0)";
+            }
+            if (Math.floor(stateArray[key] / 10) == 0) {
+                b_l.style.backgroundColor = "transparent";
+                b_l.textContent = '🔓';
+            } else {
+                b_l.style.backgroundColor = "rgb(255,0,0)";
+                b_l.textContent = '🔒';
+            }
+        }
+    }
+
+    /*
     function reloadState() {
         let stateArray = window.opener.getElmState();
         console.log(stateArray);
@@ -219,19 +219,10 @@
                         b_l.textContent = '🔒';
                     }
                     break;
-                /*
-                case 0:
-                    b.style.backgroundColor = "rgb(0,0,0)";
-                    b_v.style.backgroundColor = "transparent";
-                    break;
-                case 1:
-                    b.style.backgroundColor = "rgb(0,0,0)";
-                    b_v.style.backgroundColor = "rgb(0,0,0)";
-                    break;
-                    */
             }
         }
     }
+    */
 
     function controlParent(keyname) {
         window.opener.spot2iframe(keyname);
@@ -247,7 +238,6 @@
         window.opener.perspective4iframe(keyname);
         reloadState();
     }
-
 
     reloadState();
 
