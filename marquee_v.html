@@ -4,7 +4,7 @@
 var subtitle = [ [''], 
                  ['']];
 
-var left_gap = 32;
+var left_gap = 0;
 
 var fsize = 128;
 
@@ -13,7 +13,7 @@ side = 1;
 var gap = dots + side;
 
 fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
-var boardWidth = fsize;
+var boardWidth = fsize + 16;
 
 var fontFamily = "Monospace";
 var FONT = (fsize - 4) + "px " + fontFamily;//cwTeXKai";//"px 黑體-繁";//宋體-繁"; "px 標楷體";
@@ -62,7 +62,7 @@ function widthM() {
       body {
         margin: 0px;
         height: 100%;
-        background-color:green;
+        background-color: transparent;
         /*cursor:none;*/
       }
       /*
@@ -450,6 +450,9 @@ window.addEventListener('message', (e) => {
   if (jsonData.des.trim().length == 0) return;
     
   document.getElementById("txt").value = jsonData.des.trim();
+
+  if (jsonData.trigger) 
+    textGo();
   
 
 }, false);

@@ -1,4 +1,4 @@
-const APPS = ['hymn', 'Bible', 'NIV', 'url_1', 'url_2', 'file_1', 'file_2', 'info', 'effect', 'time', 'dBoard', 'tabs'];
+const APPS = ['hymn', 'Bible', 'NIV', 'BPlay', 'url_1', 'url_2', 'file_1', 'file_2', 'info', 'effect', 'time', 'dBoard', 'tabs'];
 
 const GRID_W = 32;
 const GRID_H = 32;
@@ -692,7 +692,7 @@ function getElmState() {
   //array.id3 = 400;
   //array["id4"] = 500;
   let stateArray = {
-    hymn: -1, Bible: -1, NIV: -1,
+    hymn: -1, Bible: -1, NIV: -1, BPlay: -1,
     url_1: -1, url_2: -1, file_1: -1, file_2: -1,
     info: -1, effect: -1, time: -1,
     dBoard: -1, tabs: -1
@@ -840,6 +840,13 @@ function _createFrame(keyname) {
     } break;
     case 'NIV': {
       createFrame(keyname, 'subtitle_niv.html');
+      let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
+      applets.push(app);
+      app.onTop();
+      return app;
+    } break;
+    case 'BPlay': {
+      createFrame(keyname, 'subtitle_b_display.html');
       let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
       applets.push(app);
       app.onTop();

@@ -1,9 +1,9 @@
 var presetVerse = [
       
   [''], //0
+  [''], //1
   [''], //2
-  ['創世記', 1, 0, '創世記', 4, 26, 'https://cdn-news.readmoo.com/wp-content/uploads/2018/08/jerusalem-news.jpg'], //1
-  ['詩篇', 1, 1, '詩篇', 2, 12], //3
+  [''], //3
   [''], //4
   [''], //5
   [''], //6
@@ -140,7 +140,7 @@ class VerseObj {
     volume = 0;
     chapter = 0;
     verse = 0;
-    wratio = 0.95;
+    wratio = 0.925;
     substrings = [];
     //frontxt: '',
     level = 0;
@@ -256,6 +256,7 @@ class VerseObj {
 
       //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
 
+      /*
       if (color_selection <= 1) {
         let r = this.level == 0? this.substrings.length * fs + fs * 0.5: this.substrings.length * fs + fs * 0.2
         //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
@@ -265,6 +266,16 @@ class VerseObj {
         //if (progress == -2) this.gap_transY = (r - this.transY)/animTotal.toFixed(2);
         return r;
       }
+      */
+
+      if (fontsize_dist == 1) //if (color_selection == 0) 
+        return this.level == 0 ? this.substrings.length * fs + fs * 0.5 : this.substrings.length * fs + fs * 0.2;
+      else
+        return this.substrings.length * fs + fs * 0.5;
+
+
+
+
     }
 
     draw() {
@@ -371,14 +382,15 @@ function loadUrlImg(imageUrl) {
 
     image.onload = function() {
         img = image;
-        startImgAnim();
-        _repaint();
+        t_mask_opacity = 0;
+        startImgAnim(); //_repaint();
     };
 }
 
 //function flow() {}
 
-const WORD_DELAY = 100;
+const BASE_DELAY = 1000;
+const WORD_DELAY = 150;
 
 const LEV_1_OPC = 0.8;
 const LEV_2_OPC = 0.7;
@@ -403,7 +415,6 @@ var txt_fillStyle = 'rgba(255, 255, 255, ';
 var txt_strokeStyle_white = 'rgb(255,255,255)';
 var txt_fillStyle_white = 'rgba(0, 0, 0, '; 
 
-
 /////
 var bgcolor_pointer = "rgba(255, 255, 255, 0.33)";
 var color_pointer = ["rgb(0, 100, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 255, 0)"];;
@@ -411,6 +422,8 @@ var hlight_pointer = 'rgba(0, 0, 0, 0.33)';
 
 var txt_fill = txt_fillStyle;
 var txt_stroke = txt_strokeStyle;
+
+//var image_base64 = null;
 
 function getSong(jsonid) {
   var json_elm = document.getElementById(jsonid);
@@ -467,11 +480,18 @@ var img;
 var canvas;
 var ctx;
 
-var color_selection = 0;
+//var color_selection = 0;
+var fontsize_dist = 0;
 
 var uisel = 0;
 var uisel_start = 0;
 var uisel_end = 0;
+
+var t_song = 0;
+var t_phase = 0;
+var t_line = 0;
+
+var autoIdx = 0;
 
 function createCanvas() {
 
@@ -583,6 +603,8 @@ function verse_update(elapse) {
             render_vertical(animElapse/animTotal);
             break;
     }
+
+  if (animElapse == -1) return;
   
   if (animElapse < animTotal) {
     animElapse++;
@@ -649,14 +671,29 @@ function operateQuene(queueType, doanim) {
     }
   }
 
-  if (color_selection <= 1) {
-    for (let _sel = 2;;_sel++)
+  if (fontsize_dist == 1) { //if (color_selection == 0) {
+    for (let _sel = 2; ; _sel++)
       if (sel >= _sel) queue[sel - _sel].setLevel(_sel);
       else break;
-    for (let _sel = 2;;_sel++)
+    for (let _sel = 2; ; _sel++)
       if (queue.length > sel + _sel) queue[sel + _sel].setLevel(_sel);
       else break;
   }
+
+  /*
+  if (color_selection <= 1) {
+    for (let _sel = 2;;_sel++)
+      if (sel >= _sel) 
+        queue[sel - _sel].setLevel(_sel);
+      else 
+        break;
+    for (let _sel = 2;;_sel++)
+      if (queue.length > sel + _sel) 
+        queue[sel + _sel].setLevel(_sel);
+      else 
+        break;
+  }
+  */
 
   if (doanim > 0) {
     animElapse = 0;
@@ -785,11 +822,18 @@ function printMain(chapter, verse) {
       //i = _i;
 
       let obj = new VerseObj();
+      if (fontsize_dist == 1) { //if (color_selection == 0) {
+        obj.initial(song, i, j, k);
+      } else {
+        obj.initial(song, i, j, 1);
+      }
+      /*
       if (color_selection <= 1) {
         obj.initial(song, i, j, k);
       } else {
         obj.initial(song, i, j, 1);
       }
+      */
 
       queue.unshift(obj);
   }
@@ -811,7 +855,14 @@ function printMain(chapter, verse) {
     //  i = _i;
 
       let obj = new VerseObj();
+      /*
       if (color_selection <= 1) {
+        obj.initial(song, i, j, k);
+      } else {
+        obj.initial(song, i, j, 1);
+      }
+      */
+      if (fontsize_dist == 1) { //if (color_selection == 0) {
         obj.initial(song, i, j, k);
       } else {
         obj.initial(song, i, j, 1);
@@ -1035,14 +1086,23 @@ function anim1() {
     if (animType != 1) return;
     
     if (checkBeforeTail([song, phase, line]))
-        keyboard({keyCode : 39});
-    else { //jumpwoanim(head);
-        jump2preset4Anim(head);
-        timeoutID = setTimeout(anim1, conutWord(subtitles[head[1]][head[2]]) * WORD_DELAY);
-        return;
+        keyboard({keyCode : 39}); //按右鍵
+    else {//到底了 跑下一個設定
+      while (true) {
+        autoIdx = (autoIdx+1) % presetVerse.length;
+        if (presetVerse[autoIdx].length < 6) continue;
+        break;
+      }
+      jump2preset(presetVerse[autoIdx]);
+      return;
+
+      //jump2preset4Anim(head);
+      //timeoutID = setTimeout(anim1, BASE_DELAY + conutWord(subtitles[head[1]][head[2]]) * WORD_DELAY);
+      //return;
+
     }
         
-    timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
+    timeoutID = setTimeout(anim1, BASE_DELAY + conutWord(subtitles[phase][line]) * WORD_DELAY);
 }
 
 let head = [];
@@ -1074,16 +1134,17 @@ function checkBeforeTail(ps) {
 }
 
 function jumpwoanim(ps) {
+    let r = [];
     for (var i = 1;i<SONGS.length;i++) {
       if (ps[0] == SONGS[i][0][0] || ps[0] == i) {
-          song = i;
-          subtitles = SONGS[i];//presetVerse[value][0]
-          phase = ps[1];
-          line =  ps[2];
+          r[0] = i;//song = i;
+          //subtitles = SONGS[i];
+          r[1] = ps[1];//phase = ps[1];
+          r[2] = ps[2];//line =  ps[2];
           break;
       }
     }
-    _repaint();
+    return r; //_repaint();
 }
 
 var animType = 0;
@@ -1115,7 +1176,7 @@ function jump2preset(ps) {
         return;
     }
     */
-    //跳至章節
+    //跳至章節 原始的
     if (ps.length == 3) {
         animType = 0;
         jump2preset4Anim(ps);
@@ -1123,20 +1184,31 @@ function jump2preset(ps) {
     }
     //自動播放
     if (ps.length >= 6) {
+
         animType = 1;
-        jumpwoanim([ps[3], ps[4], ps[5]]);
-        tail = [song, phase, line];
-        jumpwoanim([ps[0], ps[1], ps[2]]);
-        head = [song, phase, line];
-        console.log(head +'::::'+ tail);
-        _repaint();
-        timeoutID = setTimeout(anim1, conutWord(subtitles[phase][line]) * WORD_DELAY);
-        //背景圖
-        if (ps.length > 6 && ps[6]) {
-          loadUrlImg(ps[6]);
+        tail = jumpwoanim([ps[3], ps[4], ps[5]]);
+        //tail = [song, phase, line];
+        head = jumpwoanim([ps[0], ps[1], ps[2]]);
+        //head = [song, phase, line];
+        if (ps.length > 6 && ps[6] && ps[6].length > 0) {
+          head[3] = ps[6];
+          t_mask_opacity = 1.0;
         }
+
+        setTimeout(_playVersus, BASE_DELAY);
+        //_repaint();
+        
         return;
     }
+}
+
+function _playVersus() {
+  jump2preset4Anim(head);
+  timeoutID = setTimeout(anim1, BASE_DELAY + conutWord(SONGS[t_song][t_phase][t_line]) * WORD_DELAY);
+  //背景圖
+  if (head.length > 3 && head[3] && head[3].length > 0) {
+      loadUrlImg(head[3]);
+  }
 }
 
 function _targetAnim() {
@@ -1183,15 +1255,10 @@ function _targetAnim() {
   _repaint();
 }
 
-var t_song = 0;
-var t_phase = 0;
-var t_line = 0;
-
 function jump2preset4Anim(ps) {
   for (var i = 1;i<SONGS.length;i++) {
     if (ps[0] == SONGS[i][0][0] || ps[0] == i) {
         t_song = i;
-        //subtitles = SONGS[i];//presetVerse[value][0]
         t_phase = ps[1];
         t_line =  ps[2];
         break;
@@ -1237,6 +1304,8 @@ function keyboard(e) { //key up
           //connect2Data();
           break;
       case 65: //a
+        display_mode = display_mode == 0?1:0;
+        /*
         if (color_selection == 2 && display_mode == 0) {
             display_mode = 1;
             break;
@@ -1245,6 +1314,7 @@ function keyboard(e) { //key up
             display_mode = 0;
         }
         color_selection = (color_selection + 1) % 3;
+        */
         break;
       case 67: //'c'
         fontColorType = (fontColorType + 1)%4; 
@@ -1255,6 +1325,9 @@ function keyboard(e) { //key up
       case 66: //'b'
         //console.log('b press');
         doblank = doblank == 0?1:0;
+        break;
+      case 68: //d
+        fontsize_dist = fontsize_dist == 0 ? 1 : 0;
         break;
       case 38: //'ArrowUp'
           if (canvas.hidden) break;
@@ -1333,13 +1406,15 @@ function keyboard(e) { //key up
           line = 0;
 
           break;
-        
+        //0~9
         case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
         //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-          var value = e.keyCode - 48;
-          if (value > presetVerse.length -1) break;
-          if (presetVerse[value][0].length == 0) break;
-          jump2preset(presetVerse[value]);
+          autoIdx = e.keyCode - 48;
+          //var value = e.keyCode - 48;
+          console.log('::' + autoIdx + ':' + presetVerse[autoIdx].length);
+          if (autoIdx > presetVerse.length -1) break;
+          if (presetVerse[autoIdx][0].length == 0) break;
+          jump2preset(presetVerse[autoIdx]);
           return;
         case 32: 
           stopAnim(); 
@@ -1389,12 +1464,15 @@ function _layer0() {
 
 var img_step = -1;//10;
 var img_idx = 0;
-//var img_move = img_step;
+var img_move = -1;
 var pre_elapse = 0;
 var elapse = 0;
 
 const during = 10;
 var _during = 0;
+
+var t_mask_opacity = 0;
+var mask_opacity = 0;
 
 /*
 function easeInOut(t) {
@@ -1458,9 +1536,20 @@ function img_update(elapse) {
         render(animElapse/animTotal);
     } else {
         render(-1);
-    }    
+    }
 
-    window.requestAnimationFrame(img_update);
+    if (mask_opacity != t_mask_opacity) {
+      mask_opacity = mask_opacity + (t_mask_opacity - mask_opacity) * dt * 5;
+      if (Math.abs(mask_opacity - t_mask_opacity) < 0.1) 
+        mask_opacity = t_mask_opacity;
+    }
+
+    ctx.fillStyle = 'rgba(0, 0, 0, ' + mask_opacity + ')';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    //if (timeoutID > 0)
+    if (img) 
+      window.requestAnimationFrame(img_update);
 
   
     /*
@@ -1474,8 +1563,11 @@ function img_update(elapse) {
 }
 
 function startImgAnim() {
+  if (img && img_move == -1) {
     img_move = 1;
     window.requestAnimationFrame(img_update);
+  } 
+    
 }
 
 function _layerui() {
@@ -1514,10 +1606,6 @@ function _repaint() {
 }
 
 init();
-
-// message 事件
-//function receiveMessage(e) {}
-//window.addEventListener('message', receiveMessage, false);
 
 /*
  * 鍵盤相關... START
@@ -1559,15 +1647,6 @@ window.addEventListener('wheel',function (event){
     keyboard({keyCode : 33}); //left
   }
 });
-
-function toObj() {
-  let obj = {};
-  obj['color'] = color_selection;
-  obj['fontfactor'] = fontfactor;
-  obj['saved'] = presetVerse;
-  return obj;
-}
-
 
 function _ajax(json, url, cb, errorcb) {
     fetch(url, {
@@ -1623,159 +1702,52 @@ jumpTo1();
 
 _repaint();
 
-//let v = "5"-"2";console.log(typeof v);
-/*
-function getPreChapter(chapter, verse) {
-    if (chapter <= 0) return -1;
-    if (verse > 0) return chapter;
-    return chapter - 1;
-  }
-  
-  function getPreVerse(chapter, verse) {
-    if (verse > 0) return verse - 1;
-    if (chapter > 0) return subtitles[chapter - 1].length - 1;
-    return subtitles[0].length - 1;
-  }
-  
-  function getNextChapter(chapter, verse) {
-    if (chapter == -1) return -1;
-    if (verse < subtitles[chapter].length - 1)
-      return chapter;
-    if (chapter < subtitles.length - 1) 
-      return chapter + 1;
-    return -1;
-  }
-  
-  function getNextVerse(chapter, verse) {
-    if (chapter == -1) return -1;
-    if (verse < subtitles[chapter].length - 1)
-      return verse + 1;
-    if (chapter < subtitles.length - 1) 
-      return 0;
-    return -1;
-  }
-  */
+function toObj() {
+  let obj = {};
+  obj['verticle'] = display_mode;
+  obj['fontfactor'] = fontfactor;
+  obj['saved'] = presetVerse;
+  obj['fsizedist'] = fontsize_dist;
+  obj['fontColorType'] = fontColorType;
+  return obj;
+}
 
-  /*
-  function createParticle() {
-    particles[i] = newParticle_txt(i, total);//();
-    particles[i].initial(canvas);
-  }
 
-  function newParticle_txt(sequence, total) {
-    let p = {
-      x: 0,
-      y: 0,
-    idx: 0,
-    txt: "",
-    array: [],
-    size:0,
-    seq:sequence,
-    ttl:total,
-    idxlen:0,
-    elapse:0,
-    gap : 0.1,
-    lev:0,
-      release: function() {
-        this.txt = '';
-        this.array = [];
-        this.array.length = 0;
-      },
-      initial: function (c) {
+// message 事件
+function receiveMessage(e) {
   
-        //this.txt += String.fromCharCode(Math.floor(65 + Math.random() * 26));
-  
-        let chapter = 1 + Math.floor(Math.random() * (subtitle.length - 1));
-        let verse = 1 + Math.floor(Math.random() * (subtitle[chapter].length - 1));
-        this.txt = subtitle[chapter][verse];
-  
-        //this.size = Math.floor(10 + (this.seq/this.ttl) * 20);
-        this.size = 20 + 4 * Math.floor(this.seq/5);
-        
-        
-        this.lev = Math.floor(this.ttl - this.seq)/5;
-        if (this.lev < 3) {
-          this.x = Math.floor(this.ttl - this.seq)%5 * c.width/5 + 2 * this.lev * c.width/this.ttl;
-        } else {
-          this.x = c.width * Math.random();
-        }
-        //this.x = this.seq * c.width/this.ttl;
-        //console.log(':'+this.size);
-  
-        this.array = Array.from(this.txt);
-        
-        this.y = 10 + Math.random() * c.height/4;
-        this.idxlen = Math.max(2, Math.floor(this.array.length * 0.8));//10 + 10 * Math.random();
-        this.elapse = 0;
-        this.idx = 0;
-        this.gap = 0.06 + Math.random() * 0.15;
-        //console.log('___  ' + this.gap);
-      },
-  
-      update: function (c, _ctx, dt) {
-        
-        if (dt > 1000) dt = 16;
-  
-        this.size += 0.05 * this.size * dt * 0.001;
-        this.y -= this.size * dt * 0.001;
-  
-        _ctx.textAlign = "left";
-  
-        var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"Noto Serif TC";"標楷體";
-        _ctx.font = this.size + "px "+ fontFamily;
-  
-        this.elapse += dt * 0.001;
-        if (this.elapse > this.gap) {
-          this.idx++;
-          if (this.idx - this.idxlen + 1 >= this.array.length) {
-            this.initial(c);
-            return;
-          }
-          this.elapse = 0;
-        }
-  
-        //console.log(this.idx + '/' + this.array.length);
-  
-        let _len = this.idxlen;
-        for (var i = this.idx;i>=0;i--) {
-          
-          if (i < this.array.length) {
-            
-            let cl = Math.floor(150 * _len/this.idxlen);
-  
-            let _r = PT_R == 0?cl:255;
-            let _g = PT_G == 0?cl:255;
-            let _b = PT_B == 0?cl:255;
-            
-            if (i == this.idx) {
-              
-              if (this.lev >= 2) {
-                _ctx.fillStyle = 'rgb(' + (PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(200, 200, 200, 0.8)';
-              } else {
-                _ctx.strokeStyle = 'rgb(' +(PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(255, 0, 0, 1.0)';
-                _ctx.lineWidth = 6;
-                _ctx.fillStyle = 'rgb(0,0,0,1.0)';
-                _ctx.strokeText(this.array[i], this.x, this.y + (i * this.size));
-              }      
-              
-            } else {
-  
-              let opa = _len/this.idxlen;
-              if (this.lev >= 2) {
-                opa *= 0.5;
-              }
-              _ctx.fillStyle = 'rgb(' + _r + ',' + _g + ',' + _b + ',' + opa + ')';
-            }
-            _ctx.fillText(this.array[i], this.x, this.y + (i * this.size)); 
-            //_ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
-          }  
-          _len--;
-          if (_len == 0) break;
-        }
-        
+    const jsonData = JSON.parse(e.data);
+    if (jsonData.verticle) display_mode = 1; else display_mode = 0;
+
+    if (jsonData.fontfactor)
+      setFontFactor(jsonData.fontfactor);
+
+    if (jsonData.saved && jsonData.saved.length > 0) {
+      for (let i = 0; i < jsonData.saved.length; i++) {
+        if (i >= 10) return;
+        presetVerse[i] = jsonData.saved[i];
       }
+      keyboard({ keyCode: 49 });
     }
-    return p;
-  }
 
-  */
+    if (jsonData.transparent) {
+      makeTransparent = true;
+    } else {
+      makeTransparent = false;
+    }
+    if (jsonData.fsizedist) {
+      fontsize_dist = 1;
+    } else {
+      fontsize_dist = 0;
+    }
+    if (jsonData.fontColorType) 
+      fontColorType = jsonData.fontColorType;
+    else 
+      fontColorType = 0;
+
+  _repaint();
+}
+
+// message 事件
+window.addEventListener('message', receiveMessage, false);
+
