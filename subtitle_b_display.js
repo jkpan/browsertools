@@ -1223,7 +1223,7 @@ function _targetAnim() {
     }
     subtitles = SONGS[song];
     //console.log('s:' + song + ', ' + phase + ', '+ line);
-    _repaint();
+    //_repaint();
     window.requestAnimationFrame(_targetAnim);
     return;
   }
@@ -1235,7 +1235,7 @@ function _targetAnim() {
     else 
       phase += step;
     //console.log('p:' + song + ', ' + phase + ', '+ line);
-    _repaint();
+    //_repaint();
     window.requestAnimationFrame(_targetAnim);
     return;
   } 
@@ -1247,7 +1247,7 @@ function _targetAnim() {
       else 
         line += step;
     //console.log('l:' + song + ', ' + phase + ', '+ line);
-    _repaint();
+    //_repaint();
     window.requestAnimationFrame(_targetAnim);
     return;
   }
