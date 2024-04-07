@@ -481,6 +481,7 @@ var canvas;
 var ctx;
 
 //var color_selection = 0;
+var makeTransparent = true;
 var fontsize_dist = 0;
 
 var uisel = 0;
@@ -1297,6 +1298,7 @@ function keyboard(e) { //key up
     //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
           
     switch (e.keyCode) {
+      case 90: makeTransparent = !makeTransparent; break; //'z'
       case 77: //m
           img = null;
           document.getElementById('img').click();
@@ -1437,6 +1439,14 @@ function keyboard(e) { //key up
 function _layer0() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if (!makeTransparent) {
+    ctx.fillStyle = 'rgba(0,200,0,0.5)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+
+  
   
   /*
     img w      x
@@ -1709,6 +1719,7 @@ function toObj() {
   obj['saved'] = presetVerse;
   obj['fsizedist'] = fontsize_dist;
   obj['fontColorType'] = fontColorType;
+  obj['transparent'] = makeTransparent ? 1 : 0;
   return obj;
 }
 
@@ -1735,6 +1746,7 @@ function receiveMessage(e) {
     } else {
       makeTransparent = false;
     }
+
     if (jsonData.fsizedist) {
       fontsize_dist = 1;
     } else {
