@@ -23,9 +23,9 @@
         "fontfactor": 14.5,
         "saved": [
           [""],
-          ["詩篇", 1, 0, "詩篇", 1, 6, "./tmp/bg00.png"],
-          ["詩篇", 23, 0, "詩篇", 23, 6, "./tmp/bg02.png"],
-          ["傳道書", 1, 0, "傳道書", 1, 18, "./tmp/bg01.png"],
+          ["詩篇", 1, 0, "詩篇", 1, 6, "https://jkpan.github.io/browsertools/tmp/bg01.png"],
+          ["詩篇", 23, 0, "詩篇", 23, 6, "https://jkpan.github.io/browsertools/tmp/bg02.png"],
+          ["傳道書", 1, 0, "傳道書", 1, 18, "https://jkpan.github.io/browsertools/tmp/bg01.png"],
           [""],
           [""],
           [""],

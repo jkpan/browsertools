@@ -1,16 +1,9 @@
 var presetVerse = [
-      
-  [''], //0
-  [''], //1
-  [''], //2
-  [''], //3
-  [''], //4
-  [''], //5
-  [''], //6
-  [''], //7
-  [''], //8
-  [''], //9
-
+  [""],
+  ["詩篇", 1, 0, "詩篇", 1, 6, "https://jkpan.github.io/browsertools/tmp/bg01.png"],
+  ["詩篇", 23, 0, "詩篇", 23, 6, "https://jkpan.github.io/browsertools/tmp/bg02.png"],
+  ["傳道書", 1, 0, "傳道書", 1, 18, "https://jkpan.github.io/browsertools/tmp/bg01.png"],
+  [""]
 ];
 
 class VerseVertical {
@@ -342,6 +335,7 @@ class VerseObj {
     }
 }
 
+/*
 function loadBgImg(event) {
     var files = event.target.files;
     var file;
@@ -372,6 +366,7 @@ function createBGHiddenFile() {
     body.appendChild(_file);
     //<input id="img" type="file" hidden="true"/>
 }
+*/
 
 function loadUrlImg(imageUrl) {
 
@@ -514,7 +509,7 @@ function createCanvas() {
 }
 
 createCanvas();
-createBGHiddenFile();
+//createBGHiddenFile();
 
 function init() {
     canvas = document.getElementById("canvas");
@@ -1658,6 +1653,7 @@ window.addEventListener('wheel',function (event){
   }
 });
 
+/*
 function _ajax(json, url, cb, errorcb) {
     fetch(url, {
       method: "POST",
@@ -1692,7 +1688,7 @@ function connect2Data() {
             console.log('error:');
         });
 }
-
+*/
 
 /*
 function connect2Data() {
