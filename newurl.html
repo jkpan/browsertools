@@ -149,6 +149,8 @@ a {
 
         <div class="ui" id="ui">
           嵌入Google簡報, Canva簡報, Youtube影片...
+          <input type="checkbox" id="loopchk" checked>
+          <label>Loop(影片)</label>
           <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
               //document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal";
@@ -158,12 +160,28 @@ a {
                 let value = document.getElementById("ppt_url").value;
                 value = value.trim();
                 if (value.length == 0) return;
-
+          
                 document.getElementById("ui").hidden = true;
-                document.getElementById("web").hidden = false;
+                
                 document.querySelector('body').style.background = 'transparent';
-                document.getElementById("reload").hidden = false;
-                document.getElementById("web").src = value;
+                
+                if (value.endsWith('.mp4') || value.endsWith('.mov')) {
+                  let vdo = document.getElementById("vsrc");
+                  vdo.src = value;
+                  vdo.hidden = false;
+
+                  vdo.setAttribute("controls", "controls");
+                  
+                  if (document.getElementById("loopchk").checked) {
+                    vdo.setAttribute("loop", "loop");
+                  }
+
+                } else {
+                  document.getElementById("web").src = value;
+                  document.getElementById("web").hidden = false;
+                  document.getElementById("reload").hidden = false;
+                }
+                
                 //if (document.getElementById("reloadPage"))
                 document.getElementById("reloadPage").hidden = false;
                 //window.location.href = value;
@@ -182,14 +200,16 @@ a {
             <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a></li>
             <li>Google簡報要打開speaker notes按's'</li>
             <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
+            <!--
             <li><a href="javascript:animLED()">LED動畫</a></li>
             0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
+            -->
           </ul>
             
           <hr size="4" width="100%" color="#00ff00"/>
           本機檔案<br/>
           <input type="checkbox" id="keepratio" checked>
-          <label for="checkbox">維持比例(圖片)</label>
+          <label>維持比例(圖片)</label>
           <P></P>
             <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" onclick="openFile('allfile')">
               <p>
@@ -233,6 +253,11 @@ window.addEventListener('message', (e) => {
 
   const jsonData = JSON.parse(e.data);
 
+  let loopbox = document.getElementById("loopchk");
+  if (loopbox && jsonData.loop) {
+    loopbox.checked = true;
+  }
+
   if (jsonData.keepratio) {
     document.getElementById("keepratio").checked = true;
   } else {
@@ -248,8 +273,8 @@ window.addEventListener('message', (e) => {
   if (!jsonData.url) return;
   if (jsonData.url.trim().length == 0) return;
   document.getElementById("ppt_url").value = jsonData.url.trim();
-  if (jsonData.trigger) 
-    urlGo();
+  //if (jsonData.trigger) 
+  urlGo();
 
 }, false);
 
@@ -278,17 +303,18 @@ function toObj() {
     if (_url.length > 0) {
       obj = { "url": _url };
     }
-    if (image_base64) {
-      let keep = isKeepRatio()?1:0;
-      obj['keepratio'] = keep;
-      obj['imageBase64'] = image_base64;
-      /*
-      return {
-        "keepratio": keep,
-        "imageBase64": image_base64 
-      };
-      */
+    
+    let loopbox = document.getElementById("loopchk");
+    if (loopbox && loopbox.checked) {
+      obj['loop'] = 1;
     }
+    let keep = isKeepRatio()?1:0;
+    obj['keepratio'] = keep;
+    
+    if (image_base64) { 
+      obj['imageBase64'] = image_base64;
+    }
+
     return obj;
   }
   //url還在欄位
