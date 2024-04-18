@@ -140,6 +140,10 @@ window.addEventListener('message', (e) => {
     document.getElementById("keepratio").checked = false;
   }
 
+  forPlay = 0;
+  if (jsonData.forPlay) 
+    forPlay = 1;
+
   if (jsonData.imageBase64) {
     image_base64 = jsonData.imageBase64;
     showImage();

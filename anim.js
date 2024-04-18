@@ -95,7 +95,7 @@ function newParticle_in() {
       this.radius = (c.width + c.height) / 2 * 0.03 + Math.random() * 50;
       //Math.max(c.width, c.height) * 0.01 + Math.random() * 50;
       //20 + Math.random() * 50;
-      this.elapse = 1.0 + 4.0 * (70 - this.radius) / 70;
+      this.elapse = 2.0 + 4.0 * (70 - this.radius) / 70;
       this.t = 0;
 
     },
@@ -165,7 +165,7 @@ function newParticle_out() {
       this.radius = (c.width + c.height) / 2 * 0.03 + Math.random() * 50;
       //Math.max(c.width, c.height) * 0.01 + Math.random() * 50;
       //20 + Math.random() * 50;
-      this.elapse = 1.0 + 4.0 * (70 - this.radius) / 70;
+      this.elapse = 2.0 + 4.0 * (70 - this.radius) / 70;
       this.t = 0;
 
     },

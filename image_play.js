@@ -1,10 +1,5 @@
 var presetVerse = [
 
-    //["./tmp/bg01.png", 12], //0
-    //['./tmp/bg02.png', 12], //1
-    //['./tmp/bg03.png', 12], //2
-    //['./tmp/bg04.png', 12], //3
-    //https://jkpan.github.io/browsertools/tmp
 ];
 
 var images = [];
@@ -480,57 +475,39 @@ window.addEventListener('resize', function () {
 });
 //_repaint();
 
-
-/*
   function toObj() {
     let obj = {};
+    obj['saved'] = presetVerse;
+    obj['during'] = during;
+    /*
     for (let i = 0;i<images.length;i++) {
         let idx = 'img_' + i;
         obj[idx] = {};
         obj[idx]['delay'] = 10;
         obj[idx]['base64'] = images[i].base64;
     }
+    */
     return obj;
   }
-*/
 
-  /*
   // message 事件
   function receiveMessage(e) {
     
       const jsonData = JSON.parse(e.data);
-      if (jsonData.verticle) display_mode = 1; else display_mode = 0;
-  
-      if (jsonData.fontfactor)
-        setFontFactor(jsonData.fontfactor);
-  
+    
+      if (jsonData.during) {
+        during = jsonData.during;  
+      }
+
       if (jsonData.saved && jsonData.saved.length > 0) {
         for (let i = 0; i < jsonData.saved.length; i++) {
           if (i >= 10) return;
           presetVerse[i] = jsonData.saved[i];
         }
-        keyboard({ keyCode: 49 });
       }
-  
-      if (jsonData.transparent) {
-        makeTransparent = true;
-      } else {
-        makeTransparent = false;
-      }
-  
-      if (jsonData.fsizedist) {
-        fontsize_dist = 1;
-      } else {
-        fontsize_dist = 0;
-      }
-      if (jsonData.fontColorType) 
-        fontColorType = jsonData.fontColorType;
-      else 
-        fontColorType = 0;
-  
-    _repaint();
+      startPlay();      
   }
   
   // message 事件
   window.addEventListener('message', receiveMessage, false);
-  */
+  

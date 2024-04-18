@@ -1,0 +1,39 @@
+{
+  "url_1": {
+    "posize": [1, 1, 32, 32],
+    "perspective": 0,
+    "obj": {
+      "forPlay": 1,
+      "url": "./matrix_psalms.html"
+    }
+  },
+  "time": {
+    "posize": [1, 1, 9, 10],
+    "perspective": 0
+  },
+  "url_2": {
+    "posize": [5, 14, 14, 14],
+    "perspective": 0,
+    "obj": {
+      "forPlay": 1, 
+      "url": "./demo/0407.mp4"
+    }
+  },
+  "iPlay": {
+    "posize": [20, 5, 10, 24],
+    "perspective": 0,
+    "obj": {
+      "saved": [
+
+        ["./demo/pic_1.jpg", 12],
+        ["./demo/pic_2.jpg", 12],
+        ["./demo/pic_6.jpg", 12],
+        ["./demo/pic_3.jpg", 12],
+        ["./demo/pic_4.jpg", 12],
+        ["./demo/pic_7.jpg", 12],
+        ["./demo/pic_5.jpg", 12]
+    ]
+    }
+  },
+  "B/G": "G"
+}

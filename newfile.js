@@ -1,4 +1,5 @@
 var image_base64 = null;
+var forPlay = 0;
 
 function isKeepRatio() {
   var checkbox = document.getElementById("keepratio");
@@ -63,8 +64,13 @@ function selectFile(event) {
   function showImage() {
     document.querySelector('body').style.background = 'transparent';
     document.getElementById("ui").hidden = true;
-    if (document.getElementById("reloadPage"))
-      document.getElementById("reloadPage").hidden = false;
+
+    document.getElementById("reloadPage").hidden = false;
+    if (forPlay)
+        document.getElementById("reloadPage").hidden = true;
+
+    console.log(":::" + document.getElementById("reloadPage").hidden);
+      
     let img = new Image();
     img.src = image_base64;
     img.onload = function() {
@@ -126,7 +132,7 @@ function selectFile(event) {
       const contents = e.target.result;
       const jsonData = JSON.parse(contents);
       console.log(JSON.stringify(jsonData));
-      handleProfile(JSON.stringify(jsonData));
+      //handleProfile(JSON.stringify(jsonData));
     };
     reader.readAsText(file);
   }

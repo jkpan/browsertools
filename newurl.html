@@ -170,20 +170,35 @@ a {
                   vdo.src = value;
                   vdo.hidden = false;
 
-                  vdo.setAttribute("controls", "controls");
+                  //vdo.setAttribute("controls", "controls");
                   
                   if (document.getElementById("loopchk").checked) {
                     vdo.setAttribute("loop", "loop");
                   }
 
+                  if (forPlay)
+                    vdo.autoplay = true;
+
+                  if (forPlay) 
+                    document.getElementById("reload").hidden = true;
+                  else
+                    document.getElementById("reload").hidden = false;
+
                 } else {
                   document.getElementById("web").src = value;
                   document.getElementById("web").hidden = false;
-                  document.getElementById("reload").hidden = false;
+                  if (forPlay) 
+                    document.getElementById("reload").hidden = true;
+                  else
+                    document.getElementById("reload").hidden = false;
+
+                  if (forPlay) 
+                    document.getElementById("reloadPage").hidden = true;
+                  else
+                    document.getElementById("reloadPage").hidden = false;
+
                 }
                 
-                //if (document.getElementById("reloadPage"))
-                document.getElementById("reloadPage").hidden = false;
                 //window.location.href = value;
               }
               
@@ -253,6 +268,10 @@ window.addEventListener('message', (e) => {
 
   const jsonData = JSON.parse(e.data);
 
+  forPlay = 0;
+  if (jsonData.forPlay) 
+    forPlay = 1;
+
   let loopbox = document.getElementById("loopchk");
   if (loopbox && jsonData.loop) {
     loopbox.checked = true;
@@ -266,7 +285,7 @@ window.addEventListener('message', (e) => {
 
   if (jsonData.imageBase64) {
     image_base64 = jsonData.imageBase64;
-    showImage();    
+    showImage();
     return;
   }
 
@@ -274,6 +293,7 @@ window.addEventListener('message', (e) => {
   if (jsonData.url.trim().length == 0) return;
   document.getElementById("ppt_url").value = jsonData.url.trim();
   //if (jsonData.trigger) 
+  
   urlGo();
 
 }, false);
