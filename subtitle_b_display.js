@@ -1,8 +1,4 @@
 var presetVerse = [
-  [""],
-  ["詩篇", 1, 0, "詩篇", 1, 6, "https://jkpan.github.io/browsertools/tmp/bg01.png"],
-  ["詩篇", 23, 0, "詩篇", 23, 6, "https://jkpan.github.io/browsertools/tmp/bg02.png"],
-  ["傳道書", 1, 0, "傳道書", 1, 18, "https://jkpan.github.io/browsertools/tmp/bg01.png"],
   [""]
 ];
 
@@ -1473,7 +1469,7 @@ var img_move = -1;
 var pre_elapse = 0;
 var elapse = 0;
 
-const during = 10;
+var during = 10;
 var _during = 0;
 
 var t_mask_opacity = 0;

@@ -118,14 +118,14 @@ a {
 <script type="text/javascript" charset="UTF-8">
 
 function toObj() {
+  let obj = {};
+  let keep = isKeepRatio()?1:0;
+  obj['keepratio'] = keep;
+  obj['forPlay'] = forPlay;
   if (image_base64) {
-    let keep = isKeepRatio()?1:0;
-      return { 
-        "keepratio": keep,
-        "imageBase64": image_base64 
-      };
+    obj['imageBase64'] = image_base64;
   }
-  return {};
+  return obj;
 }
 
 window.addEventListener('message', (e) => {

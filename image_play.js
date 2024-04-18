@@ -121,10 +121,12 @@ function createCanvas() {
 }
 
 function init() {
-    canvas = document.getElementById("canvas");
+    if (!canvas)
+        canvas = document.getElementById("canvas");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    ctx = canvas.getContext("2d");
+    if (!ctx)
+        ctx = canvas.getContext("2d");
 }
 
 /*
@@ -211,7 +213,7 @@ var img_move = -1;
 var pre_elapse = 0;
 var elapse = 0;
 
-const during = 8;
+var during = 8;
 var _during = 0;
 
 //var t_mask_opacity = 0;
@@ -470,7 +472,7 @@ window.addEventListener('keydown', keydownAction, false);
 //大小變化
 window.addEventListener('resize', function () {
     init();
-    drawHint();
+    //drawHint();
     //_repaint();
 });
 //_repaint();
@@ -495,13 +497,13 @@ window.addEventListener('resize', function () {
     
       const jsonData = JSON.parse(e.data);
     
+      console.log("jsonData.during : " + jsonData.during);
       if (jsonData.during) {
         during = jsonData.during;  
       }
 
       if (jsonData.saved && jsonData.saved.length > 0) {
         for (let i = 0; i < jsonData.saved.length; i++) {
-          if (i >= 10) return;
           presetVerse[i] = jsonData.saved[i];
         }
       }
