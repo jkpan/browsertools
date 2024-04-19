@@ -101,14 +101,11 @@ function newParticle_txt(sequence, total) {
         
         if (i < this.array.length) {
           
-          let cl = Math.floor(150 * _len/this.idxlen);
-
-          let _r = PT_R == 0?cl:255;
-          let _g = PT_G == 0?cl:255;
-          let _b = PT_B == 0?cl:255;
-          
           if (i == this.idx) {
             
+            _ctx.fillStyle = 'rgb(' + (PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(200, 200, 200, 0.8)';
+            
+            /*
             if (this.lev >= 2) {
               _ctx.fillStyle = 'rgb(' + (PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(200, 200, 200, 0.8)';
             } else {
@@ -116,19 +113,27 @@ function newParticle_txt(sequence, total) {
               _ctx.lineWidth = 6;
               _ctx.fillStyle = 'rgb(0,0,0,1.0)';
               _ctx.strokeText(this.array[i], this.x, this.y + (i * this.size));
-            }      
+            }
+            */     
             
           } else {
 
             let opa = _len/this.idxlen;
-            if (this.lev >= 2) {
-              opa *= 0.5;
-            }
+            if (this.lev >= 2) opa *= 0.5;
+            if (opa <= 0.1) break;
+          
+
+            let cl = Math.floor(150 * _len/this.idxlen);
+
+            let _r = PT_R == 0?cl:255;
+            let _g = PT_G == 0?cl:255;
+            let _b = PT_B == 0?cl:255;          
+            
             _ctx.fillStyle = 'rgb(' + _r + ',' + _g + ',' + _b + ',' + opa + ')';
           }
-          _ctx.fillText(this.array[i], this.x, this.y + (i * this.size)); 
+          _ctx.fillText(this.array[i], this.x, this.y + (i * this.size));
           //_ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
-        }  
+        }
         _len--;
         if (_len == 0) break;
       }
@@ -167,8 +172,8 @@ function initAnim() {
     isinit = true;
   }
 
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
+  //var c = document.getElementById("canvas");
+  //var ctx = c.getContext("2d");
 
   //console.log(c.width + ', ' + c.height);
   
@@ -181,7 +186,7 @@ function initAnim() {
   particles.length = 0;
   particles = [];
 
-  var total = Math.min(35, 15 + 5 * Math.floor(c.width/500));
+  var total = Math.min(30, 10 + 5 * Math.floor(canvas.width/500));
   //console.log('total:'+total);
   for (var i = 0;i<total;i++) {
       particles[i] = newParticle_txt(i, total);//();
