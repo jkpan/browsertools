@@ -5,12 +5,20 @@ var ctx;
 var PT_R = 0;
 var PT_G = 0;
 var PT_B = 0;
+var brightest = '';
+
+function setMainColor(R, G, B) {
+  PT_R = R;
+  PT_G = G;
+  PT_B = B;
+  brightest = 'rgb(' + (PT_R == 0 ? 0 : 255) + ',' + (PT_G == 0 ? 0 : 255) + ',' + (PT_B == 0 ? 0 : 255) + ',' + '1.0)';
+}
 
 function init() {
-    canvas = document.getElementById("canvas");
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    ctx = canvas.getContext("2d");
+  canvas = document.getElementById("canvas");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx = canvas.getContext("2d"); 
 }
 
 function getSong(jsonid) {
@@ -20,69 +28,67 @@ function getSong(jsonid) {
     return obj.content;
   }
   return [['']];
-} 
+}
 
 function newParticle_txt(sequence, total) {
   let p = {
     x: 0,
     y: 0,
-  idx: 0,
-  txt: "",
-  array: [],
-  size:0,
-  seq:sequence,
-  ttl:total,
-  idxlen:0,
-  elapse:0,
-  gap : 0.1,
-  lev:0,
-    release: function() {
-      this.txt = '';
+    idx: 0,
+    //txt: "",
+    array: [],
+    size: 0,
+    seq: sequence,
+    ttl: total,
+    idxlen: 0,
+    elapse: 0,
+    gap: 0.1,
+    lev: 0,
+    release: function () {
+      //this.txt = '';
       this.array = [];
       this.array.length = 0;
     },
     initial: function (c) {
 
-      //this.txt += String.fromCharCode(Math.floor(65 + Math.random() * 26));
-
       let chapter = 1 + Math.floor(Math.random() * (subtitle.length - 1));
       let verse = 1 + Math.floor(Math.random() * (subtitle[chapter].length - 1));
-      this.txt = subtitle[chapter][verse];
+      //this.txt = subtitle[chapter][verse];
 
       //this.size = Math.floor(10 + (this.seq/this.ttl) * 20);
-      this.size = 20 + 4 * Math.floor(this.seq/5);
-      
-      
-      this.lev = Math.floor(this.ttl - this.seq)/5;
+      this.size = 15 + 4 * Math.floor(this.seq / 5);
+
+      //size seq越大 lev越小
+      this.lev = Math.floor(this.ttl - this.seq) / 5;
       if (this.lev < 3) {
-        this.x = Math.floor(this.ttl - this.seq)%5 * c.width/5 + 2 * this.lev * c.width/this.ttl;
+        this.x = Math.floor(this.ttl - this.seq) % 5 * c.width / 5 + 2 * this.lev * c.width / this.ttl;
       } else {
         this.x = c.width * Math.random();
       }
       //this.x = this.seq * c.width/this.ttl;
       //console.log(':'+this.size);
 
-      this.array = Array.from(this.txt);
-      
-      this.y = 10 + Math.random() * c.height/4;
+      this.array = Array.from(subtitle[chapter][verse]);//this.txt);
+
+      this.y = 10 + Math.random() * c.height / 4;
       this.idxlen = Math.max(2, Math.floor(this.array.length * 0.8));//10 + 10 * Math.random();
       this.elapse = 0;
       this.idx = 0;
       this.gap = 0.06 + Math.random() * 0.15;
       //console.log('___  ' + this.gap);
+      ctx.textAlign = "left";
     },
 
     update: function (c, _ctx, dt) {
-      
+
       if (dt > 1000) dt = 16;
 
       this.size += 0.05 * this.size * dt * 0.001;
       this.y -= this.size * dt * 0.001;
 
-      _ctx.textAlign = "left";
+      //_ctx.textAlign = "left";//var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"Noto Serif TC";"標楷體";
 
-      var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"Noto Serif TC";"標楷體";
-      _ctx.font = this.size + "px "+ fontFamily;
+      _ctx.font = this.size + "px Arial";//+ fontFamily;
 
       this.elapse += dt * 0.001;
       if (this.elapse > this.gap) {
@@ -94,50 +100,53 @@ function newParticle_txt(sequence, total) {
         this.elapse = 0;
       }
 
-      //console.log(this.idx + '/' + this.array.length);
-
       let _len = this.idxlen;
-      for (var i = this.idx;i>=0;i--) {
-        
-        if (i < this.array.length) {
-          
-          if (i == this.idx) {
-            
-            _ctx.fillStyle = 'rgb(' + (PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(200, 200, 200, 0.8)';
-            
-            /*
-            if (this.lev >= 2) {
-              _ctx.fillStyle = 'rgb(' + (PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(200, 200, 200, 0.8)';
-            } else {
-              _ctx.strokeStyle = 'rgb(' +(PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(255, 0, 0, 1.0)';
-              _ctx.lineWidth = 6;
-              _ctx.fillStyle = 'rgb(0,0,0,1.0)';
-              _ctx.strokeText(this.array[i], this.x, this.y + (i * this.size));
-            }
-            */     
-            
-          } else {
+      for (var i = this.idx; i >= 0; i--) {
 
-            let opa = _len/this.idxlen;
-            if (this.lev >= 2) opa *= 0.5;
-            if (opa <= 0.1) break;
-          
+        //if (this.array[i] == ' ') continue;
 
-            let cl = Math.floor(150 * _len/this.idxlen);
-
-            let _r = PT_R == 0?cl:255;
-            let _g = PT_G == 0?cl:255;
-            let _b = PT_B == 0?cl:255;          
-            
-            _ctx.fillStyle = 'rgb(' + _r + ',' + _g + ',' + _b + ',' + opa + ')';
-          }
-          _ctx.fillText(this.array[i], this.x, this.y + (i * this.size));
-          //_ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
+        if (this.array[i] == ' ' || i >= this.array.length) {
+          _len--;
+          if (_len == 0)
+            break;
+          continue;
         }
+
+        let _y = this.y + (i * this.size);
+        if (_y > canvas.height + this.size) {
+          continue;
+        }
+
+        if (i == this.idx) {
+          
+          _ctx.fillStyle = brightest;
+
+        } else {
+
+          let opa = _len / this.idxlen;
+          if (this.lev >= 2) opa *= 0.5;
+          if (opa < 0.1) break;
+
+          let cl = Math.floor(150 * _len / this.idxlen);
+
+          let _r = PT_R == 0 ? cl : 255;
+          let _g = PT_G == 0 ? cl : 255;
+          let _b = PT_B == 0 ? cl : 255;
+
+          //let _r = PT_R == 0?0:255;
+          //let _g = PT_G == 0?0:255;
+          //let _b = PT_B == 0?0:255;
+
+          _ctx.fillStyle = 'rgb(' + _r + ',' + _g + ',' + _b + ',' + opa + ')';
+        }
+        
+        _ctx.fillText(this.array[i], this.x, _y);//this.y + (i * this.size));
+        //_ctx.fillText(this.txt.substr(i, 1), this.x, this.y + (i * this.size));
+
         _len--;
         if (_len == 0) break;
       }
-      
+
     }
   }
   return p;
@@ -157,8 +166,8 @@ function anim_update(elapse) {
   pre = elapse;
 
   //if (Math.random() < 0.05) console.log('dt: ' + dt);
-  
-  for (var i = 0;i<particles.length;i++) {
+
+  for (var i = 0; i < particles.length; i++) {
     particles[i].update(c, ctx, dt);
   }
   window.requestAnimationFrame(anim_update);
@@ -174,11 +183,10 @@ function initAnim() {
 
   //var c = document.getElementById("canvas");
   //var ctx = c.getContext("2d");
-
   //console.log(c.width + ', ' + c.height);
-  
+
   if (particles.length >= 1) {
-    for (var i = 0;i<particles.length;i++) {
+    for (var i = 0; i < particles.length; i++) {
       particles[i].release();
     }
   }
@@ -186,11 +194,11 @@ function initAnim() {
   particles.length = 0;
   particles = [];
 
-  var total = Math.min(30, 10 + 5 * Math.floor(canvas.width/500));
+  var total = Math.min(30, 10 + 5 * Math.floor(canvas.width / 500));
   //console.log('total:'+total);
-  for (var i = 0;i<total;i++) {
-      particles[i] = newParticle_txt(i, total);//();
-      particles[i].initial(canvas);
+  for (var i = 0; i < total; i++) {
+    particles[i] = newParticle_txt(i, total);//();
+    particles[i].initial(canvas);
   }
 
   if (isinit)
@@ -215,3 +223,14 @@ window.addEventListener('click', initAnim, false);
 
 initAnim();
 
+
+/*
+          if (this.lev >= 2) {
+            _ctx.fillStyle = 'rgb(' + (PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(200, 200, 200, 0.8)';
+          } else {
+            _ctx.strokeStyle = 'rgb(' +(PT_R == 0?0:255) + ',' + (PT_G == 0?0:255) + ',' + (PT_B == 0?0:255) + ',' + '1.0)';//'rgb(255, 0, 0, 1.0)';
+            _ctx.lineWidth = 6;
+            _ctx.fillStyle = 'rgb(0,0,0,1.0)';
+            _ctx.strokeText(this.array[i], this.x, this.y + (i * this.size));
+          }
+          */
