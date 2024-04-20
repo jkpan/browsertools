@@ -1,6 +1,6 @@
 {
   "url_1": {
-    "posize": [1, 1, 32, 32],
+    "posize": [2, 1, 30, 32],
     "perspective": 0,
     "obj": {
       "forPlay": 1,
@@ -8,7 +8,7 @@
     }
   },
   "time": {
-    "posize": [1, 1, 9, 10],
+    "posize": [5, 3, 9, 10],
     "perspective": 0
   },
   "url_2": {

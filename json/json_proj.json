@@ -18,7 +18,7 @@
 			"fontfactor": 10,
 			"saved": [
 			  [""],
-			  [""],
+			  ["歌羅西書", 1, 9],
 			  [""],
 			  [""],
 			  [""],
@@ -57,7 +57,7 @@
 			  "使徒信經",
 			  "救恩300"
 			],
-			"fontColorType": 3,
+			"fontColorType": 1,
 			"transparent": 1,
 			"slave": 0
 		  }
