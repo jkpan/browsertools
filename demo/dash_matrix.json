@@ -1,6 +1,6 @@
 {
   "url_1": {
-    "posize": [2, 1, 30, 32],
+    "posize": [1, 1, 32, 32],
     "perspective": 0,
     "obj": {
       "forPlay": 1,
@@ -16,11 +16,11 @@
     "perspective": 0,
     "obj": {
       "forPlay": 1, 
-      "url": "./demo/0407.mp4"
+      "url": "./demo/info.mp4"
     }
   },
   "iPlay": {
-    "posize": [20, 5, 10, 24],
+    "posize": [20, 5, 11, 24],
     "perspective": 0,
     "obj": {
       "saved": [
