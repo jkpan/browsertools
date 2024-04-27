@@ -293,8 +293,9 @@ window.addEventListener('message', (e) => {
   if (jsonData.url.trim().length == 0) return;
   document.getElementById("ppt_url").value = jsonData.url.trim();
   //if (jsonData.trigger) 
-  
-  urlGo();
+  //setTimeout(urlGo, 1000);
+  if (!jsonData.hold) 
+    urlGo();
 
 }, false);
 

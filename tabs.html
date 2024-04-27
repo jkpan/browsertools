@@ -504,6 +504,34 @@ function restoreTabFromLocal() {
 
 }
 
+/*
+function switchFunction(idx) {
+  tab = idx;
+  for(let i=1;i<=tabCount;i++) {
+    document.getElementById('btn_' + i).style.background = "rgb(0,112,0)";
+    document.getElementById('btn_'+ i).style.color = "rgb(0,80,0)";
+    document.getElementById('btn_'+ i).style.fontSize = '12px';
+  }
+  document.getElementById('btn_'+tab).style.background = "rgb(0,128,0)";
+  document.getElementById('btn_'+tab).style.color = "rgb(0,255,0)";
+  document.getElementById('btn_'+tab).style.fontSize = '16px';
+
+  for(let i=1;i<=tabCount;i++) {
+    document.getElementById('content_'+i).style.opacity = 0.0;
+    document.getElementById('content_'+i).style.left = "0px";
+    document.getElementById('content_'+i).style.top = "0px";
+    document.getElementById('content_'+i).hidden = "true";
+  }
+  document.getElementById('content_'+tab).hidden = "false";
+  document.getElementById('content_'+tab).style.opacity = 1.0;
+  document.getElementById('content_'+tab).style.left = "0px";
+  document.getElementById('content_'+tab).style.top = "0px";
+
+  if (keylock) return;
+  saveTab2Local();
+}
+*/
+
 function switchFunction(idx) {
   tab = idx;
   _switchFunction();

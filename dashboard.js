@@ -123,10 +123,13 @@ class Applet {
       if (Math.abs(opcy - this.t_Opacity) <= 0.05) {
         opcy = this.t_Opacity;
 
-        if (opcy < 0.1)
+        if (opcy < 0.1) {
           this.elm.hidden = true;
-        else
+          //this.elm.style.display = 'none'; console.log('display = none');
+        } else {
           this.elm.hidden = false;
+          //this.elm.style.display = 'block'; console.log('display = block');
+        }
 
       }
 

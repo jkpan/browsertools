@@ -61,6 +61,8 @@ class ClockObj {
     let s = date.getSeconds();
     let ms = date.getMilliseconds();
 
+    //console.log(h + ":" + min + ":" + s +","+ ms);
+
     _ctx.strokeStyle = this.fontColor;
     _ctx.fillStyle = this.bgColor;
     _ctx.lineWidth = lw;

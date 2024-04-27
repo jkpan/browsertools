@@ -83,6 +83,8 @@ function newParticle_txt(sequence, total) {
 
       if (dt > 1000) dt = 16;
 
+      //console.log("matrix: "+dt);
+
       this.size += 0.05 * this.size * dt * 0.001;
       this.y -= this.size * dt * 0.001;
 
