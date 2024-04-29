@@ -149,7 +149,7 @@ class VerseObj {
       this.fs = this.targetFs;
     }
 
-    set2Top(pre) {
+    set2Top() {
       this.transY = - canvas.height * 0.2;
     }
   
@@ -157,7 +157,7 @@ class VerseObj {
       this.transY = canvas.height * 1.1;
     }
 
-    targetRect = 0;
+    //targetRect = 0;
     targetFs = 0;
 
     setLevel(level) {
@@ -239,9 +239,9 @@ class VerseObj {
       this.substrings = [];
       this.substrings = getTxtArray(txt, this.wratio);
 
-      if (progress < 0) {
-        this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-      }
+
+      //if (progress < 0) this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
+      
 
       //if (this.level == 0) console.log(this.targetFs+' # '+ this.fs + ' @' + txt);
 
@@ -262,9 +262,6 @@ class VerseObj {
       else
         return this.substrings.length * fs + fs * 0.5;
 
-
-
-
     }
 
     draw() {
@@ -274,11 +271,14 @@ class VerseObj {
       ctx.textBaseline = 'top';
 
       if (this.level == 0) {
-        ctx.transform(1,0,0,1,0,this.targetTransY);
+
+        drawHlight(HL_offset_progress, HL_H_progress);
+
+        ctx.transform(1,0,0,1,0, HL_offset_progress);
           //draw hilight rectangle
           //let rectH = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-          drawHlight(0, this.targetRect);//rectH);
           //draw chapter verse
+          
           if (this.chapter > 0 && this.verse > 0) {
             let fsize = this.targetFs * 0.4;
             ctx.font = fsize + "px " + fontFamily;//FONT_SML;
@@ -702,13 +702,19 @@ function render(progress) {
   _layerui();
 }
 
-var queue = [];
+var queue = []; 
+var HL_offset_target = 0;
+var HL_offset_progress = 0;
+var HL_H_target = 0;
+var HL_H_progress = 0;
+
+const FIX_HL = false;
 
 function _render(progress) {
   
   //let x = canvas.width * 0.1;
 
-  let fixy = canvas.height * 0.33;
+  let fixy = FIX_HL?canvas.height * 0.33:HL_offset_target; //
   let offY = fixy;
 
   if (progress <= 0)
@@ -716,16 +722,29 @@ function _render(progress) {
     let obj = queue[i];
     if (obj.chapter == phase && obj.verse == line) {
 
-      obj.setTargetTransY(offY);
-      offY += obj.preDraw(-2);
-      offY += fontsize_sml_sml/2.0;
-
-      if (offY > canvas.height) { //經文超出高度 往上移
-        let _gap = offY - canvas.height;
-        fixy -= _gap;
-        offY -= _gap;
+      if (!FIX_HL) {
         obj.setTargetTransY(fixy);
+        let offY_h = obj.preDraw(-2);// + fontsize_sml_sml / 2.0;
+        let gap = (canvas.height - offY_h)/2;
+        fixy = gap;
+        obj.setTargetTransY(fixy);
+        offY = gap + offY_h;
+        HL_offset_target = fixy;
+        HL_H_target = offY_h - obj.targetFs * 0.25;  
+      } else {
+        obj.setTargetTransY(fixy);
+        offY += obj.preDraw(-2);//offY += fontsize_sml_sml / 2.0;
+        if (offY > canvas.height) { //經文超出高度 往上移
+          let _gap = offY - canvas.height;
+          fixy -= _gap;
+          offY -= _gap;
+          obj.setTargetTransY(fixy);
+        }
+        HL_offset_target = fixy;
+        HL_H_target = offY - fixy - obj.targetFs * 0.25;  
       }
+
+      //
       
       for (let k = i + 1;k<queue.length;k++) {
         let o = queue[k];
@@ -744,6 +763,15 @@ function _render(progress) {
     }
     
   }
+
+  if (progress < 0) {
+    HL_offset_progress = HL_offset_target;
+    HL_H_progress = HL_H_target;  
+  } else if (progress >= 0) {
+    HL_offset_progress += (HL_offset_target - HL_offset_progress) * progress;
+    HL_H_progress += (HL_H_target - HL_H_progress) * progress;  
+  }
+  
   /////
 
   for (let i = 0;i<queue.length;i++) {

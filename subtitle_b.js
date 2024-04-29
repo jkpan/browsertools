@@ -1,7 +1,7 @@
 //import '/common.js';
 class Verseobj {
 
-  static hilight_height = 0;
+  //static hilight_height = 0;
 
   volume = 0;
   chapter = 0;
@@ -15,7 +15,7 @@ class Verseobj {
   fs = 0;
   opacity = 1.0;
 
-  targetRect = 0;
+  //targetRect = 0;
   targetFs = 0;
   targetTransY = 0;
 
@@ -29,7 +29,7 @@ class Verseobj {
 
   }
 
-  set2Top(pre) {
+  set2Top() {
     this.transY = -canvas.height * 0.2;
   }
 
@@ -113,22 +113,13 @@ class Verseobj {
     this.substrings = [];
     this.substrings = getTxtArray(txt, this.wratio);
 
-    if (this.level == 0) {
-      if (progress == -2)
-        this.targetRect = this.substrings.length * this.targetFs + this.targetFs * 0.5;
-      else if (progress == -1)
-        Verseobj.hilight_height = this.targetRect;
-      else
-        Verseobj.hilight_height = Verseobj.hilight_height + (this.targetRect - Verseobj.hilight_height) * progress;//Math.pow(progress, 2);
-    }
-
     //Verseobj.hilight_height = this.targetRect;
 
-
-
     if (fontsize_dist == 1) //if (color_selection == 0) 
-      return this.level == 0 ? this.substrings.length * fs + fs * 0.5 :
+      return this.level == 0 ? 
+        this.substrings.length * fs + fs * 0.5 :
         this.substrings.length * fs + fs * 0.2;
+      //this.substrings.length * this.targetFs + this.targetFs * 0.5;
     else
       return this.substrings.length * fs + fs * 0.5;
   }
@@ -141,18 +132,12 @@ class Verseobj {
 
     if (this.level == 0) {
 
-      drawHlight(this.targetTransY, Verseobj.hilight_height);
-
-      /*
-      if (doblank == 0)
-        if (color_selection == 0)
-          gradientBg();
-        else
-          drawHlight(this.targetTransY, Verseobj.hilight_height);
-        */
+      //drawHlight(this.targetTransY, 20);//Verseobj.hilight_height);
+      drawHlight(HL_offset_progress, HL_H_progress);
 
       //if (color_selection == 0 && doblank == 0)
-      ctx.transform(1, 0, 0, 1, 0, this.targetTransY);
+      //ctx.transform(1, 0, 0, 1, 0, this.transY);
+      ctx.transform(1, 0, 0, 1, 0, HL_offset_progress);//this.targetTransY);
       
       //draw chapter verse
       if (this.chapter > 0 && this.verse > 0) {
@@ -1236,30 +1221,48 @@ function render(progress) {
 }
 
 var queue = [];
+var HL_offset_target = 0;
+var HL_offset_progress = 0;
+var HL_H_target = 0;
+var HL_H_progress = 0;
+
+const FIX_HL = false;
 
 function _render(progress) {
 
   //let x = canvas.width * 0.1;
 
-  let fixy = canvas.height * 0.33;
+  let fixy = FIX_HL?canvas.height * 0.33:HL_offset_target; //
   let offY = fixy;
-
 
   if (progress <= 0)/////
     for (let i = 0; i < queue.length; i++) {
       let obj = queue[i];
       if (obj.chapter == phase && obj.verse == line) {
 
-        obj.setTargetTransY(offY);
-        offY += obj.preDraw(-2);
-        offY += fontsize_sml_sml / 2.0;
-
-        if (offY > canvas.height) { //經文超出高度 往上移
-          let _gap = offY - canvas.height;
-          fixy -= _gap;
-          offY -= _gap;
+        if (!FIX_HL) {
           obj.setTargetTransY(fixy);
+          let offY_h = obj.preDraw(-2);// + fontsize_sml_sml / 2.0;
+          let gap = (canvas.height - offY_h)/2;
+          fixy = gap;
+          obj.setTargetTransY(fixy);
+          offY = gap + offY_h;
+          HL_offset_target = fixy;
+          HL_H_target = offY_h - obj.targetFs * 0.25;  
+        } else {
+          obj.setTargetTransY(fixy);
+          offY += obj.preDraw(-2);//offY += fontsize_sml_sml / 2.0;
+          if (offY > canvas.height) { //經文超出高度 往上移
+            let _gap = offY - canvas.height;
+            fixy -= _gap;
+            offY -= _gap;
+            obj.setTargetTransY(fixy);
+          }
+          HL_offset_target = fixy;
+          HL_H_target = offY - fixy - obj.targetFs * 0.25;  
         }
+
+        ////
 
         for (let k = i + 1; k < queue.length; k++) {
           let o = queue[k];
@@ -1280,6 +1283,14 @@ function _render(progress) {
     }
   /////
 
+  if (progress < 0) {
+    HL_offset_progress = HL_offset_target;
+    HL_H_progress = HL_H_target;  
+  } else if (progress >= 0) {
+    HL_offset_progress += (HL_offset_target - HL_offset_progress) * progress;
+    HL_H_progress += (HL_H_target - HL_H_progress) * progress;  
+  }
+  
   for (let i = 0; i < queue.length; i++) {
     let obj = queue[i];
     if (obj.chapter == phase && obj.verse == line) {
