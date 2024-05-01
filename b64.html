@@ -1,0 +1,170 @@
+<!-- <script type="text/javascript" src="newfile.js"></script> -->
+<script type="text/javascript" src="common.js"></script>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
+        charset="UTF-8" />
+    <style>
+        body {
+            color: rgb(0, 255, 0);
+            margin: 0% 0%;
+            height: 100%;
+            width: 100%;
+            background-color: rgb(0, 128, 0);
+            /* transparent; border: 2px solid rgb(0, 255, 0);*/
+        }
+
+        button {
+            font-size: 24px;
+            background-color: rgb(0, 150, 0);
+            color: #00ff00;
+            margin: 2% 2%;
+            border: 2px solid;
+            vertical-align: middle;
+        }
+
+        input[type=file] {
+            border: 2px solid;
+            border-color: rgb(0, 255, 0);
+            box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+            background: rgb(0, 150, 0);
+            background-color: rgb(0, 150, 0);
+            color: rgb(0, 255, 0);
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .drop-area {
+            width: 25%;
+            height: 25%;
+            border: 2px dashed #0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <P></P>
+    <button type="button" onclick="copyB64()">copy image base64</button>
+    <P></P>
+    <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
+                onclick="openFile('allfile')">
+                <p>
+                <ul>
+                    <li>圖片</li>
+                </ul>
+                </p>
+            </div>
+            <input id="allfile" type="file" hidden="true" onchange="selectFile(event)" />
+    <!--hr size="8" width="100%" color="#00ff00"/-->
+    <div id="image_container" hidden="true"></div>
+</body>
+
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+    var image_base64 = null;
+
+    function selectFile(event) {
+        let file = event.target.files[0];
+
+        /*
+        var fileInfo = "檔案名稱: " + file.name + "<br>" +
+                                     "檔案類型: " + file.type + "<br>" +
+                                     "檔案大小: " + file.size + " bytes";
+        alert(fileInfo);
+        */
+
+        if (file.type.startsWith('image/')) {
+            displayImageFile(file);
+            return;
+        }
+
+    }
+
+    function openFile(elmid) {
+        document.getElementById(elmid).click();
+    }
+
+    function showImage() {
+        //document.querySelector('body').style.background = 'transparent';
+        //document.getElementById("ui").hidden = true;
+        let img = new Image();
+        img.src = image_base64;
+        img.onload = function () {
+            var width = img.width;
+            var height = img.height;//window.location.href = imageUrl; return;
+            let div = document.getElementById("image_container");
+            div.hidden = false;
+            div.innerHTML = '<img src="' + image_base64 + '" />';
+        };
+    }
+
+    function displayImageFile(file) {
+
+        //document.querySelector('body').style.background = 'transparent';
+        //document.getElementById("ui").hidden = true;;
+        // 讀取檔案並將其轉換成Data URL
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            image_base64 = event.target.result;//console.log('image_base64:' + image_base64);
+            showImage();
+        };
+        reader.readAsDataURL(file);
+
+    }
+   
+
+    function dropHandler(event) {
+
+        event.preventDefault();
+
+        // 檢查是否有拖拉的檔案
+        if (event.dataTransfer.items) {
+            // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
+            for (var i = 0; i < event.dataTransfer.items.length; i++) {
+                if (event.dataTransfer.items[i].kind === 'file') {
+                    var file = event.dataTransfer.items[i].getAsFile();
+                    if (file.type.startsWith('image/')) {
+                        // 顯示圖片
+                        displayImageFile(file);
+                        return;
+                    }
+                    if (file.type === 'application/pdf') {
+                        // 顯示PDF
+                        //displayPDF(file);
+                        displayPDFFile(file);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    function dragOverHandler(event) {
+        event.preventDefault();
+    }
+
+    function reloadPage() {
+        location.reload();
+    }
+
+    function copyB64() {
+        if (image_base64)
+            copyToBoard(image_base64);
+        else
+            alert('fail');
+    }
+
+</script>
