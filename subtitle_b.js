@@ -610,6 +610,71 @@ function init() {
 
 }
 
+/*
+ websocket .. 
+ */
+var ws;
+var timeoutID = -1;
+//
+function chkWebsocket() {
+  
+  console.log(`# ${timeoutID}`);
+
+  if (timeoutID >= 0) window.clearTimeout(timeoutID);
+
+  if (sync_type != 6) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.close();
+      ws = null;
+    }
+    return;
+  }
+
+  if (ws && ws.readyState != WebSocket.OPEN) {
+    console.log('WebSocket is open');
+    initWebsocket();
+    return;
+  }
+
+  timeoutID = setTimeout(chkWebsocket, 3000);
+}
+
+function initWebsocket() {
+  
+  let serverDomain = window.location.hostname;
+  console.log('Server Domain:', serverDomain);
+
+  //return;
+
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    console.log('WebSocket is open');
+    ws.close();
+  } else {
+    console.log('WebSocket is not open');
+  }
+
+  ws = new WebSocket('ws://' + serverDomain + ':8080/Bible');
+  ws.onopen = function() {
+    console.log('Connected to server');
+    ws.send('Hello, WebSocket! - from client');
+  };
+  ws.onmessage = function(event) {
+    console.log('Received:', event.data);
+    restoreFromJson(JSON.parse(event.data));
+  };
+  ws.onclose = function() {
+    console.log('Connection closed');
+  };
+  
+  if (timeoutID >= 0) window.clearTimeout(timeoutID);
+  timeoutID = setTimeout(chkWebsocket, 5000);
+  
+
+}
+
+/*
+  ajax .. 
+  */
 function _ajax(json, url, cb, errorcb) {
   fetch(url, {
     method: "POST",
@@ -648,6 +713,15 @@ function ajax_sync() {
     });
 }
 
+function restoreFromJson(res) {
+  let volume = res.vlm;
+  let chapter = res.chp;
+  let verse = res.ver;
+  let _doblank = res.blank;
+
+  restoreAnim(volume, chapter, verse, _doblank);
+}
+
 function ajax_restore() {
   _ajax({
     "action": "restore"
@@ -655,14 +729,7 @@ function ajax_restore() {
     '/restorescripture',
     (res) => {
       //console.log(JSON.stringify(res));
-      let volume = res.vlm;
-      let chapter = res.chp;
-      let verse = res.ver;
-      let _doblank = res.blank;
-
-      restoreAnim(volume, chapter, verse, _doblank);
-
-      console.log('succ: send');
+      restoreFromJson(res);
       if (sync_type == 5) setTimeout(ajax_restore, 200);
 
     },
@@ -935,6 +1002,18 @@ function createCtrlBtn() {
 
   syntoggle();
 
+  var btn_wss = _newBtn();
+  btn_wss.innerHTML = 'websocket slave';
+  btn_wss.onclick = function () {
+    sync_type = 6;
+    synctrls();
+    return false;
+  };
+  div.appendChild(btn_wss);
+  ctrls[6] = btn_wss;
+
+  syntoggle();
+
 }
 
 function syntoggle() {
@@ -952,6 +1031,9 @@ function syntoggle() {
 function synctrls() {
   if (canvas.hidden) syntoggle();
   if (funcInterval) stopActionInterval();
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.close();
+  }
   switch (sync_type) {
     case 0: break;
     case 1: break;
@@ -959,6 +1041,7 @@ function synctrls() {
     case 3: break;
     case 4: startRestoreInterval(); break;
     case 5: startRestoreFromServerInterval(); break;
+    case 6: initWebsocket(); break;
   }
   //return;
   removeDiv();
@@ -1248,7 +1331,7 @@ function _render(progress) {
           obj.setTargetTransY(fixy);
           offY = gap + offY_h;
           HL_offset_target = fixy;
-          HL_H_target = offY_h - obj.targetFs * 0.25;  
+          HL_H_target = offY_h - obj.targetFs * 0.16;
         } else {
           obj.setTargetTransY(fixy);
           offY += obj.preDraw(-2);//offY += fontsize_sml_sml / 2.0;
@@ -1259,7 +1342,7 @@ function _render(progress) {
             obj.setTargetTransY(fixy);
           }
           HL_offset_target = fixy;
-          HL_H_target = offY - fixy - obj.targetFs * 0.25;  
+          HL_H_target = offY - fixy - obj.targetFs * 0.16;
         }
 
         ////
@@ -2524,6 +2607,11 @@ function touchend(evt) { //touchend
   //preious volume
   if (gw == 0 && gh == 1) {
     keyboard({ keyCode: 189 });
+    return;
+  }
+
+  if (gw == 1 && gh == 1) {
+    keyboard({ keyCode: 13 });
     return;
   }
 
