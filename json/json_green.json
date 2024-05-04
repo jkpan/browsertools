@@ -8,7 +8,8 @@
 		  "obj": {
 			"loop": 1,
 			"keepratio": 1,
-			"forPlay": 0
+			"forPlay": 0,
+			"url": "https://docs.google.com/presentation/d/e/2PACX-1vTl1XcQ5rMrvA4_CtZMbTCiHui7YDBP8Ec_BnCflRlGylHMydpUs_aygPme89sXdw/embed?start=false&loop=false&delayms=3000&rm=minimal"
 		  }
 		},
 		"hymn": {
@@ -30,7 +31,7 @@
 			"color": 0,
 			"verticle": 0,
 			"fontfactor": 8.5,
-			"saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
+			"saved": [[""], ["哥林多後書", 4, 7], [""], [""], [""], [""], [""], [""], [""], [""]],
 			"syncType": 4,
 			"transparent": 0,
 			"printSaved": 0,

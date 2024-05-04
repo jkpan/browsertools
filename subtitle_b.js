@@ -1452,7 +1452,7 @@ function _render(progress) {
     ctx.fillText(recogResult, canvas.width, 2);
     ctx.textAlign = "left";
 
-    if (sync_type == 4 || sync_type == 5) { //if (funcInterval) {
+    if (sync_type == 4 || sync_type == 5 || sync_type == 6) { //if (funcInterval) {
       ctx.fillStyle = color_pointer[2];
       let _r = 4;//fontsize_sml_sml/5;
       ctx.fillRect(0, 0, _r * 2, fontsize_sml_sml);

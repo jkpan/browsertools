@@ -3,7 +3,17 @@ const fs = require('fs');//const qs = require('querystring');
 const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os');
-//const WebSocket = require('ws');
+var WebSocket = null;//require('ws');
+try {
+  // 尝试加载模块
+  require.resolve('ws');
+  console.log('Websocket Module exists');
+  WebSocket = require('ws');
+} catch (err) {
+  console.log('Module does not exist');
+}
+
+
 //npm install ws
 
 //const express = require('express');
@@ -300,7 +310,7 @@ function synscripture(req, res) {
       res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
       
       print('\n'+`[Bible: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-      print(` --- broadcast:${B_clients.size} --- `);
+      print(` --- connection: ${B_clients.size} --- `);
       broadcast_Bible();
       //println('[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
       //print(' --- broadcast --- ' + B_clients.size + ' --- ');
@@ -458,28 +468,30 @@ server.listen(port, () => {
   println('http://' + addresses[0] + ((port == 80)?'':':'+port)); 
 });
 
-/*
 const B_clients = new Set();
-const wss = new WebSocket.Server({ port:8080 });
-wss.on('connection', function connection(ws, req) {
+var wss = null;//new WebSocket.Server({ port:8080 });
+if (WebSocket) {
+  wss = new WebSocket.Server({ port:8080 });
+  wss.on('connection', function connection(ws, req) {
   
-  let ip = req.socket.remoteAddress;
-  let url = req.url;
-  print('[url: ' + ip + ', ' +  url + ']');
-  
-  if (url === '/Bible') {
-    print('[Bible client connected]');
-    //ws.address = ip;
-    B_clients.add(ws);
-    ws.on('message', function incoming(message) {
-      //print('[from client: ' + message + ']');
-      print(`[from client: ${message}]`);
-      // Echo message back to client
-      ws.send(getBibleObjStr());//'Whatsup client! -- from server');
-    });
-  }
-  
-});
+    let ip = req.socket.remoteAddress;
+    let url = req.url;
+    print('[url: ' + ip + ', ' +  url + ']');
+    
+    if (url === '/Bible') {
+      print('[Bible client connected]');
+      //ws.address = ip;
+      B_clients.add(ws);
+      ws.on('message', function incoming(message) {
+        //print('[from client: ' + message + ']');
+        print(`[from client: ${message}]`);
+        // Echo message back to client
+        ws.send(getBibleObjStr());//'Whatsup client! -- from server');
+      });
+    }
+    
+  });
+}
 
 function broadcast_Bible() {
   B_clients.forEach(function(client) {
@@ -493,4 +505,3 @@ function broadcast_Bible() {
   });
 
 }
-*/
