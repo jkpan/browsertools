@@ -156,6 +156,7 @@ function init() {
   //canvas.style.caretColor = "red";
 }
 
+/*
 function ajax_restore() {
   _ajax({
     "action": "restore"
@@ -184,16 +185,15 @@ function ajax_restore() {
       }
 
       doblank = _doblank;
-
       _repaint();
-
 
     });
 }
+*/
 
 function ajax_sync() {
   _ajax({
-    song: song,
+    song: subtitles, //song,
     phase: phase,
     line: line,
     blank: doblank
@@ -207,6 +207,7 @@ function ajax_sync() {
 }
 
 function _ajax(json, url, cb, errorcb) {
+  console.log(json);
   fetch(url, {
     method: "POST",
     headers: {
@@ -230,10 +231,13 @@ function _ajax(json, url, cb, errorcb) {
 }
 
 var funcInterval;
+
+/*
 function startRestoreFromServerInterval() {
   if (funcInterval) stopActionInterval();
   funcInterval = window.setInterval(ajax_restore, 200);
 }
+*/
 
 function startRestoreInterval() {
   if (funcInterval)
@@ -249,10 +253,12 @@ function stopActionInterval() {
 }
 
 function saveAction2Local() {
+  if (sync_type != 1) return;
   let key = 'save progress';
   let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
   localStorage.setItem(key, value);
-  //ajax_sync();
+  //if (sync_type == 2) 
+  ajax_sync();
 }
 
 function restoreActionFromLocal() {
@@ -678,13 +684,12 @@ function printPhase() {
 
     }
 
-    if (song > 0 && phase > 0) {
+    if (phase > 0) { //song > 0 && 
       ctx.fillStyle = 'rgb(0,200,0)';
       ctx.font = fontsize / 2 + "px Arial";
       ctx.fillText('[' + subtitles[0][0] + ' ' + phase + '/' + (subtitles.length - 1) + ']',
         _x, fontsize / 2);
     }
-
 
   } else { //mode 1, 3
     let _x = mode == 1 ? canvas.width * 0.05 : canvas.width * 0.95;
@@ -705,11 +710,10 @@ function printPhase() {
 
     }
 
-    if (song > 0 && phase > 0) {
+    if (phase > 0) { //song > 0
 
       //ctx.fillStyle = mode == 2?'yellow':'rgb(0,240,0)';
       ctx.fillStyle = 'rgb(0,200,0)';
-
       ctx.font = fontsize / 2 + "px Arial";
       ctx.fillText('[' + subtitles[0][0] + ' ' + phase + '/' + (subtitles.length - 1) + ']',
         _x, fontsize / 2);
@@ -808,12 +812,16 @@ function keyboard(e) {
   switch (e.keyCode) {
     //case 113: //F2
     case 13: //Enter
+      createCtrlBtn();
+      break;
+      /*
       if (funcInterval) {
         stopActionInterval();
         break;
       }
       startRestoreInterval();
       break;
+      */
     /*
     case 114:
       if (funcInterval) {
@@ -1015,7 +1023,6 @@ function _layer1() {
       printChart();
     printSubtitle();
   } else if (mode == 1 || mode == 3) {
-
     /*
     a	c	e
     b	d	f
@@ -1079,6 +1086,229 @@ function _repaint() {
   _layer1();
   _layer2();
 }
+
+var sync_type = 0;
+var ctrls = [];
+
+function removeDiv() {  
+  var ctrl = document.getElementById('ctrl');
+  if (ctrl) document.body.removeChild(ctrl);
+  return;
+}
+
+function _newBtn() {
+
+  var button = document.createElement('button');
+
+  button.style.width = '200px'; // setting the width to 200px
+  button.style.height = '75px'; // setting the height to 200px
+
+  button.style.background = 'rgb(50,50,50)'; // setting the background color to teal
+  button.style.color = 'rgb(255,255,255)';//color_pointer[1];// 'green'; // setting the color to white
+  button.style.fontSize = '20px'; // setting the font size to 20px
+
+  button.style.borderColor = 'rgb(255,255,255)';
+  button.style.borderRadius = '10px';
+
+  //button.style.border = 'none';
+
+  return button;
+}
+
+function createCtrlBtn() {
+  removeDiv();
+  canvas.hidden = true;
+
+  let div = document.createElement('div');
+  div.style.position = "fixed";
+  div.style.top = "0";
+  div.style.left = "0";
+  div.style.width = "100%";
+  div.style.height = "100%";
+  div.id = 'ctrl';
+  document.body.appendChild(div);
+  div.style.backgroundColor = 'rgba(0,0,0,1.0)';
+
+  var btn_none = _newBtn();
+  btn_none.innerHTML = 'none';
+  btn_none.onclick = function () {
+    sync_type = 0;
+    synctrls();
+    return false;
+  };
+  div.appendChild(btn_none);
+  ctrls[0] = btn_none;
+
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+
+  var btn_lwm = _newBtn();
+  btn_lwm.innerHTML = 'local & web master';
+  btn_lwm.onclick = function () {
+    sync_type = 1;
+    synctrls();
+    return false;
+  };
+  div.appendChild(btn_lwm);
+  ctrls[1] = btn_lwm;
+
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+
+  var btn_ls = _newBtn();
+  btn_ls.innerHTML = 'local slave';
+  btn_ls.onclick = function () {
+    sync_type = 2;
+    synctrls();
+    return false;
+  };
+  div.appendChild(btn_ls);
+  ctrls[2] = btn_ls;
+
+  var btn_wss = _newBtn();
+  btn_wss.innerHTML = 'websocket slave';
+  btn_wss.onclick = function () {
+    sync_type = 3;
+    synctrls();
+    return false;
+  };
+  div.appendChild(btn_wss);
+  ctrls[3] = btn_wss;
+
+  syntoggle();
+
+}
+
+function syntoggle() {
+  for (let i = 0; i < ctrls.length; i++) {
+    if (sync_type == i) {
+      ctrls[i].style.backgroundColor = 'rgb(255, 255, 255)';
+      ctrls[i].style.color = 'rgb(0, 0, 0)';
+    } else {
+      ctrls[i].style.backgroundColor = 'rgb(50, 50, 50)';
+      ctrls[i].style.color = 'rgb(255, 255, 255)';
+    }
+  }
+}
+
+function synctrls() {
+  if (canvas.hidden) syntoggle();
+  if (funcInterval) stopActionInterval();
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.close();
+  }
+  
+  switch (sync_type) {
+    case 0: break;
+    case 1: break;
+    case 2: startRestoreInterval(); break;
+    case 3: initWebsocket(); break;
+  }
+
+  removeDiv();
+  canvas.hidden = false;
+  _repaint();
+
+}
+
+function restoreFromJson(obj) {
+  subtitles = obj.song;
+  phase = obj.phase;
+  line = obj.line;
+  doblank = obj.blank;
+  _repaint();
+  /*
+  
+    let key = 'save progress';
+    let value = localStorage.getItem(key);
+    if (!value) return;
+    value = value.trim();
+    if (value && value.length == 0) return;
+    let array = value.split(' ');
+    let _song = parseInt(array[0]);
+    let _phase = parseInt(array[1]);
+    let _line = parseInt(array[2]);
+    let _doblank = parseInt(array[3]);
+  
+    if (_song == song && _phase == phase && _line == line && _doblank == doblank) return;
+  
+    if (_song >= SONGS.length) {
+      syncListFromController();
+      return;
+    }
+  
+    song = _song;
+    subtitles = SONGS[song];
+  
+    phase = _phase;
+    line = _line;
+  
+    doblank = _doblank;
+    _repaint();
+
+  */
+}
+
+/*
+ websocket .. 
+ */
+ var ws;
+ var timeoutID = -1;
+ //
+ function chkWebsocket() {
+   
+   console.log(`# ${timeoutID}`);
+ 
+   if (timeoutID >= 0) window.clearTimeout(timeoutID);
+ 
+   if (sync_type != 3) {
+     if (ws && ws.readyState === WebSocket.OPEN) {
+       ws.close();
+       ws = null;
+     }
+     return;
+   }
+ 
+   if (ws && ws.readyState != WebSocket.OPEN) {
+     console.log('WebSocket is open');
+     initWebsocket();
+     return;
+   }
+ 
+   timeoutID = setTimeout(chkWebsocket, 3000);
+ }
+ 
+ function initWebsocket() {
+   
+   let serverDomain = window.location.hostname;
+   console.log('Server Domain:', serverDomain);
+ 
+   //return;
+ 
+   if (ws && ws.readyState === WebSocket.OPEN) {
+     console.log('WebSocket is open');
+     ws.close();
+   } else {
+     console.log('WebSocket is not open');
+   }
+ 
+   ws = new WebSocket('ws://' + serverDomain + ':8080/Song');
+   ws.onopen = function() {
+     console.log('Connected to server');
+     ws.send('Hello, WebSocket! - from client');
+   };
+   ws.onmessage = function(event) {
+     console.log('Received:', event.data);
+     let obj = JSON.parse(event.data);
+     if (!obj) return;
+     restoreFromJson(obj);
+   };
+   ws.onclose = function() {
+     console.log('Connection closed');
+   };
+   
+   if (timeoutID >= 0) window.clearTimeout(timeoutID);
+   timeoutID = setTimeout(chkWebsocket, 5000);
+   
+ }
 
 function userhelp() {
 

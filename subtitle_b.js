@@ -1000,8 +1000,6 @@ function createCtrlBtn() {
   div.appendChild(btn_ws);
   ctrls[5] = btn_ws;
 
-  syntoggle();
-
   var btn_wss = _newBtn();
   btn_wss.innerHTML = 'websocket slave';
   btn_wss.onclick = function () {

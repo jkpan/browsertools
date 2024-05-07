@@ -74,7 +74,7 @@ var chapter = 0;
 var verse = 0;
 var doblank = 0;
 
-var song = 0;
+var song;
 var phase = 0;
 var line = 0;
 var song_doblank = 0;
@@ -209,18 +209,21 @@ function synclyrics(req, res) {
   req.on('end', () => {
       // 解析请求数据
       const requestData = JSON.parse(body);
+      println(body);
 
       song = requestData.song;
       phase = requestData.phase;
       line = requestData.line;
       song_doblank = requestData.blank;
 
-      print('(song:' + song +', '+ phase + ', ' + line + ',' + song_doblank + ')');
+      //print('(song:' + song +', '+ phase + ', ' + line + ',' + song_doblank + ')');
+      print('('+ phase + ', ' + line + ',' + song_doblank + ')');
     
       res.setHeader('Content-Type', 'application/json');
       
       // 发送响应数据
       res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
+      broadcast_Song();
 
   });
 }
@@ -259,6 +262,22 @@ function getBibleObjStr() {
     chp: chapter,
     ver: verse,
     blank: doblank
+  });
+}
+
+function getSongObjStr() {
+  if (!song) 
+    return JSON.stringify({
+      song: [[""]],
+      phase: 0,
+      line: 0,
+      blank: 0
+    });
+  return JSON.stringify({
+    song: song,
+    phase: phase,
+    line: line,
+    blank: song_doblank
   });
 }
 
@@ -469,7 +488,9 @@ server.listen(port, () => {
 });
 
 const B_clients = new Set();
+const S_clients = new Set();
 var wss = null;//new WebSocket.Server({ port:8080 });
+
 if (WebSocket) {
   wss = new WebSocket.Server({ port:8080 });
   wss.on('connection', function connection(ws, req) {
@@ -482,11 +503,18 @@ if (WebSocket) {
       print('[Bible client connected]');
       //ws.address = ip;
       B_clients.add(ws);
-      ws.on('message', function incoming(message) {
-        //print('[from client: ' + message + ']');
+      ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
         print(`[from client: ${message}]`);
-        // Echo message back to client
         ws.send(getBibleObjStr());//'Whatsup client! -- from server');
+      });
+    }
+
+    if (url === '/Song') {
+      print('[Song client connected]');
+      S_clients.add(ws);
+      ws.on('message', function incoming(message) {
+        print(`[from client: ${message}]`);
+        ws.send(getSongObjStr());
       });
     }
     
@@ -494,10 +522,11 @@ if (WebSocket) {
 }
 
 function broadcast_Bible() {
+  let data = getBibleObjStr();
   B_clients.forEach(function(client) {
       if (client.readyState === WebSocket.OPEN) {
-        print('[broadcast ' + client._socket.remoteAddress + ']');
-        client.send(getBibleObjStr());
+        print('[broadcast Bible' + client._socket.remoteAddress + ']');
+        client.send(data);
       } else {
         B_clients.delete(client);
         print('[' + client._socket.remoteAddress + ' removed]');
@@ -505,3 +534,16 @@ function broadcast_Bible() {
   });
 
 }
+
+function broadcast_Song() {
+  let data = getSongObjStr();
+  S_clients.forEach(function(client) {
+    if (client.readyState === WebSocket.OPEN) {
+      print('[broadcast song' + client._socket.remoteAddress + ']');
+      client.send(data);
+    } else {
+      S_clients.delete(client);
+      print('[' + client._socket.remoteAddress + ' removed]');
+    }
+  });
+} 
