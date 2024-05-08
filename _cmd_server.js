@@ -7,10 +7,10 @@ var WebSocket = null;//require('ws');
 try {
   // 尝试加载模块
   require.resolve('ws');
-  console.log('Websocket Module exists');
+  println('Websocket Module exists');
   WebSocket = require('ws');
 } catch (err) {
-  console.log('Module does not exist');
+  println('Module does not exist');
 }
 
 
@@ -53,15 +53,14 @@ const ctrlCode =
 </script>`;
 */
 
-console.log('cpu ' + os.cpus().length + ' cores');
+println('cpu ' + os.cpus().length + ' cores');
 
 function print(msg) {
   process.stdout.write(msg);
 }
 
 function println(msg) {
-  //console.log(msg);
-  process.stdout.write(msg + '\n');
+  process.stdout.write('\n'+msg);
 }
 
 
@@ -209,7 +208,7 @@ function synclyrics(req, res) {
   req.on('end', () => {
       // 解析请求数据
       const requestData = JSON.parse(body);
-      println(body);
+      //println(body);
 
       song = requestData.song;
       phase = requestData.phase;
@@ -228,6 +227,7 @@ function synclyrics(req, res) {
   });
 }
 
+/*
 //取得歌詞狀態
 function restorelyrics(req, res) {
   let body = '';
@@ -255,6 +255,7 @@ function restorelyrics(req, res) {
 
   });
 }
+*/
 
 function getBibleObjStr() {
   return JSON.stringify({
@@ -328,7 +329,7 @@ function synscripture(req, res) {
       // 发送响应数据
       res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
       
-      print('\n'+`[Bible: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+      println(`[Bible: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
       print(` --- connection: ${B_clients.size} --- `);
       broadcast_Bible();
       //println('[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
@@ -373,7 +374,7 @@ const server = http.createServer((req, res) => {
     case '/query':            query(req, res);            return;
     case '/command':          command(req, res);          return;
 
-    case '/restorelyrics':    restorelyrics(req, res);    return;
+    //case '/restorelyrics':    restorelyrics(req, res);    return;
     case '/synclyrics':       synclyrics(req, res);       return;
 
     case '/initui':           initui(req, res);           return;
@@ -483,8 +484,8 @@ if (args.length > 2)
   port = parseInt(args[2]);
 
 server.listen(port, () => {
-  println('Server is running...'); //console.log(`Server is running on port ${port}`);
-  println('http://' + addresses[0] + ((port == 80)?'':':'+port)); 
+  println('Server is running...');
+  println('http://' + addresses[0] + ((port == 80)?'':':'+port)+'\n'); 
 });
 
 const B_clients = new Set();

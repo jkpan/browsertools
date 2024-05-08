@@ -680,7 +680,7 @@ function printPhase() {
 
       txtRendering(txt, _x, _y);
 
-      if (i == line && song > 0) drawIdxHint(10, _y);
+      if (i == line) drawIdxHint(10, _y);
 
     }
 
@@ -706,7 +706,7 @@ function printPhase() {
         txtRendering(txt, _x, _y);
       }
 
-      if (i == line && song > 0) drawIdxHint(10, _y);
+      if (i == line) drawIdxHint(10, _y);
 
     }
 
