@@ -2419,6 +2419,8 @@ function receiveMessage(e) {
 
     if (jsonData.fontfactor)
       setFontFactor(jsonData.fontfactor);
+    
+    sync_type = 0;
     if (jsonData.syncType) {
       sync_type = jsonData.syncType;
       synctrls();
@@ -2873,9 +2875,16 @@ function parseRecogResult() {
 }
 
 // 檢查瀏覽器是否為 Safari
+// 1: safari
+// 0: chrome
+// -1: others
 function isSafariBrowser() {
   var ua = navigator.userAgent.toLowerCase();
-  return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
+  if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) //safari的ua只有'safari'
+    return 1;
+  if (ua.indexOf('chrome') !== -1) //chrome 的 ua 'safari' 'chrome' 都有
+    return 0;
+  return -1;
 }
 
 /*
@@ -2986,11 +2995,12 @@ function initRecognition() {
 
 }
 
-if (isSafariBrowser()) {
-  console.log('瀏覽器是 Safari');
-} else {
-  initRecognition();
+switch(isSafariBrowser()) {
+  case 0: initRecognition(); break;
+  case 1: console.log('瀏覽器是 Safari'); break;
+  default: console.log('其他瀏覽器'); break;
 }
+
 // 語音辨識相關 ... END
 
 //建構整本聖經

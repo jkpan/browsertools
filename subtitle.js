@@ -47,12 +47,21 @@ function json2List(fileContent) {
   else
     makeTransparent = false;
 
+  /*
   if (jsonData.slave && jsonData.slave == 1) {
     startRestoreInterval();
   } else {
     stopActionInterval();
     saveListFromController();
   }
+  */
+
+  sync_type = 0;
+  if (jsonData.syncType) {
+    sync_type = jsonData.syncType;
+    synctrls();
+  }
+
 
   _repaint();
   //console.log(jsonData.list);
@@ -253,16 +262,34 @@ function stopActionInterval() {
 }
 
 function saveAction2Local() {
-  if (sync_type != 1) return;
+  switch (sync_type) {
+    case 0: return;
+    case 1: break;
+    case 2: ajax_sync(); return;
+    case 3: ajax_sync(); break;
+    default: return;
+  }
+
   let key = 'save progress';
-  let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
+  //let value = song + ' ' + phase + ' ' + line + ' ' + doblank;
+  let obj = {
+    song: subtitles, //song,
+    phase: phase,
+    line: line,
+    blank: doblank
+  };
+  let value = JSON.stringify(obj);
   localStorage.setItem(key, value);
-  //if (sync_type == 2) 
-  ajax_sync();
+  
 }
 
 function restoreActionFromLocal() {
   let key = 'save progress';
+  let value = localStorage.getItem(key);
+  let obj = JSON.parse(value);
+  restoreFromJson(obj);
+
+  /*
   let value = localStorage.getItem(key);
   if (!value) return;
   value = value.trim();
@@ -298,9 +325,11 @@ function restoreActionFromLocal() {
 
   doblank = _doblank;
   _repaint();
+  */
 }
 
 function syncListFromController() {
+  return;
   let key = 'song list';
   let value = localStorage.getItem(key);
   if (!value) return;
@@ -309,148 +338,10 @@ function syncListFromController() {
 }
 
 function saveListFromController() {
-
   let key = 'song list';
   let value = JSON.stringify(list);
   localStorage.setItem(key, value);
-  //alert('saveListFromController : ' + value);
-  //console.log('saveListFromController : ' + value);
 }
-
-/*
-function _createEmptyBtn() {
-  var button = document.createElement('button');
-  //button.innerHTML = ' <br/> ';
-  button.style.width = '172px'; // setting the width to 200px
-  button.style.height = '25px'; // setting the height to 200px
-  //button.style.background = 'teal'; // setting the background color to teal
-  //button.style.color = 'white'; // setting the color to white
-  button.style.fontSize = '16px'; // setting the font size to 20px
-  //document.body.appendChild(button);
-  return button;
-}
-
-function _createBtn(idtxt, attr) {
-  var button = document.createElement('button');
-  button.innerHTML = idtxt + '<br/>' + attr;// + ' ' + getSong(idtxt)[0][0];
-  button.id = 'btn' + idtxt;
-
-  button.style.width = '172px'; // setting the width to 200px
-  button.style.height = '75px'; // setting the height to 200px
-  //button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
-  //button.style.color = 'rgb(0,255,0)'; // setting the color to white
-  button.style.fontSize = '16px'; // setting the font size to 20px
-
-  button.onclick = function() {
-    
-    list.push(idtxt);
-    saveListFromController();
-
-    SONGS[SONGS.length] = getSong(idtxt);
-    song = SONGS.length - 1;
-    phase = 0;
-    line = 0;
-    subtitles = SONGS[song];
-    //alert(idtxt + ' ' + subtitles[0][0]);
-    hideCanvas();
-    _repaint();
-    return false;
-  };
-  //document.body.appendChild(button);
-  return button;
-}
-
-function _songBtn(id) {
-  var exist = document.getElementById(id);
-  var btn;
-  if (exist) {
-      var attr = exist.getAttribute("name");
-      if (!attr) attr = ''; 
-      btn = _createBtn(id, attr);
-  } else {
-      btn = _createEmptyBtn();
-  }
-  return btn;
-}
-
-function createBtns() {
-
-  var div = document.createElement('div');
-  div.id = 'btns';
-  document.body.appendChild(div);
-
-  //'VOLUMN'
-  let VOLUMN = getSong('VOLUMN');
-
-  for (let pf = 0;pf<VOLUMN.length;pf++) {
-
-    var span = document.createElement('span');
-    span.style.color = 'rgb(0,255,0)' // apply your style
-    span.appendChild(document.createTextNode(VOLUMN[pf][3]));
-    div.appendChild(span);
-    div.insertAdjacentHTML('beforeend', '<p></p>');
-
-    for (var i=1;i<=VOLUMN[pf][1];i++) {
-      var btn = _songBtn(VOLUMN[pf][0]+i);
-      if (pf%2 == 0) {
-        btn.style.background = COLORS_CK[0]; // setting the background color to teal
-        btn.style.color = COLORS_CK[3];
-        btn.style.borderColor = COLORS_CK[2];
-      } else {
-        btn.style.background = COLORS_CK[1]; // setting the background color to teal
-        btn.style.color = COLORS_CK[3];
-        btn.style.borderColor = COLORS_CK[2];
-      }
-      if (btn.innerHTML.length > 0 || VOLUMN[pf][2]) {
-        div.appendChild(btn);
-      }
-    }
-
-    div.insertAdjacentHTML('beforeend', '<p></p>');
-  }
-
-  let EVENTS = getSong('EVENTS');
-
-  for (let pf = 0;pf<EVENTS.length;pf++) {
-
-    var span = document.createElement('span');
-    span.style.color = 'rgb(0,255,0)' // apply your style
-    span.appendChild(document.createTextNode(EVENTS[pf]));
-    div.appendChild(span);
-    div.insertAdjacentHTML('beforeend', '<p></p>');
-    
-    let toolList = getSong(EVENTS[pf]);
-
-    for(let i = 0;i<toolList.length;i++) {
-      var btn = _songBtn(toolList[i]);
-      if (pf%2 == 0) {
-        btn.style.background = COLORS_CK[0]; // setting the background color to teal
-        btn.style.color = COLORS_CK[3];
-        btn.style.borderColor = COLORS_CK[2];
-      } else {
-        btn.style.background = COLORS_CK[1]; // setting the background color to teal
-        btn.style.color = COLORS_CK[3];
-        btn.style.borderColor = COLORS_CK[2];
-      }
-
-      div.appendChild(btn);
-
-    }
-
-    div.insertAdjacentHTML('beforeend', '<p></p>');
-
-  }
-
-}
-
-function removeBtns() {
-  var buttons = document.getElementById('btns');
-  if (buttons) {
-    document.body.removeChild(buttons);
-  }
-  return;
-}
-*/
 
 var selector = null;
 function openSelector() {
@@ -1142,7 +1033,7 @@ function createCtrlBtn() {
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
   var btn_lwm = _newBtn();
-  btn_lwm.innerHTML = 'local & web master';
+  btn_lwm.innerHTML = 'local master';
   btn_lwm.onclick = function () {
     sync_type = 1;
     synctrls();
@@ -1151,27 +1042,47 @@ function createCtrlBtn() {
   div.appendChild(btn_lwm);
   ctrls[1] = btn_lwm;
 
+  var btn_lwm = _newBtn();
+  btn_lwm.innerHTML = 'web master';
+  btn_lwm.onclick = function () {
+    sync_type = 2;
+    synctrls();
+    return false;
+  };
+  div.appendChild(btn_lwm);
+  ctrls[2] = btn_lwm;
+
+  var btn_lwm = _newBtn();
+  btn_lwm.innerHTML = 'local & web master';
+  btn_lwm.onclick = function () {
+    sync_type = 3;
+    synctrls();
+    return false;
+  };
+  div.appendChild(btn_lwm);
+  ctrls[3] = btn_lwm;
+
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
   var btn_ls = _newBtn();
   btn_ls.innerHTML = 'local slave';
   btn_ls.onclick = function () {
-    sync_type = 2;
+    sync_type = 4;
     synctrls();
     return false;
   };
   div.appendChild(btn_ls);
-  ctrls[2] = btn_ls;
+  ctrls[4] = btn_ls;
 
   var btn_wss = _newBtn();
   btn_wss.innerHTML = 'websocket slave';
   btn_wss.onclick = function () {
-    sync_type = 3;
+    sync_type = 5;
     synctrls();
     return false;
   };
   div.appendChild(btn_wss);
-  ctrls[3] = btn_wss;
+  ctrls[5] = btn_wss;
 
   syntoggle();
 
@@ -1197,10 +1108,14 @@ function synctrls() {
   }
   
   switch (sync_type) {
+
     case 0: break;
     case 1: break;
-    case 2: startRestoreInterval(); break;
-    case 3: initWebsocket(); break;
+    case 2: break;
+    case 3: break;
+
+    case 4: startRestoreInterval(); break;
+    case 5: initWebsocket(); break;
   }
 
   removeDiv();
@@ -1210,6 +1125,7 @@ function synctrls() {
 }
 
 function restoreFromJson(obj) {
+  if (!obj) return;
   subtitles = obj.song;
   phase = obj.phase;
   line = obj.line;
@@ -1259,7 +1175,7 @@ function restoreFromJson(obj) {
  
    if (timeoutID >= 0) window.clearTimeout(timeoutID);
  
-   if (sync_type != 3) {
+   if (sync_type != 5) {
      if (ws && ws.readyState === WebSocket.OPEN) {
        ws.close();
        ws = null;
@@ -1346,7 +1262,8 @@ function toObj() {
   obj['list'] = list;
   obj['fontColorType'] = fontColorType;
   obj['transparent'] = makeTransparent ? 1 : 0;
-  obj['slave'] = funcInterval == null ? 0 : 1;
+  //obj['slave'] = funcInterval == null ? 0 : 1;
+  obj['syncType'] = sync_type;
   return obj;
 }
 

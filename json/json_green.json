@@ -21,7 +21,7 @@
 			"list": [],
 			"fontColorType": 1,
 			"transparent": 0,
-			"slave": 1
+			"syncType": 0
 		  }
 		},
 		"Bible": {
@@ -32,7 +32,7 @@
 			"verticle": 0,
 			"fontfactor": 8.5,
 			"saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
-			"syncType": 4,
+			"syncType": 6,
 			"transparent": 0,
 			"printSaved": 0,
 			"fsizedist": 1
@@ -52,7 +52,7 @@
 			"verticle": 1,
 			"fontfactor": 15,
 			"saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
-			"syncType": 4,
+			"syncType": 6,
 			"transparent": 0,
 			"printSaved": 0,
 			"fsizedist": 0
