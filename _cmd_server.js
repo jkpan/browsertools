@@ -214,15 +214,18 @@ function synclyrics(req, res) {
       phase = requestData.phase;
       line = requestData.line;
       song_doblank = requestData.blank;
-
-      //print('(song:' + song +', '+ phase + ', ' + line + ',' + song_doblank + ')');
-      println('(master:'+ phase + ',' + line + ',' + song_doblank + ')');
     
+      try {
+        println(`<master: ${song[0][0]}, ${phase}, ${line}, ${song_doblank}>`);
+      } catch (err) {
+        println(`<master: ${phase}, ${line}, ${song_doblank}>`);
+      }
+
       res.setHeader('Content-Type', 'application/json');
       
       // 发送响应数据
       res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
-      print(` -- conn: ${S_clients.size} -- `);
+      print(` < conn: ${S_clients.size} > `);
       broadcast_Song();
 
   });
@@ -331,8 +334,8 @@ function synscripture(req, res) {
       res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
       
       println(`[master: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-      print(` -- conn: ${B_clients.size} -- `);
-      broadcast_Bible();   
+      print(` [ conn: ${B_clients.size} ] `);
+      broadcast_Bible();
 
   });
 }
@@ -350,7 +353,7 @@ function responseFile(filePath, res, append) {
       res.write(content);
       res.write(append);
       res.end();
-      print('~file:' + filePath + '~');
+      print('(file:' + filePath + ')');
     }
   });
 }
@@ -509,10 +512,10 @@ if (WebSocket) {
     }
 
     if (url === '/Song') {
-      println('(client connected)'+'\n');
+      println('<client connected>'+'\n');
       S_clients.add(ws);
       ws.on('message', function incoming(message) {
-        print(`(client: ${message})`);
+        print(`<client: ${message}>`);
         ws.send(getSongObjStr());
       });
     }
@@ -538,11 +541,11 @@ function broadcast_Song() {
   let data = getSongObjStr();
   S_clients.forEach(function(client) {
     if (client.readyState === WebSocket.OPEN) {
-      print('(broadcast ' + client._socket.remoteAddress + ')');
+      print('<broadcast ' + client._socket.remoteAddress + '>');
       client.send(data);
     } else {
       S_clients.delete(client);
-      print('(' + client._socket.remoteAddress + ' removed)');
+      print('<' + client._socket.remoteAddress + ' removed>');
     }
   });
 } 

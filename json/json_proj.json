@@ -41,7 +41,7 @@
 			],
 			"fontColorType": 1,
 			"transparent": 1,
-			"syncType": 0
+			"syncType": 1
 		  }
 		},
 		"Bible": {
@@ -63,7 +63,7 @@
 			  [""],
 			  [""]
 			],
-			"syncType": 2,
+			"syncType": 1,
 			"transparent": 1,
 			"printSaved": 0,
 			"fsizedist": 1

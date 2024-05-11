@@ -917,6 +917,11 @@ function setMsg_play() {
   synctrls();
 }
 
+function setMsg_play_socket() {
+  sync_type = 6;
+  synctrls();
+}
+
 function setMsg_ctrl() {
   sync_type = 2;
   synctrls();
@@ -3035,7 +3040,7 @@ if (readParam('action') === 'play') {
   colorSwitch();
   fontfactor += 5;
 
-  setMsg_play();
+  setMsg_play_socket();
 
   removeTEvent();
   addFontSizeTouchEvent();
