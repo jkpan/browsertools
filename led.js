@@ -9,6 +9,7 @@ var criteria = dot_none * 2;//dot_none/2;
 var _r = 0;//dot_r;// * Math.random();
 var _g = 0;//dot_g;// * Math.random();
 var _b = 0;//dot_b;// * Math.random();
+var _a = 0;
 
 //verticle
 var jumpLine = 0;//(side + dots) * fsize * 4;
@@ -81,9 +82,10 @@ function asciiAction4Still(_canvas, _ctx) {
       if (_w > maskWidth) break;
       if (_h != h) break;
   
-      pickColor(data, k, dots);
+      //pickColor(data, k, dots);
       //computeAverage(data, k, dots);
-      
+      colorPickerFunc(data, k, dots);
+
       array[h/dots][idx] = ascii[Math.floor(_g/b)];
       idx++;
 
@@ -248,8 +250,10 @@ function ledAction4Still(_canvas, _ctx) {
       if (_w > maskWidth) break;
       if (_h != h) break;
   
-      pickColor(data, k, dots);
+      //pickColor(data, k, dots);
       //computeAverage(data, k, dots);
+      colorPickerFunc(data, k, dots);
+
       fillArea(data, k, dots);
 
     }
@@ -311,6 +315,7 @@ function computeAverage(data, idx, _size) {
   _r = 0;
   _g = 0;
   _b = 0;
+  //_a = 0;
 
   /*
   if (_size > 2) {
@@ -325,18 +330,27 @@ function computeAverage(data, idx, _size) {
       _r += data[__idx];
       _g += data[__idx+1];
       _b += data[__idx+2];
+      //_a += data[__idx+3];
     }
   }  
 
+  
   /*
-  __r = Math.min(255, __r/(_size * _size * 0.9));
-  __g = Math.min(255, __g/(_size * _size * 0.9));
-  __b = Math.min(255, __b/(_size * _size * 0.9));
+  _r = Math.min(255, _r/(_size * _size * 0.9));
+  _g = Math.min(255, _g/(_size * _size * 0.9));
+  _b = Math.min(255, _b/(_size * _size * 0.9));
   */
   
   _r = _r/(_size * _size);
   _g = _g/(_size * _size);
   _b = _b/(_size * _size);
+
+  /*
+  _a = _a/(_size * _size);
+  _r = _r * _a/255;
+  _g = _g * _a/255;
+  _b = _b * _a/255;
+  */
 
   filter();
 
@@ -346,6 +360,14 @@ function computeAverage(data, idx, _size) {
     _b = dot_none;
   }
 
+}
+
+var colorPickerFunc = pickColor; //computeAverage
+function set2PickColor() {
+  colorPickerFunc = pickColor;
+}
+function set2AverageColor() {
+  colorPickerFunc = computeAverage;
 }
 
 function fillArea(data, idx, _size) {

@@ -5,22 +5,36 @@ var subtitle = [ [''],
                  ['']];
 
 var left_gap = 0;
+var fsize = 96
 
-var fsize = 128;
+dots = 5;
+side = 2;
 
-dots = 7;
-side = 1;
-var gap = dots + side;
+fsize = Math.floor(fsize/(side + dots)) * (side + dots);// + side;//102;
 
-fsize = Math.floor(fsize/(side + dots)) * (side + dots) + side;//102;
 var boardWidth = fsize + 16;
 
 var fontFamily = "Monospace";
 var FONT = (fsize - 4) + "px " + fontFamily;//cwTeXKai";//"px 黑體-繁";//宋體-繁"; "px 標楷體";
 var speed = 160;
 
+function settingFormat() {
+  let gap = dots + side;
+  fsize = Math.floor(fsize/gap) * gap;// + side;
+  FONT = (fsize - 4) + "px " + fontFamily;
+}
+
 function textGo() {
   let len = subtitle.length;
+
+  makeRound = document.getElementById("round").checked;
+  
+  let averagecolor = document.getElementById("average").checked;
+  if (averagecolor) 
+    set2AverageColor();
+  else 
+    set2PickColor();
+
   let value = document.getElementById("txt").value;//String.fromCodePoint(0x1F604);
   if (value.length == 0) 
     return;
@@ -43,10 +57,12 @@ function emojiGo(emj) {
 }
 
 function widthP() {
+  let gap = dots + side;
   boardWidth += gap;
 }
 
 function widthM() {
+  let gap = dots + side;
   boardWidth -= gap;
   if (boardWidth < gap) boardWidth = gap;
 }
@@ -108,6 +124,7 @@ function widthM() {
 <body>
 
   <div id="ui" style="margin: 2% 2%;">
+    <P></P>
     <br/>
     <textarea type="text" id="txt" name="mytext" rows="6" cols="40" required>😎中文跑馬燈</textarea>
     <!--input type="text" id="txt" name="myfield" value="😎中文跑馬燈" 
@@ -117,9 +134,24 @@ function widthM() {
     <br/>
     <button class="okbutton" onclick="textGo()">OK</button>
     <br/>
-    <button class="okbutton" onclick="widthP()">width + </button>
-    <button class="okbutton" onclick="widthM()">width - </button>
-
+    <input type="checkbox" id="round" value="0" class="largerCheckbox" checked />
+    <label style="color:rgb(0, 255, 0)">Round</label>
+    <br/>
+    <input type="checkbox" id="average" value="0" class="largerCheckbox" checked />
+    <label style="color:rgb(0, 255, 0)">average color</label>
+    <br/>
+    <button class="okbutton" onclick="widthP()">width +</button>
+    <button class="okbutton" onclick="widthM()">width -</button>
+    <br/>
+    <button class="okbutton" onclick="fontEnlarge()">font +</button>
+    <button class="okbutton" onclick="fontDownsize()">font -</button>
+    <br/>
+    <button class="okbutton" onclick="dotAdd()">LED +</button>
+    <button class="okbutton" onclick="dotSub()">LED -</button>
+    <br/>
+    <button class="okbutton" onclick="gapAdd()">Gap +</button>
+    <button class="okbutton" onclick="gapSub()">Gap -</button>
+    <br/>
   </div>
 
   <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
@@ -130,6 +162,37 @@ function widthM() {
 
 
 <script type="text/javascript" charset="UTF-8">
+
+function fontEnlarge() {
+  //var fsize = 96
+  fsize += 4;
+  //settingFormat();
+}
+
+function fontDownsize() {
+  fsize -= 4;
+  if (fsize < 12) 
+    fsize = 12;
+  //settingFormat();
+}
+
+function dotAdd() {
+  dots++;
+  //settingFormat();
+}
+function dotSub() {
+  dots = dots>1?dots-1:1;
+  //settingFormat();
+}
+function gapAdd() {
+  side++;
+  //settingFormat();
+}
+function gapSub() {
+  side = side>0?side-1:0;
+  //settingFormat();
+}
+
 
 var canvas;
 var ctx;
@@ -147,6 +210,7 @@ function init() {
   initCanvas();
 
   //initLED(left_gap, 0, fsize, canvas.height);
+  settingFormat();
   initLED(left_gap, 0, boardWidth, canvas.height);
 
   newLEDMask();
@@ -202,8 +266,8 @@ function newParticle_txt_verticle(_p, _idx, xx, yy) {
       _ctx.textAlign = "center";//"left";
       _ctx.font = FONT;// + "px 標楷體";
       
-      _ctx.strokeStyle = 'black';
-      _ctx.lineWidth = 3;
+      //_ctx.strokeStyle = 'black';
+      //_ctx.lineWidth = 3;
         
       _ctx.fillStyle = 'white';
 
@@ -229,7 +293,7 @@ function newParticle_txt_verticle(_p, _idx, xx, yy) {
             continue;
         if (_y > c.height + fsize) 
             break;
-        _ctx.strokeText(this.array[i], _x, _y);
+        //_ctx.strokeText(this.array[i], _x, _y);
         _ctx.fillText(this.array[i], _x, _y);
         if (i == this.array.length - 1 && _y < -fsize/2) {
           this.activeFlag = false;
