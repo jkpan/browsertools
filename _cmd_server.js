@@ -480,9 +480,14 @@ Object.keys(networkInterfaces).forEach(interfaceName => {
 });
 
 let port = 80;
-const args = process.argv;//.slice(1);
-if (args.length > 2) 
+let wsport = 8080;
+
+const args = process.argv;//.slice(1); if (args.length > 2) port = parseInt(args[2]);
+if (args.length >= 3) {
   port = parseInt(args[2]);
+  if (args.length >= 4) 
+    wsport = parseInt(args[3]);
+}
 
 server.listen(port, () => {
   println('Server is running...');
@@ -494,7 +499,9 @@ const S_clients = new Set();
 var wss = null;//new WebSocket.Server({ port:8080 });
 
 if (WebSocket) {
-  wss = new WebSocket.Server({ port:8080 });
+  wss = new WebSocket.Server({ port:wsport });
+  println('websocket port : ' + wsport);
+
   wss.on('connection', function connection(ws, req) {
   
     let ip = req.socket.remoteAddress;
