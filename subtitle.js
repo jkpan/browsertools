@@ -251,7 +251,7 @@ function startRestoreFromServerInterval() {
 function startRestoreInterval() {
   if (funcInterval)
     stopActionInterval();
-  syncListFromController();
+  //syncListFromController();
   funcInterval = window.setInterval(restoreActionFromLocal, 200);
 }
 
@@ -328,8 +328,8 @@ function restoreActionFromLocal() {
   */
 }
 
+/*
 function syncListFromController() {
-  return;
   let key = 'song list';
   let value = localStorage.getItem(key);
   if (!value) return;
@@ -342,6 +342,7 @@ function saveListFromController() {
   let value = JSON.stringify(list);
   localStorage.setItem(key, value);
 }
+*/
 
 var selector = null;
 function openSelector() {
@@ -1249,7 +1250,7 @@ function blank() {
   if (animSwh == 1 || mode == 2) {
     //ctx.globalCompositeOperation='difference';
     //ctx.filter = 'blur()';//'invert(1)';
-    ctx.fillStyle = "rgba(0,0,0, 0.5)"
+    ctx.fillStyle = "rgba(0,0,0, 0.4)"
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     return;
   }

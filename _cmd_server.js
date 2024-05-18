@@ -556,3 +556,10 @@ function broadcast_Song() {
     }
   });
 } 
+
+//sudo su -
+//ssh -i "taipei_jkpan_macmini.pem" ubuntu@ec2-54-169-169-141.ap-southeast-1.compute.amazonaws.com
+//pm2 start _cmd_server.js
+//pm2 stop _cmd_server
+//pm2 logs --lines 200
+//ec2-54-169-169-141.ap-southeast-1.compute.amazonaws.com
