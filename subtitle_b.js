@@ -652,7 +652,8 @@ function initWebsocket() {
   } else {
     console.log('WebSocket is not open');
   }
-
+  
+  //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
   ws = new WebSocket('ws://' + serverDomain + ':8080/Bible');
   ws.onopen = function() {
     console.log('Connected to server');
@@ -2521,6 +2522,11 @@ if ('ontouchstart' in window || navigator.maxTouchPoints) {
   // 支持触摸事件
   supportTouch = true;
 }
+
+/* 網頁切換別處切回來重繪 */
+document.addEventListener('visibilitychange', function() {
+  _repaint();
+});
 
 /*
  * 手機觸控相關... START

@@ -1128,6 +1128,7 @@ function synctrls() {
 function restoreFromJson(obj) {
   if (!obj) return;
   subtitles = obj.song;
+
   phase = obj.phase;
   line = obj.line;
   doblank = obj.blank;
@@ -1310,17 +1311,13 @@ function receiveMessage(e) {
 
 // 監聽 message 事件
 window.addEventListener('message', receiveMessage, false);
-
 window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function (e) {
 
-  //e.preventDefault();
-  //e.stopPropagation();
-
+  //e.preventDefault(); //e.stopPropagation();
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = true;
   }
-
 }, false);
 window.addEventListener('resize', function () {
   init();
@@ -1329,6 +1326,10 @@ window.addEventListener('resize', function () {
 
 window.addEventListener('beforeunload', function (e) {
   closeSelector();
+});
+/* 網頁切換別處切回來重繪 */
+document.addEventListener('visibilitychange', function() {
+  _repaint();
 });
 
 /*
@@ -1345,11 +1346,8 @@ canvas.addEventListener('mousemove', e => {
 
 /*
 function getSongsFromJson(jsonData) {
-
   if (jsonData.content.length == 0) return;
-    
   getSongsFromList(jsonData.content);
-
 }
 */
 

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
 <style>
   .container {
     display: flex;
@@ -12,10 +11,6 @@
         margin: 0px;
         background-color: rgb(0, 128, 0);
       }
-    ::-webkit-scrollbar {
-        display: none;
-      }
-
   .column {
     flex: 1;
     padding: 10px;
@@ -70,7 +65,7 @@ function _createBtn(idtxt, attr) {
   button.onclick = function() {
     
     window.opener.list.push(idtxt);
-    window.opener.saveListFromController();
+    //window.opener.saveListFromController();
 
     window.opener.SONGS[window.opener.SONGS.length] = window.opener.getSong(idtxt);
     window.opener.song = window.opener.SONGS.length - 1;

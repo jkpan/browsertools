@@ -1677,30 +1677,12 @@ window.addEventListener('wheel',function (event){
   }
 });
 
-/*
-function _ajax(json, url, cb, errorcb) {
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(json)
-    }).then((response) => {
-      if (response.ok) {
-        return response.json(); // 解析JSON回應
-      } else {
-        throw new Error("請求失敗：" + response.status);
-      }
-    }).then((data) => {
-      // 在這裡處理解析後的JSON物件 //console.log(data);
-      cb(data)
-    }).catch((error) => {
-      // 處理錯誤
-      console.log('' + error);
-      errorcb();
-    });
-}
+/* 網頁切換別處切回來重繪 */
+document.addEventListener('visibilitychange', function() {
+  _repaint();
+});
 
+/*
 function connect2Data() {
     const url = 'https://script.google.com/macros/s/AKfycbzM3r3hUmQa-PUNlNQsZkKj8OsuKt5ImtuF4VMZpjrnnuGOhAI6_AW608Y_8pMzoqdF/exec';
     _ajax({}, url, 
