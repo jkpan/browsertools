@@ -653,8 +653,8 @@ function initWebsocket() {
     console.log('WebSocket is not open');
   }
   
-  ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  //ws = new WebSocket('ws://' + serverDomain + ':8080/Bible');
+  //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
+  ws = new WebSocket('ws://' + serverDomain + ':8080/Bible');
   ws.onopen = function() {
     console.log('Connected to server');
     ws.send('Hello, WebSocket! - from client');

@@ -1,6 +1,10 @@
 //for startArrange() using //const START = "2024-01-01"; // 开始日期 //const END = "2024-03-31"; // 结束日期
 const SHEET_WORKING = "arrange";
 const SHEET_SETTING = "setting";
+const SHEET_RESTORE = "restore";
+const SHEET_NOTICE  = "notice";
+
+const URL_RESTORE = "https://abeliu.idv.tw/getservicejson.php"; //"http://54.169.169.141/json/sheet.json";
 
 const URL = "https://docs.google.com/spreadsheets/d/1cL15C-cKAJufv7JFfcOpWmJo7I4M0j3kDq1C9R0HeCI/edit";
            //https://docs.google.com/spreadsheets/d/1cL15C-cKAJufv7JFfcOpWmJo7I4M0j3kDq1C9R0HeCI/edit?usp=drive_link
@@ -11,7 +15,6 @@ var ssheet = null;
 function startArrange() {
   
   //cleanSheet();
-
   //if (!generateDates()) return;
 
   let process = getNameList_('安排順序');
@@ -32,15 +35,121 @@ function doGet(e) {
   return HtmlService.createHtmlOutputFromFile("main.html");
 }
 */
-
 function opOpen() {
   let ui = SpreadsheetApp.getUi();
   ui.createMenu('TPCAOG擴充').
-    addItem('產生聚會和日期', 'generateDates').
-    addItem('開始排服事表', 'startArrange').
+    addItem('產生聚會和日期(arrange)', 'generateDates').
+    addItem('開始排服事表(arrange)', 'startArrange').
     addItem('檢查', 'checkRecurring').
     addItem('輸出Json', 'toJson').
-    addItem('清除工作區', 'cleanSheet').addToUi();
+    addItem('清除工作區(arrange)', 'cleanSheet').
+    addItem('從輪值機器人還原(restore)', 'restoreSheet').addToUi();
+}
+
+function handleRobotJson_(obj) {
+  let ss = openSheetApp_();
+  let sheet = ss.getSheetByName(SHEET_RESTORE);
+  var keys = Object.keys(obj);
+  //
+  let _row = 3;
+  let _col = 2;
+  keys.forEach(function (key) {
+    let _obj = obj[key];
+
+    //var _date = new Date(key);
+    //var formattedDate = Utilities.formatDate(_date, SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy/MM/dd");
+    //Logger.log(formattedDate);
+    sheet.getRange(_row, 1).setHorizontalAlignment("center");
+    sheet.getRange(_row, 1).setNumberFormat("yyyy/MM/dd");
+    sheet.getRange(_row, 1).setValue(key);//formattedDate);
+    
+    if (_row%2 == 0) {
+      sheet.getRange(_row, 1).setBackground("#f0f0f0");
+      sheet.getRange(_row, 1).setFontWeight("bold");
+    } else {
+      sheet.getRange(_row, 1).setBackground("#ffffff");
+      sheet.getRange(_row, 1).setFontWeight("normal");
+    }
+
+    var items = Object.keys(_obj);
+    items.forEach(function (item) {
+      sheet.getRange(_row, _col).setValue(_obj[item]);
+      if (_row%2 == 0) {
+        sheet.getRange(_row, _col).setBackground("#f0f0f0");
+        sheet.getRange(_row, _col).setFontWeight("bold");
+      } else {
+        sheet.getRange(_row, _col).setBackground("#ffffff");
+        sheet.getRange(_row, _col).setFontWeight("normal");
+      }
+      sheet.getRange(_row, _col).setHorizontalAlignment("center");
+      _col++;
+      //Logger.log(_obj[item]);
+    });
+    
+    _row++;
+    _col = 2;
+
+  });
+
+  Logger.log("function DONE");
+
+  /*
+  var sourceSheet = ss.getSheetByName(SHEET_NOTICE); // 替换为来源工作表的名称
+  var targetSheet = sheet; // 替换为目标工作表的名称
+  var targetRow = _row; // 替换为你希望复制内容的开始行
+
+  // 取得来源工作表的范围
+  var sourceRange = sourceSheet.getDataRange();
+  
+  // 计算目标范围的开始位置
+  var numRows = sourceRange.getNumRows();
+  var numCols = sourceRange.getNumColumns();
+  var targetRangeStart = targetSheet.getRange(targetRow, 1);
+
+  // 确保目标范围有足够的空间来容纳来源范围的数据
+  var targetRange = targetSheet.getRange(targetRow, 1, numRows, numCols);
+  targetRange.clear({contentsOnly: false, skipFilteredRows: true}); // 清除目标范围内容
+
+  // 复制来源范围的内容和格式到目标范围开始位置
+  sourceRange.copyTo(targetRangeStart, { contentsOnly: false });
+
+  // 处理合并单元格
+  var mergedRanges = sourceSheet.getActiveRange().getMergedRanges();
+  mergedRanges.forEach(function(range) {
+    var startRow = range.getRow();
+    var startCol = range.getColumn();
+    var endRow = startRow + range.getNumRows() - 1;
+    var endCol = startCol + range.getNumColumns() - 1;
+    var targetStartRow = startRow + targetRow - 1;
+    var targetEndRow = endRow + targetRow - 1;
+    var targetRange = targetSheet.getRange(targetStartRow, startCol, range.getNumRows(), range.getNumColumns());
+    targetRange.merge();
+  });
+  */
+
+}
+
+function restoreSheet() {
+  cleanSheet_(SHEET_RESTORE);
+  var url = URL_RESTORE; 
+  var options = {
+    "method" : "get",
+    "headers" : {
+      "Authorization" : "Bearer YOUR_ACCESS_TOKEN",
+      "Accept" : "application/json"
+    },
+    "muteHttpExceptions" : true // 允許處理 HTTP 錯誤
+  };
+  
+  var response = UrlFetchApp.fetch(url, options);
+  if (response.getResponseCode() == 200) {
+    var jsonData = JSON.parse(response.getContentText());
+    handleRobotJson_(jsonData);
+    //Logger.log(jsonData);
+  } else {
+    Logger.log("Error: " + response.getResponseCode());
+  }
+  
 }
 
 function showResult(result) {
@@ -300,15 +409,19 @@ function putByService_(sername, sercol, type) {
 }
 
 function cleanSheet() {
+  cleanSheet_(SHEET_WORKING);
+}
+
+function cleanSheet_(sheetname) {
   var ss = openSheetApp_();
-  var sheet = ss.getSheetByName(SHEET_WORKING);
-  let col_max = sheet.getLastColumn();
+  var sheet = ss.getSheetByName(sheetname);
+  let col_max = sheet.getLastColumn() + 2;
   for (var col = 1; col <= col_max; col++) {
     sheet.getRange(3, col, sheet.getLastRow(), 1).clearContent();
   }
 
   
-  for (let row=3;row<=52;row++) 
+  for (let row=3;row<=120;row++) 
     for (let col=1;col<=col_max;col++) {
       sheet.getRange(row, col).setFontColor("black");
       sheet.getRange(row, col).setBackground("white");

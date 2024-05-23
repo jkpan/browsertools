@@ -328,6 +328,8 @@ function synscripture(req, res) {
       verse = requestData.ver;
       doblank = requestData.blank;
     
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
       res.setHeader('Content-Type', 'application/json');
       
       // 发送响应数据
@@ -338,6 +340,41 @@ function synscripture(req, res) {
       broadcast_Bible();
 
   });
+}
+
+//Bible sync 
+function synscripture_get(req, res) { 
+  let body = '';
+  // 接收请求的数据
+  req.on('data', (data) => {
+      body += data;
+  });
+    
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+      
+      //print('.');
+      //res.setHeader('Content-Type', 'text/html');
+      //res.end(msgs[_cma]);
+      ////
+      //const requestData = JSON.parse(body);
+      
+      //volume = requestData.vlm;
+      //chapter = requestData.chp;
+      //verse = requestData.ver;
+      //doblank = requestData.blank;
+    
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+      res.setHeader('Content-Type', 'application/json');
+      
+      // 发送响应数据
+      res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
+      
+      println(`[master: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+      print(` [ conn: ${B_clients.size} ] `);
+      broadcast_Bible();
+    });
 }
 
 //讀檔輸出
@@ -411,14 +448,12 @@ const server = http.createServer((req, res) => {
 
   if (url.startsWith('/synscripture_get')) {
     var requestData = urltool.parse(url, true).query;
-    console.log(requestData);
+    println('data : ' + requestData.vlm + ', ' + requestData.chp + ', ' + requestData.ver + ', ' + requestData.blank);
     volume = requestData.vlm;
     chapter = requestData.chp;
     verse = requestData.ver;
     doblank = requestData.blank;
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
-    broadcast_Bible();
+    synscripture_get(req, res);
     return;
   }
 
