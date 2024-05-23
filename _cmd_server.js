@@ -409,6 +409,19 @@ const server = http.createServer((req, res) => {
         break;
   }
 
+  if (url.startsWith('/synscripture_get')) {
+    var requestData = urltool.parse(url, true).query;
+    console.log(requestData);
+    volume = requestData.vlm;
+    chapter = requestData.chp;
+    verse = requestData.ver;
+    doblank = requestData.blank;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
+    broadcast_Bible();
+    return;
+  }
+
   if (url === '/Bible_play') {
     const redirect = '/subtitle_b.html?action=play';
     res.writeHead(302, {Location: redirect});
