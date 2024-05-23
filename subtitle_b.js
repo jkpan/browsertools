@@ -618,7 +618,7 @@ var timeoutID = -1;
 //
 function chkWebsocket() {
   
-  console.log(`# ${timeoutID}`);
+  //console.log(`# ${timeoutID}`);
 
   if (timeoutID >= 0) window.clearTimeout(timeoutID);
 
@@ -653,8 +653,8 @@ function initWebsocket() {
     console.log('WebSocket is not open');
   }
   
-  //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  ws = new WebSocket('ws://' + serverDomain + ':8080/Bible');
+  ws = new WebSocket('ws://54.169.169.141:8080/Bible');
+  //ws = new WebSocket('ws://' + serverDomain + ':8080/Bible');
   ws.onopen = function() {
     console.log('Connected to server');
     ws.send('Hello, WebSocket! - from client');
@@ -700,18 +700,44 @@ function _ajax(json, url, cb, errorcb) {
 }
 
 function ajax_sync() {
+  /*
+  //'http://54.169.169.141/synscripture_get',
+  const url = new URL('http://192.168.0.16/synscripture_get');
+  const params = {
+    vlm: song,
+    chp: phase,
+    ver: line,
+    blank: doblank
+  };
+  // 將參數附加到 URL
+  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+  fetch(url).then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.json();
+  }).then(data => {
+    console.log(data);
+  }).catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
+  */
+  
   _ajax({
     vlm: song,
     chp: phase,
     ver: line,
     blank: doblank
-  },
-    '/synscripture',
-    (res) => {
-      console.log(JSON.stringify(res));
-    }, () => {
-      console.log('exception');
-    });
+  }, 
+  '/synscripture',
+  //'http://192.168.0.16/synscripture',
+  (res) => {
+    console.log(JSON.stringify(res));
+  }, () => {
+    console.log('exception');
+  });
+
 }
 
 function restoreFromJson(res) {
