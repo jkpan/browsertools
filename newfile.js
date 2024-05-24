@@ -105,6 +105,8 @@ function selectFile(event) {
   }
   
   function displayPDFFile(file) {
+    //displayHTMLFile(file);
+    //document.getElementById("reloadPage").hidden = false;
     document.querySelector('body').style.background = 'transparent';
     document.getElementById("ui").hidden = true;
     const fileURL = URL.createObjectURL(file);

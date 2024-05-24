@@ -823,58 +823,64 @@ function _createFrame(keyname) {
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'dBoard': {
       createFrame(keyname, 'dashboard.html');
       let app = new Applet({ x: 2, y: 7, w: 16, h: 10, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'hymn': {
       createFrame(keyname, 'subtitle.html');
       let app = new Applet({ x: 1, y: 14, w: 15, h: 18, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'Bible': {
       createFrame(keyname, 'subtitle_b.html');
       let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'NIV': {
       createFrame(keyname, 'subtitle_niv.html');
       let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'BPlay': {
       createFrame(keyname, 'subtitle_b_display.html');
       let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'iPlay': {
       createFrame(keyname, 'image_play.html');
       let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'url_1':
-    case 'url_2': 
-    case 'url_3': {
+    case 'url_2': {
       createFrame(keyname, 'newurl.html');
       let app = new Applet({ x: 6, y: 1, w: 10, h: 16, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
+    case 'url_3': {
+      createFrame(keyname, 'newurl_display.html');
+      let app = new Applet({ x: 6, y: 1, w: 10, h: 16, keyname: keyname });
+      applets.push(app);
+      app.onTop();
+      return app;
+    }
     case 'file_1':
     case 'file_2': 
     case 'file_3': {
@@ -883,28 +889,28 @@ function _createFrame(keyname) {
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'info': {
       createFrame(keyname, 'marquee_v.html');
       let app = new Applet({ x: 1, y: 1, w: 4, h: 32, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'effect': {
       createFrame(keyname, 'effect.html');
       let app = new Applet({ x: 18, y: 2, w: 4, h: 4, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     case 'time': {
       createFrame(keyname, 'clock.html');
       let app = new Applet({ x: 24, y: 2, w: 11, h: 10, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
-    } break;
+    }
     default:
       return null;
   }
