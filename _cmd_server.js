@@ -10,7 +10,7 @@ try {
   println('Websocket Module exists');
   WebSocket = require('ws');
 } catch (err) {
-  println('Module does not exist');
+  println('Websocket Module does not exist');
 }
 
 

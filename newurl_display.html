@@ -208,9 +208,38 @@
         closeCtrl();
     });
 
+    var keepratio = 0;
+    var image_base64 = null;
+
+    /*
     function toObj() {
-        return {};
+        let obj = {};
+        let keep = isKeepRatio() ? 1 : 0;
+        obj['keepratio'] = keepratio;
+        if (image_base64) {
+            obj['imageBase64'] = image_base64;
+        }
+        return obj;
     }
+
+    window.addEventListener('message', (e) => {
+
+        if (e.data && e.data.trim().length < 2) return;
+
+        const jsonData = JSON.parse(e.data);
+
+        keepratio = 0;
+        if (jsonData.keepratio) 
+            keepratio = 0;
+
+        if (jsonData.imageBase64) {
+            image_base64 = jsonData.imageBase64;
+            showImage(keepratio);
+            return;
+        }
+
+    }, false);
+    */
 
     openCtrl();
 
