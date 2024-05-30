@@ -37,7 +37,7 @@ source = [
     ];
 */
 
-const SKEWTOTAL = 60;
+const SKEWTOTAL = 30;
 var skewidx = -1;
 var idxvar = 0;
 var idxvar_target = 0;
