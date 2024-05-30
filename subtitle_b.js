@@ -137,6 +137,7 @@ class Verseobj {
 
       //if (color_selection == 0 && doblank == 0)
       //ctx.transform(1, 0, 0, 1, 0, this.transY);
+      ctx.save();
       ctx.transform(1, 0, 0, 1, 0, HL_offset_progress);//this.targetTransY);
       
       //draw chapter verse
@@ -151,8 +152,11 @@ class Verseobj {
           _drawtxt(this.frontxt, 0, this.targetFs * 0.7, 1.0);
         }
       }
-      ctx.resetTransform();
+      //ctx.resetTransform();
+      ctx.restore();
     }
+
+    ctx.save();
 
     ctx.transform(1, 0, 0, 1, 0, this.transY);
 
@@ -190,7 +194,8 @@ class Verseobj {
       }
     }
 
-    ctx.resetTransform();
+    //ctx.resetTransform();
+    ctx.restore();
 
   }
 }
@@ -810,6 +815,10 @@ function _saveAction2Local() {
 //判斷是不是要卷軸動畫
 function restoreAnim(volume, chapter, verse, _doblank) {
 
+  if (volume != song) {
+    chkVolDir(song, volume)
+  }
+
   if (volume == song && chapter == phase && verse == line) {
     if (_doblank != doblank)
       keyboard({ keyCode: 66 });
@@ -1328,9 +1337,21 @@ function operateQuene(queueType, doanim) {
 }
 
 function render(progress) {
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  trans_start();
+  
   _layer0();
   _render(progress);
   _layerui();
+
+  trans_end();
+  if (skewidx > 0) {
+    if (animElapse < 0) {
+      window.requestAnimationFrame(_repaint);
+    }
+  }
 }
 
 var queue = [];
@@ -1603,6 +1624,8 @@ function sortjump(start, end) {
   uisel_start = start;
   uisel_end = end;
 
+  let pre = song;
+
   if (song >= start && song <= end) {
     song += 1;
     if (song > end)
@@ -1610,9 +1633,11 @@ function sortjump(start, end) {
   } else {
     song = start;
   }
+  chkVolDir(pre, song);
   subtitles = SONGS[song];
   phase = 0;
   line = 0;
+
 }
 
 function combineKey(e) {
@@ -1801,6 +1826,7 @@ function jump2preset(ps) {
 
 function _targetAnim() {
   let step = 1;
+  let pre = song;
   if (song != t_song) {
     //song = ;//Math.ceil(song + (t_song - song) * 0.25);
     if (Math.abs(t_song - song) >= 10) step = 10;
@@ -1810,6 +1836,7 @@ function _targetAnim() {
       song += step;
     }
     subtitles = SONGS[song];
+    chkVolDir(pre, song);
     //console.log('s:' + song + ', ' + phase + ', '+ line);
     _repaint();
     window.requestAnimationFrame(_targetAnim);
@@ -1871,6 +1898,9 @@ function jump2preset4Anim(ps) {
 
 }
 
+function change2Verse(vol, chp, ver) {
+
+}
 
 function keyboard(e) { //key up //alert(e.keyCode);
 
@@ -1958,10 +1988,7 @@ function keyboard(e) { //key up //alert(e.keyCode);
     case 76: //l
       openCtrl();
       break;
-    /*
-    case 75://'K'
-    case 74://'J'
-    */
+    //case 75://'K' case 74://'J'
     case 68: //d
       fontsize_dist = fontsize_dist == 0 ? 1 : 0;
       break;
@@ -1976,7 +2003,6 @@ function keyboard(e) { //key up //alert(e.keyCode);
         display_mode = 1;
         break;
       }
-
 
       if (display_mode == 1) {
         display_mode = 0;
@@ -2060,9 +2086,10 @@ function keyboard(e) { //key up //alert(e.keyCode);
     }
       break;
 
-    case 189: //'-'
+    case 189: { //'-'
       helpSwitch = 0;
       if (canvas.hidden) break;
+      let oldsong = song;
       if (song > 1)
         song = song - 1;
       else
@@ -2070,11 +2097,13 @@ function keyboard(e) { //key up //alert(e.keyCode);
       subtitles = SONGS[song];
       phase = 0;
       line = 0;
-
+      chkVolDir(oldsong, song);
+      }
       break;
-    case 187: //'='
+    case 187: {//'='
       helpSwitch = 0;
       if (canvas.hidden) break;
+      let oldsong = song;
       if (song < SONGS.length - 1)
         song = song + 1;
       else
@@ -2083,7 +2112,8 @@ function keyboard(e) { //key up //alert(e.keyCode);
       subtitles = SONGS[song];
       phase = 0;
       line = 0;
-
+      chkVolDir(oldsong, song);
+      }
       break;
     /*
     case 48:
@@ -2215,6 +2245,7 @@ function gradientBg() {
   printSaved = 0;
   let _r = canvas.width / canvas.height;
   let _t = (1 - _r) * canvas.width / 2;//-canvas.width/2 * _r + canvas.width/2;
+  ctx.save();
   ctx.transform(_r, 0, 0, 1, _t, 0);//canvas.width/canvas.height
 
   // 画圆
@@ -2229,7 +2260,8 @@ function gradientBg() {
   ctx.fillStyle = gradient; // 使用径向渐变作为填充样式
   ctx.fill();
   ctx.closePath();
-  ctx.resetTransform();
+  //ctx.resetTransform();
+  ctx.restore();
 }
 
 function _layer0() {
@@ -2381,17 +2413,30 @@ function _layerBg() {
   ui_block(canvas.width * 2 / 3, canvas.height / 2, canvas.width / 3, canvas.height / 2, 0.33);
   ui_block(canvas.width / 3, canvas.height / 2, canvas.width / 3, canvas.height / 4, 0.20);
 
-
-
 }
 
 function _repaint() {
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (uisel == 1) {
+    _layerui();
+    return;
+  }
+
+  trans_start();
   //ctx.globalCompositeOperation='difference';
   //ctx.filter = 'invert(1)';
   _layer0();
   //_layerBg();
   printMain(phase, line);//_layer1();//_layer2();
   _layerui();
+
+  trans_end();
+  if (skewidx > 0 && animElapse < 0) {
+    window.requestAnimationFrame(_repaint);
+  }
+
 }
 
 function userhelp() {
@@ -2858,7 +2903,6 @@ function parseRecogResult() {
       result[0] = SONGS[i][0][0];
       jump2preset(result);
       _repaint();
-      //window.requestAnimationFrame(_repaint);
 
       let cut = chineseFullname[i].length;
       RecogResult = RecogResult.substr(cut, RecogResult.length - cut);
