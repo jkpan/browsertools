@@ -92,7 +92,7 @@ class Verseobj {
       this.wratio = 0.9;
       this.opacity = 1.0;
       if (this.chapter > 0 && this.verse > 0) {
-        ctx.font = (fs * 0.6) + "px " + fontFamily;//FONT_SML;
+        ctx.font = (fs * 0.5) + "px " + fontFamily;//FONT_SML;
         let frontGap = Math.max(0.1, ctx.measureText(this.frontxt).width / canvas.width);
         this.wratio = 1.0 - frontGap;
       }
@@ -142,14 +142,14 @@ class Verseobj {
       
       //draw chapter verse
       if (this.chapter > 0 && this.verse > 0) {
-        let fs = this.targetFs * 0.6;
+        let fs = this.targetFs * 0.5;
         ctx.font = fs + "px " + fontFamily;//FONT_SML;
         if ((animElapse % 100) >= animTotal * 0.8 || animElapse == -1) {
           _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
-          _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.7);
+          _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
         } else {
           _drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
-          _drawtxt(this.frontxt, 0, this.targetFs * 0.7, 1.0);
+          _drawtxt(this.frontxt, 0, this.targetFs * 0.6, 1.0);
         }
       }
       //ctx.resetTransform();
@@ -647,9 +647,8 @@ function chkWebsocket() {
 function initWebsocket() {
   
   let serverDomain = window.location.hostname;
-  console.log('Server Domain:', serverDomain);
-
-  //return;
+  
+  console.log('window.location: ', window.location);
 
   if (ws && ws.readyState === WebSocket.OPEN) {
     console.log('WebSocket is open');
@@ -658,8 +657,13 @@ function initWebsocket() {
     console.log('WebSocket is not open');
   }
   
+  let port = 80;
+  if (window.location.port.length > 0) {
+    port = parseInt(window.location.port, 10);
+  }
+  port += 8000;
   //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  ws = new WebSocket('ws://' + serverDomain + ':8080/Bible');
+  ws = new WebSocket('ws://' + serverDomain + ':' + port +'/Bible');
   ws.onopen = function() {
     console.log('Connected to server');
     ws.send('Hello, WebSocket! - from client');
@@ -839,8 +843,14 @@ function restoreAnim(volume, chapter, verse, _doblank) {
   subtitles = SONGS[song];
   phase = chapter;
   line = verse;
-
-  _repaint();
+  
+  if (display_mode != 0) {
+    animElapse = 0;
+    window.requestAnimationFrame(verse_update);
+    _repaint();
+  } else {
+    _repaint();
+  }
 
 }
 
@@ -1230,7 +1240,7 @@ var display_mode = 0;
 const animTotal = 30;
 var animElapse = -1; //var savePre = 0;
 
-function verse_update(elapse) {
+function verse_update() {
 
   switch (display_mode) {
     case 0:
@@ -1805,23 +1815,25 @@ function jumpTo1() {
 }
 
 function jump2preset(ps) {
-  jump2preset4Anim(ps);
-  return;
   if (display_mode == 0) {
     jump2preset4Anim(ps);
-  } else {
-    for (var i = 1; i < SONGS.length; i++) {
-      if (ps[0] == SONGS[i][0][0]) {
-        song = i;
-        subtitles = SONGS[i];//presetVerse[value][0]
-        phase = ps[1];
-        line = ps[2];
-        break;
-      }
-    }
-    saveAction2Local();
-    _repaint();
+    return;
   }
+
+  for (var i = 1; i < SONGS.length; i++) {
+    if (ps[0] == SONGS[i][0][0]) {
+      song = i;
+      subtitles = SONGS[i];//presetVerse[value][0]
+      phase = ps[1];
+      line = ps[2];
+      break;
+    }
+  }
+  saveAction2Local();
+  animElapse = 0;
+  window.requestAnimationFrame(verse_update);
+  //_repaint();
+
 }
 
 function _targetAnim() {
@@ -1829,7 +1841,7 @@ function _targetAnim() {
   let pre = song;
   if (song != t_song) {
     //song = ;//Math.ceil(song + (t_song - song) * 0.25);
-    if (Math.abs(t_song - song) >= 10) step = 10;
+    //if (Math.abs(t_song - song) >= 4) step = 4;
     if (song > t_song) {
       song -= step;
     } else {
@@ -1837,38 +1849,43 @@ function _targetAnim() {
     }
     subtitles = SONGS[song];
     chkVolDir(pre, song);
+    //if (!chkVolDir(pre, song) && skewidx < 0) _repaint();
     //console.log('s:' + song + ', ' + phase + ', '+ line);
-    _repaint();
+    
     window.requestAnimationFrame(_targetAnim);
+    saveAction2Local();
     return;
   }
 
   if (phase != t_phase) {
-    if (Math.abs(t_phase - phase) >= 10) step = 10;
+    step = 1;
+    //if (Math.abs(t_phase - phase) >= 4) step = 4;
     if (phase > t_phase)
       phase -= step;
     else
       phase += step;
     //console.log('p:' + song + ', ' + phase + ', '+ line);
-    _repaint();
+    if (skewidx < 0) _repaint();
     window.requestAnimationFrame(_targetAnim);
+    saveAction2Local();
     return;
   }
 
   if (line != t_line) {
-    if (Math.abs(t_line - line) >= 10) step = 10;
+    //if (Math.abs(t_line - line) >= 4) step = 4;
     if (line > t_line)
       line -= step;
     else
       line += step;
     //console.log('l:' + song + ', ' + phase + ', '+ line);
-    _repaint();
+    if (skewidx < 0) _repaint();
     window.requestAnimationFrame(_targetAnim);
+    saveAction2Local();
     return;
   }
 
   saveAction2Local();
-  _repaint();
+  if (skewidx < 0) _repaint();
 }
 
 var t_song = 0;
@@ -1924,9 +1941,10 @@ function keyboard(e) { //key up //alert(e.keyCode);
     case 78:
       switchLang();
       break;
-    //case 27: //'escape'
+    case 27: //'escape'
+      volAnim = !volAnim;
+      break;
     //  document.parentElement.focus();
-    //  break;
     /*
     case 114: //F3
       if (funcInterval) {

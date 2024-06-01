@@ -1,20 +1,6 @@
 //const canvas = document.getElementById('canvas');
 //const ctx = canvas.getContext('2d');
 /*
-var source;
-var target_left;
-var target_right;
-//var current;
-var current = [
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 },
-    { x: 0, y: 0 }
-];
-
-//const source_left = target_left;
-//const source_right = target_right;
-//const target_final = source;
 source = [
         { x: 0,            y: 0 },
         { x: canvas.width, y: 0 },
@@ -43,20 +29,26 @@ var idxvar = 0;
 var idxvar_target = 0;
 var imageData = null;
 var pre_image = null;
+var volAnim = true;
 
 //function init3D() {}
 
 function chkVolDir(pre, now) {
-    //if (pre == now) return;
-    console.log(pre + ', ' + now);
+    if (!volAnim || display_mode != 0) {
+        skewidx = -1;
+        return false;
+    }
     if (pre < now) {
         console.log('goLeft');
         goLeft();
+        return true;
     }
     if (pre > now) {
         console.log('goRight');
         goRight();
+        return true;
     }
+    return false;
 }
 
 function getOldImage() {
@@ -77,10 +69,15 @@ function getOldImage() {
         // 将Image对象绘制到Canvas上
         //ctx.drawImage(img, 0, 0);
         pre_image = _img;
-        skewidx = 0;
-        _repaint();
+        
+        let dorepaint = skewidx < 0;
+        if (dorepaint) {
+            skewidx = 0;
+            _repaint();
+        } else {
+            skewidx = 0;
+        }
     }
-    //skewidx = 0;
 }
 
 function goLeft() {
@@ -95,17 +92,6 @@ function goRight() {
     getOldImage();
 }
 
-/*
-function goCompute() {
-    idxvar += (idxvar_target - idxvar) * skewidx/SKEWTOTAL; 
-    skewidx++;
-    if (skewidx > 0 && skewidx < SKEWTOTAL) {
-        requestAnimationFrame(goCompute);
-        _repaint();       
-    }
-}
-*/
-
 function trans_start() {
     if (skewidx < 0) return;
     
@@ -116,12 +102,14 @@ function trans_start() {
     let m;
 
     if (pre_image) {
+        ctx.save();
         if (idxvar_target > 0) { //go right right side
             m = [1 - progress, 0, 0, 1, canvas.width * progress, 0];//calculateTransform(source, current);
+            ctx.globalAlpha = 1 - progress;
         } else { //go left left side
-            m = [progress, 0, 0, 1, 0, 0];//calculateTransform(source, current);    
+            m = [progress, 0, 0, 1, 0, 0];//calculateTransform(source, current);
+            ctx.globalAlpha = progress;  
         }
-        ctx.save();
         ctx.setTransform(...m);
         ctx.drawImage(pre_image, 0, 0);
         ctx.restore();

@@ -1207,8 +1207,15 @@ function restoreFromJson(obj) {
    } else {
      console.log('WebSocket is not open');
    }
- 
-   ws = new WebSocket('ws://' + serverDomain + ':8080/Song');
+
+   let port = 80;
+  if (window.location.port.length > 0) {
+    port = parseInt(window.location.port, 10);
+  }
+  port += 8000;
+  //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
+  ws = new WebSocket('ws://' + serverDomain + ':' + port +'/Song');
+  //ws = new WebSocket('ws://' + serverDomain + ':8080/Song');
    ws.onopen = function() {
      console.log('Connected to server');
      ws.send('Hello, WebSocket! - from client');
