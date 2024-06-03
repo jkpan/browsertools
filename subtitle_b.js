@@ -1841,7 +1841,7 @@ function _targetAnim() {
   let pre = song;
   if (song != t_song) {
     //song = ;//Math.ceil(song + (t_song - song) * 0.25);
-    //if (Math.abs(t_song - song) >= 4) step = 4;
+    if (Math.abs(t_song - song) >= 10) step = 10;
     if (song > t_song) {
       song -= step;
     } else {
@@ -1859,7 +1859,7 @@ function _targetAnim() {
 
   if (phase != t_phase) {
     step = 1;
-    //if (Math.abs(t_phase - phase) >= 4) step = 4;
+    if (Math.abs(t_phase - phase) >= 10) step = 10;
     if (phase > t_phase)
       phase -= step;
     else
@@ -1872,7 +1872,7 @@ function _targetAnim() {
   }
 
   if (line != t_line) {
-    //if (Math.abs(t_line - line) >= 4) step = 4;
+    if (Math.abs(t_line - line) >= 10) step = 10;
     if (line > t_line)
       line -= step;
     else

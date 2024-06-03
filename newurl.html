@@ -283,7 +283,7 @@ window.addEventListener('message', (e) => {
     document.getElementById("keepratio").checked = false;
   }
 
-  if (jsonData.imageBase64) {
+  if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
     image_base64 = jsonData.imageBase64;
     showImage();
     return;
@@ -334,7 +334,7 @@ function toObj() {
     obj['keepratio'] = keep;
     obj['forPlay'] = forPlay;
     
-    if (image_base64) { 
+    if (image_base64 && image_base64.length > 0) { 
       obj['imageBase64'] = image_base64;
     }
 

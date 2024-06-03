@@ -122,7 +122,7 @@ function toObj() {
   let keep = isKeepRatio()?1:0;
   obj['keepratio'] = keep;
   obj['forPlay'] = forPlay;
-  if (image_base64) {
+  if (image_base64 && image_base64.length > 0) {
     obj['imageBase64'] = image_base64;
   }
   return obj;
@@ -144,7 +144,7 @@ window.addEventListener('message', (e) => {
   if (jsonData.forPlay) 
     forPlay = 1;
 
-  if (jsonData.imageBase64) {
+  if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
     image_base64 = jsonData.imageBase64;
     showImage();
     return;
