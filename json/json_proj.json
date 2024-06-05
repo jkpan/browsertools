@@ -50,7 +50,7 @@
           "fontfactor": 9.5,
           "saved": [
             [""],
-            ["歌羅西書", 4, 2],
+            ["雅各書", 4, 1],
             [""],
             [""],
             [""],
@@ -84,13 +84,16 @@
     }
   },
   "frame_3": {
-    "src": "./newurl.html",
+    "src": "./dashboard.html",
     "obj": {
-      "hold": 1,
-      "loop": 1,
-      "keepratio": 0,
-      "forPlay": 0,
-      "url": "https://docs.google.com/presentation/d/e/2PACX-1vTl1XcQ5rMrvA4_CtZMbTCiHui7YDBP8Ec_BnCflRlGylHMydpUs_aygPme89sXdw/embed?start=false&loop=false&delayms=3000"
+      "url_3": {
+        "posize": [1, 1, 32, 32],
+        "perspective": 0,
+        "obj": {
+          "url": ""
+        }
+      },
+      "B/G": "B"
     }
   },
   "frame_4": {

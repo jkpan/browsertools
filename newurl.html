@@ -127,6 +127,10 @@ a {
       display: block;
 }
 
+.chk {
+  accent-color: rgb(0,255,0);
+}
+
 
 </style>
 </head>
@@ -149,7 +153,7 @@ a {
 
         <div class="ui" id="ui">
           嵌入Google簡報, Canva簡報, Youtube影片...
-          <input type="checkbox" id="loopchk" checked>
+          <input class="chk" type="checkbox" id="loopchk" checked>
           <label>Loop(影片)</label>
           <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
@@ -223,7 +227,7 @@ a {
             
           <hr size="4" width="100%" color="#00ff00"/>
           本機檔案<br/>
-          <input type="checkbox" id="keepratio" checked>
+          <input class="chk" type="checkbox" id="keepratio" checked>
           <label>維持比例(圖片)</label>
           <P></P>
             <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" onclick="openFile('allfile')">

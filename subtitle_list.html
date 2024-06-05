@@ -32,6 +32,28 @@
       border: 1px solid;
       vertical-align: middle;
     }
+
+    textarea {
+      border: 2px solid rgb(0, 128, 0);
+      border-radius: 2px;
+      border-color: rgb(0, 255, 0);
+      margin: 1%;
+      outline: none;
+      padding: 0px;
+      box-sizing: border-box;
+      background: rgb(0, 150, 0);
+      color: rgb(0, 255, 0);
+      width: 80%;
+      font-size: 16px;
+    }
+
+    textarea:focus {
+      border: 2px solid;
+      border-color: rgb(0, 255, 0);
+      box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+      background: rgb(0, 150, 0);
+      color: rgb(0, 255, 0);
+    }
   </style>
   <title>Three Independent Columns with Full Viewport Height</title>
 </head>
@@ -51,7 +73,7 @@
 靈火繼焚燒
 靈火繼焚燒
   </textarea>
-  <button class="okbutton" type="button" onclick="textGo()">OK</button>
+  <button onclick="textGo()">加歌</button>
   <script type="text/javascript" charset="UTF-8">
     function textGo() {
       let value = document.getElementById("songtxt").value;
@@ -62,31 +84,51 @@
       let newsong = [['']];
       let phaseidx = 0;
       let lineidx = 0;
-      
+      let preline = '';
+
+      /*
+      lines.forEach((line, index) => {
+        
+        line = line.trim();
+
+        if (preline == '' && line == '') {
+          lines.splice(index, 1);
+          preline = '';
+          return;
+        }
+
+        preline = line;
+
+      });
+
+      lines.forEach((line, index) => {
+        console.log(index + ' : ' + line);
+      });
+
+      return;
+      */
+
       // 逐行处理内容
       lines.forEach((line, index) => {
 
         line = line.trim();
 
         if (line.length == 0) {
+          if (preline == '') return;
           phaseidx++;
           lineidx = 0;
           console.log(index + '<' + (lines.length - 1));
           if (index < lines.length - 1) {//不是最後一行
-            
             newsong[phaseidx] = [''];
-            console.log(phaseidx + '-' + newsong[phaseidx]);
-
           }
+          preline = '';
           return;
         }
 
-        console.log('(' + phaseidx + ', ' + lineidx + ') = ' + line);
-        
-        //newsong[phaseidx].push(line);
-        //newsong[phaseidx][lineidx] = '';
         newsong[phaseidx][lineidx] = line;
         lineidx++;
+        preline = line;
+
       });
 
       window.opener.SONGS.push(newsong);;
@@ -94,13 +136,12 @@
       window.opener.phase = 0;
       window.opener.line = 0;
       window.opener.subtitles = window.opener.SONGS[window.opener.song];
-      //alert(idtxt + ' ' + subtitles[0][0]);
-      //hideCanvas();
+      
       window.opener._repaint();
 
     }
   </script>
-  <br/>
+  <br />
 </body>
 
 </html>
@@ -121,13 +162,26 @@
     return button;
   }
 
+  function mapping(array) {
+    let area = document.getElementById("songtxt");
+    area.value = '';
+    let txt = '';
+    array.forEach((p, index) => {
+      p.forEach((line, index) => {
+        txt += line + '\n';
+      });
+      txt += '\n'; 
+    });
+    area.value = txt;
+  }
+
   function _createBtn(idtxt, attr) {
     var button = document.createElement('button');
     button.innerHTML = idtxt + '<br/>' + attr;// + ' ' + getSong(idtxt)[0][0];
     button.id = 'btn' + idtxt;
 
     button.style.width = '172px'; // setting the width to 200px
-    button.style.height = '75px'; // setting the height to 200px
+    button.style.height = '64px'; // setting the height to 200px
     //button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
     //button.style.color = 'rgb(0,255,0)'; // setting the color to white
     button.style.fontSize = '14px'; // setting the font size to 20px
@@ -137,7 +191,9 @@
       window.opener.list.push(idtxt);
       //window.opener.saveListFromController();
 
-      window.opener.SONGS[window.opener.SONGS.length] = window.opener.getSong(idtxt);
+      let array = window.opener.getSong(idtxt);
+
+      window.opener.SONGS[window.opener.SONGS.length] = array;//window.opener.getSong(idtxt);
       window.opener.song = window.opener.SONGS.length - 1;
       window.opener.phase = 0;
       window.opener.line = 0;
@@ -145,6 +201,9 @@
       //alert(idtxt + ' ' + subtitles[0][0]);
       //hideCanvas();
       window.opener._repaint();
+      
+      mapping(array);
+      
       return false;
     };
     //document.body.appendChild(button);
@@ -227,7 +286,6 @@
     //e.stopPropagation();
     window.opener.keyboard(e);
   }, false);
-
 
   window.addEventListener('keydown', function (e) {
     //e.preventDefault();
