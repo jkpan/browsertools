@@ -1,0 +1,39 @@
+{
+    "url_1": {
+      "posize": [15, 5, 17, 17],
+      "perspective": 1,
+      "obj": {
+        "loop": 1,
+        "keepratio": 1,
+        "forPlay": 0,
+        "imageBase64": ""
+      }
+    },
+    "Bible": {
+      "posize": [1, 3, 31, 20],
+      "perspective": 1,
+      "obj": {
+        "color": 1,
+        "verticle": 0,
+        "fontfactor": 7,
+        "saved": [
+          [""],
+          ["馬太福音", 6, 33],
+          [""],
+          [""],
+          [""],
+          [""],
+          [""],
+          [""],
+          [""],
+          [""]
+        ],
+        "syncType": 0,
+        "transparent": 0,
+        "printSaved": 0,
+        "fsizedist": 1
+      }
+    },
+    "B/G": "B"
+  }
+  

@@ -360,7 +360,7 @@ class Applet {
       this.t_rotateY = 0;
       this.t_Opacity = 1.0;
     } else {
-      if (this.x + this.w / 2.0 < (GRID_W / 2.0 + 1)) {
+      if (this.x + this.w / 2.0 <= (GRID_W / 2.0 + 1)) {
         this.t_rotateY = PRY_MAX;
         this.elm.style.transformOrigin = "left center";//"bottom left";
         this.t_Opacity = PRY_OPA;

@@ -103,12 +103,14 @@ function trans_start() {
 
     if (pre_image) {
         ctx.save();
-        if (idxvar_target > 0) { //go right right side
+        if (idxvar_target > 0) { //go right right side 
             m = [1 - progress, 0, 0, 1, canvas.width * progress, 0];//calculateTransform(source, current);
-            ctx.globalAlpha = 1 - progress;
+            let opa = 1 - progress;
+            ctx.globalAlpha = - (opa - 1) * (opa - 1) + 1;
+            // y = -(x-1)^2+1
         } else { //go left left side
             m = [progress, 0, 0, 1, 0, 0];//calculateTransform(source, current);
-            ctx.globalAlpha = progress;  
+            ctx.globalAlpha = -(progress - 1) * (progress - 1) + 1;
         }
         ctx.setTransform(...m);
         ctx.drawImage(pre_image, 0, 0);
