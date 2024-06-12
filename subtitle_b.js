@@ -931,12 +931,12 @@ function _newBtn() {
 
   var button = document.createElement('button');
 
-  button.style.width = '200px'; // setting the width to 200px
-  button.style.height = '75px'; // setting the height to 200px
+  button.style.width = '128px'; // setting the width to 200px
+  button.style.height = '48px'; // setting the height to 200px
 
   button.style.background = 'rgb(50,50,50)'; // setting the background color to teal
   button.style.color = 'rgb(255,255,255)';//color_pointer[1];// 'green'; // setting the color to white
-  button.style.fontSize = '20px'; // setting the font size to 20px
+  button.style.fontSize = '12px'; // setting the font size to 20px
 
   button.style.borderColor = 'rgb(255,255,255)';
   button.style.borderRadius = '10px';

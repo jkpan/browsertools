@@ -117,7 +117,6 @@
           if (preline == '') return;
           phaseidx++;
           lineidx = 0;
-          console.log(index + '<' + (lines.length - 1));
           if (index < lines.length - 1) {//不是最後一行
             newsong[phaseidx] = [''];
           }
@@ -138,6 +137,28 @@
       window.opener.subtitles = window.opener.SONGS[window.opener.song];
       
       window.opener._repaint();
+
+      let allstr = `<script id="" name="${newsong[0][0]}" type="application/json" charset="UTF-8"> {\n`;     
+
+      newsong.forEach((p, idx) => {
+        let str = idx == 0?'"content" : [[':'             [';
+        p.forEach((line, idx2) => {
+          str += '"';
+          str += line;
+          if (idx2 == p.length - 1) 
+            str += '"';
+          else 
+            str += '", '; 
+        });
+        if (idx == newsong.length - 1)
+          str += ']]';
+        else 
+          str += '],';
+        allstr += str + '\n';
+      });
+
+      allstr += '} <\/script>';
+      console.log(allstr);
 
     }
   </script>
