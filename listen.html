@@ -1,0 +1,338 @@
+<script type="text/javascript" src="common.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        .container {
+            display: flex;
+            height: 100vh;
+            /* 设置容器高度为视窗高度的100% */
+        }
+
+        body {
+            margin: 0px;
+            background-color: rgb(0, 128, 0);
+        }
+
+        .column {
+            flex: 1;
+            padding: 10px;
+            border: 0px solid #ccc;
+            box-sizing: border-box;
+            overflow: auto;
+        }
+
+        button {
+            font-size: 16px;
+            background-color: transparent;
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            /*width: 33%;*/
+            border: 2px solid;
+            vertical-align: middle;
+        }
+
+        textarea {
+            border: 2px solid rgb(0, 128, 0);
+            border-radius: 2px;
+            border-color: rgb(0, 255, 0);
+            margin: 1%;
+            outline: none;
+            padding: 0px;
+            box-sizing: border-box;
+            background: rgb(0, 150, 0);
+            color: rgb(0, 255, 0);
+            width: 80%;
+            font-size: 24px;
+        }
+
+        textarea:focus {
+            border: 2px solid;
+            border-color: rgb(0, 255, 0);
+            box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+            background: rgb(0, 150, 0);
+            color: rgb(0, 255, 0);
+        }
+    </style>
+    <title></title>
+</head>
+
+<body>
+    <label style="color: rgb(0, 255, 0);"> </label>
+    <textarea id="listenTxt" rows="10"></textarea>
+    <P></P>
+    <button onclick="textGo()"> Format </button>
+    <P></P>
+    <textarea id="result" rows="10" cols="50">
+    </textarea>
+    <P></P>
+    <button type="button" onclick="copyFormat()">Copy</button>
+    <P></P>
+</body>
+
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+    const VOLNAME = ["",
+
+        "創世記", "出埃及記", "利未記", "民數記", "申命記",
+
+        "約書亞記", "士師記", "路得記", "撒母耳記上", "撒母耳記下",
+        "列王紀上", "列王紀下",
+        "歷代志上", "歷代志下",
+        "以斯拉記", "尼希米記", "以斯帖記",
+
+        "約伯記", "詩篇", "箴言", "傳道書", "雅歌",
+
+        "以賽亞書", "耶利米書", "耶利米哀歌", "以西結書", "但以理書",
+
+        "何西阿書", "約珥書", "阿摩司書", "俄巴底亞書", "約拿書", "彌迦書", "那鴻書", "哈巴谷書", "西番雅書",
+        "哈該書", "撒迦利亞書", "瑪拉基書",
+
+        "馬太福音", "馬可福音", "路加福音", "約翰福音", "使徒行傳",
+
+        "羅馬書", "哥林多前書", "哥林多後書", "加拉太書", "以弗所書", "腓立比書",
+        "歌羅西書", "帖撒羅尼迦前書", "帖撒羅尼迦後書",
+
+        "提摩太前書", "提摩太後書", "提多書", "腓利門書",
+
+        "希伯來書", "雅各書", "彼得前書", "彼得後書",
+        "約翰壹書", "約翰貳書", "約翰參書",
+        "猶大書", "啟示錄"
+    ];
+
+    function textGo() {
+        let value = document.getElementById("listenTxt").value;
+        value = value.trim();
+
+        //let area = document.getElementById("result");
+        //area.value = allstr;
+    }
+
+    /*
+     * 語音辨識相關... START
+     */
+    function parseRecogResult() {
+
+        console.log('parseRecogResult...' + recogResult);
+
+        if (recogResult.length == 0) return;
+        let RecogResult = recogResult;
+        let value = document.getElementById("listenTxt").value;
+        value += RecogResult;
+        document.getElementById("listenTxt").value = value;
+
+        /*
+        RecogResult = RecogResult.replace('創世紀', '創世記');
+        RecogResult = RecogResult.replace('列王記', '列王紀');
+        RecogResult = RecogResult.replace('生命記', '申命記');
+        RecogResult = RecogResult.replace('誌', '志');
+        RecogResult = RecogResult.replace('約翰一', '約翰壹');
+        RecogResult = RecogResult.replace('約翰二', '約翰貳');
+        RecogResult = RecogResult.replace('約翰三', '約翰參');
+        */
+
+        /*
+        for (var i = 1; i < VOLNAME.length; i++) {
+            if (RecogResult.startsWith(VOLNAME[i])) {
+
+                result[0] = SONGS[i][0][0];
+                jump2preset(result);
+                _repaint();
+
+                let cut = chineseFullname[i].length;
+                RecogResult = RecogResult.substr(cut, RecogResult.length - cut);
+                RecogResult = RecogResult.trim();
+                if (RecogResult.length == 0) return;
+            }
+        }
+        */
+
+        console.log(RecogResult);
+
+        /*
+        RecogResult = RecogResult.replaceAll('一', '1');
+        RecogResult = RecogResult.replaceAll('二', '2');
+        RecogResult = RecogResult.replaceAll('三', '3');
+        RecogResult = RecogResult.replaceAll('四', '4');
+        RecogResult = RecogResult.replaceAll('五', '5');
+        RecogResult = RecogResult.replaceAll('六', '6');
+        RecogResult = RecogResult.replaceAll('七', '7');
+        RecogResult = RecogResult.replaceAll('八', '8');
+        RecogResult = RecogResult.replaceAll('九', '9');
+        RecogResult = RecogResult.replaceAll('十', '10');
+        RecogResult = RecogResult.replaceAll('篇', ' ');
+        RecogResult = RecogResult.replaceAll('章', ' ');
+        RecogResult = RecogResult.replaceAll('節', '');
+        RecogResult = RecogResult.replaceAll('第', '');
+        RecogResult = RecogResult.trim();
+        console.log(RecogResult);
+        */
+
+        /*
+        let array = RecogResult.split(' ');
+        if (array.length == 0) return;
+        if (array[0].length == 0) return;
+        let chapter = parseInt(array[0]);
+        if (isNaN(chapter)) return;
+        if (chapter < 0 || chapter >= SONGS[song].length) return;
+
+        result[1] = chapter;
+        jump2preset(result);
+        _repaint();
+
+        if (array.length == 1) return;
+        if (array[1].length == 0) return;
+        let verse = parseInt(array[1]);
+        if (isNaN(verse)) return;
+        if (verse < 0 || verse >= SONGS[song][chapter].length) return;
+
+        result[2] = verse;
+        jump2preset(result);
+        _repaint();
+
+        //recogResult = '';
+        */
+    }
+
+    // 檢查瀏覽器是否為 Safari
+    // 1: safari
+    // 0: chrome
+    // -1: others
+    function isSafariBrowser() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) //safari的ua只有'safari'
+            return 1;
+        if (ua.indexOf('chrome') !== -1) //chrome 的 ua 'safari' 'chrome' 都有
+            return 0;
+        return -1;
+    }
+
+    //
+    var recogResult = '';
+    var recognizing = false;
+    var recognition;
+
+    function initRecognition() {
+
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'cmn-Hant-TW';//'zh-TW';//'en-US';'en-US';'cmn-Hant-TW';
+        //recognition.interimResults = false;
+        //recognition.maxAlternatives = 1;
+
+        /*
+        if (navigator.userAgent.indexOf("Chrome") != -1) {
+            var speechRecognitionList = new webkitSpeechGrammarList();
+            var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
+            speechRecognitionList.addFromString(grammar, 2);
+            recognition.grammars = speechRecognitionList;
+        }
+        */
+
+        recognition.onstart = function () {
+            recognizing = true;
+            console.log('info_speak_now');
+            recogResult = '';
+            //_repaint();
+        };
+
+        recognition.onerror = function (event) {
+
+            recogResult = '';
+
+            if (event.error == 'no-speech') {
+                console.log('info_no_speech');
+            }
+            if (event.error == 'audio-capture') {
+                console.log('info_no_microphone');
+            }
+            if (event.error == 'not-allowed') {
+                console.log('not-allowed');
+            }
+        };
+
+        recognition.onend = function () {
+            //parseRecogResult();
+            recognizing = false;
+            recogResult = '';
+            console.log('onend');
+            _repaint();
+        };
+
+        recognition.onresult = function (event) {
+
+            /*
+            if (typeof (event.results) == 'undefined') {
+                console.log('onresult undefined');
+                recognition.onend = null;
+                recognition.stop();
+                return;
+            }
+            */
+
+            recogResult = '';
+
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    recogResult += event.results[i][0].transcript;
+                    console.log('onresult isfinal: ' + recogResult);
+                    ///_repaint();
+                } else {
+                    recogResult += event.results[i][0].transcript;
+                    console.log('onresult not isfinal: ' + recogResult);
+                    //_repaint();
+                }
+            }
+
+            let area = document.getElementById("listenTxt");
+            //let value = area.value;
+            //value += recogResult;
+            area.value = recogResult;
+
+            //console.log('onresult: ' + recogResult);
+            //_repaint();
+        };
+
+    }
+
+    switch (isSafariBrowser()) {
+        case 0: initRecognition(); break;
+        case 1: console.log('瀏覽器是 Safari'); break;
+        default: console.log('其他瀏覽器'); break;
+    }
+
+    // 語音辨識相關 ... END
+
+    var keylock = 0;
+    function keyupAction(e) {
+        //e.preventDefault();
+        //e.stopPropagation();
+        if (e.keyCode == 32) {
+            if (recognition && recognizing) {
+                recognition.stop();
+            }
+        }
+
+        //keyboard(e);
+    }
+
+    window.addEventListener('keyup', keyupAction, false);
+
+
+    function keydownAction(e) {
+        if (e.keyCode == 32) { //space
+            if (recognition && !recognizing) {
+                recognition.start();
+            }
+            return;
+        }
+    }
+
+    window.addEventListener('keydown', keydownAction, false);
+
+</script>
