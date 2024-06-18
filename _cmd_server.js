@@ -13,9 +13,7 @@ try {
   println('Websocket Module does not exist');
 }
 
-
 //npm install ws
-
 //const express = require('express');
 //const cluster = require('cluster');
 
@@ -60,13 +58,13 @@ function print(msg) {
 }
 
 function println(msg) {
-  process.stdout.write('\n'+msg);
+  process.stdout.write('\n' + msg);
 }
 
 
 const CAMERAS = 4;
-const msgs = ['.', 
-              '.', '.', '.', '.'];
+const msgs = ['.',
+  '.', '.', '.', '.'];
 
 var volume = 1;
 var chapter = 0;
@@ -80,57 +78,57 @@ var song_doblank = 0;
 
 //intercom下指令
 function command(req, res) {
-    let body = '';
-    
-    // 接收请求的数据
-    req.on('data', (data) => {
-        body += data;
-    });
-      
-    // 请求数据接收完成后的处理
-    req.on('end', () => {
-        // 解析请求数据
-        const requestData = JSON.parse(body);
+  let body = '';
 
-        print('{cmd:' + body + '}');
-        
-        if (requestData.camera == 0) { 
-          for (let i=0;i<msgs.length;i++) msgs[i] = '.';
-        } else {
-          if (requestData.msg) {
-            msgs[requestData.camera] = requestData.msg;
-          } else {
-            msgs[requestData.camera] = '.';
-          }          
-        }
-      
-        res.setHeader('Content-Type', 'application/json');
-        
-        // 发送响应数据
-        res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
+  // 接收请求的数据
+  req.on('data', (data) => {
+    body += data;
+  });
 
-    });
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+    // 解析请求数据
+    const requestData = JSON.parse(body);
+
+    print('{cmd:' + body + '}');
+
+    if (requestData.camera == 0) {
+      for (let i = 0; i < msgs.length; i++) msgs[i] = '.';
+    } else {
+      if (requestData.msg) {
+        msgs[requestData.camera] = requestData.msg;
+      } else {
+        msgs[requestData.camera] = '.';
+      }
+    }
+
+    res.setHeader('Content-Type', 'application/json');
+
+    // 发送响应数据
+    res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
+
+  });
 }
 
 //intercom查目前所有指令
 function query(req, res) {
 
-    let body = '';
-    // 接收请求的数据
-    req.on('data', (data) => {
-        body += data;
-    });
-      
-    // 请求数据接收完成后的处理
-    req.on('end', () => {
-        // 解析请求数据 const requestData = JSON.parse(body);
+  let body = '';
+  // 接收请求的数据
+  req.on('data', (data) => {
+    body += data;
+  });
 
-        print('{query}');
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+    // 解析请求数据 const requestData = JSON.parse(body);
 
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({"state" : msgs}));
+    print('{query}');
 
-      });
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ "state": msgs }));
+
+  });
 }
 
 //intercom得到相機數量
@@ -138,23 +136,23 @@ function initui(req, res) {
   let body = '';
   // 接收请求的数据
   req.on('data', (data) => {
-      body += data;
+    body += data;
   });
-    
+
   // 请求数据接收完成后的处理
   req.on('end', () => {
 
-      print('{initui}');
+    print('{initui}');
 
-      res.setHeader('Content-Type', 'application/json');
-      
-      // 发送响应数据
-      let obj = {
-        "camera" : CAMERAS,
-        //"cmd" : COMMANDS
-      };
-      res.end(JSON.stringify(obj));
-    });
+    res.setHeader('Content-Type', 'application/json');
+
+    // 发送响应数据
+    let obj = {
+      "camera": CAMERAS,
+      //"cmd" : COMMANDS
+    };
+    res.end(JSON.stringify(obj));
+  });
 }
 
 //好像沒用到
@@ -162,38 +160,38 @@ function cmdAll(req, res) { //for M5Stick
   let body = '';
   // 接收请求的数据
   req.on('data', (data) => {
-      body += data;
+    body += data;
   });
-    
+
   // 请求数据接收完成后的处理
   req.on('end', () => {
-      res.setHeader('Content-Type', 'text/html');
-      
-      let cc = '';
-      for (let i=1;i<msgs.length;i++) {
-        cc += ' ' + msgs[i];
-      }
-      cc = cc.trim();
-      res.end(cc);
-    });
+    res.setHeader('Content-Type', 'text/html');
+
+    let cc = '';
+    for (let i = 1; i < msgs.length; i++) {
+      cc += ' ' + msgs[i];
+    }
+    cc = cc.trim();
+    res.end(cc);
+  });
 }
 
 //intercom M5Stick取得指令
-function cmd(req, res, _cma) { 
+function cmd(req, res, _cma) {
   let body = '';
   // 接收请求的数据
   req.on('data', (data) => {
-      body += data;
+    body += data;
   });
-    
+
   // 请求数据接收完成后的处理
   req.on('end', () => {
-      
-      print('.');
 
-      res.setHeader('Content-Type', 'text/html');
-      res.end(msgs[_cma]);
-    });
+    print('.');
+
+    res.setHeader('Content-Type', 'text/html');
+    res.end(msgs[_cma]);
+  });
 }
 
 //同步歌詞
@@ -201,32 +199,32 @@ function synclyrics(req, res) {
   let body = '';
   // 接收请求的数据
   req.on('data', (data) => {
-      body += data;
+    body += data;
   });
-    
+
   // 请求数据接收完成后的处理
   req.on('end', () => {
-      // 解析请求数据
-      const requestData = JSON.parse(body);
-      //println(body);
+    // 解析请求数据
+    const requestData = JSON.parse(body);
+    //println(body);
 
-      song = requestData.song;
-      phase = requestData.phase;
-      line = requestData.line;
-      song_doblank = requestData.blank;
-    
-      try {
-        println(`<master: ${song[0][0]}, ${phase}, ${line}, ${song_doblank}>`);
-      } catch (err) {
-        println(`<master: ${phase}, ${line}, ${song_doblank}>`);
-      }
+    song = requestData.song;
+    phase = requestData.phase;
+    line = requestData.line;
+    song_doblank = requestData.blank;
 
-      res.setHeader('Content-Type', 'application/json');
-      
-      // 发送响应数据
-      res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
-      print(` < conn: ${S_clients.size} > `);
-      broadcast_Song();
+    try {
+      println(`<master: ${song[0][0]}, ${phase}, ${line}, ${song_doblank}>`);
+    } catch (err) {
+      println(`<master: ${phase}, ${line}, ${song_doblank}>`);
+    }
+
+    res.setHeader('Content-Type', 'application/json');
+
+    // 发送响应数据
+    res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
+    print(` < conn: ${S_clients.size} > `);
+    broadcast_Song();
 
   });
 }
@@ -271,7 +269,7 @@ function getBibleObjStr() {
 }
 
 function getSongObjStr() {
-  if (!song) 
+  if (!song)
     return JSON.stringify({
       song: [[""]],
       phase: 0,
@@ -291,17 +289,17 @@ function restorescripture(req, res) {
   let body = '';
   // 接收请求的数据
   req.on('data', (data) => {
-      body += data;
+    body += data;
   });
-    
+
   // 请求数据接收完成后的处理
   req.on('end', () => {
-      // 解析请求数据
+    // 解析请求数据
     const requestData = JSON.parse(body);
-      
+
     // 设置响应头
     res.setHeader('Content-Type', 'application/json');
-    
+
     print('-');
     // 发送响应数据
     res.end(getBibleObjStr());
@@ -312,69 +310,34 @@ function restorescripture(req, res) {
 //同步經文
 function synscripture(req, res) {
   let body = '';
-    
+
   // 接收请求的数据
   req.on('data', (data) => {
-      body += data;
+    body += data;
   });
-    
+
   // 请求数据接收完成后的处理
   req.on('end', () => {
-      // 解析请求数据
-      const requestData = JSON.parse(body);
-      
-      volume = requestData.vlm;
-      chapter = requestData.chp;
-      verse = requestData.ver;
-      doblank = requestData.blank;
-    
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-      res.setHeader('Content-Type', 'application/json');
-      
-      // 发送响应数据
-      res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
-      
-      println(`[master: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-      print(` [ conn: ${B_clients.size} ] `);
-      broadcast_Bible();
+    // 解析请求数据
+    const requestData = JSON.parse(body);
+
+    volume = requestData.vlm;
+    chapter = requestData.chp;
+    verse = requestData.ver;
+    doblank = requestData.blank;
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Content-Type', 'application/json');
+
+    // 发送响应数据
+    res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
+
+    println(`[master: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+    print(` [ conn: ${B_clients.size} ] `);
+    broadcast_Bible();
 
   });
-}
-
-//Bible sync 
-function synscripture_get(req, res) { 
-  let body = '';
-  // 接收请求的数据
-  req.on('data', (data) => {
-      body += data;
-  });
-    
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-      
-      //print('.');
-      //res.setHeader('Content-Type', 'text/html');
-      //res.end(msgs[_cma]);
-      ////
-      //const requestData = JSON.parse(body);
-      
-      //volume = requestData.vlm;
-      //chapter = requestData.chp;
-      //verse = requestData.ver;
-      //doblank = requestData.blank;
-    
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-      res.setHeader('Content-Type', 'application/json');
-      
-      // 发送响应数据
-      res.end(JSON.stringify({"state": "success"}));//res.end(JSON.stringify(queryResult));
-      
-      println(`[master: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-      print(` [ conn: ${B_clients.size} ] `);
-      broadcast_Bible();
-    });
 }
 
 //讀檔輸出
@@ -407,15 +370,15 @@ const server = http.createServer((req, res) => {
   switch (url) {
 
     case '/restorescripture': restorescripture(req, res); return;
-    case '/synscripture':     synscripture(req, res);     return;
+    case '/synscripture': synscripture(req, res); return;
 
-    case '/query':            query(req, res);            return;
-    case '/command':          command(req, res);          return;
+    case '/query': query(req, res); return;
+    case '/command': command(req, res); return;
 
     //case '/restorelyrics':    restorelyrics(req, res);    return;
-    case '/synclyrics':       synclyrics(req, res);       return;
+    case '/synclyrics': synclyrics(req, res); return;
 
-    case '/initui':           initui(req, res);           return;
+    case '/initui': initui(req, res); return;
     /*
     case '/Bible_ctrl': {
       url = '/subtitle_b.html';
@@ -431,49 +394,53 @@ const server = http.createServer((req, res) => {
     } return;
     */
     default:
-        if (req.url.startsWith('/cmd')) {
-          if (req.url === '/cmd') {
-            cmdAll(req, res); 
-            return; 
-          }
-          var queryData = urltool.parse(req.url, true).query;
-          if (queryData.cc) {
-            cmd(req, res, parseInt(queryData.cc));
-            return;
-          }
+      if (req.url.startsWith('/cmd')) {
+        if (req.url === '/cmd') {
+          cmdAll(req, res);
           return;
         }
-        break;
+        var queryData = urltool.parse(req.url, true).query;
+        if (queryData.cc) {
+          cmd(req, res, parseInt(queryData.cc));
+          return;
+        }
+        return;
+      }
+      break;
   }
 
   if (url.startsWith('/synscripture_get')) {
     var requestData = urltool.parse(url, true).query;
-    println('data : ' + requestData.vlm + ', ' + requestData.chp + ', ' + requestData.ver + ', ' + requestData.blank);
-    volume = requestData.vlm;
-    chapter = requestData.chp;
-    verse = requestData.ver;
-    doblank = requestData.blank;
-    synscripture_get(req, res);
+    volume = parseInt(requestData.vlm);
+    chapter = parseInt(requestData.chp);
+    verse = parseInt(requestData.ver);
+    doblank = parseInt(requestData.blank);
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    
+    res.end('get done!\n');
+    println(`[[master: ${volume}, ${chapter}, ${verse}, ${doblank}]]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+    print(` [[ conn: ${B_clients.size} ]] `);
+    broadcast_Bible();
     return;
   }
 
   if (url === '/Bible_play') {
     const redirect = '/subtitle_b.html?action=play';
-    res.writeHead(302, {Location: redirect});
+    res.writeHead(302, { Location: redirect });
     res.end();
     return;
   }
 
   if (url === '/Bible_play_niv') {
     const redirect = '/subtitle_niv.html?action=play';
-    res.writeHead(302, {Location: redirect});
+    res.writeHead(302, { Location: redirect });
     res.end();
     return;
   }
 
   if (url === '/Bible_ctrl') {
     const redirect = '/subtitle_b.html?action=ctrl';
-    res.writeHead(302, {Location: redirect});
+    res.writeHead(302, { Location: redirect });
     res.end();
     return;
   }
@@ -484,7 +451,7 @@ const server = http.createServer((req, res) => {
     const redirect = '/index.html?server=nodejs';
     // 执行重定向
 
-    res.writeHead(302, {Location: redirect});
+    res.writeHead(302, { Location: redirect });
     res.end();
 
     return;
@@ -533,13 +500,13 @@ let wsport = 8080;
 const args = process.argv;//.slice(1); if (args.length > 2) port = parseInt(args[2]);
 if (args.length >= 3) {
   port = parseInt(args[2]);
-  if (args.length >= 4) 
+  if (args.length >= 4)
     wsport = parseInt(args[3]);
 }
 
 server.listen(port, () => {
   println('Server is running...');
-  println('http://' + addresses[0] + ((port == 80)?'':':'+port)+'\n'); 
+  println('http://' + addresses[0] + ((port == 80) ? '' : ':' + port) + '\n');
 });
 
 const B_clients = new Set();
@@ -547,17 +514,17 @@ const S_clients = new Set();
 var wss = null;//new WebSocket.Server({ port:8080 });
 
 if (WebSocket) {
-  wss = new WebSocket.Server({ port:wsport });
+  wss = new WebSocket.Server({ port: wsport });
   println('websocket port : ' + wsport);
 
   wss.on('connection', function connection(ws, req) {
-  
+
     let ip = req.socket.remoteAddress;
     let url = req.url;
-    println(' #url: ' + ip + ', ' +  url + '#');
-    
+    println(' #url: ' + ip + ', ' + url + '#');
+
     if (url === '/Bible') {
-      println('[client connected]'+'\n');
+      println('[client connected]' + '\n');
       //ws.address = ip;
       B_clients.add(ws);
       ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
@@ -567,34 +534,34 @@ if (WebSocket) {
     }
 
     if (url === '/Song') {
-      println('<client connected>'+'\n');
+      println('<client connected>' + '\n');
       S_clients.add(ws);
       ws.on('message', function incoming(message) {
         print(`<client: ${message}>`);
         ws.send(getSongObjStr());
       });
     }
-    
+
   });
 }
 
 function broadcast_Bible() {
   let data = getBibleObjStr();
-  B_clients.forEach(function(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        print('[broadcast ' + client._socket.remoteAddress + ']');
-        client.send(data);
-      } else {
-        B_clients.delete(client);
-        print('[' + client._socket.remoteAddress + ' removed]');
-      }
+  B_clients.forEach(function (client) {
+    if (client.readyState === WebSocket.OPEN) {
+      print('[broadcast ' + client._socket.remoteAddress + ']');
+      client.send(data);
+    } else {
+      B_clients.delete(client);
+      print('[' + client._socket.remoteAddress + ' removed]');
+    }
   });
 
 }
 
 function broadcast_Song() {
   let data = getSongObjStr();
-  S_clients.forEach(function(client) {
+  S_clients.forEach(function (client) {
     if (client.readyState === WebSocket.OPEN) {
       print('<broadcast ' + client._socket.remoteAddress + '>');
       client.send(data);
@@ -603,7 +570,7 @@ function broadcast_Song() {
       print('<' + client._socket.remoteAddress + ' removed>');
     }
   });
-} 
+}
 
 //sudo su -
 //ssh -i "taipei_jkpan_macmini.pem" ubuntu@ec2-54-169-169-141.ap-southeast-1.compute.amazonaws.com

@@ -38,14 +38,59 @@
             border: 2px solid rgb(0, 128, 0);
             border-radius: 2px;
             border-color: rgb(0, 255, 0);
-            margin: 1%;
+            margin: 0%;
             outline: none;
             padding: 0px;
             box-sizing: border-box;
             background: rgb(0, 150, 0);
             color: rgb(0, 255, 0);
-            width: 80%;
             font-size: 24px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .left {
+            position: fixed;
+            top: 10%;
+            left: 2%;
+            /* 初始位置在左侧屏幕外 */
+            width: 40%;
+            height: 40%;
+            background-color: rgb(255, 255, 0);
+            color: #fff;
+            transition: top 0.3s;
+            border: none;
+        }
+
+        .bottom {
+            position: fixed;
+            top: 50%;
+            left: 2%;
+            /* 初始位置在左侧屏幕外 */
+            width: 40%;
+            height: 40%;
+            background-color: rgb(100, 100, 100);
+            color: #fff;
+            transition: top 0.3s;
+            /* 添加过渡效果 */
+            z-index: 90;
+            border: none;
+        }
+
+
+        .slides {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            /* 初始位置在左侧屏幕外 */
+            width: 40%;
+            height: 50%;
+            background-color: rgb(0, 0, 0);
+            color: #fff;
+            transition: top 0.3s;
+            /* 添加过渡效果 */
+            z-index: 90;
+            border: none;
         }
 
         textarea:focus {
@@ -60,15 +105,20 @@
 </head>
 
 <body>
-    <label style="color: rgb(0, 255, 0);"> </label>
-    <textarea id="listenTxt" rows="10"></textarea>
+    <div class="slides" id="slidesDiv">
+        <iframe style="border: none;" width="100%" height="100%" id="slidesFrame"></iframe>
+    </div>
+
+    <button id="start" onclick="btnonclick()">開始語音輸入</button>
+    <p></p>
+    <div class="left">
+        <textarea id="listenTxt"></textarea>
+    </div>
+
     <P></P>
-    <button onclick="textGo()"> Format </button>
-    <P></P>
-    <textarea id="result" rows="10" cols="50">
-    </textarea>
-    <P></P>
-    <button type="button" onclick="copyFormat()">Copy</button>
+    <div class="bottom" id="result">
+        <a href="javascript:embeddedUrl('http://54.169.169.141/synscripture_get?vlm=41&chp=2&ver=3&blank=0')">ABC</a>
+    </div>
     <P></P>
 </body>
 
@@ -76,6 +126,23 @@
 
 <script type="text/javascript" charset="UTF-8">
 
+    function embeddedUrl(url) {
+        document.getElementById('slidesDiv').hidden = false;
+        let frame = document.getElementById('slidesFrame');
+        frame.src = url;
+    }
+
+    function btnonclick() {
+        let btn = document.getElementById('start');
+        if (recognition && !recognizing) {
+            recognition.start();
+            btn.style.backgroundColor = 'rgb(255,0,0)';
+        }
+        if (recognition && recognizing) {
+            recognition.stop();
+            btn.style.backgroundColor = 'rgb(0,255,0)';
+        }
+    }
     const VOLNAME = ["",
 
         "創世記", "出埃及記", "利未記", "民數記", "申命記",
@@ -105,11 +172,7 @@
     ];
 
     function textGo() {
-        let value = document.getElementById("listenTxt").value;
-        value = value.trim();
 
-        //let area = document.getElementById("result");
-        //area.value = allstr;
     }
 
     /*
@@ -308,6 +371,7 @@
 
     // 語音辨識相關 ... END
 
+    /*
     var keylock = 0;
     function keyupAction(e) {
         //e.preventDefault();
@@ -334,5 +398,6 @@
     }
 
     window.addEventListener('keydown', keydownAction, false);
+    */
 
 </script>
