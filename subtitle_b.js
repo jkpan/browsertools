@@ -819,8 +819,14 @@ function _saveAction2Local() {
 //判斷是不是要卷軸動畫
 function restoreAnim(volume, chapter, verse, _doblank) {
 
+  if (!(volume  < SONGS.length && 
+        chapter < SONGS[volume].length && 
+        verse   < SONGS[volume][chapter].length)) {
+    return;
+  }
+
   if (volume != song) {
-    chkVolDir(song, volume)
+    chkVolDir(song, volume);
   }
 
   if (volume == song && chapter == phase && verse == line) {

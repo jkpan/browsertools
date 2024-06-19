@@ -26,8 +26,8 @@
 
         button {
             font-size: 16px;
-            background-color: transparent;
-            color: #00ff00;
+            background-color: black;
+            color: white;
             /*margin: 2% 2%;*/
             /*width: 33%;*/
             border: 2px solid;
@@ -64,10 +64,10 @@
 
         .bottom {
             position: fixed;
-            top: 50%;
+            top: 55%;
             left: 2%;
             /* 初始位置在左侧屏幕外 */
-            width: 40%;
+            width: 88%;
             height: 40%;
             background-color: rgb(100, 100, 100);
             color: #fff;
@@ -84,7 +84,7 @@
             left: 50%;
             /* 初始位置在左侧屏幕外 */
             width: 40%;
-            height: 50%;
+            height: 40%;
             background-color: rgb(0, 0, 0);
             color: #fff;
             transition: top 0.3s;
@@ -110,15 +110,14 @@
     </div>
 
     <button id="start" onclick="btnonclick()">開始語音輸入</button>
+    <!-- <button id="start" onclick="test()">開始語音輸入</button> -->
     <p></p>
     <div class="left">
         <textarea id="listenTxt"></textarea>
     </div>
 
     <P></P>
-    <div class="bottom" id="result">
-        <a href="javascript:embeddedUrl('http://54.169.169.141/synscripture_get?vlm=41&chp=2&ver=3&blank=0')">ABC</a>
-    </div>
+    <div class="bottom" id="result"></div>
     <P></P>
 </body>
 
@@ -126,23 +125,8 @@
 
 <script type="text/javascript" charset="UTF-8">
 
-    function embeddedUrl(url) {
-        document.getElementById('slidesDiv').hidden = false;
-        let frame = document.getElementById('slidesFrame');
-        frame.src = url;
-    }
+    var saved = [];
 
-    function btnonclick() {
-        let btn = document.getElementById('start');
-        if (recognition && !recognizing) {
-            recognition.start();
-            btn.style.backgroundColor = 'rgb(255,0,0)';
-        }
-        if (recognition && recognizing) {
-            recognition.stop();
-            btn.style.backgroundColor = 'rgb(0,255,0)';
-        }
-    }
     const VOLNAME = ["",
 
         "創世記", "出埃及記", "利未記", "民數記", "申命記",
@@ -171,15 +155,147 @@
         "猶大書", "啟示錄"
     ];
 
-    function textGo() {
+    function addLink(vol, chp, vss) {
+        // 获取要放置链接的容器
+        let linkContainer = document.getElementById('result');
+        // 创建一个新的 <a> 元素
+        let link = document.createElement('a');
 
+        // 设置链接的文本内容
+        link.textContent = `${VOLNAME[vol]} ${chp} ${vss}`;
+        // 设置链接的 href 属性来调用函数
+        // 这里使用 JavaScript: 伪协议来调用函数
+        let parameter = `http://54.169.169.141/synscripture_get?vlm=${vol}&chp=${chp}&ver=${vss}&blank=0`;
+        link.href = `javascript:embeddedUrl('${parameter}')`;
+        linkContainer.appendChild(link);
+        linkContainer.appendChild(document.createElement('br'));
+        saved[saved.length] = [vol, chp, vss];
+    }
+
+    function parseContent(txt) {
+        txt = parseRecogResult(txt);
+        console.log('txt:' + txt);
+        let vol = 0;
+        let chp = 0;
+        let vss = 0;
+        for (let i = 1; i < VOLNAME.length; i++) {
+            let _vol = VOLNAME[i];
+            if (txt.indexOf(_vol) !== -1) {
+                vol = i;
+                break;
+            }
+        }
+        if (vol == 0) return;
+
+        //txt = "今天是2024年6月19日";
+        let numbers = txt.match(/\d+/g);
+        if (numbers) {
+            console.log(numbers);  // 输出: ["2024", "6", "19"]
+            if (numbers.length >= 1) {
+                chp = numbers[0];
+            }
+            if (numbers.length >= 2) {
+                vss = numbers[1];
+            }
+        }
+
+
+        for (let i = 0; i < saved.length; i++) {
+            if (saved[i][0] == vol && saved[i][1] == chp && saved[i][2] == vss)
+                return;
+        }
+
+        addLink(vol, chp, vss);
+
+    }
+    
+    /*
+    function chineseToArabic(chineseNum) {
+        const chineseNumberMap = {
+            '零': 0,
+            '一': 1,
+            '二': 2,
+            '三': 3,
+            '四': 4,
+            '五': 5,
+            '六': 6,
+            '七': 7,
+            '八': 8,
+            '九': 9,
+            '十': 10,
+            '百': 100,
+            '千': 1000,
+            '万': 10000
+        };
+
+        let result = 0;
+        let temp = 0;
+        let unit = 1; // 默认为个位
+
+        for (let i = chineseNum.length - 1; i >= 0; i--) {
+            let currentChar = chineseNum[i];
+            let currentNum = chineseNumberMap[currentChar];
+
+            if (currentNum === undefined) {
+                throw new Error("Invalid Chinese numeral: " + currentChar);
+            }
+
+            if (currentNum >= 10 && i === 0) {
+                // 如果是以 "十" 开头的特殊情况，如 "十" 代表 10，"十二" 代表 12
+                if (currentNum === 10) {
+                    temp += 10;
+                } else {
+                    temp *= currentNum;
+                }
+                result += temp;
+                temp = 0;
+            } else if (currentNum >= 10) {
+                if (temp === 0) {
+                    temp = 1;
+                }
+                result += temp * currentNum;
+                temp = 0;
+            } else {
+                temp += currentNum * unit;
+            }
+        }
+
+        result += temp;
+        return result;
+    }
+    */
+    
+
+    var startbtn = document.getElementById('start');
+
+    function embeddedUrl(url) {
+        document.getElementById('slidesDiv').hidden = false;
+        let frame = document.getElementById('slidesFrame');
+        frame.src = url;
+    }
+
+    function test() {
+        parseContent('今天講到馬太福音15章2節 耶穌說');
+    }
+
+    function btnonclick() {
+
+        if (recognition && !recognizing) {
+            recognition.start();
+            return
+        }
+        if (recognition && recognizing) {
+            recognition.stop();
+            return;
+        }
     }
 
     /*
      * 語音辨識相關... START
      */
-    function parseRecogResult() {
+    function parseRecogResult(RecogResult) {
 
+        /*
         console.log('parseRecogResult...' + recogResult);
 
         if (recogResult.length == 0) return;
@@ -187,8 +303,8 @@
         let value = document.getElementById("listenTxt").value;
         value += RecogResult;
         document.getElementById("listenTxt").value = value;
+        */
 
-        /*
         RecogResult = RecogResult.replace('創世紀', '創世記');
         RecogResult = RecogResult.replace('列王記', '列王紀');
         RecogResult = RecogResult.replace('生命記', '申命記');
@@ -196,7 +312,7 @@
         RecogResult = RecogResult.replace('約翰一', '約翰壹');
         RecogResult = RecogResult.replace('約翰二', '約翰貳');
         RecogResult = RecogResult.replace('約翰三', '約翰參');
-        */
+
 
         /*
         for (var i = 1; i < VOLNAME.length; i++) {
@@ -214,9 +330,9 @@
         }
         */
 
-        console.log(RecogResult);
+        //console.log(RecogResult);
 
-        /*
+        
         RecogResult = RecogResult.replaceAll('一', '1');
         RecogResult = RecogResult.replaceAll('二', '2');
         RecogResult = RecogResult.replaceAll('三', '3');
@@ -227,13 +343,13 @@
         RecogResult = RecogResult.replaceAll('八', '8');
         RecogResult = RecogResult.replaceAll('九', '9');
         RecogResult = RecogResult.replaceAll('十', '10');
-        RecogResult = RecogResult.replaceAll('篇', ' ');
-        RecogResult = RecogResult.replaceAll('章', ' ');
-        RecogResult = RecogResult.replaceAll('節', '');
-        RecogResult = RecogResult.replaceAll('第', '');
+        //RecogResult = RecogResult.replaceAll('篇', ' ');
+        //RecogResult = RecogResult.replaceAll('章', ' ');
+        //RecogResult = RecogResult.replaceAll('節', '');
+        //RecogResult = RecogResult.replaceAll('第', '');
         RecogResult = RecogResult.trim();
-        console.log(RecogResult);
-        */
+        //console.log(RecogResult);
+        
 
         /*
         let array = RecogResult.split(' ');
@@ -259,6 +375,7 @@
 
         //recogResult = '';
         */
+        return RecogResult;
     }
 
     // 檢查瀏覽器是否為 Safari
@@ -301,6 +418,7 @@
             recognizing = true;
             console.log('info_speak_now');
             recogResult = '';
+            startbtn.style.backgroundColor = 'rgb(0,255,0)';
             //_repaint();
         };
 
@@ -317,14 +435,19 @@
             if (event.error == 'not-allowed') {
                 console.log('not-allowed');
             }
+
+            startbtn.style.backgroundColor = 'rgb(255,0,0)';
+
         };
 
         recognition.onend = function () {
+            startbtn.style.backgroundColor = 'rgb(0,0,0)';
             //parseRecogResult();
             recognizing = false;
             recogResult = '';
             console.log('onend');
             //_repaint();
+            recognition.start();
         };
 
         recognition.onresult = function (event) {
@@ -345,6 +468,10 @@
                     recogResult += event.results[i][0].transcript;
                     console.log('onresult isfinal: ' + recogResult);
                     ///_repaint();
+                    //btnonclick();
+                    //btn.style.backgroundColor = 'rgb(255,0,0)';
+                    recognition.stop();
+
                 } else {
                     recogResult += event.results[i][0].transcript;
                     console.log('onresult not isfinal: ' + recogResult);
@@ -356,6 +483,8 @@
             //let value = area.value;
             //value += recogResult;
             area.value = recogResult;
+
+            parseContent(recogResult);
 
             //console.log('onresult: ' + recogResult);
             //_repaint();
@@ -371,33 +500,6 @@
 
     // 語音辨識相關 ... END
 
-    /*
-    var keylock = 0;
-    function keyupAction(e) {
-        //e.preventDefault();
-        //e.stopPropagation();
-        if (e.keyCode == 32) {
-            if (recognition && recognizing) {
-                recognition.stop();
-            }
-        }
 
-        //keyboard(e);
-    }
-
-    window.addEventListener('keyup', keyupAction, false);
-
-
-    function keydownAction(e) {
-        if (e.keyCode == 32) { //space
-            if (recognition && !recognizing) {
-                recognition.start();
-            }
-            return;
-        }
-    }
-
-    window.addEventListener('keydown', keydownAction, false);
-    */
 
 </script>
