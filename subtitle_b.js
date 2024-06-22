@@ -116,10 +116,10 @@ class Verseobj {
     //Verseobj.hilight_height = this.targetRect;
 
     if (fontsize_dist == 1) //if (color_selection == 0) 
-      return this.level == 0 ? 
+      return this.level == 0 ?
         this.substrings.length * fs + fs * 0.5 :
         this.substrings.length * fs + fs * 0.2;
-      //this.substrings.length * this.targetFs + this.targetFs * 0.5;
+    //this.substrings.length * this.targetFs + this.targetFs * 0.5;
     else
       return this.substrings.length * fs + fs * 0.5;
   }
@@ -139,7 +139,7 @@ class Verseobj {
       //ctx.transform(1, 0, 0, 1, 0, this.transY);
       ctx.save();
       ctx.transform(1, 0, 0, 1, 0, HL_offset_progress);//this.targetTransY);
-      
+
       //draw chapter verse
       if (this.chapter > 0 && this.verse > 0) {
         let fs = this.targetFs * 0.5;
@@ -622,7 +622,7 @@ var ws;
 var timeoutID = -1;
 //
 function chkWebsocket() {
-  
+
   //console.log(`# ${timeoutID}`);
 
   if (timeoutID >= 0) window.clearTimeout(timeoutID);
@@ -645,9 +645,9 @@ function chkWebsocket() {
 }
 
 function initWebsocket() {
-  
+
   let serverDomain = window.location.hostname;
-  
+
   console.log('window.location: ', window.location);
 
   if (ws && ws.readyState === WebSocket.OPEN) {
@@ -656,29 +656,29 @@ function initWebsocket() {
   } else {
     console.log('WebSocket is not open');
   }
-  
+
   let port = 80;
   if (window.location.port.length > 0) {
     port = parseInt(window.location.port, 10);
   }
   port += 8000;
   //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  ws = new WebSocket('ws://' + serverDomain + ':' + port +'/Bible');
-  ws.onopen = function() {
+  ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible');
+  ws.onopen = function () {
     console.log('Connected to server');
     ws.send('Hello, WebSocket! - from client');
   };
-  ws.onmessage = function(event) {
+  ws.onmessage = function (event) {
     console.log('Received:', event.data);
     restoreFromJson(JSON.parse(event.data));
   };
-  ws.onclose = function() {
+  ws.onclose = function () {
     console.log('Connection closed');
   };
-  
+
   if (timeoutID >= 0) window.clearTimeout(timeoutID);
   timeoutID = setTimeout(chkWebsocket, 5000);
-  
+
 
 }
 
@@ -732,20 +732,20 @@ function ajax_sync() {
     console.error('There was a problem with the fetch operation:', error);
   });
   */
-  
+
   _ajax({
     vlm: song,
     chp: phase,
     ver: line,
     blank: doblank
-  }, 
-  '/synscripture',
-  //'http://192.168.0.16/synscripture',
-  (res) => {
-    console.log(JSON.stringify(res));
-  }, () => {
-    console.log('exception');
-  });
+  },
+    '/synscripture',
+    //'http://192.168.0.16/synscripture',
+    (res) => {
+      console.log(JSON.stringify(res));
+    }, () => {
+      console.log('exception');
+    });
 
 }
 
@@ -819,9 +819,9 @@ function _saveAction2Local() {
 //判斷是不是要卷軸動畫
 function restoreAnim(volume, chapter, verse, _doblank) {
 
-  if (!(volume  < SONGS.length && 
-        chapter < SONGS[volume].length && 
-        verse   < SONGS[volume][chapter].length)) {
+  if (!(volume < SONGS.length &&
+    chapter < SONGS[volume].length &&
+    verse < SONGS[volume][chapter].length)) {
     return;
   }
 
@@ -849,7 +849,7 @@ function restoreAnim(volume, chapter, verse, _doblank) {
   subtitles = SONGS[song];
   phase = chapter;
   line = verse;
-  
+
   if (display_mode != 0) {
     animElapse = 0;
     window.requestAnimationFrame(verse_update);
@@ -1353,11 +1353,11 @@ function operateQuene(queueType, doanim) {
 }
 
 function render(progress) {
-  
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   trans_start();
-  
+
   _layer0();
   _render(progress);
   _layerui();
@@ -1382,7 +1382,7 @@ function _render(progress) {
 
   //let x = canvas.width * 0.1;
 
-  let fixy = FIX_HL?canvas.height * 0.33:HL_offset_target; //
+  let fixy = FIX_HL ? canvas.height * 0.33 : HL_offset_target; //
   let offY = fixy;
 
   if (progress <= 0)/////
@@ -1393,7 +1393,7 @@ function _render(progress) {
         if (!FIX_HL) {
           obj.setTargetTransY(fixy);
           let offY_h = obj.preDraw(-2);// + fontsize_sml_sml / 2.0;
-          let gap = (canvas.height - offY_h)/2;
+          let gap = (canvas.height - offY_h) / 2;
           fixy = gap;
           obj.setTargetTransY(fixy);
           offY = gap + offY_h;
@@ -1435,12 +1435,12 @@ function _render(progress) {
 
   if (progress < 0) {
     HL_offset_progress = HL_offset_target;
-    HL_H_progress = HL_H_target;  
+    HL_H_progress = HL_H_target;
   } else if (progress >= 0) {
     HL_offset_progress += (HL_offset_target - HL_offset_progress) * progress;
-    HL_H_progress += (HL_H_target - HL_H_progress) * progress;  
+    HL_H_progress += (HL_H_target - HL_H_progress) * progress;
   }
-  
+
   for (let i = 0; i < queue.length; i++) {
     let obj = queue[i];
     if (obj.chapter == phase && obj.verse == line) {
@@ -1857,7 +1857,7 @@ function _targetAnim() {
     chkVolDir(pre, song);
     //if (!chkVolDir(pre, song) && skewidx < 0) _repaint();
     //console.log('s:' + song + ', ' + phase + ', '+ line);
-    
+
     window.requestAnimationFrame(_targetAnim);
     saveAction2Local();
     return;
@@ -1899,8 +1899,15 @@ var t_phase = 0;
 var t_line = 0;
 
 function jump2preset4Anim(ps) {
+
   for (var i = 1; i < SONGS.length; i++) {
     if (ps[0] == SONGS[i][0][0]) {
+
+      if (!(ps[1] < SONGS[i].length && 
+            ps[2] < SONGS[i][ps[1]].length)) {
+        return;
+      }
+
       t_song = i;
       //subtitles = SONGS[i];//presetVerse[value][0]
       t_phase = ps[1];
@@ -2122,7 +2129,7 @@ function keyboard(e) { //key up //alert(e.keyCode);
       phase = 0;
       line = 0;
       chkVolDir(oldsong, song);
-      }
+    }
       break;
     case 187: {//'='
       helpSwitch = 0;
@@ -2137,7 +2144,7 @@ function keyboard(e) { //key up //alert(e.keyCode);
       phase = 0;
       line = 0;
       chkVolDir(oldsong, song);
-      }
+    }
       break;
     /*
     case 48:
@@ -2236,22 +2243,22 @@ function gradientBg2(yy, hh) {
   let grd = ctx.createLinearGradient(0, yy, 0, yy - g_gap);
   grd.addColorStop(0, hlightStyle_green);
   grd.addColorStop(1, 'rgba(0,0,0,0)');
-  
+
   ctx.fillStyle = grd;
   ctx.fillRect(0, yy - g_gap, canvas.width, g_gap);
-  
+
 
   ctx.fillStyle = hlightStyle_green;//hlight_pointer;
   ctx.fillRect(0, yy, canvas.width, hh);
 
-  
+
   grd = ctx.createLinearGradient(0, yy + hh, 0, yy + hh + g_gap);
   grd.addColorStop(0, hlightStyle_green);
   grd.addColorStop(1, 'rgba(0,0,0,0)');
 
   ctx.fillStyle = grd;
   ctx.fillRect(0, yy + hh, canvas.width, g_gap);
-  
+
 }
 
 function gradientBg() {
@@ -2520,7 +2527,7 @@ function receiveMessage(e) {
 
     if (jsonData.fontfactor)
       setFontFactor(jsonData.fontfactor);
-    
+
     sync_type = 0;
     if (jsonData.syncType) {
       sync_type = jsonData.syncType;
@@ -2619,7 +2626,7 @@ if ('ontouchstart' in window || navigator.maxTouchPoints) {
 }
 
 /* 網頁切換別處切回來重繪 */
-document.addEventListener('visibilitychange', function() {
+document.addEventListener('visibilitychange', function () {
   _repaint();
 });
 
@@ -2920,20 +2927,19 @@ function parseRecogResult() {
   RecogResult = RecogResult.replace('約翰二', '約翰貳');
   RecogResult = RecogResult.replace('約翰三', '約翰參');
 
-  for (var i = 1; i < SONGS.length; i++) {
-    if (RecogResult.startsWith(chineseFullname[i])) {
-      //if (RecogResult.startsWith(fullname[i])) {
-
-      result[0] = SONGS[i][0][0];
-      jump2preset(result);
-      _repaint();
-
-      let cut = chineseFullname[i].length;
-      RecogResult = RecogResult.substr(cut, RecogResult.length - cut);
-      RecogResult = RecogResult.trim();
-      if (RecogResult.length == 0) return;
+  let vol = 0;
+  for (let i = 1; i < fullname.length; i++) {
+    let _vol = fullname[i];
+    let idx = RecogResult.indexOf(_vol);
+    if (idx !== -1) {
+      vol = i;
+      result[0] = _vol;
+      RecogResult = RecogResult.substring(idx);
+      break;
     }
   }
+
+  if (vol == 0) return;
 
   console.log(RecogResult);
 
@@ -2947,34 +2953,33 @@ function parseRecogResult() {
   RecogResult = RecogResult.replaceAll('八', '8');
   RecogResult = RecogResult.replaceAll('九', '9');
   RecogResult = RecogResult.replaceAll('十', '10');
-  RecogResult = RecogResult.replaceAll('篇', ' ');
-  RecogResult = RecogResult.replaceAll('章', ' ');
-  RecogResult = RecogResult.replaceAll('節', '');
-  RecogResult = RecogResult.replaceAll('第', '');
-  RecogResult = RecogResult.trim();
+  //RecogResult = RecogResult.replaceAll('篇', ' ');
+  //RecogResult = RecogResult.replaceAll('章', ' ');
+  //RecogResult = RecogResult.replaceAll('節', '');
+  //RecogResult = RecogResult.replaceAll('第', '');
+  //RecogResult = RecogResult.trim();
 
   console.log(RecogResult);
 
-  let array = RecogResult.split(' ');
-  if (array.length == 0) return;
-  if (array[0].length == 0) return;
-  let chapter = parseInt(array[0]);
-  if (isNaN(chapter)) return;
-  if (chapter < 0 || chapter >= SONGS[song].length) return;
 
-  result[1] = chapter;
+  ///////
+  //txt = "今天是2024年6月19日";
+  let numbers = RecogResult.match(/\d+/g);
+  if (numbers) {
+    console.log(numbers);  // 输出: ["2024", "6", "19"]
+    if (numbers.length >= 1) {
+      result[1] = numbers[0];
+    }
+    if (numbers.length >= 2) {
+      result[2] = numbers[1];
+    }
+  }
+  /////////
+
+  console.log(result);
+
   jump2preset(result);
-  _repaint();
-
-  if (array.length == 1) return;
-  if (array[1].length == 0) return;
-  let verse = parseInt(array[1]);
-  if (isNaN(verse)) return;
-  if (verse < 0 || verse >= SONGS[song][chapter].length) return;
-
-  result[2] = verse;
-  jump2preset(result);
-  _repaint();
+  //_repaint();
 
   //recogResult = '';
 }
@@ -3035,18 +3040,20 @@ function initRecognition() {
   //recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
+  
   if (navigator.userAgent.indexOf("Chrome") != -1) {
     var speechRecognitionList = new webkitSpeechGrammarList();
-    var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
-    speechRecognitionList.addFromString(grammar, 2);
+    var grammar = '#JSGF V1.0; grammar volumes; public <volume> = ' + fullname.join(' | ') + ' ;';
+    speechRecognitionList.addFromString(grammar, 1.0);
     recognition.grammars = speechRecognitionList;
   }
+  
 
   recognition.onstart = function () {
     recognizing = true;
     console.log('info_speak_now');
     recogResult = '';
-    _repaint();
+    //_repaint();
   };
 
   recognition.onerror = function (event) {
@@ -3068,8 +3075,7 @@ function initRecognition() {
     parseRecogResult();
     recognizing = false;
     recogResult = '';
-    console.log('onend');
-    _repaint();
+    console.log('onend'); //_repaint();
   };
 
   recognition.onresult = function (event) {
@@ -3087,11 +3093,11 @@ function initRecognition() {
       if (event.results[i].isFinal) {
         recogResult += event.results[i][0].transcript;
         console.log('onresult isfinal: ' + recogResult);
-        _repaint();
+        //_repaint();
       } else {
         recogResult += event.results[i][0].transcript;
         console.log('onresult not isfinal: ' + recogResult);
-        _repaint();
+        //_repaint();
       }
     }
     console.log('onresult: ' + recogResult);
@@ -3100,7 +3106,7 @@ function initRecognition() {
 
 }
 
-switch(isSafariBrowser()) {
+switch (isSafariBrowser()) {
   case 0: initRecognition(); break;
   case 1: console.log('瀏覽器是 Safari'); break;
   default: console.log('其他瀏覽器'); break;

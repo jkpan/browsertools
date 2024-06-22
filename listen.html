@@ -85,7 +85,7 @@
             /* 初始位置在左侧屏幕外 */
             width: 40%;
             height: 40%;
-            background-color: rgb(0, 0, 0);
+            background-color: rgb(100, 100, 100);
             color: #fff;
             transition: top 0.3s;
             /* 添加过渡效果 */
@@ -173,15 +173,16 @@
     }
 
     function parseContent(txt) {
-        txt = parseRecogResult(txt);
-        console.log('txt:' + txt);
+        txt = parseRecogResult(txt); //console.log('txt:' + txt);
         let vol = 0;
         let chp = 0;
         let vss = 0;
         for (let i = 1; i < VOLNAME.length; i++) {
             let _vol = VOLNAME[i];
-            if (txt.indexOf(_vol) !== -1) {
+            let idx = txt.indexOf(_vol);
+            if (idx !== -1) {
                 vol = i;
+                txt = txt.substring(idx);
                 break;
             }
         }
@@ -281,10 +282,12 @@
     function btnonclick() {
 
         if (recognition && !recognizing) {
+            console.log('btn start');
             recognition.start();
             return
         }
         if (recognition && recognizing) {
+            console.log('btn stop');
             recognition.stop();
             return;
         }
@@ -295,16 +298,6 @@
      */
     function parseRecogResult(RecogResult) {
 
-        /*
-        console.log('parseRecogResult...' + recogResult);
-
-        if (recogResult.length == 0) return;
-        let RecogResult = recogResult;
-        let value = document.getElementById("listenTxt").value;
-        value += RecogResult;
-        document.getElementById("listenTxt").value = value;
-        */
-
         RecogResult = RecogResult.replace('創世紀', '創世記');
         RecogResult = RecogResult.replace('列王記', '列王紀');
         RecogResult = RecogResult.replace('生命記', '申命記');
@@ -312,23 +305,6 @@
         RecogResult = RecogResult.replace('約翰一', '約翰壹');
         RecogResult = RecogResult.replace('約翰二', '約翰貳');
         RecogResult = RecogResult.replace('約翰三', '約翰參');
-
-
-        /*
-        for (var i = 1; i < VOLNAME.length; i++) {
-            if (RecogResult.startsWith(VOLNAME[i])) {
-
-                result[0] = SONGS[i][0][0];
-                jump2preset(result);
-                _repaint();
-
-                let cut = chineseFullname[i].length;
-                RecogResult = RecogResult.substr(cut, RecogResult.length - cut);
-                RecogResult = RecogResult.trim();
-                if (RecogResult.length == 0) return;
-            }
-        }
-        */
 
         //console.log(RecogResult);
 
@@ -350,31 +326,6 @@
         RecogResult = RecogResult.trim();
         //console.log(RecogResult);
         
-
-        /*
-        let array = RecogResult.split(' ');
-        if (array.length == 0) return;
-        if (array[0].length == 0) return;
-        let chapter = parseInt(array[0]);
-        if (isNaN(chapter)) return;
-        if (chapter < 0 || chapter >= SONGS[song].length) return;
-
-        result[1] = chapter;
-        jump2preset(result);
-        _repaint();
-
-        if (array.length == 1) return;
-        if (array[1].length == 0) return;
-        let verse = parseInt(array[1]);
-        if (isNaN(verse)) return;
-        if (verse < 0 || verse >= SONGS[song][chapter].length) return;
-
-        result[2] = verse;
-        jump2preset(result);
-        _repaint();
-
-        //recogResult = '';
-        */
         return RecogResult;
     }
 
@@ -404,16 +355,19 @@
         recognition.lang = 'cmn-Hant-TW';//'zh-TW';//'en-US';'en-US';'cmn-Hant-TW';
         //recognition.interimResults = false;
         //recognition.maxAlternatives = 1;
+        // 设置识别语言
+        //recognition.lang = 'zh-CN'; // 设置为中文
+        
 
-        /*
+        
         if (navigator.userAgent.indexOf("Chrome") != -1) {
             var speechRecognitionList = new webkitSpeechGrammarList();
-            var grammar = '#JSGF V1.0; grammar volume; public <volume> = ' + fullname.join(' | ') + ' ;';
-            speechRecognitionList.addFromString(grammar, 2);
+            var grammar = '#JSGF V1.0; grammar volumes; public <volume> = ' + VOLNAME.join(' | ') + ' ;';
+            //console.log(grammar);
+            speechRecognitionList.addFromString(grammar, 1.0);
             recognition.grammars = speechRecognitionList;
         }
-        */
-
+        
         recognition.onstart = function () {
             recognizing = true;
             console.log('info_speak_now');
@@ -467,15 +421,11 @@
                 if (event.results[i].isFinal) {
                     recogResult += event.results[i][0].transcript;
                     console.log('onresult isfinal: ' + recogResult);
-                    ///_repaint();
-                    //btnonclick();
-                    //btn.style.backgroundColor = 'rgb(255,0,0)';
-                    recognition.stop();
-
+                    btnonclick();
+                    break;
                 } else {
                     recogResult += event.results[i][0].transcript;
                     console.log('onresult not isfinal: ' + recogResult);
-                    //_repaint();
                 }
             }
 
