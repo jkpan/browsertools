@@ -705,7 +705,7 @@ function keyboard(e) {
     //case 113: //F2
     case 13: //Enter
       createCtrlBtn();
-      break;
+      return;
       /*
       if (funcInterval) {
         stopActionInterval();
@@ -729,9 +729,11 @@ function keyboard(e) {
     case 33: //'page up'
       if (mode == 0) {
         keyboard({ keyCode: 37 }); //left
+        return;
       } else { //ppt mode
         if (phase > 0) { //normal
           keyboard({ keyCode: 38 }); //up
+          return;
         } else { // top phase jump to previous song
           if (song > 0) {
             song--;
@@ -745,9 +747,11 @@ function keyboard(e) {
     case 34: //'page down'
       if (mode == 0) {
         keyboard({ keyCode: 39 }); //right
+        return;
       } else {
         if (phase < subtitles.length - 1) {
           keyboard({ keyCode: 40 }); //down
+          return;
         } else {
           if (song < SONGS.length - 1) {
             song++;
@@ -884,6 +888,8 @@ function keyboard(e) {
 
   _repaint();
 
+  saveAction2Local();
+
 }
 
 var makeTransparent = false;
@@ -972,8 +978,7 @@ function _layer2() {
 
 }
 
-function _repaint() {
-  if (!funcInterval) saveAction2Local();
+function _repaint() { //if (!funcInterval) saveAction2Local();
   _layer0();
   _layer1();
   _layer2();

@@ -2978,10 +2978,11 @@ function parseRecogResult() {
 
   console.log(result);
 
-  jump2preset(result);
-  //_repaint();
+  var userConfirmed = confirm(`${result[0]} ${result[1]}:${result[2]} ?`);
+  if (userConfirmed) {
+      jump2preset(result);
+  }
 
-  //recogResult = '';
 }
 
 // 檢查瀏覽器是否為 Safari

@@ -137,6 +137,7 @@
       window.opener.subtitles = window.opener.SONGS[window.opener.song];
       
       window.opener._repaint();
+      window.opener.saveAction2Local();
 
       let allstr = `<script id="" name="${newsong[0][0]}" type="application/json" charset="UTF-8"> {\n`;     
 
@@ -222,6 +223,7 @@
       //alert(idtxt + ' ' + subtitles[0][0]);
       //hideCanvas();
       window.opener._repaint();
+      window.opener.saveAction2Local();
       
       mapping(array);
       
