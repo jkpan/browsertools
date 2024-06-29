@@ -152,6 +152,7 @@ var imgurl = '';//'./Icon-1024.png';
 var img;
 var canvas;
 var ctx;
+var makeLED = false;
 
 function init() {
   canvas = document.getElementById("canvas");
@@ -162,7 +163,16 @@ function init() {
   fontsize = Math.ceil(canvas.height / fontfactor);
   FONT = fontsize + "px " + fontFamily;
 
-  //canvas.style.caretColor = "red";
+  if (makeLED) {//LED init
+    dots = 1;
+    side = 1;
+    makeRound = true;
+    set2AverageColor(); 
+    //set2PickColor();
+    initLED(0, 0, canvas.width, canvas.height); 
+    newLEDMask();
+  }
+
 }
 
 /*
@@ -982,6 +992,7 @@ function _repaint() { //if (!funcInterval) saveAction2Local();
   _layer0();
   _layer1();
   _layer2();
+  if (makeLED) ledAction4Still(canvas, ctx); //LED
 }
 
 var sync_type = 0;
@@ -1439,6 +1450,8 @@ function anim_update(elapse) {
 
   _layer1();
   _layer2();
+
+  if (makeLED) ledAction4Still(canvas, ctx); //LED
 
   if (animSwh == 1)
     window.requestAnimationFrame(anim_update);

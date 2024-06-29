@@ -201,11 +201,11 @@
     }
 
     function displayPDFFile(file) {
-        displayHTMLFile(file);
+        //displayHTMLFile(file);
         
-        //document.querySelector('body').style.background = 'transparent';
-        //const fileURL = URL.createObjectURL(file);
-        //window.location.href = fileURL;
+        document.querySelector('body').style.background = 'transparent';
+        const fileURL = URL.createObjectURL(file);
+        window.location.href = fileURL;
         
     }
 

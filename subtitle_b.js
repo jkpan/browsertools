@@ -954,13 +954,28 @@ function _newBtn() {
 
 var ctrls = [];
 
-function setMsg_X() {
-  sync_type = 4;
+function setMsg_none() {
+  sync_type = 0;
   synctrls();
 }
 
 function setMsg_O() {
   sync_type = 1;
+  synctrls();
+}
+
+function setMsg_ctrl() {
+  sync_type = 2;
+  synctrls();
+}
+
+function setMsg_3() {
+  sync_type = 3;
+  synctrls();
+}
+
+function setMsg_X() {
+  sync_type = 4;
   synctrls();
 }
 
@@ -974,10 +989,7 @@ function setMsg_play_socket() {
   synctrls();
 }
 
-function setMsg_ctrl() {
-  sync_type = 2;
-  synctrls();
-}
+
 
 function createCtrlBtn() {
   removeDiv();
@@ -996,8 +1008,7 @@ function createCtrlBtn() {
   var btn_none = _newBtn();
   btn_none.innerHTML = 'none';
   btn_none.onclick = function () {
-    sync_type = 0;
-    synctrls();
+    setMsg_none();
     return false;
   };
   div.appendChild(btn_none);
@@ -1008,8 +1019,7 @@ function createCtrlBtn() {
   var btn_lm = _newBtn();
   btn_lm.innerHTML = 'local master';
   btn_lm.onclick = function () {
-    sync_type = 1;
-    synctrls();
+    setMsg_O();
     return false;
   };
   div.appendChild(btn_lm);
@@ -1018,8 +1028,7 @@ function createCtrlBtn() {
   var btn_wm = _newBtn();
   btn_wm.innerHTML = 'web master';
   btn_wm.onclick = function () {
-    sync_type = 2;
-    synctrls();
+    setMsg_ctrl();
     return false;
   };
   div.appendChild(btn_wm);
@@ -1028,8 +1037,7 @@ function createCtrlBtn() {
   var btn_lwm = _newBtn();
   btn_lwm.innerHTML = 'local & web master';
   btn_lwm.onclick = function () {
-    sync_type = 3;
-    synctrls();
+    setMsg_3();
     return false;
   };
   div.appendChild(btn_lwm);
@@ -1040,8 +1048,7 @@ function createCtrlBtn() {
   var btn_ls = _newBtn();
   btn_ls.innerHTML = 'local slave';
   btn_ls.onclick = function () {
-    sync_type = 4;
-    synctrls();
+    setMsg_X();
     return false;
   };
   div.appendChild(btn_ls);
@@ -1050,8 +1057,7 @@ function createCtrlBtn() {
   var btn_ws = _newBtn();
   btn_ws.innerHTML = 'web slave';
   btn_ws.onclick = function () {
-    sync_type = 5;
-    synctrls();
+    setMsg_play();
     return false;
   };
   div.appendChild(btn_ws);
@@ -1060,8 +1066,7 @@ function createCtrlBtn() {
   var btn_wss = _newBtn();
   btn_wss.innerHTML = 'websocket slave';
   btn_wss.onclick = function () {
-    sync_type = 6;
-    synctrls();
+    setMsg_play_socket();
     return false;
   };
   div.appendChild(btn_wss);
@@ -3123,7 +3128,7 @@ song = 0;
 jumpTo1();
 _repaint();
 
-setMsg_O();
+setMsg_none();
 
 window.addEventListener("beforeunload", function () {
   _saveAction2Local();

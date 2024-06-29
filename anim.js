@@ -915,7 +915,7 @@ function newParticle_led() {
           } else {
             this.data[i][j] = 0;
           }
-          console.log(this.data[i][j]);
+          //console.log(this.data[i][j]);
         }
       }
       //console.log('newParticle_led update: ' + this.data.length + ', ' + this.data[0].length);
