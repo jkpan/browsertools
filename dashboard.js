@@ -791,6 +791,36 @@ function showAll() {
   anim_update(-1);
 }
 
+function actionOne(keyname, action) { //0 hide 1 show 2 enlarge
+  recoverAll();
+  //hideAll();
+  let idx = -1;
+  for (let i = 0; i < applets.length; i++) {
+    if (keyname == applets[i].keyname) {
+      idx = i;
+      break;
+    }
+  }
+  
+  if (idx == -1) return;
+  let app = applets[idx];
+  if (app.ctrl_locked) return;
+
+  switch(action) {
+    case 0:
+      app.progress_hide_Self();
+      break;
+    case 1:
+      app.onTop();
+      app.progress_show_Self();
+      break;
+    case 2:
+      app.enlargeSelf();
+      break;
+  }  
+  anim_update(-1);
+}
+
 function hideAll() {
   for (let i = 0; i < applets.length; i++) {
     if (!applets[i].ctrl_locked) {

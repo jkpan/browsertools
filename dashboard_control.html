@@ -30,11 +30,13 @@
 </head>
 
 <body>
+
     <div id="controlWin" class="controlPart">
         <button onclick="reca()">recover</button>
         <button onclick="hida()">hide</button>
         <button onclick="shwa()">show</button>
         <button onclick="reloadState()">reload</button>
+        <button id="start" onclick="btnonclick()">語音</button>
         <hr size="4" width="100%" color="#007000">
         <button onclick="controlParent('hymn')">🎤</button>
         <button onclick="controlParent('Bible')">🎚️</button>
@@ -54,7 +56,7 @@
         <button onclick="controlParent('tabs')">頁籤</button>
 
         <hr size="4" width="100%" color="#007000">
-        
+
         <!-- <button id="hymn" onclick="controlParent('hymn')">🎤</button>
         <button id="hymn_v" onclick="switchVisible('hymn')">V</button>
         <button id="hymn_p" onclick="perspective('hymn')">P</button>
@@ -126,10 +128,10 @@
 
     function createBtns(key) {
         createBtn(key, controlParent, key);
-        createBtn(key+'_v', switchVisible, key);
-        createBtn(key+'_p', perspective, key);
-        createBtn(key+'_x', closeApp, key);
-        createBtn(key+'_l', lockApp, key);
+        createBtn(key + '_v', switchVisible, key);
+        createBtn(key + '_p', perspective, key);
+        createBtn(key + '_x', closeApp, key);
+        createBtn(key + '_l', lockApp, key);
     }
 
     function reca() {
@@ -248,5 +250,252 @@
     }
 
     reloadState();
+
+</script>
+
+<script>
+
+    var startbtn = document.getElementById('start');
+    startbtn.style.backgroundColor = 'transparent';
+
+    var cmd = ["打開", "放大", "關掉"];
+    var item = ["全部", "聖經", "歌詞", "投影片"];
+    var map = ["-", "Bible", "hymn", "url_1"];
+
+    function btnonclick() {
+
+        reloadState();
+
+        if (recognition && !recognizing) {
+            console.log('btn start');
+            recognition.start();
+            return
+        }
+        if (recognition && recognizing) {
+            console.log('btn stop');
+            recognition.stop();
+            return;
+        }
+    }
+
+
+    /*
+     * 語音辨識相關... START
+     */
+    function parseContent(RecogResult) {
+
+        //RecogResult = "關掉全部打開投影片";
+
+        console.log('parseContent: ' + RecogResult);
+
+        //RecogResult = RecogResult.replace('創世紀', '創世記');
+        //RecogResult = RecogResult.replaceAll('一', '1');
+        //RecogResult = RecogResult.trim();
+
+        //let action;
+        //let obj;
+
+        do {
+
+            let action_idx = -1;
+            let obj_idx = -1;
+
+            let sidx_a = -1;
+            let sidx_o = -1;
+
+            for (let i = 0; i < cmd.length; i++) {
+                let command = cmd[i];
+                //sidx_a = RecogResult.indexOf(command);
+                let sidx = RecogResult.indexOf(command);
+                if (sidx >= 0 && sidx_a == -1) {
+                    sidx_a = sidx;
+                    action_idx = i;
+                }
+                if (sidx >= 0 && sidx < sidx_a) {
+                    sidx_a = sidx;
+                    action_idx = i;
+                }
+            }
+
+            for (let i = 0; i < item.length; i++) {
+                let _item = item[i];
+                //sidx_o = RecogResult.indexOf(_item);
+                let sidx = RecogResult.indexOf(_item);
+                if (sidx >= 0 && sidx_o == -1) {
+                    sidx_o = sidx;
+                    obj_idx = i;
+                }
+                if (sidx >= 0 && sidx < sidx_o) {
+                    sidx_o = sidx;
+                    obj_idx = i;
+                }
+            }
+
+            if (action_idx == -1 || obj_idx == -1) return;
+
+            console.log('before:' + RecogResult);
+
+            if (sidx_a > sidx_o) {
+                RecogResult = RecogResult.substring(sidx_a + cmd[action_idx].length);
+            } else {
+                RecogResult = RecogResult.substring(sidx_o + item[obj_idx].length);
+            }
+
+            console.log('after:' + RecogResult);
+
+            //let _command = [action, obj];
+            console.log('action: ' + cmd[action_idx] + 'obj: ' + item[obj_idx]);
+
+            if (obj_idx == 0) {
+                switch (action_idx) {
+                    case 0: //"打開"
+                        shwa();
+                        break;
+                    case 1: //"放大"
+                        break;
+                    case 2: //"關掉"
+                        reca();
+                        hida();
+                        break;
+                }
+                continue;
+            }
+
+            if (!document.getElementById(map[obj_idx])) continue;
+
+            switch (action_idx) {
+                case 0: //"打開"
+                    window.opener.actionOne(map[obj_idx], 1); //0 hide 1 show 2 enlarge 
+                    break;
+                case 1: //"放大"
+                    hida();
+                    window.opener.actionOne(map[obj_idx], 2); //0 hide 1 show 2 enlarge 
+                    break;
+                case 2: //"關掉"
+                    window.opener.actionOne(map[obj_idx], 0); //0 hide 1 show 2 enlarge 
+                    break;
+            }
+
+        } while (true);
+        //return _command;
+    }
+
+    // 檢查瀏覽器是否為 Safari
+    // 1: safari
+    // 0: chrome
+    // -1: others
+    function isSafariBrowser() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) //safari的ua只有'safari'
+            return 1;
+        if (ua.indexOf('chrome') !== -1) //chrome 的 ua 'safari' 'chrome' 都有
+            return 0;
+        return -1;
+    }
+
+    //
+    var recogResult = '';
+    var recognizing = false;
+    var recognition;
+
+    function initRecognition() {
+
+        recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'cmn-Hant-TW';//'zh-TW';//'en-US';'en-US';'cmn-Hant-TW';
+        //recognition.interimResults = false;
+        //recognition.maxAlternatives = 1;
+        // 设置识别语言
+        //recognition.lang = 'zh-CN'; // 设置为中文
+
+        if (navigator.userAgent.indexOf("Chrome") != -1) {
+
+            var items = item.concat(cmd);
+
+            var speechRecognitionList = new webkitSpeechGrammarList();
+            var grammar = '#JSGF V1.0; grammar items; public <volume> = ' + items.join(' | ') + ' ;';
+            //console.log(grammar);
+            speechRecognitionList.addFromString(grammar, 1.0);
+            recognition.grammars = speechRecognitionList;
+        }
+
+        recognition.onstart = function () {
+            recognizing = true;
+            console.log('info_speak_now');
+            recogResult = '';
+            startbtn.style.backgroundColor = 'rgb(255,0,0)';
+        };
+
+        recognition.onerror = function (event) {
+
+            recogResult = '';
+
+            if (event.error == 'no-speech') {
+                console.log('info_no_speech');
+            }
+            if (event.error == 'audio-capture') {
+                console.log('info_no_microphone');
+            }
+            if (event.error == 'not-allowed') {
+                console.log('not-allowed');
+            }
+
+            startbtn.style.backgroundColor = 'rgb(0,0,0)';
+
+        };
+
+        recognition.onend = function () {
+            startbtn.style.backgroundColor = 'transparent';
+            //parseRecogResult();
+            recognizing = false;
+            recogResult = '';
+            console.log('onend');
+            //_repaint();
+            //recognition.start();
+            startbtn.style.backgroundColor = 'rgb(0,0,0)';
+        };
+
+        recognition.onresult = function (event) {
+
+            /*
+            if (typeof (event.results) == 'undefined') {
+                console.log('onresult undefined');
+                recognition.onend = null;
+                recognition.stop();
+                return;
+            }
+            */
+
+            recogResult = '';
+
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    recogResult += event.results[i][0].transcript;
+                    console.log('onresult isfinal: ' + recogResult);
+                    //parseContent(recogResult);
+                    break;
+                } else {
+                    recogResult += event.results[i][0].transcript;
+                    console.log('onresult not isfinal: ' + recogResult);
+                }
+            }
+
+            //let area = document.getElementById("listenTxt");
+            //area.value = recogResult;
+
+            parseContent(recogResult);
+
+        };
+
+    }
+
+    switch (isSafariBrowser()) {
+        case 0: initRecognition(); break;
+        case 1: console.log('瀏覽器是 Safari'); break;
+        default: console.log('其他瀏覽器'); break;
+    }
+
+    // 語音辨識相關 ... END
 
 </script>
