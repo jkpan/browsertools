@@ -1860,10 +1860,7 @@ function _targetAnim() {
     }
     subtitles = SONGS[song];
     chkVolDir(pre, song);
-    //if (!chkVolDir(pre, song) && skewidx < 0) _repaint();
-    //console.log('s:' + song + ', ' + phase + ', '+ line);
-
-    window.requestAnimationFrame(_targetAnim);
+    window.requestAnimationFrame(_targetAnim); 
     saveAction2Local();
     return;
   }
@@ -1875,9 +1872,8 @@ function _targetAnim() {
       phase -= step;
     else
       phase += step;
-    //console.log('p:' + song + ', ' + phase + ', '+ line);
     if (skewidx < 0) _repaint();
-    window.requestAnimationFrame(_targetAnim);
+    window.requestAnimationFrame(_targetAnim); 
     saveAction2Local();
     return;
   }
@@ -1888,10 +1884,8 @@ function _targetAnim() {
       line -= step;
     else
       line += step;
-    //console.log('l:' + song + ', ' + phase + ', '+ line);
     if (skewidx < 0) _repaint();
-    window.requestAnimationFrame(_targetAnim);
-    saveAction2Local();
+    window.requestAnimationFrame(_targetAnim); //saveAction2Local();
     return;
   }
 
@@ -1930,10 +1924,6 @@ function jump2preset4Anim(ps) {
   }
 
   window.requestAnimationFrame(_targetAnim);
-
-}
-
-function change2Verse(vol, chp, ver) {
 
 }
 
