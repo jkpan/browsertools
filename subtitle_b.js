@@ -1861,7 +1861,7 @@ function _targetAnim() {
     subtitles = SONGS[song];
     chkVolDir(pre, song);
     window.requestAnimationFrame(_targetAnim); 
-    saveAction2Local();
+    //saveAction2Local();
     return;
   }
 
@@ -1874,7 +1874,7 @@ function _targetAnim() {
       phase += step;
     if (skewidx < 0) _repaint();
     window.requestAnimationFrame(_targetAnim); 
-    saveAction2Local();
+    //saveAction2Local();
     return;
   }
 
