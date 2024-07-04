@@ -3,12 +3,12 @@
         {
             "name": "tpcaog",
             "script": "./_cmd_server.js",
-            "args": "['80', '8080']"
+            "args": "80 8080"
         },
         {
             "name": "jkpan",
             "script": "./_cmd_server.js",
-            "args": "['81', '8081']"
+	        "args": "81 8081"
         }
     ]
 }
