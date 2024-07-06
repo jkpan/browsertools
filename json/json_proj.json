@@ -2,7 +2,7 @@
   "frame_1": {
     "src": "./dashboard.html",
     "obj": {
-      "x_file_1": {
+      "file_1": {
         "posize": [1, 1, 32, 32],
         "perspective": 0,
         "obj": {
@@ -52,7 +52,7 @@
           "fontfactor": 9.5,
           "saved": [
             [""],
-            ["使徒行傳", 5, 29],
+            ["箴言", 22, 6],
             [""],
             [""], [""], [""], [""], [""], [""], [""]
           ],
@@ -62,7 +62,7 @@
           "fsizedist": 1
         }
       },
-      "x_info": {
+      "info": {
         "posize": [1, 1, 4, 32],
         "perspective": 0,
         "obj": {
@@ -102,11 +102,40 @@
       "forPlay": 0
     }
   },
-  "frame_5": {
+  "x_frame_5": {
     "src": "./newurl.html",
     "obj": {
       "hold": 1,
       "url": "https://www.canva.com/design/DAGDmWJPwa8/RhddFXE0m2vLq6mRPc783A/view?embed"
+    }
+  },
+  "frame_5": {
+    "src": "./dashboard.html",
+    "obj": {
+      "Bible": {
+        "posize": [18, 4, 14, 26],
+        "perspective": 0,
+        "obj": {
+          "color": 1,
+          "verticle": 0,
+          "fontfactor": 15.5,
+          "saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
+          "syncType": 0,
+          "transparent": 1,
+          "printSaved": 1,
+          "fsizedist": 1
+        }
+      },
+      "url_1": {
+        "posize": [1, 1, 32, 32],
+        "perspective": 0,
+        "obj": {
+          "loop": 1,
+          "keepratio": 1,
+          "forPlay": 0
+        }
+      },
+      "B/G": "B"
     }
   }
 }
