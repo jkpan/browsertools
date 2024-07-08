@@ -180,7 +180,7 @@ class Verseobj {
         y += this.fs;
       }
     } else {
-      let y = 0;//fontsize * 0.25;
+      let y = this.fs * 0.25;
       for (let i = 0; i < this.substrings.length; i++) {
         if (islastChar(this.substrings[i]) && i + 1 < this.substrings.length && is0Char(this.substrings[i + 1]))
           _drawtxt(this.substrings[i] + '-', x, y, this.opacity);

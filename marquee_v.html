@@ -5,10 +5,10 @@ var subtitle = [ [''],
                  ['']];
 
 var left_gap = 0;
-var fsize = 96
+var fsize = 100;
 
 dots = 5;
-side = 2;
+side = 1;
 
 fsize = Math.floor(fsize/(side + dots)) * (side + dots);// + side;//102;
 
@@ -134,10 +134,10 @@ function widthM() {
     <br/>
     <button class="okbutton" onclick="textGo()">OK</button>
     <br/>
-    <input type="checkbox" id="round" value="0" class="largerCheckbox" checked />
+    <input type="checkbox" id="round" value="0" class="largerCheckbox" />
     <label style="color:rgb(0, 255, 0)">Round</label>
     <br/>
-    <input type="checkbox" id="average" value="0" class="largerCheckbox" checked />
+    <input type="checkbox" id="average" value="0" class="largerCheckbox" />
     <label style="color:rgb(0, 255, 0)">average color</label>
     <br/>
     <button class="okbutton" onclick="widthP()">width +</button>

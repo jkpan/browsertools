@@ -579,3 +579,7 @@ function broadcast_Song() {
 //pm2 logs --lines 200
 //pm2 delete all
 //ec2-54-169-169-141.ap-southeast-1.compute.amazonaws.com
+//cluster
+//pm2 start _cmd_server.js -i 10
+//standalong process
+//pm2 start process.json     
