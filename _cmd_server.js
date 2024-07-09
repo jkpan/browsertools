@@ -3,7 +3,25 @@ const fs = require('fs');//const qs = require('querystring');
 const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os');
-var WebSocket = null;//require('ws');
+var WebSocket = null; //require('ws');
+var Cluster = null;
+
+const B_clients = new Set();
+const S_clients = new Set();
+var wss = null;
+var server;
+var port = 80;
+var pid = '';
+
+try {
+  // 尝试加载模块
+  require.resolve('cluster');
+  println('cluster Module exists');
+  Cluster = require('cluster');
+} catch (err) {
+  println('Cluster Module does not exist');
+}
+
 try {
   // 尝试加载模块
   require.resolve('ws');
@@ -54,11 +72,11 @@ const ctrlCode =
 println('cpu ' + os.cpus().length + ' cores');
 
 function print(msg) {
-  process.stdout.write(msg);
+  process.stdout.write('(' + pid + ') ' + msg);
 }
 
 function println(msg) {
-  process.stdout.write('\n' + msg);
+  process.stdout.write('\n ' + '(' + pid + ') ' + msg);
 }
 
 
@@ -358,193 +376,6 @@ function responseFile(filePath, res, append) {
   });
 }
 
-const server = http.createServer((req, res) => {
-  // 解析URL路徑
-
-  let url = req.url;
-
-  //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  //println('ip = ' + ip);
-  //res.send(`Your IP address is: ${ip}`);
-
-  switch (url) {
-
-    case '/restorescripture': restorescripture(req, res); return;
-    case '/synscripture': synscripture(req, res); return;
-
-    case '/query': query(req, res); return;
-    case '/command': command(req, res); return;
-
-    //case '/restorelyrics':    restorelyrics(req, res);    return;
-    case '/synclyrics': synclyrics(req, res); return;
-
-    case '/initui': initui(req, res); return;
-    /*
-    case '/Bible_ctrl': {
-      url = '/subtitle_b.html';
-      responseFile(`.${url}`, res, ctrlCode);
-    } return;
-    case '/Bible_play': {
-      url = '/subtitle_b.html';
-      responseFile(`.${url}`, res, playCode);
-    } return;
-    case '/Bible_play_niv': {
-      url = '/subtitle_niv.html';
-      responseFile(`.${url}`, res, playCode);
-    } return;
-    */
-    default:
-      if (req.url.startsWith('/cmd')) {
-        if (req.url === '/cmd') {
-          cmdAll(req, res);
-          return;
-        }
-        var queryData = urltool.parse(req.url, true).query;
-        if (queryData.cc) {
-          cmd(req, res, parseInt(queryData.cc));
-          return;
-        }
-        return;
-      }
-      break;
-  }
-
-  if (url.startsWith('/synscripture_get')) {
-    var requestData = urltool.parse(url, true).query;
-    volume = parseInt(requestData.vlm);
-    chapter = parseInt(requestData.chp);
-    verse = parseInt(requestData.ver);
-    doblank = parseInt(requestData.blank);
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    
-    res.end('get done!\n');
-    println(`[[master: ${volume}, ${chapter}, ${verse}, ${doblank}]]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-    print(` [[ conn: ${B_clients.size} ]] `);
-    broadcast_Bible();
-    return;
-  }
-
-  if (url === '/Bible_play') {
-    const redirect = '/subtitle_b.html?action=play';
-    res.writeHead(302, { Location: redirect });
-    res.end();
-    return;
-  }
-
-  if (url === '/Bible_play_niv') {
-    const redirect = '/subtitle_niv.html?action=play';
-    res.writeHead(302, { Location: redirect });
-    res.end();
-    return;
-  }
-
-  if (url === '/Bible_ctrl') {
-    const redirect = '/subtitle_b.html?action=ctrl';
-    res.writeHead(302, { Location: redirect });
-    res.end();
-    return;
-  }
-
-  if (url === '/' || url === '/index.html') {
-    //url = '/index_nodejs.html';
-
-    const redirect = '/index.html?server=nodejs';
-    // 执行重定向
-
-    res.writeHead(302, { Location: redirect });
-    res.end();
-
-    return;
-  }
-
-  if (url.startsWith('/index.html')) {
-    url = '/index.html';
-  }
-
-  if (url.startsWith('/dash.html')) {
-    url = '/dash.html';
-  }
-
-  if (url.startsWith('/subtitle_b.html')) {
-    url = '/subtitle_b.html';
-  }
-
-  if (url.startsWith('/subtitle_niv.html')) {
-    url = '/subtitle_niv.html';
-  }
-
-  if (url.startsWith('/led.html')) {
-    url = '/led.html';
-  }
-
-  const filePath = `.${url}`;
-  responseFile(filePath, res, '');
-
-});
-
-const networkInterfaces = os.networkInterfaces();
-const addresses = [];
-
-Object.keys(networkInterfaces).forEach(interfaceName => {
-  const interfaces = networkInterfaces[interfaceName];
-  interfaces.forEach(interfaceInfo => {
-    if (interfaceInfo.family === 'IPv4' && !interfaceInfo.internal) { // 'IPv6'
-      addresses.push(interfaceInfo.address);
-    }
-  });
-});
-
-let port = 80;
-let wsport = 8080;
-
-const args = process.argv;//.slice(1); if (args.length > 2) port = parseInt(args[2]);
-if (args.length >= 3) {
-  port = parseInt(args[2]);
-  if (args.length >= 4)
-    wsport = parseInt(args[3]);
-}
-
-server.listen(port, () => {
-  println('Server is running...');
-  println('http://' + addresses[0] + ((port == 80) ? '' : ':' + port) + '\n');
-});
-
-const B_clients = new Set();
-const S_clients = new Set();
-var wss = null;//new WebSocket.Server({ port:8080 });
-
-if (WebSocket) {
-  wss = new WebSocket.Server({ port: wsport });
-  println('websocket port : ' + wsport);
-
-  wss.on('connection', function connection(ws, req) {
-
-    let ip = req.socket.remoteAddress;
-    let url = req.url;
-    println(' #url: ' + ip + ', ' + url + '#');
-
-    if (url === '/Bible') {
-      println('[client connected]' + '\n');
-      //ws.address = ip;
-      B_clients.add(ws);
-      ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
-        print(`[client: ${message}]`);
-        ws.send(getBibleObjStr());//'Whatsup client! -- from server');
-      });
-    }
-
-    if (url === '/Song') {
-      println('<client connected>' + '\n');
-      S_clients.add(ws);
-      ws.on('message', function incoming(message) {
-        print(`<client: ${message}>`);
-        ws.send(getSongObjStr());
-      });
-    }
-
-  });
-}
-
 function broadcast_Bible() {
   let data = getBibleObjStr();
   B_clients.forEach(function (client) {
@@ -571,6 +402,213 @@ function broadcast_Song() {
     }
   });
 }
+
+function doFork() {
+
+  pid = process.pid;
+  //println('pid: ' + pid);
+
+  server = http.createServer((req, res) => {
+    // 解析URL路徑
+
+    let url = req.url;
+
+    //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    //println('ip = ' + ip);
+    //res.send(`Your IP address is: ${ip}`);
+
+    switch (url) {
+
+      case '/restorescripture': restorescripture(req, res); return;
+      case '/synscripture': synscripture(req, res); return;
+
+      case '/query': query(req, res); return;
+      case '/command': command(req, res); return;
+
+      //case '/restorelyrics':    restorelyrics(req, res);    return;
+      case '/synclyrics': synclyrics(req, res); return;
+
+      case '/initui': initui(req, res); return;
+      /*
+      case '/Bible_ctrl': {
+        url = '/subtitle_b.html';
+        responseFile(`.${url}`, res, ctrlCode);
+      } return;
+      case '/Bible_play': {
+        url = '/subtitle_b.html';
+        responseFile(`.${url}`, res, playCode);
+      } return;
+      case '/Bible_play_niv': {
+        url = '/subtitle_niv.html';
+        responseFile(`.${url}`, res, playCode);
+      } return;
+      */
+      default:
+        if (req.url.startsWith('/cmd')) {
+          if (req.url === '/cmd') {
+            cmdAll(req, res);
+            return;
+          }
+          var queryData = urltool.parse(req.url, true).query;
+          if (queryData.cc) {
+            cmd(req, res, parseInt(queryData.cc));
+            return;
+          }
+          return;
+        }
+        break;
+    }
+
+    if (url.startsWith('/synscripture_get')) {
+      var requestData = urltool.parse(url, true).query;
+      volume = parseInt(requestData.vlm);
+      chapter = parseInt(requestData.chp);
+      verse = parseInt(requestData.ver);
+      doblank = parseInt(requestData.blank);
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+
+      res.end('get done!\n');
+      println(`[[master: ${volume}, ${chapter}, ${verse}, ${doblank}]]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+      print(` [[ conn: ${B_clients.size} ]] `);
+      broadcast_Bible();
+      return;
+    }
+
+    if (url === '/Bible_play') {
+      const redirect = '/subtitle_b.html?action=play';
+      res.writeHead(302, { Location: redirect });
+      res.end();
+      return;
+    }
+
+    if (url === '/Bible_play_niv') {
+      const redirect = '/subtitle_niv.html?action=play';
+      res.writeHead(302, { Location: redirect });
+      res.end();
+      return;
+    }
+
+    if (url === '/Bible_ctrl') {
+      const redirect = '/subtitle_b.html?action=ctrl';
+      res.writeHead(302, { Location: redirect });
+      res.end();
+      return;
+    }
+
+    if (url === '/' || url === '/index.html') {
+      //url = '/index_nodejs.html';
+
+      const redirect = '/index.html?server=nodejs';
+      // 执行重定向
+
+      res.writeHead(302, { Location: redirect });
+      res.end();
+
+      return;
+    }
+
+    if (url.startsWith('/index.html')) {
+      url = '/index.html';
+    }
+
+    if (url.startsWith('/dash.html')) {
+      url = '/dash.html';
+    }
+
+    if (url.startsWith('/subtitle_b.html')) {
+      url = '/subtitle_b.html';
+    }
+
+    if (url.startsWith('/subtitle_niv.html')) {
+      url = '/subtitle_niv.html';
+    }
+
+    if (url.startsWith('/led.html')) {
+      url = '/led.html';
+    }
+
+    const filePath = `.${url}`;
+    responseFile(filePath, res, '');
+
+  });
+
+  const networkInterfaces = os.networkInterfaces();
+  const addresses = [];
+
+  Object.keys(networkInterfaces).forEach(interfaceName => {
+    const interfaces = networkInterfaces[interfaceName];
+    interfaces.forEach(interfaceInfo => {
+      if (interfaceInfo.family === 'IPv4' && !interfaceInfo.internal) { // 'IPv6'
+        addresses.push(interfaceInfo.address);
+      }
+    });
+  });
+
+
+  const args = process.argv;//.slice(1); if (args.length > 2) port = parseInt(args[2]);
+  if (args.length >= 3) {
+    port = parseInt(args[2]);
+    //if (args.length >= 4) wsport = parseInt(args[3]);
+  }
+
+  server.listen(port, () => {
+    println('Server is running... http://' + addresses[0] + ((port == 80) ? '' : ':' + port) + '\n');
+  });
+
+
+  if (WebSocket) {
+    wss = new WebSocket.Server({ server });//{ port: wsport });
+    //println('websocket port : ' + wsport);
+    wss.on('connection', function connection(ws, req) {
+
+      let ip = req.socket.remoteAddress;
+      let url = req.url;
+      println(' #url: ' + ip + ', ' + url + '#');
+
+      if (url === '/Bible') {
+        println('[client connected]' + '\n');
+        //ws.address = ip;
+        B_clients.add(ws);
+        ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
+          print(`[client: ${message}]`);
+          ws.send(getBibleObjStr());//'Whatsup client! -- from server');
+        });
+      }
+
+      if (url === '/Song') {
+        println('<client connected>' + '\n');
+        S_clients.add(ws);
+        ws.on('message', function incoming(message) {
+          print(`<client: ${message}>`);
+          ws.send(getSongObjStr());
+        });
+      }
+
+    });
+  }
+}
+
+/*
+if (Cluster.isMaster) {
+  const numCPUs = require('os').cpus().length;
+  console.log(`主进程 ${process.pid} 正在运行`);
+
+  // 创建工作进程
+  for (let i = 0; i < numCPUs; i++) {
+    Cluster.fork();
+  }
+
+  Cluster.on('exit', (worker, code, signal) => {
+    console.log(`工作进程 ${worker.process.pid} 已退出`);
+    //console.log(`工作进程 ${process.pid} 启动的服务器正在监听端口 8080`);
+  });
+
+} else {
+  doFork();
+}
+*/
+
+doFork();
 
 //sudo su -
 //ssh -i "taipei_jkpan_macmini.pem" ubuntu@ec2-54-169-169-141.ap-southeast-1.compute.amazonaws.com

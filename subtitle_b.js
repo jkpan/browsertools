@@ -661,9 +661,8 @@ function initWebsocket() {
   if (window.location.port.length > 0) {
     port = parseInt(window.location.port, 10);
   }
-  port += 8000;
-  //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible');
+  //port += 8000; //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
+  ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible'); //
   ws.onopen = function () {
     console.log('Connected to server');
     ws.send('Hello, WebSocket! - from client');
