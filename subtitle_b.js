@@ -148,10 +148,10 @@ class Verseobj {
           _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
           _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
         } else {
-          _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
-          _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
-          //_drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
-          //_drawtxt(this.frontxt, 0, this.targetFs * 0.6, 1.0);
+          //_drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
+          //_drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
+          _drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
+          _drawtxt(this.frontxt, 0, this.targetFs * 0.6, 1.0);
         }
       }
       //ctx.resetTransform();
