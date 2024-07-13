@@ -1189,7 +1189,7 @@ function restoreFromJson(obj) {
  //
  function chkWebsocket() {
    
-   console.log(`# ${timeoutID}`);
+   //console.log(`# ${timeoutID}`);
  
    if (timeoutID >= 0) window.clearTimeout(timeoutID);
  
@@ -1233,7 +1233,7 @@ function restoreFromJson(obj) {
   //ws = new WebSocket('ws://' + serverDomain + ':8080/Song');
    ws.onopen = function() {
      console.log('Connected to server');
-     ws.send('Hello, WebSocket! - from client');
+     ws.send('Hello - from 歌詞 client');
    };
    ws.onmessage = function(event) {
      console.log('Received:', event.data);

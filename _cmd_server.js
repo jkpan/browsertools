@@ -1,18 +1,35 @@
 const http = require('http');
-const fs = require('fs');//const qs = require('querystring');
-const querystring = require('querystring');
+const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os');
+//onst socketIo = require('socket.io');
 var WebSocket = null; //require('ws');
-var Cluster = null;
+//var Cluster = null;
 
 const B_clients = new Set();
 const S_clients = new Set();
-var wss = null;
-var server;
+//var wss = null;
+//var server;
 var port = 80;
 var pid = '';
 
+function print(msg) {
+  process.stdout.write(`(${pid})` + msg);
+}
+
+function print_ln(msg) {
+  process.stdout.write(`(${pid})` + msg + '\n');
+}
+
+function printlnln(msg) {
+  process.stdout.write('\n' + `(${pid})` + msg + '\n');
+}
+
+function println(msg) {
+  process.stdout.write('\n' + `(${pid})` + msg);
+}
+
+/*
 try {
   // 尝试加载模块
   require.resolve('cluster');
@@ -21,6 +38,7 @@ try {
 } catch (err) {
   println('Cluster Module does not exist');
 }
+*/
 
 try {
   // 尝试加载模块
@@ -31,54 +49,10 @@ try {
   println('Websocket Module does not exist');
 }
 
-//npm install ws
-//const express = require('express');
-//const cluster = require('cluster');
-
-/*
-const playCode = 
-`<script type="text/javascript" charset="UTF-8">
-
-  color_selection = 1; 
-  colorSwitch(); 
-  setMsg_play(); 
-  removeTEvent(); 
-  addFontSizeTouchEvent();
-  
-  //downsizeFS();
-
-  fontfactor += 5;
-  init();
-  
-  _repaint();
-
-</script>`;
-
-const ctrlCode = 
-`<script type="text/javascript" charset="UTF-8">
-
-  color_selection = 0; 
-  colorSwitch(); 
-  setMsg_ctrl();
-  
-  fontfactor += 5;
-  init();
-  
-  _repaint();
-
-</script>`;
-*/
-
 println('cpu ' + os.cpus().length + ' cores');
 
-function print(msg) {
-  process.stdout.write('(' + pid + ') ' + msg);
-}
-
-function println(msg) {
-  process.stdout.write('\n ' + '(' + pid + ') ' + msg);
-}
-
+//const express = require('express');
+//const cluster = require('cluster');
 
 const CAMERAS = 4;
 const msgs = ['.',
@@ -108,7 +82,7 @@ function command(req, res) {
     // 解析请求数据
     const requestData = JSON.parse(body);
 
-    print('{cmd:' + body + '}');
+    printlnln('{cmd:' + body + '}');
 
     if (requestData.camera == 0) {
       for (let i = 0; i < msgs.length; i++) msgs[i] = '.';
@@ -234,14 +208,13 @@ function synclyrics(req, res) {
     try {
       println(`<master: ${song[0][0]}, ${phase}, ${line}, ${song_doblank}>`);
     } catch (err) {
-      println(`<master: ${phase}, ${line}, ${song_doblank}>`);
+      println(`<master: err ${phase}, ${line}, ${song_doblank}>`);
     }
 
     res.setHeader('Content-Type', 'application/json');
 
     // 发送响应数据
     res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
-    print(` < conn: ${S_clients.size} > `);
     broadcast_Song();
 
   });
@@ -352,7 +325,6 @@ function synscripture(req, res) {
     res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
 
     println(`[master: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-    print(` [ conn: ${B_clients.size} ] `);
     broadcast_Bible();
 
   });
@@ -378,6 +350,7 @@ function responseFile(filePath, res, append) {
 
 function broadcast_Bible() {
   let data = getBibleObjStr();
+  print(` [ conn: ${B_clients.size} ] `);
   B_clients.forEach(function (client) {
     if (client.readyState === WebSocket.OPEN) {
       print('[broadcast ' + client._socket.remoteAddress + ']');
@@ -387,11 +360,12 @@ function broadcast_Bible() {
       print('[' + client._socket.remoteAddress + ' removed]');
     }
   });
-
+  print_ln('');
 }
 
 function broadcast_Song() {
   let data = getSongObjStr();
+  print(` < conn: ${S_clients.size} > `);
   S_clients.forEach(function (client) {
     if (client.readyState === WebSocket.OPEN) {
       print('<broadcast ' + client._socket.remoteAddress + '>');
@@ -401,14 +375,15 @@ function broadcast_Song() {
       print('<' + client._socket.remoteAddress + ' removed>');
     }
   });
+  print_ln('');
 }
 
-function doFork() {
+function startService() {
 
   pid = process.pid;
   //println('pid: ' + pid);
 
-  server = http.createServer((req, res) => {
+  const server = http.createServer((req, res) => {
     // 解析URL路徑
 
     let url = req.url;
@@ -469,7 +444,6 @@ function doFork() {
 
       res.end('get done!\n');
       println(`[[master: ${volume}, ${chapter}, ${verse}, ${doblank}]]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-      print(` [[ conn: ${B_clients.size} ]] `);
       broadcast_Bible();
       return;
     }
@@ -551,42 +525,44 @@ function doFork() {
     //if (args.length >= 4) wsport = parseInt(args[3]);
   }
 
-  server.listen(port, () => {
-    println('Server is running... http://' + addresses[0] + ((port == 80) ? '' : ':' + port) + '\n');
-  });
-
-
   if (WebSocket) {
-    wss = new WebSocket.Server({ server });//{ port: wsport });
+    const wss = new WebSocket.Server({ server });//{ port: wsport });
     //println('websocket port : ' + wsport);
     wss.on('connection', function connection(ws, req) {
 
       let ip = req.socket.remoteAddress;
       let url = req.url;
-      println(' #url: ' + ip + ', ' + url + '#');
+      //println(' #url: ' + ip + ', ' + url + '#');
 
       if (url === '/Bible') {
-        println('[client connected]' + '\n');
+        println(`[client ${ip} connected]`);
         //ws.address = ip;
         B_clients.add(ws);
         ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
-          print(`[client: ${message}]`);
+          print_ln(`[client: ${message}]`);
           ws.send(getBibleObjStr());//'Whatsup client! -- from server');
         });
       }
 
       if (url === '/Song') {
-        println('<client connected>' + '\n');
+        println(`<client ${ip} connected>`);
         S_clients.add(ws);
         ws.on('message', function incoming(message) {
-          print(`<client: ${message}>`);
+          print_ln(`<client: ${message}>`);
           ws.send(getSongObjStr());
         });
       }
 
     });
   }
+
+  server.listen(port, () => {
+    printlnln('Server is running... http://' + addresses[0] + ((port == 80) ? '' : ':' + port));
+  });
+
 }
+
+startService();
 
 /*
 if (Cluster.isMaster) {
@@ -594,7 +570,8 @@ if (Cluster.isMaster) {
   console.log(`主进程 ${process.pid} 正在运行`);
 
   // 创建工作进程
-  for (let i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < 2; i++) {
+  //for (let i = 0; i < numCPUs; i++) {
     Cluster.fork();
   }
 
@@ -604,12 +581,11 @@ if (Cluster.isMaster) {
   });
 
 } else {
-  doFork();
+  startService();
 }
 */
 
-doFork();
-
+//npm install ws
 //sudo su -
 //ssh -i "taipei_jkpan_macmini.pem" ubuntu@ec2-54-169-169-141.ap-southeast-1.compute.amazonaws.com
 //pm2 start _cmd_server.js
@@ -620,4 +596,4 @@ doFork();
 //cluster
 //pm2 start _cmd_server.js -i 10
 //standalong process
-//pm2 start process.json     
+//pm2 start process.json

@@ -148,8 +148,10 @@ class Verseobj {
           _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
           _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
         } else {
-          _drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
-          _drawtxt(this.frontxt, 0, this.targetFs * 0.6, 1.0);
+          _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
+          _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
+          //_drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
+          //_drawtxt(this.frontxt, 0, this.targetFs * 0.6, 1.0);
         }
       }
       //ctx.resetTransform();
@@ -623,7 +625,7 @@ var timeoutID = -1;
 //
 function chkWebsocket() {
 
-  //console.log(`# ${timeoutID}`);
+  //console.log(`B# ${timeoutID}`);
 
   if (timeoutID >= 0) window.clearTimeout(timeoutID);
 
@@ -665,7 +667,7 @@ function initWebsocket() {
   ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible'); //
   ws.onopen = function () {
     console.log('Connected to server');
-    ws.send('Hello, WebSocket! - from client');
+    ws.send('Hello - from 聖經 client');
   };
   ws.onmessage = function (event) {
     console.log('Received:', event.data);
@@ -817,7 +819,7 @@ function _saveAction2Local() {
 
 //判斷是不是要卷軸動畫
 function restoreAnim(volume, chapter, verse, _doblank) {
-
+  //console.log('restoreAnim doblank : ' + _doblank);
   if (!(volume < SONGS.length &&
     chapter < SONGS[volume].length &&
     verse < SONGS[volume][chapter].length)) {
@@ -828,11 +830,17 @@ function restoreAnim(volume, chapter, verse, _doblank) {
     chkVolDir(song, volume);
   }
 
+  /*
   if (volume == song && chapter == phase && verse == line) {
-    if (_doblank != doblank)
+    if (_doblank != doblank) {
       keyboard({ keyCode: 66 });
+    }
     return;
   }
+  */
+
+  keylock = false;
+  if (_doblank != doblank) keyboard({ keyCode: 66 });
 
   if (volume == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
     keyboard({ keyCode: 37 }); //left
