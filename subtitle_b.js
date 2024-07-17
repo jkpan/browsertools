@@ -1972,7 +1972,7 @@ function keyboard(e) { //key up //alert(e.keyCode);
     //case 113: //F2
     case 13: //enter
       createCtrlBtn();
-      break;
+      return;
     //case 114: save2Local(); break; case 115: restoreLocal(); break;
     case 67: //'c'
       fontColorType = (fontColorType + 1) % 4;

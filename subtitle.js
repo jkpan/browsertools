@@ -140,8 +140,6 @@ var fontfactor = 12.0;
 var phase = 0;
 var line = 0;
 var mode = 0;
-var animSwh = 0;
-var animIdx = 0;
 
 var displayProgress = 0;
 var doblank = 0;
@@ -456,7 +454,7 @@ function printTxt(i, j, vpos) { //subtitle mode
 
   ctx.font = FONT;
   var x = canvas.width / 2;
-  var y = canvas.height - fontsize;//animSwh == 1?canvas.height/2:canvas.height - 100;
+  var y = canvas.height - fontsize;
 
 
   if (dword > 0) {
@@ -478,13 +476,11 @@ function printTxt(i, j, vpos) { //subtitle mode
       txt = '-';
   }
 
-
-  if (doblank == 1 || (i == 0 && animSwh == 0)) { //單行綠色標題
+  if (doblank == 1 || i == 0) { //單行綠色標題
     ctx.fillStyle = COLORS_CK[2];//"rgb(0,180,0)";
     ctx.fillText(txt, x, y);
     return;
   }
-
 
   txtRendering(txt, x, y);
 
@@ -519,7 +515,6 @@ function printFullChart() {
 
 function printChart() {
 
-  if (animSwh > 0) return;
   printFullChart();
 
   if (phase == 0) return;
@@ -773,27 +768,21 @@ function keyboard(e) {
 
       }
       break;
+    /*
     case 65: //'A'
       if (mode == 1) break;
       if (mode == 3) break;
-      if (animSwh == 0) {
-        initAnim(animIdx);
-      } else {
-        initAnim(-1);
-      }
       break;
+    */
     case 83: displayProgress = displayProgress == 1 ? 0 : 1; break; //'s'
     case 68: dword = dword == 0 ? 1 : 0; break; //'D'
     case 67: fontColorType = (fontColorType + 1) % 4; break; //'c'
     case 90: makeTransparent = !makeTransparent; break; //'z'
     //case 67: phase = subtitles.length - 1; line = 0; break; //'c' jump to coda last one phase
     case 80:
-      if (animSwh == 0) mode = (mode + 1) % 4;
-      animSwh = 0;
-      if (mode == 0 || mode == 1 || mode == 3) fontColorType = 1;
-      if (mode == 2) fontColorType = 0;
+      mode = (mode + 1) % 4;
       break; //'p' ppt mode
-    case 72: //'h 
+    case 72: //'h 南京西路22號六樓 25506658 鄭小姐 重聽福利協會 8/8 PM3:30
       helpSwitch = helpSwitch == 0 ? 1 : 0;
       break;
     //case 76: hideCanvas(); break; //'l'
@@ -882,8 +871,6 @@ function keyboard(e) {
       mode = 0;
       //removeBtns();
       canvas.hidden = false;
-      animSwh = 0;
-      animIdx = 0;
       doblank = 0;
       helpSwitch = 0;
       displayProgress = 0;
@@ -1149,36 +1136,6 @@ function restoreFromJson(obj) {
   line = obj.line;
   doblank = obj.blank;
   _repaint();
-  /*
-  
-    let key = 'save progress';
-    let value = localStorage.getItem(key);
-    if (!value) return;
-    value = value.trim();
-    if (value && value.length == 0) return;
-    let array = value.split(' ');
-    let _song = parseInt(array[0]);
-    let _phase = parseInt(array[1]);
-    let _line = parseInt(array[2]);
-    let _doblank = parseInt(array[3]);
-  
-    if (_song == song && _phase == phase && _line == line && _doblank == doblank) return;
-  
-    if (_song >= SONGS.length) {
-      syncListFromController();
-      return;
-    }
-  
-    song = _song;
-    subtitles = SONGS[song];
-  
-    phase = _phase;
-    line = _line;
-  
-    doblank = _doblank;
-    _repaint();
-
-  */
 }
 
 /*
@@ -1269,8 +1226,7 @@ function userhelp() {
 }
 
 function blank() {
-  animSwh = 0;
-  if (animSwh == 1 || mode == 2) {
+  if (mode == 2) {
     //ctx.globalCompositeOperation='difference';
     //ctx.filter = 'blur()';//'invert(1)';
     ctx.fillStyle = "rgba(0,0,0, 0.4)"
@@ -1316,7 +1272,7 @@ function receiveMessage(e) {
     alert('資料來源錯誤');
     return false;
   }
-    // 來源網址是指定的網域時
+  // 來源網址是指定的網域時
   */
 
   if (e.data == 'x') { //alert(e.data);
@@ -1324,8 +1280,6 @@ function receiveMessage(e) {
   } else if (e.data == 'o') { //alert(e.data);
     stopActionInterval();
   } else {
-    //console.log('Message received! ' + e.data);
-    //console.trace();
     json2List(e.data);
   }
   _repaint();
@@ -1335,7 +1289,6 @@ function receiveMessage(e) {
 window.addEventListener('message', receiveMessage, false);
 window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function (e) {
-
   //e.preventDefault(); //e.stopPropagation();
   if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = true;
@@ -1345,7 +1298,6 @@ window.addEventListener('resize', function () {
   init();
   _repaint();
 });
-
 window.addEventListener('beforeunload', function (e) {
   closeSelector();
 });
@@ -1358,7 +1310,6 @@ document.addEventListener('visibilitychange', function() {
 canvas.addEventListener('mousemove', e => {
   if (mode != 0) return;
   if (canvas.hidden) return;
-  if (animSwh != 0) return;
   _repaint();
   ctx.strokeStyle = 'rgb(0,255,0)';
   ctx.strokeRect (e.x - 5, e.y - 5, 10, 10);
@@ -1416,145 +1367,6 @@ fetch('https://jkpan.github.io/browsertools/list.json')
         getSongsFromList();
     });
 */
-
-//<!-- Animation -->
-
-var pre = 0;
-var particles = [];
-
-function anim_update(elapse) {
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (!makeTransparent) {
-    if (mode == 0) {
-      ctx.fillStyle = COLORS_CK[1];//'green';
-    } else {
-      ctx.fillStyle = 'black';
-    }
-
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    if (img) {
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
-  }
-
-  let dt = elapse - pre;
-  pre = elapse;
-
-  for (var i = 0; i < particles.length; i++) {
-    particles[i].update(canvas, ctx, dt);
-  }
-
-  _layer1();
-  _layer2();
-
-  if (makeLED) ledAction4Still(canvas, ctx); //LED
-
-  if (animSwh == 1)
-    window.requestAnimationFrame(anim_update);
-  else
-    _repaint();
-
-}
-
-//function randomPickAnim() { let idx = Math.floor(Math.random() * 5); initAnim(idx);}
-
-function initAnim(idx) {
-
-  if (particles.length >= 1) {
-    for (var i = 0; i < particles.length; i++) {
-      particles[i].release();
-    }
-  }
-
-  particles.length = 0;
-  particles = [];
-
-  if (idx < 0) {
-    animIdx = (animIdx + 1) % 12;
-    idx = animIdx;
-  }
-
-  if (idx == 0) {
-    particles[0] = newBlank();
-    particles[0].initial(canvas);
-  } else if (idx == 1) {
-    for (var i = 0; i < 150; i++) {
-      particles[i] = newParticle_casual();
-      particles[i].initial(canvas);
-    }
-  } else if (idx == 2) {
-    for (var i = 0; i < 150; i++) {
-      particles[i] = newParticle_in();
-      particles[i].initial(canvas);
-    }
-  } else if (idx == 3) {
-    for (var i = 0; i < 150; i++) {
-      particles[i] = newParticle_out();
-      particles[i].initial(canvas);
-    }
-  } else if (idx == 4) {
-    for (var i = 0; i < 150; i++) {
-      particles[i] = newParticle_ring();
-      particles[i].initial(canvas);
-    }
-  } else if (idx == 5) {
-    for (var i = 0; i < 100; i++) {
-      particles[i] = newParticle_snow();
-      particles[i].initial(canvas);
-    }
-  } else if (idx == 6) {
-    for (var i = 0; i < 3; i++) {
-      particles[i] = newParticle_firework();
-      particles[i].initial(canvas);
-    }
-  } else if (idx == 7) {
-    particles[0] = new SpotLightObj(1);
-    particles[1] = new SpotLightObj(2);
-    particles[2] = new SpotLightObj(3);
-    particles[3] = new SpotLightObj(4);
-    particles[4] = new SpotLightObj(5);
-    /*
-    for (var i = 0;i<20;i++) {
-      particles[i] = newParticle_rect();
-      particles[i].initial(canvas);
-    }
-    */
-  } else if (idx == 8) {
-    particles[0] = newParticle_skylight_background();
-    for (var i = 1; i < 100; i++) {
-      particles[i] = newParticle_skylight();//newParticle_snow();
-      particles[i].initial(canvas);
-    }
-  } else if (idx == 9) {
-    particles[0] = newParticle_sunrise_background();
-    for (var i = 1; i < 100; i++) {
-      particles[i] = newParticle_sunrise();//();
-      particles[i].initial(canvas);
-    }
-  } else if (idx == 10) {
-    try {
-
-      particles[0] = new ClockObj();//newClock();
-      particles[0].setDarkmask();
-
-    } catch (e) {
-      console.log("no clock obj included");
-    }
-  } else if (idx == 11) {
-    particles[0] = newParticle_led();
-    particles[0].initial(canvas);
-  }
-
-  if (animSwh == 0) {
-    animSwh = 1;
-    window.requestAnimationFrame(anim_update);
-  }
-
-}
-
 /*
 var xhr = new XMLHttpRequest();
 xhr.open('GET', 'data.json', true);
