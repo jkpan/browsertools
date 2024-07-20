@@ -852,6 +852,9 @@ function restoreAnim(volume, chapter, verse, _doblank) {
     return;
   }
 
+  if (volume == song && chapter == phase && verse == line)// && _doblank == doblank) 
+    return;
+
   song = volume;
   subtitles = SONGS[song];
   phase = chapter;
