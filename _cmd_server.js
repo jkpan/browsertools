@@ -1,31 +1,33 @@
 const http = require('http');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
-const os = require('os');
-//onst socketIo = require('socket.io');
-var WebSocket = null; //require('ws');
-//var Cluster = null;
+const os = require('os'); //onst socketIo = require('socket.io');
 
-const B_clients = new Set();
-const S_clients = new Set();
+const sync_Bible  = require('./_sync_Bible');
+const sync_lyrics = require('./_sync_lyrics');
+const sync_tally = require('./_tally');
+
+var WebSocket = null; //require('ws'); //var Cluster = null;
+
 //var wss = null;
 //var server;
+
 var port = 80;
 var pid = '';
 
-function print(msg) {
+global.print = function(msg) {
   process.stdout.write(`(${pid})` + msg);
 }
 
-function print_ln(msg) {
+global.print_ln = function(msg) {
   process.stdout.write(`(${pid})` + msg + '\n');
 }
 
-function printlnln(msg) {
+global.printlnln = function(msg) {
   process.stdout.write('\n' + `(${pid})` + msg + '\n');
 }
 
-function println(msg) {
+global.println = function(msg) {
   process.stdout.write('\n' + `(${pid})` + msg);
 }
 
@@ -51,285 +53,6 @@ try {
 
 println('cpu ' + os.cpus().length + ' cores');
 
-//const express = require('express');
-//const cluster = require('cluster');
-
-const CAMERAS = 4;
-const msgs = ['.',
-  '.', '.', '.', '.'];
-
-var volume = 1;
-var chapter = 0;
-var verse = 0;
-var doblank = 0;
-
-var song;
-var phase = 0;
-var line = 0;
-var song_doblank = 0;
-
-//intercom下指令
-function command(req, res) {
-  let body = '';
-
-  // 接收请求的数据
-  req.on('data', (data) => {
-    body += data;
-  });
-
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-    // 解析请求数据
-    const requestData = JSON.parse(body);
-
-    printlnln('{cmd:' + body + '}');
-
-    if (requestData.camera == 0) {
-      for (let i = 0; i < msgs.length; i++) msgs[i] = '.';
-    } else {
-      if (requestData.msg) {
-        msgs[requestData.camera] = requestData.msg;
-      } else {
-        msgs[requestData.camera] = '.';
-      }
-    }
-
-    res.setHeader('Content-Type', 'application/json');
-
-    // 发送响应数据
-    res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
-
-  });
-}
-
-//intercom查目前所有指令
-function query(req, res) {
-
-  let body = '';
-  // 接收请求的数据
-  req.on('data', (data) => {
-    body += data;
-  });
-
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-    // 解析请求数据 const requestData = JSON.parse(body);
-
-    print('{query}');
-
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ "state": msgs }));
-
-  });
-}
-
-//intercom得到相機數量
-function initui(req, res) {
-  let body = '';
-  // 接收请求的数据
-  req.on('data', (data) => {
-    body += data;
-  });
-
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-
-    print('{initui}');
-
-    res.setHeader('Content-Type', 'application/json');
-
-    // 发送响应数据
-    let obj = {
-      "camera": CAMERAS,
-      //"cmd" : COMMANDS
-    };
-    res.end(JSON.stringify(obj));
-  });
-}
-
-//好像沒用到
-function cmdAll(req, res) { //for M5Stick
-  let body = '';
-  // 接收请求的数据
-  req.on('data', (data) => {
-    body += data;
-  });
-
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-    res.setHeader('Content-Type', 'text/html');
-
-    let cc = '';
-    for (let i = 1; i < msgs.length; i++) {
-      cc += ' ' + msgs[i];
-    }
-    cc = cc.trim();
-    res.end(cc);
-  });
-}
-
-//intercom M5Stick取得指令
-function cmd(req, res, _cma) {
-  let body = '';
-  // 接收请求的数据
-  req.on('data', (data) => {
-    body += data;
-  });
-
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-
-    print('.');
-
-    res.setHeader('Content-Type', 'text/html');
-    res.end(msgs[_cma]);
-  });
-}
-
-//同步歌詞
-function synclyrics(req, res) {
-  let body = '';
-  // 接收请求的数据
-  req.on('data', (data) => {
-    body += data;
-  });
-
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-    // 解析请求数据
-    const requestData = JSON.parse(body);
-    //println(body);
-
-    song = requestData.song;
-    phase = requestData.phase;
-    line = requestData.line;
-    song_doblank = requestData.blank;
-
-    try {
-      println(`<master: ${song[0][0]}, ${phase}, ${line}, ${song_doblank}>`);
-    } catch (err) {
-      println(`<master: err ${phase}, ${line}, ${song_doblank}>`);
-    }
-
-    res.setHeader('Content-Type', 'application/json');
-
-    // 发送响应数据
-    res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
-    broadcast_Song();
-
-  });
-}
-
-/*
-//取得歌詞狀態
-function restorelyrics(req, res) {
-  let body = '';
-  // 接收请求的数据
-  req.on('data', (data) => {
-      body += data;
-  });
-    
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-      // 解析请求数据
-    const requestData = JSON.parse(body);
-      
-    // 设置响应头
-    res.setHeader('Content-Type', 'application/json');
-    
-    print('#');
-    // 发送响应数据
-    res.end(JSON.stringify({
-        song: song,
-        phase: phase,
-        line: line,
-        blank: song_doblank
-    }));
-
-  });
-}
-*/
-
-function getBibleObjStr() {
-  return JSON.stringify({
-    vlm: volume,
-    chp: chapter,
-    ver: verse,
-    blank: doblank
-  });
-}
-
-function getSongObjStr() {
-  if (!song)
-    return JSON.stringify({
-      song: [[""]],
-      phase: 0,
-      line: 0,
-      blank: 0
-    });
-  return JSON.stringify({
-    song: song,
-    phase: phase,
-    line: line,
-    blank: song_doblank
-  });
-}
-
-//取得經文狀態
-function restorescripture(req, res) {
-  let body = '';
-  // 接收请求的数据
-  req.on('data', (data) => {
-    body += data;
-  });
-
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-    // 解析请求数据
-    const requestData = JSON.parse(body);
-
-    // 设置响应头
-    res.setHeader('Content-Type', 'application/json');
-
-    print('-');
-    // 发送响应数据
-    res.end(getBibleObjStr());
-
-  });
-}
-
-//同步經文
-function synscripture(req, res) {
-  let body = '';
-
-  // 接收请求的数据
-  req.on('data', (data) => {
-    body += data;
-  });
-
-  // 请求数据接收完成后的处理
-  req.on('end', () => {
-    // 解析请求数据
-    const requestData = JSON.parse(body);
-
-    volume = requestData.vlm;
-    chapter = requestData.chp;
-    verse = requestData.ver;
-    doblank = requestData.blank;
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Content-Type', 'application/json');
-
-    // 发送响应数据
-    res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
-
-    println(`[master: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-    broadcast_Bible();
-
-  });
-}
-
 //讀檔輸出
 function responseFile(filePath, res, append) {
   fs.readFile(filePath, (err, content) => {
@@ -348,36 +71,6 @@ function responseFile(filePath, res, append) {
   });
 }
 
-function broadcast_Bible() {
-  let data = getBibleObjStr();
-  print(` [ conn: ${B_clients.size} ] `);
-  B_clients.forEach(function (client) {
-    if (client.readyState === WebSocket.OPEN) {
-      print('[broadcast ' + client._socket.remoteAddress + ']');
-      client.send(data);
-    } else {
-      B_clients.delete(client);
-      print('[' + client._socket.remoteAddress + ' removed]');
-    }
-  });
-  print_ln('');
-}
-
-function broadcast_Song() {
-  let data = getSongObjStr();
-  print(` < conn: ${S_clients.size} > `);
-  S_clients.forEach(function (client) {
-    if (client.readyState === WebSocket.OPEN) {
-      print('<broadcast ' + client._socket.remoteAddress + '>');
-      client.send(data);
-    } else {
-      S_clients.delete(client);
-      print('<' + client._socket.remoteAddress + ' removed>');
-    }
-  });
-  print_ln('');
-}
-
 function startService() {
 
   pid = process.pid;
@@ -394,16 +87,17 @@ function startService() {
 
     switch (url) {
 
-      case '/restorescripture': restorescripture(req, res); return;
-      case '/synscripture': synscripture(req, res); return;
+      case '/restorescripture': sync_Bible.restorescripture(req, res); return;
+      case '/synscripture': sync_Bible.synscripture(req, res); return;
 
-      case '/query': query(req, res); return;
-      case '/command': command(req, res); return;
+      case '/query': sync_tally.query(req, res); return;
+      case '/command': sync_tally.command(req, res); return;
 
       //case '/restorelyrics':    restorelyrics(req, res);    return;
-      case '/synclyrics': synclyrics(req, res); return;
+      case '/synclyrics': sync_lyrics.synclyrics(req, res); return;
 
-      case '/initui': initui(req, res); return;
+      case '/initui': sync_tally.initui(req, res); return;
+
       /*
       case '/Bible_ctrl': {
         url = '/subtitle_b.html';
@@ -421,12 +115,12 @@ function startService() {
       default:
         if (req.url.startsWith('/cmd')) {
           if (req.url === '/cmd') {
-            cmdAll(req, res);
+            sync_tally.cmdAll(req, res);
             return;
           }
           var queryData = urltool.parse(req.url, true).query;
           if (queryData.cc) {
-            cmd(req, res, parseInt(queryData.cc));
+            sync_tally.cmd(req, res, parseInt(queryData.cc));
             return;
           }
           return;
@@ -435,16 +129,7 @@ function startService() {
     }
 
     if (url.startsWith('/synscripture_get')) {
-      var requestData = urltool.parse(url, true).query;
-      volume = parseInt(requestData.vlm);
-      chapter = parseInt(requestData.chp);
-      verse = parseInt(requestData.ver);
-      doblank = parseInt(requestData.blank);
-      res.writeHead(200, { 'Content-Type': 'text/plain' });
-
-      res.end('get done!\n');
-      println(`[[master: ${volume}, ${chapter}, ${verse}, ${doblank}]]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-      broadcast_Bible();
+      sync_Bible.synscripture_get(url);
       return;
     }
 
@@ -518,7 +203,6 @@ function startService() {
     });
   });
 
-
   const args = process.argv;//.slice(1); if (args.length > 2) port = parseInt(args[2]);
   if (args.length >= 3) {
     port = parseInt(args[2]);
@@ -536,21 +220,12 @@ function startService() {
 
       if (url === '/Bible') {
         println(`[client ${ip} connected]`);
-        //ws.address = ip;
-        B_clients.add(ws);
-        ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
-          print_ln(`[client: ${message}]`);
-          ws.send(getBibleObjStr());//'Whatsup client! -- from server');
-        });
+        sync_Bible.addClient(ws);
       }
 
       if (url === '/Song') {
         println(`<client ${ip} connected>`);
-        S_clients.add(ws);
-        ws.on('message', function incoming(message) {
-          print_ln(`<client: ${message}>`);
-          ws.send(getSongObjStr());
-        });
+        sync_lyrics.addClient(ws);
       }
 
     });
