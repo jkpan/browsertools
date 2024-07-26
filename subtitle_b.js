@@ -2533,12 +2533,6 @@ function receiveMessage(e) {
     if (jsonData.fontfactor)
       setFontFactor(jsonData.fontfactor);
 
-    sync_type = 0;
-    if (jsonData.syncType) {
-      sync_type = jsonData.syncType;
-      synctrls();
-    }
-
     if (jsonData.saved && jsonData.saved.length > 0) {
       for (let i = 0; i < jsonData.saved.length; i++) {
         if (i >= 10) return;
@@ -2558,6 +2552,11 @@ function receiveMessage(e) {
       fontsize_dist = 0;
     }
 
+    sync_type = 0;
+    if (jsonData.syncType) {
+      sync_type = jsonData.syncType;
+      synctrls();
+    }
 
   }
   _repaint();
@@ -3025,10 +3024,10 @@ function toObj() {
   obj['verticle'] = display_mode;
   obj['fontfactor'] = fontfactor;
   obj['saved'] = presetVerse;
-  obj['syncType'] = sync_type;
   obj['transparent'] = makeTransparent ? 1 : 0;
   obj['printSaved'] = printSaved ? 1 : 0;
   obj['fsizedist'] = fontsize_dist;
+  obj['syncType'] = sync_type;
   return obj;
 }
 

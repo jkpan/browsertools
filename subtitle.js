@@ -31,12 +31,8 @@ function json2List(fileContent) {
   const jsonData = JSON.parse(fileContent);
   // 進行 JSON 資料的處理
 
-  if (!jsonData.list || jsonData.list.length == 0) {
-    //if (jsonData.master && jsonData.master == 1) saveListFromController();
-    //empty
-  } else {
+  if (jsonData.list && jsonData.list.length > 0) {
     getSongsFromList(jsonData.list);
-    //if (!funcInterval) if (jsonData.master && jsonData.master == 1) saveListFromController();
   }
 
   if (jsonData.mode) mode = jsonData.mode;
@@ -47,24 +43,13 @@ function json2List(fileContent) {
   else
     makeTransparent = false;
 
-  /*
-  if (jsonData.slave && jsonData.slave == 1) {
-    startRestoreInterval();
-  } else {
-    stopActionInterval();
-    saveListFromController();
-  }
-  */
-
   sync_type = 0;
   if (jsonData.syncType) {
     sync_type = jsonData.syncType;
     synctrls();
   }
 
-
   _repaint();
-  //console.log(jsonData.list);
 
 }
 
@@ -296,61 +281,7 @@ function restoreActionFromLocal() {
   let value = localStorage.getItem(key);
   let obj = JSON.parse(value);
   restoreFromJson(obj);
-
-  /*
-  let value = localStorage.getItem(key);
-  if (!value) return;
-  value = value.trim();
-  if (value && value.length == 0) return;
-  let array = value.split(' ');
-  let _song = parseInt(array[0]);
-  let _phase = parseInt(array[1]);
-  let _line = parseInt(array[2]);
-  let _doblank = parseInt(array[3]);
-
-  if (_song == song && _phase == phase && _line == line && _doblank == doblank) return;
-
-  if (_song >= SONGS.length) {
-    syncListFromController();
-    return;
-  }
-
-  song = _song;
-  subtitles = SONGS[song];
-
-  phase = _phase;
-  line = _line;
-
-  if (phase >= subtitles.length) {
-    syncListFromController();
-    return;
-  }
-
-  if (line >= subtitles[phase].length) {
-    syncListFromController();
-    return;
-  }
-
-  doblank = _doblank;
-  _repaint();
-  */
 }
-
-/*
-function syncListFromController() {
-  let key = 'song list';
-  let value = localStorage.getItem(key);
-  if (!value) return;
-  var array = JSON.parse(value);
-  getSongsFromList(array);
-}
-
-function saveListFromController() {
-  let key = 'song list';
-  let value = JSON.stringify(list);
-  localStorage.setItem(key, value);
-}
-*/
 
 var selector = null;
 function openSelector() {
@@ -631,22 +562,8 @@ function printPhaseChart() {
 
   for (let i = 1; i < subtitles.length; i++) {
     if (i % 2 == 0) {
-      /*
-      if (mode == 2) {
-        ctx.fillStyle = "rgb(0,0,128)";
-      } else {
-        ctx.fillStyle = "rgb(50,50,50, 0.5)";
-      }
-      */
       ctx.fillStyle = "rgba(0,0,0, 0.1)";
     } else {
-      /*
-      if (mode == 2) {
-        ctx.fillStyle = "rgb(0,0,200)";
-      } else {
-        ctx.fillStyle = "rgb(100,100,100, 0.5)";
-      }
-      */
       ctx.fillStyle = "rgba(0,0,0, 0.2)";
     }
     ctx.fillRect((i - 1) * gap + (gap - _gap) / 2, y, _gap, _h);
@@ -697,37 +614,12 @@ function keyboard(e) {
       combineKey(e);
     return;
   }
-
-  /*
-  if (doblank == 1) {
-    doblank = 0;
-    _repaint();
-    return;
-  }
-  */
-
+  
   switch (e.keyCode) {
     //case 113: //F2
     case 13: //Enter
       createCtrlBtn();
       return;
-      /*
-      if (funcInterval) {
-        stopActionInterval();
-        break;
-      }
-      startRestoreInterval();
-      break;
-      */
-    /*
-    case 114:
-      if (funcInterval) {
-        stopActionInterval();
-        break;
-      }
-      startRestoreFromServerInterval();
-      break;
-    */
     case 66: //'b'
       doblank = doblank == 0 ? 1 : 0;
       break;
@@ -782,7 +674,7 @@ function keyboard(e) {
     case 80:
       mode = (mode + 1) % 4;
       break; //'p' ppt mode
-    case 72: //'h 南京西路22號六樓 25506658 鄭小姐 重聽福利協會 8/8 PM3:30
+    case 72: //'h 
       helpSwitch = helpSwitch == 0 ? 1 : 0;
       break;
     //case 76: hideCanvas(); break; //'l'
@@ -1257,23 +1149,7 @@ init();
 
 var keylock = false;
 
-/*
-window.addEventListener('keyup', function(e) {
-  //e.preventDefault();
-  //e.stopPropagation();
-  keyboard(e);
-}, false);
-*/
-
 function receiveMessage(e) {
-  /*
-  // 來源網址（e.origin）不是指定的網域時
-  if(e.origin !== 'https://xxxxxxx.tw') {
-    alert('資料來源錯誤');
-    return false;
-  }
-  // 來源網址是指定的網域時
-  */
 
   if (e.data == 'x') { //alert(e.data);
     startRestoreInterval();
@@ -1306,24 +1182,6 @@ document.addEventListener('visibilitychange', function() {
   _repaint();
 });
 
-/*
-canvas.addEventListener('mousemove', e => {
-  if (mode != 0) return;
-  if (canvas.hidden) return;
-  _repaint();
-  ctx.strokeStyle = 'rgb(0,255,0)';
-  ctx.strokeRect (e.x - 5, e.y - 5, 10, 10);
-  //doblank = 0; helpSwitch = 0; displayProgress = 0;
-});
-*/
-
-/*
-function getSongsFromJson(jsonData) {
-  if (jsonData.content.length == 0) return;
-  getSongsFromList(jsonData.content);
-}
-*/
-
 function getSongsFromList(_list) {
 
   if (_list)
@@ -1351,6 +1209,24 @@ function getSongsFromList(_list) {
 }
 
 getSongsFromList();
+
+/*
+canvas.addEventListener('mousemove', e => {
+  if (mode != 0) return;
+  if (canvas.hidden) return;
+  _repaint();
+  ctx.strokeStyle = 'rgb(0,255,0)';
+  ctx.strokeRect (e.x - 5, e.y - 5, 10, 10);
+  //doblank = 0; helpSwitch = 0; displayProgress = 0;
+});
+*/
+
+/*
+function getSongsFromJson(jsonData) {
+  if (jsonData.content.length == 0) return;
+  getSongsFromList(jsonData.content);
+}
+*/
 
 /*
 fetch('https://jkpan.github.io/browsertools/list.json')
