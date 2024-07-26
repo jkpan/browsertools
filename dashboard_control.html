@@ -22,7 +22,7 @@
             background-color: rgb(0, 150, 0);
             color: #00ff00;
             /*margin: 2% 2%;*/
-            width: 18%;
+            width: 15%;
             border: 1px solid;
             vertical-align: middle;
         }
@@ -81,6 +81,8 @@
         if (button) button.remove();
         button = document.getElementById(key + '_x');
         if (button) button.remove();
+        button = document.getElementById(key + '_t');
+        if (button) button.remove();
         button = document.getElementById(key + '_l');
         if (button) button.remove();
     }
@@ -113,8 +115,12 @@
             button.innerHTML = 'V';
         if (key_.endsWith('_p'))
             button.innerHTML = 'P';
-        if (key_.endsWith('_x'))
+        if (key_.endsWith('_x')) {
+            button.style.backgroundColor = 'red';
             button.innerHTML = 'X';
+        }
+        if (key_.endsWith('_t'))
+            button.innerHTML = '^';
         if (key_.endsWith('_l'))
             button.innerHTML = '🔓';
 
@@ -132,8 +138,9 @@
         createBtn(key, controlParent, key);
         createBtn(key + '_v', switchVisible, key);
         createBtn(key + '_p', perspective, key);
-        createBtn(key + '_x', closeApp, key);
+        createBtn(key + '_t', onTopApp, key);
         createBtn(key + '_l', lockApp, key);
+        createBtn(key + '_x', closeApp, key);
     }
 
     function reca() {
@@ -151,7 +158,17 @@
         reloadState();
     }
 
+    function onTopApp(keyname) {
+        window.opener.onTopApp(keyname);
+        reloadState();
+    }
+
     function closeApp(keyname) {
+        window.opener.closeApp(keyname);
+        reloadState();
+    }
+
+    function onTop(keyname) {
         window.opener.closeApp(keyname);
         reloadState();
     }
@@ -172,19 +189,21 @@
             let b_p = document.getElementById(key + '_p');
             let b_x = document.getElementById(key + '_x');
             let b_l = document.getElementById(key + '_l');
-            if (stateArray[key] % 10 == 0) {
-                b.style.backgroundColor = "rgb(0,0,0)";
+            b.style.backgroundColor = "rgb(0,0,0)";
+            if (stateArray[key].charAt(1) == '1') 
+                b_v.style.backgroundColor = "black";
+            else 
                 b_v.style.backgroundColor = "transparent";
-            } else {
-                b.style.backgroundColor = "rgb(0,0,0)";
-                b_v.style.backgroundColor = "rgb(0,0,0)";
-            }
-            if (Math.floor(stateArray[key] / 10) == 0) {
+            if (stateArray[key].charAt(2) == '1') 
+                b_p.style.backgroundColor = "black";
+            else 
+                b_p.style.backgroundColor = "transparent";
+            if (stateArray[key].charAt(3) == '1') {
+                b_l.style.backgroundColor = "red";
+                b_l.textContent = '🔒';
+            } else { 
                 b_l.style.backgroundColor = "transparent";
                 b_l.textContent = '🔓';
-            } else {
-                b_l.style.backgroundColor = "rgb(255,0,0)";
-                b_l.textContent = '🔒';
             }
         }
     }

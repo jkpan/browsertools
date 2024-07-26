@@ -82,43 +82,28 @@ function startService() {
     let url = req.url;
 
     //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    //println('ip = ' + ip);
     //res.send(`Your IP address is: ${ip}`);
 
     switch (url) {
 
-      case '/restorescripture': sync_Bible.restorescripture(req, res); return;
-      case '/synscripture': sync_Bible.synscripture(req, res); return;
-
       case '/query': sync_tally.query(req, res); return;
       case '/command': sync_tally.command(req, res); return;
-
-      //case '/restorelyrics':    restorelyrics(req, res);    return;
-      case '/synclyrics': sync_lyrics.synclyrics(req, res); return;
-
       case '/initui': sync_tally.initui(req, res); return;
 
-      /*
-      case '/Bible_ctrl': {
-        url = '/subtitle_b.html';
-        responseFile(`.${url}`, res, ctrlCode);
-      } return;
-      case '/Bible_play': {
-        url = '/subtitle_b.html';
-        responseFile(`.${url}`, res, playCode);
-      } return;
-      case '/Bible_play_niv': {
-        url = '/subtitle_niv.html';
-        responseFile(`.${url}`, res, playCode);
-      } return;
-      */
+      case '/synscripture': sync_Bible.synscripture(req, res); return;
+      case '/restorescripture': sync_Bible.restorescripture(req, res); return;
+
+      case '/synclyrics': sync_lyrics.synclyrics(req, res); return;
+      //case '/restorelyrics': restorelyrics(req, res);    return;
+
       default:
+
         if (req.url.startsWith('/cmd')) {
           if (req.url === '/cmd') {
             sync_tally.cmdAll(req, res);
             return;
           }
-          var queryData = urltool.parse(req.url, true).query;
+          let queryData = urltool.parse(req.url, true).query;
           if (queryData.cc) {
             sync_tally.cmd(req, res, parseInt(queryData.cc));
             return;
@@ -128,11 +113,13 @@ function startService() {
         break;
     }
 
+    //
     if (url.startsWith('/synscripture_get')) {
       sync_Bible.synscripture_get(url);
       return;
     }
 
+    //特定字眼給特定功能
     if (url === '/Bible_play') {
       const redirect = '/subtitle_b.html?action=play';
       res.writeHead(302, { Location: redirect });
@@ -154,38 +141,21 @@ function startService() {
       return;
     }
 
+    //首頁塞參數 redirect
     if (url === '/' || url === '/index.html') {
-      //url = '/index_nodejs.html';
-
       const redirect = '/index.html?server=nodejs';
       // 执行重定向
-
       res.writeHead(302, { Location: redirect });
       res.end();
-
       return;
     }
 
-    if (url.startsWith('/index.html')) {
-      url = '/index.html';
-    }
-
-    if (url.startsWith('/dash.html')) {
-      url = '/dash.html';
-    }
-
-    if (url.startsWith('/subtitle_b.html')) {
-      url = '/subtitle_b.html';
-    }
-
-    if (url.startsWith('/subtitle_niv.html')) {
-      url = '/subtitle_niv.html';
-    }
-
-    if (url.startsWith('/led.html')) {
-      url = '/led.html';
-    }
-
+    if (url.startsWith('/index.html')) url = '/index.html'; // 處理首頁: url == /index.html?server=nodejs
+    if (url.startsWith('/dash.html'))  url = '/dash.html';
+    if (url.startsWith('/subtitle_b.html')) url = '/subtitle_b.html';
+    if (url.startsWith('/subtitle_niv.html')) url = '/subtitle_niv.html';
+    if (url.startsWith('/led.html')) url = '/led.html';
+    
     const filePath = `.${url}`;
     responseFile(filePath, res, '');
 

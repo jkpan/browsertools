@@ -1,7 +1,7 @@
 const APPS = ['hymn', 'Bible', 'NIV', 'BPlay', 'iPlay',
-              'url_1', 'url_2', 'url_3', 
-              'file_1', 'file_2', 'file_3', 
-              'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'];
+  'url_1', 'url_2', 'url_3',
+  'file_1', 'file_2', 'file_3',
+  'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'];
 
 const GRID_W = 32;
 const GRID_H = 32;
@@ -685,21 +685,9 @@ function toObj() {
 }
 
 function getElmState() {
-  /*
-  for (let i=0;i<applets.length;i++) {
-    console.log(applets[i].keyname + ' : ' + 
-                applets[i].x + ', ' + 
-                applets[i].y + ', ' + 
-                applets[i].w + ', ' + 
-                applets[i].h);
-  }
-  */
-  //var array = {id1: 100, id2: 200, "tag with spaces": 300};
-  //array.id3 = 400;
-  //array["id4"] = 500;
   let stateArray = {
-    hymn: -1, Bible: -1, NIV: -1, BPlay: -1, iPlay:-1,
-    url_1: -1, url_2: -1, url_3: -1, 
+    hymn: -1, Bible: -1, NIV: -1, BPlay: -1, iPlay: -1,
+    url_1: -1, url_2: -1, url_3: -1,
     file_1: -1, file_2: -1, file_3: -1,
     anim: -1, info: -1, effect: -1, time: -1,
     dBoard: -1, tabs: -1
@@ -707,13 +695,21 @@ function getElmState() {
   for (let key in stateArray) {
     for (let i = 0; i < applets.length; i++) {
       if (key == applets[i].keyname) {
+        stateArray[key] = '1';
         if (applets[i].t_Opacity == 0) {
-          stateArray[key] = 0;
+          stateArray[key] += '0';
         } else {
-          stateArray[key] = 1;
+          stateArray[key] += '1';
+        }
+        if (applets[i].t_rotateY != 0) {
+          stateArray[key] += '1';
+        } else {
+          stateArray[key] += '0';
         }
         if (applets[i].ctrl_locked == 1) {
-          stateArray[key] += 10;
+          stateArray[key] += '1';
+        } else {
+          stateArray[key] += '0';
         }
       }
     }
@@ -801,12 +797,12 @@ function actionOne(keyname, action) { //0 hide 1 show 2 enlarge
       break;
     }
   }
-  
+
   if (idx == -1) return;
   let app = applets[idx];
   if (app.ctrl_locked) return;
 
-  switch(action) {
+  switch (action) {
     case 0:
       app.progress_hide_Self();
       break;
@@ -817,7 +813,7 @@ function actionOne(keyname, action) { //0 hide 1 show 2 enlarge
     case 2:
       app.enlargeSelf();
       break;
-  }  
+  }
   anim_update(-1);
 }
 
@@ -912,7 +908,7 @@ function _createFrame(keyname) {
       return app;
     }
     case 'file_1':
-    case 'file_2': 
+    case 'file_2':
     case 'file_3': {
       createFrame(keyname, 'newfile.html');
       let app = new Applet({ x: 6, y: 1, w: 10, h: 16, keyname: keyname });
@@ -954,7 +950,8 @@ function _createFrame(keyname) {
 
 }
 
-function lockApp(keyname) {
+
+function appAction(keyname, action) {
   let idx = -1;
   for (let i = 0; i < applets.length; i++) {
     if (keyname == applets[i].keyname) {
@@ -964,70 +961,44 @@ function lockApp(keyname) {
   }
 
   if (idx == -1) return;
-
   let app = applets[idx];
-  app.ctrl_locked = !app.ctrl_locked;
 
-}
-
-function closeApp(keyname) {
-  let idx = -1;
-  for (let i = 0; i < applets.length; i++) {
-    if (keyname == applets[i].keyname) {
-      idx = i;
-      break;
-    }
+  if (action == 'lock') {
+    app.ctrl_locked = !app.ctrl_locked;
+    return;
   }
-
-  if (idx == -1) return;
-
-  let app = applets[idx];
 
   if (app.ctrl_locked) return;
 
-  applets.splice(idx, 1);
-  app.removeSelf();
+  switch (action) {
+    case 'close':
+      applets.splice(idx, 1);
+      app.removeSelf();
+      break;
+    case 'ontop':
+      app.onTop();
+      break;
+    case '3d':
+      applets[idx].progress_perspective_Self();
+      anim_update(-1);
+      break;
+    case 'show':
+      applets[idx].progress_hide_show_Self();
+      anim_update(-1);
+      break;
+    default:
+      break;
+  }
+
   _repaint();
 
 }
 
-function switchVisible4iframe(keyname) {
-
-  let idx = -1;
-  for (let i = 0; i < applets.length; i++) {
-    if (keyname == applets[i].keyname) {
-      idx = i;
-      break;
-    }
-  }
-
-  if (idx == -1) return;
-
-  if (applets[idx].ctrl_locked) return;
-
-  applets[idx].progress_hide_show_Self();
-  anim_update(-1);
-
-}
-
-function perspective4iframe(keyname) {
-
-  let idx = -1;
-  for (let i = 0; i < applets.length; i++) {
-    if (keyname == applets[i].keyname) {
-      idx = i;
-      break;
-    }
-  }
-
-  if (idx == -1) return;
-
-  if (applets[idx].ctrl_locked) return;
-
-  applets[idx].progress_perspective_Self();
-  anim_update(-1);
-
-}
+function lockApp(keyname) { appAction(keyname, 'lock'); }
+function onTopApp(keyname) { appAction(keyname, 'ontop'); }
+function closeApp(keyname) { appAction(keyname, 'close'); }
+function switchVisible4iframe(keyname) { appAction(keyname, 'show'); }
+function perspective4iframe(keyname) { appAction(keyname, '3d'); }
 
 function spot2iframe(keyname) {
 
@@ -1316,7 +1287,7 @@ function registerCanvasEvent() {
 
   canvas.addEventListener('mouseup', (e) => {
     mouseDown = -1;
-    if (selectIdx < 0) 
+    if (selectIdx < 0)
       return false;
     if (Math.abs(mouseDownPos[0] - e.x) + Math.abs(mouseDownPos[1] - e.y) < 3) {
       let applet = applets[selectIdx];
@@ -1331,7 +1302,3 @@ if (canvas)
   registerCanvasEvent();
 
 openSideMenu();
-
-
-//win.document.body.innerHTML = "<button type=\"button\" onclick=\"window.parent.spot2iframe('hymn')\">歌詞</button>";
-

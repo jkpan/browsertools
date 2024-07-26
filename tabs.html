@@ -97,8 +97,27 @@
     color: rgb(0, 255, 0);
     border-radius: 8px;
 
-    font-size: 12px;
-    margin: 2px 2px;
+    font-size: 14px;
+    margin: 1px 1px;
+    
+    width: 48px;
+    height: 90%;
+
+    text-align: center;
+    text-decoration: none;
+
+    padding: 4px;
+
+    display: inline-block;
+  }
+  .cancelbutton {
+    background-color: rgb(0, 144, 0);
+    border-color: #00ff00;
+    color: rgb(0, 255, 0);
+    border-radius: 8px;
+
+    font-size: 15px;
+    margin: 1px 1px;
     
     width: 48px;
     height: 90%;
@@ -196,10 +215,11 @@
   <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">O</button>
   <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
   &nbsp;
-  <button class="okbutton" onclick="preload('./json/json_proj.json')">#1</button>
-  <button class="okbutton" onclick="preload('./json/json_green.json')">#2</button>
-  <button class="okbutton" onclick="loadJson()">#</button>
-  <button class="okbutton" onclick="downloadExpJson()">exp</button>
+  <button class="cancelbutton" onclick="preload('./json/json_ctrl.json')">#0</button>
+  <button class="cancelbutton" onclick="preload('./json/json_proj.json')">#1</button>
+  <button class="cancelbutton" onclick="preload('./json/json_green.json')">#2</button>
+  <button class="cancelbutton" onclick="loadJson()">#</button>
+  <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
   &nbsp;
       <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
   &nbsp;
