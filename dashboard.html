@@ -94,7 +94,25 @@
             position: fixed;
             z-index: 100;
     }
+    .cancelbutton {
+    background-color: rgb(0, 144, 0);
+    border-color: #00ff00;
+    color: rgb(0, 255, 0);
+    border-radius: 3px;
 
+    font-size: 12px;
+    margin: 1px 1px;
+    
+    width: 36px;
+    height: 70%;
+
+    text-align: center;
+    text-decoration: none;
+
+    padding: 4px;
+
+    display: inline-block;
+  }
   </style>
 </head>
 <body>
@@ -130,7 +148,7 @@
       <button class="btn2" onclick="spot2iframe('info')">Info</button>
       <button class="btn2" onclick="spot2iframe('effect')">Effect</button>
       <button class="btn2" onclick="spot2iframe('time')">Time</button>
-      <label style="color: #00ee00;">|</label>
+      <!-- <label style="color: #00ee00;">|</label> -->
       <!-- <button class="btn2" onclick="spot2iframe('dBoard')">客制</button> -->
       <!-- <button class="btn2" onclick="spot2iframe('tabs')">頁籤</button> -->
       <label style="color: #00ee00;">|</label>
@@ -169,9 +187,15 @@
       </script>
       <button class="btn" onclick="openCtrl()">Ctrl</button>
       <button class="btn" id="oxBtn" onclick="sendOX()">o</button>
-      <button class="btn" onclick="openProfile()">#</button>
-      <button class="btn" onclick="downloadExpJson()">exp</button>
+      <label style="color: #00ee00;">|</label>
+      <button class="cancelbutton" onclick="openProfile()">#</button>
+      <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
       <input type="file" id="profile" accept=".json" hidden="true" onchange="selectProfile(event)" />
+      <label style="color: #00ee00;">|</label>
+      <button class="cancelbutton" onclick="stateSave(0)">A0</button>
+      <button class="cancelbutton" onclick="stateSave(1)">A1</button>
+      <button class="cancelbutton" onclick="stateSave(2)">A2</button>
+      <button class="cancelbutton" onclick="stateSave(3)">A3</button>
       &nbsp;
       <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
       <!--label id="closebar" style="color: #00ee00;" onclick="preload('./json/dash_Bible.json')">x</label-->

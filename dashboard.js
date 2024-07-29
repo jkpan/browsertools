@@ -1032,6 +1032,12 @@ function spot2iframe(keyname) {
 
 }
 
+function stateSave() {
+  if (keylock) {
+    
+  }
+}
+
 function init() {
 
   if (applets == null) initContent();
