@@ -1,13 +1,70 @@
-const APPS = ['hymn', 'Bible', 'NIV', 'BPlay', 'iPlay',
+const APPS = [
+  'hymn', 'Bible', 'NIV', 'BPlay', 'iPlay',
   'url_1', 'url_2', 'url_3',
   'file_1', 'file_2', 'file_3',
-  'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'];
+  'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'
+];
 
 const GRID_W = 32;
 const GRID_H = 32;
 const PPPX = "perspective(1000px)";
 const PRY_MAX = 20;
 const PRY_OPA = 1.0;
+
+var stateSaved = {
+  "save0" : [], 
+  "save1" : [],
+  "save2" : [],
+  "save3" : []
+}
+
+function buildActionState() {
+  let array = [];
+  for (let i = 0; i < applets.length; i++) {
+    let obj = {};
+    obj['name'] = applets[i].keyname;
+    obj['posize'] = [applets[i].x, applets[i].y, applets[i].w, applets[i].h];
+    obj['visible'] = applets[i].t_Opacity > 0? 1 : 0;
+    obj['perspective'] = applets[i].t_rotateY != 0 ? 1 : 0;
+    array[i] = obj;
+  }
+  return array;
+}
+
+function restoreActionState(array) {
+  for (let i = 0; i < array.length; i++) {
+    let jobj = array[i];
+    let idx = -1;
+    for (let i = 0; i < applets.length; i++) {
+      if (jobj['name'] == applets[i].keyname) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx == -1) continue;
+    let item = applets[idx];
+    item.ctrl_locked = false;
+    item.onTop();
+    item.gotoxywh(jobj['posize']);
+    if (jobj['visible'] == 1) {
+      item.progress_show_Self();
+    } else {
+      item.progress_hide_Self();
+    }
+    if (jobj['perspective'] == 1) item.progress_3d_Self(); else item.progress_2d_Self();
+    
+  }
+  anim_update(-1);
+}
+
+function stateAction(idx) {
+  if (keylock) {
+    let saved = buildActionState();
+    stateSaved['save' + idx] = saved;
+  } else {
+    restoreActionState(stateSaved['save' + idx]);
+  }
+}
 
 function initContent() {
   applets = [];
@@ -72,6 +129,13 @@ class Applet {
     this.sh = this.h;//this.sOpacity = parseFloat(this.elm.style.opacity);
     this.sOpacity = this.t_Opacity;
     this.sRy = this.t_rotateY;
+  }
+
+  gotoxywh(posize) {
+    this.t_x = posize[0];
+    this.t_y = posize[1];
+    this.t_w = posize[2];
+    this.t_h = posize[3];
   }
 
   recover() {
@@ -355,22 +419,30 @@ class Applet {
     this.t_h = this.h;
   }
 
-  progress_perspective_Self() {
-    if (Math.abs(this.t_rotateY) == PRY_MAX) {
-      this.t_rotateY = 0;
-      this.t_Opacity = 1.0;
+  progress_2d_Self() {
+    this.t_rotateY = 0;//this.t_Opacity = 1.0;
+    this.presave(); //this.doFix();
+  }
+
+  progress_3d_Self() {
+    if (this.x + this.w / 2.0 <= (GRID_W / 2.0 + 1)) {
+      this.t_rotateY = PRY_MAX;
+      this.elm.style.transformOrigin = "left center";//"bottom left";
+      //this.t_Opacity = PRY_OPA;
     } else {
-      if (this.x + this.w / 2.0 <= (GRID_W / 2.0 + 1)) {
-        this.t_rotateY = PRY_MAX;
-        this.elm.style.transformOrigin = "left center";//"bottom left";
-        this.t_Opacity = PRY_OPA;
-      } else {
-        this.t_rotateY = -PRY_MAX;
-        this.elm.style.transformOrigin = "right center";//"bottom right";
-        this.t_Opacity = PRY_OPA;
-      }
+      this.t_rotateY = -PRY_MAX;
+      this.elm.style.transformOrigin = "right center";//"bottom right";
+      //this.t_Opacity = PRY_OPA;
     }
     this.presave(); //this.doFix();
+  }
+
+  progress_perspective_Self() {
+    if (Math.abs(this.t_rotateY) == PRY_MAX) {
+      this.progress_2d_Self();
+    } else {
+      this.progress_3d_Self();
+    }
   }
 
   hideSelf() {
@@ -556,12 +628,6 @@ function sendOX() {
 
 }
 
-function json2Perspective(app) {
-  app.progress_perspective_Self();
-  anim_update(-1);
-
-}
-
 function preload(url, doneCb) {
   fetch(url).then((response) => {
     return response.json();
@@ -623,18 +689,17 @@ function handleProfile(fileContent) {
       }
     }
     if (jsonData[key]['perspective']) {
-      json2Perspective(app);
+      app.progress_3d_Self();
     }
   });
 
-  _repaint();
+  if (jsonData['stateSaved']) stateSaved = jsonData['stateSaved'];
 
-  if (jsonData['ctrl'] && jsonData['ctrl'] == 1) {
-    openCtrl();
-  }
+  anim_update(-1);
 
+  if (jsonData['ctrl'] && jsonData['ctrl'] == 1) openCtrl();
+  
   //closeSideMenu();
-
 }
 
 function selectProfile(event) {
@@ -664,6 +729,10 @@ function openProfile() {
  */
 function toObj() {
   let obj = {};
+  
+  //if (stateSaved['save0'].length == 0) stateSaved['save0'] = buildActionState();
+  if (stateSaved) obj['stateSaved'] = stateSaved;
+  
   for (let i = 0; i < applets.length; i++) {
     obj[applets[i].keyname] = {};
     obj[applets[i].keyname]['posize'] = [applets[i].x, applets[i].y, applets[i].w, applets[i].h];
@@ -980,17 +1049,15 @@ function appAction(keyname, action) {
       break;
     case '3d':
       applets[idx].progress_perspective_Self();
-      anim_update(-1);
       break;
     case 'show':
       applets[idx].progress_hide_show_Self();
-      anim_update(-1);
       break;
     default:
       break;
   }
 
-  _repaint();
+  anim_update(-1); //_repaint();
 
 }
 
@@ -1030,12 +1097,6 @@ function spot2iframe(keyname) {
   applets[idx].elm.focus();
   anim_update(-1);
 
-}
-
-function stateSave() {
-  if (keylock) {
-    
-  }
 }
 
 function init() {

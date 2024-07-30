@@ -1,53 +1,54 @@
 {
     "frame_1": {
-      "src": "./dashboard.html",
-      "obj": {
-        "hymn": {
-          "posize": [17, 1, 16, 32],
-          "perspective": 0,
-          "obj": {
-            "mode": 1,
-            "fontfactor": 10.5,
-            "list": [
-  
-              "新歌頌揚324",
-              "讚美之泉105",
-              "其他29",
-              "讚美之泉61",
-              "讚美之泉23",
+        "src": "./dashboard.html",
+        "obj": {
+            "hymn": {
+                "posize": [17, 1, 16, 32],
+                "perspective": 0,
+                "obj": {
+                    "mode": 1,
+                    "fontfactor": 10.5,
+                    "list": [
+                        
+                        "救恩235",
+                        "救恩176",
+                        "救恩135",
 
-              "其他139",
-  
-              "主禱文",
-              "使徒信經",
-              "救恩300"
-            ],
-            "fontColorType": 1,
-            "transparent": 0,
-            "syncType": 3
-          }
-        },
-        "Bible": {
-          "posize": [1, 1, 16, 32],
-          "perspective": 0,
-          "obj": {
-            "color": 1,
-            "verticle": 0,
-            "fontfactor": 15,
-            "saved": [
-              [""],
-              ["詩篇", 148, 1],
-              [""],
-              [""], [""], [""], [""], [""], [""], [""]
-            ],
-            "syncType": 3,
-            "transparent": 0,
-            "printSaved": 1,
-            "fsizedist": 0
-          }
-        },
-        "B/G": "B"
-      }
+                        "主禱文",
+                        "使徒信經",
+                        "救恩300"
+                    ],
+                    "fontColorType": 1,
+                    "transparent": 0,
+                    "syncType": 3
+                }
+            },
+            "Bible": {
+                "posize": [1, 1, 16, 32],
+                "perspective": 0,
+                "obj": {
+                    "color": 1,
+                    "verticle": 0,
+                    "fontfactor": 15,
+                    "saved": [
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""],
+                        [""]
+                    ],
+                    "syncType": 3,
+                    "transparent": 0,
+                    "printSaved": 1,
+                    "fsizedist": 0
+                }
+            },
+            "B/G": "B"
+        }
     }
-  }
-  
+}

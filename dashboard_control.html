@@ -32,6 +32,13 @@
 <body>
 
     <div id="controlWin" class="controlPart">
+
+        <button onclick="stateAction(0)">S0</button>
+        <button onclick="stateAction(1)">S1</button>
+        <button onclick="stateAction(2)">S2</button>
+        <button onclick="stateAction(3)">S3</button>
+        <hr size="4" width="100%" color="#007000">
+
         <button onclick="reca()">recover</button>
         <button onclick="hida()">hide</button>
         <button onclick="shwa()">show</button>
@@ -71,6 +78,11 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+    function stateAction(idx) {
+        window.opener.stateAction(idx);
+        reloadState();
+    }
 
     function removeBtns(key) {
         let button = document.getElementById(key);
@@ -164,11 +176,6 @@
     }
 
     function closeApp(keyname) {
-        window.opener.closeApp(keyname);
-        reloadState();
-    }
-
-    function onTop(keyname) {
         window.opener.closeApp(keyname);
         reloadState();
     }
