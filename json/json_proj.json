@@ -158,7 +158,7 @@
 			  },
 			  {
 				  "name": "Bible",
-				  "posize": [1,	6, 22, 22],
+				  "posize": [2,	6, 30, 22],
 				  "visible": 1,
 				  "perspective": 0
 			  }
@@ -190,7 +190,7 @@
 			  },
 			  {
 				  "name": "Bible",
-				  "posize": [1,	6, 22, 22],
+				  "posize": [2,	6, 30, 22],
 				  "visible": 1,
 				  "perspective": 1
 			  }
