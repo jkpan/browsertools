@@ -15,7 +15,9 @@ var stateSaved = {
   "save0" : [], 
   "save1" : [],
   "save2" : [],
-  "save3" : []
+  "save3" : [],
+  "save4" : [],
+  "save5" : []
 }
 
 function buildActionState() {
