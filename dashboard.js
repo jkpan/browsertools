@@ -8,7 +8,7 @@ const APPS = [
 const GRID_W = 32;
 const GRID_H = 32;
 const PPPX = "perspective(1000px)";
-const PRY_MAX = 20;
+var PRY_MAX = 20;
 const PRY_OPA = 1.0;
 
 var stateSaved = {
@@ -18,6 +18,15 @@ var stateSaved = {
   "save3" : [],
   "save4" : [],
   "save5" : []
+}
+
+function rYAdd(value) {
+  PRY_MAX += value;
+  if (PRY_MAX > 80) 
+    PRY_MAX = 80;
+  if (PRY_MAX < 5)
+    PRY_MAX = 5;
+  console.log('PRY_MAX : ' + PRY_MAX);
 }
 
 function buildActionState() {

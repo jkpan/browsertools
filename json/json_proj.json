@@ -68,36 +68,36 @@
           }
         ],
         "save2": [
-          {
-            "name": "file_1",
-            "posize": [1, 1, 32, 32],
-            "visible": 1,
-            "perspective": 0
-          },
-          {
-            "name": "Bible",
-            "posize": [2, 1, 30, 20],
-            "visible": 0,
-            "perspective": 0
-          },
-          {
-            "name": "hymn",
-            "posize": [2, 22, 10, 10],
-            "visible": 0,
-            "perspective": 0
-          },
-          {
-            "name": "info",
-            "posize": [1, 1, 4, 32],
-            "visible": 0,
-            "perspective": 0
-          },
-          {
-            "name": "url_1",
-            "posize": [1, 1, 32, 32],
-            "visible": 1,
-            "perspective": 0
-          }
+        {
+          "name": "hymn",
+          "posize": [2, 22, 10, 10],
+          "visible": 0,
+          "perspective": 0
+        },
+        {
+          "name": "info",
+          "posize": [1, 1, 4, 32],
+          "visible": 0,
+          "perspective": 0
+        },
+        {
+          "name": "file_1",
+          "posize": [1, 1, 32, 32],
+          "visible": 1,
+          "perspective": 0
+        },
+        {
+          "name": "Bible",
+          "posize": [3, 6, 24, 22],
+          "visible": 1,
+          "perspective": 1
+        },
+        {
+          "name": "url_1",
+          "posize": [3, 3, 29, 29],
+          "visible": 1,
+          "perspective": 0
+        }
         ],
         "save3": [
           {
