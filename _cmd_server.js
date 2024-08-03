@@ -2,6 +2,9 @@ const http = require('http');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os'); //onst socketIo = require('socket.io');
+//const sqlite3 = require('sqlite3').verbose();
+//const express = require('express');
+//const app = express();
 
 const sync_Bible  = require('./_sync_Bible');
 const sync_lyrics = require('./_sync_lyrics');
@@ -19,6 +22,7 @@ global.print = function(msg) {
   process.stdout.write(`(${pid})` + msg);
 }
 
+/*
 global.print_ln = function(msg) {
   process.stdout.write(`(${pid})` + msg + '\n');
 }
@@ -26,8 +30,9 @@ global.print_ln = function(msg) {
 global.printlnln = function(msg) {
   process.stdout.write('\n' + `(${pid})` + msg + '\n');
 }
+*/
 
-global.println = function(msg) {
+global.println = function(msg) { //console.trace();
   process.stdout.write('\n' + `(${pid})` + msg);
 }
 
@@ -202,7 +207,8 @@ function startService() {
   }
 
   server.listen(port, () => {
-    printlnln('Server is running... http://' + addresses[0] + ((port == 80) ? '' : ':' + port));
+    println('Server is running... http://' + addresses[0] + ((port == 80) ? '' : ':' + port));
+    println('');
   });
 
 }

@@ -69,13 +69,13 @@ function broadcast() {
       print('<' + client._socket.remoteAddress + ' removed>');
     }
   });
-  print_ln('');
+  //println('');
 }
 
 function addClient(ws) {
     S_clients.add(ws);
     ws.on('message', function incoming(message) {
-        print_ln(`<client: ${message}>`);
+        println(`<client: ${message}>`);
         ws.send(getSongObjStr());
     });
 }

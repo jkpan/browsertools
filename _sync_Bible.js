@@ -103,13 +103,12 @@ function broadcast() {
             print('[' + client._socket.remoteAddress + ' removed]');
         }
     });
-    print_ln('');
 }
 
 function addClient(ws) {
     B_clients.add(ws);
     ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
-        print_ln(`[client: ${message}]`);
+        println(`[client: ${message}]`);
         ws.send(getBibleObjStr());//'Whatsup client! -- from server');
     });
 }

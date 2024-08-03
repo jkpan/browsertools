@@ -252,24 +252,23 @@
     div.id = 'btns';
     document.body.appendChild(div);
 
-    //'VOLUMN'
-    let VOLUMN = window.opener.getSong('VOLUMN');
+    let VOLUME = window.opener.getSong('VOLUME');
 
-    for (let pf = 0; pf < VOLUMN.length; pf++) {
+    for (let pf = 0; pf < VOLUME.length; pf++) {
 
       var span = document.createElement('span');
       span.style.color = 'rgb(0,255,0)' // apply your style
-      span.appendChild(document.createTextNode(VOLUMN[pf][3]));
+      span.appendChild(document.createTextNode(VOLUME[pf][3]));
       div.appendChild(span);
       div.insertAdjacentHTML('beforeend', '<p></p>');
 
-      for (var i = 1; i <= VOLUMN[pf][1]; i++) {
-        var btn = _songBtn(VOLUMN[pf][0] + i);
+      for (var i = 1; i <= VOLUME[pf][1]; i++) {
+        var btn = _songBtn(VOLUME[pf][0] + i);
         if (pf % 2 == 0) {
           btn.style.background = '#005500';//window.opener.COLORS_CK[0]; // setting the background color to teal
         }
 
-        if (btn.innerHTML.length > 0 || VOLUMN[pf][2]) {
+        if (btn.innerHTML.length > 0 || VOLUME[pf][2]) {
           div.appendChild(btn);
         }
       }

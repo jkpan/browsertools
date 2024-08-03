@@ -16,7 +16,7 @@ function command(req, res) {
         // 解析请求数据
         const requestData = JSON.parse(body);
 
-        printlnln('{cmd:' + body + '}');
+        println('{cmd:' + body + '}');
 
         if (requestData.camera == 0) {
             for (let i = 0; i < msgs.length; i++) msgs[i] = '.';

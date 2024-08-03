@@ -214,7 +214,7 @@ class Applet {
 
     if (this.ry != this.t_rotateY) {
       this.ry += (this.t_rotateY - this.ry) * 0.1;
-      if (Math.abs(this.ry - this.t_rotateY) <= 1.0) {
+      if (Math.abs(this.ry - this.t_rotateY) <= 0.5) {
         this.ry = this.t_rotateY;
       }
     }
