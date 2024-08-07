@@ -63,7 +63,7 @@ function restoreActionState(array) {
       item.progress_hide_Self();
     }
     if (jobj['perspective'] == 1) item.progress_3d_Self(); else item.progress_2d_Self();
-    
+    item.presave_action();
   }
   anim_update(-1);
 }
@@ -71,6 +71,7 @@ function restoreActionState(array) {
 function stateAction(idx) {
   if (keylock) {
     let saved = buildActionState();
+    console.log('state saved: ' + JSON.stringify(saved));
     stateSaved['save' + idx] = saved;
   } else {
     restoreActionState(stateSaved['save' + idx]);
@@ -132,6 +133,16 @@ class Applet {
     this.doFix();
   }
 
+  presave_action() {
+    if (this.t_x == 1 && this.t_y == 1 && this.t_w == GRID_W && this.t_h == GRID_H) return;
+    this.sx = this.t_x;
+    this.sy = this.t_y;
+    this.sw = this.t_w;
+    this.sh = this.t_h;//this.sOpacity = parseFloat(this.elm.style.opacity);
+    this.sOpacity = this.t_Opacity;
+    this.sRy = this.t_rotateY;
+  }
+
   presave() {
     if (this.x == 1 && this.y == 1 && this.w == GRID_W && this.h == GRID_H) return;
     this.sx = this.x;
@@ -179,14 +190,10 @@ class Applet {
 
   targetProgress() {
 
-    if (this.x != this.t_x)
-      this.x += Math.ceil((this.t_x - this.x) / Math.abs(this.t_x - this.x));
-    if (this.y != this.t_y)
-      this.y += Math.ceil((this.t_y - this.y) / Math.abs(this.t_y - this.y));
-    if (this.w != this.t_w)
-      this.w += Math.ceil((this.t_w - this.w) / Math.abs(this.t_w - this.w));
-    if (this.h != this.t_h)
-      this.h += Math.ceil((this.t_h - this.h) / Math.abs(this.t_h - this.h));
+    if (this.x != this.t_x) this.x += Math.ceil((this.t_x - this.x) / Math.abs(this.t_x - this.x));
+    if (this.y != this.t_y) this.y += Math.ceil((this.t_y - this.y) / Math.abs(this.t_y - this.y));
+    if (this.w != this.t_w) this.w += Math.ceil((this.t_w - this.w) / Math.abs(this.t_w - this.w));
+    if (this.h != this.t_h) this.h += Math.ceil((this.t_h - this.h) / Math.abs(this.t_h - this.h));
 
     let opcy = parseFloat(this.elm.style.opacity);
 
@@ -212,12 +219,12 @@ class Applet {
 
     this.elm.style.opacity = '' + opcy;
 
-    if (this.ry != this.t_rotateY) {
-      this.ry += (this.t_rotateY - this.ry) * 0.1;
-      if (Math.abs(this.ry - this.t_rotateY) <= 0.5) {
-        this.ry = this.t_rotateY;
+    //if (this.x == this.t_x && this.y == this.t_y && this.w == this.t_w && this.h == this.t_h)
+      if (this.ry != this.t_rotateY) {
+        this.ry += (this.t_rotateY - this.ry) * 0.1;
+        if (Math.abs(this.ry - this.t_rotateY) <= 0.5) 
+          this.ry = this.t_rotateY;
       }
-    }
 
     this.settle();//
 
@@ -436,6 +443,7 @@ class Applet {
   }
 
   progress_3d_Self() {
+    /*
     if (this.x + this.w / 2.0 <= (GRID_W / 2.0 + 1)) {
       this.t_rotateY = PRY_MAX;
       this.elm.style.transformOrigin = "left center";//"bottom left";
@@ -445,6 +453,17 @@ class Applet {
       this.elm.style.transformOrigin = "right center";//"bottom right";
       //this.t_Opacity = PRY_OPA;
     }
+    */
+    if (this.t_x + this.t_w / 2.0 <= (GRID_W / 2.0 + 1)) {
+      this.t_rotateY = PRY_MAX;
+      this.elm.style.transformOrigin = "left center";//"bottom left";
+      //this.t_Opacity = PRY_OPA;
+    } else {
+      this.t_rotateY = -PRY_MAX;
+      this.elm.style.transformOrigin = "right center";//"bottom right";
+      //this.t_Opacity = PRY_OPA;
+    }
+    
     this.presave(); //this.doFix();
   }
 
@@ -540,7 +559,7 @@ class Applet {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.font = _gap_w + "px Arial";
-    ctx.fillStyle = 'rgb(0, 88, 0)';//"rgb(0,180,0)";
+    ctx.fillStyle = 'rgb(0, 255, 0)';//"rgb(0,180,0)";
     let pos = this.getPosition();
     ctx.fillText(this.keyname, pos[0] + 4, pos[1]);
     //ctx.fillStyle = 'rgb(50, 255, 50)';//"rgb(0,180,0)";

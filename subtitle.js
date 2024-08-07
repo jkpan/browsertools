@@ -87,11 +87,11 @@ var list = [];
 const content_help = [[
   "方向鍵  '左右'切句  '上下'切段",
   "'0-9'0-9首  '-'上一首  '='下一首",
-  "'QWERTYUI'1-8段  'O'第0段  'C'最後一段",
+  "'QWERTYUI'1-8段",
   "'P'投影片模式切換  'L'即時選歌",
-  "'S'顯示進度  'A'動畫  'B'Blank",
+  "'S'顯示進度 'B'Blank 'Z'透空",
   "shift'=-' 字大小",
-  "'F2'被控方"
+  "'Enter'切換控制模式"
 ]];
 
 //字型顏色設定
@@ -136,6 +136,8 @@ var img;
 var canvas;
 var ctx;
 var makeLED = false;
+
+var image_base64 = null;
 
 function init() {
   canvas = document.getElementById("canvas");
@@ -747,8 +749,7 @@ function keyboard(e) {
       img = null;
       document.getElementById('img').click();
       break;
-    case 74: document.getElementById('json').click(); break;
-    case 79: phase = 0; line = 0; break;
+    case 74: document.getElementById('json').click(); break; //case 79: phase = 0; line = 0; break;
     case 81: if (subtitles.length > 1) { phase = 1; line = 0; } break;
     case 87: if (subtitles.length > 2) { phase = 2; line = 0; } break;
     case 69: if (subtitles.length > 3) { phase = 3; line = 0; } break;

@@ -606,7 +606,7 @@ function init() {
   canvas.height = window.innerHeight;
   ctx = canvas.getContext("2d");
 
-  fontsize = Math.ceil(canvas.height / fontfactor);//48;
+  fontsize = Math.ceil(Math.min(canvas.width, canvas.height) / fontfactor);//48;
   FONT = fontsize + "px " + fontFamily;
 
   fontsize_sml = Math.ceil(fontsize * 0.66);//32;

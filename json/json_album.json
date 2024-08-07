@@ -1,0 +1,197 @@
+{
+    "frame_1": {
+      "src": "./dashboard.html",
+      "obj": {
+        "stateSaved": {
+          "save0": [
+            {
+              "name": "file_1",
+              "posize": [1, 1, 32, 32],
+              "visible": 1,
+              "perspective": 0
+            },
+            {
+              "name": "url_1",
+              "posize": [22, 22, 10, 10],
+              "visible": 1,
+              "perspective": 0
+            },
+            {
+              "name": "hymn",
+              "posize": [2, 22, 10, 10],
+              "visible": 1,
+              "perspective": 0
+            },
+            {
+              "name": "Bible",
+              "posize": [2, 1, 30, 20],
+              "visible": 1,
+              "perspective": 0
+            },
+            {
+              "name": "info",
+              "posize": [1, 1, 4, 32],
+              "visible": 1,
+              "perspective": 0
+            }
+          ],
+          "save1": [{"name":"Bible","posize":[21,11,12,12],"visible":1,"perspective":1},
+                    {"name":"url_1","posize":[14,8,18,18],"visible":1,"perspective":1},
+                    {"name":"hymn","posize":[3,3,28,28],"visible":1,"perspective":0},
+                    {"name":"info","posize":[1,1,4,32],"visible":1,"perspective":0}],
+          "save2": [{"name":"info","posize":[1,1,4,32],"visible":0,"perspective":0},
+                    {"name":"Bible","posize":[15,8,18,18],"visible":1,"perspective":1},
+                    {"name":"hymn","posize":[1,8,18,18],"visible":1,"perspective":1},
+                    {"name":"url_1","posize":[3,3,28,28],"visible":1,"perspective":0}],
+          "save3": [{"name":"info","posize":[1,1,4,32],"visible":0,"perspective":0},
+                    {"name":"hymn","posize":[1,11,12,12],"visible":1,"perspective":1},
+                    {"name":"url_1","posize":[2,8,18,18],"visible":1,"perspective":1},
+                    {"name":"Bible","posize":[4,7,26,20],"visible":1,"perspective":0}],
+          "save4": [
+            {
+              "name": "hymn",
+              "posize": [2, 22, 10, 10],
+              "visible": 0,
+              "perspective": 0
+            },
+            {
+              "name": "info",
+              "posize": [1, 1, 4, 32],
+              "visible": 0,
+              "perspective": 0
+            },
+            {
+              "name": "url_1",
+              "posize": [12, 7, 20, 20],
+              "visible": 1,
+              "perspective": 0
+            },
+            {
+              "name": "Bible",
+              "posize": [2, 6, 30, 22],
+              "visible": 1,
+              "perspective": 0
+            }
+          ],
+          "save5": [
+            {
+              "name": "hymn",
+              "posize": [2, 22, 10, 10],
+              "visible": 0,
+              "perspective": 0
+            },
+            {
+              "name": "info",
+              "posize": [1, 1, 4, 32],
+              "visible": 0,
+              "perspective": 0
+            },
+            {
+              "name": "url_1",
+              "posize": [12, 7, 20, 20],
+              "visible": 1,
+              "perspective": 1
+            },
+            {
+              "name": "Bible",
+              "posize": [2, 6, 30, 22],
+              "visible": 1,
+              "perspective": 1
+            }
+          ]
+        },
+        "url_1": {
+          "posize": [22, 22, 10, 10],
+          "perspective": 0,
+          "obj": {
+            "loop": 1,
+            "keepratio": 1,
+            "forPlay": 0,
+            "imageBase64": ""
+          }
+        },
+        "hymn": {
+          "posize": [2, 22, 10, 10],
+          "perspective": 0,
+          "obj": {
+            "mode": 2,
+            "fontfactor": 10.5,
+            "list": ["主禱文", "使徒信經", "救恩300"],
+            "fontColorType": 1,
+            "transparent": 0,
+            "syncType": 5
+          }
+        },
+        "Bible": {
+          "posize": [2, 1, 30, 20],
+          "perspective": 0,
+          "obj": {
+            "color": 1,
+            "verticle": 0,
+            "fontfactor": 9.5,
+            "saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
+            "transparent": 0,
+            "printSaved": 0,
+            "fsizedist": 1,
+            "syncType": 6
+          }
+        },
+        "info": {
+          "posize": [1, 1, 4, 32],
+          "perspective": 0,
+          "obj": {
+            "des": "📍或坐或站 自由敬拜😀"
+          }
+        },
+        "B/G": "B"
+      }
+    },
+    "frame_2": {
+      "src": "./newurl.html",
+      "obj": {
+        "hold": 1,
+        "url": "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+      }
+    },
+    "frame_3": {
+      "src": "./dashboard.html",
+      "obj": {
+        "stateSaved": {
+          "save0": [],
+          "save1": [],
+          "save2": [],
+          "save3": [],
+          "save4": [],
+          "save5": []
+        },
+        "url_3": {
+          "posize": [1, 1, 32, 32],
+          "perspective": 0,
+          "obj": {
+            "url": ""
+          }
+        },
+        "B/G": "B"
+      }
+    },
+    "frame_4": {
+      "src": "./newurl.html",
+      "obj": {
+        "hold": 1,
+        "url": "https://docs.google.com/presentation/d/e/2PACX-1vRSshXRoYJ3yRfnc0VnHT2G4ELj_GzD6BL24iGg4HqmlKjOKzL75Bf6GbaIxZBdxg/embed?start=false&loop=false&delayms=3000&rm=minimal"
+      }
+    },
+    "frame_5": {
+      "src": "./tools.html",
+      "obj": {}
+    },
+    "frame_6": {
+      "src": "./tools.html",
+      "obj": {}
+    },
+    "frame_7": {
+      "src": "./tools.html",
+      "obj": {}
+    }
+  }
+  
