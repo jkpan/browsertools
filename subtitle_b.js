@@ -1,3 +1,65 @@
+function readParam(param) {
+
+  // 获取当前页面的URL
+  //var currentURL = window.location.href;
+  //console.log('url: ' + currentURL);
+  //console.log(':' + window.location.origin);
+
+  // 通过URLSearchParams对象解析URL参数
+  var urlParams = new URLSearchParams(window.location.search);
+
+  // 获取特定参数的值
+  var parameterValue = urlParams.get(param);//'参数名');
+
+  // 输出参数值到控制台
+  console.log(param + ' 参数值为: ' + parameterValue);
+
+  return parameterValue;
+}
+
+function dropHandler(event) {
+
+  event.preventDefault();
+
+  // 檢查是否有拖拉的檔案
+  if (event.dataTransfer.items) {
+      // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
+      for (var i = 0; i < event.dataTransfer.items.length; i++) {
+          if (event.dataTransfer.items[i].kind === 'file') {
+              var file = event.dataTransfer.items[i].getAsFile();
+              if (file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                // 读取文件内容
+                reader.onload = function (event) {
+                  image_base64 = event.target.result;
+                  showImage();
+                };
+                reader.readAsDataURL(file);
+              } else {
+                let div = document.getElementById("image_container");
+                div.innerHTML = '';
+                image_base64 = null;
+              }
+          }
+      }
+  }
+}
+
+function dragOverHandler(event) {
+  event.preventDefault();
+}
+
+function showImage() {
+
+  makeTransparent = true;
+
+  let div = document.getElementById("image_container");
+  div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
+
+  _repaint();
+
+}
+
 //import '/common.js';
 class Verseobj {
 
@@ -563,8 +625,6 @@ var mode = 0;
 var doblank = 0;
 var helpSwitch = 0;
 
-var imgurl = '';//'./Icon-1024.png';
-var img;
 var canvas;
 var ctx;
 
@@ -598,7 +658,6 @@ function createCanvas() {
 }
 
 createCanvas();
-createBGHiddenFile();
 
 function init() {
   canvas = document.getElementById("canvas");
@@ -1134,12 +1193,6 @@ function removeDiv() {
   if (ctrl) document.body.removeChild(ctrl);
 
   return;
-}
-
-function prepareImage() {
-  img = new Image();
-  img.src = imgurl;
-  img.onload = function () { };
 }
 
 function printSideTxt(i, j, x, y, a) {
@@ -1956,30 +2009,10 @@ function keyboard(e) { //key up //alert(e.keyCode);
 
   switch (e.keyCode) {
     case 90: makeTransparent = !makeTransparent; break; //'z'
-    case 78:
-      switchLang();
-      break;
-    case 27: //'escape'
-      volAnim = !volAnim;
-      break;
-    //  document.parentElement.focus();
-    /*
-    case 114: //F3
-      if (funcInterval) {
-        stopActionInterval();
-        break;
-      }
-      startRestoreFromServerInterval();
-      break;
-    */
-    //case 113: //F2
-    case 13: //enter
-      createCtrlBtn();
-      return;
-    //case 114: save2Local(); break; case 115: restoreLocal(); break;
-    case 67: //'c'
-      fontColorType = (fontColorType + 1) % 4;
-      break;
+    case 78: switchLang(); break; //n
+    case 27: volAnim = !volAnim; break;//'escape'
+    case 13: createCtrlBtn(); return;//enter
+    case 67: fontColorType = (fontColorType + 1) % 4; break;//'c'
     case 66: //'b'
       //console.log('b press');
       doblank = doblank == 0 ? 1 : 0;
@@ -2021,16 +2054,9 @@ function keyboard(e) { //key up //alert(e.keyCode);
         plaintxtMode();
       }
       break;
-    case 76: //l
-      openCtrl();
-      break;
-    //case 75://'K' case 74://'J'
-    case 68: //d
-      fontsize_dist = fontsize_dist == 0 ? 1 : 0;
-      break;
-    case 83: //s
-      printSaved = !printSaved;
-      break;
+    case 76: openCtrl(); break;//l
+    case 68: fontsize_dist = fontsize_dist == 0 ? 1 : 0; break;//d
+    case 83: printSaved = !printSaved; break;//s
     case 65: //a
 
       helpSwitch = 0;
@@ -2230,7 +2256,6 @@ function keyboard(e) { //key up //alert(e.keyCode);
       doblank = 0;
       helpSwitch = 0;
       uisel = 0;
-      img = null;
       break;
     default:
       break;
@@ -2312,10 +2337,6 @@ function _layer0() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  if (img) {
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  }
-
   /*
   if (color_selection == 0) {
     ctx.fillStyle = 'green';
@@ -2323,9 +2344,6 @@ function _layer0() {
   } else {
     ctx.fillStyle = bgcolor_pointer;//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    if (img) {
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    }
   }
   */
 
@@ -2550,6 +2568,11 @@ function receiveMessage(e) {
       fontsize_dist = 1;
     } else {
       fontsize_dist = 0;
+    }
+
+    if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
+      image_base64 = jsonData.imageBase64;
+      showImage();
     }
 
     sync_type = 0;
@@ -3028,6 +3051,9 @@ function toObj() {
   obj['printSaved'] = printSaved ? 1 : 0;
   obj['fsizedist'] = fontsize_dist;
   obj['syncType'] = sync_type;
+  if (image_base64 && image_base64.length > 0) {
+    obj['imageBase64'] = image_base64;
+  }
   return obj;
 }
 

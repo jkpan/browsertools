@@ -1,3 +1,46 @@
+function dropHandler(event) {
+
+  event.preventDefault();
+
+  // 檢查是否有拖拉的檔案
+  if (event.dataTransfer.items) {
+      // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
+      for (var i = 0; i < event.dataTransfer.items.length; i++) {
+          if (event.dataTransfer.items[i].kind === 'file') {
+              var file = event.dataTransfer.items[i].getAsFile();
+              if (file.type.startsWith('image/')) {
+                var reader = new FileReader();
+                // 读取文件内容
+                reader.onload = function (event) {
+                  image_base64 = event.target.result;
+                  showImage();
+                };
+                reader.readAsDataURL(file);
+              } else {
+                let div = document.getElementById("image_container");
+                div.innerHTML = '';
+                image_base64 = null;
+              }
+          }
+      }
+  }
+}
+
+function dragOverHandler(event) {
+  event.preventDefault();
+}
+
+function showImage() {
+
+  makeTransparent = true;
+
+  let div = document.getElementById("image_container");
+  div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
+
+  _repaint();
+
+}
+
 //Complete Html Page
 function createCanvas() {
 
@@ -42,6 +85,11 @@ function json2List(fileContent) {
     makeTransparent = true;
   else
     makeTransparent = false;
+
+  if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
+      image_base64 = jsonData.imageBase64;
+      showImage();
+  }
 
   sync_type = 0;
   if (jsonData.syncType) {
@@ -131,8 +179,8 @@ var doblank = 0;
 var helpSwitch = 0;
 var dword = 0;
 
-var imgurl = '';//'./Icon-1024.png';
-var img;
+//var imgurl = '';//'./Icon-1024.png';
+//var img;
 var canvas;
 var ctx;
 var makeLED = false;
@@ -309,11 +357,13 @@ function hideCanvas() {
 }
 */
 
+/*
 function prepareImage() {
   img = new Image();
   img.src = imgurl;
   img.onload = function () { };
 }
+*/
 
 function drawIdxHint(x, y) {
   ctx.lineWidth = 1;
@@ -745,10 +795,7 @@ function keyboard(e) {
       }
       break;
     //oqwertyui
-    case 77:
-      img = null;
-      document.getElementById('img').click();
-      break;
+    //case 77: //img = null; document.getElementById('img').click(); break;
     case 74: document.getElementById('json').click(); break; //case 79: phase = 0; line = 0; break;
     case 81: if (subtitles.length > 1) { phase = 1; line = 0; } break;
     case 87: if (subtitles.length > 2) { phase = 2; line = 0; } break;
@@ -800,7 +847,7 @@ function _layer0() {
     ctx.fillStyle = COLOR_PPT;//'blue';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    if (img) ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    //if (img) ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
   }
 }
@@ -1137,12 +1184,14 @@ function toObj() {
   obj['transparent'] = makeTransparent ? 1 : 0;
   //obj['slave'] = funcInterval == null ? 0 : 1;
   obj['syncType'] = sync_type;
+  if (image_base64 && image_base64.length > 0) {
+    obj['imageBase64'] = image_base64;
+  }
   return obj;
 }
 
 //generate HTML
-createCanvas();
-createBGHiddenFile();
+createCanvas(); //createBGHiddenFile();
 createListHiddenFile();
 //end html page
 
