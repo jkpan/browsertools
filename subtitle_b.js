@@ -1,3 +1,6 @@
+
+var image_base64 = null;
+
 function readParam(param) {
 
   // 获取当前页面的URL
@@ -3043,6 +3046,7 @@ function isSafariBrowser() {
  */
 function toObj() {
   let obj = {};
+  //alert('subtotle_b toobj: ' + JSON.stringify(obj));
   obj['color'] = color_selection;
   obj['verticle'] = display_mode;
   obj['fontfactor'] = fontfactor;
