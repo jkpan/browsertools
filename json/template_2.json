@@ -2,7 +2,7 @@
 	"frame_1": {
 	  "src": "./dashboard.html",
 	  "obj": {
-		"hymn": {
+		"lyrics": {
 		  "posize": [18, 17, 15, 15],
 		  "perspective": 1,
 		  "obj": {

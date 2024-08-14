@@ -1,5 +1,5 @@
 const APPS = [
-  'hymn', 'Bible', 'NIV', 'BPlay', 'iPlay',
+  'lyrics', 'Bible', 'NIV', 'BPlay', 'iPlay',
   'url_1', 'url_2', 'url_3',
   'file_1', 'file_2', 'file_3',
   'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'
@@ -12,17 +12,17 @@ var PRY_MAX = 20;
 const PRY_OPA = 1.0;
 
 var stateSaved = {
-  "save0" : [], 
-  "save1" : [],
-  "save2" : [],
-  "save3" : [],
-  "save4" : [],
-  "save5" : []
+  "save0": [],
+  "save1": [],
+  "save2": [],
+  "save3": [],
+  "save4": [],
+  "save5": []
 }
 
 function rYAdd(value) {
   PRY_MAX += value;
-  if (PRY_MAX > 80) 
+  if (PRY_MAX > 80)
     PRY_MAX = 80;
   if (PRY_MAX < 5)
     PRY_MAX = 5;
@@ -35,7 +35,7 @@ function buildActionState() {
     let obj = {};
     obj['name'] = applets[i].keyname;
     obj['posize'] = [applets[i].x, applets[i].y, applets[i].w, applets[i].h];
-    obj['visible'] = applets[i].t_Opacity > 0? 1 : 0;
+    obj['visible'] = applets[i].t_Opacity > 0 ? 1 : 0;
     obj['perspective'] = applets[i].t_rotateY != 0 ? 1 : 0;
     array[i] = obj;
   }
@@ -188,7 +188,7 @@ class Applet {
     this.t_Opacity = 1.0;
   }
 
-  targetProgress() {
+  targetProgress_easyout() {
 
     if (this.x != this.t_x) this.x += Math.ceil((this.t_x - this.x) / Math.abs(this.t_x - this.x));
     if (this.y != this.t_y) this.y += Math.ceil((this.t_y - this.y) / Math.abs(this.t_y - this.y));
@@ -220,11 +220,57 @@ class Applet {
     this.elm.style.opacity = '' + opcy;
 
     //if (this.x == this.t_x && this.y == this.t_y && this.w == this.t_w && this.h == this.t_h)
-      if (this.ry != this.t_rotateY) {
-        this.ry += (this.t_rotateY - this.ry) * 0.1;
-        if (Math.abs(this.ry - this.t_rotateY) <= 0.5) 
-          this.ry = this.t_rotateY;
+    if (this.ry != this.t_rotateY) {
+      this.ry += (this.t_rotateY - this.ry) * 0.1;
+      if (Math.abs(this.ry - this.t_rotateY) <= 0.5)
+        this.ry = this.t_rotateY;
+    }
+
+    this.settle();//
+
+    if (this.ry == this.t_rotateY && opcy == this.t_Opacity &&
+      this.x == this.t_x && this.y == this.t_y &&
+      this.w == this.t_w && this.h == this.t_h) {
+      return true;
+    }
+    return false;
+  }
+
+  targetProgress() {
+
+    this.x = this.x == this.t_x ? this.x : this.x > this.t_x ? this.x - 1 : this.x + 1;
+    this.y = this.y == this.t_y ? this.y : this.y > this.t_y ? this.y - 1 : this.y + 1;
+    this.w = this.w == this.t_w ? this.w : this.w > this.t_w ? this.w - 1 : this.w + 1;
+    this.h = this.h == this.t_h ? this.h : this.h > this.t_h ? this.h - 1 : this.h + 1;
+
+    let opcy = parseFloat(this.elm.style.opacity);
+
+    if (opcy != this.t_Opacity) {
+
+      this.elm.hidden = false;
+
+      if (opcy > this.t_Opacity) {
+        opcy -= 0.05;
+        if (opcy < this.t_Opacity) {
+          opcy = this.t_Opacity;
+        }
+      } else if (opcy < this.t_Opacity) {
+        opcy += 0.05;
+        if (opcy > this.t_Opacity) {
+          opcy = this.t_Opacity;
+        }
       }
+    }
+
+    this.elm.style.opacity = '' + opcy;
+
+    if (opcy < 0.05) {
+      this.elm.hidden = true;
+    }
+
+    this.ry = this.ry == this.t_rotateY ? this.ry : this.ry > this.t_rotateY ? this.ry - 1 : this.ry + 1;
+    if (Math.abs(this.ry - this.t_rotateY) <= 0.1) 
+      this.ry = this.t_rotateY;
 
     this.settle();//
 
@@ -463,7 +509,7 @@ class Applet {
       this.elm.style.transformOrigin = "right center";//"bottom right";
       //this.t_Opacity = PRY_OPA;
     }
-    
+
     this.presave(); //this.doFix();
   }
 
@@ -728,7 +774,7 @@ function handleProfile(fileContent) {
   anim_update(-1);
 
   if (jsonData['ctrl'] && jsonData['ctrl'] == 1) openCtrl();
-  
+
   //closeSideMenu();
 }
 
@@ -759,10 +805,10 @@ function openProfile() {
  */
 function toObj() {
   let obj = {};
-  
+
   //if (stateSaved['save0'].length == 0) stateSaved['save0'] = buildActionState();
   if (stateSaved) obj['stateSaved'] = stateSaved;
-  
+
   for (let i = 0; i < applets.length; i++) {
     obj[applets[i].keyname] = {};
     obj[applets[i].keyname]['posize'] = [applets[i].x, applets[i].y, applets[i].w, applets[i].h];
@@ -785,7 +831,7 @@ function toObj() {
 
 function getElmState() {
   let stateArray = {
-    hymn: -1, Bible: -1, NIV: -1, BPlay: -1, iPlay: -1,
+    lyrics: -1, Bible: -1, NIV: -1, BPlay: -1, iPlay: -1,
     url_1: -1, url_2: -1, url_3: -1,
     file_1: -1, file_2: -1, file_3: -1,
     anim: -1, info: -1, effect: -1, time: -1,
@@ -956,7 +1002,7 @@ function _createFrame(keyname) {
       app.onTop();
       return app;
     }
-    case 'hymn': {
+    case 'lyrics': {
       createFrame(keyname, 'subtitle.html');
       let app = new Applet({ x: 1, y: 14, w: 15, h: 18, keyname: keyname });
       applets.push(app);

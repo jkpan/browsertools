@@ -17,7 +17,7 @@
 			"url" : ""
 		  }
 		},
-		"hymn": {
+		"lyrics": {
 		  "posize": [2, 22, 10, 10],
 		  "perspective": 0,
 		  "obj": {

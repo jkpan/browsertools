@@ -50,7 +50,7 @@
         <button onclick="reloadState()">reload</button>
         <button id="start" onclick="btnonclick()">語音</button>
         <hr size="4" width="100%" color="#007000">
-        <button onclick="controlParent('hymn')">🎤</button>
+        <button onclick="controlParent('lyrics')">🎤</button>
         <button onclick="controlParent('Bible')">🎚️</button>
         <button onclick="controlParent('NIV')">NIV</button>
         <button onclick="controlParent('BPlay')">🎚️Play</button>
@@ -69,12 +69,6 @@
         <button onclick="controlParent('tabs')">頁籤</button>
 
         <hr size="4" width="100%" color="#007000">
-
-        <!-- <button id="hymn" onclick="controlParent('hymn')">🎤</button>
-        <button id="hymn_v" onclick="switchVisible('hymn')">V</button>
-        <button id="hymn_p" onclick="perspective('hymn')">P</button>
-        <button id="hymn_x" onclick="closeApp('hymn')">x</button>
-        <button id="hymn_l" onclick="lockApp('hymn')">🔓</button> -->
 
     </div>
 
@@ -113,7 +107,7 @@
         let div = document.getElementById('controlWin');
         var button = document.createElement('button');
         switch (key_) {
-            case 'hymn': button.innerHTML = '🎤'; break;
+            case 'lyrics': button.innerHTML = '🎤'; break;
             case 'Bible': button.innerHTML = '🎚️'; break;
             case 'NIV': button.innerHTML = 'NIV'; break;
             case 'BPlay': button.innerHTML = '🎚️Play'; break;
@@ -297,7 +291,7 @@
 
     var cmd = ["打開", "放大", "關掉"];
     var item = ["全部", "聖經", "歌詞", "投影片"];
-    var map = ["-", "Bible", "hymn", "url_1"];
+    var map = ["-", "Bible", "lyrics", "url_1"];
 
     function btnonclick() {
 

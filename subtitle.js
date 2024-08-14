@@ -1,28 +1,193 @@
+var list = [];
+var ALL_SONGS_JSON;
+
+const EMPTY = [
+  [
+    ['____歌詞____'],
+    ['']
+  ]
+];
+
+var SONGS = EMPTY.slice();//[ [['____歌詞____'],['']] ];
+
+function getArrayDimension(arr) {
+  if (Array.isArray(arr)) {
+      return 1 + Math.max(...arr.map(getArrayDimension), 0);
+  } else {
+      return 0;
+  }
+}
+
+function formatALL() {
+  console.log('{');
+  var keys = Object.keys(ALL_SONGS_JSON);
+  keys.forEach(function (key) {
+    console.log('  "' + key + '": {');
+    let song = ALL_SONGS_JSON[key];
+    let content = song['content'];
+    switch(getArrayDimension(content)) {
+      case 1:
+        let str = '[';
+        for (let k=0;k<content.length;k++) {
+          str += '"'+content[k]+'"';
+          str += k<content.length-1?',':']';
+        }
+        console.log('    "content":' + str);
+        break;
+      case 2:
+        //console.log('"content":' + )
+        break;
+    }
+    
+    
+    console.log('  },');
+  });
+  console.log('}');
+}
+
+//抓取預設歌庫
+async function fetchData() {
+  try {
+    const response = await fetch('./json/songs.json'); // 等待 fetch 请求完成
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
+    console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
+    //return data; // 如果需要同步效果，可以返回数据
+    //formatALL();
+  } catch (error) {
+    console.error('Failed to fetch JSON:', error);
+  }
+  console.log('fetchData END');
+}
+
+//取得一首歌
+function getSong(jsonid) { return getSongFromJSON(jsonid);
+  var json_elm = document.getElementById(jsonid);
+  if (json_elm) {
+    var obj = JSON.parse(json_elm.innerHTML);
+    if (obj.content)
+      return obj.content;
+  }
+  return [['']];
+}
+
+//從json取得一首歌
+function getSongFromJSON(jsonid) {
+  if (ALL_SONGS_JSON == null) fetchData();
+  if (!ALL_SONGS_JSON) return [['']];
+  var obj = ALL_SONGS_JSON[jsonid];//JSON.parse(json_elm.innerHTML);
+  if (obj && obj["content"])
+    return obj['content'];
+  return [['']];
+}
+
+function getSongsFromList(_list) {
+
+  if (_list)
+    list = _list;
+  else
+    list = getSong('LIST');
+
+  SONGS = EMPTY.slice();
+
+  for (let i = 0; i < list.length; i++) { //SONGS[i+1] = getSong(list[i]);
+    if (typeof list[i] === 'string') {
+      SONGS[i + 1] = getSong(list[i]);
+    } else {
+      SONGS[i + 1] = list[i];
+    }
+  }
+
+  song = 0;
+  phase = 0;
+  line = 0;
+
+  subtitles = SONGS[song];
+
+  _repaint();
+}
+
+/*
+  list : (list)
+  mode : (mode)
+  fontfactor: (fontfactor)
+  slave: 1,0
+  //master : 1 
+ */
+function json2List(fileContent) {
+
+  const jsonData = JSON.parse(fileContent);
+  // 進行 JSON 資料的處理
+
+  if (jsonData.list && jsonData.list.length > 0) {
+    getSongsFromList(jsonData.list);
+  }
+
+  if (jsonData.mode) mode = jsonData.mode;
+  if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
+  if (jsonData.fontColorType) fontColorType = jsonData.fontColorType;
+  if (jsonData.transparent)
+    makeTransparent = true;
+  else
+    makeTransparent = false;
+
+  if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
+    image_base64 = jsonData.imageBase64;
+    showImage();
+  }
+
+  sync_type = 0;
+  if (jsonData.syncType) {
+    sync_type = jsonData.syncType;
+    synctrls();
+  }
+
+  _repaint();
+
+}
+
+function loadListFromJson(event) {
+  var files = event.target.files;//const inputFile = document.getElementById('json');
+  if (files.length > 0) {
+    // 讀取使用者選擇的檔案
+    const file = files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
+    reader.onload = function (event) {
+      const fileContent = event.target.result;
+      json2List(fileContent);
+    }
+  }
+}
+
 function dropHandler(event) {
 
   event.preventDefault();
 
   // 檢查是否有拖拉的檔案
   if (event.dataTransfer.items) {
-      // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
-      for (var i = 0; i < event.dataTransfer.items.length; i++) {
-          if (event.dataTransfer.items[i].kind === 'file') {
-              var file = event.dataTransfer.items[i].getAsFile();
-              if (file.type.startsWith('image/')) {
-                var reader = new FileReader();
-                // 读取文件内容
-                reader.onload = function (event) {
-                  image_base64 = event.target.result;
-                  showImage();
-                };
-                reader.readAsDataURL(file);
-              } else {
-                let div = document.getElementById("image_container");
-                div.innerHTML = '';
-                image_base64 = null;
-              }
-          }
+    // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
+    for (var i = 0; i < event.dataTransfer.items.length; i++) {
+      if (event.dataTransfer.items[i].kind === 'file') {
+        var file = event.dataTransfer.items[i].getAsFile();
+        if (file.type.startsWith('image/')) {
+          var reader = new FileReader();
+          // 读取文件内容
+          reader.onload = function (event) {
+            image_base64 = event.target.result;
+            showImage();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          let div = document.getElementById("image_container");
+          div.innerHTML = '';
+          image_base64 = null;
+        }
       }
+    }
   }
 }
 
@@ -62,60 +227,6 @@ function createCanvas() {
   document.body.style.backgroundColor = 'transparent';
 }
 
-/*
-  list : (list)
-  mode : (mode)
-  fontfactor: (fontfactor)
-  slave: 1,0
-  //master : 1 
- */
-function json2List(fileContent) {
-
-  const jsonData = JSON.parse(fileContent);
-  // 進行 JSON 資料的處理
-
-  if (jsonData.list && jsonData.list.length > 0) {
-    getSongsFromList(jsonData.list);
-  }
-
-  if (jsonData.mode) mode = jsonData.mode;
-  if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
-  if (jsonData.fontColorType) fontColorType = jsonData.fontColorType;
-  if (jsonData.transparent)
-    makeTransparent = true;
-  else
-    makeTransparent = false;
-
-  if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
-      image_base64 = jsonData.imageBase64;
-      showImage();
-  }
-
-  sync_type = 0;
-  if (jsonData.syncType) {
-    sync_type = jsonData.syncType;
-    synctrls();
-  }
-
-  _repaint();
-
-}
-
-function loadListFromJson(event) {
-  var files = event.target.files;//const inputFile = document.getElementById('json');
-  if (files.length > 0) {
-    // 讀取使用者選擇的檔案
-    const file = files[0];
-    const reader = new FileReader();
-    reader.readAsText(file);
-    // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
-    reader.onload = function (event) {
-      const fileContent = event.target.result;
-      json2List(fileContent);
-    }
-  }
-}
-
 function createListHiddenFile() {
   let _file = document.createElement('input');
   _file.type = "file";
@@ -129,8 +240,6 @@ function createListHiddenFile() {
   body.appendChild(_file);
   //<input id="img" type="file" hidden="true"/>
 }
-
-var list = [];
 
 const content_help = [[
   "方向鍵  '左右'切句  '上下'切段",
@@ -148,20 +257,6 @@ var fontFamily = "Monospace"; //"Arial" "cwTeXKai" '華康瘦金體' "標楷體"
 const COLORS_CK = ["rgb(0, 110, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 240, 0)"];
 const COLOR_PPT = 'rgb(0,0,200)';
 const COLOR_PPT_SML = 'rgb(0, 70, 0)';
-
-function getSong(jsonid) {
-  var json_elm = document.getElementById(jsonid);
-  if (json_elm) {
-    var obj = JSON.parse(json_elm.innerHTML);
-    if (obj.content)
-      return obj.content;
-  }
-  return [['']];
-}
-
-const EMPTY = [[['____歌詞____'], ['']]];
-
-var SONGS = EMPTY.slice();//[ [['____歌詞____'],['']] ];
 
 var song;
 var subtitles;
@@ -200,9 +295,9 @@ function init() {
     dots = 1;
     side = 1;
     makeRound = true;
-    set2AverageColor(); 
+    set2AverageColor();
     //set2PickColor();
-    initLED(0, 0, canvas.width, canvas.height); 
+    initLED(0, 0, canvas.width, canvas.height);
     newLEDMask();
   }
 
@@ -243,6 +338,7 @@ function ajax_restore() {
 }
 */
 
+//控方上傳目前
 function ajax_sync() {
   _ajax({
     song: subtitles, //song,
@@ -323,7 +419,7 @@ function saveAction2Local() {
   };
   let value = JSON.stringify(obj);
   localStorage.setItem(key, value);
-  
+
 }
 
 function restoreActionFromLocal() {
@@ -344,26 +440,6 @@ function closeSelector() {
     selector.close();
   selector = null;
 }
-
-/*
-function hideCanvas() {  
-  if (canvas.hidden) {
-    removeBtns();
-    canvas.hidden = false;
-  } else {
-    createBtns();
-    canvas.hidden = true;
-  }
-}
-*/
-
-/*
-function prepareImage() {
-  img = new Image();
-  img.src = imgurl;
-  img.onload = function () { };
-}
-*/
 
 function drawIdxHint(x, y) {
   ctx.lineWidth = 1;
@@ -666,7 +742,7 @@ function keyboard(e) {
       combineKey(e);
     return;
   }
-  
+
   switch (e.keyCode) {
     //case 113: //F2
     case 13: //Enter
@@ -925,7 +1001,7 @@ function _repaint() { //if (!funcInterval) saveAction2Local();
 var sync_type = 0;
 var ctrls = [];
 
-function removeDiv() {  
+function removeDiv() {
   var ctrl = document.getElementById('ctrl');
   if (ctrl) document.body.removeChild(ctrl);
   return;
@@ -1050,7 +1126,7 @@ function synctrls() {
   if (ws && ws.readyState === WebSocket.OPEN) {
     ws.close();
   }
-  
+
   switch (sync_type) {
 
     case 0: break;
@@ -1081,71 +1157,71 @@ function restoreFromJson(obj) {
 /*
  websocket .. 
  */
- var ws;
- var timeoutID = -1;
- //
- function chkWebsocket() {
-   
-   //console.log(`# ${timeoutID}`);
- 
-   if (timeoutID >= 0) window.clearTimeout(timeoutID);
- 
-   if (sync_type != 5) {
-     if (ws && ws.readyState === WebSocket.OPEN) {
-       ws.close();
-       ws = null;
-     }
-     return;
-   }
- 
-   if (ws && ws.readyState != WebSocket.OPEN) {
-     console.log('WebSocket is open');
-     initWebsocket();
-     return;
-   }
- 
-   timeoutID = setTimeout(chkWebsocket, 3000);
- }
- 
- function initWebsocket() {
-   
-   let serverDomain = window.location.hostname;
-   console.log('Server Domain:', serverDomain);
- 
-   //return;
- 
-   if (ws && ws.readyState === WebSocket.OPEN) {
-     console.log('WebSocket is open');
-     ws.close();
-   } else {
-     console.log('WebSocket is not open');
-   }
+var ws;
+var timeoutID = -1;
+//
+function chkWebsocket() {
+
+  //console.log(`# ${timeoutID}`);
+
+  if (timeoutID >= 0) window.clearTimeout(timeoutID);
+
+  if (sync_type != 5) {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.close();
+      ws = null;
+    }
+    return;
+  }
+
+  if (ws && ws.readyState != WebSocket.OPEN) {
+    console.log('WebSocket is open');
+    initWebsocket();
+    return;
+  }
+
+  timeoutID = setTimeout(chkWebsocket, 3000);
+}
+
+function initWebsocket() {
+
+  let serverDomain = window.location.hostname;
+  console.log('Server Domain:', serverDomain);
+
+  //return;
+
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    console.log('WebSocket is open');
+    ws.close();
+  } else {
+    console.log('WebSocket is not open');
+  }
 
   let port = 80;
   if (window.location.port.length > 0) {
     port = parseInt(window.location.port, 10);
   }
   //port += 8000;//ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  ws = new WebSocket('ws://' + serverDomain + ':' + port +'/Song');
+  ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Song');
   //ws = new WebSocket('ws://' + serverDomain + ':8080/Song');
-   ws.onopen = function() {
-     console.log('Connected to server');
-     ws.send('Hello - from 歌詞 client');
-   };
-   ws.onmessage = function(event) {
-     console.log('Received:', event.data);
-     let obj = JSON.parse(event.data);
-     if (!obj) return;
-     restoreFromJson(obj);
-   };
-   ws.onclose = function() {
-     console.log('Connection closed');
-   };
-   
-   if (timeoutID >= 0) window.clearTimeout(timeoutID);
-   timeoutID = setTimeout(chkWebsocket, 5000);
-   
- }
+  ws.onopen = function () {
+    console.log('Connected to server');
+    ws.send('Hello - from 歌詞 client');
+  };
+  ws.onmessage = function (event) {
+    console.log('Received:', event.data);
+    let obj = JSON.parse(event.data);
+    if (!obj) return;
+    restoreFromJson(obj);
+  };
+  ws.onclose = function () {
+    console.log('Connection closed');
+  };
+
+  if (timeoutID >= 0) window.clearTimeout(timeoutID);
+  timeoutID = setTimeout(chkWebsocket, 5000);
+
+}
 
 function userhelp() {
 
@@ -1197,6 +1273,8 @@ createListHiddenFile();
 
 init();
 
+
+
 var keylock = false;
 
 function receiveMessage(e) {
@@ -1216,7 +1294,7 @@ window.addEventListener('message', receiveMessage, false);
 window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function (e) {
   //e.preventDefault(); //e.stopPropagation();
-  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+  if (e.keyCode == 16) {
     keylock = true;
   }
 }, false);
@@ -1228,55 +1306,13 @@ window.addEventListener('beforeunload', function (e) {
   closeSelector();
 });
 /* 網頁切換別處切回來重繪 */
-document.addEventListener('visibilitychange', function() {
+document.addEventListener('visibilitychange', function () {
   _repaint();
 });
-
-function getSongsFromList(_list) {
-
-  if (_list)
-    list = _list;
-  else
-    list = getSong('LIST');
-
-  SONGS = EMPTY.slice();
-
-  for (let i = 0; i < list.length; i++) { //SONGS[i+1] = getSong(list[i]);
-    if (typeof list[i] === 'string') {
-      SONGS[i + 1] = getSong(list[i]);
-    } else {
-      SONGS[i + 1] = list[i];
-    }
-  }
-
-  song = 0;
-  phase = 0;
-  line = 0;
-
-  subtitles = SONGS[song];
-
-  _repaint();
-}
 
 getSongsFromList();
 
-/*
-canvas.addEventListener('mousemove', e => {
-  if (mode != 0) return;
-  if (canvas.hidden) return;
-  _repaint();
-  ctx.strokeStyle = 'rgb(0,255,0)';
-  ctx.strokeRect (e.x - 5, e.y - 5, 10, 10);
-  //doblank = 0; helpSwitch = 0; displayProgress = 0;
-});
-*/
-
-/*
-function getSongsFromJson(jsonData) {
-  if (jsonData.content.length == 0) return;
-  getSongsFromList(jsonData.content);
-}
-*/
+//fetchData();
 
 /*
 fetch('https://jkpan.github.io/browsertools/list.json')
