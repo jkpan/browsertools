@@ -62,7 +62,7 @@ async function fetchData() {
   console.log('fetchData END');
 }
 
-//取得一首歌
+/*
 function getSong(jsonid) { return getSongFromJSON(jsonid);
   var json_elm = document.getElementById(jsonid);
   if (json_elm) {
@@ -72,10 +72,11 @@ function getSong(jsonid) { return getSongFromJSON(jsonid);
   }
   return [['']];
 }
+*/
 
 //從json取得一首歌
-function getSongFromJSON(jsonid) {
-  if (ALL_SONGS_JSON == null) fetchData();
+function getSong(jsonid) {
+  //fetchData();
   if (!ALL_SONGS_JSON) return [['']];
   var obj = ALL_SONGS_JSON[jsonid];//JSON.parse(json_elm.innerHTML);
   if (obj && obj["content"])
@@ -84,16 +85,33 @@ function getSongFromJSON(jsonid) {
 }
 
 function getSongsFromList(_list) {
-
-  if (_list)
+  if (_list) {
+    console.log('list = _list');
     list = _list;
-  else
+  }
+  /* 
+  else {
+    console.log('getSong(LIST)');
     list = getSong('LIST');
+    console.log('getSong(LIST) done');
+  }
+  */
 
   SONGS = EMPTY.slice();
 
+  if (ALL_SONGS_JSON == null) {
+    (async function() { //const jsonData = 
+      console.log('get all songs');
+      await fetchData();
+      console.log('get content from list');
+      getSongsFromList(_list);
+    })();
+    return;
+  }
+
   for (let i = 0; i < list.length; i++) { //SONGS[i+1] = getSong(list[i]);
     if (typeof list[i] === 'string') {
+      console.log('getSong(list[i]) ' + list[i]);
       SONGS[i + 1] = getSong(list[i]);
     } else {
       SONGS[i + 1] = list[i];
@@ -508,6 +526,8 @@ function printSubtitle() {
 }
 
 function printTxt(i, j, vpos) { //subtitle mode 
+
+  if (!subtitles) return;
 
   let txt = subtitles[i][j];
 
