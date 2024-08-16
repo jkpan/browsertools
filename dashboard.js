@@ -5,8 +5,8 @@ const APPS = [
   'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'
 ];
 
-const GRID_W = 32;
-const GRID_H = 32;
+const GRID_W = 48;
+const GRID_H = 48;
 const PPPX = "perspective(1000px)";
 var PRY_MAX = 20;
 const PRY_OPA = 1.0;
@@ -1070,7 +1070,7 @@ function _createFrame(keyname) {
     }
     case 'info': {
       createFrame(keyname, 'marquee_v.html');
-      let app = new Applet({ x: 1, y: 1, w: 4, h: 32, keyname: keyname });
+      let app = new Applet({ x: 1, y: 1, w: 4, h: 48, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;

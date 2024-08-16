@@ -6,31 +6,31 @@
         "save0": [
           {
             "name": "file_1",
-            "posize": [1, 1, 32, 32],
+            "posize": [1, 1, 48, 48],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "url_1",
-            "posize": [22, 22, 10, 10],
+            "posize": [33, 33, 15, 15],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "lyrics",
-            "posize": [5, 22, 10, 10],
+            "posize": [8, 33, 15, 15],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "Bible",
-            "posize": [2, 2, 30, 19],
+            "posize": [2, 2, 45, 30],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "info",
-            "posize": [1, 1, 4, 32],
+            "posize": [1, 1, 6, 48],
             "visible": 1,
             "perspective": 0
           }
@@ -38,31 +38,31 @@
         "save1": [
           {
             "name": "file_1",
-            "posize": [1, 1, 32, 32],
+            "posize": [1, 1, 48, 48],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "url_1",
-            "posize": [22, 22, 10, 10],
+            "posize": [33, 33, 15, 15],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "Bible",
-            "posize": [2, 1, 30, 20],
+            "posize": [2, 1, 45, 30],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "lyrics",
-            "posize": [1, 1, 32, 32],
+            "posize": [1, 1, 48, 48],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "info",
-            "posize": [1, 1, 4, 32],
+            "posize": [1, 1, 6, 48],
             "visible": 1,
             "perspective": 0
           }
@@ -70,31 +70,31 @@
         "save2": [
           {
             "name": "lyrics",
-            "posize": [2, 22, 10, 10],
+            "posize": [2, 33, 15, 15],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "info",
-            "posize": [1, 1, 4, 32],
+            "posize": [1, 1, 6, 48],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "file_1",
-            "posize": [1, 1, 32, 32],
+            "posize": [1, 1, 48, 48],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "Bible",
-            "posize": [3, 6, 24, 22],
+            "posize": [5, 9, 36, 33],
             "visible": 1,
             "perspective": 1
           },
           {
             "name": "url_1",
-            "posize": [3, 3, 29, 29],
+            "posize": [2, 2, 47, 46],
             "visible": 1,
             "perspective": 0
           }
@@ -102,31 +102,31 @@
         "save3": [
           {
             "name": "file_1",
-            "posize": [1, 1, 32, 32],
+            "posize": [1, 1, 48, 48],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "url_1",
-            "posize": [22, 22, 10, 10],
+            "posize": [33, 33, 15, 15],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "Bible",
-            "posize": [2, 2, 30, 19],
+            "posize": [2, 2, 46, 30],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "lyrics",
-            "posize": [2, 22, 10, 10],
+            "posize": [2, 33, 15, 15],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "info",
-            "posize": [1, 1, 4, 32],
+            "posize": [1, 1, 6, 48],
             "visible": 0,
             "perspective": 0
           }
@@ -134,31 +134,31 @@
         "save4": [
           {
             "name": "lyrics",
-            "posize": [2, 22, 10, 10],
+            "posize": [2, 33, 15, 15],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "info",
-            "posize": [1, 1, 4, 32],
+            "posize": [1, 1, 6, 48],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "url_1",
-            "posize": [13, 7, 20, 20],
+            "posize": [19, 10, 30, 30],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "file_1",
-            "posize": [1, 6, 32, 22],
+            "posize": [1, 9, 48, 33],
             "visible": 1,
             "perspective": 0
           },
           {
             "name": "Bible",
-            "posize": [2, 6, 30, 22],
+            "posize": [2, 9, 45, 33],
             "visible": 1,
             "perspective": 0
           }
@@ -166,38 +166,38 @@
         "save5": [
           {
             "name": "lyrics",
-            "posize": [2, 22, 10, 10],
+            "posize": [2, 33, 15, 15],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "info",
-            "posize": [1, 1, 4, 32],
+            "posize": [1, 1, 6, 48],
             "visible": 0,
             "perspective": 0
           },
           {
             "name": "url_1",
-            "posize": [13, 7, 20, 20],
+            "posize": [19, 10, 30, 30],
             "visible": 1,
             "perspective": 1
           },
           {
             "name": "file_1",
-            "posize": [1, 6, 32, 22],
+            "posize": [1, 9, 48, 33],
             "visible": 1,
             "perspective": 1
           },
           {
             "name": "Bible",
-            "posize": [2, 6, 30, 22],
+            "posize": [2, 9, 45, 33],
             "visible": 1,
             "perspective": 1
           }
         ]
       },
       "file_1": {
-        "posize": [1, 1, 32, 32],
+        "posize": [1, 1, 48, 48],
         "perspective": 0,
         "obj": {
           "keepratio": 0,
@@ -206,17 +206,16 @@
         }
       },
       "url_1": {
-        "posize": [22, 22, 10, 10],
+        "posize": [33, 33, 15, 15],
         "perspective": 0,
         "obj": {
           "loop": 1,
           "keepratio": 1,
-          "forPlay": 0,
-          "imageBase64": ""
+          "forPlay": 0
         }
       },
       "lyrics": {
-        "posize": [5, 22, 10, 10],
+        "posize": [8, 33, 15, 15],
         "perspective": 0,
         "obj": {
           "mode": 2,
@@ -228,7 +227,7 @@
         }
       },
       "Bible": {
-        "posize": [2, 2, 30, 19],
+        "posize": [2, 2, 45, 30],
         "perspective": 0,
         "obj": {
           "color": 1,
@@ -242,7 +241,7 @@
         }
       },
       "info": {
-        "posize": [1, 1, 4, 32],
+        "posize": [1, 1, 6, 48],
         "perspective": 0,
         "obj": {
           "des": "📍或坐或站 自由敬拜😀"
@@ -254,8 +253,10 @@
   "frame_2": {
     "src": "./newurl.html",
     "obj": {
-      "hold": 1,
-      "url": "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal"
+      "url": "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal",
+      "loop": 1,
+      "keepratio": 0,
+      "forPlay": 0
     }
   },
   "frame_3": {
@@ -270,7 +271,7 @@
         "save5": []
       },
       "url_3": {
-        "posize": [1, 1, 32, 32],
+        "posize": [1, 1, 48, 48],
         "perspective": 0,
         "obj": {
           "url": ""
@@ -282,8 +283,10 @@
   "frame_4": {
     "src": "./newurl.html",
     "obj": {
-      "hold": 1,
-      "url": "https://docs.google.com/presentation/d/e/2PACX-1vRSshXRoYJ3yRfnc0VnHT2G4ELj_GzD6BL24iGg4HqmlKjOKzL75Bf6GbaIxZBdxg/embed?start=false&loop=false&delayms=3000&rm=minimal"
+      "url": "https://docs.google.com/presentation/d/e/2PACX-1vRSshXRoYJ3yRfnc0VnHT2G4ELj_GzD6BL24iGg4HqmlKjOKzL75Bf6GbaIxZBdxg/embed?start=false&loop=false&delayms=3000&rm=minimal",
+      "loop": 1,
+      "keepratio": 0,
+      "forPlay": 0
     }
   },
   "frame_5": {

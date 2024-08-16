@@ -3,7 +3,7 @@
 	  "src": "./dashboard.html",
 	  "obj": {
 		"url_1": {
-		  "posize": [20, 2, 13, 13],
+		  "posize": [30, 2, 19, 19],
 		  "perspective": 1,
 		  "obj": {
 			"loop": 1,
@@ -14,7 +14,7 @@
 		  }
 		},
 		"lyrics": {
-		  "posize": [16, 17, 17, 15],
+		  "posize": [24, 25, 25, 22],
 		  "perspective": 1,
 		  "obj": {
 			"mode": 3,
@@ -26,7 +26,7 @@
 		  }
 		},
 		"Bible": {
-		  "posize": [1, 15, 23, 18],
+		  "posize": [1, 22, 34, 27],
 		  "perspective": 1,
 		  "obj": {
 			"color": 0,
@@ -46,7 +46,7 @@
 	  "src": "./dashboard.html",
 	  "obj": {
 		"Bible": {
-		  "posize": [13, 2, 19, 30],
+		  "posize": [18, 2, 30, 45],
 		  "perspective": 0,
 		  "obj": {
 			"color": 0,

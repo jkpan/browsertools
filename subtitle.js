@@ -18,44 +18,17 @@ function getArrayDimension(arr) {
   }
 }
 
-function formatALL() {
-  console.log('{');
-  var keys = Object.keys(ALL_SONGS_JSON);
-  keys.forEach(function (key) {
-    console.log('  "' + key + '": {');
-    let song = ALL_SONGS_JSON[key];
-    let content = song['content'];
-    switch(getArrayDimension(content)) {
-      case 1:
-        let str = '[';
-        for (let k=0;k<content.length;k++) {
-          str += '"'+content[k]+'"';
-          str += k<content.length-1?',':']';
-        }
-        console.log('    "content":' + str);
-        break;
-      case 2:
-        //console.log('"content":' + )
-        break;
-    }
-    
-    
-    console.log('  },');
-  });
-  console.log('}');
-}
-
 //抓取預設歌庫
 async function fetchData() {
   try {
-    const response = await fetch('./json/songs.json'); // 等待 fetch 请求完成
+    const response = await fetch('./json/output.json'); // 等待 fetch 请求完成
+    //const response = await fetch('./json/songs.json'); // 等待 fetch 请求完成
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
     ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
     console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
     //return data; // 如果需要同步效果，可以返回数据
-    //formatALL();
   } catch (error) {
     console.error('Failed to fetch JSON:', error);
   }
@@ -63,7 +36,7 @@ async function fetchData() {
 }
 
 /*
-function getSong(jsonid) { return getSongFromJSON(jsonid);
+function getSong(jsonid) {
   var json_elm = document.getElementById(jsonid);
   if (json_elm) {
     var obj = JSON.parse(json_elm.innerHTML);
@@ -85,10 +58,9 @@ function getSong(jsonid) {
 }
 
 function getSongsFromList(_list) {
-  if (_list) {
-    console.log('list = _list');
-    list = _list;
-  }
+  
+  if (_list) list = _list;
+  
   /* 
   else {
     console.log('getSong(LIST)');

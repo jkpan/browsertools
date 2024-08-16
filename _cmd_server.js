@@ -36,6 +36,87 @@ global.println = function(msg) { //console.trace();
   process.stdout.write('\n' + `(${pid})` + msg);
 }
 
+var ALL_SONGS_JSON;
+var all;
+
+function getArrayDimension(arr) {
+  if (Array.isArray(arr)) {
+      return 1 + Math.max(...arr.map(getArrayDimension), 0);
+  } else {
+      return 0;
+  }
+}
+
+function formatALL(fstream) {
+  fstream.write('{\n');
+  var keys = Object.keys(ALL_SONGS_JSON);
+  let indent = '    ';
+  keys.forEach(function (key, index) {
+    fstream.write(indent + '"' + key + '": {\n');
+    let song = ALL_SONGS_JSON[key];
+    let content = song['content'];
+    switch(getArrayDimension(content)) {
+      case 1: {
+        let str = '[';
+        for (let k=0;k<content.length;k++) {
+          str += '"'+content[k]+'"';
+          str += k<content.length-1?', ':']';
+        }
+        fstream.write(indent + indent+'"content":' + str + '\n');
+      }
+      break;
+      case 2: {
+        fstream.write(indent + indent + '"content": [\n');
+        let str = indent + indent + indent;
+        for (let i=0;i<content.length;i++) {
+          str += '[';
+          for (let j=0;j<content[i].length;j++) {
+            str += '"' + content[i][j] + '"';
+            str += j<content[i].length-1?', ':']';
+          }
+          str += i == content.length - 1?'':',';
+          fstream.write(str+'\n');
+          str = indent + indent + indent;
+        }
+        fstream.write(indent + indent+ ']\n');
+      }
+      break;
+    }    
+    console.log("index: "  + index +'/'+ keys.length);
+    if (index < keys.length - 1)
+      fstream.write(indent + '},\n');
+    else 
+      fstream.write(indent + '}\n');
+  });
+  fstream.write('}\n');
+}
+
+function songjsonformat() {
+  // 讀取 JSON 檔案
+  fs.readFile('./json/songs.json', 'utf8', (err, data) => {
+    
+    if (err) {
+        console.error('讀取 JSON 檔案時發生錯誤:', err);
+        return;
+    }
+
+    try {
+        // 將讀取到的內容轉換為 JSON 物件
+        ALL_SONGS_JSON = JSON.parse(data);
+
+        const writeStream = fs.createWriteStream('./json/output.json');
+        formatALL(writeStream);
+        writeStream.end(() => {
+          console.log('檔案寫入完成!');
+        });  
+
+    } catch (parseError) {
+        console.error('解析 JSON 檔案時發生錯誤:', parseError);
+    }
+});
+
+}
+
 /*
 try {
   // 尝试加载模块
@@ -214,6 +295,8 @@ function startService() {
 }
 
 startService();
+
+//songjsonformat();
 
 /*
 if (Cluster.isMaster) {

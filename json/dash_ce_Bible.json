@@ -1,6 +1,6 @@
 {
 	"Bible": {
-		"posize": [2, 4, 13, 28],
+		"posize": [2, 3, 18, 44],
 		"perspective": false,
 		"obj": {
 			"color": 1,
@@ -21,7 +21,7 @@
 		}
 	},
 	"NIV": {
-		"posize": [16, 4, 16, 28],
+		"posize": [21, 3, 27, 44],
 		"perspective": false,
 		"obj": {
 			"color": 2,
@@ -35,7 +35,7 @@
 		}
 	},
 	"time": {
-		"posize": [28, 1, 5, 9],
+		"posize": [42, 1, 7, 14],
 		"perspective": false
 	},
 

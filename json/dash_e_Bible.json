@@ -1,6 +1,6 @@
 {
 	"NIV": {
-		"posize": [2, 2, 30, 30],
+		"posize": [3, 3, 45, 45],
 		"perspective": false,
 		"obj": {
 			"color": 2,
@@ -14,7 +14,7 @@
 		}
 	},
 	"time": {
-		"posize": [27, 1, 6, 8],
+		"posize": [39, 1, 9, 12],
 		"perspective": false
 	},
 	"B/G": "G"
