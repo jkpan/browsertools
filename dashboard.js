@@ -990,49 +990,49 @@ function _createFrame(keyname) {
   switch (keyname) {
     case 'tabs': {
       createFrame(keyname, 'tabs.html');
-      let app = new Applet({ x: 2, y: 7, w: 16, h: 10, keyname: keyname });
+      let app = new Applet({ x: 2, y: 11, w: 24, h: 15, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'dBoard': {
       createFrame(keyname, 'dashboard.html');
-      let app = new Applet({ x: 2, y: 7, w: 16, h: 10, keyname: keyname });
+      let app = new Applet({ x: 4, y: 15, w: 24, h: 15, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'lyrics': {
       createFrame(keyname, 'subtitle.html');
-      let app = new Applet({ x: 1, y: 14, w: 15, h: 18, keyname: keyname });
+      let app = new Applet({ x: 3, y: 21, w: 22, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'Bible': {
       createFrame(keyname, 'subtitle_b.html');
-      let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
+      let app = new Applet({ x: 12, y: 11, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'NIV': {
       createFrame(keyname, 'subtitle_niv.html');
-      let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
+      let app = new Applet({ x: 8, y: 12, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'BPlay': {
       createFrame(keyname, 'subtitle_b_display.html');
-      let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
+      let app = new Applet({ x: 15, y: 21, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'iPlay': {
       createFrame(keyname, 'image_play.html');
-      let app = new Applet({ x: 17, y: 14, w: 16, h: 18, keyname: keyname });
+      let app = new Applet({ x: 17, y: 14, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
@@ -1040,14 +1040,14 @@ function _createFrame(keyname) {
     case 'url_1':
     case 'url_2': {
       createFrame(keyname, 'newurl.html');
-      let app = new Applet({ x: 6, y: 1, w: 10, h: 16, keyname: keyname });
+      let app = new Applet({ x: 10, y: 5, w: 15, h: 24, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'url_3': {
       createFrame(keyname, 'newurl_display.html');
-      let app = new Applet({ x: 6, y: 1, w: 10, h: 16, keyname: keyname });
+      let app = new Applet({ x: 6, y: 1, w: 15, h: 24, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
@@ -1063,28 +1063,28 @@ function _createFrame(keyname) {
     }
     case 'anim': {
       createFrame(keyname, 'anim.html');
-      let app = new Applet({ x: 4, y: 4, w: 16, h: 16, keyname: keyname });
+      let app = new Applet({ x: 8, y: 8, w: 24, h: 24, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'info': {
       createFrame(keyname, 'marquee_v.html');
-      let app = new Applet({ x: 1, y: 1, w: 4, h: 48, keyname: keyname });
+      let app = new Applet({ x: 1, y: 1, w: 5, h: 48, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'effect': {
       createFrame(keyname, 'effect.html');
-      let app = new Applet({ x: 18, y: 2, w: 4, h: 4, keyname: keyname });
+      let app = new Applet({ x: 18, y: 2, w: 10, h: 10, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'time': {
       createFrame(keyname, 'clock.html');
-      let app = new Applet({ x: 24, y: 2, w: 11, h: 10, keyname: keyname });
+      let app = new Applet({ x: 36, y: 2, w: 13, h: 13, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
