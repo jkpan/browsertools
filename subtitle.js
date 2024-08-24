@@ -21,8 +21,8 @@ function getArrayDimension(arr) {
 //抓取預設歌庫
 async function fetchData() {
   try {
-    const response = await fetch('./json/output.json'); // 等待 fetch 请求完成
-    //const response = await fetch('./json/songs.json'); // 等待 fetch 请求完成
+    //const response = await fetch('./json/output.json'); // 等待 fetch 请求完成
+    const response = await fetch('./json/songs.json'); // 等待 fetch 请求完成
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }

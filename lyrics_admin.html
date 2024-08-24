@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        .container {
+            display: flex;
+            height: 100vh;
+            /* 设置容器高度为视窗高度的100% */
+        }
+
+        body {
+            margin: 0px;
+            background-color: rgb(0, 128, 0);
+        }
+
+        .column {
+            flex: 1;
+            padding: 10px;
+            border: 0px solid #ccc;
+            box-sizing: border-box;
+            overflow: auto;
+        }
+
+        button {
+            font-size: 14px;
+            background-color: transparent;
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            /*width: 33%;*/
+            border: 1px solid;
+            vertical-align: middle;
+        }
+
+        textarea {
+            border: 2px solid rgb(0, 128, 0);
+            border-radius: 2px;
+            border-color: rgb(0, 255, 0);
+            margin: 1%;
+            outline: none;
+            padding: 0px;
+            box-sizing: border-box;
+            background: rgb(0, 150, 0);
+            color: rgb(0, 255, 0);
+            width: 80%;
+            font-size: 16px;
+        }
+
+        textarea:focus {
+            border: 2px solid;
+            border-color: rgb(0, 255, 0);
+            box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+            background: rgb(0, 150, 0);
+            color: rgb(0, 255, 0);
+        }
+    </style>
+    <title>Song selection</title>
+</head>
+
+<body>
+    <br>
+    <label style="margin: 1%;color: rgb(0, 255, 0);">ID: </label>
+    <input type="text" style="border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="song_id">
+
+    <br>
+    <textarea id="songtxt" rows="5">
+
+</textarea>
+    <button onclick="textGo()">加歌</button>
+    <script type="text/javascript" charset="UTF-8">
+        function textGo() {
+
+            let id_value = document.getElementById("song_id").value;
+            //if (ALL_SONGS_JSON[id_value]) return;           
+
+            let value = document.getElementById("songtxt").value;
+            value = value.trim();
+            if (value.length == 0) return;
+            let lines = value.split('\n');
+
+            let newsong = [['']];
+            let phaseidx = 0;
+            let lineidx = 0;
+            let preline = '';
+
+            /*
+            lines.forEach((line, index) => {
+              
+              line = line.trim();
+      
+              if (preline == '' && line == '') {
+                lines.splice(index, 1);
+                preline = '';
+                return;
+              }
+      
+              preline = line;
+      
+            });
+      
+            lines.forEach((line, index) => {
+              console.log(index + ' : ' + line);
+            });
+      
+            return;
+            */
+
+            // 逐行处理内容
+            lines.forEach((line, index) => {
+
+                line = line.trim();
+
+                if (line.length == 0) {
+                    if (preline == '') return;
+                    phaseidx++;
+                    lineidx = 0;
+                    if (index < lines.length - 1) {//不是最後一行
+                        newsong[phaseidx] = [''];
+                    }
+                    preline = '';
+                    return;
+                }
+
+                newsong[phaseidx][lineidx] = line;
+                lineidx++;
+                preline = line;
+
+            });
+
+            //window.opener.SONGS.push(newsong);
+            ajax_action('add', id_value, newsong);
+                     
+
+        }
+    </script>
+    <br />
+</body>
+
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+    function _ajax(json, url, cb, errorcb) {
+        console.log(json);
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(json)
+        }).then((response) => {
+            if (response.ok) {
+                return response.json(); // 解析JSON回應
+            } else {
+                throw new Error("請求失敗：" + response.status);
+            }
+        }).then((data) => {
+            // 在這裡處理解析後的JSON物件 //console.log(data);
+            cb(data);
+        }).catch((error) => {
+            // 處理錯誤
+            console.log('' + error);
+            errorcb();
+        });
+    }
+
+    //控方上傳目前
+    function ajax_action(action, id, content) {
+        console.log('action:' + action +', id:' + id + ', ' + JSON.stringify(content));
+        _ajax({
+            action: action,
+            id: id,
+            song: content
+        },
+            '/actionlyrics',
+            (res) => {
+                console.log(JSON.stringify(res));
+            }, () => {
+                console.log('exception');
+            });
+    }
+
+
+
+
+    var ALL_SONGS_JSON;
+
+    function _createEmptyBtn() {
+        var button = document.createElement('button');
+        //button.innerHTML = ' <br/> ';
+        button.style.width = '172px'; // setting the width to 200px
+        button.style.height = '25px'; // setting the height to 200px
+        //button.style.background = 'teal'; // setting the background color to teal
+        //button.style.color = 'white'; // setting the color to white
+        button.style.fontSize = '14px'; // setting the font size to 20px
+        //document.body.appendChild(button);
+        return button;
+    }
+
+    function mapping(array) {
+        let area = document.getElementById("songtxt");
+        area.value = '';
+        let txt = '';
+        array.forEach((p, index) => {
+            p.forEach((line, index) => {
+                txt += line + '\n';
+            });
+            txt += '\n';
+        });
+        area.value = txt;
+    }
+
+    function _createBtn(idtxt, attr) {
+        var button = document.createElement('button');
+        button.innerHTML = idtxt + '<br/>' + attr;// + ' ' + getSong(idtxt)[0][0];
+        button.id = 'btn' + idtxt;
+
+        button.style.width = '172px'; // setting the width to 200px
+        button.style.height = '64px'; // setting the height to 200px
+        //button.style.background = 'rgb(0,100,0)'; // setting the background color to teal
+        //button.style.color = 'rgb(0,255,0)'; // setting the color to white
+        button.style.fontSize = '14px'; // setting the font size to 20px
+
+        button.onclick = function () {
+
+            let array = ALL_SONGS_JSON[idtxt].content;
+            if (!array) return false;
+
+            let field = document.getElementById("song_id");
+            field.value = idtxt;
+            mapping(array);
+
+            return false;
+        };
+        return button;
+    }
+
+    function _songBtn(id) {
+        let allsongs = ALL_SONGS_JSON;
+        var exist = allsongs[id];
+        var btn;
+        if (exist) {
+            console.log(JSON.stringify(exist));
+            var attr = exist['content'][0][0];
+            if (!attr || attr == id) attr = ''
+            btn = _createBtn(id, attr);
+        } else {
+            btn = _createEmptyBtn();
+        }
+        return btn;
+    }
+
+    function createBtns() {
+
+        var div = document.createElement('div');
+        div.id = 'btns';
+        document.body.appendChild(div);
+
+        let VOLUME = ALL_SONGS_JSON['VOLUME']['content'];// window.opener.getSong('VOLUME');
+
+        for (let pf = 0; pf < VOLUME.length; pf++) {
+            var span = document.createElement('span');
+            span.style.color = 'rgb(0,255,0)' // apply your style
+            span.appendChild(document.createTextNode(VOLUME[pf][3]));
+            div.appendChild(span);
+            div.insertAdjacentHTML('beforeend', '<p></p>');
+            for (var i = 1; i <= VOLUME[pf][1]; i++) {
+                var btn = _songBtn(VOLUME[pf][0] + i);
+                if (pf % 2 == 0) {
+                    btn.style.background = '#005500';//window.opener.COLORS_CK[0]; // setting the background color to teal
+                }
+                if (btn.innerHTML.length > 0 || VOLUME[pf][2]) {
+                    console.log('btn.innerHTML.length : ' + btn.innerHTML.length);
+                    console.log('VOLUME[pf][2] : ' + VOLUME[pf][2]);
+                    div.appendChild(btn);
+                }
+            }
+
+            div.insertAdjacentHTML('beforeend', '<p></p>');
+        }
+
+        let EVENTS = ALL_SONGS_JSON['EVENTS']['content'];
+
+        for (let pf = 0; pf < EVENTS.length; pf++) {
+
+            var span = document.createElement('span');
+            span.style.color = 'rgb(0,255,0)' // apply your style
+            span.appendChild(document.createTextNode(EVENTS[pf]));
+            div.appendChild(span);
+            div.insertAdjacentHTML('beforeend', '<p></p>');
+
+            let toolList = ALL_SONGS_JSON[EVENTS[pf]].content;
+
+            for (let i = 0; i < toolList.length; i++) {
+                var btn = _songBtn(toolList[i]);
+                btn.style.background = '#009900';
+                div.appendChild(btn);
+            }
+
+            div.insertAdjacentHTML('beforeend', '<p></p>');
+
+        }
+
+    }
+
+    //抓取預設歌庫
+    async function fetchData() {
+        try {
+            const response = await fetch('./json/songs.json'); // 等待 fetch 请求完成
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
+            console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
+            //return data; // 如果需要同步效果，可以返回数据
+        } catch (error) {
+            console.error('Failed to fetch JSON:', error);
+        }
+        console.log('fetchData END');
+    }
+
+    (async function () {
+        console.log('get all songs');
+        await fetchData();
+        createBtns();
+        console.log('get content from list');
+    })();
+
+
+</script>
