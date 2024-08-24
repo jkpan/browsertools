@@ -616,6 +616,8 @@ function printChart() {
 
 function printPhase() {
 
+  if (!subtitles || phase > subtitles.length - 1) return;
+
   ctx.font = FONT;
 
   var gap = canvas.height / Math.max(3, (subtitles[phase].length + 1));
