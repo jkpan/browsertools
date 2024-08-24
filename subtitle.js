@@ -49,7 +49,6 @@ function getSong(jsonid) {
 
 //從json取得一首歌
 function getSong(jsonid) {
-  //fetchData();
   if (!ALL_SONGS_JSON) return [['']];
   var obj = ALL_SONGS_JSON[jsonid];//JSON.parse(json_elm.innerHTML);
   if (obj && obj["content"])
@@ -112,7 +111,10 @@ function json2List(fileContent) {
   // 進行 JSON 資料的處理
 
   if (jsonData.list && jsonData.list.length > 0) {
-    getSongsFromList(jsonData.list);
+    if (ALL_SONGS_JSON)
+      getSongsFromList(jsonData.list);
+    else
+      list = jsonData.list;
   }
 
   if (jsonData.mode) mode = jsonData.mode;
@@ -1304,23 +1306,6 @@ document.addEventListener('visibilitychange', function () {
 
 getSongsFromList();
 
-//fetchData();
-
-/*
-fetch('https://jkpan.github.io/browsertools/list.json')
-    .then((response) => {
-        return response.json();
-    })
-    .then( (json) => {
-        console.log(json);//http://localhost/list.json
-        list = json.list;
-        getSongsFromList();
-    })
-    .catch((error) => {
-        console.log(`Error: ${error}`);
-        getSongsFromList();
-    });
-*/
 /*
 var xhr = new XMLHttpRequest();
 xhr.open('GET', 'data.json', true);
