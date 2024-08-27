@@ -22,7 +22,7 @@ function getArrayDimension(arr) {
 async function fetchData() {
   try {
     //const response = await fetch('./json/output.json'); // 等待 fetch 请求完成
-    const response = await fetch('./json/songs.json'); // 等待 fetch 请求完成
+    const response = await fetch('./json/songbase.json'); // 等待 fetch 请求完成
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
@@ -46,6 +46,14 @@ function getSong(jsonid) {
   return [['']];
 }
 */
+
+function getnoSong(jsonid) {
+  if (!ALL_SONGS_JSON) return [['']];
+  var obj = ALL_SONGS_JSON['nosong'][jsonid];//JSON.parse(json_elm.innerHTML);
+  if (obj && obj["content"])
+    return obj['content'];
+  return [['']];
+}
 
 //從json取得一首歌
 function getSong(jsonid) {

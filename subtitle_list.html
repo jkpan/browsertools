@@ -264,7 +264,7 @@
     */
 
   /* 
-  subtitle.html -- songs.json
+  subtitle.html -- songbase.json
   function html2json() {
     console.log('createBtns...');
     let VOLUME = window.opener.getSong('VOLUME');
@@ -347,7 +347,7 @@
     div.id = 'btns';
     document.body.appendChild(div);
 
-    let VOLUME = window.opener.getSong('VOLUME');
+    let VOLUME = window.opener.getnoSong('VOLUME');
 
     for (let pf = 0; pf < VOLUME.length; pf++) {
 
@@ -371,7 +371,7 @@
       div.insertAdjacentHTML('beforeend', '<p></p>');
     }
 
-    let EVENTS = window.opener.getSong('EVENTS');
+    let EVENTS = window.opener.getnoSong('EVENTS');
 
     for (let pf = 0; pf < EVENTS.length; pf++) {
 
@@ -381,7 +381,7 @@
       div.appendChild(span);
       div.insertAdjacentHTML('beforeend', '<p></p>');
 
-      let toolList = window.opener.getSong(EVENTS[pf]);
+      let toolList = window.opener.getnoSong(EVENTS[pf]);
 
       for (let i = 0; i < toolList.length; i++) {
         var btn = _songBtn(toolList[i]);

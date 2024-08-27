@@ -257,7 +257,7 @@
         div.id = 'btns';
         document.body.appendChild(div);
 
-        let VOLUME = ALL_SONGS_JSON['VOLUME']['content'];// window.opener.getSong('VOLUME');
+        let VOLUME = ALL_SONGS_JSON['nosong']['VOLUME']['content'];// window.opener.getSong('VOLUME');
 
         for (let pf = 0; pf < VOLUME.length; pf++) {
             var span = document.createElement('span');
@@ -280,7 +280,7 @@
             div.insertAdjacentHTML('beforeend', '<p></p>');
         }
 
-        let EVENTS = ALL_SONGS_JSON['EVENTS']['content'];
+        let EVENTS = ALL_SONGS_JSON['nosong']['EVENTS']['content'];
 
         for (let pf = 0; pf < EVENTS.length; pf++) {
 
@@ -290,7 +290,7 @@
             div.appendChild(span);
             div.insertAdjacentHTML('beforeend', '<p></p>');
 
-            let toolList = ALL_SONGS_JSON[EVENTS[pf]].content;
+            let toolList = ALL_SONGS_JSON['nosong'][EVENTS[pf]].content;
 
             for (let i = 0; i < toolList.length; i++) {
                 var btn = _songBtn(toolList[i]);
@@ -307,7 +307,7 @@
     //抓取預設歌庫
     async function fetchData() {
         try {
-            const response = await fetch('./json/songs.json'); // 等待 fetch 请求完成
+            const response = await fetch('./json/songbase.json'); // 等待 fetch 请求完成
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }

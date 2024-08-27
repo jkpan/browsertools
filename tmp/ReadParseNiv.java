@@ -4,7 +4,7 @@ import java.util.*;
 
 public class ReadParseNiv {
 
-  static String volumns[] = { "Genesis",//).preReadline("Ge.", "Exodus");
+  static String volumes[] = { "Genesis",//).preReadline("Ge.", "Exodus");
                      "Exodus",//).preReadline("Ex.", "Leviticus");
                      "Leviticus",//).preReadline("Le.", "Numbers");
                      "Numbers",//).preReadline("Nu.", "Deuteronomy");
@@ -223,8 +223,8 @@ public class ReadParseNiv {
     public void preReadline(int v) {
 
         currentLine = null;
-        String prefix = volumns[v];
-        String next = v+1<volumns.length?volumns[v+1]:null;
+        String prefix = volumes[v];
+        String next = v+1<volumes.length?volumes[v+1]:null;
         int array[] = cv[v];
 
         //System.out.println(prefix + "~" + next);
@@ -366,19 +366,19 @@ public class ReadParseNiv {
 
     public static void main(String[] args) {
         
-        //System.out.println(volumns.length);
+        //System.out.println(volumes.length);
         //System.out.println(cv.length);
 
         //new ReadParseNiv("").preReadline(4);
 
-        //for (int i=0;i<volumns.length;i++) new ReadParseNiv("").preReadline(i);
+        //for (int i=0;i<volumes.length;i++) new ReadParseNiv("").preReadline(i);
 
-        //new ReadParseNiv(volumns[0]).readline(volumns[0]);
+        //new ReadParseNiv(volumes[0]).readline(volumes[0]);
 
         
-        for (int i=0;i<volumns.length;i++) {
+        for (int i=0;i<volumes.length;i++) {
             IDX = i;
-            new ReadParseNiv(volumns[i]).readline(volumns[i]);
+            new ReadParseNiv(volumes[i]).readline(volumes[i]);
         }
         
 

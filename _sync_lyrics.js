@@ -161,7 +161,7 @@ function readAndAction(path, handle) {
 }
 
 function songjsonformat() {
-  readAndAction('./json/songs.json', ()=>{
+  readAndAction('./json/songbase.json', ()=>{
     const writeStream = fs.createWriteStream('./json/output2.json');
     formatALL(writeStream);
     writeStream.end(() => {
@@ -194,8 +194,8 @@ function lyricsBaseAction(req, res) {
 
     switch (action) {
       case 'add':
-        readAndAction('./json/songs.json', ()=>{
-          let volume = ALL_SONGS_JSON['VOLUME'].content;
+        readAndAction('./json/songbase.json', ()=>{
+          let volume = ALL_SONGS_JSON['nosong']['VOLUME'].content;
           let prefix = '';
           let volumn_idx;
           for (let i=0;i<volume.length;i++) {
@@ -223,12 +223,12 @@ function lyricsBaseAction(req, res) {
         });
         break;
       case 'fix':
-        readAndAction('./json/songs.json', ()=>{
+        readAndAction('./json/songbase.json', ()=>{
           
         });
         break;
       case 'del':
-        readAndAction('./json/songs.json', ()=>{
+        readAndAction('./json/songbase.json', ()=>{
           
         });
         break;

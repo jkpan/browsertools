@@ -56,7 +56,16 @@ try {
   println('Websocket Module does not exist');
 }
 
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 println('cpu ' + os.cpus().length + ' cores');
+//println('total ram ' + os.totalmem());
+//println('free/total: ' +  numberWithCommas(os.freemem()) + '/' + numberWithCommas(os.totalmem()));
+println('total mem: ' + numberWithCommas(os.totalmem()));
+println(' free mem: ' + numberWithCommas(os.freemem()));
+println('    ratio: ' +  Math.floor(os.freemem()/os.totalmem() * 100) + '%');
 
 //讀檔輸出
 function responseFile(filePath, res, append) {
