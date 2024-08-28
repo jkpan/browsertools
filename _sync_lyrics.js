@@ -81,8 +81,6 @@ function addClient(ws) {
   });
 }
 
-var ALL_SONGS_JSON;
-
 function getArrayDimension(arr) {
   if (Array.isArray(arr)) {
     return 1 + Math.max(...arr.map(getArrayDimension), 0);
@@ -91,13 +89,18 @@ function getArrayDimension(arr) {
   }
 }
 
-function formatALL(fstream) {
+function formatALL(fstream, ALL_SONGS) {
   fstream.write('{\n');
-  var keys = Object.keys(ALL_SONGS_JSON);
+  var keys = Object.keys(ALL_SONGS);
   let indent = '    ';
   keys.forEach(function (key, index) {
+    let song = ALL_SONGS[key];
+    if (key === 'nosong') {
+      let jsonstr = '"' + key + '": ' + JSON.stringify(song, null, "\t");
+      fstream.write(jsonstr + ',\n\n');
+      return;
+    }
     fstream.write(indent + '"' + key + '": {\n');
-    let song = ALL_SONGS_JSON[key];
     let content = song['content'];
     switch (getArrayDimension(content)) {
       case 1: {
@@ -144,26 +147,32 @@ function formatALL(fstream) {
 function readAndAction(path, handle) {
   fs.readFile(path, 'utf8', (err, data) => {
 
+    println('readFileSync 0');
+
     if (err) {
       console.error('讀取 JSON 檔案時發生錯誤:', err);
       return;
     }
 
+    println('readFileSync 1');
+
     try {
       // 將讀取到的內容轉換為 JSON 物件
-      ALL_SONGS_JSON = JSON.parse(data);      
-      handle();
+      let ALL_SONGS = JSON.parse(data);      
+      handle(ALL_SONGS);
+      println('readFileSync 2');
 
     } catch (parseError) {
       console.error('解析 JSON 檔案時發生錯誤:', parseError);
     }
+    println('readFileSync 3');
   });
 }
 
 function songjsonformat() {
-  readAndAction('./json/songbase.json', ()=>{
+  readAndAction('./json/songbase.json', (ALL_SONGS)=>{
     const writeStream = fs.createWriteStream('./json/output2.json');
-    formatALL(writeStream);
+    formatALL(writeStream, ALL_SONGS);
     writeStream.end(() => {
       console.log('檔案寫入完成!');
     });
@@ -192,10 +201,38 @@ function lyricsBaseAction(req, res) {
       "content": content
     };
 
+    println('action: ' + action);
+    println(JSON.stringify(content));
+
     switch (action) {
-      case 'add':
-        readAndAction('./json/songbase.json', ()=>{
-          let volume = ALL_SONGS_JSON['nosong']['VOLUME'].content;
+      case 'add': {
+        let result = false;
+        println('add start');
+        readAndAction('./json/songbase.json', (ALL_SONGS) => {
+          if (ALL_SONGS[id]) {
+            result = false;
+            println('add exist return!');
+            //res.setHeader('Content-Type', 'application/json');// 发送响应数据
+            //res.end(JSON.stringify({ "state": "fail" }));
+            return;
+          }
+          ALL_SONGS[id] = opObj;
+          println('add success');
+          result = true;
+          println('add save file');
+          const writeStream = fs.createWriteStream('./json/output3.json');
+          formatALL(writeStream, ALL_SONGS);
+          writeStream.end(() => {
+            console.log('檔案寫入完成!');
+          });
+          //res.setHeader('Content-Type', 'application/json');// 发送响应数据
+          //res.end(JSON.stringify({ "state": "success" }));
+        });
+        res.setHeader('Content-Type', 'application/json');// 发送响应数据
+        res.end(JSON.stringify({ "state": "success" }));
+        /*
+        readAndAction('./json/songbase.json', ()=> {
+          let volume = ALL_SONGS['nosong']['VOLUME'].content;
           let prefix = '';
           let volumn_idx;
           for (let i=0;i<volume.length;i++) {
@@ -206,7 +243,7 @@ function lyricsBaseAction(req, res) {
               break;
             }
           }          
-          var keys = Object.keys(ALL_SONGS_JSON);
+          var keys = Object.keys(ALL_SONGS);
           let done = false;
           keys.forEach(function (key, index) {
             if (done) return;
@@ -218,26 +255,25 @@ function lyricsBaseAction(req, res) {
               done = true;
             }
           });
-          
-
         });
+        */
+        }
         break;
       case 'fix':
-        readAndAction('./json/songbase.json', ()=>{
+        readAndAction('./json/songbase.json', (ALL_SONGS)=>{
           
         });
+        res.setHeader('Content-Type', 'application/json');// 发送响应数据
+        res.end(JSON.stringify({ "state": "success" }));
         break;
       case 'del':
-        readAndAction('./json/songbase.json', ()=>{
+        readAndAction('./json/songbase.json', (ALL_SONGS)=>{
           
         });
+        res.setHeader('Content-Type', 'application/json');// 发送响应数据
+        res.end(JSON.stringify({ "state": "success" }));
         break;
     }
-
-    res.setHeader('Content-Type', 'application/json');
-
-    // 发送响应数据
-    res.end(JSON.stringify({ "state": "success" }));
 
   });
 }
