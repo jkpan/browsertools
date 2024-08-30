@@ -37,7 +37,7 @@
             border: 2px solid rgb(0, 128, 0);
             border-radius: 2px;
             border-color: rgb(0, 255, 0);
-            margin: 1%;
+            margin: 0%;
             outline: none;
             padding: 0px;
             box-sizing: border-box;
@@ -59,16 +59,26 @@
 </head>
 
 <body>
+    <div style="margin: 1%;">
     <br>
-    <label style="margin: 1%;color: rgb(0, 255, 0);">ID: </label>
-    <input type="text" style="border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="song_id">
+    <label style="color: rgb(0, 255, 0);">ID: </label>
+    <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="song_id">
 
     <br>
     <textarea id="songtxt" rows="5">
 
-</textarea>
-    <button onclick="textGo()">加歌</button>
+    </textarea>
+    <br>
+    <button onclick="textGo()">加歌 / 修改</button>
+    <br>
+    <button onclick="delGo()">刪除</button>
+    </div>
+    <p></p>
     <script type="text/javascript" charset="UTF-8">
+        function delGo() {
+            let id_value = document.getElementById("song_id").value;
+            ajax_action('del', id_value, []);
+        }
         function textGo() {
 
             let id_value = document.getElementById("song_id").value;
@@ -83,28 +93,6 @@
             let phaseidx = 0;
             let lineidx = 0;
             let preline = '';
-
-            /*
-            lines.forEach((line, index) => {
-              
-              line = line.trim();
-      
-              if (preline == '' && line == '') {
-                lines.splice(index, 1);
-                preline = '';
-                return;
-              }
-      
-              preline = line;
-      
-            });
-      
-            lines.forEach((line, index) => {
-              console.log(index + ' : ' + line);
-            });
-      
-            return;
-            */
 
             // 逐行处理内容
             lines.forEach((line, index) => {
@@ -129,9 +117,11 @@
             });
 
             //window.opener.SONGS.push(newsong);
-            ajax_action('add', id_value, newsong);
-                     
-
+            if (ALL_SONGS_JSON[id_value])
+                ajax_action('fix', id_value, newsong);
+            else 
+                ajax_action('add', id_value, newsong);
+            
         }
     </script>
     <br />
@@ -176,6 +166,7 @@
             '/actionlyrics',
             (res) => {
                 console.log(JSON.stringify(res));
+                alert('done');
             }, () => {
                 console.log('exception');
             });

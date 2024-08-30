@@ -1,3 +1,6 @@
+const READ_SRC = './json/songbase.json';
+const WRITE_SRC = './json/songbase.json';
+
 const fs = require('fs');
 var WebSocket = require('ws');
 
@@ -145,33 +148,19 @@ function formatALL(fstream, ALL_SONGS) {
 }
 
 function readAndAction(path, handle) {
-  fs.readFile(path, 'utf8', (err, data) => {
-
-    println('readFileSync 0');
-
-    if (err) {
-      console.error('讀取 JSON 檔案時發生錯誤:', err);
-      return;
-    }
-
-    println('readFileSync 1');
-
-    try {
-      // 將讀取到的內容轉換為 JSON 物件
-      let ALL_SONGS = JSON.parse(data);      
-      handle(ALL_SONGS);
-      println('readFileSync 2');
-
-    } catch (parseError) {
-      console.error('解析 JSON 檔案時發生錯誤:', parseError);
-    }
-    println('readFileSync 3');
-  });
+  let txt = fs.readFileSync(path, 'utf8');//
+  try {
+    // 將讀取到的內容轉換為 JSON 物件
+    let ALL_SONGS = JSON.parse(txt);      
+    handle(ALL_SONGS);
+  } catch (parseError) {
+    console.error('解析 JSON 檔案時發生錯誤:', parseError);
+  }
 }
 
 function songjsonformat() {
-  readAndAction('./json/songbase.json', (ALL_SONGS)=>{
-    const writeStream = fs.createWriteStream('./json/output2.json');
+  readAndAction(READ_SRC, (ALL_SONGS)=>{
+    const writeStream = fs.createWriteStream(WRITE_SRC);
     formatALL(writeStream, ALL_SONGS);
     writeStream.end(() => {
       console.log('檔案寫入完成!');
@@ -205,10 +194,10 @@ function lyricsBaseAction(req, res) {
     println(JSON.stringify(content));
 
     switch (action) {
-      case 'add': {
-        let result = false;
+      case 'add': 
         println('add start');
-        readAndAction('./json/songbase.json', (ALL_SONGS) => {
+        readAndAction(READ_SRC, (ALL_SONGS) => {
+          println('add in');
           if (ALL_SONGS[id]) {
             result = false;
             println('add exist return!');
@@ -220,7 +209,7 @@ function lyricsBaseAction(req, res) {
           println('add success');
           result = true;
           println('add save file');
-          const writeStream = fs.createWriteStream('./json/output3.json');
+          const writeStream = fs.createWriteStream(WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
@@ -228,47 +217,36 @@ function lyricsBaseAction(req, res) {
           //res.setHeader('Content-Type', 'application/json');// 发送响应数据
           //res.end(JSON.stringify({ "state": "success" }));
         });
+        println('add end');
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
-        /*
-        readAndAction('./json/songbase.json', ()=> {
-          let volume = ALL_SONGS['nosong']['VOLUME'].content;
-          let prefix = '';
-          let volumn_idx;
-          for (let i=0;i<volume.length;i++) {
-            println('id:'+id +',  ' + volume[i][0] + ', ' + id.startsWith(volume[i][0]));
-            if (id.startsWith(volume[i][0])) {
-              prefix = volume[i][0];
-              volumn_idx = parseInt(id.substring(prefix.length));
-              break;
-            }
-          }          
-          var keys = Object.keys(ALL_SONGS);
-          let done = false;
-          keys.forEach(function (key, index) {
-            if (done) return;
-            if (!key.startsWith(prefix)) return;
-            let idx = parseInt(key.substring(prefix.length));
-            println(`${prefix} :: ${idx}`);
-            if (idx > volumn_idx && !done) {
-              println('insert...');
-              done = true;
-            }
-          });
-        });
-        */
-        }
+
         break;
       case 'fix':
-        readAndAction('./json/songbase.json', (ALL_SONGS)=>{
-          
+        readAndAction(READ_SRC, (ALL_SONGS)=> {
+          if (ALL_SONGS[id]) {
+            ALL_SONGS[id].content = content;
+          } else {
+            ALL_SONGS[id] = opObj;
+          }
+          const writeStream = fs.createWriteStream(WRITE_SRC);
+          formatALL(writeStream, ALL_SONGS);
+          writeStream.end(() => {
+            console.log('檔案寫入完成!');
+          });
         });
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
         break;
       case 'del':
-        readAndAction('./json/songbase.json', (ALL_SONGS)=>{
-          
+        readAndAction(READ_SRC, (ALL_SONGS)=>{
+          if (!ALL_SONGS[id]) return;
+          delete ALL_SONGS[id];
+          const writeStream = fs.createWriteStream(WRITE_SRC);
+          formatALL(writeStream, ALL_SONGS);
+          writeStream.end(() => {
+            console.log('檔案寫入完成!');
+          });
         });
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
