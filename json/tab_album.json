@@ -167,6 +167,7 @@
           "loop": 1,
           "keepratio": 1,
           "forPlay": 0,
+          "url": "https://docs.google.com/presentation/d/1cyqixz5y4FJOTO-tv913iIgt2_QzRyUf/embed?start=false&loop=false&delayms=3000&rm=minimal",
           "imageBase64": ""
         }
       },
@@ -212,7 +213,7 @@
     "src": "./newurl.html",
     "obj": {
       "hold": 1,
-      "url": "https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/embed?start=false&loop=false&delayms=3000&rm=minimal",
+      "url": "https://www.canva.com/design/DAGPY2UjdkI/0I5uArnGuDBGL2cGPYjTUQ/view?embed&utm_content=DAGPY2UjdkI&utm_campaign=designshare&utm_medium=link&utm_source=editor#8",
       "loop": 1,
       "keepratio": 0,
       "forPlay": 0
@@ -243,7 +244,7 @@
     "src": "./newurl.html",
     "obj": {
       "hold": 1,
-      "url": "https://docs.google.com/presentation/d/e/2PACX-1vRSshXRoYJ3yRfnc0VnHT2G4ELj_GzD6BL24iGg4HqmlKjOKzL75Bf6GbaIxZBdxg/embed?start=false&loop=false&delayms=3000&rm=minimal",
+      "url": "https://docs.google.com/presentation/d/1AIkUsgcSpSBlWZ3Juu04Nr5SulURFHV0/embed?start=false&loop=false&delayms=3000&rm=minimal",
       "loop": 1,
       "keepratio": 0,
       "forPlay": 0
