@@ -33,6 +33,16 @@
             vertical-align: middle;
         }
 
+        .button2 {
+            font-size: 14px;
+            background-color: transparent;
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            width: 20%;
+            border: 1px solid;
+            vertical-align: middle;
+        }
+
         textarea {
             border: 2px solid rgb(0, 128, 0);
             border-radius: 2px;
@@ -44,7 +54,7 @@
             background: rgb(0, 150, 0);
             color: rgb(0, 255, 0);
             width: 80%;
-            font-size: 16px;
+            font-size: 20px;
         }
 
         textarea:focus {
@@ -63,18 +73,22 @@
     <br>
     <label style="color: rgb(0, 255, 0);">ID: </label>
     <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="song_id">
-
-    <br>
-    <textarea id="songtxt" rows="5">
-
-    </textarea>
-    <br>
-    <button onclick="textGo()">加歌 / 修改</button>
-    <br>
-    <button onclick="delGo()">刪除</button>
+    <p></p>
+    <textarea id="songtxt" rows="10"></textarea>
+    <p></p>
+    <button class="button2" onclick="textGo()">加歌 / 修改</button>
+    <p></p>
+    <button class="button2" style="color: white;background-color: red;" onclick="delGo()">刪除</button>
+    <p></p>
+    <button class="button2" onclick="clearTxt()">清除</button>
     </div>
     <p></p>
     <script type="text/javascript" charset="UTF-8">
+        function clearTxt() {
+            document.getElementById("song_id").value = "";
+            document.getElementById("songtxt").value = "";
+        }
+
         function delGo() {
             let id_value = document.getElementById("song_id").value;
             ajax_action('del', id_value, []);

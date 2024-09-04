@@ -224,7 +224,7 @@ function startService() {
 }
 
 startService();
-//sync_lyrics.songjsonformat();
+sync_lyrics.songjsonformat();
 
 /*
 if (Cluster.isMaster) {

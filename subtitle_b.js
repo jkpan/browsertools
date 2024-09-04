@@ -2550,9 +2550,14 @@ function receiveMessage(e) {
     if (jsonData.printSaved) printSaved = true; else printSaved = false;
 
     colorSwitch();
+    if (jsonData.hlight) {
+      color_selection_hlight = jsonData.hlight;
+      colorSwitch_hlight();
+    }
 
-    if (jsonData.fontfactor)
-      setFontFactor(jsonData.fontfactor);
+    if (jsonData.verseCount) verseCount = jsonData.verseCount;
+
+    if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
 
     if (jsonData.saved && jsonData.saved.length > 0) {
       for (let i = 0; i < jsonData.saved.length; i++) {
@@ -3048,12 +3053,14 @@ function toObj() {
   let obj = {};
   //alert('subtotle_b toobj: ' + JSON.stringify(obj));
   obj['color'] = color_selection;
+  obj['hlight'] = color_selection_hlight;
   obj['verticle'] = display_mode;
   obj['fontfactor'] = fontfactor;
   obj['saved'] = presetVerse;
   obj['transparent'] = makeTransparent ? 1 : 0;
   obj['printSaved'] = printSaved ? 1 : 0;
   obj['fsizedist'] = fontsize_dist;
+  obj['verseCount'] = verseCount;
   obj['syncType'] = sync_type;
   if (image_base64 && image_base64.length > 0) {
     obj['imageBase64'] = image_base64;

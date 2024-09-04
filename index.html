@@ -81,19 +81,23 @@
       <a href="./subtitle_b.html">聖經字幕工具</a>
       <p></p>
       <blockquote>
-        <a id="bplay" hidden="true" href="./Bible_play" style="background-color: black;">幫你翻聖經 (聖經手機同步服務)</a>
+        <a id="bplay" hidden="true" href="./Bible_play" style="background-color: black;">幫你翻聖經 (nodejs)</a>
         <p></p>
-        <a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a>
-        <p></p>
+        <!--a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a>
+        <p></p-->
       </blockquote>
       <a href="./subtitle_niv.html">Bible niv </a>
       <p></p>
       <blockquote>
-        <a id="nivsync" hidden="true" href="./Bible_play_niv" style="background-color: black;">NIV聖經手機同步服務 (nodejs)</a>
+        <a id="nivsync" hidden="true" href="./Bible_play_niv" style="background-color: black;">幫你翻聖經NIV (nodejs)</a>
         <p></p>
       </blockquote>
       <a href="./subtitle.html">詩歌字幕工具</a>
       <p></p>
+      <blockquote>
+        <a id="lyrics_admin" hidden="true" href="./lyrics_admin.html" style="background-color: black;">歌詞管理(nodejs)</a>
+        <p></p>
+      </blockquote>
       <a href="./effect.html">綜藝效果</a>
       <p></p>
       <a href="./clock.html">小時鐘</a>
@@ -142,10 +146,10 @@
   }
 
   if (readParam('server') === 'nodejs') {
-    document.getElementById("bplay").hidden = false;
-    document.getElementById("bctrl").hidden = false;
+    document.getElementById("bplay").hidden = false; //document.getElementById("bctrl").hidden = false;
     document.getElementById("nivsync").hidden = false;
     document.getElementById("icom").hidden = false;
+    document.getElementById("lyrics_admin").hidden = false;
   }
 
 </script>

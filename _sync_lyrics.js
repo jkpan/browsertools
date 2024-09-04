@@ -92,9 +92,27 @@ function getArrayDimension(arr) {
   }
 }
 
+function refactor(ALL_SONGS) {
+  let vol = ALL_SONGS['nosong']['VOLUME'].content;
+  for(let v = 0;v<vol.length;v++) {
+    let k = vol[v][0];
+    for (let i=1;i<1000;i++) {
+      let idx = k + i;
+      if (ALL_SONGS[idx]) {
+        let tmp = ALL_SONGS[idx].content;
+        delete ALL_SONGS[idx];
+        ALL_SONGS[idx] = {"content": tmp};
+      }
+    }
+  }
+
+  //let keys = Object.keys(ALL_SONGS); keys.forEach(function (key, index) { console.log('"' + key + '"');});
+
+}
+
 function formatALL(fstream, ALL_SONGS) {
   fstream.write('{\n');
-  var keys = Object.keys(ALL_SONGS);
+  let keys = Object.keys(ALL_SONGS);
   let indent = '    ';
   keys.forEach(function (key, index) {
     let song = ALL_SONGS[key];
@@ -159,7 +177,9 @@ function readAndAction(path, handle) {
 }
 
 function songjsonformat() {
+  return;
   readAndAction(READ_SRC, (ALL_SONGS)=>{
+    refactor(ALL_SONGS);
     const writeStream = fs.createWriteStream(WRITE_SRC);
     formatALL(writeStream, ALL_SONGS);
     writeStream.end(() => {
@@ -201,14 +221,13 @@ function lyricsBaseAction(req, res) {
           if (ALL_SONGS[id]) {
             result = false;
             println('add exist return!');
-            //res.setHeader('Content-Type', 'application/json');// 发送响应数据
-            //res.end(JSON.stringify({ "state": "fail" }));
             return;
           }
           ALL_SONGS[id] = opObj;
           println('add success');
           result = true;
           println('add save file');
+          refactor(ALL_SONGS);
           const writeStream = fs.createWriteStream(WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
@@ -229,6 +248,7 @@ function lyricsBaseAction(req, res) {
           } else {
             ALL_SONGS[id] = opObj;
           }
+          refactor(ALL_SONGS);
           const writeStream = fs.createWriteStream(WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
@@ -242,6 +262,7 @@ function lyricsBaseAction(req, res) {
         readAndAction(READ_SRC, (ALL_SONGS)=>{
           if (!ALL_SONGS[id]) return;
           delete ALL_SONGS[id];
+          refactor(ALL_SONGS)
           const writeStream = fs.createWriteStream(WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
