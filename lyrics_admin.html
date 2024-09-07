@@ -65,7 +65,7 @@
             color: rgb(0, 255, 0);
         }
     </style>
-    <title>Song selection</title>
+    <title>Song editor</title>
 </head>
 
 <body>
@@ -91,8 +91,13 @@
 
         function delGo() {
             let id_value = document.getElementById("song_id").value;
-            ajax_action('del', id_value, []);
+            if (ALL_SONGS_JSON[id_value]) {
+                if (confirm("確定要刪除 '" + id_value + "' ?"))
+                    ajax_action('del', id_value, []);
+            }
+            
         }
+
         function textGo() {
 
             let id_value = document.getElementById("song_id").value;
@@ -130,11 +135,14 @@
 
             });
 
-            //window.opener.SONGS.push(newsong);
-            if (ALL_SONGS_JSON[id_value])
-                ajax_action('fix', id_value, newsong);
-            else 
-                ajax_action('add', id_value, newsong);
+            if (ALL_SONGS_JSON[id_value]) {
+                if (confirm("確定要修改 '" + id_value + "' ?")) 
+                   ajax_action('fix', id_value, newsong);
+            } else {
+                if (confirm("確定要新增 '" + id_value + "' ?")) 
+                    ajax_action('add', id_value, newsong);
+            } 
+                
             
         }
     </script>
@@ -181,6 +189,7 @@
             (res) => {
                 console.log(JSON.stringify(res));
                 alert('done');
+                location.reload();
             }, () => {
                 console.log('exception');
             });
