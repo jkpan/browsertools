@@ -44,7 +44,7 @@
       background: rgb(0, 150, 0);
       color: rgb(0, 255, 0);
       width: 80%;
-      font-size: 16px;
+      font-size: 20px;
     }
 
     textarea:focus {
@@ -60,7 +60,7 @@
 
 <body>
   <label style="color: rgb(0, 255, 0);"> </label>
-  <textarea id="songtxt" rows="5">
+  <textarea id="songtxt" rows="10">
 靈火繼焚燒
 
 靈火繼焚燒
@@ -73,7 +73,7 @@
 靈火繼焚燒
 靈火繼焚燒
   </textarea>
-  <button onclick="textGo()">臨時加歌</button>
+  <button onclick="textGo()" style="font-size: 20px;">臨時加歌</button>
   <script type="text/javascript" charset="UTF-8">
     function textGo() {
       let value = document.getElementById("songtxt").value;
@@ -215,6 +215,7 @@
 
       let array = window.opener.getSong(idtxt);
 
+      /*
       window.opener.SONGS[window.opener.SONGS.length] = array;//window.opener.getSong(idtxt);
       window.opener.song = window.opener.SONGS.length - 1;
       window.opener.phase = 0;
@@ -224,8 +225,11 @@
       //hideCanvas();
       window.opener._repaint();
       window.opener.saveAction2Local();
+      */
 
       mapping(array);
+
+      window.scrollTo(0, 0);
 
       return false;
     };

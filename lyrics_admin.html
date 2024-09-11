@@ -12,7 +12,7 @@
 
         body {
             margin: 0px;
-            background-color: rgb(0, 128, 0);
+            background-color: rgb(0, 0, 0);
         }
 
         .column {
@@ -51,7 +51,7 @@
             outline: none;
             padding: 0px;
             box-sizing: border-box;
-            background: rgb(0, 150, 0);
+            background: rgb(50, 50, 50);
             color: rgb(0, 255, 0);
             width: 80%;
             font-size: 20px;
@@ -61,7 +61,7 @@
             border: 2px solid;
             border-color: rgb(0, 255, 0);
             box-shadow: 0 0 8px 0 rgb(0, 255, 0);
-            background: rgb(0, 150, 0);
+            background: rgb(70, 70, 70);
             color: rgb(0, 255, 0);
         }
     </style>
@@ -76,11 +76,11 @@
     <p></p>
     <textarea id="songtxt" rows="10"></textarea>
     <p></p>
-    <button class="button2" onclick="textGo()">加歌 / 修改</button>
-    <p></p>
-    <button class="button2" style="color: white;background-color: red;" onclick="delGo()">刪除</button>
+    <button class="button2" style="background-color: rgb(0, 80, 0);" onclick="textGo()">加歌 / 修改</button>
     <p></p>
     <button class="button2" onclick="clearTxt()">清除</button>
+    <p></p>
+    <button class="button2" style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button>
     </div>
     <p></p>
     <script type="text/javascript" charset="UTF-8">
@@ -91,6 +91,7 @@
 
         function delGo() {
             let id_value = document.getElementById("song_id").value;
+            if (id_value.length == 0) return;
             if (ALL_SONGS_JSON[id_value]) {
                 if (confirm("確定要刪除 '" + id_value + "' ?"))
                     ajax_action('del', id_value, []);
@@ -101,6 +102,7 @@
         function textGo() {
 
             let id_value = document.getElementById("song_id").value;
+            if (id_value.length == 0) return;
             //if (ALL_SONGS_JSON[id_value]) return;           
 
             let value = document.getElementById("songtxt").value;
@@ -244,6 +246,8 @@
             let field = document.getElementById("song_id");
             field.value = idtxt;
             mapping(array);
+
+            window.scrollTo(0, 0);
 
             return false;
         };

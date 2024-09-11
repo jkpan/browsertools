@@ -36,8 +36,12 @@
 </head>
 
 <body>
-    <div class="fullbg" id="image_container"></div>
+    <!-- <div class="fullbg" id="image_container"></div> -->
     <!-- <video id="videoElement" width="300" height="200" hidden="true" style="background-color: #707000; opacity: 1.0;" autoplay></video> -->
+    <div id="image_container">
+        <img src="./test/missile.gif" />';
+    </div>
+    <p></p>
     <canvas id="canvas" width="400" height="200" ondrop="dropHandler(event)"
         ondragover="dragOverHandler(event)"></canvas>
 </body>
@@ -107,16 +111,15 @@
         dots = 5;
         //makeRound = true;
 
-        initLED(0, 0, canvas.width, canvas.height);
-        //initLED(v_offx, v_offy, v_width, v_height);
+        initLED(0, 0, canvas.width/2, canvas.height/2);//initLED(v_offx, v_offy, v_width, v_height);
         newLEDMask();
     }
 
     function init() {
         console.log('init() 1');
         canvas = document.getElementById('canvas');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth/3;
+        canvas.height = window.innerHeight/3;
         //ctx = canvas.getContext('2d');
         ctx = canvas.getContext("2d", { willReadFrequently: true });
 
@@ -141,7 +144,7 @@
 
         console.log('(' +  v_offx +', '+ v_offy +', '+ v_width+', '+ v_height + ')');
 
-        if (effect_type == 1)
+        if (effect_type == 1) 
             ledinit();
     }
 
@@ -156,17 +159,27 @@
         }
     }
 
-    function drawFrame() {
-        console.log('drawFrame');
-        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var imageData;
 
+    function drawFrame() {
+    
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (imageData)
+            ctx.drawImage(imageData, 0, 0, canvas.width, canvas.height);
+        effectGo();
+        console.log('drawFrame');
+
+        
         html2canvas(captureArea).then(function(canvasData) {
             // 清空 canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
             // 將抓取到的圖像繪製到 canvas 上
-            ctx.drawImage(canvasData, 0, 0, canvas.width, canvas.height);
-            effectGo();
+            //ctx.drawImage(canvasData, 0, 0, canvas.width/2, canvas.height/2);
+            //effectGo();
+            console.log('captureArea');
+            imageData = canvasData;
         });
+        
 
 
         //ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, v_offx, v_offy, v_width, v_height);

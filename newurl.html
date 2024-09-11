@@ -326,7 +326,10 @@ function toObj() {
   } else {
     let _url = relativeUrl(document.getElementById("ppt_url").value.trim());
     if (_url.length > 0) {
-      obj = { "url": _url };
+      obj = {
+        "hold": 1, 
+        "url": _url 
+      };
     }
     
     let loopbox = document.getElementById("loopchk");
@@ -338,6 +341,7 @@ function toObj() {
     obj['keepratio'] = keep;
     obj['forPlay'] = forPlay;
     
+    obj['imageBase64'] = "";
     if (image_base64 && image_base64.length > 0) { 
       obj['imageBase64'] = image_base64;
     }

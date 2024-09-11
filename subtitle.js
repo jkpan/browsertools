@@ -1264,6 +1264,7 @@ function toObj() {
   obj['transparent'] = makeTransparent ? 1 : 0;
   //obj['slave'] = funcInterval == null ? 0 : 1;
   obj['syncType'] = sync_type;
+  obj['imageBase64'] = "";
   if (image_base64 && image_base64.length > 0) {
     obj['imageBase64'] = image_base64;
   }

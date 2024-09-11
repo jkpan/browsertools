@@ -72,7 +72,7 @@
 
 <body>
     <div class="wrapper">
-        <iframe width="100%" height="100%" hidden="true" id="web" class="full"></iframe>
+        <iframe class="full" width="100%" height="100%" hidden="true" id="web"></iframe>
         <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls autoplay></video></video>
         <div class="full" id="image_container" hidden="true"></div>
         <button class="fullRange" id="rect" type="button" onclick="openCtrl()"></button>
@@ -202,11 +202,11 @@
 
     function displayPDFFile(file) {
         //displayHTMLFile(file);
-        
+
         document.querySelector('body').style.background = 'transparent';
         const fileURL = URL.createObjectURL(file);
         window.location.href = fileURL;
-        
+
     }
 
     window.addEventListener('beforeunload', function (e) {
@@ -215,18 +215,22 @@
 
     var keepratio = 0;
     var image_base64 = null;
-
-    /*
+    
     function toObj() {
-        let obj = {};
-        let keep = isKeepRatio() ? 1 : 0;
-        obj['keepratio'] = keepratio;
-        if (image_base64) {
+        return {};
+        /*
+        if (!document.getElementById("web").hidden) { //已經連上
+            return { "url": relativeUrl(document.getElementById("web").src) };
+        }
+        obj['imageBase64'] = "";
+        if (image_base64 && image_base64.length > 0) {
             obj['imageBase64'] = image_base64;
         }
         return obj;
+        */
     }
 
+    /*
     window.addEventListener('message', (e) => {
 
         if (e.data && e.data.trim().length < 2) return;
