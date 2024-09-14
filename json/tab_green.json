@@ -31,12 +31,13 @@
 		  "obj": {
 			"color": 0,
 			"verticle": 0,
-			"fontfactor": 8.5,
+			"fontfactor": 8.0,
 			"saved": [[""], [""], [""], [""], [""], [""], [""], [""], [""], [""]],
 			"syncType": 6,
 			"transparent": 0,
 			"printSaved": 0,
-			"fsizedist": 1
+			"fsizedist": 1,
+			"verseCount": 2
 		  }
 		},
 		"B/G": "G"

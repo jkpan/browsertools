@@ -1068,11 +1068,14 @@ function createCtrlBtn() {
   canvas.hidden = true;
 
   let div = document.createElement('div');
+  div.appendChild(document.createElement("br"));
+  
   div.style.position = "fixed";
-  div.style.top = "0";
-  div.style.left = "0";
-  div.style.width = "100%";
-  div.style.height = "100%";
+  //div.style.top = "0";
+  //div.style.left = "0";
+  //div.style.width = "100%";
+  //div.style.height = "100%";
+  div.style.margin = "20px";
   div.id = 'ctrl';
   document.body.appendChild(div);
   div.style.backgroundColor = 'rgba(0,0,0,1.0)';
@@ -1143,6 +1146,9 @@ function createCtrlBtn() {
   };
   div.appendChild(btn_wss);
   ctrls[6] = btn_wss;
+
+  div.appendChild(document.createElement("br"));
+  div.appendChild(document.createElement("br"));
 
   syntoggle();
 

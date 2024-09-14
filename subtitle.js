@@ -432,6 +432,7 @@ function restoreActionFromLocal() {
 var selector = null;
 function openSelector() {
   closeSelector();
+  //selector = window.open("subtitle_list.html", '_blank');//.focus();
   selector = window.open("subtitle_list.html", "_blank", 'width=800, height=600, left=100, top=100');
 }
 
@@ -1035,11 +1036,14 @@ function createCtrlBtn() {
   canvas.hidden = true;
 
   let div = document.createElement('div');
+  div.appendChild(document.createElement("br"));
+
   div.style.position = "fixed";
-  div.style.top = "0";
-  div.style.left = "0";
-  div.style.width = "100%";
-  div.style.height = "100%";
+  //div.style.top = "20";
+  //div.style.left = "20";
+  //div.style.width = "100%";
+  //div.style.height = "100%";
+  div.style.margin = "20px";
   div.id = 'ctrl';
   document.body.appendChild(div);
   div.style.backgroundColor = 'rgba(0,0,0,1.0)';
@@ -1107,6 +1111,9 @@ function createCtrlBtn() {
   };
   div.appendChild(btn_wss);
   ctrls[5] = btn_wss;
+
+  div.appendChild(document.createElement("br"));
+  div.appendChild(document.createElement("br"));
 
   syntoggle();
 

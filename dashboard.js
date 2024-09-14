@@ -124,6 +124,7 @@ class Applet {
     this.h = data.h;
     this.elm = document.getElementById(this.keyname);//data.elm;
     this.elm.style.opacity = '1.0';
+    //this.elm.style.boxShadow = "10px 5px 5px #ff0000";
     this.ry = 0;
     this.t_rotateY = 0;
     this.sOpacity = 1.0;
@@ -975,11 +976,11 @@ function hideAll() {
 
 function createFrame(id, url) {
   //class="full" id="frame_song" frameborder="0" width="100%" height="100%" src="subtitle.html"
-  frame = document.createElement("iframe");
+  let frame = document.createElement("iframe");
   frame.setAttribute("src", url);
   frame.setAttribute("class", "full");
   frame.setAttribute("id", id);
-  frame.frameBorder = 0;
+  frame.style.border = 'none';
   frame.style.width = "100%";
   frame.style.height = "100%";
   document.getElementById("mainDiv").appendChild(frame);
