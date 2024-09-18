@@ -141,6 +141,7 @@ a {
       <div class="wrapper">
 
         <iframe width="100%" height="100%" hidden="true" id="web" class="full"></iframe>
+        <div class="full" id="webdiv" width="100%" height="100%" hidden="true"></div>
         
         <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls autoplay></video></video>
         <div class="full" id="image_container" hidden="true"></div>
@@ -157,6 +158,38 @@ a {
           <label>Loop(影片)</label>
           <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
+
+              function appendToIframeSrc(inputString, appendString) {
+                return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
+                  // 修改 src 的內容
+                  const newSrc = srcValue + appendString;
+                  // 替換 src 屬性
+                  return match.replace(srcValue, newSrc);
+                });
+              }
+
+              function modifyIframeAttributes(inputString, newWidth, newHeight) {
+                return inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
+                  // 更新 width 屬性
+                  iframeTag = iframeTag.replace(/width\s*=\s*["'].*?["']/i, `width="${newWidth}"`);
+                  // 更新 height 屬性
+                  iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
+        
+                  /*
+                  // 如果沒有 width 或 height，則添加
+                  if (!/width\s*=\s*["'].*?["']/i.test(iframeTag)) {
+                    iframeTag = iframeTag.replace(/^<iframe/i, `<iframe width="${newWidth}"`);
+                  }
+                  if (!/height\s*=\s*["'].*?["']/i.test(iframeTag)) {
+                    iframeTag = iframeTag.replace(/^<iframe/i, `<iframe height="${newHeight}"`);
+                  }
+                  */
+
+                  return iframeTag;
+                });
+              }
+
+
               //document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal";
               //document.getElementById("ppt_url").select();
               function urlGo() {
@@ -187,7 +220,14 @@ a {
                     document.getElementById("reload").hidden = true;
                   else
                     document.getElementById("reload").hidden = false;
+                  return;
 
+                }
+                
+                if (value.startsWith('<iframe')) {
+                  value = modifyIframeAttributes(value, '100%', '100%');
+                  document.getElementById("webdiv").hidden = false;
+                  document.getElementById("webdiv").innerHTML = value;
                 } else {
                   document.getElementById("web").src = value;
                   document.getElementById("web").hidden = false;
@@ -200,12 +240,11 @@ a {
                     document.getElementById("reloadPage").hidden = true;
                   else
                     document.getElementById("reloadPage").hidden = false;
-
                 }
-                
                 //window.location.href = value;
               }
-              
+
+                           
               function reload() {
                 let d = document.getElementById("web");
                 document.getElementById("web").src = d.src;
@@ -251,8 +290,17 @@ function googleSlidesRemoveBar() {
   let value = document.getElementById("ppt_url").value;
   value = value.trim();
   if (value.length == 0) return;
-  value += '&rm=minimal';
-  document.getElementById("ppt_url").value = value;
+
+  if (value.startsWith('<iframe')) {
+    let modifiedString = appendToIframeSrc(value, '&rm=minimal');
+    console.log(modifiedString);
+    document.getElementById("ppt_url").value = modifiedString;
+  } else {
+    value += '&rm=minimal';
+    document.getElementById("ppt_url").value = value;
+  }
+
+
 }
 
 function animLED() {

@@ -2372,7 +2372,7 @@ function _phoneUi() {
   ui_rectFill(canvas.width * 0.66, 0, canvas.width * 0.33, canvas.height * 0.25, '字大');
 
   ui_rectFill(0, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '上一卷');
-  //ui_rectFill(canvas.width * 0.33, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '選經文');
+  ui_rectFill(canvas.width * 0.33, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '控制模式');
   ui_rectFill(canvas.width * 0.66, canvas.height * 0.25, canvas.width * 0.33, canvas.height * 0.25, '下一卷');
 
   ui_rectFill(canvas.width * 0.33, canvas.height * 0.5, canvas.width * 0.33, canvas.height * 0.25, '上一章');
