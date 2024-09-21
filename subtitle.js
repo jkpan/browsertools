@@ -729,6 +729,18 @@ function combineKey(e) {
     case 187: //'='
       setFontFactor(fontfactor - 0.5);
       break;
+    case 68:
+      if (song == 0) break;
+      console.log('del ' + song);
+      SONGS.splice(song, 1);
+      song = 0;
+      subtitles = SONGS[song];
+      phase = 0;
+      line = 0;
+      console.log("after : " + SONGS.length + '' + SONGS);
+      console.log("===");
+      console.log(JSON.stringify(SONGS));
+      break;
   }
   _repaint();
 }
@@ -1266,7 +1278,7 @@ function toObj() {
   let obj = {};
   obj['mode'] = mode;
   obj['fontfactor'] = fontfactor;
-  obj['list'] = list;
+  obj['list'] = SONGS.slice(1);//list;
   obj['fontColorType'] = fontColorType;
   obj['transparent'] = makeTransparent ? 1 : 0;
   //obj['slave'] = funcInterval == null ? 0 : 1;

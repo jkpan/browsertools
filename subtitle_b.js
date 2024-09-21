@@ -1847,8 +1847,17 @@ function combineKey(e) {
       helpSwitch = 0;
       enlargeFS();
       break;
-    default:
-      break;
+    case 80: presetVerse[0] = ['']; break;
+    case 81: presetVerse[1] = ['']; break;//Q
+    case 87: presetVerse[2] = ['']; break;//W
+    case 69: presetVerse[3] = ['']; break;//E
+    case 82: presetVerse[4] = ['']; break;//R
+    case 84: presetVerse[5] = ['']; break;
+    case 89: presetVerse[6] = ['']; break;
+    case 85: presetVerse[7] = ['']; break;
+    case 73: presetVerse[8] = ['']; break;
+    case 79: presetVerse[9] = ['']; break;
+    default: break;
   }
 
   saveAction2Local();
