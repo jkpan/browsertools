@@ -41,6 +41,7 @@
         <button onclick="stateAction(5)">S5</button>
         <hr size="4" width="100%" color="#007000">
         
+        <button onclick="switchEditable()">Edit</button>
         <button onclick="rYAdd(2)">R+</button>
         <button onclick="rYAdd(-2)">R-</button>
 
@@ -77,6 +78,10 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+    function switchEditable() {
+        window.opener.switchEditMode();
+    }
 
     function rYAdd(value) {
         window.opener.rYAdd(value);
