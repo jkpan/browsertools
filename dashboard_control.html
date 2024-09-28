@@ -27,6 +27,7 @@
             vertical-align: middle;
         }
     </style>
+    <title>Dash-Ctrl</title>
 </head>
 
 <body>
@@ -78,6 +79,10 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+    const normalColor = 'rgb(0, 150, 0)';
+    const deactiveColor = 'rgb(80, 80, 80)';
+    const activeColor = 'rgb(250, 0, 0)';
 
     function switchEditable() {
         window.opener.switchEditMode();
@@ -136,7 +141,7 @@
         if (key_.endsWith('_p'))
             button.innerHTML = 'P';
         if (key_.endsWith('_x')) {
-            button.style.backgroundColor = 'red';
+            button.style.backgroundColor = 'rgb(180,0,0)';//'red';
             button.innerHTML = 'X';
         }
         if (key_.endsWith('_t'))
@@ -195,7 +200,11 @@
 
     function reloadState() {
         let stateArray = window.opener.getElmState();
+        if (stateArray['bgcolor']) {
+            document.body.style.backgroundColor = stateArray['bgcolor'];
+        }
         for (let key in stateArray) {
+            if (key == 'bgcolor') continue;
             removeBtns(key);
             if (stateArray[key] == -1) continue;
             createBtns(key);
@@ -204,20 +213,21 @@
             let b_p = document.getElementById(key + '_p');
             let b_x = document.getElementById(key + '_x');
             let b_l = document.getElementById(key + '_l');
-            b.style.backgroundColor = "rgb(0,0,0)";
+            b.style.backgroundColor = normalColor;//"rgb(0,150,0)";
             if (stateArray[key].charAt(1) == '1') 
-                b_v.style.backgroundColor = "black";
+                b_v.style.backgroundColor = activeColor;//"black";
             else 
-                b_v.style.backgroundColor = "transparent";
+                b_v.style.backgroundColor = deactiveColor;//"transparent";
             if (stateArray[key].charAt(2) == '1') 
-                b_p.style.backgroundColor = "black";
+                b_p.style.backgroundColor = activeColor;//"black";
             else 
-                b_p.style.backgroundColor = "transparent";
+                b_p.style.backgroundColor = deactiveColor;//"transparent";
+
             if (stateArray[key].charAt(3) == '1') {
-                b_l.style.backgroundColor = "red";
+                b_l.style.backgroundColor = activeColor;//"red";
                 b_l.textContent = '🔒';
             } else { 
-                b_l.style.backgroundColor = "transparent";
+                b_l.style.backgroundColor = deactiveColor;//"transparent";
                 b_l.textContent = '🔓';
             }
         }
@@ -292,7 +302,7 @@
 <script>
 
     var startbtn = document.getElementById('start');
-    startbtn.style.backgroundColor = 'transparent';
+    startbtn.style.backgroundColor = deactiveColor;//'transparent';
 
     var cmd = ["打開", "放大", "關掉"];
     var item = ["全部", "聖經", "歌詞", "投影片"];
@@ -460,7 +470,7 @@
             recognizing = true;
             console.log('info_speak_now');
             recogResult = '';
-            startbtn.style.backgroundColor = 'rgb(255,0,0)';
+            startbtn.style.backgroundColor = activeColor;//'rgb(255,0,0)';
         };
 
         recognition.onerror = function (event) {
@@ -477,19 +487,18 @@
                 console.log('not-allowed');
             }
 
-            startbtn.style.backgroundColor = 'rgb(0,0,0)';
+            startbtn.style.backgroundColor = deactiveColor;//'rgb(0,0,0)';
 
         };
 
         recognition.onend = function () {
-            startbtn.style.backgroundColor = 'transparent';
             //parseRecogResult();
             recognizing = false;
             recogResult = '';
             console.log('onend');
             //_repaint();
             //recognition.start();
-            startbtn.style.backgroundColor = 'rgb(0,0,0)';
+            startbtn.style.backgroundColor = deactiveColor;//'rgb(0,0,0)';
         };
 
         recognition.onresult = function (event) {

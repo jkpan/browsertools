@@ -158,7 +158,7 @@ a {
           <label>Loop(影片)</label>
           <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
-
+              var value = "";
               function appendToIframeSrc(inputString, appendString) {
                 return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
                   // 修改 src 的內容
@@ -194,7 +194,7 @@ a {
               //document.getElementById("ppt_url").select();
               function urlGo() {
 
-                let value = document.getElementById("ppt_url").value;
+                value = document.getElementById("ppt_url").value;
                 value = value.trim();
                 if (value.length == 0) return;
           
@@ -231,21 +231,32 @@ a {
                 } else {
                   document.getElementById("web").src = value;
                   document.getElementById("web").hidden = false;
-                  if (forPlay) 
-                    document.getElementById("reload").hidden = true;
-                  else
-                    document.getElementById("reload").hidden = false;
-
-                  if (forPlay) 
-                    document.getElementById("reloadPage").hidden = true;
-                  else
-                    document.getElementById("reloadPage").hidden = false;
                 }
                 //window.location.href = value;
+                if (forPlay) 
+                    document.getElementById("reload").hidden = true;
+                else
+                    document.getElementById("reload").hidden = false;
+
+                if (forPlay) 
+                    document.getElementById("reloadPage").hidden = true;
+                else
+                    document.getElementById("reloadPage").hidden = false;
+
               }
 
                            
               function reload() {
+                
+                //let value = document.getElementById("ppt_url").value;
+                //value = value.trim();
+                if (value.length > 0) {
+                  if (value.startsWith('<iframe')) {
+                    document.getElementById("webdiv").innerHTML = value;
+                    return;
+                  }
+                }
+
                 let d = document.getElementById("web");
                 document.getElementById("web").src = d.src;
               }

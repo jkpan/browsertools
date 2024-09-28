@@ -151,6 +151,7 @@
             z-index: 91;
     }
   </style>
+  <title>Tabs</title>
 </head>
 <body>
   
@@ -402,7 +403,8 @@ function selectSetting(event) {
 var _openWin = null;
 function openCtrl() { 
   closeCtrl();
-  _openWin = window.open("tabs_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
+  _openWin = window.open("tabs_ctrl.html", "");
+  //_openWin = window.open("tabs_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
 }
 
 function closeCtrl() {

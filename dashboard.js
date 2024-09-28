@@ -838,6 +838,10 @@ function getElmState() {
     anim: -1, info: -1, effect: -1, time: -1,
     dBoard: -1, tabs: -1
   };
+  
+  let div = document.getElementById("mainDiv");
+  stateArray['bgcolor'] = div.style.backgroundColor;
+
   for (let key in stateArray) {
     for (let i = 0; i < applets.length; i++) {
       if (key == applets[i].keyname) {
@@ -867,7 +871,16 @@ var _openWin = null;
 
 function openCtrl() {
   closeCtrl();
-  _openWin = window.open("dashboard_control.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=300,height=320,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+  _openWin = window.open("dashboard_control.html", "_blank");
+  return;
+  if (standalong) {
+    _openWin = window.open(
+      "dashboard_control.html", 
+      "", 
+      "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=300,height=320,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+  } else {
+    _openWin = window.open("dashboard_control.html", "");
+  }
 }
 
 function closeCtrl() {
