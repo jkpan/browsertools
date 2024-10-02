@@ -65,7 +65,22 @@ function synscripture(req, res) {
         //broadcast_Bible();
         broadcast();
 
+        if (process.send) {
+            process.send({
+                type: "syncBible",
+                volume: volume,
+                chapter: chapter,
+                verse: verse,
+                doblank: doblank
+            });
+        }
+
     });
+}
+
+function syncFromWorker(msg) {
+    syncData(msg.volume, msg.chapter, msg.verse, msg.doblank);
+    broadcast();
 }
 
 //取得經文狀態
@@ -117,5 +132,6 @@ module.exports = {
     addClient,
     synscripture,
     synscripture_get,
-    restorescripture
+    restorescripture,
+    syncFromWorker
 };

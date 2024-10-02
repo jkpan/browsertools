@@ -58,7 +58,29 @@ function synclyrics(req, res) {
     res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
     broadcast();
 
+    if (process.send) {
+      process.send({
+        type: "syncSong",
+        song: song,
+        phase: phase,
+        line: line,
+        doblank: song_doblank
+      });
+    }
+    
+
   });
+}
+
+function syncFromWorker(msg) {
+  //syncData(msg.volume, msg.chapter, msg.verse, msg.doblank);
+  //const requestData = JSON.parse(body);
+  //println(body);
+  song = msg.song;
+  phase = msg.phase;
+  line = msg.line;
+  song_doblank = msg.doblank;
+  broadcast();
 }
 
 function broadcast() {
@@ -281,5 +303,6 @@ module.exports = {
   addClient,
   synclyrics,
   lyricsBaseAction,
-  songjsonformat
+  songjsonformat,
+  syncFromWorker
 };
