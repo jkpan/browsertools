@@ -1,3 +1,4 @@
+const blessed = require('blessed');
 const http = require('http');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
@@ -26,6 +27,10 @@ global.print = function (msg) {
 
 global.println = function (msg) { //console.trace();
   process.stdout.write('\n' + `(${process.pid})` + msg);
+}
+
+global.clearScreen = function () {
+  process.stdout.write('\x1B[2J\x1B[0;0H');
 }
 
 /*
@@ -67,6 +72,7 @@ println('cpu ' + os.cpus().length + ' cores');
 println('total mem: ' + numberWithCommas(os.totalmem()));
 println(' free mem: ' + numberWithCommas(os.freemem()));
 println('    ratio: ' + Math.floor(os.freemem() / os.totalmem() * 100) + '%');
+//clearScreen();
 
 //讀檔輸出
 function responseFile(filePath, res, append) {
