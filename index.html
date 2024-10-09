@@ -83,7 +83,7 @@
       <blockquote>
         <a id="bplay" hidden="true" href="./Bible_play" style="background-color: black;">幫你翻聖經 (nodejs)</a>
         <p></p>
-        <!--a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a>
+        <!-- a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a>
         <p></p-->
       </blockquote>
       <a href="./subtitle_niv.html">Bible niv </a>
@@ -146,10 +146,13 @@
   }
 
   if (readParam('server') === 'nodejs') {
-    document.getElementById("bplay").hidden = false; //document.getElementById("bctrl").hidden = false;
-    document.getElementById("nivsync").hidden = false;
+    //document.getElementById("bplay").hidden = false; //document.getElementById("bctrl").hidden = false;
+    //document.getElementById("nivsync").hidden = false;
     document.getElementById("icom").hidden = false;
     document.getElementById("lyrics_admin").hidden = false;
   }
 
+  //Bible_play      './subtitle_b.html?action=play';
+  //Bible_ctrl      './subtitle_b.html?action=ctrl';
+  
 </script>

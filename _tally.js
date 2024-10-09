@@ -28,6 +28,14 @@ function command(req, res) {
             }
         }
 
+        if (process.send) {
+            process.send({
+                type: "syncTally",
+                msgs: msgs
+            });
+        }
+
+
         res.setHeader('Content-Type', 'application/json');
 
         // 发送响应数据
@@ -120,10 +128,17 @@ function cmd(req, res, _cma) {
     });
 }
 
+function syncFromWorker(msg) {
+    for (let i = 0; i < msgs.length; i++) {
+        msgs[i] = msg['msgs'][i];
+    }
+}
+
 module.exports = {
     query,
     command,
     cmdAll,
     cmd,
-    initui
+    initui,
+    syncFromWorker
 };

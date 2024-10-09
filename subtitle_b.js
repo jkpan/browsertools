@@ -826,8 +826,7 @@ function ajax_restore() {
     "action": "restore"
   },
     '/restorescripture',
-    (res) => {
-      //console.log(JSON.stringify(res));
+    (res) => {//console.log(JSON.stringify(res));
       restoreFromJson(res);
       if (sync_type == 5) setTimeout(ajax_restore, 200);
 
@@ -2275,6 +2274,12 @@ function keyboard(e) { //key up //alert(e.keyCode);
       helpSwitch = 0;
       uisel = 0;
       break;
+    case 74:
+      if (sync_type == 1) 
+        restoreActionFromLocal();
+      else if (sync_type != 5) 
+        ajax_restore();
+      return;
     default:
       break;
   }

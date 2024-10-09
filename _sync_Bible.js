@@ -29,9 +29,9 @@ function synscripture_get(url) {
 
     var requestData = urltool.parse(url, true).query;
 
-    syncData(parseInt(requestData.vlm), parseInt(requestData.chp), 
-                      parseInt(requestData.ver), parseInt(requestData.blank));
-    
+    syncData(parseInt(requestData.vlm), parseInt(requestData.chp),
+        parseInt(requestData.ver), parseInt(requestData.blank));
+
     res.writeHead(200, { 'Content-Type': 'text/plain' });
 
     res.end('get done!\n');

@@ -67,7 +67,7 @@ function synclyrics(req, res) {
         doblank: song_doblank
       });
     }
-    
+
 
   });
 }
@@ -116,14 +116,14 @@ function getArrayDimension(arr) {
 
 function refactor(ALL_SONGS) {
   let vol = ALL_SONGS['nosong']['VOLUME'].content;
-  for(let v = 0;v<vol.length;v++) {
+  for (let v = 0; v < vol.length; v++) {
     let k = vol[v][0];
-    for (let i=1;i<1000;i++) {
+    for (let i = 1; i < 1000; i++) {
       let idx = k + i;
       if (ALL_SONGS[idx]) {
         let tmp = ALL_SONGS[idx].content;
         delete ALL_SONGS[idx];
-        ALL_SONGS[idx] = {"content": tmp};
+        ALL_SONGS[idx] = { "content": tmp };
       }
     }
   }
@@ -191,7 +191,7 @@ function readAndAction(path, handle) {
   let txt = fs.readFileSync(path, 'utf8');//
   try {
     // 將讀取到的內容轉換為 JSON 物件
-    let ALL_SONGS = JSON.parse(txt);      
+    let ALL_SONGS = JSON.parse(txt);
     handle(ALL_SONGS);
   } catch (parseError) {
     console.error('解析 JSON 檔案時發生錯誤:', parseError);
@@ -200,7 +200,7 @@ function readAndAction(path, handle) {
 
 function songjsonformat() {
   return;
-  readAndAction(READ_SRC, (ALL_SONGS)=>{
+  readAndAction(READ_SRC, (ALL_SONGS) => {
     refactor(ALL_SONGS);
     const writeStream = fs.createWriteStream(WRITE_SRC);
     formatALL(writeStream, ALL_SONGS);
@@ -236,7 +236,7 @@ function lyricsBaseAction(req, res) {
     println(JSON.stringify(content));
 
     switch (action) {
-      case 'add': 
+      case 'add':
         println('add start');
         readAndAction(READ_SRC, (ALL_SONGS) => {
           println('add in');
@@ -264,7 +264,7 @@ function lyricsBaseAction(req, res) {
 
         break;
       case 'fix':
-        readAndAction(READ_SRC, (ALL_SONGS)=> {
+        readAndAction(READ_SRC, (ALL_SONGS) => {
           if (ALL_SONGS[id]) {
             ALL_SONGS[id].content = content;
           } else {
@@ -281,7 +281,7 @@ function lyricsBaseAction(req, res) {
         res.end(JSON.stringify({ "state": "success" }));
         break;
       case 'del':
-        readAndAction(READ_SRC, (ALL_SONGS)=>{
+        readAndAction(READ_SRC, (ALL_SONGS) => {
           if (!ALL_SONGS[id]) return;
           delete ALL_SONGS[id];
           refactor(ALL_SONGS)

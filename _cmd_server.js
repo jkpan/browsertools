@@ -1,4 +1,4 @@
-const blessed = require('blessed');
+//const blessed = require('blessed');
 const http = require('http');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
@@ -111,6 +111,8 @@ function webservice(req, res) {
     case '/synclyrics': sync_lyrics.synclyrics(req, res); return;
     case '/actionlyrics': sync_lyrics.lyricsBaseAction(req, res); return;
     //case '/restorelyrics': restorelyrics(req, res);    return;
+    
+    
 
     default:
 
@@ -132,28 +134,6 @@ function webservice(req, res) {
   //
   if (url.startsWith('/synscripture_get')) {
     sync_Bible.synscripture_get(url);
-    return;
-  }
-
-  //特定字眼給特定功能
-  if (url === '/Bible_play') {
-    const redirect = '/subtitle_b.html?action=play';
-    res.writeHead(302, { Location: redirect });
-    res.end();
-    return;
-  }
-
-  if (url === '/Bible_play_niv') {
-    const redirect = '/subtitle_niv.html?action=play';
-    res.writeHead(302, { Location: redirect });
-    res.end();
-    return;
-  }
-
-  if (url === '/Bible_ctrl') {
-    const redirect = '/subtitle_b.html?action=ctrl';
-    res.writeHead(302, { Location: redirect });
-    res.end();
     return;
   }
 
@@ -225,13 +205,19 @@ function startService() {
 function prepare() {
   //pid = process.pid;
   const args = process.argv;//.slice(1); if (args.length > 2) port = parseInt(args[2]);
-  if (args.length >= 3) {
-    port = parseInt(args[2]);
-    //if (args.length >= 4) wsport = parseInt(args[3]);
-  }
-  if (args.length >= 4) {
-    if (args[3] == 'cluster') {
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] == '-port') { //0 1 2 3
+      if (args.length >= i + 2 && !isNaN(parseInt(args[i + 1])))
+        port = parseInt(args[i + 1]);
+      continue;
+    }
+    if (args[i] == '-cluster') {
       docluster = true;
+      continue;
+    }
+    if (args[i] == '-tui') {
+      continue;
     }
   }
 
@@ -268,18 +254,23 @@ function createService() {
 
   if (process.send)
     println('process on message');
-    process.on('message', (msg) => {//println('process receive:' + JSON.stringify(msg));
+  process.on('message', (msg) => {//println('process receive:' + JSON.stringify(msg));
 
-      if (msg.type === 'syncBible') {
-        sync_Bible.syncFromWorker(msg);
-        return;
-      }
-      if (msg.type === 'syncSong') {
-        sync_lyrics.syncFromWorker(msg);
-        return;
-      }
+    if (msg.type === 'syncBible') {
+      sync_Bible.syncFromWorker(msg);
+      return;
+    }
+    if (msg.type === 'syncSong') {
+      sync_lyrics.syncFromWorker(msg);
+      return;
+    }
 
-    });
+    if (msg.type === 'syncTally') {
+      sync_tally.syncFromWorker(msg);
+      return;
+    }
+
+  });
 }
 
 prepare();
@@ -294,7 +285,7 @@ if (docluster) {
   if (Cluster.isMaster) {
     createFork();
   } else {
-    createService(); 
+    createService();
   }
 } else {
   createService();
