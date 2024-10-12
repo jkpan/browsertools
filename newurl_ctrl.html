@@ -148,7 +148,6 @@
             background-color: green;
         }
         */
-
     </style>
 </head>
 
@@ -158,14 +157,6 @@
 
     <div class="wrapper">
 
-        <iframe width="100%" height="100%" hidden="true" id="web" class="full"></iframe>
-
-        <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls autoplay></video></video>
-        <div class="full" id="image_container" hidden="true"></div>
-
-        <!--iframe src="https://onedrive.live.com/embed?resid=A9C489AB715D78A%21237&amp;authkey=!AMd1wONLe7THB_E&amp;em=2&amp;wdAr=1.7777777777777777" width="476px" height="288px" frameborder="0">這是 <a target="_blank" href="https://office.com/webapps">Office</a> 提供的內嵌 <a target="_blank" href="https://office.com">Microsoft Office</a> 簡報。</iframe-->
-        <!--https://onedrive.live.com/view.aspx?resid=A9C489AB715D78A!237&cid=0a9c489ab715d78a&wdo=2&authkey=!AMd1wONLe7THB_E-->
-
         <div class="ui" id="ui">
             嵌入Google簡報, Canva簡報, Youtube影片...
             <input type="checkbox" id="loopchk" checked>
@@ -174,11 +165,36 @@
 https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false
           </textarea>
             <script type="text/javascript" charset="UTF-8">
+
+                function appendToIframeSrc(inputString, appendString) {
+                    return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
+                        // 修改 src 的內容
+                        const newSrc = srcValue + appendString;
+                        // 替換 src 屬性
+                        return match.replace(srcValue, newSrc);
+                    });
+                }
+
+                function modifyIframeAttributes(inputString, newWidth, newHeight) {
+                    return inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
+                        // 更新 width 屬性
+                        iframeTag = iframeTag.replace(/width\s*=\s*["'].*?["']/i, `width="${newWidth}"`);
+                        // 更新 height 屬性
+                        iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
+                        return iframeTag;
+                    });
+                }
+
                 function urlGo() {
                     let value = document.getElementById("ppt_url").value;
                     value = value.trim();
                     if (value.length == 0) return;
                     let loop = document.getElementById("loopchk").checked;
+                    
+                    if (value.startsWith('<iframe')) {
+                        value = modifyIframeAttributes(value, '100%', '100%');
+                    }
+                    
                     window.opener.urlGo(value, loop);
                 }
             </script>
@@ -190,7 +206,7 @@ https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSH
                 </li>
                 <li>Google簡報要打開speaker notes按's'</li>
                 <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
-            <!--
+                <!--
             <li><a href="javascript:animLED()">LED動畫</a></li>
             0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
             -->
@@ -221,11 +237,19 @@ https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSH
 <script type="text/javascript" charset="UTF-8">
 
     function googleSlidesRemoveBar() {
+
         let value = document.getElementById("ppt_url").value;
         value = value.trim();
         if (value.length == 0) return;
-        value += '&rm=minimal';
-        document.getElementById("ppt_url").value = value;
+
+        if (value.startsWith('<iframe')) {
+            let modifiedString = appendToIframeSrc(value, '&rm=minimal');
+            document.getElementById("ppt_url").value = modifiedString;
+        } else {
+            value += '&rm=minimal';
+            document.getElementById("ppt_url").value = value;
+        }
+
     }
 
     function animLED() {

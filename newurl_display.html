@@ -73,6 +73,7 @@
 <body>
     <div class="wrapper">
         <iframe class="full" width="100%" height="100%" hidden="true" id="web"></iframe>
+        <div class="full" id="webdiv" width="100%" height="100%" hidden="true"></div>
         <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls autoplay></video></video>
         <div class="full" id="image_container" hidden="true"></div>
         <button class="fullRange" id="rect" type="button" onclick="openCtrl()"></button>
@@ -96,6 +97,17 @@
         _openWin = null;
     }
 
+    function hideAll() {
+        document.querySelector('body').style.background = 'transparent';
+        document.getElementById("image_container").hidden = true;
+        document.getElementById("vsrc").hidden = true;
+        document.getElementById("web").hidden = true;
+        document.getElementById("rect").hidden = true;
+        document.getElementById("webdiv").hidden = true;
+        document.getElementById("web").src = '';
+        document.getElementById("webdiv").innerHTML = '';
+    }
+
     function urlGo(value, loop) {
         value = value.trim();
         if (value.length == 0) return;
@@ -106,6 +118,9 @@
         document.getElementById("vsrc").hidden = true;
         document.getElementById("web").hidden = true;
         document.getElementById("rect").hidden = true;
+        document.getElementById("webdiv").hidden = true;
+        document.getElementById("web").src = '';
+        document.getElementById("webdiv").innerHTML = '';
 
         if (value.endsWith('.mp4') || value.endsWith('.mov')) {
             let vdo = document.getElementById("vsrc");
@@ -119,9 +134,13 @@
 
         } else {
 
-            document.getElementById("web").src = value;
-            document.getElementById("web").hidden = false;
-
+            if (value.startsWith('<iframe')) {
+                document.getElementById("webdiv").hidden = false;
+                document.getElementById("webdiv").innerHTML = value;
+            } else {
+                document.getElementById("web").src = value;
+                document.getElementById("web").hidden = false;
+            }
         }
 
         //window.location.href = value;
@@ -134,10 +153,13 @@
 
     function displayVideoFile(file, loop) {
 
-        document.querySelector('body').style.background = 'transparent';
-        document.getElementById("image_container").hidden = true;
-        document.getElementById("web").hidden = true;
-        document.getElementById("rect").hidden = true;
+        // document.querySelector('body').style.background = 'transparent';
+        // document.getElementById("image_container").hidden = true;
+        // document.getElementById("web").hidden = true;
+        // document.getElementById("rect").hidden = true;
+        // document.getElementById("webdiv").hidden = true;
+
+        hideAll();
 
         //const file = event.target.files[0];
         const videoURL = URL.createObjectURL(file);
@@ -169,10 +191,12 @@
 
     function displayImageFile(file, keepratio) {
 
-        document.querySelector('body').style.background = 'transparent';
-        document.getElementById("vsrc").hidden = true;
-        document.getElementById("web").hidden = true;
-        document.getElementById("rect").hidden = true;
+        // document.querySelector('body').style.background = 'transparent';
+        // document.getElementById("vsrc").hidden = true;
+        // document.getElementById("web").hidden = true;
+        // document.getElementById("rect").hidden = true;
+        // document.getElementById("webdiv").hidden = true;
+        hideAll();
 
         var reader = new FileReader();
         reader.onload = function (event) {
@@ -185,10 +209,13 @@
 
     function displayHTMLFile(file) {
 
-        document.querySelector('body').style.background = 'transparent';
-        document.getElementById("image_container").hidden = true;
-        document.getElementById("vsrc").hidden = true;
-        document.getElementById("rect").hidden = true;
+        // document.querySelector('body').style.background = 'transparent';
+        // document.getElementById("image_container").hidden = true;
+        // document.getElementById("vsrc").hidden = true;
+        // document.getElementById("rect").hidden = true;
+        // document.getElementById("webdiv").hidden = true;
+
+        hideAll();
 
         // 讀取檔案並將其轉換成Data URL
         var reader = new FileReader();

@@ -128,10 +128,26 @@ function addClient(ws) {
     });
 }
 
+function getInfo() {
+    let info = [
+        `[${volume}, ${chapter}, ${verse}, ${doblank}]`
+    ];
+    let i = 1;
+    //<button onclick="controlParent('Bible')">📖</button>
+    B_clients.forEach(function (client) {
+        if (client.readyState === WebSocket.OPEN) {
+            info[i] = `[📖 ${client._socket.remoteAddress}]`;
+            i++;
+        }
+    });
+    return info;
+}
+
 module.exports = {
     addClient,
     synscripture,
     synscripture_get,
     restorescripture,
-    syncFromWorker
+    syncFromWorker,
+    getInfo
 };

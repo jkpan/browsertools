@@ -26,7 +26,10 @@ global.print = function (msg) {
 }
 
 global.println = function (msg) { //console.trace();
-  process.stdout.write('\n' + `(${process.pid})` + msg);
+  if (msg)
+    process.stdout.write('\n' + `(${process.pid})` + msg);
+  else 
+    process.stdout.write('\n');
 }
 
 global.clearScreen = function () {
@@ -112,7 +115,7 @@ function webservice(req, res) {
     case '/actionlyrics': sync_lyrics.lyricsBaseAction(req, res); return;
     //case '/restorelyrics': restorelyrics(req, res);    return;
     
-    
+
 
     default:
 
@@ -204,7 +207,7 @@ function startService() {
 
 function prepare() {
   //pid = process.pid;
-  const args = process.argv;//.slice(1); if (args.length > 2) port = parseInt(args[2]);
+  const args = process.argv;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] == '-port') { //0 1 2 3
@@ -290,6 +293,40 @@ if (docluster) {
 } else {
   createService();
 }
+
+function printInfo() {
+  let info_b = sync_Bible.getInfo();
+  let info_l = sync_lyrics.getInfo();
+  info_b.forEach(function (_info) {
+    println(_info);
+  }); 
+  info_l.forEach(function (_info) {
+    println(_info);
+  }); 
+}
+
+process.stdin.setRawMode(true);
+process.stdin.resume();
+process.stdin.setEncoding('utf8');
+
+process.stdin.on('data', (key) => {
+  if (key === '\u0003' || key.toLowerCase() === 'q') { // 按下 Ctrl+C 或 'q' 退出
+    clearScreen();
+    process.exit();
+  }
+
+  // 更新光標位置
+  //console.log('// ' +key.toLowerCase());
+  switch (key.toLowerCase()) {
+    case 'c': 
+      clearScreen();
+      printInfo();
+      break;
+    //case '\n':  println(); break;
+    //default: println(); break;
+  }
+
+});
 
 
 

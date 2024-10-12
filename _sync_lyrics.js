@@ -4,7 +4,9 @@ const WRITE_SRC = './json/songbase.json';
 const fs = require('fs');
 var WebSocket = require('ws');
 
-var song;
+var song = [
+  ['']
+];
 var phase = 0;
 var line = 0;
 var song_doblank = 0;
@@ -299,10 +301,26 @@ function lyricsBaseAction(req, res) {
   });
 }
 
+function getInfo() {
+  let info = [
+    `<${song[0][0]}, ${phase}, ${line}, ${song_doblank}>`
+  ];
+  let i = 1;
+  //<button onclick="controlParent('Bible')">📖</button>
+  S_clients.forEach(function (client) {
+    if (client.readyState === WebSocket.OPEN) {
+      info[i] = `<🎤 ${client._socket.remoteAddress}>`;
+      i++;
+    }
+  });
+  return info;
+}
+
 module.exports = {
   addClient,
   synclyrics,
   lyricsBaseAction,
   songjsonformat,
-  syncFromWorker
+  syncFromWorker,
+  getInfo
 };

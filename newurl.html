@@ -304,7 +304,6 @@ function googleSlidesRemoveBar() {
 
   if (value.startsWith('<iframe')) {
     let modifiedString = appendToIframeSrc(value, '&rm=minimal');
-    console.log(modifiedString);
     document.getElementById("ppt_url").value = modifiedString;
   } else {
     value += '&rm=minimal';
