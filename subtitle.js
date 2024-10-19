@@ -875,7 +875,7 @@ function keyboard(e) {
       if (song > 0) {
         song = song - 1;
         subtitles = SONGS[song];
-        phase = 0;
+        phase = 1;
         line = 0;
       }
       break;
@@ -883,7 +883,7 @@ function keyboard(e) {
       if (song < SONGS.length - 1) {
         song = song + 1;
         subtitles = SONGS[song];
-        phase = 0;
+        phase = 1;
         line = 0;
       }
       break;
