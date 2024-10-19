@@ -55,7 +55,6 @@ try {
   println('Cluster Module does not exist');
 }
 
-
 try {
   // 尝试加载模块
   require.resolve('ws');
@@ -278,12 +277,15 @@ function createService() {
 
 prepare();
 
+createService();
+
 /*
 worker    worker    worker
   ^         ^     --  ^
   |         |         | msg
 process   process   process
 */
+/*
 if (docluster) {
   if (Cluster.isMaster) {
     createFork();
@@ -327,7 +329,7 @@ process.stdin.on('data', (key) => {
   }
 
 });
-
+*/
 
 
 //npm install ws
