@@ -1275,19 +1275,8 @@ var mouseY;
 init();
 _repaint();
 
-window.addEventListener('resize', e => { //init();
-  closeSideMenu();
-  /*
-  let sideMenu = document.getElementById('sideMenu');
-  let _idx = sideMenu.style.top.indexOf('px');
-  let _sub = sideMenu.style.top.substring(0, _idx);
-  let _sub_num = parseInt(_sub);
-  if (_sub_num < window.innerHeight - 25) {
-    openSideMenu();
-  } else {
-    closeSideMenu();
-  }
-  */
+window.addEventListener('resize', e => {
+  init();
 });
 
 function showCtrlPane(show) {
