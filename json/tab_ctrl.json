@@ -5,14 +5,14 @@
         "stateSaved": {
           "save0": [
             {
-              "name": "lyrics",
-              "posize": [25, 1, 24, 48],
+              "name": "Bible",
+              "posize": [1, 5, 24, 40],
               "visible": 1,
               "perspective": 0
             },
             {
-              "name": "Bible",
-              "posize": [1, 1, 24, 48],
+              "name": "lyrics",
+              "posize": [25, 5, 24, 40],
               "visible": 1,
               "perspective": 0
             }
@@ -20,13 +20,13 @@
           "save1": [
             {
               "name": "Bible",
-              "posize": [1, 1, 24, 48],
+              "posize": [1, 5, 24, 40],
               "visible": 0,
               "perspective": 0
             },
             {
               "name": "lyrics",
-              "posize": [1, 1, 48, 48],
+              "posize": [1, 5, 48, 40],
               "visible": 1,
               "perspective": 0
             }
@@ -34,13 +34,13 @@
           "save2": [
             {
               "name": "lyrics",
-              "posize": [25, 1, 24, 48],
+              "posize": [25, 5, 24, 40],
               "visible": 0,
               "perspective": 0
             },
             {
               "name": "Bible",
-              "posize": [1, 1, 48, 48],
+              "posize": [1, 5, 48, 40],
               "visible": 1,
               "perspective": 0
             }
@@ -50,22 +50,23 @@
           "save5": []
         },
         "lyrics": {
-          "posize": [25, 1, 24, 48],
+          "posize": [25, 5, 24, 40],
           "perspective": 0,
           "obj": {
             "mode": 1,
-            "fontfactor": 10.5,
+            "fontfactor": 9,
             "list": [
   
-              "讚美之泉101", 
-              "讚美之泉143",
-              "讚美之泉9",
-              "讚美之泉44",
-              "救恩261",
+              "救恩103",
+              "其他154",
+              "其他65",
+              "救恩214",
 
-              "救恩152",
 
-              "其他153",
+              "讚美之泉26",
+              "讚美之泉36",
+              "讚美之泉96",
+              "其他77",
 
               "主禱文",
               "使徒信經",
@@ -78,7 +79,7 @@
           }
         },
         "Bible": {
-          "posize": [1, 1, 24, 48],
+          "posize": [1, 5, 24, 40],
           "perspective": 0,
           "obj": {
             "color": 1,
@@ -87,7 +88,7 @@
             "fontfactor": 15,
             "saved": [
               [""],
-              ["出埃及記", 13, 17],
+              ["撒母耳記上", 7, 1],
               [""],
               [""],
               [""],

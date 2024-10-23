@@ -2264,7 +2264,7 @@ function keyboard(e) { //key up //alert(e.keyCode);
       presetVerse[0][1] = phase;
       presetVerse[0][2] = line;
       break;
-    //case 32: canvas.requestFullscreen(); break;
+    //case 32: return; //canvas.requestFullscreen(); break;
     case 27: //'escape'
       jumpTo1();
       mode = 0;
@@ -2628,7 +2628,9 @@ function keyupAction(e) {
 
   if (recognition && recognizing) {
     recognition.stop();
+    return;
   }
+
   keyboard(e);
 }
 
@@ -3116,11 +3118,12 @@ function initRecognition() {
     recognizing = true;
     console.log('info_speak_now');
     recogResult = '';
-    //_repaint();
+    _repaint();
   };
 
   recognition.onerror = function (event) {
 
+    recognizing = false;
     recogResult = '';
 
     if (event.error == 'no-speech') {
@@ -3132,13 +3135,17 @@ function initRecognition() {
     if (event.error == 'not-allowed') {
       console.log('not-allowed');
     }
+    
+    _repaint();
+
   };
 
   recognition.onend = function () {
     parseRecogResult();
     recognizing = false;
     recogResult = '';
-    console.log('onend'); //_repaint();
+    console.log('onend'); //
+    _repaint();
   };
 
   recognition.onresult = function (event) {
@@ -3156,11 +3163,9 @@ function initRecognition() {
       if (event.results[i].isFinal) {
         recogResult += event.results[i][0].transcript;
         console.log('onresult isfinal: ' + recogResult);
-        //_repaint();
       } else {
         recogResult += event.results[i][0].transcript;
         console.log('onresult not isfinal: ' + recogResult);
-        //_repaint();
       }
     }
     console.log('onresult: ' + recogResult);

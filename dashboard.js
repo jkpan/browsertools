@@ -1196,10 +1196,11 @@ function init() {
   if (keylock) switchEditMode();
 
   let div = document.getElementById("content_control");
-  if (!div) return;
-  div.hidden = false;
-  div.style.gridColumn = '1 / ' + (GRID_W + 1)//' '2 / 4';
-  div.style.gridRow = '1 / ' + (GRID_H + 1);//'1 / 8';
+  if (div) {
+    div.hidden = false;
+    div.style.gridColumn = '1 / ' + (GRID_W + 1)//' '2 / 4';
+    div.style.gridRow = '1 / ' + (GRID_H + 1);//'1 / 8';
+  }
 
   canvas = document.getElementById("canvas");
   canvas.width = div.clientWidth;
@@ -1210,8 +1211,7 @@ function init() {
   div.hidden = true;
 
   let sideMenu = document.getElementById('sideMenu');
-  if (sideMenu)
-    sideMenu.style.top = window.innerHeight + 'px';
+  if (sideMenu) sideMenu.style.top = window.innerHeight + 'px';
 
 }
 
@@ -1275,7 +1275,20 @@ var mouseY;
 init();
 _repaint();
 
-window.addEventListener('resize', e => { init(); });
+window.addEventListener('resize', e => { //init();
+  closeSideMenu();
+  /*
+  let sideMenu = document.getElementById('sideMenu');
+  let _idx = sideMenu.style.top.indexOf('px');
+  let _sub = sideMenu.style.top.substring(0, _idx);
+  let _sub_num = parseInt(_sub);
+  if (_sub_num < window.innerHeight - 25) {
+    openSideMenu();
+  } else {
+    closeSideMenu();
+  }
+  */
+});
 
 function showCtrlPane(show) {
   let div = document.getElementById("controlDiv");

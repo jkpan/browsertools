@@ -18,7 +18,6 @@ var Cluster = null;
 //var server;
 
 var port = 80;
-//var pid = '';
 var docluster = false;
 
 global.print = function (msg) {
@@ -204,25 +203,39 @@ function startService() {
 
 }
 
-function prepare() {
-  //pid = process.pid;
-  const args = process.argv;
+function printInfo() {
+  let info_b = sync_Bible.getInfo();
+  let info_l = sync_lyrics.getInfo();
+  info_b.forEach(function (_info) {
+    println(_info);
+  }); 
+  info_l.forEach(function (_info) {
+    println(_info);
+  }); 
+}
 
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] == '-port') { //0 1 2 3
-      if (args.length >= i + 2 && !isNaN(parseInt(args[i + 1])))
-        port = parseInt(args[i + 1]);
-      continue;
+function tuiPrepare() {
+  process.stdin.setRawMode(true);
+  process.stdin.resume();
+  process.stdin.setEncoding('utf8');
+  process.stdin.on('data', (key) => {
+    if (key === '\u0003' || key.toLowerCase() === 'q') { // 按下 Ctrl+C 或 'q' 退出
+      clearScreen();
+      process.exit();
     }
-    if (args[i] == '-cluster') {
-      docluster = true;
-      continue;
+  
+    // 更新光標位置
+    //console.log('// ' +key.toLowerCase());
+    switch (key.toLowerCase()) {
+      case 'c': 
+        clearScreen();
+        printInfo();
+        break;
+      //case '\n':  println(); break;
+      //default: println(); break;
     }
-    if (args[i] == '-tui') {
-      continue;
-    }
-  }
-
+  
+  });
 }
 
 function createFork() {
@@ -254,8 +267,8 @@ function createService() {
 
   startService();
 
-  if (process.send)
-    println('process on message');
+  if (process.send) println('process on message');
+
   process.on('message', (msg) => {//println('process receive:' + JSON.stringify(msg));
 
     if (msg.type === 'syncBible') {
@@ -275,9 +288,29 @@ function createService() {
   });
 }
 
-prepare();
+function prepareArgSetting() {
+  //pid = process.pid;
+  const args = process.argv;
 
-createService();
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] == '-port') { //0 1 2 3
+      if (args.length >= i + 2 && !isNaN(parseInt(args[i + 1])))
+        port = parseInt(args[i + 1]);
+      continue;
+    }
+    if (args[i] == '-cluster') {
+      docluster = true;
+      continue;
+    }
+    if (args[i] == '-tui') {
+      tuiPrepare();
+      continue;
+    }
+  }
+
+}
+
+prepareArgSetting(); //createService();
 
 /*
 worker    worker    worker
@@ -285,7 +318,6 @@ worker    worker    worker
   |         |         | msg
 process   process   process
 */
-/*
 if (docluster) {
   if (Cluster.isMaster) {
     createFork();
@@ -295,42 +327,6 @@ if (docluster) {
 } else {
   createService();
 }
-
-function printInfo() {
-  let info_b = sync_Bible.getInfo();
-  let info_l = sync_lyrics.getInfo();
-  info_b.forEach(function (_info) {
-    println(_info);
-  }); 
-  info_l.forEach(function (_info) {
-    println(_info);
-  }); 
-}
-
-process.stdin.setRawMode(true);
-process.stdin.resume();
-process.stdin.setEncoding('utf8');
-
-process.stdin.on('data', (key) => {
-  if (key === '\u0003' || key.toLowerCase() === 'q') { // 按下 Ctrl+C 或 'q' 退出
-    clearScreen();
-    process.exit();
-  }
-
-  // 更新光標位置
-  //console.log('// ' +key.toLowerCase());
-  switch (key.toLowerCase()) {
-    case 'c': 
-      clearScreen();
-      printInfo();
-      break;
-    //case '\n':  println(); break;
-    //default: println(); break;
-  }
-
-});
-*/
-
 
 //npm install ws
 //sudo su -
