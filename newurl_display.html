@@ -104,14 +104,17 @@
         document.getElementById("web").hidden = true;
         document.getElementById("rect").hidden = true;
         document.getElementById("webdiv").hidden = true;
+
         document.getElementById("web").src = '';
         document.getElementById("webdiv").innerHTML = '';
+        document.getElementById("vsrc").src = "";
     }
 
     function urlGo(value, loop) {
         value = value.trim();
         if (value.length == 0) return;
 
+        /*
         //document.getElementById("ui").hidden = true;
         document.querySelector('body').style.background = 'transparent';
         document.getElementById("image_container").hidden = true;
@@ -121,6 +124,9 @@
         document.getElementById("webdiv").hidden = true;
         document.getElementById("web").src = '';
         document.getElementById("webdiv").innerHTML = '';
+        */
+
+        hideAll();
 
         if (value.endsWith('.mp4') || value.endsWith('.mov')) {
             let vdo = document.getElementById("vsrc");

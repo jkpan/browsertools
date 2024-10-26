@@ -340,3 +340,4 @@ if (docluster) {
 //pm2 start _cmd_server.js -i 10
 //standalong process
 //pm2 start process.json
+//pm2 start _cmd_server.js -- -port 8080 -cluster

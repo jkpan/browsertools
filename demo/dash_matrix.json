@@ -1,30 +1,28 @@
 {
+  "stateSaved": {
+    "save0": [],
+    "save1": [],
+    "save2": [],
+    "save3": [],
+    "save4": [],
+    "save5": []
+  },
   "url_1": {
-    "posize": [1, 1, 32, 32],
+    "posize": [2, 2, 46, 46],
     "perspective": 0,
     "obj": {
-      "forPlay": 1,
       "url": "./matrix_psalms.html"
     }
   },
   "time": {
-    "posize": [5, 3, 9, 10],
+    "posize": [2, 2, 13, 18],
     "perspective": 0
   },
-  "url_2": {
-    "posize": [5, 14, 14, 14],
-    "perspective": 0,
-    "obj": {
-      "forPlay": 1, 
-      "url": "./demo/info.mp4"
-    }
-  },
   "iPlay": {
-    "posize": [20, 5, 11, 24],
+    "posize": [32, 4, 14, 40],
     "perspective": 0,
     "obj": {
       "saved": [
-
         ["./demo/pic_1.jpg", 12],
         ["./demo/pic_2.jpg", 12],
         ["./demo/pic_6.jpg", 12],
@@ -32,7 +30,20 @@
         ["./demo/pic_4.jpg", 12],
         ["./demo/pic_7.jpg", 12],
         ["./demo/pic_5.jpg", 12]
-    ]
+      ],
+      "during": 8
+    }
+  },
+  "url_2": {
+    "posize": [5, 25, 21, 20],
+    "perspective": 0,
+    "obj": {
+      "hold": 0,
+      "url": "./demo/info.mp4",
+      "loop": 1,
+      "keepratio": 0,
+      "forPlay": 1,
+      "imageBase64": ""
     }
   },
   "B/G": "B"
