@@ -177,3 +177,27 @@ function calculateTransform(src, dst) {
     return [isNaN(m11)?0:m11, isNaN(m12)?0:m12, isNaN(m21)?0:m21, isNaN(m22)?0:m22, isNaN(dx)?0:dx, isNaN(dy)?0:dy];
 }
 */
+/*
+function cookieStuff() {
+  const allCookies = document.cookie;
+  if (allCookies == null) return;
+  const cookiesArray = allCookies.split(";");
+  cookiesArray.forEach(cookie => {
+    const [name, value] = cookie.trim().split("=");
+    if (name == 'last') {
+      const v = decodeURIComponent(value);
+      //cookiesObject[name] = 
+      let obj = JSON.parse(v);
+      console.log(obj);
+
+      song = obj['song'];
+      subtitles = SONGS[song];
+      phase = obj['phase'];
+      line = obj['line'];
+      _repaint();
+      return;
+    }
+  });
+}
+cookieStuff();
+*/

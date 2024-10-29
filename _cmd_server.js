@@ -341,3 +341,19 @@ if (docluster) {
 //standalong process
 //pm2 start process.json
 //pm2 start _cmd_server.js -- -port 8080 -cluster
+/*
+Install Nodejs & ws module (websocket)
+node _cmd_server.js [-port number] [-cluster]
+
+Ex:
+ node _cmd_server.js
+預設一個process執行 使用port 80
+
+Ex:
+	node _cmd_server.js -port 8080 -cluster
+使用 8080 port 有多少核心跑多少process
+
+Install pm2
+Ex:
+	pm2 start  _cmd_server.js – -port 80 -cluster
+*/

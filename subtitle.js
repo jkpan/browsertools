@@ -133,6 +133,10 @@ function json2List(fileContent) {
   else
     makeTransparent = false;
 
+  displayProgress = 0;
+  if (jsonData.progress) 
+    displayProgress = 1;
+
   if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
     image_base64 = jsonData.imageBase64;
     showImage();
@@ -1283,6 +1287,7 @@ function toObj() {
   obj['transparent'] = makeTransparent ? 1 : 0;
   //obj['slave'] = funcInterval == null ? 0 : 1;
   obj['syncType'] = sync_type;
+  obj['progress'] = displayProgress;
   obj['imageBase64'] = "";
   if (image_base64 && image_base64.length > 0) {
     obj['imageBase64'] = image_base64;
@@ -1348,3 +1353,93 @@ xhr.onload = function() {
 };
 xhr.send();
 */
+
+let supportTouch = false;
+if ('ontouchstart' in window || navigator.maxTouchPoints) {
+  // 支持触摸事件
+  supportTouch = true;
+}
+
+/*
+ * 手機觸控相關... START
+ */
+var colState = 0;
+var rowState = 0;
+
+function getTouchPos(canvasDom, touchEvent) {
+  var rect = canvasDom.getBoundingClientRect();
+  return {
+    x: touchEvent.touches[0].clientX - rect.left,
+    y: touchEvent.touches[0].clientY - rect.top
+  };
+}
+//canvas.addEventListener("click", function(evt) {
+//document.getElementsByTagName("canvas")[0]
+
+
+function touchstart(evt) {
+  evt.preventDefault();
+  //var touches = {x:evt.changedTouches[0].clientX, y:evt.changedTouches[0].clientY};//getTouchPos(canvas, evt);
+  let touchPX = evt.changedTouches[0].clientX;//touches.x;
+  let touchPY = evt.changedTouches[0].clientY;//touches.y;
+  //sumOffset = 0;
+  colState = 0;
+  rowState = 0;
+
+  colState = 1 + Math.floor(touchPX/(canvas.width/3));
+  rowState = 1 + Math.floor(touchPY/(canvas.height/4));
+
+}
+canvas.addEventListener("touchstart", touchstart, false);
+
+function touchend(evt) { //touchend
+
+  evt.preventDefault();
+
+  let touchPX = evt.changedTouches[0].clientX;//touches.x;
+  let touchPY = evt.changedTouches[0].clientY;//touches.y;
+  
+  let _colState = 1 + Math.floor(touchPX/(canvas.width/3));
+  let _rowState = 1 + Math.floor(touchPY/(canvas.height/4));
+
+  if (_colState != colState) return;
+  if (_rowState != rowState) return;
+
+  if (rowState < 3) { //open sync options selection
+    keyboard({ keyCode: 13 });
+    return;
+  }
+
+  if (rowState == 3 && colState == 1) { //上一首
+    keyboard({ keyCode: 189 });
+    return;
+  }
+
+  if (rowState == 3 && colState == 3) { //下一首
+    keyboard({ keyCode: 187 });
+    return;
+  }
+
+  if (rowState == 3 && colState == 2) { //上
+    keyboard({ keyCode: 38 });
+    return;
+  }
+
+  if (rowState == 4 && colState == 2) { //下
+    keyboard({ keyCode: 40 });
+    return;
+  }
+
+  if (rowState == 4 && colState == 1) { //左
+    keyboard({ keyCode: 37 });
+    return;
+  }
+
+  if (rowState == 4 && colState == 3) { //右
+    keyboard({ keyCode: 39 });
+    return;
+  }
+
+}
+
+canvas.addEventListener("touchend", touchend, false);
