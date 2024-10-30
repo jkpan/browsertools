@@ -934,18 +934,24 @@ function _layer0() {
 
   if (makeTransparent) return;
 
+  console.log('mode ' + mode);
+
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else if (mode == 1 || mode == 3) {
+  } else if (mode == 1) {
+    ctx.fillStyle = COLORS_CK[1];//'green';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = COLORS_CK[2];//'green';
+    ctx.fillRect(0, canvas.height/2, canvas.width, canvas.height/2);
+    ctx.fillStyle = COLORS_CK[1];//'green';
+    ctx.fillRect(0, canvas.height * 3/4, canvas.width, canvas.height/4);
+  } else if (mode == 3) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   } else if (mode == 2) {
     ctx.fillStyle = COLOR_PPT;//'blue';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    //if (img) ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
   }
 }
 
@@ -1402,11 +1408,15 @@ function touchend(evt) { //touchend
   let _colState = 1 + Math.floor(touchPX/(canvas.width/3));
   let _rowState = 1 + Math.floor(touchPY/(canvas.height/4));
 
-  if (_colState != colState) return;
-  if (_rowState != rowState) return;
+  if (_colState != colState || _rowState != rowState) return;
 
-  if (rowState < 3) { //open sync options selection
+  if (rowState == 1) { //open sync options selection
     keyboard({ keyCode: 13 });
+    return;
+  }
+
+  if (rowState == 2) { //open sync options selection
+    keyboard({ keyCode: 66 });
     return;
   }
 
