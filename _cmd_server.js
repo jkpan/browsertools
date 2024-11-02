@@ -93,6 +93,36 @@ function responseFile(filePath, res, append) {
   });
 }
 
+function savejsonfile(req, res) {
+  let body = '';
+  // 接收请求的数据
+  req.on('data', (data) => {
+    body += data;
+  });
+
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+    // 解析请求数据
+    const requestData = JSON.parse(body); //obj
+    //println(body);
+
+    let fn = requestData.filename;
+    let content = requestData.content; //str
+    let jsonobj = JSON.parse(content); //obj
+    println(jsonobj);  
+  
+    const writeStream = fs.createWriteStream('./json/' + fn);
+    writeStream.write(JSON.stringify(jsonobj, null, "\t")); //, null, "\t");
+    writeStream.end(() => {
+      console.log('檔案寫入完成!');
+    });
+    
+    res.setHeader('Content-Type', 'application/json');// 发送响应数据
+    res.end(JSON.stringify({ "state": "success" }));
+
+  });
+}
+
 function webservice(req, res) {
 
   let url = req.url;
@@ -112,9 +142,8 @@ function webservice(req, res) {
     case '/synclyrics': sync_lyrics.synclyrics(req, res); return;
     case '/actionlyrics': sync_lyrics.lyricsBaseAction(req, res); return;
     //case '/restorelyrics': restorelyrics(req, res);    return;
+    case '/savejson': savejsonfile(req, res); return;
     
-
-
     default:
 
       if (req.url.startsWith('/cmd')) {
@@ -355,5 +384,5 @@ Ex:
 
 Install pm2
 Ex:
-	pm2 start  _cmd_server.js – -port 80 -cluster
+	pm2 start _cmd_server.js -- -port 80 -cluster
 */

@@ -216,12 +216,13 @@
   <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">O</button>
   <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
   &nbsp;
-  <button class="cancelbutton" onclick="preload('./json/tab_ctrl.json')">#0</button>
-  <button class="cancelbutton" onclick="preload('./json/tab_proj.json')">#1</button>
-  <button class="cancelbutton" onclick="preload('./json/tab_green.json')">#2</button>
-  <button class="cancelbutton" onclick="preload('./json/tab_album.json')">#3</button>
+  <button class="cancelbutton" onclick="preload('./json/tab_01.json')">#1</button>
+  <button class="cancelbutton" onclick="preload('./json/tab_02.json')">#2</button>
+  <button class="cancelbutton" onclick="preload('./json/tab_03.json')">#3</button>
+  <button class="cancelbutton" onclick="preload('./json/tab_04.json')">#4</button>
   <button class="cancelbutton" onclick="loadJson()">#</button>
   <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
+  <!-- <button class="cancelbutton" onclick="testsave()">save</button> -->
   &nbsp;
       <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
   &nbsp;
@@ -301,6 +302,45 @@ function relativeUrl(url) {
     return '.' + str;
   }
   return url;
+}
+
+function _ajax(json, url, cb, errorcb) {
+  console.log(json);
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(json)
+  }).then((response) => {
+    if (response.ok) {
+      return response.json(); // 解析JSON回應
+    } else {
+      throw new Error("請求失敗：" + response.status);
+    }
+  }).then((data) => {
+    // 在這裡處理解析後的JSON物件 //console.log(data);
+    cb(data);
+  }).catch((error) => {
+    // 處理錯誤
+    console.log('' + error);
+    errorcb();
+  });
+}
+
+function ajax_savejson(fn, json) {
+  _ajax({
+      filename: fn,
+      content: json
+    },
+    '/savejson',
+    (res) => { console.log(JSON.stringify(res)); }, 
+    () => {    console.log('exception'); }
+  );
+}
+
+function testsave() {
+  ajax_savejson('m1.json', JSON.stringify(toObj()));
 }
 
 /*

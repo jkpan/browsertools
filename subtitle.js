@@ -353,8 +353,8 @@ function ajax_sync() {
     '/synclyrics',
     (res) => {
       console.log(JSON.stringify(res));
-    }, () => {
-      console.log('exception');
+    }, (error) => {
+      console.log('exception: ' + error);
     });
 }
 
@@ -373,12 +373,9 @@ function _ajax(json, url, cb, errorcb) {
       throw new Error("請求失敗：" + response.status);
     }
   }).then((data) => {
-    // 在這裡處理解析後的JSON物件 //console.log(data);
     cb(data);
   }).catch((error) => {
-    // 處理錯誤
-    console.log('' + error);
-    errorcb();
+    errorcb(error);
   });
 }
 
@@ -939,13 +936,21 @@ function _layer0() {
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else if (mode == 1) {
-    ctx.fillStyle = COLORS_CK[1];//'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = COLORS_CK[2];//'green';
-    ctx.fillRect(0, canvas.height/2, canvas.width, canvas.height/2);
-    ctx.fillStyle = COLORS_CK[1];//'green';
-    ctx.fillRect(0, canvas.height * 3/4, canvas.width, canvas.height/4);
+  } else if (mode == 1) {    
+    if (supportTouch) {
+      for (let x = 0;x<3;x++) {
+        for (let y = 0;y<4;y++) {
+          if ((x+y) %2 == 0) 
+            ctx.fillStyle = COLORS_CK[1];
+          else 
+            ctx.fillStyle = COLORS_CK[2];
+          ctx.fillRect(x * canvas.width/3, y * canvas.height/4, canvas.width/3, canvas.height/4);
+        }
+      }
+    } else {
+      ctx.fillStyle = COLORS_CK[1];//'green';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
   } else if (mode == 3) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1379,9 +1384,6 @@ function getTouchPos(canvasDom, touchEvent) {
     y: touchEvent.touches[0].clientY - rect.top
   };
 }
-//canvas.addEventListener("click", function(evt) {
-//document.getElementsByTagName("canvas")[0]
-
 
 function touchstart(evt) {
   evt.preventDefault();
@@ -1396,7 +1398,6 @@ function touchstart(evt) {
   rowState = 1 + Math.floor(touchPY/(canvas.height/4));
 
 }
-canvas.addEventListener("touchstart", touchstart, false);
 
 function touchend(evt) { //touchend
 
@@ -1452,4 +1453,7 @@ function touchend(evt) { //touchend
 
 }
 
-canvas.addEventListener("touchend", touchend, false);
+if (supportTouch) {
+  canvas.addEventListener("touchstart", touchstart, false);
+  canvas.addEventListener("touchend", touchend, false);
+}
