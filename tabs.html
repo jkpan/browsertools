@@ -216,13 +216,16 @@
   <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">O</button>
   <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
   &nbsp;
-  <button class="cancelbutton" onclick="preload('./json/tab_01.json')">#1</button>
-  <button class="cancelbutton" onclick="preload('./json/tab_02.json')">#2</button>
-  <button class="cancelbutton" onclick="preload('./json/tab_03.json')">#3</button>
-  <button class="cancelbutton" onclick="preload('./json/tab_04.json')">#4</button>
+  <button class="button" onclick="preload('./json/tab_01.json')">#1</button>
+  <button class="button" onclick="preload('./json/tab_02.json')">#2</button>
+  <button class="button" onclick="preload('./json/tab_03.json')">#3</button>
+  <button class="button" onclick="preload('./json/tab_04.json')">#4</button>
   <button class="cancelbutton" onclick="loadJson()">#</button>
   <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
-  <!-- <button class="cancelbutton" onclick="testsave()">save</button> -->
+  <button class="button" onclick="savefile(1)">1^</button>
+  <button class="button" onclick="savefile(2)">2^</button>
+  <button class="button" onclick="savefile(3)">3^</button>
+  <button class="button" onclick="savefile(4)">4^</button>
   &nbsp;
       <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
   &nbsp;
@@ -251,16 +254,13 @@
     }
   }
 
-  //let mbtn = document.getElementById("menubtn");
-  //mbtn.addEventListener('mouseenter', e => {sideClick();});
+  //document.getElementById("menubtn").addEventListener('mouseenter', e => {sideClick();});
 
   /*
   sideMenu.addEventListener('mouseup', (e) =>{
     closeSideMenu();
   });
-  */
-
-  /*
+  
   let mbar = document.getElementById("sideMenu");
   mbar.addEventListener('mouseleave', e => {
     closeSideMenu();
@@ -339,8 +339,10 @@ function ajax_savejson(fn, json) {
   );
 }
 
-function testsave() {
-  ajax_savejson('m1.json', JSON.stringify(toObj()));
+function savefile(idx) {
+  let fn = `tab_0${idx}.json`;
+  if (confirm(`確定要存入 #${idx} ?`))
+    ajax_savejson(fn, JSON.stringify(toObj()));
 }
 
 /*

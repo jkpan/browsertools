@@ -378,17 +378,18 @@ function relativeUrl(url) {
 }
 
 function toObj() {
+  let _url = "";
   let obj = {};
   if (!document.getElementById("web").hidden) { //已經連上
-    return { "url": relativeUrl(document.getElementById("web").src) };
+    _url = relativeUrl(document.getElementById("web").src);
   } else {
-    let _url = relativeUrl(document.getElementById("ppt_url").value.trim());
-    if (_url.length > 0) {
-      obj = {
-        "hold": 1, 
-        "url": _url 
-      };
-    }
+    _url = relativeUrl(document.getElementById("ppt_url").value.trim());
+  }
+  //url還在欄位
+  obj = {
+    "hold": 1, 
+    "url": _url 
+  };
     
     let loopbox = document.getElementById("loopchk");
     if (loopbox && loopbox.checked) {
@@ -405,9 +406,6 @@ function toObj() {
     }
 
     return obj;
-  }
-  //url還在欄位
-  
 }
 /*
 https://www.canva.com/design/DAGDmWJPwa8/RhddFXE0m2vLq6mRPc783A/edit?utm_content=DAGDmWJPwa8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton

@@ -45,6 +45,10 @@ global.printlnln = function(msg) {
 }
 */
 
+//clearScreen();
+println(`dir  name ${__dirname}`);
+println(`file name ${__filename}`);
+
 try {
   // 尝试加载模块
   require.resolve('cluster');
