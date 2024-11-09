@@ -185,6 +185,7 @@ function webservice(req, res) {
   if (url.startsWith('/subtitle_b.html')) url = '/subtitle_b.html';
   if (url.startsWith('/subtitle_niv.html')) url = '/subtitle_niv.html';
   if (url.startsWith('/led.html')) url = '/led.html';
+  if (url.startsWith('/tabs.html')) url = '/tabs.html';
 
   const filePath = `.${url}`;
   responseFile(filePath, res, '');

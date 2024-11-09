@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<script type="text/javascript" src="common.js" charset="UTF-8"></script>
 <script type="text/javascript" charset="UTF-8">
 
   var tabCount = 7;
@@ -662,9 +663,6 @@ function _switchFunction() {
 
 }
 
-resetFrame();
-switchFunction(1);
-
 var keylock = false;
 
 window.addEventListener('keyup', function(e) {
@@ -727,5 +725,14 @@ window.addEventListener('resize', function() {
 window.addEventListener('beforeunload', function (e) {
   closeCtrl();
 });
+
+resetFrame();
+switchFunction(1);
+
+if (readParam('json')) {
+    let value = readParam('json');
+    if (value) 
+      preload('./' + value);
+}
 
 </script>
