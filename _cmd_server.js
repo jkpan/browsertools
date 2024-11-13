@@ -13,6 +13,7 @@ const sync_tally = require('./_tally');
 
 var WebSocket = null; //require('ws'); 
 var Cluster = null;
+var jwt = null;
 
 //var wss = null;
 //var server;
@@ -50,7 +51,6 @@ println(`dir  name ${__dirname}`);
 println(`file name ${__filename}`);
 
 try {
-  // 尝试加载模块
   require.resolve('cluster');
   println('cluster Module exists');
   Cluster = require('cluster');
@@ -59,12 +59,19 @@ try {
 }
 
 try {
-  // 尝试加载模块
   require.resolve('ws');
   println('Websocket Module exists');
   WebSocket = require('ws');
 } catch (err) {
   println('Websocket Module does not exist');
+}
+
+try {
+  require.resolve('jsonwebtoken');
+  println('jsonwebtoken Module exists');
+  jwt = require('jsonwebtoken');
+} catch (err) {
+  println('jsonwebtoken Module does not exist');
 }
 
 function numberWithCommas(x) {
@@ -80,7 +87,7 @@ println('    ratio: ' + Math.floor(os.freemem() / os.totalmem() * 100) + '%');
 //clearScreen();
 
 //讀檔輸出
-function responseFile(filePath, res, append) {
+function responseFile(filePath, res) {
   fs.readFile(filePath, (err, content) => {
     if (err) {
       // 若檔案不存在，回傳404 Not Found狀態碼
@@ -90,7 +97,6 @@ function responseFile(filePath, res, append) {
       // 回傳200 OK狀態碼及HTML內容
       res.writeHead(200, { 'Content-Type': 'text/html' });//; charset = UTF-8
       res.write(content);
-      res.write(append);
       res.end();
       print('(file:' + filePath + ')');
     }
@@ -188,7 +194,7 @@ function webservice(req, res) {
   if (url.startsWith('/tabs.html')) url = '/tabs.html';
 
   const filePath = `.${url}`;
-  responseFile(filePath, res, '');
+  responseFile(filePath, res);
 }
 
 function startService() {
@@ -378,6 +384,7 @@ if (docluster) {
 /*
 Install Nodejs & ws module (websocket)
 node _cmd_server.js [-port number] [-cluster]
+npm install jsonwebtoken
 
 Ex:
  node _cmd_server.js
