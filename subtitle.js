@@ -553,7 +553,7 @@ function printFullChart() {
 
   let margin = 36;
   let fsize = fontsize / 4;
-  ctx.font = fsize + "px Arial";
+  ctx.font = fsize + "px " + fontFamily;
   ctx.textAlign = 'left';
   ctx.strokeStyle = "rgb(0,240,0)";
   ctx.lineWidth = 1;
@@ -648,7 +648,7 @@ function printPhase() {
 
     if (phase > 0) { //song > 0 && 
       ctx.fillStyle = 'rgb(0,200,0)';
-      ctx.font = fontsize / 2 + "px Arial";
+      ctx.font = fontsize / 2 + "px " + fontFamily;
       ctx.fillText('[' + subtitles[0][0] + ' ' + phase + '/' + (subtitles.length - 1) + ']',
         _x, fontsize / 2);
     }
@@ -676,7 +676,7 @@ function printPhase() {
 
       //ctx.fillStyle = mode == 2?'yellow':'rgb(0,240,0)';
       ctx.fillStyle = 'rgb(0,200,0)';
-      ctx.font = fontsize / 2 + "px Arial";
+      ctx.font = fontsize / 2 + "px " + fontFamily;
       ctx.fillText('[' + subtitles[0][0] + ' ' + phase + '/' + (subtitles.length - 1) + ']',
         _x, fontsize / 2);
     }
@@ -762,6 +762,10 @@ function keyboard(e) {
   }
 
   switch (e.keyCode) {
+    case 70:
+      fontFamily = Math.floor(Math.random() * 100) % 2 == 0?"Monospace":"LXGW WenKai Mono TC";
+      init();
+      break;
     //case 113: //F2
     case 13: //Enter
       createCtrlBtn();
@@ -1266,7 +1270,7 @@ function userhelp() {
   ctx.fillStyle = COLORS_CK[1];//'green';
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = fontsize / 2 + "px Arial";
+  ctx.font = fontsize / 2 + "px " + fontFamily;
   ctx.textAlign = "left";
 
   let gap = canvas.height / (content_help[0].length + 1);

@@ -15,8 +15,11 @@ var WebSocket = null; //require('ws');
 var Cluster = null;
 var jwt = null;
 
-//var wss = null;
-//var server;
+// 模擬用戶資料庫
+const users = {
+  tpcaog: '0223210665',
+  user2: 'password2'
+};
 
 var port = 80;
 var docluster = false;

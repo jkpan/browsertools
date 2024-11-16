@@ -420,12 +420,17 @@ const LEV_2_OPC = 0.8;
 const LEV_3_OPC = 0.7;
 
 var fontfactor = 14.0;
+//const fontFamily_array = ["Monospace", "LXGW WenKai Mono TC"];
 var fontFamily = "Monospace";
+console.log("fontFamily : " + fontFamily);
+//"LXGW WenKai Mono TC"
 //"Arial";
 //"cwTeXKai";
 //'華康瘦金體';
 //"標楷體";
 //"Noto Serif TC";
+//"報隸-繁" mac "行楷-繁" "宋體-繁" "黑體-繁"
+//
 var fontsize = 48;
 var FONT = fontsize + "px " + fontFamily;
 
@@ -1571,10 +1576,10 @@ function _render(progress) {
     ctx.fillStyle = color_pointer[2];//'rgb(0, 200, 0)';
 
     //if (color_selection == 0) ctx.fillStyle = 'rgba(155, 155, 155, 1.0)';
-    ctx.font = (fs * 1.2) + 'px Arial';
+    ctx.font = (fs * 1.2) + 'px ' + fontFamily;
     _drawtxt(subtitles[0][0], 10, 2, 0.5);
     let gap = ctx.measureText(subtitles[0][0]).width + 20;
-    ctx.font = (fs - 4) + 'px Arial';
+    ctx.font = (fs - 4) + 'px ' + fontFamily;
 
     //if (color_selection != 4) 
     for (let idx = 1; idx <= presetVerse.length; idx++) {
@@ -1838,6 +1843,7 @@ function combineKey(e) {
     case 32:
       history.back();
       return;
+    case 27: volAnim = !volAnim; break;//'escape'
     case 189: //'-'
       helpSwitch = 0;
       downsizeFS();
@@ -2025,9 +2031,13 @@ function keyboard(e) { //key up //alert(e.keyCode);
   //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
 
   switch (e.keyCode) {
+    case 70:
+      fontFamily = Math.floor(Math.random() * 100) % 2 == 0?"Monospace":"LXGW WenKai Mono TC";
+      init();
+      break;
     case 90: makeTransparent = !makeTransparent; break; //'z'
     case 78: switchLang(); break; //n
-    case 27: volAnim = !volAnim; break;//'escape'
+    case 27: return;//volAnim = !volAnim; break;//'escape'
     case 13: createCtrlBtn(); return;//enter
     case 67: fontColorType = (fontColorType + 1) % 4; break;//'c'
     case 66: //'b'
@@ -2444,7 +2454,7 @@ function _layerui() {
   ctx.font = FONT;
   let x = fontsize_sml;
   let y = canvas.height - fontsize_sml;
-  ctx.font = fontsize_sml + 'px Arial';
+  ctx.font = fontsize_sml + 'px ' + fontFamily;
   ctx.textBaseline = 'top';//'bottom';
   ctx.strokeStyle = color_pointer[2];
   for (let i = uisel_start; i <= uisel_end; i++) {
@@ -2525,7 +2535,7 @@ function userhelp() {
   //ctx.clearRect(0, 0, canvas.width/2, canvas.height/2);
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = fontsize_sml + "px Arial";
+  ctx.font = fontsize_sml + "px " + fontFamily; 
   ctx.textAlign = "left";
 
   let gap = canvas.height / (content_help[0].length + 1);

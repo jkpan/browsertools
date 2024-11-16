@@ -73,6 +73,9 @@ function widthM() {
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&display=swap" rel="stylesheet">
     <style>
       @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
       body {
@@ -152,6 +155,8 @@ function widthM() {
     <button class="okbutton" onclick="gapAdd()">Gap +</button>
     <button class="okbutton" onclick="gapSub()">Gap -</button>
     <br/>
+    <button class="okbutton" onclick="font_sys()">Sys</button>
+    <button class="okbutton" onclick="font_gle()">Gle</button>
   </div>
 
   <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
@@ -162,6 +167,14 @@ function widthM() {
 
 
 <script type="text/javascript" charset="UTF-8">
+
+function font_sys() {
+  fontFamily = "Monospace"
+}
+
+function font_gle() {
+  fontFamily = "LXGW WenKai Mono TC";
+}
 
 function fontEnlarge() {
   //var fsize = 96
