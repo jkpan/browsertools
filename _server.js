@@ -1,6 +1,14 @@
 const http = require('http');
-const jwt = require('jsonwebtoken');
+var jwt = null;//require('jsonwebtoken');
 const fs = require('fs');
+
+try {
+    require.resolve('jsonwebtoken');
+    println('jsonwebtoken Module exists');
+    jwt = require('jsonwebtoken');
+  } catch (err) {
+    console.log('jsonwebtoken Module does not exist');
+  }
 
 // 模擬用戶資料庫
 const users = {

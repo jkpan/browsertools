@@ -420,17 +420,13 @@ const LEV_2_OPC = 0.8;
 const LEV_3_OPC = 0.7;
 
 var fontfactor = 14.0;
-//const fontFamily_array = ["Monospace", "LXGW WenKai Mono TC"];
-var fontFamily = "Monospace";
+const fontFamily_array = 
+["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC"]; //google fonts
+//["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
+
+var fontFamily = fontFamily_array[0];
 console.log("fontFamily : " + fontFamily);
-//"LXGW WenKai Mono TC"
-//"Arial";
-//"cwTeXKai";
-//'華康瘦金體';
-//"標楷體";
-//"Noto Serif TC";
-//"報隸-繁" mac "行楷-繁" "宋體-繁" "黑體-繁"
-//
+
 var fontsize = 48;
 var FONT = fontsize + "px " + fontFamily;
 
@@ -2032,7 +2028,12 @@ function keyboard(e) { //key up //alert(e.keyCode);
 
   switch (e.keyCode) {
     case 70:
-      fontFamily = Math.floor(Math.random() * 100) % 2 == 0?"Monospace":"LXGW WenKai Mono TC";
+      for (let i=0;i<fontFamily_array.length;i++) {
+        if (fontFamily == fontFamily_array[i]) {
+          fontFamily = fontFamily_array[(i+1) % fontFamily_array.length];
+          break;
+        }
+      }
       init();
       break;
     case 90: makeTransparent = !makeTransparent; break; //'z'

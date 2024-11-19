@@ -14,7 +14,11 @@ fsize = Math.floor(fsize/(side + dots)) * (side + dots);// + side;//102;
 
 var boardWidth = fsize + 16;
 
-var fontFamily = "Monospace";
+const fontFamily_array = 
+["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC"]; //google fonts
+//["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
+var fontFamily = fontFamily_array[0];
+
 var FONT = (fsize - 4) + "px " + fontFamily;//cwTeXKai";//"px 黑體-繁";//宋體-繁"; "px 標楷體";
 var speed = 160;
 
@@ -75,7 +79,7 @@ function widthM() {
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">
     <style>
       @import url(https://fonts.googleapis.com/earlyaccess/cwtexkai.css);
       body {
@@ -155,8 +159,9 @@ function widthM() {
     <button class="okbutton" onclick="gapAdd()">Gap +</button>
     <button class="okbutton" onclick="gapSub()">Gap -</button>
     <br/>
-    <button class="okbutton" onclick="font_sys()">Sys</button>
-    <button class="okbutton" onclick="font_gle()">Gle</button>
+    <label id="fontfml" style="color:rgb(0, 255, 0)">Monospace</label>
+    <br/>
+    <button class="okbutton" onclick="font_switch()">fonts</button>
   </div>
 
   <canvas id="canvas" width="100" height="100" hidden="true"></canvas>
@@ -168,12 +173,15 @@ function widthM() {
 
 <script type="text/javascript" charset="UTF-8">
 
-function font_sys() {
-  fontFamily = "Monospace"
-}
 
-function font_gle() {
-  fontFamily = "LXGW WenKai Mono TC";
+function font_switch() {
+  for (let i=0;i<fontFamily_array.length;i++) {
+        if (fontFamily == fontFamily_array[i]) {
+          fontFamily = fontFamily_array[(i+1) % fontFamily_array.length];
+          break;
+        }
+  }
+  document.getElementById("fontfml").innerHTML = fontFamily;
 }
 
 function fontEnlarge() {

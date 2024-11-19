@@ -256,7 +256,12 @@ const content_help = [[
 ]];
 
 //字型顏色設定
-var fontFamily = "Monospace"; //"Arial" "cwTeXKai" '華康瘦金體' "標楷體" "Noto Serif TC";
+
+const fontFamily_array = 
+["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC"]; //google fonts
+//["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
+
+var fontFamily = fontFamily_array[0];//"Monospace"; //"Arial" "cwTeXKai" '華康瘦金體' "標楷體" "Noto Serif TC";
 
 const COLORS_CK = ["rgb(0, 110, 0)", "green", "rgb(0, 180, 0)", "rgb(0, 240, 0)"];
 const COLOR_PPT = 'rgb(0,0,200)';
@@ -763,7 +768,12 @@ function keyboard(e) {
 
   switch (e.keyCode) {
     case 70:
-      fontFamily = Math.floor(Math.random() * 100) % 2 == 0?"Monospace":"LXGW WenKai Mono TC";
+      for (let i=0;i<fontFamily_array.length;i++) {
+        if (fontFamily == fontFamily_array[i]) {
+          fontFamily = fontFamily_array[(i+1) % fontFamily_array.length];
+          break;
+        }
+      }
       init();
       break;
     //case 113: //F2

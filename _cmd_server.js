@@ -10,16 +10,10 @@ const os = require('os'); //onst socketIo = require('socket.io');
 const sync_Bible = require('./_sync_Bible');
 const sync_lyrics = require('./_sync_lyrics');
 const sync_tally = require('./_tally');
+const users = require('./_users');
 
 var WebSocket = null; //require('ws'); 
 var Cluster = null;
-var jwt = null;
-
-// 模擬用戶資料庫
-const users = {
-  tpcaog: '0223210665',
-  user2: 'password2'
-};
 
 var port = 80;
 var docluster = false;
@@ -67,14 +61,6 @@ try {
   WebSocket = require('ws');
 } catch (err) {
   println('Websocket Module does not exist');
-}
-
-try {
-  require.resolve('jsonwebtoken');
-  println('jsonwebtoken Module exists');
-  jwt = require('jsonwebtoken');
-} catch (err) {
-  println('jsonwebtoken Module does not exist');
 }
 
 function numberWithCommas(x) {
@@ -142,6 +128,7 @@ function webservice(req, res) {
 
   //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   //res.send(`Your IP address is: ${ip}`);
+  
 
   switch (url) {
 
