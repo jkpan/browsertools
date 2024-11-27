@@ -29,15 +29,15 @@
 			},
 			"lyrics": {
 				"posize": [
-					24,
+					22,
 					25,
-					25,
+					27,
 					22
 				],
 				"perspective": 1,
 				"obj": {
 					"mode": 3,
-					"fontfactor": 10,
+					"fontfactor": 8.5,
 					"list": [],
 					"fontColorType": 1,
 					"transparent": 0,
@@ -50,7 +50,7 @@
 				"posize": [
 					1,
 					22,
-					34,
+					35,
 					27
 				],
 				"perspective": 1,
@@ -58,7 +58,7 @@
 					"color": 0,
 					"hlight": 1,
 					"verticle": 0,
-					"fontfactor": 8,
+					"fontfactor": 7.5,
 					"saved": [
 						[
 							""

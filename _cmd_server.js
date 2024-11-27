@@ -1,8 +1,10 @@
 //const blessed = require('blessed');
+const path = require('path');
 const http = require('http');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
-const os = require('os'); //onst socketIo = require('socket.io');
+const os = require('os'); 
+//const socketIo = require('socket.io');
 //const sqlite3 = require('sqlite3').verbose();
 //const express = require('express');
 //const app = express();
@@ -128,7 +130,16 @@ function webservice(req, res) {
 
   //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   //res.send(`Your IP address is: ${ip}`);
-  
+
+  if (req.method === 'POST' && req.url === '/protected') {
+    users.chk(req, res);
+    return;
+  }
+
+  if (req.method === 'POST' && req.url === '/login') {
+    users.auth(req, res);
+    return;
+  }
 
   switch (url) {
 
@@ -167,7 +178,6 @@ function webservice(req, res) {
     return;
   }
 
-  //首頁塞參數 redirect
   if (url === '/' || url === '/index.html') {
     const redirect = '/index.html?server=nodejs';
     // 执行重定向
@@ -176,12 +186,24 @@ function webservice(req, res) {
     return;
   }
 
+  // 使用正規表達式提取檔名
+  if (url.lastIndexOf(".html?") > 0) {
+    const match = url.match(/\/([^\/?#]+\.html)(?:[?#]|$)/);
+    const fileName = match ? match[1] : null;
+    println('filename: ' + fileName + '\n'); // "file.html
+    url = '/' + fileName;
+  }
+  
+  /*
   if (url.startsWith('/index.html')) url = '/index.html'; // 處理首頁: url == /index.html?server=nodejs
   if (url.startsWith('/dash.html')) url = '/dash.html';
   if (url.startsWith('/subtitle_b.html')) url = '/subtitle_b.html';
   if (url.startsWith('/subtitle_niv.html')) url = '/subtitle_niv.html';
   if (url.startsWith('/led.html')) url = '/led.html';
   if (url.startsWith('/tabs.html')) url = '/tabs.html';
+  */
+
+  //首頁塞參數 redirect
 
   const filePath = `.${url}`;
   responseFile(filePath, res);

@@ -1223,6 +1223,7 @@ function printSideTxt(i, j, x, y, a) {
 }
 
 function drawHlight(yy, hh) {
+  
   if (color_selection_hlight == 5 && doblank == 0) {
     gradientBg();
     return;
@@ -1231,14 +1232,25 @@ function drawHlight(yy, hh) {
     gradientBg2(yy, hh);
     return;
   }
+  
   if (doblank == 0 && phase >= 1) {
     ctx.fillStyle = hlight_pointer;
-    ctx.fillRect(0, yy, canvas.width, hh);
+    ctx.fillRect(0, yy, canvas.width, hh);    
     /*
-    ctx.beginPath();
-    ctx.roundRect(0, yy, canvas.width, hh, 5);
-    ctx.fill();
-    ctx.closePath();
+    const g_gap = hh * 2;
+    let grd = ctx.createLinearGradient(0, yy + hh/2, 0, yy - g_gap);
+    grd.addColorStop(0, hlight_pointer);
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+  
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, yy - g_gap, canvas.width, g_gap + hh/2);  
+  
+    grd = ctx.createLinearGradient(0, yy + hh/2, 0, yy + hh + g_gap);
+    grd.addColorStop(0, hlight_pointer);
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+  
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, yy + hh/2, canvas.width, g_gap + hh/2);
     */
   }
 }
@@ -1681,21 +1693,21 @@ function getPreVerse(chapter, verse) {
 }
 
 function getNextChapter(chapter, verse) {
-  if (chapter == -1) return -1;
-  if (verse < subtitles[chapter].length - 1)
-    return chapter;
-  if (chapter < subtitles.length - 1)
-    return chapter + 1;
-  return -1;
+    if (chapter == -1) return -1;
+    if (verse < subtitles[chapter].length - 1)
+      return chapter;
+    if (chapter < subtitles.length - 1)
+      return chapter + 1;
+    return -1;
 }
 
 function getNextVerse(chapter, verse) {
-  if (chapter == -1) return -1;
-  if (verse < subtitles[chapter].length - 1)
-    return verse + 1;
-  if (chapter < subtitles.length - 1)
-    return 0;
-  return -1;
+    if (chapter == -1) return -1;
+    if (verse < subtitles[chapter].length - 1)
+      return verse + 1;
+    if (chapter < subtitles.length - 1)
+      return 0;
+    return -1;
 }
 
 function jump4external(_song, _phase, _line) {
@@ -2595,7 +2607,6 @@ function receiveMessage(e) {
         if (i >= 10) return;
         presetVerse[i] = jsonData.saved[i];
       }
-      keyboard({ keyCode: 49 });
     }
 
     if (jsonData.transparent) {
@@ -2618,6 +2629,10 @@ function receiveMessage(e) {
     if (jsonData.syncType) {
       sync_type = jsonData.syncType;
       synctrls();
+    }
+
+    if (sync_type <= 3) {
+      keyboard({ keyCode: 49 });
     }
 
   }
@@ -3021,7 +3036,7 @@ jumpTo1();
 
 setMsg_none();
 
-_repaint();
+//_repaint();
 
 window.addEventListener("beforeunload", function () {
   _saveAction2Local();

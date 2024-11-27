@@ -1,3 +1,4 @@
+<script type="text/javascript" src="_login.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,10 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-        
-
         /* 將頁面全螢幕，並置中容器 */
-        body, html {
+        body,
+        html {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -61,7 +61,7 @@
             color: black;
         }
 
-        
+
         .login-form button {
             width: 90%;
             padding: 10px;
@@ -72,7 +72,6 @@
             font-size: 24px;
             cursor: pointer;
         }
-        
     </style>
 </head>
 
@@ -86,58 +85,78 @@
         <label for="password">密碼</label><br>
         <input type="password" id="password" required><br>
         <label></label><br>
-        <button type="submit">Login</button><br>
+        <button type="submit">Login</button>
+        <p></p>
+        <button id="getProtected">Get Protected Resource</button>
     </form>
+
     <p></p>
-    <!-- <label>Protected Resource</label><br> -->
-    <!-- <button id="getProtected">Get Protected Resource</button> -->
+
 
     <script>
         const loginForm = document.getElementById('loginForm');
         const getProtectedButton = document.getElementById('getProtected');
-        let token = '';
-
+        
         // 登入事件
         loginForm.addEventListener('submit', async (event) => {
+
             event.preventDefault();
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const response = await fetch('/login', { //await fetch('http://localhost:3000/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
+            let result = await auth(username, password);
 
-            const data = await response.json();
-            if (response.ok) {
-                token = data.token; // 儲存 token
-                alert('Login successful!');
-            } else {
-                alert(data.error);
+            console.log(JSON.stringify(result));
+
+            if (result["state"] == 1) {
+                alert(result["des"]);
+                window.close();
+            } else if (result["state"] == -1) {
+                alert(result["des"]);
             }
         });
 
         // 獲取保護資源事件
         getProtectedButton.addEventListener('click', async () => {
-            let obj = {
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` }
-            };
-            const response = await fetch('/protected', obj);
-
-            console.log("=-========");
-            console.log(JSON.stringify(obj));
-            console.log("=-========");
-
-            const data = await response.json();
-            if (response.ok) {
-                alert(data.message);
-            } else {
-                alert(data.error);
+            let result = await chk();
+            if (result["state"] == 1) {
+                alert(result["des"]);
+                window.close();
+            } else if (result["state"] == -1) {
+                alert(result["des"]);
             }
         });
+
+        /*
+        // 當頁面載入時，檢查是否已登入
+        window.onload = () => {
+            if (!isLoggedIn()) {
+                alert('Please log in to access this page.');
+                window.location.href = '/login.html';
+            }
+        };
+        */
+        /*
+        function isTokenExpired(token) {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Math.floor(Date.now() / 1000); // 當前時間（秒）
+
+            return payload.exp < currentTime; // 如果 token 已過期，回傳 true
+        }
+
+        function checkTokenAndRedirect() {
+            const token = localStorage.getItem('token');
+            if (!token || isTokenExpired(token)) {
+                alert('Session expired. Please log in again.');
+                localStorage.removeItem('token');
+                window.location.href = '/login.html';
+            }
+        }
+
+        // 在頁面載入時執行檢查
+        window.onload = checkTokenAndRedirect;
+        */
     </script>
 </body>
 

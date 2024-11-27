@@ -27,7 +27,7 @@ async function fetchData() {
       throw new Error('Network response was not ok ' + response.statusText);
     }
     ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
-    console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
+    //console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
     //return data; // 如果需要同步效果，可以返回数据
   } catch (error) {
     console.error('Failed to fetch JSON:', error);
