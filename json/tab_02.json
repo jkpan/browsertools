@@ -1,5 +1,5 @@
 {
-	"frame_2": {
+	"frame_1": {
 		"src": "./dashboard.html",
 		"obj": {
 			"stateSaved": {
@@ -84,9 +84,9 @@
 			},
 			"Bible": {
 				"posize": [
-					3,
-					5,
-					44,
+					4,
+					4,
+					42,
 					26
 				],
 				"perspective": 0,
@@ -94,7 +94,7 @@
 					"color": 1,
 					"hlight": 1,
 					"verticle": 0,
-					"fontfactor": 8,
+					"fontfactor": 10,
 					"saved": [
 						[
 							""
@@ -130,7 +130,7 @@
 					"transparent": 0,
 					"printSaved": 0,
 					"fsizedist": 1,
-					"verseCount": 2,
+					"verseCount": 3,
 					"syncType": 6,
 					"imageBase64": ""
 				}
@@ -138,7 +138,7 @@
 			"B/G": "B"
 		}
 	},
-	"frame_1": {
+	"frame_2": {
 		"src": "./dashboard.html",
 		"obj": {
 			"stateSaved": {
