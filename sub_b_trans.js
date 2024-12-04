@@ -39,12 +39,10 @@ function chkVolDir(pre, now) {
         return false;
     }
     if (pre < now) {
-        console.log('goLeft');
         goLeft();
         return true;
     }
     if (pre > now) {
-        console.log('goRight');
         goRight();
         return true;
     }

@@ -1,5 +1,5 @@
 //const blessed = require('blessed');
-const path = require('path');
+//const path = require('path');
 const http = require('http');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
@@ -131,7 +131,9 @@ function webservice(req, res) {
   //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   //res.send(`Your IP address is: ${ip}`);
 
-  if (req.method === 'POST' && req.url === '/protected') {
+  if (req.method === 'POST' && req.url === '/loginchk') {
+    println('------');
+    println('post /loginchk');
     users.chk(req, res);
     return;
   }
@@ -196,11 +198,11 @@ function webservice(req, res) {
   
   /*
   if (url.startsWith('/index.html')) url = '/index.html'; // 處理首頁: url == /index.html?server=nodejs
-  if (url.startsWith('/dash.html')) url = '/dash.html';
-  if (url.startsWith('/subtitle_b.html')) url = '/subtitle_b.html';
-  if (url.startsWith('/subtitle_niv.html')) url = '/subtitle_niv.html';
-  if (url.startsWith('/led.html')) url = '/led.html';
-  if (url.startsWith('/tabs.html')) url = '/tabs.html';
+  else if (url.startsWith('/dash.html')) url = '/dash.html';
+  else if (url.startsWith('/subtitle_b.html')) url = '/subtitle_b.html';
+  else if (url.startsWith('/subtitle_niv.html')) url = '/subtitle_niv.html';
+  else if (url.startsWith('/led.html')) url = '/led.html';
+  else if (url.startsWith('/tabs.html')) url = '/tabs.html';
   */
 
   //首頁塞參數 redirect
@@ -345,7 +347,7 @@ function prepareArgSetting() {
   const args = process.argv;
 
   for (let i = 0; i < args.length; i++) {
-    if (args[i] == '-port') { //0 1 2 3
+    if (args[i] == '-port') {
       if (args.length >= i + 2 && !isNaN(parseInt(args[i + 1])))
         port = parseInt(args[i + 1]);
       continue;
@@ -356,6 +358,10 @@ function prepareArgSetting() {
     }
     if (args[i] == '-tui') {
       tuiPrepare();
+      continue;
+    }
+    if (args[i] == '-auth') {
+      users.setDoAuth(true);
       continue;
     }
   }

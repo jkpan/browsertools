@@ -1297,7 +1297,7 @@ function openSideMenu() {
 function closeSideMenu() {
   let sideMenu = document.getElementById('sideMenu');
   if (sideMenu)
-    sideMenu.style.top = window.innerHeight + 'px';
+    sideMenu.style.top = (window.innerHeight + 50) + 'px';
 }
 
 window.addEventListener('beforeunload', function (e) {

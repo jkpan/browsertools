@@ -1,4 +1,4 @@
-<script type="text/javascript" src="_login.js"></script>
+<script type="text/javascript" src="login.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -96,7 +96,7 @@
     <script>
         const loginForm = document.getElementById('loginForm');
         const getProtectedButton = document.getElementById('getProtected');
-        
+
         // 登入事件
         loginForm.addEventListener('submit', async (event) => {
 
@@ -105,8 +105,23 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            let result = await auth(username, password);
+            let result = await auth(
+                username,
+                password,
+                (json) => { //console.log(JSON.stringify(json));
+                    if (json.state == 1) {
+                        let token = data.token; // 儲存 token
+                        localStorage.setItem('token', token); // 儲存 token 到 localStorage
+                        window.close();
+                    } else {
+                        alert(json.error);
+                    }
+                },
+                (json) => {
+                    alert(json.error);
+                });
 
+            /*
             console.log(JSON.stringify(result));
 
             if (result["state"] == 1) {
@@ -115,6 +130,8 @@
             } else if (result["state"] == -1) {
                 alert(result["des"]);
             }
+            */
+
         });
 
         // 獲取保護資源事件

@@ -1,753 +1,637 @@
 <!DOCTYPE html>
 <script type="text/javascript" src="common.js" charset="UTF-8"></script>
+<script type="text/javascript" src="login.js" charset="UTF-8"></script>
 <script type="text/javascript" charset="UTF-8">
 
   var tabCount = 7;
 
   var tool_Bible = 'subtitle_b.html';
   var tool_index = 'tools.html';//'effect.html';
-    
+
 </script>
 <html>
+
 <head>
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
-  <!--meta http-equiv="X-Frame-Options" content="DENY"-->
-  <!--meta http-equiv="X-Frame-Options" content="SAMEORIGIN"-->
-  <!--meta http-equiv="X-Frame-Options" content="ALLOW-FROM https://example.com/"-->
+  <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
+    charset="UTF-8" />
   <style>
-  body {
-    margin: 0px;
-    height: 100%;
-    width: 100%;
-    background-color: green;
-  }
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  .wrapper {
-    display: grid;
-    gap: 0px;
-    grid-template-columns: 1fr 49fr 48fr 2fr;
-    grid-template-rows: 1fr 49fr 49fr 1fr;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    position: fixed;
-  }
-  /*
-  .ctrl {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    background-color: #00700080;
-    z-index: 90;
-    transition: all 0.3s ease;
-  }
-  */
-  .content {
-    grid-column: 1 /3;
-    grid-row: 1 / 3;
-  }
-  .container {
-
-        width: 100%;
-        height: 100%;
-
-        position: absolute;
-        left: 0;
-        top: 0;
-
-        display: flex;
-
-        /* 过渡动画 */
-        transition: opacity 0.5s;
-
-        overflow-y: hidden;
-        overflow-x: hidden;
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+      background-color: green;
     }
-  /*
-  .button {
-    font-size: 16px;
-    background-color:transparent;
-    color: #00ff00;
-    
-    width: 50px;
-    height:100%;
-    
-    border: none;
-    vertical-align: middle;
-  }
-  */
-  .button {
-    background-color: rgb(0, 180, 0);
-    border-color: rgb(0, 180, 0);
-    color: rgb(0, 255, 0);
-    border-radius: 8px;
 
-    font-size: 16px;
-    margin: 2px 2px;
-    
-    width: 28px;
-    height: 80%;
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
-    text-align: center;
-    padding: 4px;
-  }
-  .okbutton {
-    background-color: rgb(0, 100, 0);
-    border-color: #00ff00;
-    color: rgb(0, 255, 0);
-    border-radius: 8px;
+    .wrapper {
+      display: grid;
+      gap: 0px;
+      grid-template-columns: 1fr 49fr 48fr 2fr;
+      grid-template-rows: 1fr 49fr 49fr 1fr;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      position: fixed;
+    }
 
-    font-size: 14px;
-    margin: 1px 1px;
-    
-    width: 48px;
-    height: 90%;
+    .content {
+      grid-column: 1 /3;
+      grid-row: 1 / 3;
+    }
 
-    text-align: center;
-    text-decoration: none;
+    .container {
 
-    padding: 4px;
+      width: 100%;
+      height: 100%;
 
-    display: inline-block;
-  }
-  .cancelbutton {
-    background-color: rgb(0, 144, 0);
-    border-color: #00ff00;
-    color: rgb(0, 255, 0);
-    border-radius: 8px;
+      position: absolute;
+      left: 0;
+      top: 0;
 
-    font-size: 15px;
-    margin: 1px 1px;
-    
-    width: 48px;
-    height: 90%;
+      display: flex;
 
-    text-align: center;
-    text-decoration: none;
+      /* 过渡动画 */
+      transition: opacity 0.5s;
 
-    padding: 4px;
+      overflow-y: hidden;
+      overflow-x: hidden;
+    }
 
-    display: inline-block;
-  }
-  .sideMenu {
-    position: fixed;
-    top: 0;
-    left: 0px; /* 初始位置在左侧屏幕外 */
-    width: 100%;
-    height: 50px;
-    background-color: rgb(0,90,0);
-    color: #fff;
-    
-    transition: top 0.3s; /* 添加过渡效果 */
-    z-index: 90;
-  }
-  .menuButton {
-    background-color: transparent;
-    border-color: #008000;
-    color: rgb(0, 255, 0);
-    border-radius: 4px;
-    opacity: 0.33;
-            position: fixed;
-            z-index: 91;
+    .button {
+      background-color: rgb(0, 180, 0);
+      border-color: rgb(0, 180, 0);
+      color: rgb(0, 255, 0);
+      border-radius: 8px;
+
+      font-size: 16px;
+      margin: 2px 2px;
+
+      width: 28px;
+      height: 40%;
+
+      text-align: center;
+      padding: 4px;
+    }
+
+    .okbutton {
+      background-color: rgb(0, 100, 0);
+      border-color: #00ff00;
+      color: rgb(0, 255, 0);
+      border-radius: 8px;
+
+      font-size: 14px;
+      margin: 1px 1px;
+
+      width: 48px;
+      height: 40%;
+
+      text-align: center;
+      text-decoration: none;
+
+      padding: 4px;
+
+      display: inline-block;
+    }
+
+    .cancelbutton {
+      background-color: rgb(0, 144, 0);
+      border-color: #00ff00;
+      color: rgb(0, 255, 0);
+      border-radius: 8px;
+
+      font-size: 15px;
+      margin: 1px 1px;
+
+      width: 48px;
+      height: 40%;
+
+      text-align: center;
+      text-decoration: none;
+
+      padding: 4px;
+
+      display: inline-block;
+    }
+
+    .sideMenu {
+      position: fixed;
+      top: 0;
+      left: 0px;
+      /* 初始位置在左侧屏幕外 */
+      width: 100%;
+      height: 100px;
+      background-color: rgb(0, 90, 0);
+      color: #fff;
+
+      transition: top 0.3s;
+      /* 添加过渡效果 */
+      z-index: 90;
+    }
+
+    .menuButton {
+      background-color: transparent;
+      border-color: #008000;
+      color: rgb(0, 255, 0);
+      border-radius: 4px;
+      opacity: 0.33;
+      position: fixed;
+      z-index: 91;
+    }
+
+    label {
+      color: #00ee00;
     }
   </style>
   <title>Tabs</title>
 </head>
+
 <body>
-  
-  
 
-<div class="wrapper" style="background-color: #007000; opacity: 1.0;">
-        
+
+
+  <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
+
     <div class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-        <div id="content_1" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-            <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
-        </div>
-        
-        <div id="content_2" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-            <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-        </div>
-        
-        <div id="content_3" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-            <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-        </div>
-        
-        <div id="content_4" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-            <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-        </div>
-        
-        <div id="content_5" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-            <iframe id="frame_5" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-        </div>
-        
-        <div id="content_6" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-            <iframe id="frame_6" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-        </div>
-        
-        <div id="content_7" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-            <iframe id="frame_7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-        </div>
+      <div id="content_1" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
+      </div>
+
+      <div id="content_2" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
+
+      <div id="content_3" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
+
+      <div id="content_4" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
+
+      <div id="content_5" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_5" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
+
+      <div id="content_6" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_6" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
+
+      <div id="content_7" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+        <iframe id="frame_7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+      </div>
     </div>
-  
-  
-</div>
 
-<input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)"/>
-  <!--button class="okbutton" hidden onclick="current2Json()">export</button-->    
-</div>
 
-<button id="menubtn" class="menuButton" style="top:10px;left:10px;" onclick="sideClick()">-</button>
+  </div>
 
-<div class="sideMenu" id="sideMenu">
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  <button id="btn_1" class="button" onclick="switchFunction(1)">1</button>
-  <button id="btn_2" class="button" onclick="switchFunction(2)">2</button>
-  <button id="btn_3" class="button" onclick="switchFunction(3)">3</button>
-  <button id="btn_4" class="button" onclick="switchFunction(4)">4</button>
-  <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
-  <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
-  <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
-  &nbsp;
-  <button class="okbutton" onclick="reloadFrame()">R</button>
-  <button class="okbutton" onclick="openCtrl()">C</button>
-  <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">O</button>
-  <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
-  &nbsp;
-  <button class="button" onclick="preload('./json/tab_01.json')">#1</button>
-  <button class="button" onclick="preload('./json/tab_02.json')">#2</button>
-  <button class="button" onclick="preload('./json/tab_03.json')">#3</button>
-  <button class="button" onclick="preload('./json/tab_04.json')">#4</button>
-  <button class="cancelbutton" onclick="loadJson()">#</button>
-  <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
-  <button class="button" onclick="savefile(1)">1^</button>
-  <button class="button" onclick="savefile(2)">2^</button>
-  <button class="button" onclick="savefile(3)">3^</button>
-  <button class="button" onclick="savefile(4)">4^</button>
-  &nbsp;
-      <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
-  &nbsp;
-  <button class="cancelbutton" onclick="login()">login</button>
-</div>
-<script>
+  <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)" />
+  <!--button class="okbutton" hidden onclick="current2Json()">export</button-->
+  </div>
 
-var _login = null;
+  <button id="menubtn" class="menuButton" style="top:10px;left:10px;" onclick="sideClick()">-</button>
 
-function login() {
-  closeLogin();
-  _login = window.open("_login.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=500,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
-}
+  <div class="sideMenu" id="sideMenu">
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    <button id="btn_1" class="button" onclick="switchFunction(1)">1</button>
+    <button id="btn_2" class="button" onclick="switchFunction(2)">2</button>
+    <button id="btn_3" class="button" onclick="switchFunction(3)">3</button>
+    <button id="btn_4" class="button" onclick="switchFunction(4)">4</button>
+    <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
+    <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
+    <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
+    &nbsp;
+    <label id="__username" hidden="true"></label>
+    &nbsp;
+    <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
+    &nbsp;
+    <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign up</label>
 
-function closeLogin() {
-  if (_login)
-    _login.close();
-  _login = null;
-}
+    <br>
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    <button class="okbutton" onclick="reloadFrame()">R</button>
+    <button class="okbutton" onclick="openCtrl()">C</button>
+    <!-- <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">O</button> -->
+    <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
+    &nbsp;
+    <button class="button" onclick="preload('./json/tab_01.json')">
+      <th>#1</th>
+    </button>
+    <button class="button" onclick="preload('./json/tab_02.json')">#2</button>
+    <button class="button" onclick="preload('./json/tab_03.json')">#3</button>
+    <button class="button" onclick="preload('./json/tab_04.json')">#4</button>
+    <button class="cancelbutton" onclick="loadJson()">#</button>
+    <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
+    <button class="button" onclick="savefile(1)">1^</button>
+    <button class="button" onclick="savefile(2)">2^</button>
+    <button class="button" onclick="savefile(3)">3^</button>
+    <button class="button" onclick="savefile(4)">4^</button>
+    &nbsp;
+    <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
+  </div>
+  <script>
 
-  let sideMenu = document.getElementById('sideMenu');
-  sideMenu.style.top = '0px';
-
-  function openSideMenu() {
-    let sideMenu = document.getElementById('sideMenu');
-    sideMenu.style.top = '0';
-  }
-
-  function closeSideMenu() {
-    let sideMenu = document.getElementById('sideMenu');
-    sideMenu.style.top = '-100px';
-  }
-
-  function sideClick() {
-    let sideMenu = document.getElementById('sideMenu');
-    if (sideMenu.style.top == '-100px') {
-        openSideMenu();
-    } else {
-        closeSideMenu();
+    function closeLogin() {
+      if (_login)
+        _login.close();
+      _login = null;
     }
-  }
 
-  //document.getElementById("menubtn").addEventListener('mouseenter', e => {sideClick();});
+    let sideMenu = document.getElementById('sideMenu');
+    sideMenu.style.top = '0px';
 
-  /*
-  sideMenu.addEventListener('mouseup', (e) =>{
-    closeSideMenu();
-  });
-  
-  let mbar = document.getElementById("sideMenu");
-  mbar.addEventListener('mouseleave', e => {
-    closeSideMenu();
-  });
-  */
+    function openSideMenu() {
+      let sideMenu = document.getElementById('sideMenu');
+      sideMenu.style.top = '0';
+    }
+
+    function closeSideMenu() {
+      let sideMenu = document.getElementById('sideMenu');
+      sideMenu.style.top = '-120px';
+    }
+
+    function sideClick() {
+      let sideMenu = document.getElementById('sideMenu');
+      if (sideMenu.style.top == '-120px') {
+        openSideMenu();
+      } else {
+        closeSideMenu();
+      }
+    }
+
+    //document.getElementById("menubtn").addEventListener('mouseenter', e => {sideClick();});
+
+    /*
+    sideMenu.addEventListener('mouseup', (e) =>{
+      closeSideMenu();
+    });
+    
+    let mbar = document.getElementById("sideMenu");
+    mbar.addEventListener('mouseleave', e => {
+      closeSideMenu();
+    });
+    */
 
 
-</script>
+  </script>
 
 </body>
+
 </html>
 
 <script type="text/javascript" charset="UTF-8">
 
-function resetFrame() {
-  for (let i=1;i<=tabCount;i++) {
-    document.getElementById('frame_'+i).src = tool_index;
-    //document.getElementById('content_'+i).style.left = (i-1) * window.innerWidth + "px";
-    //console.log(window.innerWidth + ', ' + window.innerHeight);.left = index * width * -1 + "px";
-  }
-}
-
-function reloadFrame() {
-  let src = document.getElementById('frame_'+tab).getAttribute('src');//console.log('tab:' + tab + ': ' + src);
-  document.getElementById('frame_'+tab).setAttribute('src', src);
-}
-
-function getRootUrl() {
-  let all = window.location.href; //console.log(all);
-  let root = all.substr(0, all.length - '/tabs.html'.length); //console.log('root:' + root);
-  return root;
-}
-
-function relativeUrl(url) {
-  let root = getRootUrl();//let domain = window.location.origin;
-  if (url.startsWith(root)) {
-    let str = url.substr(root.length, url.length - root.length);
-    console.log(str);
-    return '.' + str;
-  }
-  return url;
-}
-
-function _ajax(json, url, cb, errorcb) {
-  console.log(json);
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(json)
-  }).then((response) => {
-    if (response.ok) {
-      return response.json(); // 解析JSON回應
-    } else {
-      throw new Error("請求失敗：" + response.status);
+  function resetFrame() {
+    for (let i = 1; i <= tabCount; i++) {
+      document.getElementById('frame_' + i).src = tool_index;
+      //document.getElementById('content_'+i).style.left = (i-1) * window.innerWidth + "px";
+      //console.log(window.innerWidth + ', ' + window.innerHeight);.left = index * width * -1 + "px";
     }
-  }).then((data) => {
-    // 在這裡處理解析後的JSON物件 //console.log(data);
-    cb(data);
-  }).catch((error) => {
-    // 處理錯誤
-    console.log('' + error);
-    errorcb();
-  });
-}
+  }
 
-function ajax_savejson(fn, json) {
-  _ajax({
+  function reloadFrame() {
+    let src = document.getElementById('frame_' + tab).getAttribute('src');//console.log('tab:' + tab + ': ' + src);
+    document.getElementById('frame_' + tab).setAttribute('src', src);
+  }
+
+  function getRootUrl() {
+    let all = window.location.href; //console.log(all);
+    let root = all.substr(0, all.length - '/tabs.html'.length); //console.log('root:' + root);
+    return root;
+  }
+
+  function relativeUrl(url) {
+    let root = getRootUrl();//let domain = window.location.origin;
+    if (url.startsWith(root)) {
+      let str = url.substr(root.length, url.length - root.length);
+      console.log(str);
+      return '.' + str;
+    }
+    return url;
+  }
+
+  function _ajax(json, url, cb, errorcb) {
+    console.log(json);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(json)
+    }).then((response) => {
+      if (response.ok) {
+        return response.json(); // 解析JSON回應
+      } else {
+        throw new Error("請求失敗：" + response.status);
+      }
+    }).then((data) => {
+      // 在這裡處理解析後的JSON物件 //console.log(data);
+      cb(data);
+    }).catch((error) => {
+      // 處理錯誤
+      console.log('' + error);
+      errorcb();
+    });
+  }
+
+  function ajax_savejson(fn, json) {
+    _ajax({
       filename: fn,
       content: json
     },
-    '/savejson',
-    (res) => { console.log(JSON.stringify(res)); }, 
-    () => {    console.log('exception'); }
-  );
-}
-
-function savefile(idx) {
-  let fn = `tab_0${idx}.json`;
-  if (confirm(`確定要存入 #${idx} ?`))
-    ajax_savejson(fn, JSON.stringify(toObj()));
-}
-
-/*
-  frame_1 ~ 7
-  src
-  obj
- */
-function toObj() {
-  let obj = {}
-  for (let i=1;i<=tabCount;i++) {
-    obj['frame_'+i] = {};
-    let frameObj = obj['frame_'+i];
-    let url = document.getElementById('frame_'+i).src;
-    url = relativeUrl(url);
-    frameObj['src'] = url;//document.getElementById('frame_'+i).src;
-    frameObj['obj'] = {};
-    try {
-      let _obj = document.getElementById('frame_'+i).contentWindow.toObj();
-      if (_obj) {
-        frameObj['obj'] = _obj;
-      }
-    } catch (e) {
-      //frameObj['obj'] = { "url" : "xx" }
-    }
+      '/savejson',
+      (res) => { console.log(JSON.stringify(res)); },
+      () => { console.log('exception'); }
+    );
   }
-  return obj;
-}
 
-function downloadExpJson() {
-  let str = JSON.stringify(toObj(), null, "\t");
-  console.log(str);
-  var downloadLink = document.createElement("a");
-  downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + str);
-  downloadLink.setAttribute("download", "tabs_setting.json"); // 设置下载文件的名称，此处为myFile.txt
-  // 4. 使用JavaScript模拟用户点击下载链接，从而触发下载
-  downloadLink.click();
-}
+  function savefile(idx) {
+    let fn = `tab_0${idx}.json`;
+    if (confirm(`確定要存入 #${idx} ?`))
+      ajax_savejson(fn, JSON.stringify(toObj()));
+  }
 
-function preload(url) {
-  fetch(url).then((response) => {
-        return response.json();
-    }).then( (json) => {
-        handleProfile(json);
+  /*
+    frame_1 ~ 7
+    src
+    obj
+   */
+  function toObj() {
+    let obj = {}
+    for (let i = 1; i <= tabCount; i++) {
+      obj['frame_' + i] = {};
+      let frameObj = obj['frame_' + i];
+      let url = document.getElementById('frame_' + i).src;
+      url = relativeUrl(url);
+      frameObj['src'] = url;//document.getElementById('frame_'+i).src;
+      frameObj['obj'] = {};
+      try {
+        let _obj = document.getElementById('frame_' + i).contentWindow.toObj();
+        if (_obj) {
+          frameObj['obj'] = _obj;
+        }
+      } catch (e) {
+        //frameObj['obj'] = { "url" : "xx" }
+      }
+    }
+    return obj;
+  }
+
+  function downloadExpJson() {
+    let str = JSON.stringify(toObj(), null, "\t");
+    console.log(str);
+    var downloadLink = document.createElement("a");
+    downloadLink.setAttribute("href", "data:text/plain;charset=utf-8," + str);
+    downloadLink.setAttribute("download", "tabs_setting.json"); // 设置下载文件的名称，此处为myFile.txt
+    // 4. 使用JavaScript模拟用户点击下载链接，从而触发下载
+    downloadLink.click();
+  }
+
+  function preload(url) {
+    fetch(url).then((response) => {
+      return response.json();
+    }).then((json) => {
+      handleProfile(json);
     }).catch((error) => {
       alert('Error' + error);
       console.log(`Error: ${error}`);
     });
-}
+  }
 
-function loadJson() {
-  document.getElementById('jsonfile').click();
-}
+  function loadJson() {
+    document.getElementById('jsonfile').click();
+  }
 
-/*
-  frame_1:
-    src : 
-    obj 
-*/
-function handleProfile(jsonData) {
-  //const fileContent = event.target.result;
-  //const jsonData = JSON.parse(fileContent);
-  //console.log(fileContent);
-  resetFrame();
-  for (let i=1;i<=tabCount;i++) {
+  /*
+    frame_1:
+      src : 
+      obj 
+  */
+  function handleProfile(jsonData) {
+    //const fileContent = event.target.result;
+    //const jsonData = JSON.parse(fileContent);
+    //console.log(fileContent);
+    resetFrame();
+    for (let i = 1; i <= tabCount; i++) {
       let _f = 'frame_' + i;
       if (!jsonData[_f]) continue;
       let frame = document.getElementById(_f);
       if (jsonData[_f]['src'])
         frame.src = jsonData[_f]['src'];
-      else 
+      else
         continue;
-      if (jsonData[_f]['obj']) 
-        frame.onload = function() { 
-          frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/'); 
-        } 
-  }
-  switchFunction(1);
-  if (jsonData['ctrl'] && jsonData['ctrl'] == 1) {
-    openCtrl();
-  }
-}
-
-function selectSetting(event) {
-  const inputFile = document.getElementById('jsonfile');
-  if (inputFile.files.length == 0) return;
-  // 讀取使用者選擇的檔案
-  const file = inputFile.files[0];
-  const reader = new FileReader();
-  reader.readAsText(file);
-  // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
-  reader.onload = function(event) {
-    const fileContent = event.target.result;
-    const jsonData = JSON.parse(fileContent);
-    console.log(fileContent);
-    handleProfile(jsonData);
+      if (jsonData[_f]['obj'])
+        frame.onload = function () {
+          frame.contentWindow.postMessage(JSON.stringify(jsonData[_f]['obj']), '/');
+        }
+    }
+    switchFunction(1);
+    if (jsonData['ctrl'] && jsonData['ctrl'] == 1) {
+      openCtrl();
+    }
   }
 
-}
+  function selectSetting(event) {
+    const inputFile = document.getElementById('jsonfile');
+    if (inputFile.files.length == 0) return;
+    // 讀取使用者選擇的檔案
+    const file = inputFile.files[0];
+    const reader = new FileReader();
+    reader.readAsText(file);
+    // 當讀取完成時，將檔案內容轉換成 JSON 物件並進行處理
+    reader.onload = function (event) {
+      const fileContent = event.target.result;
+      const jsonData = JSON.parse(fileContent);
+      console.log(fileContent);
+      handleProfile(jsonData);
+    }
 
-var _openWin = null;
-function openCtrl() { 
-  closeCtrl();
-  _openWin = window.open("tabs_ctrl.html", "");
-  //_openWin = window.open("tabs_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
-}
+  }
 
-function closeCtrl() {
-  if (_openWin) 
-    _openWin.close();
-  _openWin = null;
-}
+  var _openWin = null;
+  function openCtrl() {
+    closeCtrl();
+    _openWin = window.open("tabs_ctrl.html", "");
+    //_openWin = window.open("tabs_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=64,height=250,top="+(screen.height-400)+",left="+(screen.width-840));
+  }
 
-var action = '';
-var tab;
-var funcInterval;
-var animType = 1;
+  function closeCtrl() {
+    if (_openWin)
+      _openWin.close();
+    _openWin = null;
+  }
 
-function setSlideAnim() {
+  var action = '';
+  var tab;
+  var funcInterval;
+  var animType = 1;
 
-  animType = (animType + 1) % 4;
+  function setSlideAnim() {
+
+    animType = (animType + 1) % 4;
 
     var b = document.getElementById('aBtn');
     let caption = b.textContent;
     if (animType == 0) {
-        b.textContent = '--';
+      b.textContent = '--';
     } else {
-        b.textContent = 'a' + animType;//  <> ^v
+      b.textContent = 'a' + animType;//  <> ^v
     }
-    
-    for(let i=1;i<=tabCount;i++) {
-      switch(animType) {
-        case 0: document.getElementById("content_"+i).style.transition = 'none'; break;
-        case 1: document.getElementById("content_"+i).style.transition = 'opacity 0.5s'; break;
-        case 2: 
-        case 3: document.getElementById("content_"+i).style.transition = 'all 0.5s'; break;
+
+    for (let i = 1; i <= tabCount; i++) {
+      switch (animType) {
+        case 0: document.getElementById("content_" + i).style.transition = 'none'; break;
+        case 1: document.getElementById("content_" + i).style.transition = 'opacity 0.5s'; break;
+        case 2:
+        case 3: document.getElementById("content_" + i).style.transition = 'all 0.5s'; break;
       }
     }
 
     framePos();
-    
-}
 
-function startRestoreInterval() {
-
-  if (funcInterval) {
-    stopTabInterval();
-    return;
   }
 
-  funcInterval = window.setInterval(restoreTabFromLocal, 500);
-
-  var b = document.getElementById('oxBtn');
-  b.textContent = 'X';
-
-  /*
-  for(let i=1;i<=tabCount;i++) 
-    if (document.getElementById("frame_"+i).contentWindow)
-      document.getElementById("frame_"+i).contentWindow.postMessage('x', '/');
-  */
-
-}
-
-function stopTabInterval() {
-  if (funcInterval) clearInterval(funcInterval);
-  funcInterval = null;
-
-  var b = document.getElementById('oxBtn');
-  b.textContent = 'O';
-
-  /*
-  for(let i=1;i<=tabCount;i++) 
-    if (document.getElementById("frame_"+i).contentWindow)
-      document.getElementById("frame_"+i).contentWindow.postMessage('o', '/');
-  */
-
-}
-
-function saveAction2Local(act) {
-  
-  var date = new Date();
-
-  let h = date.getHours() % 12;
-  let min = date.getMinutes();
-  let s = date.getSeconds();
-  let ms = date.getMilliseconds();
-
-  let key = 'save act';
-  let value = act + ' ' + h + ':' + min +':' + s + ':' + ms;
-  localStorage.setItem(key, value);
-
-}
-
-function saveTab2Local() {
-  let key = 'save tab';
-  let value = '' + tab;
-  localStorage.setItem(key, value);
-}
-
-function restoreTabFromLocal() {
-
-  let actkey = 'save act';
-  let actvalue = localStorage.getItem(actkey);
-  if (actvalue && actvalue.trim().length > 0) {
-    actvalue = actvalue.trim();
-    //if (action != actvalue) somelayout();
-    action = actvalue;
-  } 
-
-  let key = 'save tab';
-  let value = localStorage.getItem(key);
-  
-  if (!value) return;
-  
-  value = value.trim();
-  
-  if (value && value.length == 0) return;
-  
-  let _tab = value;//parseInt(value);
-
-  if (_tab == tab) return;
-
-  tab = _tab;
-  _switchFunction();
-
-}
-
-/*
-function switchFunction(idx) {
-  tab = idx;
-  for(let i=1;i<=tabCount;i++) {
-    document.getElementById('btn_' + i).style.background = "rgb(0,112,0)";
-    document.getElementById('btn_'+ i).style.color = "rgb(0,80,0)";
-    document.getElementById('btn_'+ i).style.fontSize = '12px';
-  }
-  document.getElementById('btn_'+tab).style.background = "rgb(0,128,0)";
-  document.getElementById('btn_'+tab).style.color = "rgb(0,255,0)";
-  document.getElementById('btn_'+tab).style.fontSize = '16px';
-
-  for(let i=1;i<=tabCount;i++) {
-    document.getElementById('content_'+i).style.opacity = 0.0;
-    document.getElementById('content_'+i).style.left = "0px";
-    document.getElementById('content_'+i).style.top = "0px";
-    document.getElementById('content_'+i).hidden = "true";
-  }
-  document.getElementById('content_'+tab).hidden = "false";
-  document.getElementById('content_'+tab).style.opacity = 1.0;
-  document.getElementById('content_'+tab).style.left = "0px";
-  document.getElementById('content_'+tab).style.top = "0px";
-
-  if (keylock) return;
-  saveTab2Local();
-}
-*/
-
-function switchFunction(idx) {
-  tab = idx;
-  _switchFunction();
-  if (keylock) return;
-  saveTab2Local();
-  //closeSideMenu();
-}
-
-function framePos() {
-  switch (animType) {
-    case 0:
-    case 2:
-      for(let i=1;i<=tabCount;i++) {
-        document.getElementById('content_'+i).style.opacity = 1.0;
-        document.getElementById('content_'+i).style.left = (i-tab) * window.innerWidth + "px";
-        document.getElementById('content_'+i).style.top = "0px";
-      }
-      break;
-    case 3:
-      for(let i=1;i<=tabCount;i++) {
-        document.getElementById('content_'+i).style.opacity = 1.0;
-        document.getElementById('content_'+i).style.left = "0px";
-        document.getElementById('content_'+i).style.top = (i-tab) * window.innerHeight + "px";
-      }
-      break;
-    case 1:
-      for(let i=1;i<=tabCount;i++) {
-        let div = document.getElementById('content_'+i);
-        if (i == tab) {
-          div.style.left = "0px";
-          div.style.top = "0px";
-          div.style.opacity = 1.0;
-          //setTimeout(function () {  div.style.left = "0px";  }, 510);
-        } else {
-          div.style.opacity = 0;
-          div.style.top = "0px";
-          setTimeout(function () {
-            div.style.left = window.innerWidth + "px";
-          }, 500);
+  function framePos() {
+    switch (animType) {
+      case 0:
+      case 2:
+        for (let i = 1; i <= tabCount; i++) {
+          document.getElementById('content_' + i).style.opacity = 1.0;
+          document.getElementById('content_' + i).style.left = (i - tab) * window.innerWidth + "px";
+          document.getElementById('content_' + i).style.top = "0px";
         }
-      }
-      break;
-  }
-}
-
-function _switchFunction() {
-      
-  for(let i=1;i<=tabCount;i++) {
-    document.getElementById('btn_' + i).style.background = "rgb(0,112,0)";
-    document.getElementById('btn_'+ i).style.color = "rgb(0,80,0)";
-    document.getElementById('btn_'+ i).style.fontSize = '12px';
-  }
-
-  framePos();
-
-  document.getElementById('btn_'+tab).style.background = "rgb(0,128,0)";
-  document.getElementById('btn_'+tab).style.color = "rgb(0,255,0)";
-  document.getElementById('btn_'+tab).style.fontSize = '16px';
-
-  //document.getElementById('content_'+idx).hidden = false;
-  document.getElementById('frame_'+tab).focus();
-  return document.getElementById('frame_'+tab);
-
-}
-
-var keylock = false;
-
-window.addEventListener('keyup', function(e) {
-  if (e.keyCode == 16) keylock = false;
-}, false);
-
-window.addEventListener('keydown', function(e) {
-  if (e.keyCode == 16) keylock = true;
-}, false);
-
-function showPane(elm, show) {
-  //div.hidden = !show;
-  if (show) {
-    elm.style.opacity = '0.8';
-  } else {
-    elm.style.opacity = '0.0';
-  }
-}
-
-/*
-let div = document.getElementById("ctrlBtns");
-div.addEventListener('mouseenter', e => {
-  showPane(div, true);
-});
-div.addEventListener('mouseleave', e => {
-  showPane(div, false);
-});
-
-let div2 = document.getElementById("ctrlBtns2");
-div2.addEventListener('mouseenter', e => {
-  showPane(div2, true);
-});
-div2.addEventListener('mouseleave', e => {
-  showPane(div2, false);
-});
-*/
-
-window.addEventListener('message', function(event) {
-
-  console.log('message: ' + event.data);
-
-  if (event.data == 'x' || event.data == 'o') {
-    //startRestoreInterval();
-  } else {
-    try {
-      handleProfile(JSON.parse(event.data));
-    } catch (e) {
-      let frame = document.getElementById('frame_' + tab);
-      frame.src = event.data;
+        break;
+      case 3:
+        for (let i = 1; i <= tabCount; i++) {
+          document.getElementById('content_' + i).style.opacity = 1.0;
+          document.getElementById('content_' + i).style.left = "0px";
+          document.getElementById('content_' + i).style.top = (i - tab) * window.innerHeight + "px";
+        }
+        break;
+      case 1:
+        for (let i = 1; i <= tabCount; i++) {
+          let div = document.getElementById('content_' + i);
+          if (i == tab) {
+            div.style.left = "0px";
+            div.style.top = "0px";
+            div.style.opacity = 1.0;
+            //setTimeout(function () {  div.style.left = "0px";  }, 510);
+          } else {
+            div.style.opacity = 0;
+            div.style.top = "0px";
+            setTimeout(function () {
+              div.style.left = window.innerWidth + "px";
+            }, 500);
+          }
+        }
+        break;
     }
   }
 
-});
+  function switchFunction(idx) {
+    tab = idx;
+    for (let i = 1; i <= tabCount; i++) {
+      document.getElementById('btn_' + i).style.background = "rgb(0,112,0)";
+      document.getElementById('btn_' + i).style.color = "rgb(0,80,0)";
+      document.getElementById('btn_' + i).style.fontSize = '12px';
+    }
 
-//大小變化
-window.addEventListener('resize', function() {
     framePos();
-});
 
-window.addEventListener('beforeunload', function (e) {
-  closeCtrl();
-  closeLogin();
-});
+    document.getElementById('btn_' + tab).style.background = "rgb(0,128,0)";
+    document.getElementById('btn_' + tab).style.color = "rgb(0,255,0)";
+    document.getElementById('btn_' + tab).style.fontSize = '16px';
 
-resetFrame();
-switchFunction(1);
+    document.getElementById('frame_' + tab).focus();
+    return document.getElementById('frame_' + tab);
+  }
 
-if (readParam('json')) {
+  function showPane(elm, show) {
+    //div.hidden = !show;
+    if (show) {
+      elm.style.opacity = '0.8';
+    } else {
+      elm.style.opacity = '0.0';
+    }
+  }
+
+  window.addEventListener('message', function (event) {
+
+    console.log('message: ' + event.data);
+
+    if (event.data == 'x' || event.data == 'o') {
+      //startRestoreInterval();
+    } else {
+      try {
+        handleProfile(JSON.parse(event.data));
+      } catch (e) {
+        let frame = document.getElementById('frame_' + tab);
+        frame.src = event.data;
+      }
+    }
+
+  });
+
+  //大小變化
+  window.addEventListener('resize', function () {
+    framePos();
+  });
+
+  window.addEventListener('beforeunload', function (e) {
+    closeCtrl();
+    closeLogin();
+  });
+
+  resetFrame();
+  switchFunction(1);
+
+  if (readParam('json')) {
     let value = readParam('json');
-    if (value) 
+    if (value)
       preload('./' + value);
-}
+  }
+
+  var _login = null;
+
+  function logout() {
+
+  }
+
+  function login() {
+    closeLogin();
+    _login = window.open("login.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=500,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+  }
+
+  async function chkloginstatus() {
+    chk((json) => {
+      console.log(JSON.stringify(json));
+      if (json.state == 1) {
+        document.getElementById('__username').hidden = false;
+        document.getElementById('__username').innerHTML = json.username;
+        document.getElementById('__login').hidden = true;
+        if (json.username.toLowerCase() != 'guest') {
+          document.getElementById('__logout').hidden = false;
+        }
+      } else {
+        document.getElementById('__login').hidden = false;
+      }
+    },
+      (json) => {
+        document.getElementById('__username').hidden = true;
+        document.getElementById('__login').hidden = true;
+        document.getElementById('__logout').hidden = true;
+      });
+  }
+
+  chkloginstatus();
 
 </script>

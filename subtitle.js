@@ -147,8 +147,9 @@ function json2List(fileContent) {
     sync_type = jsonData.syncType;
     synctrls();
   }
-
-  _repaint();
+  
+  if (subtitles != undefined)
+    _repaint();
 
 }
 
@@ -1192,7 +1193,8 @@ function synctrls() {
 
   removeDiv();
   canvas.hidden = false;
-  _repaint();
+  if (subtitles != undefined)
+    _repaint();
 
 }
 
@@ -1340,7 +1342,8 @@ function receiveMessage(e) {
   } else {
     json2List(e.data);
   }
-  _repaint();
+  if (subtitles != undefined)
+    _repaint();
 }
 
 // 監聽 message 事件

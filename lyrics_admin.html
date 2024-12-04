@@ -259,7 +259,7 @@
         var exist = allsongs[id];
         var btn;
         if (exist) {
-            console.log(JSON.stringify(exist));
+            //console.log(JSON.stringify(exist));
             var attr = exist['content'][0][0];
             if (!attr || attr == id) attr = ''
             btn = _createBtn(id, attr);
@@ -289,8 +289,8 @@
                     btn.style.background = '#005500';//window.opener.COLORS_CK[0]; // setting the background color to teal
                 }
                 if (btn.innerHTML.length > 0 || VOLUME[pf][2]) {
-                    console.log('btn.innerHTML.length : ' + btn.innerHTML.length);
-                    console.log('VOLUME[pf][2] : ' + VOLUME[pf][2]);
+                    //console.log('btn.innerHTML.length : ' + btn.innerHTML.length);
+                    //console.log('VOLUME[pf][2] : ' + VOLUME[pf][2]);
                     div.appendChild(btn);
                 }
             }
@@ -330,7 +330,7 @@
                 throw new Error('Network response was not ok ' + response.statusText);
             }
             ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
-            console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
+            //console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
             //return data; // 如果需要同步效果，可以返回数据
         } catch (error) {
             console.error('Failed to fetch JSON:', error);
@@ -341,6 +341,15 @@
     (async function () {
         console.log('get all songs');
         await fetchData();
+
+        //const months = ['March', 'Jan', 'Feb', 'Dec'];
+        //ALL_SONGS_JSON.sort();
+        //console.log(ALL_SONGS_JSON);
+
+        //let keys = Object.keys(ALL_SONGS_JSON);
+        //console.log(keys.sort());
+        //keys.forEach(function (key, index) {}
+
         createBtns();
         console.log('get content from list');
     })();

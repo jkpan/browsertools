@@ -7,6 +7,11 @@ var PT_G = 0;
 var PT_B = 0;
 var brightest = '';
 
+const fontFamily_array = ["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC"]; //google fonts
+//["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
+var fontFamily = fontFamily_array[0];
+
+
 function setMainColor(R, G, B) {
   PT_R = R;
   PT_G = G;
@@ -90,7 +95,7 @@ function newParticle_txt(sequence, total) {
 
       //_ctx.textAlign = "left";//var fontFamily = "Arial";//'華康瘦金體';//"cwTeXKai";//"Noto Serif TC";"標楷體";
 
-      _ctx.font = this.size + "px Arial";//+ fontFamily;
+      _ctx.font = this.size + "px "+ fontFamily;
 
       this.elapse += dt * 0.001;
       if (this.elapse > this.gap) {
