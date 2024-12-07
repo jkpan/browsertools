@@ -145,16 +145,34 @@
     label {
       color: #00ee00;
     }
+
+    .account {
+      
+      display: flex;
+      flex-direction: row-reverse;
+      top: 10px;
+      
+    }
+    .account2 {
+      
+      direction: rtl; /* 文字與內容從右向左排列 */
+      text-align: right; /* 確保文字對齊方向 */
+      
+    }
+    /*
+    .account_item {
+      padding: 10px;
+      background-color: lightblue;
+      border: 1px solid #ccc;
+    }
+      */
   </style>
   <title>Tabs</title>
 </head>
 
 <body>
 
-
-
   <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
-
     <div class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
       <div id="content_1" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
         <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
@@ -184,13 +202,11 @@
         <iframe id="frame_7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
       </div>
     </div>
-
-
   </div>
 
   <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)" />
   <!--button class="okbutton" hidden onclick="current2Json()">export</button-->
-  </div>
+  
 
   <button id="menubtn" class="menuButton" style="top:10px;left:10px;" onclick="sideClick()">-</button>
 
@@ -206,13 +222,14 @@
     <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
     <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
     <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
-    &nbsp;
-    <label id="__username" hidden="true"></label>
-    &nbsp;
-    <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
-    &nbsp;
-    <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign up</label>
-
+    
+      &nbsp;
+      <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
+      &nbsp;
+      <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign up</label>
+      &nbsp;
+      <label id="__username" hidden="true"></label>
+   
     <br>
     &nbsp;
     &nbsp;
@@ -223,9 +240,7 @@
     <!-- <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">O</button> -->
     <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
     &nbsp;
-    <button class="button" onclick="preload('./json/tab_01.json')">
-      <th>#1</th>
-    </button>
+    <button class="button" onclick="preload('./json/tab_01.json')">#1</button>
     <button class="button" onclick="preload('./json/tab_02.json')">#2</button>
     <button class="button" onclick="preload('./json/tab_03.json')">#3</button>
     <button class="button" onclick="preload('./json/tab_04.json')">#4</button>
@@ -238,57 +253,53 @@
     &nbsp;
     <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
   </div>
-  <script>
-
-    function closeLogin() {
-      if (_login)
-        _login.close();
-      _login = null;
-    }
-
-    let sideMenu = document.getElementById('sideMenu');
-    sideMenu.style.top = '0px';
-
-    function openSideMenu() {
-      let sideMenu = document.getElementById('sideMenu');
-      sideMenu.style.top = '0';
-    }
-
-    function closeSideMenu() {
-      let sideMenu = document.getElementById('sideMenu');
-      sideMenu.style.top = '-120px';
-    }
-
-    function sideClick() {
-      let sideMenu = document.getElementById('sideMenu');
-      if (sideMenu.style.top == '-120px') {
-        openSideMenu();
-      } else {
-        closeSideMenu();
-      }
-    }
-
-    //document.getElementById("menubtn").addEventListener('mouseenter', e => {sideClick();});
-
-    /*
-    sideMenu.addEventListener('mouseup', (e) =>{
-      closeSideMenu();
-    });
-    
-    let mbar = document.getElementById("sideMenu");
-    mbar.addEventListener('mouseleave', e => {
-      closeSideMenu();
-    });
-    */
-
-
-  </script>
-
+  
 </body>
 
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+  function closeLogin() {
+    if (_login)
+      _login.close();
+    _login = null;
+  }
+
+  let sideMenu = document.getElementById('sideMenu');
+  sideMenu.style.top = '0px';
+
+  function openSideMenu() {
+    let sideMenu = document.getElementById('sideMenu');
+    sideMenu.style.top = '0';
+  }
+
+  function closeSideMenu() {
+    let sideMenu = document.getElementById('sideMenu');
+    sideMenu.style.top = '-120px';
+  }
+
+  function sideClick() {
+    let sideMenu = document.getElementById('sideMenu');
+    if (sideMenu.style.top == '-120px') {
+      openSideMenu();
+    } else {
+      closeSideMenu();
+    }
+  }
+
+  //document.getElementById("menubtn").addEventListener('mouseenter', e => {sideClick();});
+
+  /*
+  sideMenu.addEventListener('mouseup', (e) =>{
+    closeSideMenu();
+  });
+  
+  let mbar = document.getElementById("sideMenu");
+  mbar.addEventListener('mouseleave', e => {
+    closeSideMenu();
+  });
+  */
 
   function resetFrame() {
     for (let i = 1; i <= tabCount; i++) {
@@ -601,9 +612,14 @@
   }
 
   var _login = null;
+  var username = null;
 
   function logout() {
-
+    cleanLogin();
+    document.getElementById('__username').hidden = true;
+    document.getElementById('__username').innerHTML = '';
+    document.getElementById('__login').hidden = false;
+    document.getElementById('__logout').hidden = true;
   }
 
   function login() {
@@ -612,24 +628,23 @@
   }
 
   async function chkloginstatus() {
-    chk((json) => {
-      console.log(JSON.stringify(json));
-      if (json.state == 1) {
-        document.getElementById('__username').hidden = false;
-        document.getElementById('__username').innerHTML = json.username;
-        document.getElementById('__login').hidden = true;
-        if (json.username.toLowerCase() != 'guest') {
-          document.getElementById('__logout').hidden = false;
-        }
-      } else {
-        document.getElementById('__login').hidden = false;
-      }
-    },
-      (json) => {
-        document.getElementById('__username').hidden = true;
-        document.getElementById('__login').hidden = true;
-        document.getElementById('__logout').hidden = true;
-      });
+    let result = await doChk();//console.log(JSON.stringify(result));
+    handleLogin(result);
+  }
+
+  function handleLogin(resultJson) {
+    document.getElementById('__username').hidden = true;
+    document.getElementById('__login').hidden = true;
+    document.getElementById('__logout').hidden = true;
+    if (resultJson.state == 1) {
+      username = resultJson.username;
+      document.getElementById('__username').hidden = false;
+      document.getElementById('__username').innerHTML = resultJson.username;
+      if (resultJson.username != 'guest')
+        document.getElementById('__logout').hidden = false;
+      return;
+    }
+    document.getElementById('__login').hidden = false;
   }
 
   chkloginstatus();

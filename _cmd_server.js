@@ -21,14 +21,18 @@ var port = 80;
 var docluster = false;
 
 global.print = function (msg) {
-  process.stdout.write(`(${process.pid})` + msg);
+  process.stdout.write(`(${process.pid}) ${msg}`);
 }
 
 global.println = function (msg) { //console.trace();
   if (msg)
-    process.stdout.write('\n' + `(${process.pid})` + msg);
+    process.stdout.write(`\n(${process.pid}) ${msg}`);
   else 
     process.stdout.write('\n');
+}
+
+global.ptlet = function (msg) { //console.trace();
+  process.stdout.write(msg);
 }
 
 global.clearScreen = function () {

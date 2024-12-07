@@ -99,7 +99,7 @@ function restorescripture(req, res) {
         // 设置响应头
         res.setHeader('Content-Type', 'application/json');
 
-        print('-');
+        ptlet('-');
         // 发送响应数据
         res.end(getBibleObjStr());
 

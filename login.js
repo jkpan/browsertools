@@ -20,36 +20,13 @@ function _ajax_auth(url, _header, _body, succcb, errcb) {
 }
 
 async function auth(username, password, succcb, errcb) {
-   
-    
-    //url, _header, _body, succcb, errcb
+ 
     _ajax_auth('/login', 
             { "Content-Type": "application/json" }, 
             { username, password },
             succcb, 
             errcb
     );
-    
-    return;
-    
-    const response = await fetch('/login', { //await fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-        let token = data.token; // 儲存 token
-        localStorage.setItem('token', token); // 儲存 token 到 localStorage
-        //alert('Login successful!'); console.log("response.ok");
-        return { state: 1, des: "Login successful!", username: data.username };
-    } else {
-        console.log("!response.ok");
-        return { state: -1, des: data.error };
-        //alert(data.error);
-    }
 }
 
 async function chk(succcb, errcb) {
@@ -57,8 +34,8 @@ async function chk(succcb, errcb) {
     console.log('token :' + token);
     if (token == null) { 
         console.log('token null');
-        //alert('token null');
-        return {state:-1, des:"token null"};
+        errcb({state:-1, des:"token null"});
+        return;
     }
     _ajax_auth('/loginchk', 
         {
@@ -69,6 +46,77 @@ async function chk(succcb, errcb) {
         succcb,
         errcb
     );
+}
+
+function newLogin(username, token) {
+    cleanLogin();
+    localStorage.setItem('username', username);
+    if (token)
+       localStorage.setItem('token', token);
+}
+
+function cleanLogin() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    //window.location.href = '/login.html'; // 導向登入頁
+}
+
+async function doLogin(username, password) {
+    let response = await fetch("/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ username, password })
+      });
+    const data = await response.json();
+    if (response.ok) {
+        return data;
+    }
+    return {state:-1, des:"doLogin response not ok"}
+}
+
+async function doChk() {
+    const token = localStorage.getItem('token');
+    if (token == null) {
+        return {state:-1, des:"token null"};
+    }
+    let response = await fetch("/loginchk", {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: {}
+      });
+    const data = await response.json();
+    if (response.ok) {
+        return data;
+    }
+    return {state:-1, des:"dochk response not ok"}
+}
+
+function getLoginState() {
+    /*
+    {
+        -1: server not suppose
+        0: not sign in state
+        1: sign in state
+        2: guest state
+    }
+     */
+    const token = localStorage.getItem('token');
+    const name = localStorage.getItem('username');
+    if (token == null && name == null) {
+        return {state: 0, des: ""}
+    }
+    if (name == "guest") {
+        return {state: 2, des: ""} 
+    }
+    if (token != null && name != null) {
+        return {state: 1, des: "", username: name}
+    }
+
+
+    return {};
 }
 
 /*
@@ -94,12 +142,6 @@ async function chk2() {
     }
 }
 */
-
-function logout() {
-    localStorage.removeItem('token'); // 移除 token
-    alert('Logged out successfully.');
-    window.location.href = '/login.html'; // 導向登入頁
-}
 
 /*
 function isLoggedIn() {
@@ -146,3 +188,24 @@ function fetchProtectedData() {
         .catch(error => console.error('Error:', error));
 }
 */
+
+/*
+const response = await fetch('/login', { //await fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        let token = data.token; // 儲存 token
+        localStorage.setItem('token', token); // 儲存 token 到 localStorage
+        //alert('Login successful!'); console.log("response.ok");
+        return { state: 1, des: "Login successful!", username: data.username };
+    } else {
+        console.log("!response.ok");
+        return { state: -1, des: data.error };
+        //alert(data.error);
+    }
+        */

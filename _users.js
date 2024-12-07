@@ -73,16 +73,16 @@ async function auth(req, res) {
     } else {
       console.log("user passwd fail");
       // 驗證失敗
-      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ 
         "state": -1,
-        error: 'Invalid credentials' }));
+        des: 'Invalid credentials' }));
     }
   } catch (error) {
-    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ 
       "state": -1,
-      error: 'Server error' }));
+      des: 'Server error: ' + error }));
   }
 
 }
@@ -103,25 +103,27 @@ function chk(req, res) {
   //console.log("authHeader : " + authHeader);console.log("     token : " + token);
 
   if (!token) {
-    res.writeHead(401, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ error: 'Token not provided' }));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ state:-1, des: 'Token not provided' }));
     return;
   }
 
   // 驗證 token
   jwt.verify(token, SECRET_KEY, (err, user) => {
     if (err) {
-      res.writeHead(403, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ 
+      println('err : ' + err);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
         state: -1,
-        error: 'Invalid token: ' + err
+        des: err
       }));
       return;
     }
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       state: 1, 
-      username: `${user.username}` //message: `Hello, ${user.username}!` 
+      username: `${user.username}`, //message: `Hello, ${user.username}!`
+      des: "auth success"
     }));
   });
 

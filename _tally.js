@@ -121,7 +121,7 @@ function cmd(req, res, _cma) {
     // 请求数据接收完成后的处理
     req.on('end', () => {
 
-        print('.');
+        ptlet('.');
 
         res.setHeader('Content-Type', 'text/html');
         res.end(msgs[_cma]);

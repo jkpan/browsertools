@@ -87,13 +87,13 @@
         <label></label><br>
         <button type="submit">Login</button>
         <p></p>
-        <button id="getProtected">Get Protected Resource</button>
+        <!-- <button id="getProtected">Get Protected Resource</button> -->
     </form>
 
     <p></p>
 
-
     <script>
+
         const loginForm = document.getElementById('loginForm');
         const getProtectedButton = document.getElementById('getProtected');
 
@@ -104,36 +104,42 @@
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-
+            /*
             let result = await auth(
                 username,
                 password,
                 (json) => { //console.log(JSON.stringify(json));
                     if (json.state == 1) {
-                        let token = data.token; // 儲存 token
-                        localStorage.setItem('token', token); // 儲存 token 到 localStorage
+                        let token = json.token;
+                        newLogin(username, token);
+                        opener.handleLogin(json);
                         window.close();
                     } else {
-                        alert(json.error);
+                        alert(json.des);
+                        document.getElementById('username').value = '';
+                        document.getElementById('password').value = '';
                     }
                 },
                 (json) => {
-                    alert(json.error);
+                    alert(json.des);
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
                 });
-
-            /*
-            console.log(JSON.stringify(result));
-
-            if (result["state"] == 1) {
-                alert(result["des"]);
-                window.close();
-            } else if (result["state"] == -1) {
-                alert(result["des"]);
-            }
-            */
-
+                */
+               let result = await doLogin(username, password); //console.log(JSON.stringify(result));
+               if (result.state == 1) {
+                    let token = result.token;
+                    newLogin(username, token);
+                    opener.handleLogin(result);
+                    window.close();
+                } else {
+                    alert(result.des);
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                }
         });
 
+        /*
         // 獲取保護資源事件
         getProtectedButton.addEventListener('click', async () => {
             let result = await chk();
@@ -144,6 +150,7 @@
                 alert(result["des"]);
             }
         });
+        */
 
         /*
         // 當頁面載入時，檢查是否已登入

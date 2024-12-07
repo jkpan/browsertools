@@ -468,6 +468,7 @@ var printSaved = true;
 var verseCount = 4;
 var fontColorType = 1;
 //var print_ctx_vidx = 1;
+var username = null;
 
 function colorSwitch_hlight() {
   switch (color_selection_hlight) {
@@ -691,7 +692,7 @@ function chkWebsocket() {
 
   if (timeoutID >= 0) window.clearTimeout(timeoutID);
 
-  if (sync_type != 6) {
+  if (sync_type != 5) {
     if (ws && ws.readyState === WebSocket.OPEN) {
       ws.close();
       ws = null;
@@ -726,7 +727,14 @@ function initWebsocket() {
     port = parseInt(window.location.port, 10);
   }
   //port += 8000; //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible'); //
+  //ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible'); //
+  if (username == 'guest' || username == null) {
+    ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible');  
+  } else {
+    ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible/' + username); //
+  }
+
+  //console.log('ws://' + serverDomain + ':' + port + '/Bible' + (username == 'guest'?'':'/' + username));
   ws.onopen = function () {
     console.log('Connected to server');
     ws.send('Hello - from 聖經 client');
@@ -828,12 +836,11 @@ function ajax_restore() {
     '/restorescripture',
     (res) => {//console.log(JSON.stringify(res));
       restoreFromJson(res);
-      if (sync_type == 5) setTimeout(ajax_restore, 200);
-
+      if (sync_type == 6) setTimeout(ajax_restore, 200);
     },
     () => {
       console.log('error: delay & re-send');
-      if (sync_type == 5) setTimeout(ajax_restore, 2000);
+      if (sync_type == 6) setTimeout(ajax_restore, 2000);
     });
 }
 
@@ -862,9 +869,8 @@ function saveAction2Local() {
   //if (funcInterval) return;
   if (!(sync_type == 1 || sync_type == 2 || sync_type == 3)) return;
 
-  if (sync_type == 2 || sync_type == 3) {
-    ajax_sync();
-  }
+  if (sync_type == 2 || sync_type == 3) ajax_sync();
+  
   if (sync_type == 2) return;
 
   _saveAction2Local();
@@ -1050,17 +1056,15 @@ function setMsg_X() {
   synctrls();
 }
 
-function setMsg_play() {
+function setMsg_play_socket() {
   sync_type = 5;
   synctrls();
 }
 
-function setMsg_play_socket() {
+function setMsg_play() {
   sync_type = 6;
   synctrls();
 }
-
-
 
 function createCtrlBtn() {
   removeDiv();
@@ -1128,6 +1132,18 @@ function createCtrlBtn() {
   div.appendChild(btn_ls);
   ctrls[4] = btn_ls;
 
+  var btn_wss = _newBtn();
+  btn_wss.innerHTML = 'ws slave';
+  btn_wss.onclick = function () {
+    setMsg_play_socket();
+    return false;
+  };
+  div.appendChild(btn_wss);
+  ctrls[5] = btn_wss;
+
+  syntoggle();
+  
+  /*
   var btn_ws = _newBtn();
   btn_ws.innerHTML = 'web slave';
   btn_ws.onclick = function () {
@@ -1135,25 +1151,32 @@ function createCtrlBtn() {
     return false;
   };
   div.appendChild(btn_ws);
-  ctrls[5] = btn_ws;
-
-  var btn_wss = _newBtn();
-  btn_wss.innerHTML = 'websocket slave';
-  btn_wss.onclick = function () {
-    setMsg_play_socket();
-    return false;
-  };
-  div.appendChild(btn_wss);
-  ctrls[6] = btn_wss;
-
-  div.appendChild(document.createElement("br"));
-  div.appendChild(document.createElement("br"));
-
-  syntoggle();
-
+  ctrls[6] = btn_ws;
+  */
+  /*
+  chk((json) => { //console.log(JSON.stringify(json));
+    if (json.state == 1) {
+      username = json.username;
+      btn_wss.innerHTML = (username === 'guest'?'':username) + ' ws slave';
+      syntoggle();
+      return;
+    }
+    btn_wm.hidden = true;
+    btn_lwm.hidden = true;
+    btn_wss.hidden = true;
+    syntoggle();
+  },
+  (json) => {
+    btn_wm.hidden = true;
+    btn_lwm.hidden = true;
+    btn_wss.hidden = true;
+    syntoggle();
+  });
+  */
 }
 
 function syntoggle() {
+  if (ctrls[sync_type].hidden) setMsg_none();
   for (let i = 0; i < ctrls.length; i++) {
     if (sync_type == i) {
       ctrls[i].style.backgroundColor = 'rgb(255, 255, 255)';
@@ -1177,8 +1200,8 @@ function synctrls() {
     case 2: break;
     case 3: break;
     case 4: startRestoreInterval(); break;
-    case 5: startRestoreFromServerInterval(); break;
-    case 6: initWebsocket(); break;
+    case 5: initWebsocket(); break;
+    case 6: startRestoreFromServerInterval(); break;
   }
   //return;
   removeDiv();
@@ -1607,7 +1630,7 @@ function _render(progress) {
     ctx.fillText(recogResult, canvas.width, 2);
     ctx.textAlign = "left";
 
-    if (sync_type == 4 || sync_type == 5 || sync_type == 6) { //if (funcInterval) {
+    if (sync_type >= 4) {
       ctx.fillStyle = color_pointer[2];
       let _r = 4;//fontsize_sml_sml/5;
       ctx.fillRect(0, 0, _r * 2, fontsize_sml_sml);
@@ -2288,7 +2311,7 @@ function keyboard(e) {
     case 'KeyJ':
       if (sync_type == 1) 
         restoreActionFromLocal();
-      else if (sync_type != 5) 
+      else if (sync_type > 1 && sync_type != 6) 
         ajax_restore();
       return;
     default:
