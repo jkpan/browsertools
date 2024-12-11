@@ -131,7 +131,6 @@ function chk(req, res) {
 
 function adduser(username, password) {
   if (username.toLowerCase() == 'guest') return { state:-1, des:"name exist"};
-
   return { state:1, 
            username: username, 
            des:"name exist"};

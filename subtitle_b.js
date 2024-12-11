@@ -26,25 +26,25 @@ function dropHandler(event) {
 
   // 檢查是否有拖拉的檔案
   if (event.dataTransfer.items) {
-      // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
-      for (var i = 0; i < event.dataTransfer.items.length; i++) {
-          if (event.dataTransfer.items[i].kind === 'file') {
-              var file = event.dataTransfer.items[i].getAsFile();
-              if (file.type.startsWith('image/')) {
-                var reader = new FileReader();
-                // 读取文件内容
-                reader.onload = function (event) {
-                  image_base64 = event.target.result;
-                  showImage();
-                };
-                reader.readAsDataURL(file);
-              } else {
-                let div = document.getElementById("image_container");
-                div.innerHTML = '';
-                image_base64 = null;
-              }
-          }
+    // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
+    for (var i = 0; i < event.dataTransfer.items.length; i++) {
+      if (event.dataTransfer.items[i].kind === 'file') {
+        var file = event.dataTransfer.items[i].getAsFile();
+        if (file.type.startsWith('image/')) {
+          var reader = new FileReader();
+          // 读取文件内容
+          reader.onload = function (event) {
+            image_base64 = event.target.result;
+            showImage();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          let div = document.getElementById("image_container");
+          div.innerHTML = '';
+          image_base64 = null;
+        }
       }
+    }
   }
 }
 
@@ -420,8 +420,8 @@ const LEV_2_OPC = 0.8;
 const LEV_3_OPC = 0.7;
 
 var fontfactor = 14.0;
-const fontFamily_array = 
-["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC"]; //google fonts
+const fontFamily_array =
+  ["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC"]; //google fonts
 //["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
 
 var fontFamily = fontFamily_array[0];
@@ -729,7 +729,7 @@ function initWebsocket() {
   //port += 8000; //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
   //ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible'); //
   if (username == 'guest' || username == null) {
-    ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible');  
+    ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible');
   } else {
     ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible/' + username); //
   }
@@ -870,7 +870,7 @@ function saveAction2Local() {
   if (!(sync_type == 1 || sync_type == 2 || sync_type == 3)) return;
 
   if (sync_type == 2 || sync_type == 3) ajax_sync();
-  
+
   if (sync_type == 2) return;
 
   _saveAction2Local();
@@ -907,15 +907,15 @@ function restoreAnim(volume, chapter, verse, _doblank) {
   */
 
   keylock = false;
-  if (_doblank != doblank) keyboard({code:'KeyB', keyCode: 66 });
+  if (_doblank != doblank) keyboard({ code: 'KeyB', keyCode: 66 });
 
   if (volume == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
-    keyboard({code:'ArrowLeft', keyCode: 37 }); //left
+    keyboard({ code: 'ArrowLeft', keyCode: 37 }); //left
     return;
   }
 
   if (volume == song && chapter == getNextChapter(phase, line) && verse == getNextVerse(phase, line)) {
-    keyboard({code:'ArrowRight', keyCode: 39 }); //right
+    keyboard({ code: 'ArrowRight', keyCode: 39 }); //right
     return;
   }
 
@@ -1067,12 +1067,13 @@ function setMsg_play() {
 }
 
 function createCtrlBtn() {
+
   removeDiv();
   canvas.hidden = true;
 
   let div = document.createElement('div');
   div.appendChild(document.createElement("br"));
-  
+
   div.style.position = "fixed";
   //div.style.top = "0";
   //div.style.left = "0";
@@ -1141,8 +1142,27 @@ function createCtrlBtn() {
   div.appendChild(btn_wss);
   ctrls[5] = btn_wss;
 
-  syntoggle();
-  
+  doChk().then((result) => {
+    console.log('=======');
+    console.log(JSON.stringify(result));
+    if (result.state > 0) {
+      ctrls[2].hidden = false;
+      ctrls[3].hidden = false;
+      ctrls[5].hidden = false;
+    } else {
+      ctrls[2].hidden = true;
+      ctrls[3].hidden = true;
+      ctrls[5].hidden = true;
+    }
+    syntoggle();
+  }).catch(error => {
+    console.error('Error:', error);
+    ctrls[2].hidden = true;
+    ctrls[3].hidden = true;
+    ctrls[5].hidden = true;
+    syntoggle();
+  });
+
   /*
   var btn_ws = _newBtn();
   btn_ws.innerHTML = 'web slave';
@@ -1152,26 +1172,6 @@ function createCtrlBtn() {
   };
   div.appendChild(btn_ws);
   ctrls[6] = btn_ws;
-  */
-  /*
-  chk((json) => { //console.log(JSON.stringify(json));
-    if (json.state == 1) {
-      username = json.username;
-      btn_wss.innerHTML = (username === 'guest'?'':username) + ' ws slave';
-      syntoggle();
-      return;
-    }
-    btn_wm.hidden = true;
-    btn_lwm.hidden = true;
-    btn_wss.hidden = true;
-    syntoggle();
-  },
-  (json) => {
-    btn_wm.hidden = true;
-    btn_lwm.hidden = true;
-    btn_wss.hidden = true;
-    syntoggle();
-  });
   */
 }
 
@@ -1245,7 +1245,7 @@ function printSideTxt(i, j, x, y, a) {
 }
 
 function drawHlight(yy, hh) {
-  
+
   if (color_selection_hlight == 5 && doblank == 0) {
     gradientBg();
     return;
@@ -1254,10 +1254,10 @@ function drawHlight(yy, hh) {
     gradientBg2(yy, hh);
     return;
   }
-  
+
   if (doblank == 0 && phase >= 1) {
     ctx.fillStyle = hlight_pointer;
-    ctx.fillRect(0, yy, canvas.width, hh);    
+    ctx.fillRect(0, yy, canvas.width, hh);
     /*
     const g_gap = hh * 2;
     let grd = ctx.createLinearGradient(0, yy + hh/2, 0, yy - g_gap);
@@ -1715,21 +1715,21 @@ function getPreVerse(chapter, verse) {
 }
 
 function getNextChapter(chapter, verse) {
-    if (chapter == -1) return -1;
-    if (verse < subtitles[chapter].length - 1)
-      return chapter;
-    if (chapter < subtitles.length - 1)
-      return chapter + 1;
-    return -1;
+  if (chapter == -1) return -1;
+  if (verse < subtitles[chapter].length - 1)
+    return chapter;
+  if (chapter < subtitles.length - 1)
+    return chapter + 1;
+  return -1;
 }
 
 function getNextVerse(chapter, verse) {
-    if (chapter == -1) return -1;
-    if (verse < subtitles[chapter].length - 1)
-      return verse + 1;
-    if (chapter < subtitles.length - 1)
-      return 0;
-    return -1;
+  if (chapter == -1) return -1;
+  if (verse < subtitles[chapter].length - 1)
+    return verse + 1;
+  if (chapter < subtitles.length - 1)
+    return 0;
+  return -1;
 }
 
 function jump4external(_song, _phase, _line) {
@@ -1819,9 +1819,9 @@ function combineKey(e) {
       phase = 0;
       line = 0;
       break;
-    case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4': 
-    case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':  
-    //case 48: case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57:
+    case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
+    case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
+      //case 48: case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57:
       uisel = 0;
       if (song == 0) break;
 
@@ -1975,7 +1975,7 @@ function _targetAnim() {
     }
     subtitles = SONGS[song];
     chkVolDir(pre, song);
-    window.requestAnimationFrame(_targetAnim); 
+    window.requestAnimationFrame(_targetAnim);
     //saveAction2Local();
     return;
   }
@@ -1988,7 +1988,7 @@ function _targetAnim() {
     else
       phase += step;
     if (skewidx < 0) _repaint();
-    window.requestAnimationFrame(_targetAnim); 
+    window.requestAnimationFrame(_targetAnim);
     //saveAction2Local();
     return;
   }
@@ -2017,8 +2017,8 @@ function jump2preset4Anim(ps) {
   for (var i = 1; i < SONGS.length; i++) {
     if (ps[0] == SONGS[i][0][0]) {
 
-      if (!(ps[1] < SONGS[i].length && 
-            ps[2] < SONGS[i][ps[1]].length)) {
+      if (!(ps[1] < SONGS[i].length &&
+        ps[2] < SONGS[i][ps[1]].length)) {
         return;
       }
 
@@ -2057,11 +2057,11 @@ function keyboard(e) {
     return;
   }
 
-  switch(e.code) { //switch (e.keyCode) {
+  switch (e.code) { //switch (e.keyCode) {
     case 'KeyF':
-      for (let i=0;i<fontFamily_array.length;i++) {
+      for (let i = 0; i < fontFamily_array.length; i++) {
         if (fontFamily == fontFamily_array[i]) {
-          fontFamily = fontFamily_array[(i+1) % fontFamily_array.length];
+          fontFamily = fontFamily_array[(i + 1) % fontFamily_array.length];
           break;
         }
       }
@@ -2235,9 +2235,9 @@ function keyboard(e) {
       chkVolDir(oldsong, song);
     }
       break;
-    case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4': 
+    case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
     case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
-    //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+      //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
       var value = e.keyCode - 48;
       if (value > presetVerse.length - 1) break;
       if (presetVerse[value][0].length == 0) break;
@@ -2309,9 +2309,9 @@ function keyboard(e) {
       uisel = 0;
       break;
     case 'KeyJ':
-      if (sync_type == 1) 
+      if (sync_type == 1)
         restoreActionFromLocal();
-      else if (sync_type > 1 && sync_type != 6) 
+      else if (sync_type > 1 && sync_type != 6)
         ajax_restore();
       return;
     default:
@@ -2559,7 +2559,7 @@ function userhelp() {
   //ctx.clearRect(0, 0, canvas.width/2, canvas.height/2);
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.font = fontsize_sml + "px " + fontFamily; 
+  ctx.font = fontsize_sml + "px " + fontFamily;
   ctx.textAlign = "left";
 
   let gap = canvas.height / (content_help[0].length + 1);
@@ -2592,61 +2592,60 @@ init();
 
 // message 事件
 function receiveMessage(e) {
-  if (e.data == 'x') { //alert(e.data);
-    setMsg_X();
-  } else if (e.data == 'o') { //alert(e.data);
-    setMsg_O();
+
+  const jsonData = JSON.parse(e.data);
+  if (jsonData.color) color_selection = jsonData.color; else color_selection = 0;
+  if (jsonData.verticle) display_mode = 1; else display_mode = 0;
+  if (jsonData.printSaved) printSaved = true; else printSaved = false;
+
+  colorSwitch();
+  if (jsonData.hlight) {
+    color_selection_hlight = jsonData.hlight;
+    colorSwitch_hlight();
+  }
+
+  if (jsonData.verseCount) verseCount = jsonData.verseCount;
+
+  if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
+
+  if (jsonData.saved && jsonData.saved.length > 0) {
+    for (let i = 0; i < jsonData.saved.length; i++) {
+      if (i >= 10) return;
+      presetVerse[i] = jsonData.saved[i];
+    }
+  }
+
+  if (jsonData.transparent) {
+    makeTransparent = true;
   } else {
+    makeTransparent = false;
+  }
+  if (jsonData.fsizedist) {
+    fontsize_dist = 1;
+  } else {
+    fontsize_dist = 0;
+  }
 
-    const jsonData = JSON.parse(e.data);
-    if (jsonData.color) color_selection = jsonData.color; else color_selection = 0;
-    if (jsonData.verticle) display_mode = 1; else display_mode = 0;
-    if (jsonData.printSaved) printSaved = true; else printSaved = false;
+  if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
+    image_base64 = jsonData.imageBase64;
+    showImage();
+  }
 
-    colorSwitch();
-    if (jsonData.hlight) {
-      color_selection_hlight = jsonData.hlight;
-      colorSwitch_hlight();
-    }
+  sync_type = 0;
 
-    if (jsonData.verseCount) verseCount = jsonData.verseCount;
-
-    if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
-
-    if (jsonData.saved && jsonData.saved.length > 0) {
-      for (let i = 0; i < jsonData.saved.length; i++) {
-        if (i >= 10) return;
-        presetVerse[i] = jsonData.saved[i];
-      }
-    }
-
-    if (jsonData.transparent) {
-      makeTransparent = true;
-    } else {
-      makeTransparent = false;
-    }
-    if (jsonData.fsizedist) {
-      fontsize_dist = 1;
-    } else {
-      fontsize_dist = 0;
-    }
-
-    if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
-      image_base64 = jsonData.imageBase64;
-      showImage();
-    }
-
-    sync_type = 0;
-    if (jsonData.syncType) {
+  doChk().then((result)=>{
+    if (result.state > 0) {
       sync_type = jsonData.syncType;
       synctrls();
+    } else {
+      sync_type = 0;
     }
-
     if (sync_type <= 3) {
-      keyboard({code:'Digit1', keyCode: 49 });
+      keyboard({ code: 'Digit1', keyCode: 49 });
     }
-
-  }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
   _repaint();
 }
 
@@ -2663,7 +2662,7 @@ function keyupAction(e) {
   //return;
 
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') saveAction2Local();
-  
+
   if (recognition && recognizing) {
     recognition.stop();
     return;
@@ -2685,7 +2684,7 @@ function keydownAction(e) {
       console.log('x');
   }
   */
-  
+
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = 1;
     _repaint();
@@ -2718,9 +2717,9 @@ window.addEventListener('beforeunload', function (e) {
 window.addEventListener('wheel', function (event) {
   //only vertical scroll
   if (event.deltaY > 4) {
-    keyboard({code:'PageDown', keyCode: 34 }); //right
+    keyboard({ code: 'PageDown', keyCode: 34 }); //right
   } else if (event.deltaY < -4) {
-    keyboard({code:'PageUp', keyCode: 33 }); //left
+    keyboard({ code: 'PageUp', keyCode: 33 }); //left
   }
 });
 
@@ -2808,57 +2807,57 @@ function touchend(evt) { //touchend
 
   //font size decrease
   if (gw == 0 && gh == 0) {
-    combineKey({code:'Minus', keyCode: 189 });
+    combineKey({ code: 'Minus', keyCode: 189 });
     return;
   }
   //color change
   if (gw == 1 && gh == 0) {
-    keyboard({code:'KeyA', keyCode: 65 });
+    keyboard({ code: 'KeyA', keyCode: 65 });
     return;
   }
   //font size increase
   if (gw == 2 && gh == 0) {
-    combineKey({code:'Equal', keyCode: 187 });
+    combineKey({ code: 'Equal', keyCode: 187 });
     return;
   }
 
   //preious volume
   if (gw == 0 && gh == 1) {
-    keyboard({code:'Minus', keyCode: 189 });
+    keyboard({ code: 'Minus', keyCode: 189 });
     return;
   }
 
   if (gw == 1 && gh == 1) {
-    keyboard({code:'Enter', keyCode: 13 });
+    keyboard({ code: 'Enter', keyCode: 13 });
     return;
   }
 
   //next volume
   if (gw == 2 && gh == 1) {
-    keyboard({code:'Equal', keyCode: 187 });
+    keyboard({ code: 'Equal', keyCode: 187 });
     return;
   }
 
 
   //up
   if (gw == 1 && gh == 2) {
-    keyboard({code:'ArrowUp', keyCode: 38 });
+    keyboard({ code: 'ArrowUp', keyCode: 38 });
     return;
   }
   //down
   if (gw == 1 && gh == 3) {
-    keyboard({code:'ArrowDown', keyCode: 40 });
+    keyboard({ code: 'ArrowDown', keyCode: 40 });
     return;
   }
 
   //left
   if (gw == 0 && (gh == 2 || gh == 3)) {
-    keyboard({code:'ArrowLeft', keyCode: 37 });
+    keyboard({ code: 'ArrowLeft', keyCode: 37 });
     return;
   }
   //right
   if (gw == 2 && (gh == 2 || gh == 3)) {
-    keyboard({code:'ArrowRight', keyCode: 39 });
+    keyboard({ code: 'ArrowRight', keyCode: 39 });
     return;
   }
 
@@ -2902,16 +2901,16 @@ function touchmove(evt) {
     sumOffset = 0;
     switch (colState) {
       //case 1: keyboard({keyCode : 189}); break;
-      case 2: keyboard({code:'ArrowUp', keyCode: 38 }); break;
-      case 3: keyboard({code:'PageUp', keyCode: 33 }); break;
+      case 2: keyboard({ code: 'ArrowUp', keyCode: 38 }); break;
+      case 3: keyboard({ code: 'PageUp', keyCode: 33 }); break;
     }
     touchMoveState = 1;
   } else if (sumOffset <= -touchOffset) {//往下
     sumOffset = 0;
     switch (colState) {
       //case 1: keyboard({keyCode : 187}); break;
-      case 2: keyboard({code:'ArrowDown', keyCode: 40 }); break;
-      case 3: keyboard({code:'PageDown', keyCode: 34 }); break;
+      case 2: keyboard({ code: 'ArrowDown', keyCode: 40 }); break;
+      case 3: keyboard({ code: 'PageDown', keyCode: 34 }); break;
     }
     touchMoveState = 1;
   }
@@ -2998,7 +2997,7 @@ function addFontSizeTouchEvent() {
     }
     //color change
     if (gw == 1 && gh == 0) {
-      keyboard({code:'KeyA', keyCode: 65 });
+      keyboard({ code: 'KeyA', keyCode: 65 });
       return;
     }
     //font size increase

@@ -6,42 +6,42 @@ function _ajax_auth(url, _header, _body, succcb, errcb) {
         method: "POST",
         headers: _header, //{"Content-Type": "application/json"},
         body: JSON.stringify(_body)
-      }).then((response) => {
+    }).then((response) => {
         if (response.ok) {
-          return response.json(); // 解析JSON回應
+            return response.json(); // 解析JSON回應
         } else {
-          throw new Error("請求失敗：" + response.status);
+            throw new Error("請求失敗：" + response.status);
         }
-      }).then((data) => { // 在這裡處理解析後的JSON物件 //console.log(data);
+    }).then((data) => { // 在這裡處理解析後的JSON物件 //console.log(data);
         succcb(data);
-      }).catch((error) => { //console.log('' + error);
+    }).catch((error) => { //console.log('' + error);
         errcb(error);
-      });
+    });
 }
 
 async function auth(username, password, succcb, errcb) {
- 
-    _ajax_auth('/login', 
-            { "Content-Type": "application/json" }, 
-            { username, password },
-            succcb, 
-            errcb
+
+    _ajax_auth('/login',
+        { "Content-Type": "application/json" },
+        { username, password },
+        succcb,
+        errcb
     );
 }
 
 async function chk(succcb, errcb) {
     const token = localStorage.getItem('token');
     console.log('token :' + token);
-    if (token == null) { 
+    if (token == null) {
         console.log('token null');
-        errcb({state:-1, des:"token null"});
+        errcb({ state: -1, des: "token null" });
         return;
     }
-    _ajax_auth('/loginchk', 
+    _ajax_auth('/loginchk',
         {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
-        }, 
+        },
         {},
         succcb,
         errcb
@@ -49,10 +49,10 @@ async function chk(succcb, errcb) {
 }
 
 function newLogin(username, token) {
-    cleanLogin();
+    cleanLogin();  //if (username == 'guest') return;
     localStorage.setItem('username', username);
     if (token)
-       localStorage.setItem('token', token);
+        localStorage.setItem('token', token);
 }
 
 function cleanLogin() {
@@ -64,61 +64,67 @@ function cleanLogin() {
 async function doLogin(username, password) {
     let response = await fetch("/login", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
-      });
+    });
     const data = await response.json();
     if (response.ok) {
         return data;
     }
-    return {state:-1, des:"doLogin response not ok"}
+    return { state: -1, des: "doLogin response not ok" }
 }
 
-async function doChk() {
-    const token = localStorage.getItem('token');
-    if (token == null) {
-        return {state:-1, des:"token null"};
-    }
-    let response = await fetch("/loginchk", {
-        method: "POST",
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-        body: {}
-      });
-    const data = await response.json();
-    if (response.ok) {
-        return data;
-    }
-    return {state:-1, des:"dochk response not ok"}
-}
-
-function getLoginState() {
-    /*
+/*
     {
         -1: server not suppose
         0: not sign in state
         1: sign in state
         2: guest state
     }
-     */
-    const token = localStorage.getItem('token');
-    const name = localStorage.getItem('username');
-    if (token == null && name == null) {
-        return {state: 0, des: ""}
+*/
+async function doChk() {
+    
+    try {
+        let token = localStorage.getItem('token');
+        if (token == null) token = "";
+        let response = await fetch("/loginchk", {
+            method: "POST",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: {}
+        });
+        const data = await response.json();
+        if (response.ok) {
+            if (data.state == 1) {
+                if (data.username == 'guest')
+                    return { state: 2, username: data.username, des: "" };
+                return { state: 1, username: data.username, des: "" };
+            }
+            return {state: 0, des: ""}
+        }
+    } catch (err) {
+        return {state: -1, des: "dochk response not ok"}
     }
-    if (name == "guest") {
-        return {state: 2, des: ""} 
-    }
-    if (token != null && name != null) {
-        return {state: 1, des: "", username: name}
-    }
-
-
-    return {};
 }
 
+/*
+async function getLoginState() {
+    
+    try {
+        let result = await doChk();
+        if (result.state == 1) {
+            if (result.username == 'guest')
+                return { state: 2, username: result.username, des: "" };
+            return { state: 1, username: result.username, des: "" };
+        }
+        return {state: 0, des: ""}
+    } catch (err) {
+        return {state: -1, des: ""}
+    }
+}
+*/
 /*
 async function chk2() {
 

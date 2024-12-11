@@ -118,7 +118,13 @@
     }
 
     .sideMenu {
+
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
       position: fixed;
+      
       top: 0;
       left: 0px;
       /* 初始位置在左侧屏幕外 */
@@ -132,6 +138,21 @@
       z-index: 90;
     }
 
+    .btncontainer {
+      grid-column: 1 / 11;
+      grid-row: 1 / 11;
+      direction: ltr; /* 改為從右到左 */
+      text-align: left;
+      /* background-color: blue; */
+    }
+
+    .right-to-left {
+      grid-column: 8 / 11;
+      grid-row: 2 / 10;
+      direction: rtl;
+      text-align: right;
+    }
+    
     .menuButton {
       background-color: transparent;
       border-color: #008000;
@@ -141,31 +162,10 @@
       position: fixed;
       z-index: 91;
     }
-
+    
     label {
       color: #00ee00;
     }
-
-    .account {
-      
-      display: flex;
-      flex-direction: row-reverse;
-      top: 10px;
-      
-    }
-    .account2 {
-      
-      direction: rtl; /* 文字與內容從右向左排列 */
-      text-align: right; /* 確保文字對齊方向 */
-      
-    }
-    /*
-    .account_item {
-      padding: 10px;
-      background-color: lightblue;
-      border: 1px solid #ccc;
-    }
-      */
   </style>
   <title>Tabs</title>
 </head>
@@ -205,55 +205,57 @@
   </div>
 
   <input id="jsonfile" type="file" accept=".json" hidden="true" onchange="selectSetting(event)" />
-  <!--button class="okbutton" hidden onclick="current2Json()">export</button-->
-  
 
   <button id="menubtn" class="menuButton" style="top:10px;left:10px;" onclick="sideClick()">-</button>
 
   <div class="sideMenu" id="sideMenu">
-    &nbsp;
-    &nbsp;
-    &nbsp;
-    &nbsp;
-    <button id="btn_1" class="button" onclick="switchFunction(1)">1</button>
-    <button id="btn_2" class="button" onclick="switchFunction(2)">2</button>
-    <button id="btn_3" class="button" onclick="switchFunction(3)">3</button>
-    <button id="btn_4" class="button" onclick="switchFunction(4)">4</button>
-    <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
-    <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
-    <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
-    
+    <div class="btncontainer">
       &nbsp;
-      <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
       &nbsp;
-      <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign up</label>
       &nbsp;
-      <label id="__username" hidden="true"></label>
-   
-    <br>
-    &nbsp;
-    &nbsp;
-    &nbsp;
-    &nbsp;
-    <button class="okbutton" onclick="reloadFrame()">R</button>
-    <button class="okbutton" onclick="openCtrl()">C</button>
-    <!-- <button id="oxBtn" class="okbutton" onclick="startRestoreInterval()">O</button> -->
-    <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
-    &nbsp;
-    <button class="button" onclick="preload('./json/tab_01.json')">#1</button>
-    <button class="button" onclick="preload('./json/tab_02.json')">#2</button>
-    <button class="button" onclick="preload('./json/tab_03.json')">#3</button>
-    <button class="button" onclick="preload('./json/tab_04.json')">#4</button>
-    <button class="cancelbutton" onclick="loadJson()">#</button>
-    <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
-    <button class="button" onclick="savefile(1)">1^</button>
-    <button class="button" onclick="savefile(2)">2^</button>
-    <button class="button" onclick="savefile(3)">3^</button>
-    <button class="button" onclick="savefile(4)">4^</button>
-    &nbsp;
-    <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
+      &nbsp;
+      <button id="btn_1" class="button" onclick="switchFunction(1)">1</button>
+      <button id="btn_2" class="button" onclick="switchFunction(2)">2</button>
+      <button id="btn_3" class="button" onclick="switchFunction(3)">3</button>
+      <button id="btn_4" class="button" onclick="switchFunction(4)">4</button>
+      <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
+      <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
+      <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
+      <br>
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <button class="okbutton" onclick="reloadFrame()">R</button>
+      <button class="okbutton" onclick="openCtrl()">C</button>
+      <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
+      &nbsp;
+      <button class="button" onclick="preload('./json/tab_01.json')">#1</button>
+      <button class="button" onclick="preload('./json/tab_02.json')">#2</button>
+      <button class="button" onclick="preload('./json/tab_03.json')">#3</button>
+      <button class="button" onclick="preload('./json/tab_04.json')">#4</button>
+      <button class="cancelbutton" onclick="loadJson()">#</button>
+      <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
+      <button class="button" onclick="savefile(1)">1^</button>
+      <button class="button" onclick="savefile(2)">2^</button>
+      <button class="button" onclick="savefile(3)">3^</button>
+      <button class="button" onclick="savefile(4)">4^</button>
+      &nbsp;
+      <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
+    </div>
+      <div class="right-to-left">
+        &nbsp;
+        <label id="__username" hidden="true"></label>
+        &nbsp;
+        <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
+        &nbsp;
+        <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign out</label>
+        &nbsp;
+      </div>
+
+
   </div>
-  
+
 </body>
 
 </html>
@@ -628,7 +630,10 @@
   }
 
   async function chkloginstatus() {
-    let result = await doChk();//console.log(JSON.stringify(result));
+    let result = await doChk();
+    console.log('#####');
+    console.log(JSON.stringify(result));
+    console.log('#####');
     handleLogin(result);
   }
 
@@ -636,7 +641,7 @@
     document.getElementById('__username').hidden = true;
     document.getElementById('__login').hidden = true;
     document.getElementById('__logout').hidden = true;
-    if (resultJson.state == 1) {
+    if (resultJson.state > 0) {
       username = resultJson.username;
       document.getElementById('__username').hidden = false;
       document.getElementById('__username').innerHTML = resultJson.username;

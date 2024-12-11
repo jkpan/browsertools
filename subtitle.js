@@ -142,12 +142,18 @@ function json2List(fileContent) {
     showImage();
   }
 
-  sync_type = 0;
-  if (jsonData.syncType) {
-    sync_type = jsonData.syncType;
-    synctrls();
-  }
-  
+  sync_type = 0;  
+  doChk().then((result)=>{
+    if (result.state > 0) {
+      sync_type = jsonData.syncType;
+      synctrls();
+    } else {
+      sync_type = 0;
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+
   if (subtitles != undefined)
     _repaint();
 
@@ -1154,14 +1160,29 @@ function createCtrlBtn() {
   div.appendChild(btn_wss);
   ctrls[5] = btn_wss;
 
-  div.appendChild(document.createElement("br"));
-  div.appendChild(document.createElement("br"));
-
-  syntoggle();
+  doChk().then((result) => {
+    if (result.state > 0) {
+      ctrls[2].hidden = false;
+      ctrls[3].hidden = false;
+      ctrls[5].hidden = false;
+    } else {
+      ctrls[2].hidden = true;
+      ctrls[3].hidden = true;
+      ctrls[5].hidden = true;
+    }
+    syntoggle();
+  }).catch(error => {
+    console.error('Error:', error);
+    ctrls[2].hidden = true;
+    ctrls[3].hidden = true;
+    ctrls[5].hidden = true;
+    syntoggle();
+  });
 
 }
 
 function syntoggle() {
+  if (ctrls[sync_type].hidden) sync_type = 0;
   for (let i = 0; i < ctrls.length; i++) {
     if (sync_type == i) {
       ctrls[i].style.backgroundColor = 'rgb(255, 255, 255)';
@@ -1334,16 +1355,7 @@ init();
 var keylock = false;
 
 function receiveMessage(e) {
-
-  if (e.data == 'x') { //alert(e.data);
-    startRestoreInterval();
-  } else if (e.data == 'o') { //alert(e.data);
-    stopActionInterval();
-  } else {
-    json2List(e.data);
-  }
-  if (subtitles != undefined)
-    _repaint();
+  json2List(e.data);
 }
 
 // 監聽 message 事件
