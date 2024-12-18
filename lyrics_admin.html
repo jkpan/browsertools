@@ -333,7 +333,12 @@
     //抓取預設歌庫
     async function fetchData() {
         try {
-            const response = await fetch('./json/songbase.json'); // 等待 fetch 请求完成 ./usr/[account]/songbase.json
+
+            let result = await doChk();
+            if (result.state <= 0) return;
+            let user = result.username;
+            
+            const response = await fetch(`./usr/${user}/songbase.json`); // 等待 fetch 请求完成 ./usr/[account]/songbase.json
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }

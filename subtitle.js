@@ -978,9 +978,7 @@ function _layer0() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (makeTransparent) return;
-
-  console.log('mode ' + mode);
+  if (makeTransparent || image_base64) return;
 
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
