@@ -1,20 +1,27 @@
-const READ_SRC = './json/songbase.json';
-const WRITE_SRC = './json/songbase.json';
+const READ_SRC = 'songbase.json';
+const WRITE_SRC = 'songbase.json';
 
 const fs = require('fs');
 var WebSocket = require('ws');
 
-var song = [
-  ['']
-];
-var phase = 0;
-var line = 0;
-var song_doblank = 0;
+var song = [['']];
 
-const S_clients = new Set();
+const S_clients_MAP = new Map();
+const song_MAP = new Map();
 
-function getSongObjStr() {
-  if (!song)
+function syncData(usr, song, phase, line, db) {
+  let obj = {
+    song: song,
+    phase: phase,
+    line: line,
+    song_doblank: db
+  };
+  song_MAP.set(usr, obj);
+}
+
+function getSongObjStr(user) {
+  let obj = song_MAP.get(user);
+  if (obj == null)
     return JSON.stringify({
       song: [[""]],
       phase: 0,
@@ -22,10 +29,11 @@ function getSongObjStr() {
       blank: 0
     });
   return JSON.stringify({
-    song: song,
-    phase: phase,
-    line: line,
-    blank: song_doblank
+    user: user,
+    song: obj.song,
+    phase: obj.phase,
+    line: obj.line,
+    blank: obj.song_doblank
   });
 }
 
@@ -42,69 +50,74 @@ function synclyrics(req, res) {
     // 解析请求数据
     const requestData = JSON.parse(body);
     //println(body);
-
-    song = requestData.song;
-    phase = requestData.phase;
-    line = requestData.line;
-    song_doblank = requestData.blank;
+    syncData(requestData.user,
+      requestData.song,
+      requestData.phase,
+      requestData.line,
+      requestData.blank);
 
     try {
-      println(`<master: ${song[0][0]}, ${phase}, ${line}, ${song_doblank}>`);
+      println(`<master ${requestData.user}: ${requestData.song[0][0]}, ${requestData.phase}, ${requestData.line}, ${requestData.blank}>`);
     } catch (err) {
-      println(`<master: err ${phase}, ${line}, ${song_doblank}>`);
+      println(`<master: err ${requestData.phase}, ${requestData.line}, ${requestData.song_doblank}>`);
     }
 
     res.setHeader('Content-Type', 'application/json');
 
     // 发送响应数据
     res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
-    broadcast();
+    broadcast(requestData.user);
+
+    let obj = song_MAP.get(requestData.user);
+    if (obj == null) return;
 
     if (process.send) {
       process.send({
         type: "syncSong",
-        song: song,
-        phase: phase,
-        line: line,
-        doblank: song_doblank
+        song: obj.song,
+        phase: obj.phase,
+        line: obj.line,
+        doblank: obj.song_doblank,
+        user: requestData.user
       });
     }
-
 
   });
 }
 
 function syncFromWorker(msg) {
-  //syncData(msg.volume, msg.chapter, msg.verse, msg.doblank);
-  //const requestData = JSON.parse(body);
-  //println(body);
-  song = msg.song;
-  phase = msg.phase;
-  line = msg.line;
-  song_doblank = msg.doblank;
-  broadcast();
+  syncData(msg.user, msg.song, msg.phase, msg.line, msg.doblank);
+  broadcast(msg.user);
 }
 
-function broadcast() {
-  let data = getSongObjStr();
-  print(` < conn: ${S_clients.size} > `);
-  S_clients.forEach(function (client) {
+function broadcast(user) {
+  let clients = S_clients_MAP.get(user);
+  if (clients == null) return;
+  let data = getSongObjStr(user);
+  print(` < conn: ${clients.size} > `);
+  clients.forEach(function (client) {
     if (client.readyState === WebSocket.OPEN) {
-      print('<broadcast ' + client._socket.remoteAddress + '>');
+      print('<broadcast ' + user + ' ' + client._socket.remoteAddress + '>');
       client.send(data);
     } else {
-      S_clients.delete(client);
-      print('<' + client._socket.remoteAddress + ' removed>');
+      clients.delete(client);
+      print(`<${user} ${client._socket.remoteAddress} removed>`);
     }
   });
-  //println('');
 }
 
-function addClient(ws) {
-  S_clients.add(ws);
-  ws.on('message', function incoming(message) {
-    println(`<client: ${message}>`);
-    ws.send(getSongObjStr());
+function addClient2Map(usr, ws) {
+  let clients = S_clients_MAP.get(usr);
+  if (clients) {
+    clients.add(ws);
+  } else {
+    let _clients = new Set();
+    S_clients_MAP.set(usr, _clients);
+    _clients.add(ws);
+  }
+  ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
+    println(`<client ${usr}: ${message}>`);
+    ws.send(getSongObjStr(usr));//'Whatsup client! -- from server');
   });
 }
 
@@ -114,6 +127,21 @@ function getArrayDimension(arr) {
   } else {
     return 0;
   }
+}
+
+function getInfo() {
+  //let info = [`[${volume}, ${chapter}, ${verse}, ${doblank}]`];
+  let info = [];
+  let i = 0;
+  S_clients_MAP.forEach((value, key) => {
+    value.forEach(function (client) {
+      if (client.readyState === WebSocket.OPEN) {
+        info[i] = `<🎤 ${key}: ${client._socket.remoteAddress}>`;
+        i++;
+      }
+    });
+  });
+  return info;
 }
 
 function refactor(ALL_SONGS) {
@@ -129,9 +157,7 @@ function refactor(ALL_SONGS) {
       }
     }
   }
-
   //let keys = Object.keys(ALL_SONGS); keys.forEach(function (key, index) { console.log('"' + key + '"');});
-
 }
 
 function formatALL(fstream, ALL_SONGS) {
@@ -180,7 +206,7 @@ function formatALL(fstream, ALL_SONGS) {
       }
         break;
     }
-    console.log("index: " + index + '/' + keys.length);
+    ptlet(` idx: ${index}/${keys.length}`);
     if (index < keys.length - 1)
       fstream.write(indent + '},\n');
     else
@@ -229,6 +255,13 @@ function lyricsBaseAction(req, res) {
     let action = requestData.action;
     let id = requestData.id;
     let content = requestData.song;
+    let user = requestData.user;
+
+    if (user == null) {
+      res.setHeader('Content-Type', 'application/json');// 发送响应数据
+      res.end(JSON.stringify({ "state": "fail" }));
+      return;
+    };
 
     let opObj = {
       "content": content
@@ -240,7 +273,7 @@ function lyricsBaseAction(req, res) {
     switch (action) {
       case 'add':
         println('add start');
-        readAndAction(READ_SRC, (ALL_SONGS) => {
+        readAndAction('./usr/' + user + '/' + READ_SRC, (ALL_SONGS) => {
           println('add in');
           if (ALL_SONGS[id]) {
             result = false;
@@ -252,7 +285,7 @@ function lyricsBaseAction(req, res) {
           result = true;
           println('add save file');
           refactor(ALL_SONGS);
-          const writeStream = fs.createWriteStream(WRITE_SRC);
+          const writeStream = fs.createWriteStream('./usr/' + user + '/' + WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
@@ -266,14 +299,14 @@ function lyricsBaseAction(req, res) {
 
         break;
       case 'fix':
-        readAndAction(READ_SRC, (ALL_SONGS) => {
+        readAndAction('./usr/' + user + '/' + READ_SRC, (ALL_SONGS) => {
           if (ALL_SONGS[id]) {
             ALL_SONGS[id].content = content;
           } else {
             ALL_SONGS[id] = opObj;
           }
           refactor(ALL_SONGS);
-          const writeStream = fs.createWriteStream(WRITE_SRC);
+          const writeStream = fs.createWriteStream('./usr/' + user + '/' + WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
@@ -283,11 +316,11 @@ function lyricsBaseAction(req, res) {
         res.end(JSON.stringify({ "state": "success" }));
         break;
       case 'del':
-        readAndAction(READ_SRC, (ALL_SONGS) => {
+        readAndAction('./usr/' + user + '/' + READ_SRC, (ALL_SONGS) => {
           if (!ALL_SONGS[id]) return;
           delete ALL_SONGS[id];
           refactor(ALL_SONGS)
-          const writeStream = fs.createWriteStream(WRITE_SRC);
+          const writeStream = fs.createWriteStream('./usr/' + user + '/' + WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
@@ -301,23 +334,8 @@ function lyricsBaseAction(req, res) {
   });
 }
 
-function getInfo() {
-  let info = [
-    `<${song[0][0]}, ${phase}, ${line}, ${song_doblank}>`
-  ];
-  let i = 1;
-  //<button onclick="controlParent('Bible')">📖</button>
-  S_clients.forEach(function (client) {
-    if (client.readyState === WebSocket.OPEN) {
-      info[i] = `<🎤 ${client._socket.remoteAddress}>`;
-      i++;
-    }
-  });
-  return info;
-}
-
 module.exports = {
-  addClient,
+  addClient2Map,
   synclyrics,
   lyricsBaseAction,
   songjsonformat,

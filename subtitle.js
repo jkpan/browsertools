@@ -8,6 +8,8 @@ const EMPTY = [
   ]
 ];
 
+let username = null
+
 var SONGS = EMPTY.slice();//[ [['____歌詞____'],['']] ];
 
 function getArrayDimension(arr) {
@@ -21,8 +23,11 @@ function getArrayDimension(arr) {
 //抓取預設歌庫
 async function fetchData() {
   try {
+    let result = await doChk();
+    if (result.state <= 0) return;
+    let user = result.username;
     //const response = await fetch('./json/output.json'); // 等待 fetch 请求完成
-    const response = await fetch('./json/songbase.json'); // 等待 fetch 请求完成
+    const response = await fetch(`./usr/${user}/songbase.json`);//'./json/songbase.json'); // 等待 fetch 请求完成
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
@@ -145,6 +150,7 @@ function json2List(fileContent) {
   sync_type = 0;  
   doChk().then((result)=>{
     if (result.state > 0) {
+      username = result.username;
       sync_type = jsonData.syncType;
       synctrls();
     } else {
@@ -193,9 +199,7 @@ function dropHandler(event) {
           };
           reader.readAsDataURL(file);
         } else {
-          let div = document.getElementById("image_container");
-          div.innerHTML = '';
-          image_base64 = null;
+          removeBackground();
         }
       }
     }
@@ -206,11 +210,19 @@ function dragOverHandler(event) {
   event.preventDefault();
 }
 
+function removeBackground() {
+  let div = document.getElementById("image_container");
+  div.hidden = true;
+  div.innerHTML = '';
+  image_base64 = null;
+}
+
 function showImage() {
 
-  makeTransparent = true;
+  makeTransparent = false;
 
   let div = document.getElementById("image_container");
+  div.hidden = false;
   div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
 
   _repaint();
@@ -356,11 +368,15 @@ function ajax_restore() {
 
 //控方上傳目前
 function ajax_sync() {
+
+  if (username == null) return;
+
   _ajax({
     song: subtitles, //song,
     phase: phase,
     line: line,
-    blank: doblank
+    blank: doblank,
+    user: username
   },
     '/synclyrics',
     (res) => {
@@ -836,7 +852,18 @@ function keyboard(e) {
     case 83: displayProgress = displayProgress == 1 ? 0 : 1; break; //'s'
     case 68: dword = dword == 0 ? 1 : 0; break; //'D'
     case 67: fontColorType = (fontColorType + 1) % 4; break; //'c'
-    case 90: makeTransparent = !makeTransparent; break; //'z'
+    case 90: {
+        makeTransparent = !makeTransparent;
+        let div = document.getElementById("image_container");
+        if (image_base64) {
+          if (makeTransparent) {
+            div.hidden = true;
+          } else {
+            div.hidden = false;
+          }
+        }
+      }
+      break; //'z'
     //case 67: phase = subtitles.length - 1; line = 0; break; //'c' jump to coda last one phase
     case 80:
       mode = (mode + 1) % 4;
@@ -924,6 +951,7 @@ function keyboard(e) {
     //case 13: //'enter' 
     case 27: //'escape'
       mode = 0;
+      removeBackground();
       //removeBtns();
       canvas.hidden = false;
       doblank = 0;
@@ -1141,7 +1169,7 @@ function createCtrlBtn() {
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
   var btn_ls = _newBtn();
-  btn_ls.innerHTML = 'local slave';
+  btn_ls.innerHTML = 'local client';
   btn_ls.onclick = function () {
     sync_type = 4;
     synctrls();
@@ -1151,7 +1179,7 @@ function createCtrlBtn() {
   ctrls[4] = btn_ls;
 
   var btn_wss = _newBtn();
-  btn_wss.innerHTML = 'websocket slave';
+  btn_wss.innerHTML = 'ws client';
   btn_wss.onclick = function () {
     sync_type = 5;
     synctrls();
@@ -1161,10 +1189,13 @@ function createCtrlBtn() {
   ctrls[5] = btn_wss;
 
   doChk().then((result) => {
+    username = null;
     if (result.state > 0) {
+      username = result.username;
       ctrls[2].hidden = false;
       ctrls[3].hidden = false;
       ctrls[5].hidden = false;
+      ctrls[5].innerHTML = `'${username}' ws client`;
     } else {
       ctrls[2].hidden = true;
       ctrls[3].hidden = true;
@@ -1272,12 +1303,17 @@ function initWebsocket() {
     console.log('WebSocket is not open');
   }
 
+  if (username == null) return;
+
   let port = 80;
   if (window.location.port.length > 0) {
     port = parseInt(window.location.port, 10);
   }
+
+  ws = new WebSocket(`ws://${serverDomain}:${port}/Song/${username}`);
+  
   //port += 8000;//ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Song');
+  //ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Song');
   //ws = new WebSocket('ws://' + serverDomain + ':8080/Song');
   ws.onopen = function () {
     console.log('Connected to server');

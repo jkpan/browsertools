@@ -39,16 +39,6 @@ global.clearScreen = function () {
   process.stdout.write('\x1B[2J\x1B[0;0H');
 }
 
-/*
-global.print_ln = function(msg) {
-  process.stdout.write(`(${process.pid})` + msg + '\n');
-}
-
-global.printlnln = function(msg) {
-  process.stdout.write('\n' + `(${process.pid})` + msg + '\n');
-}
-*/
-
 //clearScreen();
 println(`dir  name ${__dirname}`);
 println(`file name ${__filename}`);
@@ -116,7 +106,7 @@ function savejsonfile(req, res) {
     let jsonobj = JSON.parse(content); //obj
     println(jsonobj);  
   
-    const writeStream = fs.createWriteStream('./json/' + fn);
+    const writeStream = fs.createWriteStream(fn);
     writeStream.write(JSON.stringify(jsonobj, null, "\t")); //, null, "\t");
     writeStream.end(() => {
       console.log('檔案寫入完成!');
@@ -177,8 +167,7 @@ function webservice(req, res) {
       }
       break;
   }
-
-  //
+  
   if (url.startsWith('/synscripture_get')) {
     sync_Bible.synscripture_get(url);
     return;
@@ -199,17 +188,6 @@ function webservice(req, res) {
     println('filename: ' + fileName + '\n'); // "file.html
     url = '/' + fileName;
   }
-  
-  /*
-  if (url.startsWith('/index.html')) url = '/index.html'; // 處理首頁: url == /index.html?server=nodejs
-  else if (url.startsWith('/dash.html')) url = '/dash.html';
-  else if (url.startsWith('/subtitle_b.html')) url = '/subtitle_b.html';
-  else if (url.startsWith('/subtitle_niv.html')) url = '/subtitle_niv.html';
-  else if (url.startsWith('/led.html')) url = '/led.html';
-  else if (url.startsWith('/tabs.html')) url = '/tabs.html';
-  */
-
-  //首頁塞參數 redirect
 
   const filePath = `.${url}`;
   responseFile(filePath, res);
@@ -241,14 +219,16 @@ function startService() {
       let url = req.url;
       //println(' #url: ' + ip + ', ' + url + '#');
 
-      if (url === '/Bible') {
-        println(`[client ${ip} connected]`);
-        sync_Bible.addClient(ws);
+      if (url.startsWith('/Bible')) {
+        let user = url.substring('/Bible/'.length);
+        if (user && user.length >= 1)
+          sync_Bible.addClient2Map(user, ws);
       }
 
-      if (url === '/Song') {
-        println(`<client ${ip} connected>`);
-        sync_lyrics.addClient(ws);
+      if (url.startsWith('/Song')) {
+        let user = url.substring('/Song/'.length);
+        if (user && user.length >= 1)
+          sync_lyrics.addClient2Map(user, ws);
       }
 
     });
@@ -419,4 +399,12 @@ Ex:
 Install pm2
 Ex:
 	pm2 start _cmd_server.js -- -port 80 -cluster
+*/
+/*
+  if (url.startsWith('/index.html')) url = '/index.html'; // 處理首頁: url == /index.html?server=nodejs
+  else if (url.startsWith('/dash.html')) url = '/dash.html';
+  else if (url.startsWith('/subtitle_b.html')) url = '/subtitle_b.html';
+  else if (url.startsWith('/subtitle_niv.html')) url = '/subtitle_niv.html';
+  else if (url.startsWith('/led.html')) url = '/led.html';
+  else if (url.startsWith('/tabs.html')) url = '/tabs.html';
 */

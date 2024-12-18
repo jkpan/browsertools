@@ -1,6 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
 
+<!DOCTYPE html>
+<script type="text/javascript" src="login.js" charset="UTF-8"></script>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <style>
@@ -180,12 +181,17 @@
     }
 
     //控方上傳目前
-    function ajax_action(action, id, content) {
+    async function ajax_action(action, id, content) {
+        let result = await doChk();
+        if (result.state <= 0) return;
+        let user = result.username;
+
         console.log('action:' + action +', id:' + id + ', ' + JSON.stringify(content));
         _ajax({
             action: action,
             id: id,
-            song: content
+            song: content,
+            user: user
         },
             '/actionlyrics',
             (res) => {
@@ -287,6 +293,8 @@
                 var btn = _songBtn(VOLUME[pf][0] + i);
                 if (pf % 2 == 0) {
                     btn.style.background = '#005500';//window.opener.COLORS_CK[0]; // setting the background color to teal
+                } else {
+                    btn.style.background = '#333333';
                 }
                 if (btn.innerHTML.length > 0 || VOLUME[pf][2]) {
                     //console.log('btn.innerHTML.length : ' + btn.innerHTML.length);
@@ -312,7 +320,7 @@
 
             for (let i = 0; i < toolList.length; i++) {
                 var btn = _songBtn(toolList[i]);
-                btn.style.background = '#009900';
+                btn.style.background = '#777777';
                 div.appendChild(btn);
             }
 
@@ -325,7 +333,7 @@
     //抓取預設歌庫
     async function fetchData() {
         try {
-            const response = await fetch('./json/songbase.json'); // 等待 fetch 请求完成
+            const response = await fetch('./json/songbase.json'); // 等待 fetch 请求完成 ./usr/[account]/songbase.json
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }

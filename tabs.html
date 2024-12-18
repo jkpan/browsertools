@@ -20,7 +20,7 @@
       margin: 0px;
       height: 100%;
       width: 100%;
-      background-color: green;
+      background-color: black;
     }
 
     ::-webkit-scrollbar {
@@ -28,19 +28,11 @@
     }
 
     .wrapper {
-      display: grid;
       gap: 0px;
-      grid-template-columns: 1fr 49fr 48fr 2fr;
-      grid-template-rows: 1fr 49fr 49fr 1fr;
       width: 100%;
-      height: 100vh;
+      height: 100%;
       overflow: hidden;
       position: fixed;
-    }
-
-    .content {
-      grid-column: 1 /3;
-      grid-row: 1 / 3;
     }
 
     .container {
@@ -56,6 +48,9 @@
 
       /* 过渡动画 */
       transition: opacity 0.5s;
+
+      transform-origin: 0% 0%;
+      transform: rotate(30deg);
 
       overflow-y: hidden;
       overflow-x: hidden;
@@ -124,7 +119,7 @@
       grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
       position: fixed;
-      
+
       top: 0;
       left: 0px;
       /* 初始位置在左侧屏幕外 */
@@ -141,9 +136,8 @@
     .btncontainer {
       grid-column: 1 / 11;
       grid-row: 1 / 11;
-      direction: ltr; /* 改為從右到左 */
+      direction: ltr;
       text-align: left;
-      /* background-color: blue; */
     }
 
     .right-to-left {
@@ -152,7 +146,7 @@
       direction: rtl;
       text-align: right;
     }
-    
+
     .menuButton {
       background-color: transparent;
       border-color: #008000;
@@ -162,7 +156,7 @@
       position: fixed;
       z-index: 91;
     }
-    
+
     label {
       color: #00ee00;
     }
@@ -172,35 +166,33 @@
 
 <body>
 
-  <div class="wrapper" style="background-color: #007000; opacity: 1.0;">
-    <div class="content" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-      <div id="content_1" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
-      </div>
+  <div class="wrapper" style="background-color: #000000; opacity: 1.0;">
+    <div id="content_1" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+      <iframe id="frame_1" frameborder="0" width="100%" height="100%" align="left" src=""></iframe>
+    </div>
 
-      <div id="content_2" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+    <div id="content_2" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+      <iframe id="frame_2" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    </div>
 
-      <div id="content_3" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+    <div id="content_3" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+      <iframe id="frame_3" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    </div>
 
-      <div id="content_4" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+    <div id="content_4" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+      <iframe id="frame_4" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    </div>
 
-      <div id="content_5" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_5" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+    <div id="content_5" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+      <iframe id="frame_5" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    </div>
 
-      <div id="content_6" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_6" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+    <div id="content_6" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+      <iframe id="frame_6" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
+    </div>
 
-      <div id="content_7" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
-        <iframe id="frame_7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
-      </div>
+    <div id="content_7" class="container" style="background-color: transparent;margin: 0px;opacity: 1.0;">
+      <iframe id="frame_7" frameborder="0" width="100%" height="100%" align="right" src=""></iframe>
     </div>
   </div>
 
@@ -230,28 +222,28 @@
       <button class="okbutton" onclick="openCtrl()">C</button>
       <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
       &nbsp;
-      <button class="button" onclick="preload('./json/tab_01.json')">#1</button>
-      <button class="button" onclick="preload('./json/tab_02.json')">#2</button>
-      <button class="button" onclick="preload('./json/tab_03.json')">#3</button>
-      <button class="button" onclick="preload('./json/tab_04.json')">#4</button>
+      <button id="btn_preload_1" class="button" onclick="preload(1)">#1</button>
+      <button id="btn_preload_2" class="button" onclick="preload(2)">#2</button>
+      <button id="btn_preload_3" class="button" onclick="preload(3)">#3</button>
+      <button id="btn_preload_4" class="button" onclick="preload(4)">#4</button>
       <button class="cancelbutton" onclick="loadJson()">#</button>
       <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
-      <button class="button" onclick="savefile(1)">1^</button>
-      <button class="button" onclick="savefile(2)">2^</button>
-      <button class="button" onclick="savefile(3)">3^</button>
-      <button class="button" onclick="savefile(4)">4^</button>
+      <button id="btn_save_1" class="button" onclick="savefile(1)">1^</button>
+      <button id="btn_save_2" class="button" onclick="savefile(2)">2^</button>
+      <button id="btn_save_3" class="button" onclick="savefile(3)">3^</button>
+      <button id="btn_save_4" class="button" onclick="savefile(4)">4^</button>
       &nbsp;
       <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
     </div>
-      <div class="right-to-left">
-        &nbsp;
-        <label id="__username" hidden="true"></label>
-        &nbsp;
-        <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
-        &nbsp;
-        <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign out</label>
-        &nbsp;
-      </div>
+    <div class="right-to-left">
+      &nbsp;
+      <label id="__username" hidden="true"></label>
+      &nbsp;
+      <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
+      &nbsp;
+      <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign out</label>
+      &nbsp;
+    </div>
 
 
   </div>
@@ -368,7 +360,8 @@
   }
 
   function savefile(idx) {
-    let fn = `tab_0${idx}.json`;
+    if (username == null) return;
+    let fn = `./usr/${username}/tab_0${idx}.json`;
     if (confirm(`確定要存入 #${idx} ?`))
       ajax_savejson(fn, JSON.stringify(toObj()));
   }
@@ -409,7 +402,9 @@
     downloadLink.click();
   }
 
-  function preload(url) {
+  function preload(idx) {
+    if (username == null) return;
+    let url = `./usr/${username}/tab_0${idx}.json`;
     fetch(url).then((response) => {
       return response.json();
     }).then((json) => {
@@ -490,7 +485,7 @@
 
   function setSlideAnim() {
 
-    animType = (animType + 1) % 4;
+    animType = (animType + 1) % 5;
 
     var b = document.getElementById('aBtn');
     let caption = b.textContent;
@@ -503,9 +498,11 @@
     for (let i = 1; i <= tabCount; i++) {
       switch (animType) {
         case 0: document.getElementById("content_" + i).style.transition = 'none'; break;
+        // default: document.getElementById("content_" + i).style.transition = 'all 0.5s'; break;
         case 1: document.getElementById("content_" + i).style.transition = 'opacity 0.5s'; break;
         case 2:
         case 3: document.getElementById("content_" + i).style.transition = 'all 0.5s'; break;
+        case 4: document.getElementById("content_" + i).style.transition = 'all 0.5s'; break;
       }
     }
 
@@ -518,21 +515,39 @@
       case 0:
       case 2:
         for (let i = 1; i <= tabCount; i++) {
-          document.getElementById('content_' + i).style.opacity = 1.0;
-          document.getElementById('content_' + i).style.left = (i - tab) * window.innerWidth + "px";
-          document.getElementById('content_' + i).style.top = "0px";
+          let div = document.getElementById('content_' + i);
+          div.style.opacity = 1.0;
+          div.style.left = (i - tab) * window.innerWidth + "px";
+          div.style.top = "0px";
+          div.style.transform = "rotate(0deg)";
+        }
+        break;
+      case 4:
+        for (let i = 1; i <= tabCount; i++) {
+          let div = document.getElementById('content_' + i);
+          div.style.opacity = 1.0;
+          div.style.left = "0px";
+          div.style.top = "0px";
+          if (i <= tab) {
+            div.style.transform = "rotate(0deg)";
+          } else {
+            div.style.transform = "rotate(90deg)";
+          }
         }
         break;
       case 3:
         for (let i = 1; i <= tabCount; i++) {
-          document.getElementById('content_' + i).style.opacity = 1.0;
-          document.getElementById('content_' + i).style.left = "0px";
-          document.getElementById('content_' + i).style.top = (i - tab) * window.innerHeight + "px";
+          let div = document.getElementById('content_' + i);
+          div.style.opacity = 1.0;
+          div.style.left = "0px";
+          div.style.top = (i - tab) * window.innerHeight + "px";
+          div.style.transform = "rotate(0deg)";
         }
         break;
       case 1:
         for (let i = 1; i <= tabCount; i++) {
           let div = document.getElementById('content_' + i);
+          div.style.transform = "rotate(0deg)";
           if (i == tab) {
             div.style.left = "0px";
             div.style.top = "0px";
@@ -558,13 +573,13 @@
       document.getElementById('btn_' + i).style.fontSize = '12px';
     }
 
-    framePos();
-
     document.getElementById('btn_' + tab).style.background = "rgb(0,128,0)";
     document.getElementById('btn_' + tab).style.color = "rgb(0,255,0)";
     document.getElementById('btn_' + tab).style.fontSize = '16px';
 
+    framePos();
     document.getElementById('frame_' + tab).focus();
+
     return document.getElementById('frame_' + tab);
   }
 
@@ -631,9 +646,6 @@
 
   async function chkloginstatus() {
     let result = await doChk();
-    console.log('#####');
-    console.log(JSON.stringify(result));
-    console.log('#####');
     handleLogin(result);
   }
 
@@ -641,15 +653,25 @@
     document.getElementById('__username').hidden = true;
     document.getElementById('__login').hidden = true;
     document.getElementById('__logout').hidden = true;
+    username = null;
     if (resultJson.state > 0) {
       username = resultJson.username;
       document.getElementById('__username').hidden = false;
       document.getElementById('__username').innerHTML = resultJson.username;
       if (resultJson.username != 'guest')
         document.getElementById('__logout').hidden = false;
-      return;
+      for(let i=1;i<=4;i++) {
+        document.getElementById('btn_preload_' + i).hidden = false;
+        document.getElementById('btn_save_' + i).hidden = false;
+      }
+    } else {
+      document.getElementById('__login').hidden = false;
+      for(let i=1;i<=4;i++) {
+        document.getElementById('btn_preload_' + i).hidden = true;
+        document.getElementById('btn_save_' + i).hidden = true;
+      }
     }
-    document.getElementById('__login').hidden = false;
+    
   }
 
   chkloginstatus();

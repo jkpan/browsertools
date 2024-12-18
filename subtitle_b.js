@@ -39,9 +39,7 @@ function dropHandler(event) {
           };
           reader.readAsDataURL(file);
         } else {
-          let div = document.getElementById("image_container");
-          div.innerHTML = '';
-          image_base64 = null;
+          removeBackground();
         }
       }
     }
@@ -52,11 +50,19 @@ function dragOverHandler(event) {
   event.preventDefault();
 }
 
+function removeBackground() {
+  let div = document.getElementById("image_container");
+  div.hidden = true;
+  div.innerHTML = '';
+  image_base64 = null;
+}
+
 function showImage() {
 
-  makeTransparent = true;
+  makeTransparent = false;
 
   let div = document.getElementById("image_container");
+  div.hidden = false;
   div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
 
   _repaint();
@@ -722,18 +728,14 @@ function initWebsocket() {
     console.log('WebSocket is not open');
   }
 
+  if (username == null) return;
+
   let port = 80;
   if (window.location.port.length > 0) {
     port = parseInt(window.location.port, 10);
   }
-  //port += 8000; //ws = new WebSocket('ws://54.169.169.141:8080/Bible');
-  //ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible'); //
-  if (username == 'guest' || username == null) {
-    ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible');
-  } else {
-    ws = new WebSocket('ws://' + serverDomain + ':' + port + '/Bible/' + username); //
-  }
 
+  ws = new WebSocket(`ws://${serverDomain}:${port}/Bible/${username}`);
   //console.log('ws://' + serverDomain + ':' + port + '/Bible' + (username == 'guest'?'':'/' + username));
   ws.onopen = function () {
     console.log('Connected to server');
@@ -749,7 +751,6 @@ function initWebsocket() {
 
   if (timeoutID >= 0) window.clearTimeout(timeoutID);
   timeoutID = setTimeout(chkWebsocket, 5000);
-
 
 }
 
@@ -804,11 +805,14 @@ function ajax_sync() {
   });
   */
 
+  if (username == null) return;
+
   _ajax({
     vlm: song,
     chp: phase,
     ver: line,
-    blank: doblank
+    blank: doblank,
+    user: username
   },
     '/synscripture',
     //'http://192.168.0.16/synscripture',
@@ -830,8 +834,10 @@ function restoreFromJson(res) {
 }
 
 function ajax_restore() {
+  if (username == null) return;
   _ajax({
-    "action": "restore"
+    "action": "restore",
+    "user" : username
   },
     '/restorescripture',
     (res) => {//console.log(JSON.stringify(res));
@@ -1125,7 +1131,7 @@ function createCtrlBtn() {
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
   var btn_ls = _newBtn();
-  btn_ls.innerHTML = 'local slave';
+  btn_ls.innerHTML = 'local client';
   btn_ls.onclick = function () {
     setMsg_X();
     return false;
@@ -1134,7 +1140,7 @@ function createCtrlBtn() {
   ctrls[4] = btn_ls;
 
   var btn_wss = _newBtn();
-  btn_wss.innerHTML = 'ws slave';
+  btn_wss.innerHTML = 'ws client';
   btn_wss.onclick = function () {
     setMsg_play_socket();
     return false;
@@ -1142,13 +1148,14 @@ function createCtrlBtn() {
   div.appendChild(btn_wss);
   ctrls[5] = btn_wss;
 
-  doChk().then((result) => {
-    console.log('=======');
-    console.log(JSON.stringify(result));
+  doChk().then((result) => { //console.log('======='); //console.log(JSON.stringify(result));
+    username = null;
     if (result.state > 0) {
+      username = result.username;
       ctrls[2].hidden = false;
       ctrls[3].hidden = false;
       ctrls[5].hidden = false;
+      ctrls[5].innerHTML = `'${username}' ws client`;
     } else {
       ctrls[2].hidden = true;
       ctrls[3].hidden = true;
@@ -2067,9 +2074,22 @@ function keyboard(e) {
       }
       init();
       break;
-    case 'KeyZ': makeTransparent = !makeTransparent; break; //'z'
+    case 'KeyZ': {
+        makeTransparent = !makeTransparent;
+        let div = document.getElementById("image_container");
+        if (image_base64) {
+          if (makeTransparent) {
+            div.hidden = true;
+          } else {
+            div.hidden = false;
+          }
+        }
+      }
+      break; //'z'
     case 'KeyN': switchLang(); break; //n
-    case 'Escape': return;//volAnim = !volAnim; break;//'escape'
+    case 'Escape':
+      removeBackground();
+      break;//volAnim = !volAnim; break;//'escape'
     case 'Enter': createCtrlBtn(); return;//enter
     case 'KeyC': fontColorType = (fontColorType + 1) % 4; break;//'c'
     case 'KeyB': //'b'
@@ -2384,15 +2404,18 @@ function gradientBg() {
 
 function _layer0() {
 
+
   if (makeTransparent) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-  } else if (color_selection == 0) {
-    ctx.fillStyle = 'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.fillStyle = bgcolor_pointer;//'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
+  } else if (image_base64 == null) {
+    if (color_selection == 0) {
+      ctx.fillStyle = 'green';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = bgcolor_pointer;//'green';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  } 
 
   /*
   if (color_selection == 0) {
@@ -2536,14 +2559,15 @@ function _repaint() {
   }
 
   trans_start();
-  //ctx.globalCompositeOperation='difference';
-  //ctx.filter = 'invert(1)';
+  
   _layer0();
-  //_layerBg();
+  
   printMain(phase, line);//_layer1();//_layer2();
+  
   _layerui();
 
   trans_end();
+
   if (skewidx > 0 && animElapse < 0) {
     window.requestAnimationFrame(_repaint);
   }
@@ -2635,6 +2659,7 @@ function receiveMessage(e) {
 
   doChk().then((result)=>{
     if (result.state > 0) {
+      username = result.username;
       sync_type = jsonData.syncType;
       synctrls();
     } else {

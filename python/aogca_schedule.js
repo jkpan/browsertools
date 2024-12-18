@@ -35,7 +35,7 @@ function doGet(e) {
   return HtmlService.createHtmlOutputFromFile("main.html");
 }
 */
-function opOpen() {
+function onOpen() {
   let ui = SpreadsheetApp.getUi();
   ui.createMenu('TPCAOG擴充').
     addItem('產生聚會和日期(arrange)', 'generateDates').

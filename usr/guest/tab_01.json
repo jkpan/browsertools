@@ -1,0 +1,195 @@
+{
+	"frame_1": {
+		"src": "./dashboard.html",
+		"obj": {
+			"stateSaved": {
+				"save0": [
+					{
+						"name": "Bible",
+						"posize": [
+							1,
+							5,
+							24,
+							40
+						],
+						"visible": 1,
+						"perspective": 0
+					},
+					{
+						"name": "lyrics",
+						"posize": [
+							25,
+							5,
+							24,
+							40
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				],
+				"save1": [
+					{
+						"name": "Bible",
+						"posize": [
+							1,
+							5,
+							24,
+							40
+						],
+						"visible": 0,
+						"perspective": 0
+					},
+					{
+						"name": "lyrics",
+						"posize": [
+							1,
+							5,
+							48,
+							40
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				],
+				"save2": [
+					{
+						"name": "lyrics",
+						"posize": [
+							25,
+							5,
+							24,
+							40
+						],
+						"visible": 0,
+						"perspective": 0
+					},
+					{
+						"name": "Bible",
+						"posize": [
+							1,
+							5,
+							48,
+							40
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				],
+				"save3": [],
+				"save4": [],
+				"save5": []
+			},
+			"lyrics": {
+				"posize": [
+					25,
+					5,
+					24,
+					40
+				],
+				"perspective": 0,
+				"obj": {
+					"mode": 1,
+					"fontfactor": 9,
+					"list": [
+						
+						"救恩74", 
+						"讚美之泉80", 
+						"其他101",
+
+						"主禱文",
+						"使徒信經",
+						"救恩300"
+						
+					],
+					"fontColorType": 1,
+					"transparent": 0,
+					"syncType": 3,
+					"progress": 1,
+					"imageBase64": ""
+				}
+			},
+			"Bible": {
+				"posize": [
+					1,
+					5,
+					24,
+					40
+				],
+				"perspective": 0,
+				"obj": {
+					"color": 1,
+					"hlight": 1,
+					"verticle": 0,
+					"fontfactor": 15,
+					"saved": [
+						[
+							""
+						],
+						[
+							"彌迦書",
+							6,
+							1
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							"哥林多前書",
+							11,
+							23
+						]
+					],
+					"transparent": 0,
+					"printSaved": 1,
+					"fsizedist": 0,
+					"verseCount": 4,
+					"syncType": 3,
+					"imageBase64": ""
+				}
+			},
+			"B/G": "B"
+		}
+	},
+	"frame_2": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_3": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_4": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_5": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_6": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_7": {
+		"src": "./tools.html",
+		"obj": {}
+	}
+}

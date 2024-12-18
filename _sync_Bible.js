@@ -1,42 +1,54 @@
 const WebSocket = require('ws');
 const urltool = require('url');
 
-const B_clients = new Set();
+const B_clients_MAP = new Map();
+const verse_MAP = new Map();
 
-var volume = 1;
-var chapter = 0;
-var verse = 0;
-var doblank = 0;
-
-//pid = process.pid;
-
-function syncData(vol, chp, ver, db) {
-    volume = vol;
-    chapter = chp;
-    verse = ver;
-    doblank = db;
+function syncData(usr, vol, chp, ver, db) {
+    verse_MAP.set(usr,
+        {
+            vlm: vol,
+            chp: chp,
+            ver: ver,
+            blank: db
+        });
 }
-function getBibleObjStr() {
+
+function getBibleObjStr(user) {
+    let obj = verse_MAP.get(user);
+    if (obj != null) {
+        return JSON.stringify({
+            vlm: obj.vlm,
+            chp: obj.chp,
+            ver: obj.ver,
+            blank: obj.blank,
+            user: user
+        });
+    }
     return JSON.stringify({
-        vlm: volume,
-        chp: chapter,
-        ver: verse,
-        blank: doblank
+        vlm: 1,
+        chp: 1,
+        ver: 1,
+        blank: 1,
+        user: user
     });
 }
 
 function synscripture_get(url) {
-
+    
     var requestData = urltool.parse(url, true).query;
 
-    syncData(parseInt(requestData.vlm), parseInt(requestData.chp),
+    syncData(requestData.user, parseInt(requestData.vlm), parseInt(requestData.chp),
         parseInt(requestData.ver), parseInt(requestData.blank));
 
     res.writeHead(200, { 'Content-Type': 'text/plain' });
 
     res.end('get done!\n');
-    println(`[[master: ${volume}, ${chapter}, ${verse}, ${doblank}]]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
-    broadcast();
+
+    let obj = verse_MAP.get(requestData.user);
+    if (obj == null) return;
+    println(`[master: ${requestData.user} ${obj.vlm}, ${obj.chp}, ${obj.ver}, ${obj.blank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+    broadcast(requestData.user);
 }
 
 function synscripture(req, res) {
@@ -52,7 +64,7 @@ function synscripture(req, res) {
         // 解析请求数据
         const requestData = JSON.parse(body);
 
-        syncData(requestData.vlm, requestData.chp, requestData.ver, requestData.blank);
+        syncData(requestData.user, requestData.vlm, requestData.chp, requestData.ver, requestData.blank);
 
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -61,17 +73,20 @@ function synscripture(req, res) {
         // 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
 
-        println(`[master: ${volume}, ${chapter}, ${verse}, ${doblank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+        let obj = verse_MAP.get(requestData.user);
+        if (obj == null) return;
+        println(`[master ${requestData.user}: ${obj.vlm}, ${obj.chp}, ${obj.ver}, ${obj.blank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
         //broadcast_Bible();
-        broadcast();
+        broadcast(requestData.user);
 
         if (process.send) {
             process.send({
                 type: "syncBible",
-                volume: volume,
-                chapter: chapter,
-                verse: verse,
-                doblank: doblank
+                volume: obj.vlm,
+                chapter: obj.chp,
+                verse: obj.ver,
+                doblank: obj.blank,
+                user: requestData.user
             });
         }
 
@@ -79,8 +94,8 @@ function synscripture(req, res) {
 }
 
 function syncFromWorker(msg) {
-    syncData(msg.volume, msg.chapter, msg.verse, msg.doblank);
-    broadcast();
+    syncData(msg.user, msg.volume, msg.chapter, msg.verse, msg.doblank);
+    broadcast(msg.user);
 }
 
 //取得經文狀態
@@ -101,13 +116,30 @@ function restorescripture(req, res) {
 
         ptlet('-');
         // 发送响应数据
-        res.end(getBibleObjStr());
+        res.end(getBibleObjStr(requestData.user));
 
     });
 }
 
-function broadcast() {
-    let data = getBibleObjStr();
+function broadcast(user) {
+    let clients = B_clients_MAP.get(user);
+    if (clients == null) return;
+    let data = getBibleObjStr(user);
+    print(` [ conn: ${clients.size} ] `);
+    clients.forEach(function (client) {
+        if (client.readyState === WebSocket.OPEN) {
+            print('[broadcast ' + user + ' ' + client._socket.remoteAddress + ']');
+            client.send(data);
+        } else {
+            clients.delete(client);
+            print(`[${user} ${client._socket.remoteAddress} removed]`);
+        }
+    });
+}
+
+/*
+function broadcast(user) {
+    let data = getBibleObjStr(user);
     print(` [ conn: ${B_clients.size} ] `);
     B_clients.forEach(function (client) {
         if (client.readyState === WebSocket.OPEN) {
@@ -119,7 +151,9 @@ function broadcast() {
         }
     });
 }
+*/
 
+/*
 function addClient(ws) {
     B_clients.add(ws);
     ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
@@ -127,24 +161,40 @@ function addClient(ws) {
         ws.send(getBibleObjStr());//'Whatsup client! -- from server');
     });
 }
+*/
+
+function addClient2Map(usr, ws) {
+    let clients = B_clients_MAP.get(usr);
+    if (clients) {
+        clients.add(ws);
+    } else {
+        let _clients = new Set();
+        B_clients_MAP.set(usr, _clients);
+        _clients.add(ws);
+    }
+    ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
+        println(`[client ${usr}: ${message}]`);
+        ws.send(getBibleObjStr(usr));//'Whatsup client! -- from server');
+    });
+}
 
 function getInfo() {
-    let info = [
-        `[${volume}, ${chapter}, ${verse}, ${doblank}]`
-    ];
-    let i = 1;
-    //<button onclick="controlParent('Bible')">📖</button>
-    B_clients.forEach(function (client) {
-        if (client.readyState === WebSocket.OPEN) {
-            info[i] = `[📖 ${client._socket.remoteAddress}]`;
-            i++;
-        }
+    //let info = [`[${volume}, ${chapter}, ${verse}, ${doblank}]`];
+    let info = [];
+    let i = 0;
+    B_clients_MAP.forEach((value, key) => {
+        value.forEach(function (client) {
+            if (client.readyState === WebSocket.OPEN) {
+                info[i] = `[📖 %{key}: ${client._socket.remoteAddress}]`;
+                i++;
+            }
+        });
     });
     return info;
 }
 
 module.exports = {
-    addClient,
+    addClient2Map,
     synscripture,
     synscripture_get,
     restorescripture,
