@@ -23,11 +23,15 @@ function getArrayDimension(arr) {
 //抓取預設歌庫
 async function fetchData() {
   try {
+    let jsonurl = './usr/guest/songbase.json';
     let result = await doChk();
-    if (result.state <= 0) return;
-    let user = result.username;
+    if (result.state > 0) {
+      let user = result.username;
+      jsonurl = `./usr/${user}/songbase.json`;
+    }
+    console.log('song url: ' + jsonurl);
     //const response = await fetch('./json/output.json'); // 等待 fetch 请求完成
-    const response = await fetch(`./usr/${user}/songbase.json`);//'./json/songbase.json'); // 等待 fetch 请求完成
+    const response = await fetch(jsonurl);//'./json/songbase.json'); // 等待 fetch 请求完成
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
@@ -84,7 +88,7 @@ function getSongsFromList(_list) {
   SONGS = EMPTY.slice();
 
   if (ALL_SONGS_JSON == null) {
-    (async function() { //const jsonData = 
+    (async function() {
       console.log('get all songs');
       await fetchData();
       console.log('get content from list');
