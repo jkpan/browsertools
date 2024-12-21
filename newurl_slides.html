@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
+        charset="UTF-8" />
+    <style>
+        body {
+            color: rgb(0, 255, 0);
+            margin: 0% 0%;
+            height: 100%;
+            width: 100%;
+            background-color: black;
+        }
+
+        .wrapper {
+
+            position: fixed;
+            gap: 0px;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .full {
+            user-select: none;
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .transDiv {
+
+            width: 100%;
+            height: 100%;
+            border: none;
+
+            position: absolute;
+            left: 0;
+            top: 0;
+
+            display: flex;
+
+            /* 过渡动画 */
+            transition: all 0.5s;
+
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
+
+        .fullRange {
+            margin: auto;
+            width: 90%;
+            height: 90%;
+
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            right: 5%;
+            bottom: 5%;
+
+            user-select: none;
+
+            border-radius: 10px;
+            border: 5px dashed rgba(128, 0, 0, 0.7);
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        button {
+            font-size: 24px;
+            background-color: transparent;
+            color: #00ff00;
+            margin: 1% 1%;
+            border: 2px solid;
+            vertical-align: middle;
+        }
+
+        .centered {
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            object-fit: cover;
+            width: auto;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .centered2 {
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            /* object-fit: ; */
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" class="wrapper">
+        <!-- <iframe class="full" width="100%" height="100%" hidden="true" id="web"></iframe> -->
+        <!-- <div class="full" id="webdiv" width="100%" height="100%" hidden="true"></div> -->
+        <!-- <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls autoplay></video></video> -->
+        <!-- <div class="full" id="image_container" hidden="true"></div> -->
+        <button class="fullRange" id="rect" type="button" onclick="openCtrl()"></button>
+    </div>
+</body>
+
+</html>
+
+<script>
+
+    const items = [];
+    var current = -1;
+
+    function newDiv() {
+        const _div = document.createElement('div');
+        _div.className = 'transDiv';
+        return _div;
+    }
+
+    /*
+    function newVideoDiv() {
+        const video = document.createElement('video');
+        //video.src = '你的視頻路徑.mp4'; // 替換為你的影片路徑
+        video.controls = true;
+        videoDiv.appendChild(video);
+    }
+    */
+
+    function newPDFDiv() { }
+    function newFrameDiv() { }
+
+    var _openWin = null;
+
+    function openCtrl() {
+        closeCtrl();
+        _openWin = window.open("newurl_ctrl.html", "");
+        //_openWin = window.open("newurl_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=500,height=400,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+    }
+
+    function closeCtrl() {
+        if (_openWin)
+            _openWin.close();
+        _openWin = null;
+    }
+
+    function clean() {
+        hideAll();
+        document.getElementById("rect").hidden = false;
+    }
+
+    function hideAll() {
+        document.getElementById("rect").hidden = true;
+    }
+
+    function reload() {
+        let d = document.getElementById("web");
+        document.getElementById("web").src = d.src;
+    }
+
+    function displayHTMLFile(file) {
+
+        hideAll();
+
+        // 讀取檔案並將其轉換成Data URL
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var imageUrl = event.target.result;
+            document.getElementById("web").hidden = false;
+            document.getElementById("web").src = imageUrl;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function displayPDFFile(file) {
+
+        hideAll();
+
+        const fileURL = URL.createObjectURL(file);
+        document.getElementById("web").hidden = false;
+        document.getElementById("web").src = fileURL;
+    }
+
+    function showImage(keepratio) {
+        let img = new Image();
+        img.src = image_base64;
+        img.onload = function () {
+            var width = img.width;
+            var height = img.height;//window.location.href = imageUrl; return;
+            let div = newDiv();//document.getElementById("image_container");
+            div.hidden = false;
+            if (keepratio) {
+                div.innerHTML = '<img class="centered"  src="' + image_base64 + '" />';
+            } else {
+                div.innerHTML = '<img class="centered2" src="' + image_base64 + '" />';
+            }
+            let parent = document.getElementById('container');
+            parent.appendChild(div);
+            items.push(div);
+            current = items.length - 1;
+            framePos();
+        };
+    }
+
+    function displayImageFile(file, keepratio) {
+
+        hideAll();
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            image_base64 = event.target.result;//console.log('image_base64:' + image_base64);
+            showImage(keepratio);
+        };
+        reader.readAsDataURL(file);
+
+    }
+
+    function displayVideoFile(file, loop) {
+
+        hideAll();
+
+        let div = newDiv();//document.getElementById("image_container");
+        div.hidden = false;
+
+        const videoURL = URL.createObjectURL(file);
+
+        const video = document.createElement('video');
+        video.src = videoURL;
+        video.hidden = false;
+        video.setAttribute("controls", "controls");
+        //video.setAttribute("autoplay", "autoplay");
+        video.setAttribute("width", "100%");
+        video.setAttribute("height", "100%");
+        if (loop) video.setAttribute("loop", "loop");
+
+        div.appendChild(video);
+
+        let parent = document.getElementById('container');
+        parent.appendChild(div);
+        items.push(div);
+        current = items.length - 1;
+        framePos();
+    }
+
+    function urlGo(value, loop) {
+
+        value = value.trim();
+        if (value.length == 0) return;
+
+        hideAll();
+
+        let div = newDiv();//document.getElementById("image_container");
+        div.hidden = false;
+
+        if (value.endsWith('.mp4') || value.endsWith('.mov')) {
+
+            let vdo = document.createElement('video');
+            vdo.className = "full";
+            vdo.src = value;
+            vdo.controls = true;
+            vdo.hidden = false;
+            div.appendChild(vdo);
+            if (loop) vdo.setAttribute("loop", "loop");
+
+            let parent = document.getElementById('container');
+            parent.appendChild(div);
+            items.push(div);
+            current = items.length - 1;
+            framePos();
+
+            //vdo.setAttribute("controls", "controls");
+
+
+        } else {
+
+            if (value.startsWith('<iframe')) {
+                document.getElementById("webdiv").hidden = false;
+                document.getElementById("webdiv").innerHTML = value;
+            } else {
+                document.getElementById("web").src = value;
+                document.getElementById("web").hidden = false;
+            }
+        }
+
+        //window.location.href = value;
+    }
+
+    function framePos() {
+        if (current < 0) return;
+        for (let i = 0; i < items.length; i++) {
+            let div = items[i];//document.getElementById('content_' + i);
+            div.style.left = (i - current) * window.innerWidth + "px";
+            div.style.top = "0px";
+        }
+    }
+
+    function goAddMoveLeft() {
+        current++;
+        if (current >= items.length)
+            current = items.length - 1;
+        framePos();
+    }
+
+    function goSubMoveRight() {
+        current--;
+        if (current < 0)
+            current = 0;
+        framePos();
+    }
+
+    window.addEventListener('keyup', (e) => {
+        //e.preventDefault();
+        //e.stopPropagation();
+        //console.log("key up : " +  e.code);
+        switch (e.code) {
+            case 'Minus':
+                goSubMoveRight();
+                break;
+            case 'Equal':
+                goAddMoveLeft();
+                break;
+            case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
+            case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
+                //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+                var value = e.keyCode - 48;
+                if (value >= items.length) return;
+                current = value;
+                framePos();
+                break;
+        }
+    }, false);
+
+    window.addEventListener('beforeunload', function (e) {
+        closeCtrl();
+    });
+
+    var keepratio = 0;
+    var image_base64 = null;
+
+    function toObj() {
+        return {};
+    }
+
+</script>
