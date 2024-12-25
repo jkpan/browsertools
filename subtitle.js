@@ -20,6 +20,25 @@ function getArrayDimension(arr) {
   }
 }
 
+function readParam(param) {
+
+  // 获取当前页面的URL
+  //var currentURL = window.location.href;
+  //console.log('url: ' + currentURL);
+  //console.log(':' + window.location.origin);
+
+  // 通过URLSearchParams对象解析URL参数
+  var urlParams = new URLSearchParams(window.location.search);
+
+  // 获取特定参数的值
+  var parameterValue = urlParams.get(param);//'参数名');
+
+  // 输出参数值到控制台
+  console.log(param + ' 参数值为: ' + parameterValue);
+
+  return parameterValue;
+}
+
 //抓取預設歌庫
 async function fetchData() {
   try {
@@ -1190,6 +1209,9 @@ function createCtrlBtn() {
   div.appendChild(btn_wss);
   ctrls[5] = btn_wss;
 
+  ctrls[2].hidden = true;
+  ctrls[3].hidden = true;
+  ctrls[5].hidden = true;
   doChk().then((result) => {
     username = null;
     if (result.state > 0) {
@@ -1198,17 +1220,10 @@ function createCtrlBtn() {
       ctrls[3].hidden = false;
       ctrls[5].hidden = false;
       ctrls[5].innerHTML = `'${username}' ws client`;
-    } else {
-      ctrls[2].hidden = true;
-      ctrls[3].hidden = true;
-      ctrls[5].hidden = true;
     }
     syntoggle();
   }).catch(error => {
     console.error('Error:', error);
-    ctrls[2].hidden = true;
-    ctrls[3].hidden = true;
-    ctrls[5].hidden = true;
     syntoggle();
   });
 
@@ -1523,4 +1538,9 @@ function touchend(evt) { //touchend
 if (supportTouch) {
   canvas.addEventListener("touchstart", touchstart, false);
   canvas.addEventListener("touchend", touchend, false);
+}
+
+if (readParam('mode')) {
+  mode = parseInt(readParam('mode'));
+  _repaint();
 }

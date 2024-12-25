@@ -1060,7 +1060,7 @@ function _createFrame(keyname) {
       return app;
     }
     case 'url_3': {
-      createFrame(keyname, 'newurl_display.html');
+      createFrame(keyname, 'newurl_slides.html');
       let app = new Applet({ x: 6, y: 1, w: 15, h: 24, keyname: keyname });
       applets.push(app);
       app.onTop();

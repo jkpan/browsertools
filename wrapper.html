@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>百分比置中</title>
+  <style>
+    /* 確保頁面內容佔滿整個視窗 */
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center; /* 水平置中 */
+      align-items: center; /* 垂直置中 */
+      background-color: transparent;
+    }
+
+    /* 置中的 div */
+    .center-div {
+      position: absolute;
+      width: 90%; /* 設定寬度百分比 */
+      height: 70%; /* 設定高度百分比 */
+      background-color: transparent; /* 背景色 */
+      color: white; /* 文字顏色 */
+      display: flex;
+      justify-content: center; /* div內部內容水平置中 */
+      align-items: center; /* div內部內容垂直置中 */
+      border-radius: 10px; /* 圓角邊框 */
+      transform: translate(-50%, -50%); /* 偏移到中心 */
+      top: 40%; /* 垂直置中 */
+      left: 50%; /* 水平置中 */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 投影效果 */
+    }
+  </style>
+</head>
+<body>
+  <!-- 中心區域 -->
+  <div class="center-div">
+    <iframe style="border:none" width="100%" height="100%" src="subtitle_b.html?colorsel=1"></iframe>
+  </div>
+</body>
+</html>

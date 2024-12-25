@@ -96,6 +96,17 @@
             color: rgb(0, 255, 0);
         }
 
+        button {
+            font-size: 16px;
+            background-color: rgb(0, 150, 0);
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            width: auto;
+            height: 64px;
+            border: 1px solid;
+            vertical-align: middle;
+        }
+
         .okbutton {
             font-size: 24px;
             background-color: rgb(0, 150, 0);
@@ -153,12 +164,24 @@
 
 <body>
 
+    <p></p>
     <!--hr size="8" width="100%" color="#00ff00"/-->
-
+    &nbsp;
+    <button onclick="urlGo('subtitle.html?mode=2')">歌詞</button>
+    <button onclick="urlGo('subtitle_b.html?colorsel=1')">聖經</button>
+    <button onclick="urlGo('subtitle_niv.html')">NIV</button>
+    <!-- <button onclick="urlGo('anim.html')">Anim</button> -->
+    <button onclick="urlGo('marquee.html')">LED</button>
+    <button onclick="urlGo('clock.html')">時鐘</button>
+    <button onclick="urlGo('dashboard.html')">Dashboard</button>
+    &nbsp;
+    <button onclick="window.opener.goSubMoveRight()">◀️</button>
+    <button onclick="window.opener.goAddMoveLeft()">▶️</button>
+     
+    
     <div class="wrapper">
-
         <div class="ui" id="ui">
-            <button class="okbutton" type="button" onclick="window.opener.clean()">Clean</button><br />
+            <button class="okbutton" type="button" onclick="window.opener.clean()">Remove</button><br />
             嵌入Google簡報, Canva簡報, Youtube影片...
             <input type="checkbox" id="loopchk" checked>
             <label>Loop(影片)</label>
@@ -186,8 +209,13 @@ https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSH
                     });
                 }
 
-                function urlGo() {
-                    let value = document.getElementById("ppt_url").value;
+                function urlGo(url) {
+                    let value = '';
+                    if (url != null) 
+                        value = url;
+                    else 
+                        value = document.getElementById("ppt_url").value;
+                    
                     value = value.trim();
                     if (value.length == 0) return;
                     let loop = document.getElementById("loopchk").checked;
@@ -208,9 +236,9 @@ https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSH
                 <li>Google簡報要打開speaker notes按's'</li>
                 <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
                 <!--
-            <li><a href="javascript:animLED()">LED動畫</a></li>
-            0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
-            -->
+                <li><a href="javascript:animLED()">LED動畫</a></li>
+                0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
+                -->
             </ul>
 
             <hr size="4" width="100%" color="#00ff00" />
@@ -385,5 +413,28 @@ https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSH
     }
 
     //window.addEventListener('beforeunload', function (e) { window.opener.clean(); });
+    window.addEventListener('keyup', (e) => {
+        //e.preventDefault();
+        //e.stopPropagation();
+        //console.log("key up : " +  e.code);
+        switch (e.code) {
+            case 'Minus':
+                window.opener.goSubMoveRight();
+                break;
+            case 'Equal':
+                window.opener.goAddMoveLeft();
+                break;
+            case 'Digit0':
+                window.opener.jump2(10);
+                break; 
+            case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
+            case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': 
+            case 'Digit9':
+                //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+                let value = e.keyCode - 48 - 1;
+                window.opener.jump2(value);
+                break;
+        }
+    }, false);
 
 </script>

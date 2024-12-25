@@ -528,6 +528,7 @@ function colorSwitch() {
       //hlight_pointer = hlightStyle_white;
       break;
   }
+  _repaint();
 }
 
 function _drawSdwtxt(txt, x, y) {
@@ -1148,6 +1149,9 @@ function createCtrlBtn() {
   div.appendChild(btn_wss);
   ctrls[5] = btn_wss;
 
+  ctrls[2].hidden = true;
+  ctrls[3].hidden = true;
+  ctrls[5].hidden = true;
   doChk().then((result) => { //console.log('======='); //console.log(JSON.stringify(result));
     username = null;
     if (result.state > 0) {
@@ -1156,17 +1160,10 @@ function createCtrlBtn() {
       ctrls[3].hidden = false;
       ctrls[5].hidden = false;
       ctrls[5].innerHTML = `'${username}' ws client`;
-    } else {
-      ctrls[2].hidden = true;
-      ctrls[3].hidden = true;
-      ctrls[5].hidden = true;
     }
     syntoggle();
   }).catch(error => {
     console.error('Error:', error);
-    ctrls[2].hidden = true;
-    ctrls[3].hidden = true;
-    ctrls[5].hidden = true;
     syntoggle();
   });
 
@@ -3097,6 +3094,11 @@ if (readParam('volume')) {
   jump2preset4Anim([volume, chapter, verse]);
 } else {
   restoreActionFromLocal();
+}
+
+if (readParam('colorsel')) {
+  color_selection = parseInt(readParam('colorsel'));
+  colorSwitch();
 }
 
 voiceChkActive();

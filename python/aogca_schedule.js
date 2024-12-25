@@ -153,8 +153,20 @@ function restoreSheet() {
 }
 
 function showResult(result) {
-  var ui = SpreadsheetApp.getUi(); // Same variations.
-  ui.alert(result);
+  //var ui = SpreadsheetApp.getUi(); // Same variations.
+  //ui.alert(result);
+  
+  const html = HtmlService.createTemplateFromFile('dialog');
+  html.textToCopy = result; // 傳遞字串到模板
+  const output = html.evaluate().setWidth(500).setHeight(500);
+  SpreadsheetApp.getUi().showModalDialog(output, '輸出json');
+
+  /*
+  const html = HtmlService.createHtmlOutputFromFile('dialog')
+    .setWidth(300)
+    .setHeight(150);
+  SpreadsheetApp.getUi().showModalDialog(html, '複製字串');
+  */
   /*
   var result = ui.alert(
      'Please confirm',
@@ -199,8 +211,8 @@ function toJson() {
     }
     date_obj = null;
   }
-  //let str = JSON.stringify(obj, null, "\t");
-  let str = JSON.stringify(obj);
+  let str = JSON.stringify(obj, null, "\t");
+  //let str = JSON.stringify(obj);
   console.log(str);
   //SpreadsheetApp.getActive().toast(str, "10秒內複製以下字串", 10);
   showResult(str);

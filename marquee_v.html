@@ -85,7 +85,7 @@ function widthM() {
       body {
         margin: 0px;
         height: 100%;
-        background-color: transparent;
+        background-color: green;
         /*cursor:none;*/
       }
       /*
@@ -451,22 +451,6 @@ function keyboard(e) {
             speed -= 20;
             //if (speed < 10) speed = 0;
             break;
-        /*
-        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57: {
-        //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-            var value = e.keyCode - 48;
-            if (value > subtitle.length - 1)
-                break;
-            
-            phase = value;
-            if (keepGoing == 0) {
-              initAnim();
-            } else {
-              keepGoing = 0;
-            }
-        }
-        break;
-        */
         case 73: //i
           //inputTxt();
           if (canvas.hidden == false) {
@@ -475,6 +459,7 @@ function keyboard(e) {
             switch2Marquee();
           }
           break;
+        /*
         case 90: //'z'
           console.log('z : ' + document.querySelector('body').style.background);
           if (document.querySelector('body').style.background == 'transparent')
@@ -482,7 +467,7 @@ function keyboard(e) {
           else 
             document.querySelector('body').style.background = 'transparent';
           break; 
-
+        */
     }
 
 }
@@ -495,6 +480,7 @@ function switch2Input() {
   if (div) {
     div.hidden = false;
     canvas.hidden = true;
+    document.body.style.backgroundColor = "green";
   }
   
 }
@@ -504,6 +490,7 @@ function switch2Marquee() {
   if (div) {
     div.hidden = true;
     canvas.hidden = false;
+    document.body.style.backgroundColor = "transparent";
   }
 }
 
