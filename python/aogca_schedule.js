@@ -5,10 +5,8 @@ const SHEET_RESTORE = "restore";
 const SHEET_NOTICE  = "notice";
 
 const URL_RESTORE = "https://abeliu.idv.tw/getservicejson.php"; //"http://54.169.169.141/json/sheet.json";
-
-const URL = "https://docs.google.com/spreadsheets/d/1cL15C-cKAJufv7JFfcOpWmJo7I4M0j3kDq1C9R0HeCI/edit";
-           //https://docs.google.com/spreadsheets/d/1cL15C-cKAJufv7JFfcOpWmJo7I4M0j3kDq1C9R0HeCI/edit?usp=drive_link
-//#gid=130662762";
+const URL_SENDBACK = "https://abeliu.idv.tw/getservicejson.php"; //"http://54.169.169.141/json/sheet.json";
+const SIGNKEY = "H[~)UN?@xnjoCTT94IZS";
 
 var ssheet = null;
 
@@ -35,6 +33,7 @@ function doGet(e) {
   return HtmlService.createHtmlOutputFromFile("main.html");
 }
 */
+
 function onOpen() {
   let ui = SpreadsheetApp.getUi();
   ui.createMenu('TPCAOG擴充').
@@ -42,6 +41,7 @@ function onOpen() {
     addItem('開始排服事表(arrange)', 'startArrange').
     addItem('檢查', 'checkRecurring').
     addItem('輸出Json', 'toJson').
+    addItem('直輸至機器人', 'toRobot').
     addItem('清除工作區(arrange)', 'cleanSheet').
     addItem('從輪值機器人還原(restore)', 'restoreSheet').addToUi();
 }
@@ -147,43 +147,21 @@ function restoreSheet() {
     handleRobotJson_(jsonData);
     //Logger.log(jsonData);
   } else {
-    Logger.log("Error: " + response.getResponseCode());
+    SpreadsheetApp.getUi().alert("Error: " + response.getResponseCode());
   }
   
 }
 
 function showResult(result) {
-  //var ui = SpreadsheetApp.getUi(); // Same variations.
-  //ui.alert(result);
-  
+
   const html = HtmlService.createTemplateFromFile('dialog');
   html.textToCopy = result; // 傳遞字串到模板
   const output = html.evaluate().setWidth(500).setHeight(500);
   SpreadsheetApp.getUi().showModalDialog(output, '輸出json');
 
-  /*
-  const html = HtmlService.createHtmlOutputFromFile('dialog')
-    .setWidth(300)
-    .setHeight(150);
-  SpreadsheetApp.getUi().showModalDialog(html, '複製字串');
-  */
-  /*
-  var result = ui.alert(
-     'Please confirm',
-     'Are you sure you want to continue?',
-      ui.ButtonSet.YES_NO);
-  // Process the user's response.
-  if (result == ui.Button.YES) {
-    // User clicked "Yes".
-    ui.alert('Confirmation received.');
-  } else {
-    // User clicked "No" or X in the title bar.
-    ui.alert('Permission denied.');
-  }
-  */
 }
 
-function toJson() {
+function toJson_() {
   var ss = openSheetApp_();
   let sn = ss.getActiveSheet().getName();
   if (sn === SHEET_SETTING || sn === 'notice') {
@@ -211,27 +189,88 @@ function toJson() {
     }
     date_obj = null;
   }
-  let str = JSON.stringify(obj, null, "\t");
   //let str = JSON.stringify(obj);
-  console.log(str);
+  let str = JSON.stringify(obj, null, "\t");
+  return str;
+  
+  //console.log(str);
   //SpreadsheetApp.getActive().toast(str, "10秒內複製以下字串", 10);
-  showResult(str);
-  return str;//obj;
+  //showResult(str);
+  //return str;//obj;
+}
+
+function toJson() {
+  let json = toJson_();
+  showResult(json);
+}
+
+function generateDS_(jsonstr) {
+  const key = SIGNKEY; // 替換為您的密鑰
+  const message = jsonstr; // 要簽署的訊息
+
+  // 使用 HMAC-SHA256 演算法生成簽章
+  const signature = Utilities.computeHmacSignature(
+    Utilities.MacAlgorithm.HMAC_SHA_256,
+    message,
+    key,
+    Utilities.Charset.UTF_8
+  );
+
+  // 將簽章轉為十六進位字串，方便檢視或傳輸
+  const hexSignature = signature.map(byte => {
+    return ("0" + (byte & 0xFF).toString(16)).slice(-2);
+  }).join("");
+
+  Logger.log("Message: " + message);
+  Logger.log("Signature: " + hexSignature);
+
+  return hexSignature;
+}
+
+function toRobot() {
+  
+  let result = toJson_();
+  let _ds = generateDS_(result);
+  
+  const obj = {
+    data: result,
+    signature: _ds,
+  };
+
+  const payload = Object.entries(obj)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join("&");
+
+  /*
+  const options = {
+    method: "post",
+    contentType: "application/json",
+    payload:  payload// 將資料轉為 JSON 格式
+  };
+  */
+
+  const options = {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    payload:  payload
+    //JSON.stringify(obj)
+    // data: result,
+    // signature: _ds
+  };
+
+  try {
+    const response = UrlFetchApp.fetch(URL_SENDBACK, options);
+    SpreadsheetApp.getUi().alert(response.getResponseCode() + ': ' + response.getContentText());
+  } catch (error) {
+    SpreadsheetApp.getUi().alert("Error: " + error.message);
+  }
 }
 
 function openSheetApp_() {
   if (ssheet == null) 
-    ssheet = //SpreadsheetApp.openByUrl(URL);
-             SpreadsheetApp.getActiveSpreadsheet();
+    ssheet = SpreadsheetApp.getActiveSpreadsheet(); //SpreadsheetApp.openByUrl(URL);
   return ssheet;
 }
-
-/*
-function checkRecurringxx() {
-  let ss = openSheetApp_();
-  ss.getActiveSheet();
-}
-*/
 
 function checkRecurring() {
   //let ss = openSheetApp_();
@@ -440,4 +479,3 @@ function cleanSheet_(sheetname) {
     }
 
 }
-

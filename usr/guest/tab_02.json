@@ -463,6 +463,15 @@
 				"perspective": 0,
 				"obj": {}
 			},
+			"time": {
+				"posize": [
+					1,
+					10,
+					19,
+					31
+				],
+				"perspective": 0
+			},
 			"B/G": "B"
 		}
 	},
