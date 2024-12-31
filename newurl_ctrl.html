@@ -175,13 +175,16 @@
     <button onclick="urlGo('clock.html')">時鐘</button>
     <button onclick="urlGo('dashboard.html')">Dashboard</button>
     &nbsp;
+    <button id="aBtn" onclick="setSlideAnim()">a2</button>
+    &nbsp;
     <button onclick="window.opener.goSubMoveRight()">◀️</button>
     <button onclick="window.opener.goAddMoveLeft()">▶️</button>
-     
-    
+
+
     <div class="wrapper">
         <div class="ui" id="ui">
-            <button class="okbutton" style="height:48px;background-color: red;" type="button" onclick="window.opener.clean()">Remove</button><br />
+            <button class="okbutton" style="height:48px;background-color: red;" type="button"
+                onclick="window.opener.clean()">Remove</button><br />
             嵌入Google簡報, Canva簡報, Youtube影片...
             <input type="checkbox" id="loopchk" checked>
             <label>Loop(影片)</label>
@@ -210,11 +213,11 @@
 
                 function urlGo(url) {
                     let value = '';
-                    if (url != null) 
+                    if (url != null)
                         value = url;
-                    else 
+                    else
                         value = document.getElementById("ppt_url").value;
-                    
+
                     value = value.trim();
                     if (value.length == 0) return;
                     let loop = document.getElementById("loopchk").checked;
@@ -263,6 +266,24 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+    var animType = 2;
+
+    function setSlideAnim() {
+
+        animType = (animType + 1) % 5;
+
+        var b = document.getElementById('aBtn');
+        let caption = b.textContent;
+        if (animType == 0) {
+            b.textContent = '--';
+        } else {
+            b.textContent = 'a' + animType;//  <> ^v
+        }
+
+        window.opener.setSlideAnim(animType);
+    }
+
 
     function googleSlidesRemoveBar() {
 
@@ -425,9 +446,9 @@
                 break;
             case 'Digit0':
                 window.opener.jump2(10);
-                break; 
+                break;
             case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
-            case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': 
+            case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8':
             case 'Digit9':
                 //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
                 let value = e.keyCode - 48 - 1;

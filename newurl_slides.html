@@ -41,8 +41,12 @@
 
             display: flex;
 
+            /* transition: all 0.5s; */
+
             /* 过渡动画 */
             transition: all 0.5s;
+            transform-origin: 0% 0%;
+            transform: rotate(0deg);
 
             overflow-y: hidden;
             overflow-x: hidden;
@@ -68,7 +72,7 @@
         iframe {
             border: none;
         }
-        
+
         ::-webkit-scrollbar {
             display: none;
         }
@@ -131,6 +135,7 @@
 
     const items = [];
     var current = -1;
+    var animType = 2;
 
     function add2Item(_div) {
         let parent = document.getElementById('container');
@@ -345,7 +350,28 @@
         //window.location.href = value;
     }
 
+    function setSlideAnim(animidx) {
+
+        animType = animidx;
+
+        for (let i = 0; i < items.length; i++) {
+            let div = items[i];
+            switch (animType) {
+                case 0: div.style.transition = 'none'; break;
+                case 1: div.style.transition = 'opacity 0.5s'; break;
+                case 2:
+                case 3: div.style.transition = 'all 0.5s'; break;
+                case 4: div.style.transition = 'all 0.5s'; break;
+            }
+        }
+
+        framePos();
+
+    }
+
+    /*
     function framePos() {
+
         if (current < 0) return;
         for (let i = 0; i < items.length; i++) {
             let div = items[i];//document.getElementById('content_' + i);
@@ -353,6 +379,64 @@
             div.style.top = "0px";
         }
     }
+    */
+
+    function framePos() {
+        
+        switch (animType) {
+            case 0:
+            case 2:
+                for (let i = 0; i < items.length; i++) {
+                    let div = items[i]; //let div = document.getElementById('content_' + i);
+                    div.style.opacity = 1.0;
+                    div.style.left = (i - current) * window.innerWidth + "px";
+                    div.style.top = "0px";
+                    div.style.transform = "rotate(0deg)";
+                }
+                break;
+            case 4:
+                for (let i = 0; i < items.length; i++) {
+                    let div = items[i]; //let div = document.getElementById('content_' + i);
+                    div.style.opacity = 1.0;
+                    div.style.left = "0px";
+                    div.style.top = "0px";
+                    if (i <= current) {
+                        div.style.transform = "rotate(0deg)";
+                    } else {
+                        div.style.transform = "rotate(90deg)";
+                    }
+                }
+                break;
+            case 3:
+                for (let i = 0; i < items.length; i++) {
+                    let div = items[i]; //let div = document.getElementById('content_' + i);
+                    div.style.opacity = 1.0;
+                    div.style.left = "0px";
+                    div.style.top = (i - current) * window.innerHeight + "px";
+                    div.style.transform = "rotate(0deg)";
+                }
+                break;
+            case 1:
+                for (let i = 0; i < items.length; i++) {
+                    let div = items[i]; //let div = document.getElementById('content_' + i);
+                    div.style.transform = "rotate(0deg)";
+                    if (i == current) {
+                        div.style.left = "0px";
+                        div.style.top = "0px";
+                        div.style.opacity = 1.0;
+                        //setTimeout(function () {  div.style.left = "0px";  }, 510);
+                    } else {
+                        div.style.opacity = 0;
+                        div.style.top = "0px";
+                        setTimeout(function () {
+                            div.style.left = window.innerWidth + "px";
+                        }, 500);
+                    }
+                }
+                break;
+        }
+    }
+
 
     function goAddMoveLeft() {
         current++;
