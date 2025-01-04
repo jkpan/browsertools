@@ -77,10 +77,29 @@
             display: none;
         }
 
-        img {
-            display: block;
-            margin: 0 auto;
+        .img_ratio {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            
+            position: absolute; /* 設定絕對定位 */
+            top: 50%;           /* 垂直置中 */
+            left: 50%;          /* 水平置中 */
+            transform: translate(-50%, -50%); /* 修正到圖片的中心 */
+
         }
+
+        .img_full {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /*
+        .centered {
+            position: absolute;
+            display: block;
+        }
+        */
 
         button {
             font-size: 24px;
@@ -91,40 +110,11 @@
             vertical-align: middle;
         }
 
-        .centered {
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            object-fit: cover;
-            width: auto;
-            height: 100vh;
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .centered2 {
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            /* object-fit: ; */
-            width: 100%;
-            height: 100%;
-            max-width: 100%;
-            max-height: 100%;
-        }
     </style>
 </head>
 
 <body>
     <div id="container" class="wrapper">
-        <!-- <iframe class="full" width="100%" height="100%" hidden="true" id="web"></iframe> -->
-        <!-- <div class="full" id="webdiv" width="100%" height="100%" hidden="true"></div> -->
-        <!-- <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls autoplay></video></video> -->
-        <!-- <div class="full" id="image_container" hidden="true"></div> -->
         <button class="fullRange" id="rect" type="button" onclick="openCtrl()"></button>
     </div>
 </body>
@@ -150,18 +140,6 @@
         _div.className = 'transDiv';
         return _div;
     }
-
-    /*
-    function newVideoDiv() {
-        const video = document.createElement('video');
-        //video.src = '你的視頻路徑.mp4'; // 替換為你的影片路徑
-        video.controls = true;
-        videoDiv.appendChild(video);
-    }
-    */
-
-    function newPDFDiv() { }
-    function newFrameDiv() { }
 
     var _openWin = null;
 
@@ -259,9 +237,9 @@
             let div = newDiv();//document.getElementById("image_container");
             div.hidden = false;
             if (keepratio) {
-                div.innerHTML = '<img class="centered"  src="' + image_base64 + '" />';
+                div.innerHTML = '<img class="img_ratio" src="' + image_base64 + '" />';
             } else {
-                div.innerHTML = '<img class="centered2" src="' + image_base64 + '" />';
+                div.innerHTML = '<img class="img_full" width="100%" height="100%" src="' + image_base64 + '" />';
             }
 
             add2Item(div);
@@ -369,20 +347,8 @@
 
     }
 
-    /*
     function framePos() {
 
-        if (current < 0) return;
-        for (let i = 0; i < items.length; i++) {
-            let div = items[i];//document.getElementById('content_' + i);
-            div.style.left = (i - current) * window.innerWidth + "px";
-            div.style.top = "0px";
-        }
-    }
-    */
-
-    function framePos() {
-        
         switch (animType) {
             case 0:
             case 2:
@@ -472,5 +438,7 @@
         current = idx;
         framePos();
     }
+
+    //openCtrl();
 
 </script>

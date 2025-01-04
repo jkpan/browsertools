@@ -79,6 +79,14 @@ function selectFile(event) {
       var height = img.height;//window.location.href = imageUrl; return;
       let div = document.getElementById("image_container");
       div.hidden = false;
+      
+      if (isKeepRatio()) {
+        div.innerHTML = '<img class="img_ratio" src="' + image_base64 + '" />';
+      } else {
+        div.innerHTML = '<img class="img_full" width="100%" height="100%" src="' + image_base64 + '" />';
+      }
+      
+      /*
       if (isKeepRatio()) {
         if (width >= height) 
           div.innerHTML = '<img class="centered" width="100%" height="auto" src="' + image_base64 + '" />';
@@ -87,6 +95,8 @@ function selectFile(event) {
       } else {
         div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
       }
+      */
+
     };
     
 

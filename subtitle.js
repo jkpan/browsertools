@@ -300,7 +300,7 @@ const content_help = [[
 //字型顏色設定
 
 const fontFamily_array = 
-["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC"]; //google fonts
+["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"]; //google fonts
 //["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
 
 var fontFamily = fontFamily_array[0];//"Monospace"; //"Arial" "cwTeXKai" '華康瘦金體' "標楷體" "Noto Serif TC";
@@ -704,9 +704,9 @@ function printPhase() {
         _x, fontsize / 2);
     }
 
-  } else { //mode 1, 3
-    let _x = mode == 1 ? canvas.width * 0.05 : canvas.width * 0.95;
-    ctx.textAlign = mode == 1 ? 'left' : 'right';
+  } else { //mode 1, 3, 4
+    let _x = mode == 3 ? canvas.width * 0.95 : canvas.width * 0.05;
+    ctx.textAlign = mode == 3 ? 'right':'left';
     for (let i = 0; i < subtitles[phase].length; i++) {
       let _y = (i + 1) * gap + fontsize / 2;
       let txt = subtitles[phase][i];
@@ -889,7 +889,7 @@ function keyboard(e) {
       break; //'z'
     //case 67: phase = subtitles.length - 1; line = 0; break; //'c' jump to coda last one phase
     case 80:
-      mode = (mode + 1) % 4;
+      mode = (mode + 1) % 5;
       break; //'p' ppt mode
     case 72: //'h 
       helpSwitch = helpSwitch == 0 ? 1 : 0;
@@ -1021,7 +1021,7 @@ function _layer0() {
       ctx.fillStyle = COLORS_CK[1];//'green';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-  } else if (mode == 3) {
+  } else if (mode == 3 || mode == 4) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   } else if (mode == 2) {
@@ -1031,6 +1031,44 @@ function _layer0() {
 }
 
 function _layer1() {
+  switch(mode) {
+    case 0:
+      if (displayProgress == 1) printChart();
+      printSubtitle();
+      break;
+    case 1:
+      if (displayProgress == 1) printFullChart();
+      let _scale = 0.5;
+      let _gap = 0; 
+      ctx.transform(_scale,
+        0, 
+        0,
+        _scale,
+        _gap,
+        (1 - _scale) * canvas.height - _gap);
+      if (doblank == 1) {
+        ctx.fillStyle = 'green';
+      } else {
+        ctx.fillStyle = COLOR_PPT_SML;
+      }
+      printPhase();
+      ctx.resetTransform();
+      break;
+    case 2:
+      if (displayProgress == 1) printPhaseChart();
+      printPhase();
+      break;
+    case 3: case 4:
+      if (displayProgress == 1) printPhaseChart();
+      if (doblank == 1) {
+        ctx.fillStyle = 'green';
+      } else {
+        ctx.fillStyle = COLOR_PPT_SML;
+      }
+      printPhase();
+      break;
+  }
+  return;
   if (mode == 0) {
     if (displayProgress == 1)
       printChart();
@@ -1098,6 +1136,7 @@ function _repaint() { //if (!funcInterval) saveAction2Local();
   _layer1();
   _layer2();
   if (makeLED) ledAction4Still(canvas, ctx); //LED
+  console.log('mode: ' + mode);
 }
 
 var sync_type = 0;
