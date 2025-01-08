@@ -282,7 +282,7 @@
         add2Item(div);
     }
 
-    function urlGo(value, loop) {
+    function urlGo(value, loop, key) {
 
         value = value.trim();
         if (value.length == 0) return;
@@ -290,6 +290,7 @@
         hideAll();
 
         let div = newDiv();//document.getElementById("image_container");
+        if (key) div.setAttribute('title', key);
         div.hidden = false;
 
         if (value.endsWith('.mp4') || value.endsWith('.mov')) {
@@ -343,6 +344,19 @@
 
         framePos();
 
+    }
+
+    function jump(key) {
+        for (let i = 0; i < items.length; i++) {
+            let div = items[i]; //let div = document.getElementById('content_' + i);
+            let title = div.getAttribute('title');
+            if (title && title == key) {
+                current = i;
+                framePos();
+                return true;
+            }
+        }
+        return false;
     }
 
     function framePos() {

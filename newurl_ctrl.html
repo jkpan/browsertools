@@ -167,14 +167,13 @@
     <p></p>
     <!--hr size="8" width="100%" color="#00ff00"/-->
     &nbsp;
-    <button onclick="urlGo('subtitle.html?action=play&mode=2')">歌詞</button>
-    <!-- <button onclick="urlGo('subtitle_b.html?colorsel=1&verseCount=2')">聖經</button> -->
-    <button onclick="urlGo('subtitle_b.html?action=play&verseCount=2')">聖經</button>
-    <button onclick="urlGo('subtitle_niv.html?colorsel=1&verseCount=2')">NIV</button>
+    <button onclick="urlGo('subtitle.html?action=play&mode=2', 'lyric')">歌詞</button>
+    <button onclick="urlGo('subtitle_b.html?action=play&verseCount=2', 'Bible')">聖經</button>
+    <button onclick="urlGo('subtitle_niv.html?colorsel=1&verseCount=2', 'NIV')">NIV</button>
     <!-- <button onclick="urlGo('anim.html')">Anim</button> -->
-    <button onclick="urlGo('marquee.html')">LED</button>
-    <button onclick="urlGo('clock.html')">時鐘</button>
-    <button onclick="urlGo('dashboard.html')">Dashboard</button>
+    <button onclick="urlGo('marquee.html', 'LED')">LED</button>
+    <button onclick="urlGo('clock.html', 'clock')">時鐘</button>
+    <button onclick="urlGo('dashboard.html', 'dash')">Dashboard</button>
     &nbsp;
     <button id="aBtn" onclick="setSlideAnim()">a2</button>
     &nbsp;
@@ -213,7 +212,14 @@
                     });
                 }
 
-                function urlGo(url) {
+                function urlGo(url, key) {
+
+                    if (key) {
+                        if (window.opener.jump(key)) {
+                            return;
+                        }
+                    }
+
                     let value = '';
                     if (url != null)
                         value = url;
@@ -228,7 +234,7 @@
                         value = modifyIframeAttributes(value, '100%', '100%');
                     }
 
-                    window.opener.urlGo(value, loop);
+                    window.opener.urlGo(value, loop, key);
                 }
             </script>
             <br />
