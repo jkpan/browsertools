@@ -893,7 +893,6 @@ function _saveAction2Local() {
 
 //判斷是不是要卷軸動畫
 function restoreAnim(volume, chapter, verse, _doblank) {
-  //console.log('restoreAnim doblank : ' + _doblank);
   if (!(volume < SONGS.length &&
     chapter < SONGS[volume].length &&
     verse < SONGS[volume][chapter].length)) {
@@ -2413,7 +2412,7 @@ function _layer0() {
       ctx.fillStyle = bgcolor_pointer;//'green';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-  } 
+  }
 
   /*
   if (color_selection == 0) {
@@ -3088,6 +3087,9 @@ window.addEventListener("beforeunload", function () {
   //document.cookie = "last=" + JSON.stringify(obj) + "; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/";
 });
 
+voiceChkActive();
+
+
 if (readParam('volume')) {
   let volume = readParam('volume');//parseInt(array[0]);//array[0];
   let chapter = readParam('chapter') ? parseInt(readParam('chapter')) : 0;
@@ -3102,16 +3104,27 @@ if (readParam('colorsel')) {
   colorSwitch();
 }
 
-voiceChkActive();
 
+
+if (readParam('verseCount')) {
+  verseCount = parseInt(readParam('verseCount'));
+}
 ///////
 if (readParam('action') === 'play') {
 
   color_selection = 1;
+  printSaved = false;
   colorSwitch();
-  fontfactor += 5;
+  fontfactor += 3;
 
-  setMsg_play_socket();
+  doChk().then((result)=>{
+    if (result.state > 0) {
+      username = result.username;
+      setMsg_play_socket();
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
 
   removeTEvent();
   addFontSizeTouchEvent();
@@ -3125,9 +3138,15 @@ if (readParam('action') === 'play') {
   colorSwitch();
   fontfactor += 5;
 
-  setMsg_ctrl();
+  doChk().then((result)=>{
+    if (result.state > 0) {
+      username = result.username;
+      setMsg_3();
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
 
-  fontfactor += 5;
   init();
   _repaint();
 

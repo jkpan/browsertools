@@ -167,9 +167,10 @@
     <p></p>
     <!--hr size="8" width="100%" color="#00ff00"/-->
     &nbsp;
-    <button onclick="urlGo('subtitle.html?mode=2')">歌詞</button>
-    <button onclick="urlGo('subtitle_b.html?colorsel=1')">聖經</button>
-    <button onclick="urlGo('subtitle_niv.html')">NIV</button>
+    <button onclick="urlGo('subtitle.html?action=play&mode=2')">歌詞</button>
+    <!-- <button onclick="urlGo('subtitle_b.html?colorsel=1&verseCount=2')">聖經</button> -->
+    <button onclick="urlGo('subtitle_b.html?action=play&verseCount=2')">聖經</button>
+    <button onclick="urlGo('subtitle_niv.html?colorsel=1&verseCount=2')">NIV</button>
     <!-- <button onclick="urlGo('anim.html')">Anim</button> -->
     <button onclick="urlGo('marquee.html')">LED</button>
     <button onclick="urlGo('clock.html')">時鐘</button>
@@ -188,10 +189,11 @@
             嵌入Google簡報, Canva簡報, Youtube影片...
             <input type="checkbox" id="loopchk" checked>
             <label>Loop(影片)</label>
-            <textarea id="ppt_url" name="mytext" rows="5">./led.html?anim=7&round=0&str1=2025新年快樂</textarea>
-            <!-- https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false -->
+            <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
 
+                document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false";
+                
                 function appendToIframeSrc(inputString, appendString) {
                     return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
                         // 修改 src 的內容
@@ -450,11 +452,15 @@
             case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
             case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8':
             case 'Digit9':
-                //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
                 let value = e.keyCode - 48 - 1;
                 window.opener.jump2(value);
                 break;
         }
     }, false);
+    
+    
+    window.addEventListener("beforeunload", function (event) {
+        window.opener.openCtrl();
+    });
 
 </script>

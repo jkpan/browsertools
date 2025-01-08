@@ -1583,3 +1583,19 @@ if (readParam('mode')) {
   mode = parseInt(readParam('mode'));
   _repaint();
 }
+
+if (readParam('action') === 'play') {
+    
+  doChk().then((result)=>{
+    if (result.state > 0) {
+      username = result.username;
+      sync_type = 5;
+      synctrls();
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+
+  _repaint();
+
+}
