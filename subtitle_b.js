@@ -936,7 +936,7 @@ function restoreAnim(volume, chapter, verse, _doblank) {
   if (display_mode != 0) {
     animElapse = 0;
     window.requestAnimationFrame(verse_update);
-    _repaint();
+    //_repaint();
   } else {
     _repaint();
   }
@@ -1568,13 +1568,9 @@ function _render(progress) {
           obj.draw();
           break;
         case 1:
-          //render_vertical(progress);//toFixed(2)/animTotal.toFixed(2));
           if (v_vertical.volume != obj.volume || v_vertical.chapter != obj.chapter || v_vertical.verse != obj.verse) {
             v_vertical.initial(obj.volume, obj.chapter, obj.verse);
           }
-
-          //console.log(v_vertical.chapter +', '+ v_vertical.verse);
-
           v_vertical.draw(progress);
           return;
       }
@@ -2130,23 +2126,19 @@ function keyboard(e) {
       break;
     case 'KeyL': openCtrl(); break;//l
     case 'KeyD': fontsize_dist = fontsize_dist == 0 ? 1 : 0; break;//d
-    case 'KeyS': printSaved = !printSaved; break;//s
-    case 'KeyA': //a
-
-      helpSwitch = 0;
-
-      if (color_selection == 0 && display_mode == 0) {
-        display_mode = 1;
-        break;
-      }
-
+    case 'KeyS': printSaved = !printSaved; break;
+    case 'KeyV': 
+      display_mode = (display_mode + 1)%2;
       if (display_mode == 1) {
-        display_mode = 0;
+        animElapse = 0;
+        window.requestAnimationFrame(verse_update);
+        return;
       }
-
+      break;
+    case 'KeyA': //a
+      helpSwitch = 0;
       color_selection = (color_selection + 1) % 3;
       colorSwitch();
-
       break;
     case 'KeyH': //'H'
       if (canvas.hidden) {
@@ -2400,11 +2392,9 @@ function gradientBg() {
 
 function _layer0() {
 
-  if (display_mode == 1) ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (makeTransparent) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  } else if (image_base64 == null) {
+  if (!makeTransparent && image_base64 == null) {
     if (color_selection == 0) {
       ctx.fillStyle = 'green';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -3116,6 +3106,7 @@ if (readParam('action') === 'play') {
   printSaved = false;
   colorSwitch();
   fontfactor += 3;
+  fontsize_dist = 1;
 
   doChk().then((result)=>{
     if (result.state > 0) {

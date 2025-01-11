@@ -108,11 +108,12 @@
         }
 
         .okbutton {
-            font-size: 24px;
+            font-size: 16px;
             background-color: rgb(0, 150, 0);
             color: #00ff00;
             margin: 2% 2%;
-            width: 50%;
+            width: 30%;
+            height: 32px;
             border: 2px solid;
             vertical-align: middle;
         }
@@ -174,6 +175,7 @@
     <button onclick="urlGo('marquee.html', 'LED')">LED</button>
     <button onclick="urlGo('clock.html', 'clock')">時鐘</button>
     <button onclick="urlGo('dashboard.html', 'dash')">Dashboard</button>
+    <button onclick="urlGo('tabs.html', 'tabs')">頁籤</button>
     &nbsp;
     <button id="aBtn" onclick="setSlideAnim()">a2</button>
     &nbsp;
@@ -183,7 +185,7 @@
 
     <div class="wrapper">
         <div class="ui" id="ui">
-            <button class="okbutton" style="height:48px;background-color: red;" type="button"
+            <button class="okbutton" style="background-color: red;" type="button"
                 onclick="window.opener.clean()">Remove</button><br />
             嵌入Google簡報, Canva簡報, Youtube影片...
             <input type="checkbox" id="loopchk" checked>
@@ -192,7 +194,7 @@
             <script type="text/javascript" charset="UTF-8">
 
                 document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false";
-                
+
                 function appendToIframeSrc(inputString, appendString) {
                     return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
                         // 修改 src 的內容
@@ -276,6 +278,15 @@
 <script type="text/javascript" charset="UTF-8">
 
     var animType = 2;
+
+    function isSafariBrowser() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) //safari的ua只有'safari'
+            return 1;
+        if (ua.indexOf('chrome') !== -1) //chrome 的 ua 'safari' 'chrome' 都有
+            return 0;
+        return -1;
+    }
 
     function setSlideAnim() {
 
@@ -463,10 +474,12 @@
                 break;
         }
     }, false);
-    
-    
+
+
+
     window.addEventListener("beforeunload", function (event) {
-        window.opener.openCtrl();
+        if (!isSafariBrowser()) 
+            window.opener.openCtrl_reborn();
     });
 
 </script>

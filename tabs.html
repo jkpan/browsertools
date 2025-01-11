@@ -624,12 +624,6 @@
   resetFrame();
   switchFunction(1);
 
-  if (readParam('json')) {
-    let value = readParam('json');
-    if (value)
-      preload('./' + value);
-  }
-
   var _login = null;
   var username = null;
 
@@ -677,5 +671,14 @@
   }
 
   chkloginstatus();
+
+  /*
+  if (readParam('json')) {
+    let value = readParam('json');
+    if (value)
+      preload('./' + value);
+  }
+  */
+  
 
 </script>

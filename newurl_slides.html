@@ -128,11 +128,60 @@
     var animType = 2;
 
     function add2Item(_div) {
+
+        _div.style.transition = 'none';
+
         let parent = document.getElementById('container');
         parent.appendChild(_div);
         items.push(_div);
-        current = items.length - 1;
-        framePos();
+        
+        
+
+        switch (animType) {
+            case 0:
+                _div.style.top =  '0px';
+                _div.style.left = '0px';
+                _div.style.opacity = 1.0; 
+                _div.style.transform = "rotate(0deg)";
+                _div.style.transition = 'none';
+                break;
+            case 1:
+                 _div.style.top =  '0px';
+                _div.style.left = '0px';
+                _div.style.opacity = 0.0;
+                _div.style.transform = "rotate(0deg)";
+                _div.style.transition = '';
+                _div.style.transition = 'all 0.5s';
+                break;
+            case 2: 
+                _div.style.top =  '0px';
+                _div.style.left = (items.length - 1 - current) * window.innerWidth + "px";
+                _div.style.opacity = 1.0; 
+                _div.style.transform = "rotate(0deg)";
+                _div.style.transition = 'all 0.5s';
+                break;
+            case 3:
+                _div.style.left =  '0px';
+                _div.style.top = (items.length - 1 - current) * window.innerHeight + "px";
+                _div.style.opacity = 1.0;
+                _div.style.transform = "rotate(0deg)";
+                _div.style.transition = 'all 0.5s';
+                break;
+            case 4: 
+                _div.style.top =  '0px';
+                _div.style.left = '0px';
+                _div.style.opacity = 1.0; 
+                _div.style.transform = "rotate(90deg)";
+                _div.style.transition = 'all 0.5s';
+                break;
+        }
+
+        setTimeout(()=>{
+            current = items.length - 1;
+            framePos();
+        }, 300);
+
+        
     }
 
     function newDiv() {
@@ -144,8 +193,13 @@
     var _openWin = null;
 
     function openCtrl() {
+        if (_openWin) return;
         closeCtrl();
         //_openWin = window.open("newurl_ctrl.html", "");
+        _openWin = window.open("newurl_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=500,height=400,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+    }
+
+    function openCtrl_reborn() {
         _openWin = window.open("newurl_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=500,height=400,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
     }
 
@@ -237,7 +291,7 @@
             let div = newDiv();//document.getElementById("image_container");
             div.hidden = false;
             if (keepratio) {
-                div.innerHTML = '<img class="img_ratio" src="' + image_base64 + '" />';
+                div.innerHTML = '<img class="img_ratio" width="100%" height="100%" src="' + image_base64 + '" />';
             } else {
                 div.innerHTML = '<img class="img_full" width="100%" height="100%" src="' + image_base64 + '" />';
             }
@@ -337,7 +391,7 @@
                 case 0: div.style.transition = 'none'; break;
                 case 1: div.style.transition = 'opacity 0.5s'; break;
                 case 2:
-                case 3: div.style.transition = 'all 0.5s'; break;
+                case 3: 
                 case 4: div.style.transition = 'all 0.5s'; break;
             }
         }
@@ -372,31 +426,6 @@
                     div.style.transform = "rotate(0deg)";
                 }
                 break;
-            case 4:
-                for (let i = 0; i < items.length; i++) {
-                    let div = items[i]; //let div = document.getElementById('content_' + i);
-                    div.style.opacity = 1.0;
-                    div.style.left = "0px";
-                    div.style.top = "0px";
-                    if (i <= current) {
-                        div.style.transform = "rotate(0deg)";
-                    } else {
-                        div.style.transform = "rotate(90deg)";
-                        if (i > current) {
-                            div.style.transition = 'all ' + 0.8/(i - current) + 's';//'all 0.5s';
-                        }
-                    }
-                }
-                break;
-            case 3:
-                for (let i = 0; i < items.length; i++) {
-                    let div = items[i]; //let div = document.getElementById('content_' + i);
-                    div.style.opacity = 1.0;
-                    div.style.left = "0px";
-                    div.style.top = (i - current) * window.innerHeight + "px";
-                    div.style.transform = "rotate(0deg)";
-                }
-                break;
             case 1:
                 for (let i = 0; i < items.length; i++) {
                     let div = items[i]; //let div = document.getElementById('content_' + i);
@@ -412,6 +441,31 @@
                         setTimeout(function () {
                             div.style.left = window.innerWidth + "px";
                         }, 500);
+                    }
+                }
+                break;
+            case 3:
+                for (let i = 0; i < items.length; i++) {
+                    let div = items[i]; //let div = document.getElementById('content_' + i);
+                    div.style.opacity = 1.0;
+                    div.style.left = "0px";
+                    div.style.top = (i - current) * window.innerHeight + "px";
+                    div.style.transform = "rotate(0deg)";
+                }
+                break;
+            case 4:
+                for (let i = 0; i < items.length; i++) {
+                    let div = items[i]; //let div = document.getElementById('content_' + i);
+                    div.style.opacity = 1.0;
+                    div.style.left = "0px";
+                    div.style.top = "0px";
+                    if (i <= current) {
+                        div.style.transform = "rotate(0deg)";
+                    } else {
+                        div.style.transform = "rotate(90deg)";
+                        if (i > current) {
+                            div.style.transition = 'all ' + 0.8/(i - current) + 's';//'all 0.5s';
+                        }
                     }
                 }
                 break;
