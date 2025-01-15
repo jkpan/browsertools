@@ -11,7 +11,7 @@
             height: 100%;
             width: 100%;
             border: none;
-            background-color: black;
+            background-color: #222;
         }
 
         .wrapper {
@@ -81,11 +81,15 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            
-            position: absolute; /* 設定絕對定位 */
-            top: 50%;           /* 垂直置中 */
-            left: 50%;          /* 水平置中 */
-            transform: translate(-50%, -50%); /* 修正到圖片的中心 */
+
+            position: absolute;
+            /* 設定絕對定位 */
+            top: 50%;
+            /* 垂直置中 */
+            left: 50%;
+            /* 水平置中 */
+            transform: translate(-50%, -50%);
+            /* 修正到圖片的中心 */
 
         }
 
@@ -109,7 +113,6 @@
             border: 2px solid;
             vertical-align: middle;
         }
-
     </style>
 </head>
 
@@ -134,54 +137,54 @@
         let parent = document.getElementById('container');
         parent.appendChild(_div);
         items.push(_div);
-        
-        
+
+
 
         switch (animType) {
             case 0:
-                _div.style.top =  '0px';
+                _div.style.top = '0px';
                 _div.style.left = '0px';
-                _div.style.opacity = 1.0; 
+                _div.style.opacity = 1.0;
                 _div.style.transform = "rotate(0deg)";
                 _div.style.transition = 'none';
                 break;
             case 1:
-                 _div.style.top =  '0px';
+                _div.style.top = '0px';
                 _div.style.left = '0px';
                 _div.style.opacity = 0.0;
                 _div.style.transform = "rotate(0deg)";
                 _div.style.transition = '';
                 _div.style.transition = 'all 0.5s';
                 break;
-            case 2: 
-                _div.style.top =  '0px';
+            case 2:
+                _div.style.top = '0px';
                 _div.style.left = (items.length - 1 - current) * window.innerWidth + "px";
-                _div.style.opacity = 1.0; 
+                _div.style.opacity = 1.0;
                 _div.style.transform = "rotate(0deg)";
                 _div.style.transition = 'all 0.5s';
                 break;
             case 3:
-                _div.style.left =  '0px';
+                _div.style.left = '0px';
                 _div.style.top = (items.length - 1 - current) * window.innerHeight + "px";
                 _div.style.opacity = 1.0;
                 _div.style.transform = "rotate(0deg)";
                 _div.style.transition = 'all 0.5s';
                 break;
-            case 4: 
-                _div.style.top =  '0px';
+            case 4:
+                _div.style.top = '0px';
                 _div.style.left = '0px';
-                _div.style.opacity = 1.0; 
+                _div.style.opacity = 1.0;
                 _div.style.transform = "rotate(90deg)";
                 _div.style.transition = 'all 0.5s';
                 break;
         }
 
-        setTimeout(()=>{
+        setTimeout(() => {
             current = items.length - 1;
             framePos();
         }, 300);
 
-        
+
     }
 
     function newDiv() {
@@ -224,11 +227,9 @@
             framePos();
         }
 
-        //hideAll();
-        //document.getElementById("rect").hidden = false;
     }
 
-    function hideAll() {
+    function hideBtn() {
         document.getElementById("rect").hidden = true;
     }
 
@@ -239,14 +240,12 @@
 
     function displayHTMLFile(file) {
 
-        hideAll();
+        hideBtn();
 
         // 讀取檔案並將其轉換成Data URL
         var reader = new FileReader();
         reader.onload = function (event) {
             var imageUrl = event.target.result;
-            //document.getElementById("web").hidden = false;
-            //document.getElementById("web").src = imageUrl;
 
             const iframe = document.createElement('iframe');
             iframe.setAttribute("width", "100%");
@@ -265,7 +264,7 @@
 
     function displayPDFFile(file) {
 
-        hideAll();
+        hideBtn();
 
         const fileURL = URL.createObjectURL(file);
         //document.getElementById("web").hidden = false;
@@ -288,7 +287,7 @@
         img.onload = function () {
             var width = img.width;
             var height = img.height;//window.location.href = imageUrl; return;
-            let div = newDiv();//document.getElementById("image_container");
+            let div = newDiv();
             div.hidden = false;
             if (keepratio) {
                 div.innerHTML = '<img class="img_ratio" width="100%" height="100%" src="' + image_base64 + '" />';
@@ -302,11 +301,11 @@
 
     function displayImageFile(file, keepratio) {
 
-        hideAll();
+        hideBtn();
 
         var reader = new FileReader();
         reader.onload = function (event) {
-            image_base64 = event.target.result;//console.log('image_base64:' + image_base64);
+            image_base64 = event.target.result;
             showImage(keepratio);
         };
         reader.readAsDataURL(file);
@@ -315,9 +314,9 @@
 
     function displayVideoFile(file, loop) {
 
-        hideAll();
+        hideBtn();
 
-        let div = newDiv();//document.getElementById("image_container");
+        let div = newDiv();
         div.hidden = false;
 
         const videoURL = URL.createObjectURL(file);
@@ -341,9 +340,9 @@
         value = value.trim();
         if (value.length == 0) return;
 
-        hideAll();
+        hideBtn();
 
-        let div = newDiv();//document.getElementById("image_container");
+        let div = newDiv();
         if (key) div.setAttribute('title', key);
         div.hidden = false;
 
@@ -391,7 +390,7 @@
                 case 0: div.style.transition = 'none'; break;
                 case 1: div.style.transition = 'opacity 0.5s'; break;
                 case 2:
-                case 3: 
+                case 3:
                 case 4: div.style.transition = 'all 0.5s'; break;
             }
         }
@@ -464,7 +463,7 @@
                     } else {
                         div.style.transform = "rotate(90deg)";
                         if (i > current) {
-                            div.style.transition = 'all ' + 0.8/(i - current) + 's';//'all 0.5s';
+                            div.style.transition = 'all ' + 0.8 / (i - current) + 's';//'all 0.5s';
                         }
                     }
                 }
@@ -506,6 +505,19 @@
         if (idx >= items.length) return;
         current = idx;
         framePos();
+    }
+
+    function blank(doblank) {
+        if (!doblank) {
+            framePos();
+            return;
+        }
+        console.log('blank::' + doblank);
+        for (let i = 0; i < items.length; i++) {
+            let div = items[i]; //let div = document.getElementById('content_' + i);
+            //div.hidden = true; 
+            if (doblank) div.style.opacity = 0.0;
+        }
     }
 
     //openCtrl();

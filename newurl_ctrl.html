@@ -97,12 +97,12 @@
         }
 
         button {
-            font-size: 16px;
+            font-size: 14px;
             background-color: rgb(0, 150, 0);
             color: #00ff00;
             /*margin: 2% 2%;*/
             width: auto;
-            height: 64px;
+            height: 36px;
             border: 1px solid;
             vertical-align: middle;
         }
@@ -174,14 +174,17 @@
     <!-- <button onclick="urlGo('anim.html')">Anim</button> -->
     <button onclick="urlGo('marquee.html', 'LED')">LED</button>
     <button onclick="urlGo('clock.html', 'clock')">時鐘</button>
-    <button onclick="urlGo('dashboard.html', 'dash')">Dashboard</button>
+    <button onclick="urlGo('dashboard.html', 'dash')">Dash</button>
     <button onclick="urlGo('tabs.html', 'tabs')">頁籤</button>
+    <p></p>
     &nbsp;
-    <button id="aBtn" onclick="setSlideAnim()">a2</button>
+    <button style="background-color: blue;" id="aBtn" onclick="setSlideAnim()">a2</button>
     &nbsp;
-    <button onclick="window.opener.goSubMoveRight()">◀️</button>
-    <button onclick="window.opener.goAddMoveLeft()">▶️</button>
-
+    <button style="background-color: blue;" onclick="window.opener.blank(true)">blank</button>
+    <button style="background-color: blue;" onclick="window.opener.blank(false)">show</button>
+    &nbsp;
+    <button style="background-color: blue;" onclick="window.opener.goSubMoveRight()">◀️</button>
+    <button style="background-color: blue;" onclick="window.opener.goAddMoveLeft()">▶️</button>
 
     <div class="wrapper">
         <div class="ui" id="ui">
@@ -271,6 +274,8 @@
             <input id="allfile" type="file" hidden="true" onchange="selectFile(event)" />
         </div>
     </div>
+    <p></p>
+    &nbsp;
 </body>
 
 </html>
@@ -451,6 +456,16 @@
         location.reload();
     }
 
+    /*
+    function blank() {
+        window.opener.blank(true);
+    }
+
+    function show() {
+        window.opener.blank(false);
+    }
+    */
+
     //window.addEventListener('beforeunload', function (e) { window.opener.clean(); });
     window.addEventListener('keyup', (e) => {
         //e.preventDefault();
@@ -474,8 +489,6 @@
                 break;
         }
     }, false);
-
-
 
     window.addEventListener("beforeunload", function (event) {
         if (!isSafariBrowser()) 

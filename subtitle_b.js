@@ -426,8 +426,7 @@ const LEV_2_OPC = 0.8;
 const LEV_3_OPC = 0.7;
 
 var fontfactor = 14.0;
-const fontFamily_array =
-  ["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"]; //google fonts
+const fontFamily_array = ["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"];
 //["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
 
 var fontFamily = fontFamily_array[0];

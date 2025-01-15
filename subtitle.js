@@ -773,25 +773,21 @@ function setFontFactor(ff) {
 
 function combineKey(e) {
 
-  switch (e.keyCode) {
-    case 32: history.back(); return;
-    case 189: //'-'
+  switch (e.code) {
+    case 'Space': history.back(); return;
+    case 'Minus': //'-'
       setFontFactor(fontfactor + 0.5);
       break;
-    case 187: //'='
+    case 'Equal': //'='
       setFontFactor(fontfactor - 0.5);
       break;
-    case 68:
+    case 'KeyD':
       if (song == 0) break;
-      console.log('del ' + song);
       SONGS.splice(song, 1);
       song = 0;
       subtitles = SONGS[song];
       phase = 0;
       line = 0;
-      console.log("after : " + SONGS.length + '' + SONGS);
-      console.log("===");
-      console.log(JSON.stringify(SONGS));
       break;
   }
   _repaint();
@@ -800,7 +796,7 @@ function combineKey(e) {
 function keyboard(e) {
 
   //alert(e.keyCode);
-  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+  if (e.code == 'ShiftLeft') {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = false;
     _repaint();
     return;
@@ -812,8 +808,8 @@ function keyboard(e) {
     return;
   }
 
-  switch (e.keyCode) {
-    case 70:
+  switch (e.code) {
+    case 'KeyF':
       for (let i=0;i<fontFamily_array.length;i++) {
         if (fontFamily == fontFamily_array[i]) {
           fontFamily = fontFamily_array[(i+1) % fontFamily_array.length];
@@ -823,19 +819,19 @@ function keyboard(e) {
       init();
       break;
     //case 113: //F2
-    case 13: //Enter
+    case 'Enter':
       createCtrlBtn();
       return;
-    case 66: //'b'
+    case 'KeyB': //'b'
       doblank = doblank == 0 ? 1 : 0;
       break;
-    case 33: //'page up'
+    case 'PageUp':
       if (mode == 0) {
-        keyboard({ keyCode: 37 }); //left
+        keyboard({code:'ArrowLeft', keyCode: 37 }); //left
         return;
       } else { //ppt mode
         if (phase > 0) { //normal
-          keyboard({ keyCode: 38 }); //up
+          keyboard({code:'ArrowUp', keyCode: 38 }); //up
           return;
         } else { // top phase jump to previous song
           if (song > 0) {
@@ -847,13 +843,13 @@ function keyboard(e) {
         }
       }
       break;
-    case 34: //'page down'
+    case 'PageDown':
       if (mode == 0) {
-        keyboard({ keyCode: 39 }); //right
+        keyboard({code:'ArrowRight', keyCode: 39 }); //right
         return;
       } else {
         if (phase < subtitles.length - 1) {
-          keyboard({ keyCode: 40 }); //down
+          keyboard({code:'ArrowDown', keyCode: 40 }); //down
           return;
         } else {
           if (song < SONGS.length - 1) {
@@ -872,10 +868,10 @@ function keyboard(e) {
       if (mode == 3) break;
       break;
     */
-    case 83: displayProgress = displayProgress == 1 ? 0 : 1; break; //'s'
-    case 68: dword = dword == 0 ? 1 : 0; break; //'D'
-    case 67: fontColorType = (fontColorType + 1) % 4; break; //'c'
-    case 90: {
+    case 'KeyS': displayProgress = displayProgress == 1 ? 0 : 1; break; //'s'
+    case 'KeyD': dword = dword == 0 ? 1 : 0; break; //'D'
+    case 'KeyC': fontColorType = (fontColorType + 1) % 4; break; //'c'
+    case 'KeyZ': {
         makeTransparent = !makeTransparent;
         let div = document.getElementById("image_container");
         if (image_base64) {
@@ -888,27 +884,27 @@ function keyboard(e) {
       }
       break; //'z'
     //case 67: phase = subtitles.length - 1; line = 0; break; //'c' jump to coda last one phase
-    case 80:
+    case 'KeyP':
       mode = (mode + 1) % 5;
       break; //'p' ppt mode
-    case 72: //'h 
+    case 'KeyH': //'h 
       helpSwitch = helpSwitch == 0 ? 1 : 0;
       break;
     //case 76: hideCanvas(); break; //'l'
-    case 76: openSelector(); break; //'l'
-    case 38: //'ArrowUp'
+    case 'KeyL': openSelector(); break; //'l'
+    case 'ArrowUp':
       if (phase > 0) {
         phase = phase - 1;
       }
       line = 0;
       break;
-    case 40: //'ArrowDown':
+    case 'ArrowDown':
       if (phase < subtitles.length - 1) {
         phase = phase + 1;
         line = 0;
       }
       break;
-    case 37: //'ArrowLeft'
+    case 'ArrowLeft':
       line = line - 1;
       if (line < 0) {
         phase = phase - 1;
@@ -920,7 +916,7 @@ function keyboard(e) {
         }
       }
       break;
-    case 39: //'ArrowRight'
+    case 'ArrowRight':
       line = line + 1;
       if (line >= subtitles[phase].length) {
         phase = phase + 1;
@@ -932,8 +928,8 @@ function keyboard(e) {
         }
       }
       break;
-    case 48: case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57:
-      //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+    case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
+    case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
       let value = e.keyCode - 48;
       if (value < SONGS.length) {
         song = value;
@@ -942,8 +938,7 @@ function keyboard(e) {
         line = 0;
       }
       break;
-
-    case 189: //'-'
+    case 'Minus': //'-'
       if (song > 0) {
         song = song - 1;
         subtitles = SONGS[song];
@@ -951,7 +946,7 @@ function keyboard(e) {
         line = 0;
       }
       break;
-    case 187: //'='
+    case 'Equal': //'='
       if (song < SONGS.length - 1) {
         song = song + 1;
         subtitles = SONGS[song];
@@ -961,18 +956,17 @@ function keyboard(e) {
       break;
     //oqwertyui
     //case 77: //img = null; document.getElementById('img').click(); break;
-    case 74: document.getElementById('json').click(); break; //case 79: phase = 0; line = 0; break;
-    case 81: if (subtitles.length > 1) { phase = 1; line = 0; } break;
-    case 87: if (subtitles.length > 2) { phase = 2; line = 0; } break;
-    case 69: if (subtitles.length > 3) { phase = 3; line = 0; } break;
-    case 82: if (subtitles.length > 4) { phase = 4; line = 0; } break;
-    case 84: if (subtitles.length > 5) { phase = 5; line = 0; } break;
-    case 89: if (subtitles.length > 6) { phase = 6; line = 0; } break;
-    case 85: if (subtitles.length > 7) { phase = 7; line = 0; } break;
-    case 73: if (subtitles.length > 8) { phase = 8; line = 0; } break;
+    case 'KeyJ': document.getElementById('json').click(); break; //case 79: phase = 0; line = 0; break;
+    case 'KeyQ': if (subtitles.length > 1) { phase = 1; line = 0; } break;
+    case 'KeyW': if (subtitles.length > 2) { phase = 2; line = 0; } break;
+    case 'KeyE': if (subtitles.length > 3) { phase = 3; line = 0; } break;
+    case 'KeyR': if (subtitles.length > 4) { phase = 4; line = 0; } break;
+    case 'KeyT': if (subtitles.length > 5) { phase = 5; line = 0; } break;
+    case 'KeyY': if (subtitles.length > 6) { phase = 6; line = 0; } break;
+    case 'KeyU': if (subtitles.length > 7) { phase = 7; line = 0; } break;
+    case 'KeyI': if (subtitles.length > 8) { phase = 8; line = 0; } break;
 
-    //case 13: //'enter' 
-    case 27: //'escape'
+    case 'Escape':
       mode = 0;
       removeBackground();
       //removeBtns();
@@ -985,7 +979,6 @@ function keyboard(e) {
       break;
     //case 32: canvas.requestFullscreen(); break;
     default:
-      //alert(e.key);
       break;
   }
 
@@ -1455,7 +1448,7 @@ window.addEventListener('message', receiveMessage, false);
 window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function (e) {
   //e.preventDefault(); //e.stopPropagation();
-  if (e.keyCode == 16) {
+  if (e.code == 'ShiftLeft') {
     keylock = true;
   }
 }, false);
@@ -1533,42 +1526,42 @@ function touchend(evt) { //touchend
   if (_colState != colState || _rowState != rowState) return;
 
   if (rowState == 1) { //open sync options selection
-    keyboard({ keyCode: 13 });
+    keyboard({code:'Enter', keyCode: 13 });
     return;
   }
 
   if (rowState == 2) { //open sync options selection
-    keyboard({ keyCode: 66 });
+    keyboard({code:'KeyB', keyCode: 66 });
     return;
   }
 
   if (rowState == 3 && colState == 1) { //上一首
-    keyboard({ keyCode: 189 });
+    keyboard({code:'Minus', keyCode: 189 });
     return;
   }
 
   if (rowState == 3 && colState == 3) { //下一首
-    keyboard({ keyCode: 187 });
+    keyboard({code:'Equal', keyCode: 187 });
     return;
   }
 
   if (rowState == 3 && colState == 2) { //上
-    keyboard({ keyCode: 38 });
+    keyboard({code:'ArrowUp', keyCode: 38 });
     return;
   }
 
   if (rowState == 4 && colState == 2) { //下
-    keyboard({ keyCode: 40 });
+    keyboard({code:'ArrowDown', keyCode: 40 });
     return;
   }
 
   if (rowState == 4 && colState == 1) { //左
-    keyboard({ keyCode: 37 });
+    keyboard({code:'ArrowLeft', keyCode: 37 });
     return;
   }
 
   if (rowState == 4 && colState == 3) { //右
-    keyboard({ keyCode: 39 });
+    keyboard({code:'ArrowRight', keyCode: 39 });
     return;
   }
 

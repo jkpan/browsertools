@@ -388,7 +388,10 @@ const LEV_2_OPC = 0.7;
 const LEV_3_OPC = 0.6;
 
 var fontfactor = 14.0;
-var fontFamily = "Monospace";
+
+const fontFamily_array = ["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"];
+//["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
+var fontFamily = fontFamily_array[0];
 
 var fontsize = 48;
 var FONT = fontsize + "px " + fontFamily;
@@ -982,32 +985,32 @@ function sortjump(start, end) {
 
 function combineKey(e) {
   var jump = 10;
-  switch (e.keyCode) {
-      case 219:
+  switch (e.code) {
+      case 'BracketLeft':
           if (verseCount > 0) 
             verseCount--;
           break;
-      case 221:
+      case 'BracketRight':
           if (verseCount < 10) 
             verseCount++;
           break;
-      case 65: sortjump( 1,  5); break;
-      case 83: sortjump( 6, 17); break;
-      case 68: sortjump(18, 22); break;
-      case 70: sortjump(23, 27); break;
-      case 71: sortjump(28, 39); break;
+      case 'KeyA': sortjump(1, 5); break;
+      case 'KeyS': sortjump(6, 17); break;
+      case 'KeyD': sortjump(18, 22); break;
+      case 'KeyF': sortjump(23, 27); break;
+      case 'KeyG': sortjump(28, 39); break;
       
-      case 90: sortjump(40, 44); break;
-      case 88: sortjump(45, 53); break;
-      case 67: sortjump(54, 57); break;
-      case 86: sortjump(58, 66); break;
+      case 'KeyZ': sortjump(40, 44); break;
+      case 'KeyX': sortjump(45, 53); break;
+      case 'KeyC': sortjump(54, 57); break;
+      case 'KeyV': sortjump(58, 66); break;
 
-      case 8:
+      case 'Backspace':
         phase = 0;
         line = 0;
         break;
-      case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
-      //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+      case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
+      case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
           uisel = 0;
           if (song == 0) break;
 
@@ -1026,7 +1029,7 @@ function combineKey(e) {
           
           break;
       
-      case 38: //'ArrowUp'
+      case 'ArrowUp':
           if (canvas.hidden) break;
           if (phase >= jump) {
             phase = phase - jump;
@@ -1035,7 +1038,7 @@ function combineKey(e) {
           }
           line = 0;
           break; 
-      case 40: //'ArrowDown':
+      case 'ArrowDown':
           if (canvas.hidden) break;
           if (phase == subtitles.length - 1) break;
           if (phase + jump < subtitles.length) {
@@ -1046,25 +1049,25 @@ function combineKey(e) {
             line = 0;
           }
           break;
-      case 37: //'ArrowLeft'
+      case 'ArrowLeft':
           line -= jump;
           if (line < 0) 
               line = 0;
         
           break; 
-      case 39:  //'ArrowRight'
+      case 'ArrowRight':
           line += jump;
           if (line > subtitles[phase].length -1) 
               line = subtitles[phase].length -1; 
           break;
-      case 32:
+      case 'Space':
           history.back();
           return;
-      case 189: //'-'
+      case 'Minus': //'-'
           helpSwitch = 0;
           downsizeFS();
           break;
-      case 187: //'='
+      case 'Equal': //'='
           helpSwitch = 0;
           enlargeFS();
           break;
@@ -1106,7 +1109,7 @@ function anim1() {
     if (animType != 1) return;
     
     if (checkBeforeTail([song, phase, line]))
-        keyboard({keyCode : 39}); //按右鍵
+        keyboard({code: 'ArrowRight', keyCode : 39}); //按右鍵
     else {//到底了 跑下一個設定
       while (true) {
         autoIdx = (autoIdx+1) % presetVerse.length;
@@ -1301,7 +1304,7 @@ function keyboard(e) { //key up
 
     //alert(e.keyCode);
 
-    if (e.keyCode == 16) { //} || e.keyCode == 17) { //key up release lock
+    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
         keylock = 0;
         uisel = 0;
         _repaint();
@@ -1316,41 +1319,40 @@ function keyboard(e) { //key up
 
     //if (keylock == 2 && e.keyCode == 67) if (!canvas.hidden) copyToClickBoard();
           
-    switch (e.keyCode) {
-      case 90: makeTransparent = !makeTransparent; break; //'z'
-      case 77: //m
+    switch (e.code) {
+      case 'KeyF':
+        for (let i = 0; i < fontFamily_array.length; i++) {
+          if (fontFamily == fontFamily_array[i]) {
+            fontFamily = fontFamily_array[(i + 1) % fontFamily_array.length];
+            break;
+          }
+        }
+        init();
+      break;
+      case 'KeyZ': makeTransparent = !makeTransparent; break; //'z'
+      case 'KeyM': //m
           img = null;
           document.getElementById('img').click();
           //loadUrlImg();
           //connect2Data();
           break;
-      case 65: //a
+      case 'KeyV': //v
         display_mode = display_mode == 0?1:0;
-        /*
-        if (color_selection == 2 && display_mode == 0) {
-            display_mode = 1;
-            break;
-        }
-        if (display_mode == 1) {
-            display_mode = 0;
-        }
-        color_selection = (color_selection + 1) % 3;
-        */
         break;
-      case 67: //'c'
+      case 'KeyC': //'c'
         fontColorType = (fontColorType + 1)%4; 
         break;
-      case 78:
+      case 'KeyN':
         switchLang();
         break;
-      case 66: //'b'
+      case 'KeyB': //'b'
         //console.log('b press');
         doblank = doblank == 0?1:0;
         break;
-      case 68: //d
+      case 'KeyD': //d
         fontsize_dist = fontsize_dist == 0 ? 1 : 0;
         break;
-      case 38: //'ArrowUp'
+      case 'ArrowUp': //'ArrowUp'
           if (canvas.hidden) break;
           helpSwitch = 0;
           if (phase > 0) 
@@ -1359,7 +1361,7 @@ function keyboard(e) { //key up
             phase = 0;
           line = 0;
           break; 
-      case 40: //'ArrowDown':
+      case 'ArrowDown':
           if (canvas.hidden) break;
           helpSwitch = 0;
           if (phase == subtitles.length - 1) break;
@@ -1367,8 +1369,8 @@ function keyboard(e) { //key up
           line = 0;
           break;
           //////
-      case 33: //'page up'
-      case 37: { //'ArrowLeft'
+      case 'PageUp':
+      case 'ArrowLeft': {
           helpSwitch = 0;
           let cv = getPreCV(phase, line);
           let _phase = cv[0];//getPreChapter(phase, line);
@@ -1384,8 +1386,8 @@ function keyboard(e) { //key up
 
         }
           break;
-      case 34: //'page down' 
-      case 39: { //'ArrowRight'
+      case 'PageDown': //'page down' 
+      case 'ArrowRight': { //'ArrowRight'
           helpSwitch = 0;
           let cv = getNextCV(phase, line);
           let _phase = cv[0];//getNextChapter(phase, line);
@@ -1402,7 +1404,7 @@ function keyboard(e) { //key up
         }
           break;
       
-        case 189: //'-'
+      case 'Minus': //'-'
           helpSwitch = 0;
           if (canvas.hidden) break;
           if (song > 1) 
@@ -1414,7 +1416,7 @@ function keyboard(e) { //key up
           line = 0;
           
           break;
-        case 187: //'='
+      case 'Equal': //'='
           helpSwitch = 0;
           if (canvas.hidden) break;
           if (song < SONGS.length -1) 
@@ -1428,8 +1430,8 @@ function keyboard(e) { //key up
 
           break;
         //0~9
-        case 48:    case 49:  case 50:  case 51:  case 52:  case 53:  case 54:  case 55:  case 56:  case 57:
-        //case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+        case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
+        case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
           autoIdx = e.keyCode - 48;
           //var value = e.keyCode - 48;
           console.log('::' + autoIdx + ':' + presetVerse[autoIdx].length);
@@ -1437,11 +1439,11 @@ function keyboard(e) { //key up
           if (presetVerse[autoIdx][0].length == 0) break;
           jump2preset(presetVerse[autoIdx]);
           return;
-        case 32: 
-          stopAnim(); 
+        case 'Space':
+          stopAnim();
           break;
         //case 13: //'enter' break;
-        case 27: //'escape'
+        case 'Escape':
           animType = 0;
           mode = 0;
           doblank = 0;
@@ -1671,9 +1673,9 @@ window.addEventListener('resize', function() {
 window.addEventListener('wheel',function (event){
   //only vertical scroll
   if (event.deltaY > 4) {
-    keyboard({keyCode : 34}); //right
+    keyboard({code:'PageDown', keyCode : 34}); //right
   } else if (event.deltaY < -4) {
-    keyboard({keyCode : 33}); //left
+    keyboard({code:'PageUp', keyCode : 33}); //left
   }
 });
 
@@ -1740,7 +1742,7 @@ function receiveMessage(e) {
         if (i >= 10) return;
         presetVerse[i] = jsonData.saved[i];
       }
-      keyboard({ keyCode: 49 });
+      keyboard({code: 'Digit1', keyCode: 49 });
     }
 
     if (jsonData.transparent) {
