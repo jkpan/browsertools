@@ -218,12 +218,14 @@
 
         let parent = document.getElementById('container');
         parent.removeChild(items[current]);
+        let ori_len = items.length;
         items.splice(current, 1);
 
         if (items.length == 0) {
+            current = -1;
             document.getElementById("rect").hidden = false;
         } else {
-            current = items.length - 1;
+            if (current == ori_len - 1) current = items.length - 1;
             framePos();
         }
 
