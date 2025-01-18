@@ -36,36 +36,6 @@
             border: none;
         }
 
-        .reload {
-
-            grid-column: 24 / 25;
-            grid-row: 22 / 23;
-            border: none;
-            opacity: 25%;
-
-            font-size: 24px;
-            background-color: rgb(0, 150, 0);
-            color: #00ff00;
-
-            vertical-align: middle;
-
-        }
-
-        .reloadP {
-
-            grid-column: 24 / 25;
-            grid-row: 23 / 24;
-            border: none;
-            opacity: 25%;
-
-            font-size: 24px;
-            background-color: rgb(0, 150, 0);
-            color: #00ff00;
-
-            vertical-align: middle;
-
-        }
-
         .ui {
             grid-column: 2 / 24;
             grid-row: 2 / 24;
@@ -112,7 +82,7 @@
             background-color: rgb(0, 150, 0);
             color: #00ff00;
             margin: 2% 2%;
-            width: 30%;
+            width: 25%;
             height: 32px;
             border: 2px solid;
             vertical-align: middle;
@@ -153,18 +123,21 @@
             transform: translate(-50%, -50%);
             display: block;
         }
-
-        /*
-        input[type=checkbox] {
-            color:rgb(0, 255, 0);
-            background-color: green;
-        }
-        */
     </style>
 </head>
 
 <body>
-
+    <p></p>
+    <button class="okbutton" style="background-color: red;" type="button" onclick="window.opener.clean()">Remove</button>
+    &nbsp;
+    <button style="background-color: blue;" id="aBtn" onclick="setSlideAnim()">a2</button>
+    &nbsp;
+    <button style="background-color: blue;" onclick="window.opener.blank(true)">blank</button>
+    <button style="background-color: blue;" onclick="window.opener.blank(false)">show</button>
+    &nbsp;
+    <button style="background-color: blue;" onclick="window.opener.goSubMoveRight()">◀️</button>
+    <button style="background-color: blue;" onclick="window.opener.goAddMoveLeft()">▶️</button>
+    
     <p></p>
     <!--hr size="8" width="100%" color="#00ff00"/-->
     &nbsp;
@@ -176,23 +149,30 @@
     <button onclick="urlGo('clock.html', 'clock')">時鐘</button>
     <button onclick="urlGo('dashboard.html', 'dash')">Dash</button>
     <button onclick="urlGo('tabs.html', 'tabs')">頁籤</button>
-    <p></p>
-    &nbsp;
-    <button style="background-color: blue;" id="aBtn" onclick="setSlideAnim()">a2</button>
-    &nbsp;
-    <button style="background-color: blue;" onclick="window.opener.blank(true)">blank</button>
-    <button style="background-color: blue;" onclick="window.opener.blank(false)">show</button>
-    &nbsp;
-    <button style="background-color: blue;" onclick="window.opener.goSubMoveRight()">◀️</button>
-    <button style="background-color: blue;" onclick="window.opener.goAddMoveLeft()">▶️</button>
-
+    
     <div class="wrapper">
         <div class="ui" id="ui">
-            <button class="okbutton" style="background-color: red;" type="button"
-                onclick="window.opener.clean()">Remove</button><br />
+                <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
+                    onclick="openFile('allfile')">
+                    <p>
+                    <ul>
+                        <li>PDF</li>
+                        <li>圖片</li>
+                        <li>影片</li>
+                    </ul>
+                    </p>
+                </div>
+                <input id="allfile" type="file" hidden="true" onchange="selectFile(event)" />
+    
+                <!-- <hr size="4" width="100%" color="#00ff00" /> -->
+                <input type="checkbox" id="loopchk" checked>
+                <label>Loop(影片)</label>
+                <input type="checkbox" id="keepratio" checked>
+                <label>維持比例(圖片)</label>
+                <!-- <hr size="4" width="100%" color="#00ff00" /> -->
+                <P></P>
+
             嵌入Google簡報, Canva簡報, Youtube影片...
-            <input type="checkbox" id="loopchk" checked>
-            <label>Loop(影片)</label>
             <textarea id="ppt_url" name="mytext" rows="5"></textarea>
             <script type="text/javascript" charset="UTF-8">
 
@@ -254,24 +234,7 @@
                 <li><a href="javascript:animLED()">LED動畫</a></li>
                 0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
                 -->
-            </ul>
-
-            <hr size="4" width="100%" color="#00ff00" />
-            本機檔案<br />
-            <input type="checkbox" id="keepratio" checked>
-            <label>維持比例(圖片)</label>
-            <P></P>
-            <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
-                onclick="openFile('allfile')">
-                <p>
-                <ul>
-                    <li>PDF</li>
-                    <li>圖片</li>
-                    <li>影片</li>
-                </ul>
-                </p>
-            </div>
-            <input id="allfile" type="file" hidden="true" onchange="selectFile(event)" />
+            </ul>            
         </div>
     </div>
     <p></p>
@@ -451,20 +414,6 @@
     function dragOverHandler(event) {
         event.preventDefault();
     }
-
-    function reloadPage() {
-        location.reload();
-    }
-
-    /*
-    function blank() {
-        window.opener.blank(true);
-    }
-
-    function show() {
-        window.opener.blank(false);
-    }
-    */
 
     //window.addEventListener('beforeunload', function (e) { window.opener.clean(); });
     window.addEventListener('keyup', (e) => {
