@@ -2617,7 +2617,8 @@ function receiveMessage(e) {
   if (jsonData.verseCount) verseCount = jsonData.verseCount;
 
   if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
-
+  if (jsonData.fontColorType) fontColorType = jsonData.fontColorType;
+  
   if (jsonData.saved && jsonData.saved.length > 0) {
     for (let i = 0; i < jsonData.saved.length; i++) {
       if (i >= 10) return;
@@ -3046,6 +3047,7 @@ function toObj() {
   obj['hlight'] = color_selection_hlight;
   obj['verticle'] = display_mode;
   obj['fontfactor'] = fontfactor;
+  obj['fontColorType'] = fontColorType;
   obj['saved'] = presetVerse;
   obj['transparent'] = makeTransparent ? 1 : 0;
   obj['printSaved'] = printSaved ? 1 : 0;
