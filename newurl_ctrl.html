@@ -12,7 +12,7 @@
             margin: 0% 0%;
             height: 100%;
             width: 100%;
-            background-color: rgb(0, 128, 0);
+            background-color: rgb(80, 80, 80);
             /* transparent; border: 2px solid rgb(0, 255, 0);*/
         }
 
@@ -106,6 +106,14 @@
             color: #00ff00;
         }
 
+        .ctrl {
+            width: 100%;
+            height: 300px;
+            border: none;
+            justify-content: center;
+            align-items: center;
+        }
+
         .drop-area {
             width: 360px;
             height: 200px;
@@ -142,7 +150,7 @@
     <!--hr size="8" width="100%" color="#00ff00"/-->
     &nbsp;
     <button onclick="urlGo('subtitle.html?action=play&mode=2', 'lyric')">歌詞</button>
-    <button onclick="urlGo('subtitle_b.html?action=play&verseCount=2', 'Bible')">聖經</button>
+    <button onclick="urlGo('subtitle_b.html?action=play&colorsel=1&verseCount=2', 'Bible')">聖經</button>
     <button onclick="urlGo('subtitle_niv.html?colorsel=1&verseCount=2', 'NIV')">NIV</button>
     <!-- <button onclick="urlGo('anim.html')">Anim</button> -->
     <button onclick="urlGo('marquee.html', 'LED')">LED</button>
@@ -238,12 +246,26 @@
         </div>
     </div>
     <p></p>
-    &nbsp;
+    <button onclick="divGo('subtitle.html?action=play&mode=2', 'frame_song')">歌詞</button>
+    <button onclick="divGo('subtitle_b.html?action=play&colorsel=1&verseCount=2', 'frame_bible')">聖經</button>
+    <div>
+        <!-- <iframe id="frame_song" class="ctrl" src="./subtitle.html?action=ctrl&mode=2"></iframe> -->
+        <iframe id="frame_song" class="ctrl"></iframe>
+    </div>
+    <p></p>
+    <div>
+        <!-- <iframe id="frame_bible" class="ctrl" src="./subtitle_b.html?action=ctrl&colorsel=1&verseCount=2"></iframe> -->
+        <iframe id="frame_bible" class="ctrl"></iframe>
+    </div>
 </body>
 
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+    function divGo(url, div) {
+        document.getElementById(div).src = url;
+    }
 
     var animType = 2;
 

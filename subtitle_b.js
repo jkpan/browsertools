@@ -2668,8 +2668,8 @@ window.addEventListener('message', receiveMessage, false);
  */
 var keylock = 0;
 function keyupAction(e) {
-  //e.preventDefault();
-  //e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
   //console.log("key up : " +  e.code);
   //return;
 
@@ -2686,7 +2686,8 @@ function keyupAction(e) {
 window.addEventListener('keyup', keyupAction, false);
 
 function keydownAction(e) {
-
+  e.preventDefault();
+  e.stopPropagation();
   /*
   console.log("key down : " +  e.code);
   //return;
@@ -3095,17 +3096,14 @@ if (readParam('colorsel')) {
   colorSwitch();
 }
 
-
-
 if (readParam('verseCount')) {
   verseCount = parseInt(readParam('verseCount'));
 }
 ///////
 if (readParam('action') === 'play') {
 
-  color_selection = 1;
+  //color_selection = 1; colorSwitch();
   printSaved = false;
-  colorSwitch();
   fontfactor += 3;
   fontsize_dist = 1;
 
@@ -3126,8 +3124,7 @@ if (readParam('action') === 'play') {
 
 } else if (readParam('action') === 'ctrl') {
 
-  color_selection = 0;
-  colorSwitch();
+  //color_selection = 0; colorSwitch();
   fontfactor += 5;
 
   doChk().then((result)=>{

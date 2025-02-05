@@ -602,7 +602,7 @@ function printTxt(i, j, vpos) { //subtitle mode
 
 function printFullChart() {
 
-  let margin = 36;
+  let margin = fontsize/2;
   let fsize = fontsize / 4;
   ctx.font = fsize + "px " + fontFamily;
   ctx.textAlign = 'left';
@@ -642,7 +642,7 @@ function printChart() {
   if (all == 0) return;
 
   let gap = canvas.width / all;
-  let _h = 20;
+  let _h = fontsize/2;
   let y = canvas.height - _h * 2;
 
   let _step = 0;
@@ -742,7 +742,7 @@ function printPhaseChart() {
 
   let gap = canvas.width / (subtitles.length - 1);
   let _gap = Math.min(canvas.width / 4, gap);
-  let _h = 20;
+  let _h = fontsize/2;
   let y = canvas.height - _h * 2;
 
   for (let i = 1; i < subtitles.length; i++) {
@@ -794,6 +794,9 @@ function combineKey(e) {
 }
 
 function keyboard(e) {
+
+  e.preventDefault(); 
+  e.stopPropagation();
 
   //alert(e.keyCode);
   if (e.code == 'ShiftLeft') {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
@@ -1052,7 +1055,12 @@ function _layer1() {
       printPhase();
       break;
     case 3: case 4:
-      if (displayProgress == 1) printPhaseChart();
+      if (displayProgress == 1) {
+        if (mode == 3) 
+          printChart();
+        else
+          printPhaseChart();
+      }
       if (doblank == 1) {
         ctx.fillStyle = 'green';
       } else {
@@ -1061,13 +1069,8 @@ function _layer1() {
       printPhase();
       break;
   }
-  return;
-  if (mode == 0) {
-    if (displayProgress == 1)
-      printChart();
-    printSubtitle();
-  } else if (mode == 1 || mode == 3) {
-    /*
+  
+  /*
     a	c	e
     b	d	f
     0	0	1
@@ -1075,36 +1078,6 @@ function _layer1() {
                   xscale, xskew, yscale, yskew, xoffset, yoffset
     ctx.resetTransform
     */
-
-    if (mode == 1 && displayProgress == 1)
-      printFullChart();
-
-    let _scale = mode == 1 ? 0.5 : 1.0;
-    let _gap = 0; //canvas.width/100;
-
-    ctx.transform(_scale,
-      0,
-      0,
-      _scale,
-      _gap,
-      (1 - _scale) * canvas.height - _gap);
-
-    if (doblank == 1) {
-      ctx.fillStyle = 'green';
-    } else {
-      ctx.fillStyle = COLOR_PPT_SML;
-    }
-
-    printPhase();
-
-    //if (displayProgress == 1) printPhaseChart();
-
-    ctx.resetTransform();
-
-  } else if (mode == 2) {
-    if (displayProgress == 1) printPhaseChart();
-    printPhase();
-  }
 
 }
 
@@ -1447,7 +1420,8 @@ function receiveMessage(e) {
 window.addEventListener('message', receiveMessage, false);
 window.addEventListener('keyup', keyboard, false);
 window.addEventListener('keydown', function (e) {
-  //e.preventDefault(); //e.stopPropagation();
+  e.preventDefault(); 
+  e.stopPropagation();
   if (e.code == 'ShiftLeft') {
     keylock = true;
   }
@@ -1579,10 +1553,28 @@ if (readParam('mode')) {
 
 if (readParam('action') === 'play') {
     
-  doChk().then((result)=>{
+  doChk().then((result) => {
     if (result.state > 0) {
       username = result.username;
       sync_type = 5;
+      synctrls();
+    }
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+
+  _repaint();
+
+}
+
+if (readParam('action') === 'ctrl') {
+
+  doChk().then((result)=>{
+    if (result.state > 0) {
+      username = result.username;
+      displayProgress = 1;
+      mode = 3;
+      sync_type = 3;
       synctrls();
     }
   }).catch(error => {
