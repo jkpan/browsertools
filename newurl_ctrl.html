@@ -9,53 +9,30 @@
     <style>
         body {
             color: rgb(0, 255, 0);
-            margin: 0% 0%;
             height: 100%;
             width: 100%;
             background-color: rgb(80, 80, 80);
+            margin: 5%;
             /* transparent; border: 2px solid rgb(0, 255, 0);*/
         }
-
-        .wrapper {
-
-            display: grid;
-            gap: 0px;
-
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-
-            width: 100%;
-            height: 100vh;
-
-        }
-
-        .full {
-            grid-column: 1 / 25;
-            grid-row: 1 / 25;
-            user-select: none;
-            border: none;
-        }
-
-        .ui {
-            grid-column: 2 / 24;
-            grid-row: 2 / 24;
-        }
-
         ::-webkit-scrollbar {
             display: none;
+        }
+
+        hr {
+            width: 120%;
         }
 
         textarea {
             border: 2px solid rgb(0, 128, 0);
             border-radius: 2px;
             border-color: rgb(0, 255, 0);
-            margin: 1%;
             outline: none;
             padding: 0px;
             box-sizing: border-box;
             background: rgb(0, 150, 0);
             color: rgb(0, 255, 0);
-            width: 96%;
+            width: 90%;
         }
 
         textarea:focus {
@@ -107,15 +84,15 @@
         }
 
         .ctrl {
-            width: 100%;
-            height: 300px;
+            width: 90%;
+            height: 400px;
             border: none;
             justify-content: center;
             align-items: center;
         }
 
         .drop-area {
-            width: 360px;
+            width: 90%;
             height: 200px;
             border: 2px dashed #0f0;
             display: flex;
@@ -124,19 +101,13 @@
             cursor: pointer;
         }
 
-        .centered {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: block;
-        }
     </style>
 </head>
 
 <body>
-    <p></p>
-    <button class="okbutton" style="background-color: red;" type="button" onclick="window.opener.clean()">Remove</button>
+    
+    <button class="okbutton" style="background-color: red;" type="button"
+        onclick="window.opener.clean()">Remove</button>
     &nbsp;
     <button style="background-color: blue;" id="aBtn" onclick="setSlideAnim()">a2</button>
     &nbsp;
@@ -145,10 +116,7 @@
     &nbsp;
     <button style="background-color: blue;" onclick="window.opener.goSubMoveRight()">◀️</button>
     <button style="background-color: blue;" onclick="window.opener.goAddMoveLeft()">▶️</button>
-    
     <p></p>
-    <!--hr size="8" width="100%" color="#00ff00"/-->
-    &nbsp;
     <button onclick="urlGo('subtitle.html?action=play&mode=2', 'lyric')">歌詞</button>
     <button onclick="urlGo('subtitle_b.html?action=play&colorsel=1&verseCount=2', 'Bible')">聖經</button>
     <button onclick="urlGo('subtitle_niv.html?colorsel=1&verseCount=2', 'NIV')">NIV</button>
@@ -157,105 +125,104 @@
     <button onclick="urlGo('clock.html', 'clock')">時鐘</button>
     <button onclick="urlGo('dashboard.html', 'dash')">Dash</button>
     <button onclick="urlGo('tabs.html', 'tabs')">頁籤</button>
-    
-    <div class="wrapper">
-        <div class="ui" id="ui">
-                <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
-                    onclick="openFile('allfile')">
-                    <p>
-                    <ul>
-                        <li>PDF</li>
-                        <li>圖片</li>
-                        <li>影片</li>
-                    </ul>
-                    </p>
-                </div>
-                <input id="allfile" type="file" hidden="true" onchange="selectFile(event)" />
-    
-                <!-- <hr size="4" width="100%" color="#00ff00" /> -->
-                <input type="checkbox" id="loopchk" checked>
-                <label>Loop(影片)</label>
-                <input type="checkbox" id="keepratio" checked>
-                <label>維持比例(圖片)</label>
-                <!-- <hr size="4" width="100%" color="#00ff00" /> -->
-                <P></P>
-
-            嵌入Google簡報, Canva簡報, Youtube影片...
-            <textarea id="ppt_url" name="mytext" rows="5"></textarea>
-            <script type="text/javascript" charset="UTF-8">
-
-                document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false";
-
-                function appendToIframeSrc(inputString, appendString) {
-                    return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
-                        // 修改 src 的內容
-                        const newSrc = srcValue + appendString;
-                        // 替換 src 屬性
-                        return match.replace(srcValue, newSrc);
-                    });
-                }
-
-                function modifyIframeAttributes(inputString, newWidth, newHeight) {
-                    return inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
-                        // 更新 width 屬性
-                        iframeTag = iframeTag.replace(/width\s*=\s*["'].*?["']/i, `width="${newWidth}"`);
-                        // 更新 height 屬性
-                        iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
-                        return iframeTag;
-                    });
-                }
-
-                function urlGo(url, key) {
-
-                    if (key) {
-                        if (window.opener.jump(key)) {
-                            return;
-                        }
-                    }
-
-                    let value = '';
-                    if (url != null)
-                        value = url;
-                    else
-                        value = document.getElementById("ppt_url").value;
-
-                    value = value.trim();
-                    if (value.length == 0) return;
-                    let loop = document.getElementById("loopchk").checked;
-
-                    if (value.startsWith('<iframe')) {
-                        value = modifyIframeAttributes(value, '100%', '100%');
-                    }
-
-                    window.opener.urlGo(value, loop, key);
-                }
-            </script>
-            <br />
-            <button class="okbutton" type="button" onclick="urlGo()">OK</button>
-            <br />
-            <ul>
-                <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a>
-                </li>
-                <li>Google簡報要打開speaker notes按's'</li>
-                <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
-                <!--
-                <li><a href="javascript:animLED()">LED動畫</a></li>
-                0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
-                -->
-            </ul>            
-        </div>
-    </div>
     <p></p>
-    <button onclick="divGo('subtitle.html?action=play&mode=2', 'frame_song')">歌詞</button>
-    <button onclick="divGo('subtitle_b.html?action=play&colorsel=1&verseCount=2', 'frame_bible')">聖經</button>
-    <div>
-        <!-- <iframe id="frame_song" class="ctrl" src="./subtitle.html?action=ctrl&mode=2"></iframe> -->
+    
+    <hr/>
+
+    <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
+        onclick="openFile('allfile')">
+        <p>
+        <ul>
+            <li>PDF</li>
+            <li>圖片</li>
+            <li>影片</li>
+        </ul>
+        </p>
+    </div>
+
+    <input id="allfile" type="file" hidden="true" onchange="selectFile(event)" />
+    <input type="checkbox" id="loopchk" checked>
+    <label>Loop(影片)</label>
+    <input type="checkbox" id="keepratio" checked>
+    <label>維持比例(圖片)</label>
+    <P></P>
+    嵌入Google簡報, Canva簡報, Youtube影片...
+    <textarea id="ppt_url" name="mytext" rows="5"></textarea>
+    <P></P>
+    <button class="okbutton" type="button" onclick="urlGo()">OK</button>
+    <P></P>
+    <ul>
+        <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a>
+        </li>
+        <li>Google簡報要打開speaker notes按's'</li>
+        <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
+        <!--
+        <li><a href="javascript:animLED()">LED動畫</a></li>
+        0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
+        -->
+    </ul>
+
+    <script type="text/javascript" charset="UTF-8">
+
+        document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false";
+
+        function appendToIframeSrc(inputString, appendString) {
+            return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
+                // 修改 src 的內容
+                const newSrc = srcValue + appendString;
+                // 替換 src 屬性
+                return match.replace(srcValue, newSrc);
+            });
+        }
+
+        function modifyIframeAttributes(inputString, newWidth, newHeight) {
+            return inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
+                // 更新 width 屬性
+                iframeTag = iframeTag.replace(/width\s*=\s*["'].*?["']/i, `width="${newWidth}"`);
+                // 更新 height 屬性
+                iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
+                return iframeTag;
+            });
+        }
+
+        function urlGo(url, key) {
+
+            if (key) {
+                if (window.opener.jump(key)) {
+                    return;
+                }
+            }
+
+            let value = '';
+            if (url != null)
+                value = url;
+            else
+                value = document.getElementById("ppt_url").value;
+
+            value = value.trim();
+            if (value.length == 0) return;
+            let loop = document.getElementById("loopchk").checked;
+
+            if (value.startsWith('<iframe')) {
+                value = modifyIframeAttributes(value, '100%', '100%');
+            }
+
+            window.opener.urlGo(value, loop, key);
+        }
+    </script>
+
+    <hr/>
+    
+    <p></p>
+    <button onclick="divGo('subtitle.html?action=ctrl&mode=2', 'frame_song', 'div_song')">歌詞控制</button>
+    <button onclick="divGo('subtitle_b.html?action=ctrl&colorsel=1&verseCount=2', 'frame_Bible', 'div_Bible')">經文控制</button>
+    <p></p>
+    <div id="div_song" hidden>
         <iframe id="frame_song" class="ctrl"></iframe>
     </div>
     <p></p>
-    <div>
-        <!-- <iframe id="frame_bible" class="ctrl" src="./subtitle_b.html?action=ctrl&colorsel=1&verseCount=2"></iframe> -->
-        <iframe id="frame_bible" class="ctrl"></iframe>
+    <div id="div_Bible" hidden>
+        <iframe id="frame_Bible" class="ctrl"></iframe>
     </div>
 </body>
 
@@ -263,8 +230,15 @@
 
 <script type="text/javascript" charset="UTF-8">
 
-    function divGo(url, div) {
-        document.getElementById(div).src = url;
+    function divGo(url, frame, div) {
+        if (document.getElementById(div).hidden) {
+            if (!document.getElementById(frame).src || document.getElementById(frame).src.length == 0)
+                document.getElementById(frame).src = url;
+            document.getElementById(div).hidden = false;
+        } else {
+            document.getElementById(div).hidden = true;
+        }
+
     }
 
     var animType = 2;
@@ -462,7 +436,7 @@
     }, false);
 
     window.addEventListener("beforeunload", function (event) {
-        if (!isSafariBrowser()) 
+        if (!isSafariBrowser())
             window.opener.openCtrl_reborn();
     });
 

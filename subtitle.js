@@ -795,9 +795,6 @@ function combineKey(e) {
 
 function keyboard(e) {
 
-  e.preventDefault(); 
-  e.stopPropagation();
-
   //alert(e.keyCode);
   if (e.code == 'ShiftLeft') {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = false;
@@ -865,12 +862,6 @@ function keyboard(e) {
 
       }
       break;
-    /*
-    case 65: //'A'
-      if (mode == 1) break;
-      if (mode == 3) break;
-      break;
-    */
     case 'KeyS': displayProgress = displayProgress == 1 ? 0 : 1; break; //'s'
     case 'KeyD': dword = dword == 0 ? 1 : 0; break; //'D'
     case 'KeyC': fontColorType = (fontColorType + 1) % 4; break; //'c'
@@ -1418,7 +1409,11 @@ function receiveMessage(e) {
 
 // 監聽 message 事件
 window.addEventListener('message', receiveMessage, false);
-window.addEventListener('keyup', keyboard, false);
+window.addEventListener('keyup', function(e) {
+  e.preventDefault(); 
+  e.stopPropagation();
+  keyboard(e);
+}, false);
 window.addEventListener('keydown', function (e) {
   e.preventDefault(); 
   e.stopPropagation();

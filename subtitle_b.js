@@ -2668,10 +2668,10 @@ window.addEventListener('message', receiveMessage, false);
  */
 var keylock = 0;
 function keyupAction(e) {
+  
   e.preventDefault();
   e.stopPropagation();
-  //console.log("key up : " +  e.code);
-  //return;
+  
 
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') saveAction2Local();
 
@@ -2686,18 +2686,10 @@ function keyupAction(e) {
 window.addEventListener('keyup', keyupAction, false);
 
 function keydownAction(e) {
+  
   e.preventDefault();
   e.stopPropagation();
-  /*
-  console.log("key down : " +  e.code);
-  //return;
-  switch(e.code) {
-    case 'KeyA' : console.log('a'); break;
-    default:
-      console.log('x');
-  }
-  */
-
+  
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = 1;
     _repaint();
