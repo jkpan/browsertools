@@ -371,9 +371,18 @@ var v_vertical = new VerseVertical();
 
 function render_vertical(progress) {
   _layer0();
+  if (v_vertical.volume != song ||
+    v_vertical.chapter != phase ||
+    v_vertical.verse != line) {
+      v_vertical.initial(song, phase, line);
+  }
+  v_vertical.draw(progress);
+  
+  /*
   for (let i = 0; i < queue.length; i++) {
     let obj = queue[i];
     if (obj.chapter == phase && obj.verse == line) {
+      
       if (v_vertical.volume != obj.volume ||
         v_vertical.chapter != obj.chapter ||
         v_vertical.verse != obj.verse) {
@@ -383,6 +392,7 @@ function render_vertical(progress) {
       break;
     }
   }
+  */
   _layerui();
 }
 
@@ -924,7 +934,7 @@ function restoreAnim(volume, chapter, verse, _doblank) {
     return;
   }
 
-  if (volume == song && chapter == phase && verse == line)// && _doblank == doblank) 
+  if (volume == song && chapter == phase && verse == line) 
     return;
 
   song = volume;
