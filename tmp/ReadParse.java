@@ -2,7 +2,7 @@
 import java.io.*;
 import java.util.*;
 
-public class ReadParse {
+public class ReadParse {   
 
     public ReadParse(String _name) {
         //System.out.print("\nReadParse init...\n");
@@ -23,15 +23,13 @@ public class ReadParse {
         try {
 
             BufferedReader br = new BufferedReader(new FileReader("bible.txt"));
-            //BufferedReader br = new BufferedReader(new FileReader("約翰福音.txt"));
-            
+
             String line = null;
 
-            //int count = 0;
             do {
                 line = br.readLine();
                 if (line != null) {
-                    //count++;System.out.println(line);
+
                     handleLine(line, prefix);
                     preLine = currentLine;
                     
@@ -45,18 +43,6 @@ public class ReadParse {
 
             System.out.println(currentLine);
             System.out.println("} </script>");
-
-            //System.out.println("count: "+count);
-        
-            /*
-            StringBuilder sb = new StringBuilder();
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            String everything = sb.toString();
-            */
 
             br.close();
 
@@ -111,10 +97,75 @@ public class ReadParse {
         
     }
 
+    /*
+    public void readline(String prefix) {
+
+        System.out.println();
+
+        currentLine = null;
+        preLine = null;
+
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader("bible.txt"));
+
+            String line = null;
+
+            do {
+                line = br.readLine();
+                if (line != null) {
+
+                    handleLine(line, prefix);
+                    preLine = currentLine;
+                    
+
+                } else {
+                    break;
+                }
+            } while (true);
+
+            br.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            
+        }
+    }
+
+    public void handleLine(String line, String prefix) {
+        if (!line.startsWith(prefix)) return;
+        StringTokenizer st = new StringTokenizer(line, " ");
+        int chapter = -1;
+        int verse = -1;
+        if (st.hasMoreElements()) {
+            String title = st.nextToken();
+            //System.out.print("(" + title + ")");
+            StringTokenizer st2 = new StringTokenizer(title.substring(prefix.length()), ":");
+            try {
+                chapter = Integer.parseInt(st2.nextToken());
+                verse = Integer.parseInt(st2.nextToken());
+                //System.out.print("(" + chapter + ", " + verse + ")");
+            } catch(NumberFormatException ne) {
+                return;
+            }
+        
+            currentLine = line.substring(title.length() + 1);
+            //System.out.println(name +" "+ chapter + ":" + verse + " " + currentLine);
+            System.out.println(currentLine);
+            prechapter = chapter;
+            preverse = verse;
+
+        }
+        
+    }
+    */
+
     public static void main(String[] args) {
 
         //new ReadParse("詩篇").readline("詩");
         //return;
+        
         
         new ReadParse("創世記").readline("創");
         new ReadParse("出埃及記").readline("出");
@@ -156,7 +207,6 @@ public class ReadParse {
         new ReadParse("撒迦利亞書").readline("亞");
         new ReadParse("瑪拉基書").readline("瑪");
         
-        
         new ReadParse("馬太福音").readline("太");
         new ReadParse("馬可福音").readline("可");
         new ReadParse("路加福音").readline("路");
@@ -185,5 +235,6 @@ public class ReadParse {
         new ReadParse("猶大書").readline("猶");
         new ReadParse("啟示錄").readline("啟");
         
+        //new ReadParse("約翰壹書").readline("約一");
     }
 }
