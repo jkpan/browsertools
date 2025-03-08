@@ -238,6 +238,8 @@ function removeBackground() {
   div.hidden = true;
   div.innerHTML = '';
   image_base64 = null;
+  transparent = false;
+  _repaint();
 }
 
 function showImage() {
@@ -961,6 +963,13 @@ function keyboard(e) {
     case 'KeyI': if (subtitles.length > 8) { phase = 8; line = 0; } break;
 
     case 'Escape':
+      
+      if (document.getElementById('ctrl')) {
+        removeDiv();
+        break;
+      }
+
+      removeDiv();
       mode = 0;
       removeBackground();
       //removeBtns();
@@ -1110,11 +1119,11 @@ function _newBtn() {
   var button = document.createElement('button');
 
   button.style.width = '128px'; // setting the width to 200px
-  button.style.height = '48px'; // setting the height to 200px
+  button.style.height = '32px'; // setting the height to 200px
 
-  button.style.background = 'rgb(50,50,50)'; // setting the background color to teal
-  button.style.color = 'rgb(255,255,255)';//color_pointer[1];// 'green'; // setting the color to white
-  button.style.fontSize = '12px'; // setting the font size to 20px
+  button.style.background = 'rgb(250,250,50)'; // setting the background color to teal
+  button.style.color = 'rgb(5,5,5)';//color_pointer[1];// 'green'; // setting the color to white
+  button.style.fontSize = '14px'; // setting the font size to 20px
 
   button.style.borderColor = 'rgb(255,255,255)';
   button.style.borderRadius = '10px';
@@ -1124,87 +1133,46 @@ function _newBtn() {
   return button;
 }
 
+function addBtn(caption, parent, _onclick) {
+  var btn = _newBtn();
+  btn.innerHTML = caption;
+  btn.onclick = _onclick;
+  parent.appendChild(btn);
+  return btn;
+}
+
 function createCtrlBtn() {
+
   removeDiv();
-  canvas.hidden = true;
+  canvas.hidden = false;
 
   let div = document.createElement('div');
   div.appendChild(document.createElement("br"));
 
   div.style.position = "fixed";
-  //div.style.top = "20";
-  //div.style.left = "20";
-  //div.style.width = "100%";
-  //div.style.height = "100%";
-  div.style.margin = "20px";
+  div.style.top = "0";
+  div.style.left = "0";
+  div.style.width = "96%";
+  div.style.height = "96%";
+  div.style.margin = "2% 2% 2% 2%";
+
   div.id = 'ctrl';
   document.body.appendChild(div);
-  div.style.backgroundColor = 'rgba(0,0,0,1.0)';
+  div.style.backgroundColor = 'rgba(0,0,0,0.2)';
 
-  var btn_none = _newBtn();
-  btn_none.innerHTML = 'none';
-  btn_none.onclick = function () {
-    sync_type = 0;
-    synctrls();
-    return false;
-  };
-  div.appendChild(btn_none);
-  ctrls[0] = btn_none;
-
+  ctrls[0] = addBtn('none', div, ()=>{ sync_type = 0; synctrls(); return false; });// _newBtn();
+  
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  var btn_lwm = _newBtn();
-  btn_lwm.innerHTML = 'local master';
-  btn_lwm.onclick = function () {
-    sync_type = 1;
-    synctrls();
-    return false;
-  };
-  div.appendChild(btn_lwm);
-  ctrls[1] = btn_lwm;
-
-  var btn_lwm = _newBtn();
-  btn_lwm.innerHTML = 'web master';
-  btn_lwm.onclick = function () {
-    sync_type = 2;
-    synctrls();
-    return false;
-  };
-  div.appendChild(btn_lwm);
-  ctrls[2] = btn_lwm;
-
-  var btn_lwm = _newBtn();
-  btn_lwm.innerHTML = 'local & web master';
-  btn_lwm.onclick = function () {
-    sync_type = 3;
-    synctrls();
-    return false;
-  };
-  div.appendChild(btn_lwm);
-  ctrls[3] = btn_lwm;
-
+  ctrls[1] = addBtn('local master', div, ()=>{ sync_type = 1; synctrls(); return false; });//_newBtn();
+  ctrls[2] = addBtn('ws master', div, ()=>{ sync_type = 2; synctrls(); return false; }); //_newBtn();
+  ctrls[3] = addBtn('local & ws master', div, ()=>{ sync_type = 3; synctrls(); return false; });//_newBtn();
+  
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  var btn_ls = _newBtn();
-  btn_ls.innerHTML = 'local client';
-  btn_ls.onclick = function () {
-    sync_type = 4;
-    synctrls();
-    return false;
-  };
-  div.appendChild(btn_ls);
-  ctrls[4] = btn_ls;
-
-  var btn_wss = _newBtn();
-  btn_wss.innerHTML = 'ws client';
-  btn_wss.onclick = function () {
-    sync_type = 5;
-    synctrls();
-    return false;
-  };
-  div.appendChild(btn_wss);
-  ctrls[5] = btn_wss;
-
+  ctrls[4] = addBtn('local client', div, ()=>{ sync_type = 4; synctrls(); return false; });//_newBtn();
+  ctrls[5] = addBtn('ws client', div, ()=>{ sync_type = 5; synctrls(); return false; });//_newBtn();
+  
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
   ctrls[5].hidden = true;
@@ -1223,6 +1191,29 @@ function createCtrlBtn() {
     syntoggle();
   });
 
+  div.insertAdjacentHTML('beforeend', '<br/><br/><hr />');
+
+  ctrls[7] = addBtn('mode', div, ()=>{ keyboard({ code: 'KeyP' }); return false; });
+  ctrls[8] = addBtn('char color', div, ()=> {  keyboard({ code: 'KeyC' }); return false; });
+  ctrls[9] = addBtn('font', div, ()=>{keyboard({ code: 'KeyF' }); return false;});
+  ctrls[10] = addBtn('show hint', div, ()=>{ keyboard({ code: 'KeyS' }); return false;});
+
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+
+  ctrls[11] = addBtn('font size-', div, ()=>{ 
+    setFontFactor(fontfactor + 0.5);
+    _repaint();
+    return false;
+  });
+  ctrls[12] = addBtn('font size+', div, ()=>{  
+    setFontFactor(fontfactor - 0.5);
+    _repaint();
+    return false;
+  });
+
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+
+  ctrls[13] = addBtn('remove BG', div, ()=>{ removeBackground(); return false;});
 }
 
 function syntoggle() {

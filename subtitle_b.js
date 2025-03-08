@@ -55,6 +55,8 @@ function removeBackground() {
   div.hidden = true;
   div.innerHTML = '';
   image_base64 = null;
+  transparent = false;
+  _repaint();
 }
 
 function showImage() {
@@ -1030,11 +1032,11 @@ function _newBtn() {
   var button = document.createElement('button');
 
   button.style.width = '128px'; // setting the width to 200px
-  button.style.height = '48px'; // setting the height to 200px
+  button.style.height = '32px'; // setting the height to 200px
 
-  button.style.background = 'rgb(50,50,50)'; // setting the background color to teal
-  button.style.color = 'rgb(255,255,255)';//color_pointer[1];// 'green'; // setting the color to white
-  button.style.fontSize = '12px'; // setting the font size to 20px
+  button.style.background = 'rgb(250,250,50)'; // setting the background color to teal
+  button.style.color = 'rgb(5,5,5)';//color_pointer[1];// 'green'; // setting the color to white
+  button.style.fontSize = '14px'; // setting the font size to 20px
 
   button.style.borderColor = 'rgb(255,255,255)';
   button.style.borderRadius = '10px';
@@ -1081,82 +1083,46 @@ function setMsg_play() {
   synctrls();
 }
 
+function addBtn(caption, parent, _onclick) {
+  var btn = _newBtn();
+  btn.innerHTML = caption;
+  btn.onclick = _onclick;
+  parent.appendChild(btn);
+  return btn;
+}
+
 function createCtrlBtn() {
 
   removeDiv();
-  canvas.hidden = true;
+  canvas.hidden = false;
 
   let div = document.createElement('div');
   div.appendChild(document.createElement("br"));
 
   div.style.position = "fixed";
-  //div.style.top = "0";
-  //div.style.left = "0";
-  //div.style.width = "100%";
-  //div.style.height = "100%";
-  div.style.margin = "20px";
+  div.style.top = "0";
+  div.style.left = "0";
+  div.style.width = "96%";
+  div.style.height = "96%";
+  div.style.margin = "2% 2% 2% 2%";
+
   div.id = 'ctrl';
   document.body.appendChild(div);
-  div.style.backgroundColor = 'rgba(0,0,0,1.0)';
+  div.style.backgroundColor = 'rgba(0,0,0,0.2)';
 
-  var btn_none = _newBtn();
-  btn_none.innerHTML = 'none';
-  btn_none.onclick = function () {
-    setMsg_none();
-    return false;
-  };
-  div.appendChild(btn_none);
-  ctrls[0] = btn_none;
+  ctrls[0] = addBtn('none', div, ()=> { setMsg_none(); return false; });
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  var btn_lm = _newBtn();
-  btn_lm.innerHTML = 'local master';
-  btn_lm.onclick = function () {
-    setMsg_O();
-    return false;
-  };
-  div.appendChild(btn_lm);
-  ctrls[1] = btn_lm;
-
-  var btn_wm = _newBtn();
-  btn_wm.innerHTML = 'web master';
-  btn_wm.onclick = function () {
-    setMsg_ctrl();
-    return false;
-  };
-  div.appendChild(btn_wm);
-  ctrls[2] = btn_wm;
-
-  var btn_lwm = _newBtn();
-  btn_lwm.innerHTML = 'local & web master';
-  btn_lwm.onclick = function () {
-    setMsg_3();
-    return false;
-  };
-  div.appendChild(btn_lwm);
-  ctrls[3] = btn_lwm;
+  ctrls[1] = addBtn('local master', div, ()=> { setMsg_O(); return false; });
+  ctrls[2] = addBtn('ws master', div, ()=>{  setMsg_ctrl(); return false; });
+  ctrls[3] = addBtn('local & ws master', div, ()=>{ setMsg_3(); return false; });
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  var btn_ls = _newBtn();
-  btn_ls.innerHTML = 'local client';
-  btn_ls.onclick = function () {
-    setMsg_X();
-    return false;
-  };
-  div.appendChild(btn_ls);
-  ctrls[4] = btn_ls;
-
-  var btn_wss = _newBtn();
-  btn_wss.innerHTML = 'ws client';
-  btn_wss.onclick = function () {
-    setMsg_play_socket();
-    return false;
-  };
-  div.appendChild(btn_wss);
-  ctrls[5] = btn_wss;
-
+  ctrls[4] = addBtn('local client', div, ()=>{ setMsg_X(); return false; });
+  ctrls[5] = addBtn('ws client', div, ()=>{ setMsg_play_socket(); return false; });
+  
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
   ctrls[5].hidden = true;
@@ -1185,7 +1151,42 @@ function createCtrlBtn() {
   div.appendChild(btn_ws);
   ctrls[6] = btn_ws;
   */
-}
+
+  div.insertAdjacentHTML('beforeend', '<br/><br/><hr />');
+
+  ctrls[7] = addBtn('mode', div, ()=>{ keyboard({ code: 'KeyA' }); return false; });
+  ctrls[8] = addBtn('vertical', div, ()=>{ keyboard({ code: 'KeyV' }); return false; });
+  ctrls[9] = addBtn('char color', div, ()=> {  keyboard({ code: 'KeyC' }); return false; });
+  ctrls[10] = addBtn('font', div, ()=>{keyboard({ code: 'KeyF' }); return false;});
+  ctrls[11] = addBtn('show saved', div, ()=>{ keyboard({ code: 'KeyS' }); return false;});
+  ctrls[12] = addBtn('Line dist.', div, ()=>{ keyboard({ code: 'KeyD' }); return false;});
+  
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+
+  ctrls[13] = addBtn('font size-', div, ()=>{ 
+    helpSwitch = 0;
+    downsizeFS();
+    _repaint();
+    return false;
+  });
+  ctrls[14] = addBtn('font size+', div, ()=>{  
+    helpSwitch = 0;
+    enlargeFS();
+    _repaint();
+    return false;
+  });
+  
+  ctrls[15] = addBtn('Line-', div, ()=>{  
+    subLineCount();
+    return false;
+  });
+  ctrls[16] = addBtn('Line+', div, ()=>{ 
+    addLineCount();
+    return false;
+  });
+  
+};
+
 
 function syntoggle() {
   if (ctrls[sync_type].hidden) setMsg_none();
@@ -1775,6 +1776,18 @@ function sortjump(start, end) {
 
 }
 
+function addLineCount() {
+  if (verseCount < 10)
+    verseCount++;
+  _repaint();
+}
+
+function subLineCount() {
+  if (verseCount > 0)
+    verseCount--;
+  _repaint();
+}
+
 function combineKey(e) {
   var jump = 10;
   switch (e.code) {
@@ -1782,14 +1795,8 @@ function combineKey(e) {
       color_selection_hlight = (color_selection_hlight + 1) % 6;
       colorSwitch_hlight();
       break;
-    case 'BracketLeft':
-      if (verseCount > 0)
-        verseCount--;
-      break;
-    case 'BracketRight':
-      if (verseCount < 10)
-        verseCount++;
-      break;
+    case 'BracketLeft': subLineCount(); return;
+    case 'BracketRight': addLineCount(); return;
     case 'PageUp': { //page up
       helpSwitch = 0;
       let _phase = getPreChapter(phase, line);
@@ -2088,9 +2095,7 @@ function keyboard(e) {
       }
       break; //'z'
     case 'KeyN': switchLang(); break; //n
-    case 'Escape':
-      removeBackground();
-      break;//volAnim = !volAnim; break;//'escape'
+    case 'Escape': removeDiv(); break;//volAnim = !volAnim; break;//'escape'
     case 'Enter': createCtrlBtn(); return;//enter
     case 'KeyC': fontColorType = (fontColorType + 1) % 4; break;//'c'
     case 'KeyB': //'b'
