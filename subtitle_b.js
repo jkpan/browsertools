@@ -72,6 +72,8 @@ function showImage() {
 }
 
 //import '/common.js';
+let animFactor = 0.3;
+
 class Verseobj {
 
   //static hilight_height = 0;
@@ -139,7 +141,7 @@ class Verseobj {
     } else if (progress == -2) {
       fs = this.targetFs;
     } else {
-      let _p = (animElapse % 100) == animTotal ? 1.0 : progress / 3.0;
+      let _p = (animElapse % 100) == animTotal ? 1.0 : progress * animFactor;
       this.fs = this.fs + (this.targetFs - this.fs) * _p;
       fs = this.fs;
       this.transY = this.transY + (this.targetTransY - this.transY) * _p;
@@ -217,7 +219,7 @@ class Verseobj {
       if (this.chapter > 0 && this.verse > 0) {
         let fs = this.targetFs * 0.5;
         ctx.font = fs + "px " + fontFamily;//FONT_SML;
-        if ((animElapse % 100) >= animTotal * 0.8 || animElapse == -1) {
+        if ((animElapse % 100) >= animTotal * 0.95 || animElapse == -1) {
           _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
           _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
         } else {
@@ -242,12 +244,12 @@ class Verseobj {
       let y = this.fs * 0.25;
       for (let i = 0; i < this.substrings.length; i++) {
         if (islastChar(this.substrings[i]) && i + 1 < this.substrings.length && is0Char(this.substrings[i + 1])) {
-          if ((animElapse % 100) >= animTotal * 0.8 || animElapse == -1)
+          if ((animElapse % 100) >= animTotal * 0.95 || animElapse == -1)
             _drawSdwtxt(this.substrings[i] + '-', x, y);
           else
             _drawtxt(this.substrings[i] + '-', x, y, 1.0);
         } else {
-          if ((animElapse % 100) >= animTotal * 0.8 || animElapse == -1)
+          if ((animElapse % 100) >= animTotal * 0.95 || animElapse == -1)
             _drawSdwtxt(this.substrings[i], x, y);
           else
             _drawtxt(this.substrings[i], x, y, 1.0);
@@ -265,7 +267,7 @@ class Verseobj {
       }
       if (color_selection > 0) {
         ctx.font = this.fs * 0.7 + "px " + fontFamily;
-        _drawtxt(this.frontxt, 0, 0, this.opacity * (animElapse < 0 ? 1 : Math.pow(animElapse / animTotal, 2)));
+        _drawtxt(this.frontxt, 0, 0, this.opacity * (animElapse < 0 ? 1 : Math.pow(estimateElapse(), 2)));
       }
     }
 
@@ -1334,7 +1336,7 @@ function blankend_update() {
 
   render(-1);
 
-  ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - (animElapse % 100) / animTotal) + ')'; //opacity 1.0 ~ 0
+  ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - estimateElapse()) + ')'; //opacity 1.0 ~ 0
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if ((animElapse % 100) < animTotal) {
@@ -1353,7 +1355,7 @@ function blank_update(elapse) {
 
   if (animElapse < 100) return;
 
-  ctx.fillStyle = 'rgba(0,128,0,' + ((animElapse % 100) / animTotal) + ')';
+  ctx.fillStyle = 'rgba(0,128,0,' + estimateElapse() + ')';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if ((animElapse % 100) < animTotal) {
@@ -1366,18 +1368,41 @@ function blank_update(elapse) {
 
 }
 
-var display_mode = 0;
-const animTotal = 30;
-var animElapse = -1; //var savePre = 0;
+function estimateElapse() {
+  //let r = (animElapse % 100) / animTotal;
+  //console.log(r);
+  //return r;//(animElapse % 100) / animTotal;
+  return (animElapse % 100) / animTotal;
+}
 
-function verse_update() {
+var display_mode = 0;
+var animTotal = 30;
+var animElapse = -1; //var savePre = 0;
+var preT = 0;
+
+function verse_update(t) {
+
+  
+  let diff = t - preT;
+  preT = t;
+
+  if (diff > 10) { 
+    animTotal = 30;
+    animFactor = 0.33;
+  } else {
+    animTotal = 60;
+    animFactor = 0.15;
+  }
+
+  //console.log(diff + ': ' + animElapse + '/' + animTotal);
+  
 
   switch (display_mode) {
     case 0:
-      render((animElapse % 100) / animTotal);
+      render(estimateElapse());
       break;
     case 1:
-      render_vertical((animElapse % 100) / animTotal);
+      render_vertical(estimateElapse);
       break;
   }
 
