@@ -1213,7 +1213,7 @@ function createCtrlBtn() {
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[13] = addBtn('remove BG', div, ()=>{ removeBackground(); return false;});
+  ctrls[13] = addBtn('rm BG', div, ()=>{ removeBackground(); return false;});
 }
 
 function syntoggle() {

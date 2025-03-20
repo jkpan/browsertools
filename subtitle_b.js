@@ -72,7 +72,7 @@ function showImage() {
 }
 
 //import '/common.js';
-let animFactor = 0.3;
+//let animFactor = 0.3;
 
 class Verseobj {
 
@@ -141,10 +141,25 @@ class Verseobj {
     } else if (progress == -2) {
       fs = this.targetFs;
     } else {
+      
+      if ((animElapse % 100) >= animTotal) {
+        //animElapse = animElapse >= 100 ? 100 + animTotal : animTotal;
+        progress = 1.0;
+        this.fs = this.targetFs;
+        fs = this.fs;
+        this.transY = this.targetTransY;
+      } else {
+        this.fs += (this.targetFs - this.fs) / (animTotal - animElapse % 100);
+        fs = this.fs;
+        this.transY += (this.targetTransY - this.transY) / (animTotal - animElapse % 100);
+      }
+      
+      /*
       let _p = (animElapse % 100) == animTotal ? 1.0 : progress * animFactor;
       this.fs = this.fs + (this.targetFs - this.fs) * _p;
       fs = this.fs;
       this.transY = this.transY + (this.targetTransY - this.transY) * _p;
+      */
     }
 
     if (this.volume <= 0 || this.chapter < 0 || this.verse < 0) return 0;
@@ -190,6 +205,8 @@ class Verseobj {
 
     //Verseobj.hilight_height = this.targetRect;
 
+    //if (animElapse > 0) console.log( '('+progress +') ' + animElapse+': ' + (fs - this.fs));
+
     if (fontsize_dist == 1) //if (color_selection == 0) 
       return this.level == 0 ?
         this.substrings.length * fs + fs * 0.5 :
@@ -197,6 +214,7 @@ class Verseobj {
     //this.substrings.length * this.targetFs + this.targetFs * 0.5;
     else
       return this.substrings.length * fs + fs * 0.5;
+
   }
 
   draw() {
@@ -1186,6 +1204,11 @@ function createCtrlBtn() {
     addLineCount();
     return false;
   });
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  ctrls[17] = addBtn('rm BG', div, ()=>{ 
+    removeBackground();
+    return false;
+  });
   
 };
 
@@ -1369,9 +1392,8 @@ function blank_update(elapse) {
 }
 
 function estimateElapse() {
-  //let r = (animElapse % 100) / animTotal;
-  //console.log(r);
-  //return r;//(animElapse % 100) / animTotal;
+  if ((animElapse % 100) > animTotal) 
+    return 1.0;
   return (animElapse % 100) / animTotal;
 }
 
@@ -1380,29 +1402,31 @@ var animTotal = 30;
 var animElapse = -1; //var savePre = 0;
 var preT = 0;
 
-function verse_update(t) {
+function estimateTotal(t) {
 
-  
   let diff = t - preT;
   preT = t;
 
-  if (diff > 10) { 
-    animTotal = 30;
-    animFactor = 0.33;
-  } else {
-    animTotal = 60;
-    animFactor = 0.15;
+  if (animElapse > 5) {
+    if (diff > 10) { 
+      animTotal = 30; //animFactor = 0.33;
+    } else {
+      animTotal = 60; //animFactor = 0.15;
+    }
   }
 
-  //console.log(diff + ': ' + animElapse + '/' + animTotal);
-  
+}
+
+function verse_update(t) {
+
+  estimateTotal(t); 
 
   switch (display_mode) {
     case 0:
       render(estimateElapse());
       break;
     case 1:
-      render_vertical(estimateElapse);
+      render_vertical(estimateElapse());
       break;
   }
 
@@ -1586,8 +1610,11 @@ function _render(progress) {
     HL_offset_progress = HL_offset_target;
     HL_H_progress = HL_H_target;
   } else if (progress >= 0) {
-    HL_offset_progress += (HL_offset_target - HL_offset_progress) * progress;
-    HL_H_progress += (HL_H_target - HL_H_progress) * progress;
+    //console.log(animTotal +' - ' + animElapse + '=' + (animTotal - animElapse%100));
+    HL_offset_progress += (HL_offset_target - HL_offset_progress) / Math.max(1.0, (animTotal - animElapse%100));
+    HL_H_progress += (HL_H_target - HL_H_progress) / Math.max(1.0, (animTotal - animElapse%100));
+    //HL_offset_progress += (HL_offset_target - HL_offset_progress) * progress/3.0;
+    //HL_H_progress += (HL_H_target - HL_H_progress) * progress/3.0;
   }
 
   for (let i = 0; i < queue.length; i++) {
