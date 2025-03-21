@@ -1409,9 +1409,9 @@ function estimateTotal(t) {
 
   if (animElapse > 5 && animElapse < 12) {
     if (diff > 10) { 
-      animTotal = 30; //animFactor = 0.33;
+      animTotal = 24; //animFactor = 0.33;
     } else {
-      animTotal = 60; //animFactor = 0.15;
+      animTotal = 48; //animFactor = 0.15;
     }
   }
 }
