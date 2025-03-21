@@ -1215,7 +1215,7 @@ function createCtrlBtn() {
 
 function syntoggle() {
   if (ctrls[sync_type].hidden) setMsg_none();
-  for (let i = 0; i < ctrls.length; i++) {
+  for (let i = 0; i <= 5; i++) {
     if (sync_type == i) {
       ctrls[i].style.backgroundColor = 'rgb(255, 255, 255)';
       ctrls[i].style.color = 'rgb(0, 0, 0)';
@@ -1407,14 +1407,13 @@ function estimateTotal(t) {
   let diff = t - preT;
   preT = t;
 
-  if (animElapse > 5) {
+  if (animElapse > 5 && animElapse < 12) {
     if (diff > 10) { 
       animTotal = 30; //animFactor = 0.33;
     } else {
       animTotal = 60; //animFactor = 0.15;
     }
   }
-
 }
 
 function verse_update(t) {
@@ -1432,11 +1431,20 @@ function verse_update(t) {
 
   if (animElapse == -1) return;
 
-  if ((animElapse % 100) < animTotal) {
+  /* 
+    x      a
+   ---- = ----   x = a * 30/60
+    30     60 
+   */
+  if ((animElapse % 100) > animTotal) { //console.log(animElapse + '/' + animTotal);
+    animElapse = Math.floor(animElapse / 2);
+    window.requestAnimationFrame(verse_update);
+  } else if ((animElapse % 100) < animTotal) {
     animElapse++;
     window.requestAnimationFrame(verse_update);
-  } else {
+  } else if ((animElapse % 100) == animTotal) {
     animElapse = -1;
+    _repaint();
   }
 
 }
@@ -1516,8 +1524,13 @@ function operateQuene(queueType, doanim) {
   }
 
   if (doanim > 0) {
-    animElapse = 0;
-    window.requestAnimationFrame(verse_update);
+    if (animElapse < 0) {
+      animElapse = 0;
+      window.requestAnimationFrame(verse_update);
+    } else {
+      animElapse = 0;
+    }
+   
   } else {
     //render(-1);
     _repaint();

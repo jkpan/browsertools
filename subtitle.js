@@ -1218,7 +1218,7 @@ function createCtrlBtn() {
 
 function syntoggle() {
   if (ctrls[sync_type].hidden) sync_type = 0;
-  for (let i = 0; i < ctrls.length; i++) {
+  for (let i = 0; i <= 5; i++) {
     if (sync_type == i) {
       ctrls[i].style.backgroundColor = 'rgb(255, 255, 255)';
       ctrls[i].style.color = 'rgb(0, 0, 0)';
