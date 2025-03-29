@@ -763,11 +763,17 @@ function initWebsocket() {
   if (username == null) return;
 
   let port = 80;
-  if (window.location.port.length > 0) {
-    port = parseInt(window.location.port, 10);
+  if (window.location.protocol === 'https:') {
+    port = 443;
+  } else {
+    if (window.location.port.length > 0) {
+      port = parseInt(window.location.port, 10);
+    }
   }
 
-  ws = new WebSocket(`ws://${serverDomain}:${port}/Bible/${username}`);
+  ws = port == 443? 
+  new WebSocket(`wss://${serverDomain}/Bible/${username}`): 
+  new WebSocket(`ws://${serverDomain}:${port}/Bible/${username}`);
   //console.log('ws://' + serverDomain + ':' + port + '/Bible' + (username == 'guest'?'':'/' + username));
   ws.onopen = function () {
     console.log('Connected to server');

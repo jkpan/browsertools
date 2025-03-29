@@ -119,6 +119,11 @@ document.getElementById('videoElement').addEventListener('canplay', () => {
 navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
   var videoElement = document.getElementById('videoElement');
   videoElement.srcObject = stream;
+  
+  videoElement.setAttribute('autoplay', '');
+  videoElement.setAttribute('muted', '');
+  videoElement.setAttribute('playsinline', '')
+
   //alert("(" + videoElement.width + ", " + videoElement.height + ")");
 }).catch(function(error) {
   console.error('取得視訊鏡頭畫面失敗：', error);

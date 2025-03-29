@@ -1,6 +1,7 @@
 //const blessed = require('blessed');
 //const path = require('path');
 const http = require('http');
+const https = require('https');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os'); 
@@ -19,6 +20,12 @@ var Cluster = null;
 
 var port = 80;
 var docluster = false;
+var httpsEnable = false;
+
+const httpsOptions = {
+  key: fs.readFileSync('./ssl/localhost.key'),
+  cert: fs.readFileSync('./ssl/localhost.crt'),
+};
 
 global.print = function (msg) {
   process.stdout.write(`(${process.pid}) ${msg}`);
@@ -195,7 +202,9 @@ function webservice(req, res) {
 
 function startService() {
 
-  const server = http.createServer(webservice);
+  const server = httpsEnable?
+    https.createServer(httpsOptions, webservice):
+    http.createServer(webservice);
 
   const networkInterfaces = os.networkInterfaces();
   const addresses = [];
@@ -235,7 +244,11 @@ function startService() {
   }
 
   server.listen(port, () => {
-    println('Server is running... http://' + addresses[0] + ((port == 80) ? '' : ':' + port));
+    if (httpsEnable) {
+      println('Server is running... https://' + addresses[0]);
+    } else {
+      println('Server is running... http://' + addresses[0] + ((port == 80) ? '' : ':' + port));
+    }
     println('');
   });
 
@@ -346,6 +359,11 @@ function prepareArgSetting() {
     }
     if (args[i] == '-auth') {
       users.setDoAuth(true);
+      continue;
+    }
+    if (args[i] == '-https') {
+      httpsEnable = true;
+      port = 443;
       continue;
     }
   }
