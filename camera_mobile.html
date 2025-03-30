@@ -31,6 +31,9 @@
     autoplay></video>
 
   <canvas id="canvas" width="400" height="200"></canvas>
+  <button class="btn" onclick="handleVideo('user')">user</button>
+  <button class="btn" onclick="handleVideo('environment')">environment</button>
+
 </body>
 
 </html>
@@ -48,7 +51,7 @@
   var v_offx;
   var v_offy;
 
-  var faceType = 'user';
+  //var faceType = 'user';
 
   function ledinit() {
     //side = 3;
@@ -201,10 +204,11 @@
     return constraints
   }
 
-  turnVideo(handleVideo(faceType));//{ video: true });
   window.addEventListener('keyup', keyboard, false);
 
-
+  turnVideo(handleVideo('user'));//{ video: true });
+  
+  /*
   document.getElementById("canvas").addEventListener("click", () => {
     if (faceType == 'user') {
       turnVideo(handleVideo("environment"));
@@ -212,6 +216,7 @@
       turnVideo(handleVideo("user"));
     }
   });
+  */
 
   /*
   function setDevice() {
