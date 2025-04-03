@@ -1,0 +1,128 @@
+<script type="text/javascript" src="login.js"></script>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Camera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        body {
+            margin: 0px;
+            height: 100%;
+            background-color: rgba(67, 67, 67, 0.0);
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        main {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="canvas" width="400" height="200"></canvas>
+
+</body>
+
+</html>
+
+<script>
+
+    var username = 'guest';
+
+    async function connectWebSocket() {
+
+        let result = await doChk();
+        if (result.state <= 0) return;
+        username = result.username;
+
+        let serverDomain = window.location.hostname;
+
+        let port = 80;
+        if (window.location.protocol === 'https:') {
+            port = 443;
+        } else {
+            if (window.location.port.length > 0) {
+                port = parseInt(window.location.port, 10);
+            }
+        }
+
+        ws = port == 443 ?
+            new WebSocket(`wss://${serverDomain}/Canvas/${username}`) :
+            new WebSocket(`ws://${serverDomain}:${port}/Canvas/${username}`);
+
+        ws.onopen = function () {
+            console.log('Connected to server');
+            ws.send('Hello - from Camera client');
+        };
+
+        /*
+        ws.onmessage = function (event) {
+            console.log('Received:', event.data);
+            restoreFromJson(JSON.parse(event.data));
+        };
+        */
+
+        ws.onclose = function () {
+            console.log('Connection closed');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket 錯誤:', error);
+        };
+
+        ws.onmessage = (event) => {
+            if (event.data instanceof Blob) {
+                // 處理接收到的二進制圖像數據
+                createImageBitmap(event.data).then(imageBitmap => {
+                    canvas.width = imageBitmap.width;
+                    canvas.height = imageBitmap.height;
+                    ctx.drawImage(imageBitmap, 0, 0);
+                }).catch(error => {
+                    console.error('圖像處理錯誤:', error);
+                    statusDiv.textContent = '圖像處理錯誤';
+                });
+            }
+        };
+        //stopStreaming(); startStreaming();
+
+    }
+
+    var canvas = document.getElementById('canvas');
+    var ctx = null;
+
+    function init() {
+        canvas = document.getElementById('canvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        //ctx = canvas.getContext('2d');
+        ctx = canvas.getContext("2d", { willReadFrequently: true });
+    }
+
+    window.addEventListener('resize', function () {
+        init();
+    });
+
+    /*
+    function drawVideoFrame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = 'rgb(200, 0, 0)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        //ctx.drawImage(video, 0, 0, canvas.width, canvas.height);        
+    }
+    */
+
+    init();
+    connectWebSocket();
+
+</script>

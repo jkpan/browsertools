@@ -258,8 +258,8 @@ function ledAction4Still(_canvas, _ctx) {
 
     }
   }
-  _ctx.putImageData(mask, posx, posy);
-  _ctx.drawImage(maskimg, posx, posy);
+  _ctx.putImageData(mask, posx, posy); //led主畫面
+  _ctx.drawImage(maskimg, posx, posy); //蓋上格子
 }
 
 function filter_gray(coloramount) {

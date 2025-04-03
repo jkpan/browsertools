@@ -33,7 +33,7 @@
 
 var video = document.getElementById('videoElement');
 var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext("2d", {willReadFrequently:true});
+var ctx = null;
 
 var effect_type = 0; //0:none 1:LED 2:ascii
 
@@ -67,6 +67,8 @@ function init() {
   let vh = video.videoHeight;
   let ratio = vw/vh;
   let _ratio = canvas.width/canvas.height;
+
+  //alert(`(${vw}, ${vh})`);
         
   if (ratio > _ratio) {  //camera寬 canvas 方
     v_width = Math.floor(canvas.width);
@@ -101,7 +103,12 @@ function effectGo() {
 }
 
 function drawVideoFrame() {
+  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = 'rgb(0, 200, 0)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
   ctx.drawImage(video, 0,      0,      video.videoWidth, video.videoHeight, 
                        v_offx, v_offy, v_width,          v_height);
   effectGo();

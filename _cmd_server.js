@@ -12,6 +12,7 @@ const os = require('os');
 
 const sync_Bible = require('./_sync_Bible');
 const sync_lyrics = require('./_sync_lyrics');
+const sync_camera = require('./_sync_camera');
 const sync_tally = require('./_tally');
 const users = require('./_users');
 
@@ -238,6 +239,18 @@ function startService() {
         let user = url.substring('/Song/'.length);
         if (user && user.length >= 1)
           sync_lyrics.addClient2Map(user, ws);
+      }
+
+      if (url.startsWith('/Camera')) {
+        let user = url.substring('/Camera/'.length);
+        if (user && user.length >= 1)
+          sync_camera.setCamera(user, ws);
+      }
+
+      if (url.startsWith('/Canvas')) {
+        let user = url.substring('/Canvas/'.length);
+        if (user && user.length >= 1)
+          sync_camera.addClient2Map(user, ws);
       }
 
     });
