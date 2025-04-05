@@ -36,13 +36,19 @@
 
 <script>
 
-    var username = 'guest';
+    var username = null;
+
+    var timeoutID = -1;
 
     async function connectWebSocket() {
 
-        let result = await doChk();
-        if (result.state <= 0) return;
-        username = result.username;
+        if (username == null) {
+            let result = await doChk();
+            if (result.state <= 0) {
+                return;
+            }
+            username = result.username;
+        }
 
         let serverDomain = window.location.hostname;
 
@@ -83,28 +89,69 @@
             if (event.data instanceof Blob) {
                 // 處理接收到的二進制圖像數據
                 createImageBitmap(event.data).then(imageBitmap => {
-                    canvas.width = imageBitmap.width;
-                    canvas.height = imageBitmap.height;
-                    ctx.drawImage(imageBitmap, 0, 0);
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    //canvas.width = imageBitmap.width;
+                    //canvas.height = imageBitmap.height;
+                    //window.innerWidth;
+                    //window.innerHeight;
+                    /*
+                          cw      iw         y       iw
+                        ----- = -----     ------ = ------
+                          x       ih         ch      ih
+                    */
+                    if (imageBitmap.width / imageBitmap.height > canvas.width / canvas.height) {
+                        ctx.drawImage(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height,
+                            0, 0, canvas.width, canvas.width * imageBitmap.height / imageBitmap.width);
+                    } else {
+                        ctx.drawImage(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height,
+                            0, 0, canvas.height * imageBitmap.width / imageBitmap.height, canvas.height);
+                    }
                 }).catch(error => {
                     console.error('圖像處理錯誤:', error);
-                    statusDiv.textContent = '圖像處理錯誤';
                 });
             }
         };
         //stopStreaming(); startStreaming();
 
+        if (timeoutID >= 0)
+            window.clearTimeout(timeoutID);
+        timeoutID = setTimeout(chkWebsocket, 5000);
+
+    }
+
+    function chkWebsocket() {
+
+        console.log(`B# ${timeoutID}`);
+
+        if (timeoutID >= 0) {
+            window.clearTimeout(timeoutID);
+            timeoutID = -1;
+        }
+
+        if (ws && ws.readyState != WebSocket.OPEN) {
+            console.log('WebSocket is not open');
+            console.log('call connectWebSocket!');
+            connectWebSocket();
+            return;
+        }
+
+        timeoutID = setTimeout(chkWebsocket, 3000);
     }
 
     var canvas = document.getElementById('canvas');
-    var ctx = null;
+    var ctx = canvas.getContext("2d", { willReadFrequently: true });
 
     function init() {
         canvas = document.getElementById('canvas');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         //ctx = canvas.getContext('2d');
-        ctx = canvas.getContext("2d", { willReadFrequently: true });
+        //ctx = canvas.getContext("2d", { willReadFrequently: true });
     }
 
     window.addEventListener('resize', function () {

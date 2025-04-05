@@ -739,7 +739,7 @@ function chkWebsocket() {
   }
 
   if (ws && ws.readyState != WebSocket.OPEN) {
-    console.log('WebSocket is open');
+    console.log('WebSocket is not open');
     initWebsocket();
     return;
   }

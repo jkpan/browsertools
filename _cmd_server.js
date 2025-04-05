@@ -24,8 +24,8 @@ var docluster = false;
 var httpsEnable = false;
 
 const httpsOptions = {
-  key: fs.readFileSync('./ssl/localhost.key'),
-  cert: fs.readFileSync('./ssl/localhost.crt'),
+  //key: fs.readFileSync('./ssl/localhost.key'),
+  //cert: fs.readFileSync('./ssl/localhost.crt'),
 };
 
 global.print = function (msg) {

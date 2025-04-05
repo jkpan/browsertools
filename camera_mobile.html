@@ -1,4 +1,5 @@
 <script type="text/javascript" src="login.js"></script>
+<script type="text/javascript" src="common.js" charset="UTF-8"></script>
 <!DOCTYPE html>
 <html>
 
@@ -33,6 +34,7 @@
         autoplay></video>
 
     <canvas id="canvas" width="400" height="200"></canvas>
+    <button id="record" style="font-size: 32;" onclick="startstop()">🔘</button>
 
 </body>
 
@@ -43,6 +45,16 @@
     var username = 'guest';
     var sendCounter = 0;
 
+    function startstop() {
+        streamType = streamType == 1 ? 0 : 1;
+        if (streamType == 1) {
+            document.getElementById('record').innerHTML = '🔴';
+        } else {
+            document.getElementById('record').innerHTML = '🔘';
+        }
+    }
+
+    
     /*
     function startStreaming() {
       // 設置定時器定期發送 canvas 數據
@@ -203,8 +215,8 @@
 
     function drawVideoFrame() {
         
-        canvas.width = video.videoWidth/2;
-        canvas.height = video.videoHeight/2;
+        canvas.width = video.videoWidth * 0.6;
+        canvas.height = video.videoHeight * 0.6;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -273,23 +285,16 @@
         return constraints
     }
 
-    
-    //turnVideo({ video: true });
-    turnVideo(handleVideo('environment'));
+    if (detectDevice()) { //mobile
+        if (readParam('camera') == 'user') {
+            turnVideo({ video: true });
+        } else {
+            turnVideo(handleVideo('environment'));
+        }
+    } else {
+        turnVideo({ video: true });
+    }
 
-    canvas.addEventListener("touchstart", function (evt) {
-        streamType = streamType == 1 ? 0 : 1;
-    }, false);
-    /*
-    canvas.addEventListener("touchend", function (evt) {
-        streamType = 0;
-    }, false);
-    */
-    /*
-    canvas.addEventListener("click", function (evt) {
-        streamType = streamType == 1 ? 0 : 1;
-    }, false);
-    */
-    connectWebSocket();
+    connectWebSocket();    
 
 </script>

@@ -43,7 +43,7 @@ function broadcast(user, msg) {
     let clients = c_clients_MAP.get(user);
     if (clients == null) return;
     //let data = getCameraObjStr(user);
-    print(` [ conn: ${clients.size} ] `);
+    //print(` [ conn: ${clients.size} ] `);
     clients.forEach(function (client) {
         if (client.readyState === WebSocket.OPEN) {
             //print('[broadcast ' + user + ' ' + client._socket.remoteAddress + ']');
@@ -73,7 +73,7 @@ function setCamera(usr, ws) {
                 }
             });
             */
-            ptlet('.' + message.length);
+            //ptlet('.' + message.length);
         }
     });
 
