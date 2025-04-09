@@ -34,7 +34,7 @@
         autoplay></video>
 
     <canvas id="canvas" width="400" height="200"></canvas>
-    <button id="record" style="font-size: 32;" onclick="startstop()">🔘</button>
+    <button id="record" style="font-size: 32;" onclick="startstop()">x</button>
 
 </body>
 
@@ -46,6 +46,10 @@
     var sendCounter = 0;
 
     function startstop() {
+        if (document.getElementById('record').innerHTML === 'x') {
+            connectWebSocket();
+            return;
+        }
         streamType = streamType == 1 ? 0 : 1;
         if (streamType == 1) {
             document.getElementById('record').innerHTML = '🔴';
@@ -85,7 +89,11 @@
     async function connectWebSocket() {
 
         let result = await doChk();
-        if (result.state <= 0) return;
+        if (result.state <= 0) {
+            alert('請先登入');
+            window.Location.href = 'login.html';
+            return;
+        } 
         username = result.username;
 
         let serverDomain = window.location.hostname;
@@ -115,12 +123,18 @@
 
         ws.onclose = function () {
             console.log('Connection closed');
+            streamType = 0;
+            document.getElementById('record').innerHTML = 'x';
         };
 
         ws.onerror = (error) => {
             console.error('WebSocket 錯誤:', error);
+            streamType = 0;
+            document.getElementById('record').innerHTML = 'x';
         };
 
+        streamType = 0;
+        document.getElementById('record').innerHTML = '🔘';
         //stopStreaming(); startStreaming();
 
     }
@@ -234,7 +248,23 @@
         
 
         sendCounter = (sendCounter + 1)%5;
-        
+        if (sendCounter == 0) {
+            if (ws == null || ws.readyState !== WebSocket.OPEN) {
+                document.getElementById('record').innerHTML = 'x';
+            } else if (streamType == 1) {
+                // 獲取 canvas 數據並發送
+                canvas.toBlob((blob) => {
+                
+                    if (ws.readyState === WebSocket.OPEN) {
+                        ws.send(blob);
+                        //console.log('.');
+                    }
+                
+                }, 'image/jpeg', 0.7); // 使用 JPEG 格式，質量 70%
+            }
+            
+        }
+        /*
         if (sendCounter == 0 && streamType == 1 && ws && ws.readyState === WebSocket.OPEN) {
             // 獲取 canvas 數據並發送
             canvas.toBlob((blob) => {
@@ -246,7 +276,7 @@
                 
             }, 'image/jpeg', 0.7); // 使用 JPEG 格式，質量 70%
         }
-        //console.log('-');
+        */ //console.log('-');
         requestAnimationFrame(drawVideoFrame);
     }
 
@@ -264,7 +294,7 @@
 
             videoElement.setAttribute('autoplay', '');
             videoElement.setAttribute('muted', '');
-            videoElement.setAttribute('playsinline', '')
+            videoElement.setAttribute('playsinline', '');
 
             //alert("(" + videoElement.width + ", " + videoElement.height + ")");
 

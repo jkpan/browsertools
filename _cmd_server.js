@@ -306,7 +306,6 @@ function createFork() {
   const numCPUs = os.cpus().length;
   println(`main process running`);
 
-  //for (let i = 0; i < 3; i++) { 
   for (let i = 0; i < numCPUs; i++) {
     const worker = Cluster.fork();
     worker.on('message', (msg) => { //println('worker receive:' + JSON.stringify(msg));
@@ -349,7 +348,11 @@ function createService() {
       return;
     }
 
-    sync_camera.syncFromWorker('', msg);
+    if (msg.type === 'syncCamera') {
+      sync_camera.syncFromWorker(msg);
+      return;
+    }
+    //sync_camera.syncFromWorker('', msg);
 
 
   });

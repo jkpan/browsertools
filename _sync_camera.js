@@ -6,9 +6,10 @@ const c_MAP = new Map();
 
 var c_camera = new Map();
 
-function syncFromWorker(user, msg) {
+function syncFromWorker(msg) {
     //syncData(msg.user, msg.volume, msg.chapter, msg.verse, msg.doblank);
-    broadcast(user, msg);
+    //broadcast(msg.user);
+    broadcast(msg.user , msg.content);
 }
 
 function broadcast(user, msg) {
@@ -38,6 +39,13 @@ function setCamera(usr, ws) {
             // 廣播二進制數據給所有其他客戶端
             broadcast(usr, message);
             //ptlet('.' + message.length);
+            if (process.send) {
+                process.send({
+                    type: "syncCamera",
+                    user: usr,
+                    content: message
+                });
+            }
         }
     });
 

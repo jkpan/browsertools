@@ -45,6 +45,8 @@
         if (username == null) {
             let result = await doChk();
             if (result.state <= 0) {
+                alert('請先登入');
+                window.Location.href = 'login.html';
                 return;
             }
             username = result.username;
@@ -102,11 +104,15 @@
                           x       ih         ch      ih
                     */
                     if (imageBitmap.width / imageBitmap.height > canvas.width / canvas.height) {
-                        ctx.drawImage(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height,
-                            0, 0, canvas.width, canvas.width * imageBitmap.height / imageBitmap.width);
+                        let _h = canvas.width * imageBitmap.height / imageBitmap.width;
+                        ctx.drawImage(imageBitmap, 
+                            0,                      0, imageBitmap.width, imageBitmap.height,
+                            0, (canvas.height - _h)/2, canvas.width,      _h);
                     } else {
-                        ctx.drawImage(imageBitmap, 0, 0, imageBitmap.width, imageBitmap.height,
-                            0, 0, canvas.height * imageBitmap.width / imageBitmap.height, canvas.height);
+                        let _w = canvas.height * imageBitmap.width / imageBitmap.height;
+                        ctx.drawImage(imageBitmap, 
+                            0,                  0, imageBitmap.width, imageBitmap.height,
+                            (canvas.width - _w)/2, 0,                 _w, canvas.height);
                     }
                 }).catch(error => {
                     console.error('圖像處理錯誤:', error);
