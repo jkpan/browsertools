@@ -21,6 +21,23 @@
             height: 100%;
         }
 
+        .box1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            
+            background-color: rgba(255, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .box2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            
+            z-index: 2;
+        }
+
         ::-webkit-scrollbar {
             display: none;
         }
@@ -29,12 +46,11 @@
 
 <body>
 
-    <!--video id="videoElement" src="PD_low.mp4" width="300" height="200" hidden="true" style="background-color: #707000; opacity: 1.0;" autoplay></video-->
-    <video id="videoElement" width="300" height="200" hidden="true" style="background-color: #707000; opacity: 1.0;"
-        autoplay></video>
+    <video class="box1" id="videoElement" width="300" height="200" autoplay muted playsinline></video>
 
-    <canvas id="canvas" width="400" height="200"></canvas>
-    <button id="record" style="font-size: 32;" onclick="startstop()">x</button>
+    <canvas class="box2" id="canvas" width="400" height="200"></canvas>
+    <p></p>
+    <button class="box2" id="record" style="font-size: 32;" onclick="startstop()">x</button>
 
 </body>
 
@@ -58,34 +74,6 @@
         }
     }
 
-    
-    /*
-    function startStreaming() {
-      // 設置定時器定期發送 canvas 數據
-      streamingInterval = setInterval(() => {
-        // 更新 canvas 內容 (示例)
-        updateCanvas();
-        
-        // 獲取 canvas 數據並發送
-        canvas.toBlob((blob) => {
-          if (ws.readyState === WebSocket.OPEN) {
-            ws.send(blob);
-          }
-        }, 'image/jpeg', 0.7); // 使用 JPEG 格式，質量 70%
-      }, 100); // 每 100ms 發送一幀
-    }
-    
-    function stopStreaming() {
-      if (streamingInterval) {
-        clearInterval(streamingInterval);
-        streamingInterval = null;
-      }
-      if (ws) {
-        ws.close();
-      }
-    }
-    */
-
     async function connectWebSocket() {
 
         let result = await doChk();
@@ -93,7 +81,7 @@
             alert('請先登入');
             window.Location.href = 'login.html';
             return;
-        } 
+        }
         username = result.username;
 
         let serverDomain = window.location.hostname;
@@ -139,43 +127,7 @@
 
     }
 
-
-    /*
-    function go4send2server() {
-      alert('touch');
-      let mask = ctx.getImageData(v_offx, v_offy, v_width, v_height);
-      var data = mask.data;
-    
-      let wid = mwidth;
-    
-      for (let i = initDot;i < data.length;i += jumpLine) {
-        
-        let h = Math.floor((i/4)/wid);
-    
-        for (let k = i;;k+=jumpSide) {
-    
-          let _pix = k/4;
-          let _h = Math.floor(_pix/wid);
-          let _w = _pix%wid;
-    
-          if (_w > maskWidth) break;
-          if (_h != h) break;
-      
-          //pickColor(data, k, dots);
-          //computeAverage(data, k, dots);
-          colorPickerFunc(data, k, dots);
-    
-          fillArea(data, k, dots);
-    
-        }
-      }
-      //_ctx.putImageData(mask, posx, posy);
-      //_ctx.drawImage(maskimg, posx, posy);
-    }
-    */
-
     var streamType = 0;
-
 
     var video = document.getElementById('videoElement');
     var canvas = document.getElementById('canvas');
@@ -187,7 +139,124 @@
     var v_offy;
 
     function init() {
-        //canvas = document.getElementById('canvas');
+
+    }
+
+    function drawVideoFrame() {
+
+        video.width = video.videoWidth * 0.6;
+        video.height = video.videoHeight * 0.6;
+
+
+        canvas.width = video.videoWidth * 0.6;
+        canvas.height = video.videoHeight * 0.6;
+
+        console.log(video.videoWidth + ', ' + video.videoHeight);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (streamType == 0) {
+            ctx.fillStyle = 'rgb(0, 200, 0)';
+        } else {
+            ctx.fillStyle = 'rgb(200, 0, 0)';
+        }
+
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight,
+            0, 0, canvas.width, canvas.height);
+
+
+        sendCounter = (sendCounter + 1) % 5;
+        if (sendCounter == 0) {
+            if (ws == null || ws.readyState !== WebSocket.OPEN) {
+                document.getElementById('record').innerHTML = 'x';
+            } else if (streamType == 1) {
+                // 獲取 canvas 數據並發送
+                canvas.toBlob((blob) => {
+
+                    if (ws.readyState === WebSocket.OPEN) {
+                        ws.send(blob);
+                    }
+
+                }, 'image/jpeg', 0.7); // 使用 JPEG 格式，質量 70%
+            }
+
+        }
+
+        requestAnimationFrame(drawVideoFrame);
+    }
+
+    document.getElementById('videoElement').addEventListener('canplay', () => {
+        init();
+        requestAnimationFrame(drawVideoFrame);
+    });
+
+    function turnVideo(constraints) {
+        // 取得視訊鏡頭畫面
+        //if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)
+        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+            var videoElement = document.getElementById('videoElement');
+            videoElement.srcObject = stream;
+
+            //videoElement.setAttribute('autoplay', '');
+            //videoElement.setAttribute('muted', '');
+            //videoElement.setAttribute('playsinline', '');
+
+            //alert("(" + videoElement.width + ", " + videoElement.height + ")");
+
+        }).catch(function (error) {
+            alert('取得視訊鏡頭畫面失敗');
+            console.error('取得視訊鏡頭畫面失敗：', error);
+        });
+    }
+
+    function getProfile(cameraFacing) {
+        const constraints = {
+            video: {
+                facingMode: {
+                    exact: cameraFacing
+                }
+            }
+        }
+        return constraints
+    }
+
+    function isSafariBrowser() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) //safari的ua只有'safari'
+            return 1;
+        if (ua.indexOf('chrome') !== -1) //chrome 的 ua 'safari' 'chrome' 都有
+            return 0;
+        return -1;
+    }
+
+    
+    if (detectDevice()) { //mobile
+        if (readParam('camera') == 'user') {
+            turnVideo({ video: true });
+        } else {
+            turnVideo(getProfile('environment'));
+        }
+    } else { //pc ipad would be here
+        if (isSafariBrowser() == 1) {
+            if (readParam('camera') == 'user') {
+                turnVideo({ video: true });
+            } else {
+                turnVideo(getProfile('environment'));
+            }
+        } else {
+            turnVideo({ video: true });
+        }
+    }
+    
+
+    connectWebSocket();
+
+</script>
+
+<!--script>
+    //canvas = document.getElementById('canvas');
         //canvas.width = window.innerWidth;
         //canvas.height = window.innerHeight;
         //ctx = canvas.getContext('2d');
@@ -217,114 +286,4 @@
             //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
         }
         */
-
-    }
-
-    /*
-    window.addEventListener('resize', function () {
-        init();
-        alert('resize!');
-    });
-    */
-
-    function drawVideoFrame() {
-        
-        canvas.width = video.videoWidth * 0.6;
-        canvas.height = video.videoHeight * 0.6;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (streamType == 0) {
-            ctx.fillStyle = 'rgb(0, 200, 0)';
-        } else {
-            ctx.fillStyle = 'rgb(200, 0, 0)';
-        }
-
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        //ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, v_offx, v_offy, v_width, v_height);
-        
-        ctx.drawImage(video, 0, 0);
-        
-
-        sendCounter = (sendCounter + 1)%5;
-        if (sendCounter == 0) {
-            if (ws == null || ws.readyState !== WebSocket.OPEN) {
-                document.getElementById('record').innerHTML = 'x';
-            } else if (streamType == 1) {
-                // 獲取 canvas 數據並發送
-                canvas.toBlob((blob) => {
-                
-                    if (ws.readyState === WebSocket.OPEN) {
-                        ws.send(blob);
-                        //console.log('.');
-                    }
-                
-                }, 'image/jpeg', 0.7); // 使用 JPEG 格式，質量 70%
-            }
-            
-        }
-        /*
-        if (sendCounter == 0 && streamType == 1 && ws && ws.readyState === WebSocket.OPEN) {
-            // 獲取 canvas 數據並發送
-            canvas.toBlob((blob) => {
-                
-                if (ws.readyState === WebSocket.OPEN) {
-                    ws.send(blob);
-                    //console.log('.');
-                }
-                
-            }, 'image/jpeg', 0.7); // 使用 JPEG 格式，質量 70%
-        }
-        */ //console.log('-');
-        requestAnimationFrame(drawVideoFrame);
-    }
-
-    document.getElementById('videoElement').addEventListener('canplay', () => {
-        init();
-        requestAnimationFrame(drawVideoFrame);
-    });
-
-    function turnVideo(constraints) {
-        // 取得視訊鏡頭畫面
-        //if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)
-        navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-            var videoElement = document.getElementById('videoElement');
-            videoElement.srcObject = stream;
-
-            videoElement.setAttribute('autoplay', '');
-            videoElement.setAttribute('muted', '');
-            videoElement.setAttribute('playsinline', '');
-
-            //alert("(" + videoElement.width + ", " + videoElement.height + ")");
-
-        }).catch(function (error) {
-            alert('取得視訊鏡頭畫面失敗');
-            console.error('取得視訊鏡頭畫面失敗：', error);
-        });
-    }
-
-    function handleVideo(cameraFacing) {
-        const constraints = {
-            video: {
-                facingMode: {
-                    exact: cameraFacing
-                }
-            }
-        }
-        return constraints
-    }
-
-    if (detectDevice()) { //mobile
-        if (readParam('camera') == 'user') {
-            turnVideo({ video: true });
-        } else {
-            turnVideo(handleVideo('environment'));
-        }
-    } else {
-        turnVideo({ video: true });
-    }
-
-    connectWebSocket();    
-
-</script>
+</script-->

@@ -2,6 +2,7 @@ const APPS = [
   'lyrics', 'Bible', 'NIV', 'BPlay', 'iPlay',
   'url_1', 'url_2', 'url_3',
   'file_1', 'file_2', 'file_3',
+  'swipe',
   'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'
 ];
 
@@ -835,6 +836,7 @@ function getElmState() {
     lyrics: -1, Bible: -1, NIV: -1, BPlay: -1, iPlay: -1,
     url_1: -1, url_2: -1, url_3: -1,
     file_1: -1, file_2: -1, file_3: -1,
+    swipe: -1, 
     anim: -1, info: -1, effect: -1, time: -1,
     dBoard: -1, tabs: -1
   };
@@ -1052,14 +1054,15 @@ function _createFrame(keyname) {
       return app;
     }
     case 'url_1':
-    case 'url_2': {
+    case 'url_2': 
+    case 'url_3' : {
       createFrame(keyname, 'newurl.html');
       let app = new Applet({ x: 10, y: 5, w: 15, h: 24, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
-    case 'url_3': {
+    case 'swipe': {
       createFrame(keyname, 'newurl_slides.html');
       let app = new Applet({ x: 6, y: 1, w: 15, h: 24, keyname: keyname });
       applets.push(app);
