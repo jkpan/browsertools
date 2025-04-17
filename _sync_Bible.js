@@ -34,7 +34,7 @@ function getBibleObjStr(user) {
     });
 }
 
-function synscripture_get(url) {
+function synscripture_get(url, res) {
     
     var requestData = urltool.parse(url, true).query;
 

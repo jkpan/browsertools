@@ -9,8 +9,9 @@ const os = require('os');
 //const sqlite3 = require('sqlite3').verbose();
 //const express = require('express');
 //const app = express();
+//const objb = require('./_obj_Bible');
 
-const sync_Bible = require('./_sync_Bible');
+const sync_Bible = require('./_sync_Bible'); //('./_obj_Bible')
 const sync_lyrics = require('./_sync_lyrics');
 const sync_camera = require('./_sync_camera');
 const sync_tally = require('./_tally');
@@ -117,7 +118,7 @@ function savejsonfile(req, res) {
     const writeStream = fs.createWriteStream(fn);
     writeStream.write(JSON.stringify(jsonobj, null, "\t")); //, null, "\t");
     writeStream.end(() => {
-      console.log('檔案寫入完成!');
+      println('檔案寫入完成!');
     });
     
     res.setHeader('Content-Type', 'application/json');// 发送响应数据
@@ -177,7 +178,7 @@ function webservice(req, res) {
   }
   
   if (url.startsWith('/synscripture_get')) {
-    sync_Bible.synscripture_get(url);
+    sync_Bible.synscripture_get(url, res);
     return;
   }
 
@@ -311,10 +312,11 @@ function createFork() {
     worker.on('message', (msg) => { //println('worker receive:' + JSON.stringify(msg));
 
       for (const id in Cluster.workers) {
+        //console.log();
         if (Cluster.workers[id].process.pid !== worker.process.pid) {
           Cluster.workers[id].send(msg);
         } else {
-          println('pass');
+          println(Cluster.workers[id].process.pid + ' ---pass--- ' + worker.process.pid);
         }
       }
 
@@ -406,6 +408,8 @@ if (docluster) {
 } else {
   createService();
 }
+
+//new objb.BibleObj('hello');
 
 //npm install ws
 //sudo su -

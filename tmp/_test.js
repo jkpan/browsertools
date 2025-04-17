@@ -1,3 +1,4 @@
+/*
 let thePromise = new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve(100);
@@ -6,6 +7,7 @@ let thePromise = new Promise((resolve, reject) => {
   });
   
   return;
+
   async function getData() {
     console.log("222");
     let res1 = await thePromise; //此时等待Promise实例对象thePromise转化成一个状态为fulfilled，值为100。之后交由await解析，await解析为结果100，赋值给res1。
@@ -13,4 +15,19 @@ let thePromise = new Promise((resolve, reject) => {
   }
   getData();
   console.log("333");
-  
+  */
+
+  var k = 0;
+  function test() {
+    console.log('call test');
+    k++;
+    return k; 
+  }
+
+  function test1() {
+    const x = test();
+    console.log('result:' + x);
+  }
+
+  test1();
+  test1();
