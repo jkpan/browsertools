@@ -24,14 +24,14 @@ class BibleObj {
     }
 
     getBibleObjStr() {
-        return JSON.stringify({
+        return {
             type: "syncBible",
             vlm: this.vlm,
             chp: this.chp,
             ver: this.ver,
             blank: this.blank,
             user: this.user
-        });
+        };
     }
 
     synscripture_get(url, res) {
@@ -54,8 +54,7 @@ class BibleObj {
     }
 
     broadcast() {
-        let data = this.getBibleObjStr();
-        println(`[broadcast conn count: ${this.clients.size} ] `);
+        let data = JSON.stringify(this.getBibleObjStr());
         this.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 print('[send ' + this.user + ' ' + client._socket.remoteAddress + ']');
@@ -71,7 +70,7 @@ class BibleObj {
         this.clients.add(ws);
         ws.on('message', (message)=> { //print('[from client: ' + message + ']');
             println(`[client ${this.user}: ${message}]`);
-            ws.send(this.getBibleObjStr());//'Whatsup client! -- from server');
+            ws.send(JSON.stringify(this.getBibleObjStr()));//'Whatsup client! -- from server');
         });
     }
 
@@ -100,20 +99,15 @@ function restorescripture(req, res) {
         ptlet('-');
         // 发送响应数据
         let obj = getObj(requestData.user);
-        res.end(obj.getBibleObjStr());
+        res.end(JSON.stringify(obj.getBibleObjStr()));
 
     });
 }
-/*
-function syncFromWorker(msg) {
-    syncData(msg.user, msg.volume, msg.chapter, msg.verse, msg.doblank);
-    broadcast(msg.user);
-}
-*/
+
 function syncFromWorker(msg) {
     let obj = getObj(msg.user);
-    console.log('syncFromWorker: ' + msg);
-    obj.syncData(msg.volume, msg.chapter, msg.verse, msg.doblank);
+    print('syncFromWorker. ' + msg.type + ' - ' + msg.user);
+    obj.syncData(msg.vlm, msg.chp, msg.ver, msg.blank);
     obj.broadcast();
 }
 
@@ -139,7 +133,8 @@ function synscripture(req, res) {
         obj.syncData(requestData.vlm, requestData.chp, requestData.ver, requestData.blank);
         res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
 
-        println(`[master ${requestData.user}: ${obj.vlm}, ${obj.chp}, ${obj.ver}, ${obj.blank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+        println(`[synscripture ${requestData.user}: ${obj.vlm}, ${obj.chp}, ${obj.ver}, ${obj.blank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
+        
         obj.broadcast();
 
         if (process.send) {

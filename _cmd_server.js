@@ -11,7 +11,7 @@ const os = require('os');
 //const app = express();
 //const objb = require('./_obj_Bible');
 
-const sync_Bible = require('./_sync_Bible'); //('./_obj_Bible')
+const sync_Bible = require('./_obj_Bible') //('./_sync_Bible')
 const sync_lyrics = require('./_sync_lyrics');
 const sync_camera = require('./_sync_camera');
 const sync_tally = require('./_tally');
@@ -25,8 +25,8 @@ var docluster = false;
 var httpsEnable = false;
 
 const httpsOptions = {
-  key: fs.readFileSync('./ssl/localhost.key'),
-  cert: fs.readFileSync('./ssl/localhost.crt'),
+  //key: fs.readFileSync('./ssl/localhost.key'),
+  //cert: fs.readFileSync('./ssl/localhost.crt'),
 };
 
 global.print = function (msg) {
@@ -310,9 +310,7 @@ function createFork() {
   for (let i = 0; i < numCPUs; i++) {
     const worker = Cluster.fork();
     worker.on('message', (msg) => { //println('worker receive:' + JSON.stringify(msg));
-
       for (const id in Cluster.workers) {
-        //console.log();
         if (Cluster.workers[id].process.pid !== worker.process.pid) {
           Cluster.workers[id].send(msg);
         } else {
@@ -344,7 +342,6 @@ function createService() {
       sync_lyrics.syncFromWorker(msg);
       return;
     }
-
     if (msg.type === 'syncTally') {
       sync_tally.syncFromWorker(msg);
       return;
@@ -354,8 +351,6 @@ function createService() {
       sync_camera.syncFromWorker(msg);
       return;
     }
-    //sync_camera.syncFromWorker('', msg);
-
 
   });
 }
