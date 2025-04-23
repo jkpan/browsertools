@@ -137,32 +137,6 @@ function broadcast(user) {
     });
 }
 
-/*
-function broadcast(user) {
-    let data = getBibleObjStr(user);
-    print(` [ conn: ${B_clients.size} ] `);
-    B_clients.forEach(function (client) {
-        if (client.readyState === WebSocket.OPEN) {
-            print('[broadcast ' + client._socket.remoteAddress + ']');
-            client.send(data);
-        } else {
-            B_clients.delete(client);
-            print('[' + client._socket.remoteAddress + ' removed]');
-        }
-    });
-}
-*/
-
-/*
-function addClient(ws) {
-    B_clients.add(ws);
-    ws.on('message', function incoming(message) { //print('[from client: ' + message + ']');
-        println(`[client: ${message}]`);
-        ws.send(getBibleObjStr());//'Whatsup client! -- from server');
-    });
-}
-*/
-
 function addClient2Map(usr, ws) {
     let clients = B_clients_MAP.get(usr);
     if (clients) {

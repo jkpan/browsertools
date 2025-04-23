@@ -55,13 +55,13 @@ class BibleObj {
 
     broadcast() {
         let data = JSON.stringify(this.getBibleObjStr());
-        this.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                print('[send ' + this.user + ' ' + client._socket.remoteAddress + ']');
-                client.send(data);
+        this.clients.forEach((ws) => {
+            if (ws.readyState === WebSocket.OPEN) {
+                print(`[send ${this.user} ${ws._socket.remoteAddress}]`);
+                ws.send(data);
             } else {
-                this.clients.delete(client);
-                print(`[remove ${this.user} ${client._socket.remoteAddress}]`);
+                this.clients.delete(ws);
+                print(`[remove ${this.user} ${ws._socket.remoteAddress}]`);
             }
         });
     }
@@ -96,7 +96,7 @@ function restorescripture(req, res) {
         // 设置响应头
         res.setHeader('Content-Type', 'application/json');
 
-        ptlet('-');
+        println(`[restorescripture ${requestData.user}]`);
         // 发送响应数据
         let obj = getObj(requestData.user);
         res.end(JSON.stringify(obj.getBibleObjStr()));
@@ -106,7 +106,7 @@ function restorescripture(req, res) {
 
 function syncFromWorker(msg) {
     let obj = getObj(msg.user);
-    print('syncFromWorker. ' + msg.type + ' - ' + msg.user);
+    println(`[syncFromWorker ${msg.user}]`);
     obj.syncData(msg.vlm, msg.chp, msg.ver, msg.blank);
     obj.broadcast();
 }
@@ -154,9 +154,9 @@ function getInfo() {
     let info = [];
     let i = 0;
     obj_clients_MAP.forEach((value, key) => {
-        value.forEach(function (client) {
+        value.clients.forEach(function (client) {
             if (client.readyState === WebSocket.OPEN) {
-                info[i] = `[📖 %{key}: ${client._socket.remoteAddress}]`;
+                info[i] = `[${key}: ${client._socket.remoteAddress}]`;
                 i++;
             }
         });

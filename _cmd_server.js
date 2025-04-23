@@ -13,7 +13,7 @@ const os = require('os');
 
 const sync_Bible = require('./_obj_Bible') //('./_sync_Bible')
 const sync_lyrics = require('./_sync_lyrics');
-const sync_camera = require('./_sync_camera');
+const sync_camera = require('./_obj_camera');//('./_sync_camera');
 const sync_tally = require('./_tally');
 const users = require('./_users');
 
@@ -25,8 +25,8 @@ var docluster = false;
 var httpsEnable = false;
 
 const httpsOptions = {
-  //key: fs.readFileSync('./ssl/localhost.key'),
-  //cert: fs.readFileSync('./ssl/localhost.crt'),
+  key: fs.readFileSync('./ssl/localhost.key'),
+  cert: fs.readFileSync('./ssl/localhost.crt'),
 };
 
 global.print = function (msg) {
@@ -226,9 +226,8 @@ function startService() {
     //println('websocket port : ' + wsport);
     wss.on('connection', function connection(ws, req) {
 
-      let ip = req.socket.remoteAddress;
+      //let ip = req.socket.remoteAddress;
       let url = req.url;
-      //println(' #url: ' + ip + ', ' + url + '#');
 
       if (url.startsWith('/Bible')) {
         let user = url.substring('/Bible/'.length);
@@ -259,7 +258,7 @@ function startService() {
 
   server.listen(port, () => {
     if (httpsEnable) {
-      println('Server is running... https://' + addresses[0]);
+      println('Server is running... https://[Domain name]    ' + 'https://' + addresses[0]);
     } else {
       println('Server is running... http://' + addresses[0] + ((port == 80) ? '' : ':' + port));
     }
@@ -314,7 +313,7 @@ function createFork() {
         if (Cluster.workers[id].process.pid !== worker.process.pid) {
           Cluster.workers[id].send(msg);
         } else {
-          println(Cluster.workers[id].process.pid + ' ---pass--- ' + worker.process.pid);
+          //println(Cluster.workers[id].process.pid + ' ---pass--- ' + worker.process.pid);
         }
       }
 
