@@ -12,8 +12,8 @@ const os = require('os');
 //const objb = require('./_obj_Bible');
 
 const sync_Bible = require('./_obj_Bible') //('./_sync_Bible')
-const sync_lyrics = require('./_sync_lyrics');
-const sync_camera = require('./_obj_camera');//('./_sync_camera');
+const sync_lyrics = require('./_sync_lyrics');//('./_obj_lyrics')
+const sync_camera = require('./_sync_camera');//('./_obj_camera')
 const sync_tally = require('./_tally');
 const users = require('./_users');
 
@@ -25,8 +25,8 @@ var docluster = false;
 var httpsEnable = false;
 
 const httpsOptions = {
-  key: fs.readFileSync('./ssl/localhost.key'),
-  cert: fs.readFileSync('./ssl/localhost.crt'),
+  //key: fs.readFileSync('./ssl/localhost.key'),
+  //cert: fs.readFileSync('./ssl/localhost.crt'),
 };
 
 global.print = function (msg) {

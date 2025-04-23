@@ -17,8 +17,9 @@ class CameraObj {
         if (this.camera && this.camera.readyState === WebSocket.OPEN) {
             this.camera.close();
         }
+        this.camera = ws;
         // 接收二進制消息
-        ws.on('message', (message) => {
+        this.camera.on('message', (message) => {
             if (message instanceof Buffer) {
                 // 廣播二進制數據給所有其他客戶端
                 this.broadcast(message);
@@ -26,7 +27,7 @@ class CameraObj {
                 if (process.send) {
                     process.send({
                         type: "syncCamera",
-                        user: usr,
+                        user: this.user,
                         content: message
                     });
                 }
@@ -56,23 +57,21 @@ class CameraObj {
     }
 }
 
+function setCamera(usr, ws) {
+    let obj = getObj(usr);
+    obj.setCamera(ws);
+}
+
 function addClient2Map(user, ws) {
     let obj = getObj(user);
     obj.addClient2Map(ws);
 }
-
 
 function syncFromWorker(msg) {
     let obj = getObj(msg.user);
     println(`#syncFromWorker ${msg.user}#`);
     obj.broadcast(msg.content);
 }
-
-function setCamera(usr, ws) {
-    let obj = getObj(usr);
-    obj.setCamera(ws);
-}
-
 
 function getObj(usr) {
     let obj = obj_clients_MAP.get(usr);

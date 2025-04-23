@@ -18,14 +18,29 @@ class LyricsObj {
 
     getSongObjStr() {
         return {
-          type: "syncLyrics",
-          user: this.user,
-          song: this.content.song,
-          phase: this.content.phase,
-          line: this.content.line,
-          blank: this.content.song_doblank
+            type: "syncLyrics",
+            user: this.user,
+            song: this.content.song,
+            phase: this.content.phase,
+            line: this.content.line,
+            blank: this.content.song_doblank
         };
-      }
+    }
+
+    broadcast() {
+      let data = JSON.stringify(this.getSongObjStr());
+      //print(` <conn: ${clients.size}> `);
+      this.clients.forEach((ws) => {
+        if (ws.readyState === WebSocket.OPEN) {
+          print('<broadcast ' + this.user + ' ' + ws._socket.remoteAddress + '>');
+          ws.send(data);
+        } else {
+          clients.delete(ws);
+          print(`<remove ${this.user} ${ws._socket.remoteAddress}>`);
+        }
+      });
+    }
+    
 
     syncData(song, phase, line, db) {
         this.content = {
@@ -36,11 +51,11 @@ class LyricsObj {
         };
     }
 
-    addClient2Map(usr, ws) {
+    addClient2Map(ws) {
         this.clients.add(ws);
         ws.on('message', (message) => { //print('[from client: ' + message + ']');
             println(`<client ${this.user}: ${message}>`);
-            ws.send(JSON.stringify(getSongObjStr(usr)));//'Whatsup client! -- from server');
+            ws.send(JSON.stringify(this.getSongObjStr()));//'Whatsup client! -- from server');
         });
     }
 
@@ -50,39 +65,39 @@ function synclyrics(req, res) {
     let body = '';
     // 接收请求的数据
     req.on('data', (data) => {
-      body += data;
+        body += data;
     });
-  
+
     // 请求数据接收完成后的处理
     req.on('end', () => {
-      // 解析请求数据
-      const requestData = JSON.parse(body);
-      //println(body);
+        // 解析请求数据
+        const requestData = JSON.parse(body);
+        //println(body);
 
-      let obj = getObj(requestData.user);
-      obj.syncData(requestData.song, requestData.phase,
-                   requestData.line, requestData.blank);
-  
-      try {
-        println(`<master ${requestData.user}: ${requestData.song[0][0]}, ${requestData.phase}, ${requestData.line}, ${requestData.blank}>`);
-      } catch (err) {
-        println(`<master: err ${requestData.phase}, ${requestData.line}, ${requestData.song_doblank}>`);
-      }
-  
-      res.setHeader('Content-Type', 'application/json');
-  
-      // 发送响应数据
-      res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
-      obj.broadcast();
-    
-      if (process.send) {
-        process.send(obj.getSongObjStr());
-      }
-  
+        let obj = getObj(requestData.user);
+        obj.syncData(requestData.song, requestData.phase,
+            requestData.line, requestData.blank);
+
+        try {
+            println(`<master ${requestData.user}: ${requestData.song[0][0]}, ${requestData.phase}, ${requestData.line}, ${requestData.blank}>`);
+        } catch (err) {
+            println(`<master: err ${requestData.phase}, ${requestData.line}, ${requestData.song_doblank}>`);
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+
+        // 发送响应数据
+        res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
+        obj.broadcast();
+
+        if (process.send) {
+            process.send(obj.getSongObjStr());
+        }
+
     });
-  }
+}
 
-  
+
 function syncFromWorker(msg) {
     let obj = getObj(msg.user);
     println(`<syncFromWorker ${msg.user}>`);
@@ -117,17 +132,6 @@ function getInfo() {
     });
     return info;
 }
-
-module.exports = {
-    addClient2Map,
-    synclyrics,
-    //lyricsBaseAction,
-    //songjsonformat,
-    syncFromWorker,
-    getInfo
-};
-
-/*
 
 function getArrayDimension(arr) {
   if (Array.isArray(arr)) {
@@ -217,18 +221,6 @@ function readAndAction(path, handle) {
   } catch (parseError) {
     console.error('解析 JSON 檔案時發生錯誤:', parseError);
   }
-}
-
-function songjsonformat() {
-  return;
-  readAndAction(READ_SRC, (ALL_SONGS) => {
-    refactor(ALL_SONGS);
-    const writeStream = fs.createWriteStream(WRITE_SRC);
-    formatALL(writeStream, ALL_SONGS);
-    writeStream.end(() => {
-      console.log('檔案寫入完成!');
-    });
-  });
 }
 
 //songs base manipulation
@@ -325,5 +317,28 @@ function lyricsBaseAction(req, res) {
     }
 
   });
+}
+
+module.exports = {
+    addClient2Map,
+    synclyrics,
+    lyricsBaseAction,
+    //songjsonformat,
+    syncFromWorker,
+    getInfo
+};
+
+
+/*
+function songjsonformat() {
+    return;
+    readAndAction(READ_SRC, (ALL_SONGS) => {
+        refactor(ALL_SONGS);
+        const writeStream = fs.createWriteStream(WRITE_SRC);
+        formatALL(writeStream, ALL_SONGS);
+        writeStream.end(() => {
+            console.log('檔案寫入完成!');
+        });
+    });
 }
 */

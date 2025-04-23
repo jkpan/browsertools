@@ -60,6 +60,7 @@
 
     var username = 'guest';
     var sendCounter = 0;
+    var streamType = 0;
 
     function startstop() {
         if (document.getElementById('record').innerHTML === 'x') {
@@ -84,6 +85,9 @@
         }
         username = result.username;
 
+        streamType = 0;
+        document.getElementById('record').innerHTML = 'x';
+
         let serverDomain = window.location.hostname;
 
         let port = 80;
@@ -102,6 +106,8 @@
         ws.onopen = function () {
             console.log('Connected to server');
             ws.send('Hello - from Camera client');
+            streamType = 0;
+            document.getElementById('record').innerHTML = '🔘';
         };
 
         ws.onmessage = function (event) {
@@ -121,13 +127,7 @@
             document.getElementById('record').innerHTML = 'x';
         };
 
-        streamType = 0;
-        document.getElementById('record').innerHTML = '🔘';
-        //stopStreaming(); startStreaming();
-
     }
-
-    var streamType = 0;
 
     var video = document.getElementById('videoElement');
     var canvas = document.getElementById('canvas');
