@@ -11,9 +11,9 @@ const os = require('os');
 //const app = express();
 //const objb = require('./_obj_Bible');
 
-const sync_Bible = require('./_obj_Bible') //('./_sync_Bible')
-const sync_lyrics = require('./_sync_lyrics');//('./_obj_lyrics')
-const sync_camera = require('./_sync_camera');//('./_obj_camera')
+const sync_Bible = require('./_obj_Bible'); //('./_sync_Bible')
+const sync_lyrics = require('./_obj_lyrics'); //('./_sync_lyrics')
+const sync_camera = require('./_obj_camera'); //('./_sync_camera')
 const sync_tally = require('./_tally');
 const users = require('./_users');
 
@@ -310,11 +310,8 @@ function createFork() {
     const worker = Cluster.fork();
     worker.on('message', (msg) => { //println('worker receive:' + JSON.stringify(msg));
       for (const id in Cluster.workers) {
-        if (Cluster.workers[id].process.pid !== worker.process.pid) {
-          Cluster.workers[id].send(msg);
-        } else {
-          //println(Cluster.workers[id].process.pid + ' ---pass--- ' + worker.process.pid);
-        }
+        if (Cluster.workers[id].process.pid === worker.process.pid) continue;
+        Cluster.workers[id].send(msg);
       }
 
     });
@@ -331,7 +328,7 @@ function createService() {
 
   if (process.send) println('process on message');
 
-  process.on('message', (msg) => {//println('process receive:' + JSON.stringify(msg));
+  process.on('message', (msg) => { //println('process receive:' + JSON.stringify(msg));           
 
     if (msg.type === 'syncBible') {
       sync_Bible.syncFromWorker(msg);
@@ -392,6 +389,10 @@ worker    worker    worker
   ^         ^     --  ^
   |         |         | msg
 process   process   process
+
+process.send
+worker.send  (check pid)
+process. on message
 */
 if (docluster) {
   if (Cluster.isMaster) {

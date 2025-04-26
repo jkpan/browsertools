@@ -18,7 +18,7 @@ class LyricsObj {
 
     getSongObjStr() {
         return {
-            type: "syncLyrics",
+            type: "syncSong",
             user: this.user,
             song: this.content.song,
             phase: this.content.phase,
@@ -35,7 +35,7 @@ class LyricsObj {
           print('<broadcast ' + this.user + ' ' + ws._socket.remoteAddress + '>');
           ws.send(data);
         } else {
-          clients.delete(ws);
+          this.clients.delete(ws);
           print(`<remove ${this.user} ${ws._socket.remoteAddress}>`);
         }
       });
@@ -101,7 +101,7 @@ function synclyrics(req, res) {
 function syncFromWorker(msg) {
     let obj = getObj(msg.user);
     println(`<syncFromWorker ${msg.user}>`);
-    obj.syncData(msg.user, msg.song, msg.phase, msg.line, msg.blank);
+    obj.syncData(msg.song, msg.phase, msg.line, msg.blank);
     obj.broadcast();
 }
 

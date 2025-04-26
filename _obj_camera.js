@@ -37,13 +37,13 @@ class CameraObj {
     }
 
     broadcast(msg) {
-        this.clients.forEach(function (ws) {
+        this.clients.forEach((ws) => {
             if (ws.readyState === WebSocket.OPEN) {
-                //print('[broadcast ' + user + ' ' + client._socket.remoteAddress + ']');
+                //print('[broadcast ' + this.user + ' ' + ws._socket.remoteAddress + ']');
                 ws.send(msg, { binary: true });
             } else {
-                this.clients.delete(client);
-                //print(`[${user} ${client._socket.remoteAddress} removed]`);
+                this.clients.delete(ws);
+                //print(`[${this.user} ${ws._socket.remoteAddress} removed]`);
             }
         });
     }
@@ -68,8 +68,7 @@ function addClient2Map(user, ws) {
 }
 
 function syncFromWorker(msg) {
-    let obj = getObj(msg.user);
-    println(`#syncFromWorker ${msg.user}#`);
+    let obj = getObj(msg.user); //println(`#syncFromWorker ${msg.user}#`);
     obj.broadcast(msg.content);
 }
 
@@ -86,7 +85,7 @@ function getInfo() {
     let info = [];
     let i = 0;
     obj_clients_MAP.forEach((value, key) => {
-        value.clients.forEach(function (client) {
+        value.clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
                 info[i] = `#${key}: ${client._socket.remoteAddress}#`;
                 i++;

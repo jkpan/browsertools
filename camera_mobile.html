@@ -58,6 +58,7 @@
 
 <script>
 
+    const framecounttodo = 10;
     var username = 'guest';
     var sendCounter = 0;
     var streamType = 0;
@@ -167,7 +168,7 @@
             0, 0, canvas.width, canvas.height);
 
 
-        sendCounter = (sendCounter + 1) % 5;
+        sendCounter = (sendCounter + 1) % framecounttodo;
         if (sendCounter == 0) {
             if (ws == null || ws.readyState !== WebSocket.OPEN) {
                 document.getElementById('record').innerHTML = 'x';

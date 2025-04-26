@@ -1101,7 +1101,7 @@ function _createFrame(keyname) {
     }
     case 'time': {
       createFrame(keyname, 'clock.html');
-      let app = new Applet({ x: 36, y: 2, w: 13, h: 13, keyname: keyname });
+      let app = new Applet({ x: 36, y: 2, w: 13, h: 25, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
