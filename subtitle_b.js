@@ -1211,10 +1211,12 @@ function createCtrlBtn() {
     return false;
   });
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[17] = addBtn('rm BG', div, ()=>{ 
+  ctrls[17] = addBtn('remove BG', div, ()=>{ 
     removeBackground();
     return false;
   });
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
   
 };
 
@@ -1862,6 +1864,13 @@ function subLineCount() {
 function combineKey(e) {
   var jump = 10;
   switch (e.code) {
+    case 'Tab': 
+      if (stopSpeak()) {
+        stopReading();
+        return;
+      }
+      startReading(); 
+      return;
     case 'KeyB': //'b'
       color_selection_hlight = (color_selection_hlight + 1) % 6;
       colorSwitch_hlight();
@@ -2407,6 +2416,9 @@ function keyboard(e) {
       else if (sync_type > 1 && sync_type != 6)
         ajax_restore();
       return;
+    case 'Tab': //console.log('[' + phase + ':' + line + ']');
+      speakCurrent();
+      return;
     default:
       break;
   }
@@ -2415,6 +2427,11 @@ function keyboard(e) {
 
   _repaint();
 
+}
+
+function speakCurrent() {
+  stopSpeak();
+  speak(subtitles[phase][line]);
 }
 
 function gradientBg2(yy, hh) {

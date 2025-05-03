@@ -120,14 +120,17 @@ function regenMemberlist_(item, type) {
     }
   }
   Logger.log((type ? type : '') + ' ' + item + '   ' + list.join());
-  
+
   let str = '';
-  for (let i=0;i<list.length;i++) {
+  for (let i = 0; i < list.length; i++) {
     str = str + list[i] + '\n';
   }
 
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  SpreadsheetApp.setActiveSheet(spreadsheet.getSheetByName(SHEET_SETTING));
+
   showResult(str, ((type ? type : '') + ' ' + item));
-  
+
 }
 
 function handleRobotJson_(obj) {
@@ -472,25 +475,30 @@ function putByService_(sername, sercol, type) {
     //已經手動填上 就略過
     if (sheet.getRange(row, col).getValue().trim().length > 0) continue;
 
-    if (cell === type) {
-      sheet.getRange(row, col).setFontColor("black");
-      let t = 1;
-      while (!checkPass_(sheet, row, col, name[idx])) {
-        exchange_(name, idx, (idx + t) % name.length);
-        t++;
-        if (t > name.length) {
-          sheet.getRange(row, col).setFontColor("red");
-          break;
+    if (cell != type) continue;
+
+    //Logger.log('before: ' + name + ' - ' + sheet.getRange(row, 1).getValue());
+
+    sheet.getRange(row, col).setFontColor("black");
+
+    for (let pt = 0; pt < name.length; pt++) {
+      if (!checkPass_(sheet, row, col, name[pt])) {
+        if (pt != name.length - 1) {
+          Logger.log('有重複 跳下一個');
+          continue;
         }
+        Logger.log('到底了 跳回0 紅標');
+        pt = 0;
+        sheet.getRange(row, col).setFontColor("red");
       }
-
       sheet.getRange(row, col).setHorizontalAlignment("center");
-
       //填空
-      sheet.getRange(row, col).setValue(name[idx]);
-
-      idx = (idx + 1) % name.length;
+      sheet.getRange(row, col).setValue(name[pt]);
+      const item = name.splice(pt, 1); // 從原陣列中取出
+      name.push(item[0]); // 加到最後
+      break;
     }
+    //Logger.log('after: ' + name);
   }
 }
 
@@ -515,7 +523,46 @@ function cleanSheet_(sheetname) {
 
 }
 
+/*
+function putByService_(sername, sercol, type) {
+  //fillByService_(sername, sercol, type);
+  //return;
+  let col = getColByService_(sercol);//Logger.log('Col: ' + col);
+  if (col == -1) return;
+  var ss = openSheetApp_();
+  let name = getNameList_(sername); //Logger.log(name);
+  var sheet = ss.getSheetByName(SHEET_WORKING); // 修改为你的工作表名称
+  let idx = 0;
+  for (let row = 3; row < 100; row++) {
 
+    //取得聚會種類
+    let cell = sheet.getRange(row, 2).getValue().trim();
+
+    //已經手動填上 就略過
+    if (sheet.getRange(row, col).getValue().trim().length > 0) continue;
+
+    if (cell === type) {
+      sheet.getRange(row, col).setFontColor("black");
+      let t = 1;
+      while (!checkPass_(sheet, row, col, name[idx])) {
+        exchange_(name, idx, (idx + t) % name.length);
+        t++;
+        if (t > name.length) {
+          sheet.getRange(row, col).setFontColor("red");
+          break;
+        }
+      }
+
+      sheet.getRange(row, col).setHorizontalAlignment("center");
+
+      //填空
+      sheet.getRange(row, col).setValue(name[idx]);
+
+      idx = (idx + 1) % name.length;
+    }
+  }
+}
+*/
 
 /*
   var sourceSheet = ss.getSheetByName(SHEET_NOTICE); // 替换为来源工作表的名称
