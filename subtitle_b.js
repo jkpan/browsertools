@@ -1216,8 +1216,10 @@ function createCtrlBtn() {
     return false;
   });
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
-  
+  ctrls[18] = addBtn('start reading', div, ()=>{ startReading(); removeDiv(); return false;});
+  ctrls[19] = addBtn('stop reading', div, ()=>{ stopReading(); removeDiv(); return false;});
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  ctrls[20] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
 };
 
 
