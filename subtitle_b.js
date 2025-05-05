@@ -2516,17 +2516,7 @@ function _layer0() {
     }
   }
 
-  /*
-  if (color_selection == 0) {
-    ctx.fillStyle = 'green';
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.fillStyle = bgcolor_pointer;//'green';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  }
-  */
-
-  _layerBg();
+  //_layerBg();
 
 }
 
@@ -2645,7 +2635,7 @@ function _layerBg() {
   ui_block(0, canvas.height / 2, canvas.width / 3, canvas.height / 2, 0.33);
   ui_block(canvas.width * 2 / 3, canvas.height / 2, canvas.width / 3, canvas.height / 2, 0.33);
   ui_block(canvas.width / 3, canvas.height / 2, canvas.width / 3, canvas.height / 4, 0.20);
-
+  
 }
 
 function _repaint() {
@@ -2946,7 +2936,8 @@ function touchend(evt) { //touchend
   }
 
   if (gw == 1 && gh == 1) {
-    keyboard({ code: 'Enter', keyCode: 13 });
+    createCtrlBtn();
+    //keyboard({ code: 'Enter', keyCode: 13 });
     return;
   }
 
