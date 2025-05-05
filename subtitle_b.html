@@ -1,42 +1,61 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <!--html, body {margin: 0; height: 100%; overflow: hidden;}-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Mochiy+Pop+One&family=Noto+Serif+TC:wght@200..900&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
-    <style>
-      body {
-        margin: 0px;
-        height: 100%;
-        overflow: hidden;
-        background-color: transparent;
-      }
-      main {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-      }
-      .fullbg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-      }
-      ::-webkit-scrollbar {
-        display: none;
-      }
-      #chapter { 
-        border:0px solid blue; 
-        font-size: 48px;
-        color: rgb(180, 180, 180);
-      }
-      span { color:rgb(255, 255, 255); }
-    </style>
-  </head>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+  <!--html, body {margin: 0; height: 100%; overflow: hidden;}-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Mochiy+Pop+One&family=Noto+Serif+TC:wght@200..900&family=Shippori+Antique+B1&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      margin: 0px;
+      height: 100%;
+      overflow: hidden;
+      background-color: transparent;
+    }
+
+    main {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+    }
+
+    .fullbg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    #chapter {
+      border: 0px solid blue;
+      font-size: 48px;
+      color: rgb(180, 180, 180);
+    }
+
+    span {
+      color: rgb(255, 255, 255);
+    }
+    .ctrlButton {
+      background-color: transparent;
+      border-color: #00ff00;
+      color: rgb(0, 255, 0);
+      border-radius: 4px;
+      opacity: 0.33;
+      position: fixed;
+      z-index: 100;
+    }
+  </style>
+</head>
 
 <script id="中文縮寫" name="中文縮寫" type="application/json" charset="UTF-8"> {
     "content" : ["", 
@@ -32573,6 +32592,7 @@
 
 <body>
   <div class="fullbg" id="image_container"></div>
+  <button class="ctrlButton" style="top:10px;right:10px;" onclick="createCtrlBtn()">-</button>
 </body>
 
 </html>
@@ -32582,4 +32602,3 @@
 <script type="text/javascript" src="sub_b_trans.js"></script>
 <script type="text/javascript" src="sub_b_voice.js"></script>
 <script type="text/javascript" src="subtitle_b.js"></script>
-

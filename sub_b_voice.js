@@ -199,10 +199,20 @@ function readingEventEnd(evt) {
   }
 }
 
+function switchVoice2Chinese() {
+  initutter();
+  utter.lang = 'zh-TW';
+}
+
+function switchVoice2English() {
+  initutter();
+  utter.lang = 'en-US';
+}
+
 function initutter() {
   if (utter) return;
   utter = new SpeechSynthesisUtterance();
-  utter.lang = 'zh-TW';
+  utter.lang = 'zh-TW';//'en-US';// //'zh-CN';
   //utter.removeEventListener();
   //startReading();
   //utter.pitch

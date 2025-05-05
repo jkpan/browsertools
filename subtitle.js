@@ -821,9 +821,7 @@ function keyboard(e) {
       init();
       break;
     //case 113: //F2
-    case 'Enter':
-      createCtrlBtn();
-      return;
+    //case 'Enter': createCtrlBtn(); return;
     case 'KeyB': //'b'
       doblank = doblank == 0 ? 1 : 0;
       break;
@@ -1143,6 +1141,11 @@ function addBtn(caption, parent, _onclick) {
 
 function createCtrlBtn() {
 
+  if (document.getElementById('ctrl')) {
+    removeDiv();
+    return;
+  }
+
   removeDiv();
   canvas.hidden = false;
 
@@ -1214,8 +1217,8 @@ function createCtrlBtn() {
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
   ctrls[13] = addBtn('remove BG', div, ()=>{ removeBackground(); return false;});
-  div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
+  //div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  //ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
 }
 
 function syntoggle() {

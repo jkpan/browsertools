@@ -645,9 +645,11 @@ function switchLang() {
   if (abbr == chineseAbbr) {
     abbr = engAbbr;
     fullname = engFullname;
+    switchVoice2English();
   } else {
     abbr = chineseAbbr;
     fullname = chineseFullname;
+    switchVoice2Chinese();
   }
   for (let i = 1; i < abbr.length; i++) SONGS[i] = getSong(abbr[i]);
   subtitles = SONGS[song];
@@ -1118,8 +1120,14 @@ function addBtn(caption, parent, _onclick) {
 }
 
 function createCtrlBtn() {
+  
+  if(document.getElementById('ctrl')) {
+    removeDiv();
+    return;
+  }
 
   removeDiv();
+  
   canvas.hidden = false;
 
   let div = document.createElement('div');
@@ -1211,15 +1219,15 @@ function createCtrlBtn() {
     return false;
   });
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[17] = addBtn('remove BG', div, ()=>{ 
+  ctrls[17] = addBtn('移除背景', div, ()=>{ 
     removeBackground();
     return false;
   });
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[18] = addBtn('start reading', div, ()=>{ startReading(); removeDiv(); return false;});
-  ctrls[19] = addBtn('stop reading', div, ()=>{ stopReading(); removeDiv(); return false;});
-  div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[20] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
+  ctrls[18] = addBtn('自動閱讀', div, ()=>{ startReading(); removeDiv(); return false;});
+  ctrls[19] = addBtn('停止閱讀', div, ()=>{ stopReading(); removeDiv(); return false;});
+  //div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  //ctrls[20] = addBtn('跳出', div, ()=>{ removeDiv(); return false;});
 };
 
 
@@ -1259,15 +1267,13 @@ function synctrls() {
 }
 
 function removeDiv() {
-  var buttons = document.getElementById('btns');
-  if (buttons) {
-    document.body.removeChild(buttons);
-  }
-  var txt = document.getElementById('chapter');
-  if (txt) {
-    document.body.removeChild(txt);
-  }
 
+  //var buttons = document.getElementById('btns');
+  //if (buttons) document.body.removeChild(buttons);
+  
+  var txt = document.getElementById('chapter');
+  if (txt) document.body.removeChild(txt);
+  
   var ctrl = document.getElementById('ctrl');
   if (ctrl) document.body.removeChild(ctrl);
 
@@ -1866,6 +1872,7 @@ function subLineCount() {
 function combineKey(e) {
   var jump = 10;
   switch (e.code) {
+    /*
     case 'Tab': 
       if (stopSpeak()) {
         stopReading();
@@ -1873,6 +1880,7 @@ function combineKey(e) {
       }
       startReading(); 
       return;
+    */
     case 'KeyB': //'b'
       color_selection_hlight = (color_selection_hlight + 1) % 6;
       colorSwitch_hlight();
@@ -2178,7 +2186,7 @@ function keyboard(e) {
       break; //'z'
     case 'KeyN': switchLang(); break; //n
     case 'Escape': removeDiv(); break;//volAnim = !volAnim; break;//'escape'
-    case 'Enter': createCtrlBtn(); return;//enter
+    //case 'Enter': createCtrlBtn(); return;//enter
     case 'KeyC': fontColorType = (fontColorType + 1) % 4; break;//'c'
     case 'KeyB': //'b'
       doblank = doblank == 0 ? 1 : 0;
@@ -2418,7 +2426,7 @@ function keyboard(e) {
       else if (sync_type > 1 && sync_type != 6)
         ajax_restore();
       return;
-    case 'Tab': //console.log('[' + phase + ':' + line + ']');
+    case 'Tab': 
       speakCurrent();
       return;
     default:
