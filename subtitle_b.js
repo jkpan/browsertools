@@ -2162,6 +2162,8 @@ function keyboard(e) {
     return;
   }
 
+  //alert('' + e.code);
+
   switch (e.code) { //switch (e.keyCode) {
     case 'KeyF':
       for (let i = 0; i < fontFamily_array.length; i++) {
@@ -2185,7 +2187,6 @@ function keyboard(e) {
       }
       break; //'z'
     case 'KeyN': switchLang(); break; //n
-    case 'Escape': removeDiv(); break;//volAnim = !volAnim; break;//'escape'
     //case 'Enter': createCtrlBtn(); return;//enter
     case 'KeyC': fontColorType = (fontColorType + 1) % 4; break;//'c'
     case 'KeyB': //'b'
@@ -2412,14 +2413,15 @@ function keyboard(e) {
       break;
     //case 32: return; //canvas.requestFullscreen(); break;
     case 'Escape':
-      jumpTo1();
-      mode = 0;
-      removeDiv();
-      canvas.hidden = false;
-      doblank = 0;
-      helpSwitch = 0;
-      uisel = 0;
-      break;
+        jumpTo1();
+        mode = 0;
+        removeDiv();
+        canvas.hidden = false;
+        doblank = 0;
+        helpSwitch = 0;
+        uisel = 0;
+        stopReading();
+        break;
     case 'KeyJ':
       if (sync_type == 1)
         restoreActionFromLocal();

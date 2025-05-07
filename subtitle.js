@@ -1216,7 +1216,7 @@ function createCtrlBtn() {
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[13] = addBtn('remove BG', div, ()=>{ removeBackground(); return false;});
+  ctrls[13] = addBtn('移除背景', div, ()=>{ removeBackground(); return false;});
   //div.insertAdjacentHTML('beforeend', '<br/><br/>');
   //ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
 }

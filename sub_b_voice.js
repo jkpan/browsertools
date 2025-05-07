@@ -243,10 +243,10 @@ function startReading() {
 }
 
 function stopReading() {
-  if (synth.speaking) {
+  if (synth && synth.speaking) 
     synth.cancel();
-  }
-  utter.removeEventListener('end', readingEventEnd);
+  if (utter) 
+    utter.removeEventListener('end', readingEventEnd);
 }
 
 /*
