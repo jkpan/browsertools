@@ -101,9 +101,9 @@
 
 						[
 							["You are my sunshine", "你是我的陽光"],
-							["You are my sunshine", "my only sunshine", "你是我的陽光, 我唯一的陽光"],
-							["You make me happy", "when skies are gray", "當天空烏雲密佈時, 你使我快樂"],
-							["You'll never know dear", "how much I love you", "親愛的, 你永遠不會知道我多麼愛你"],
+							["You are my sunshine, my only sunshine", "你是我的陽光, 我唯一的陽光"],
+							["You make me happy when skies are gray", "當天空烏雲密佈時, 你使我快樂"],
+							["You'll never know dear, how much I love you", "親愛的, 你永遠不會知道我多麼愛你"],
 							["Please don't take my sunshine away", "請不要奪走我的陽光"]
 						],
 
@@ -136,18 +136,10 @@
 						[
 							""
 						],
-						[
-							"希伯來書", 10, 1
-						],
-						[
-							""
-						],
-						[
-							""
-						],
-						[
-							""
-						],
+						["約翰福音", 1, 12],
+						["以弗所書"	,2, 8],
+						["以弗所書"	, 4, 20],
+						["以弗所書"	, 5, 22],
 						[
 							""
 						],

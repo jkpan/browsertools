@@ -343,6 +343,8 @@ window.addEventListener('message', (e) => {
   let loopbox = document.getElementById("loopchk");
   if (loopbox && jsonData.loop) {
     loopbox.checked = true;
+  } else {
+    loopbox.checked = false;
   }
 
   if (jsonData.keepratio) {

@@ -7,6 +7,12 @@ function isKeepRatio() {
   return isChecked;
 }
 
+function isDoLoop() {
+  var checkbox = document.getElementById("loopchk");
+  var isChecked = checkbox.checked;
+  return isChecked;
+}
+
 function selectFile(event) {
     let file = event.target.files[0];
     
