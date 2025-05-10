@@ -92,9 +92,20 @@
 					"fontfactor": 7.5,
 					"list": [
 						
-						"救恩43",
-						"救恩47",
-						"救恩239",
+						"讚美之泉27",
+						"讚美之泉155",
+						"新歌頌揚162", 
+						"讚美之泉155",
+						"其他48",
+						"其他170",
+
+						[
+							["You are my sunshine", "你是我的陽光"],
+							["You are my sunshine", "my only sunshine", "你是我的陽光, 我唯一的陽光"],
+							["You make me happy", "when skies are gray", "當天空烏雲密佈時, 你使我快樂"],
+							["You'll never know dear", "how much I love you", "親愛的, 你永遠不會知道我多麼愛你"],
+							["Please don't take my sunshine away", "請不要奪走我的陽光"]
+						],
 
 						"主禱文",
 						"使徒信經", 

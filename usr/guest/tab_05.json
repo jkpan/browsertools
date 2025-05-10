@@ -152,23 +152,23 @@
 						"perspective": 1
 					},
 					{
-						"name": "lyrics",
-						"posize": [
-							1,
-							12,
-							24,
-							26
-						],
-						"visible": 0,
-						"perspective": 1
-					},
-					{
 						"name": "url_1",
 						"posize": [
 							1,
 							1,
 							48,
 							48
+						],
+						"visible": 1,
+						"perspective": 0
+					},
+					{
+						"name": "lyrics",
+						"posize": [
+							1,
+							31,
+							48,
+							14
 						],
 						"visible": 1,
 						"perspective": 0
@@ -366,7 +366,7 @@
 				"perspective": 0,
 				"obj": {
 					"hold": 1,
-					"url": "",
+					"url": "<iframe width=\"640\" height=\"360\" src=\"https://www.youtube.com/embed/wFIAT6pg73s\" title=\"YOU ARE MY SUNSHINE Lyrics &amp; chords in C\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
 					"loop": 1,
 					"keepratio": 1,
 					"forPlay": 0,
@@ -383,10 +383,10 @@
 				"perspective": 0,
 				"obj": {
 					"mode": 2,
-					"fontfactor": 9.5,
+					"fontfactor": 5,
 					"list": [],
 					"fontColorType": 1,
-					"transparent": 1,
+					"transparent": 0,
 					"syncType": 5,
 					"progress": 0,
 					"imageBase64": ""
@@ -405,6 +405,7 @@
 					"hlight": 2,
 					"verticle": 0,
 					"fontfactor": 9.5,
+					"fontColorType": 1,
 					"saved": [
 						[
 							""
