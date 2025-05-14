@@ -1124,7 +1124,7 @@ function _newBtn() {
   button.style.fontSize = '14px'; // setting the font size to 20px
 
   button.style.borderColor = 'rgb(255,255,255)';
-  button.style.borderRadius = '10px';
+  button.style.borderRadius = '4px';
 
   //button.style.border = 'none';
 
@@ -1161,7 +1161,7 @@ function createCtrlBtn() {
 
   div.id = 'ctrl';
   document.body.appendChild(div);
-  div.style.backgroundColor = 'rgba(0,0,0,0.2)';
+  div.style.backgroundColor = 'rgba(0,0,0, 0.0)';
 
   ctrls[0] = addBtn('none', div, ()=>{ sync_type = 0; synctrls(); return false; });// _newBtn();
   
@@ -1216,10 +1216,67 @@ function createCtrlBtn() {
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[13] = addBtn('移除背景', div, ()=>{ removeBackground(); return false;});
-  //div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  //ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
+  ctrls[13] = addBtn('移除背景', div, () => { removeBackground(); return false;});//ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
+  //ctrls[14] = addBtn('背景顏色', div, () => { _colorSwitch(); return false;});
+  //<input type="color" id="colorPicker" name="colorPicker" hidden="true"/>
+  const colorInput = document.createElement("input");
+  colorInput.type = "color";
+  colorInput.hidden = false;
+  colorInput.id = "dynamicColorPicker";
+  // 加到 body 中
+  div.appendChild(colorInput);
+
+  ctrls[14] = colorInput;
+
+
+  // 加事件：選色時改變背景色
+  colorInput.addEventListener("input", function () {
+    ctrls[15].hidden = false;
+    ctrls[16].hidden = false;
+    removeBackground();
+    makeTransparent = true;
+    document.body.style.backgroundColor = colorInput.value;
+    console.log(colorInput.value);
+  });
+
+  ctrls[15] = addBtn('不透明度-', div, () => {
+    opacity--;
+    if (opacity < 0) opacity = 0;
+    bgopacity();
+    return false;
+  });
+  ctrls[16] = addBtn('不透明度+', div, () => {
+    opacity++;
+    if (opacity > 100) opacity = 100;
+    bgopacity();
+    return false;
+  });
+  ctrls[15].hidden = true;
+  ctrls[16].hidden = true;
+  
 }
+
+var opacity = 100;
+
+function bgopacity() {
+  const colorPicker = document.getElementById('dynamicColorPicker');
+  const color = colorPicker.value; // HEX format, e.g. #ff0000
+  const alpha = opacity / 100; // convert to 0–1
+
+  // 將 HEX 轉為 RGB
+  const r = parseInt(color.substr(1, 2), 16);
+  const g = parseInt(color.substr(3, 2), 16);
+  const b = parseInt(color.substr(5, 2), 16);
+  console.log(`rgba(${r}, ${g}, ${b}, ${alpha})`);
+  document.body.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+/*
+function _colorSwitch() {
+  const colorPicker = document.getElementById('dynamicColorPicker');
+  colorPicker.hidden = false;
+}
+*/
 
 function syntoggle() {
   if (ctrls[sync_type].hidden) sync_type = 0;

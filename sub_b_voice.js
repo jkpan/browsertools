@@ -221,6 +221,12 @@ function initutter() {
   //SpeechSynthesisUtterance.volume
 }
 
+function speakCurrent() {
+  if (stopSpeak()) 
+    return;
+  speak(subtitles[phase][line]);
+}
+
 function speak(text) {
   initutter();
   utter.text = text;

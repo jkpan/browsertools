@@ -1067,7 +1067,7 @@ function _newBtn() {
   button.style.fontSize = '14px'; // setting the font size to 20px
 
   button.style.borderColor = 'rgb(255,255,255)';
-  button.style.borderRadius = '10px';
+  button.style.borderRadius = '4px';
 
   //button.style.border = 'none';
 
@@ -1142,7 +1142,7 @@ function createCtrlBtn() {
 
   div.id = 'ctrl';
   document.body.appendChild(div);
-  div.style.backgroundColor = 'rgba(0,0,0,0.2)';
+  div.style.backgroundColor = 'rgba(0,0,0, 0.0)';
 
   ctrls[0] = addBtn('none', div, ()=> { setMsg_none(); return false; });
 
@@ -1226,10 +1226,61 @@ function createCtrlBtn() {
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
   ctrls[18] = addBtn('自動閱讀', div, ()=>{ startReading(); removeDiv(); return false;});
   ctrls[19] = addBtn('停止閱讀', div, ()=>{ stopReading(); removeDiv(); return false;});
-  //div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  //ctrls[20] = addBtn('跳出', div, ()=>{ removeDiv(); return false;});
-};
+  
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
+  //ctrls[20] = addBtn('跳出', div, ()=>{ removeDiv(); return false;});
+  const colorInput = document.createElement("input");
+  colorInput.type = "color";
+  colorInput.hidden = false;
+  colorInput.id = "dynamicColorPicker";
+  // 加到 body 中
+  div.appendChild(colorInput);
+
+  ctrls[20] = colorInput;
+
+
+  // 加事件：選色時改變背景色
+  colorInput.addEventListener("input", function () {
+    ctrls[21].hidden = false;
+    ctrls[22].hidden = false;
+    removeBackground();
+    makeTransparent = true;
+    document.body.style.backgroundColor = colorInput.value;
+    console.log(colorInput.value);
+  });
+
+  ctrls[21] = addBtn('不透明度-', div, () => {
+    opacity--;
+    if (opacity < 0) opacity = 0;
+    bgopacity();
+    return false;
+  });
+  ctrls[22] = addBtn('不透明度+', div, () => {
+    opacity++;
+    if (opacity > 100) opacity = 100;
+    bgopacity();
+    return false;
+  });
+  ctrls[21].hidden = true;
+  ctrls[22].hidden = true;
+
+}
+
+var opacity = 100;
+
+function bgopacity() {
+  const colorPicker = document.getElementById('dynamicColorPicker');
+  const color = colorPicker.value; // HEX format, e.g. #ff0000
+  const alpha = opacity / 100; // convert to 0–1
+
+  // 將 HEX 轉為 RGB
+  const r = parseInt(color.substr(1, 2), 16);
+  const g = parseInt(color.substr(3, 2), 16);
+  const b = parseInt(color.substr(5, 2), 16);
+  console.log(`rgba(${r}, ${g}, ${b}, ${alpha})`);
+  document.body.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
 
 function syntoggle() {
   if (ctrls[sync_type].hidden) setMsg_none();
@@ -2439,11 +2490,6 @@ function keyboard(e) {
 
   _repaint();
 
-}
-
-function speakCurrent() {
-  stopSpeak();
-  speak(subtitles[phase][line]);
 }
 
 function gradientBg2(yy, hh) {
