@@ -60,8 +60,8 @@ class BibleObj {
                 print(`[send ${this.user} ${ws._socket.remoteAddress}]`);
                 ws.send(data);
             } else {
-                this.clients.delete(ws);
                 print(`[remove ${this.user} ${ws._socket.remoteAddress}]`);
+                this.clients.delete(ws);
             }
         });
     }
