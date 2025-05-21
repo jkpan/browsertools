@@ -88,35 +88,58 @@
         };
 
         ws.onmessage = (event) => {
+            //const buffer = Buffer.from(event.data);
+
+            //if ( event.data instanceof ArrayBuffer) console.log('Received ArrayBuffer:', event.data);
+
+
+
             if (event.data instanceof Blob) {
-                // 處理接收到的二進制圖像數據
-                createImageBitmap(event.data).then(imageBitmap => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    //canvas.width = imageBitmap.width;
-                    //canvas.height = imageBitmap.height;
-                    //window.innerWidth;
-                    //window.innerHeight;
-                    /*
-                          cw      iw         y       iw
-                        ----- = -----     ------ = ------
-                          x       ih         ch      ih
-                    */
-                    if (imageBitmap.width / imageBitmap.height > canvas.width / canvas.height) {
-                        let _h = canvas.width * imageBitmap.height / imageBitmap.width;
-                        ctx.drawImage(imageBitmap, 
-                            0,                      0, imageBitmap.width, imageBitmap.height,
-                            0, (canvas.height - _h)/2, canvas.width,      _h);
-                    } else {
-                        let _w = canvas.height * imageBitmap.width / imageBitmap.height;
-                        ctx.drawImage(imageBitmap, 
-                            0,                  0, imageBitmap.width, imageBitmap.height,
-                            (canvas.width - _w)/2, 0,                 _w, canvas.height);
+
+                event.data.arrayBuffer().then((buffer) => {
+                    //const ab8 = new Uint8Array(buffer);
+                    const view = new DataView(buffer);
+                    const timestamp = view.getBigUint64(0, false);
+
+                    let ct = Date.now();//console.log(`diff: ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
+                    if (ct - Number(timestamp) > 1000) {
+                        console.log(`too old reject ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
+                        return;
                     }
-                }).catch(error => {
-                    console.error('圖像處理錯誤:', error);
+
+                    //console.log(`Received timestamp: ${timestamp}`);
+                    //const imageBuffer = buffer.slice(8);
+                    const imageBuffer = new Blob([buffer.slice(8)]);
+
+                    createImageBitmap(imageBuffer).then(imageBitmap => {
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        //canvas.width = imageBitmap.width;
+                        //canvas.height = imageBitmap.height;
+                        //window.innerWidth;
+                        //window.innerHeight;
+                        /*
+                              cw      iw         y       iw
+                            ----- = -----     ------ = ------
+                              x       ih         ch      ih
+                        */
+                        if (imageBitmap.width / imageBitmap.height > canvas.width / canvas.height) {
+                            let _h = canvas.width * imageBitmap.height / imageBitmap.width;
+                            ctx.drawImage(imageBitmap,
+                                0, 0, imageBitmap.width, imageBitmap.height,
+                                0, (canvas.height - _h) / 2, canvas.width, _h);
+                        } else {
+                            let _w = canvas.height * imageBitmap.width / imageBitmap.height;
+                            ctx.drawImage(imageBitmap,
+                                0, 0, imageBitmap.width, imageBitmap.height,
+                                (canvas.width - _w) / 2, 0, _w, canvas.height);
+                        }
+                    }).catch(error => {
+                        console.error('圖像處理錯誤:', error);
+                    });
                 });
+
             }
         };
         //stopStreaming(); startStreaming();

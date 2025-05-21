@@ -1,4 +1,5 @@
 const WebSocket = require('ws');
+const fs = require('fs');
 const urltool = require('url');
 
 const obj_clients_MAP = new Map();
@@ -21,9 +22,22 @@ class CameraObj {
         // 接收二進制消息
         this.camera.on('message', (message) => {
             if (message instanceof Buffer) {
-                // 廣播二進制數據給所有其他客戶端
+                               
+                const buffer = Buffer.from(message);
+
+                // 前 8 bytes 是 timestamp
+                const timestamp = buffer.readBigUInt64BE(0);
+                //const dateStr = new Date(Number(timestamp)).toISOString().replace(/[:.]/g, '-');
+                
+                let ct = Date.now();//console.log(`diff: ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
+                if (ct - Number(timestamp) > 1000) {
+                    console.log(`too old reject ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
+                    return;
+                }
+
+                //const imageBuffer = buffer.slice(8);
                 this.broadcast(message);
-                //ptlet('.' + message.length);
+                
                 if (process.send) {
                     process.send({
                         type: "syncCamera",
@@ -31,6 +45,7 @@ class CameraObj {
                         content: message
                     });
                 }
+                
             }
         });
     

@@ -15,6 +15,8 @@ function startArrange() {
   //cleanSheet();
   //if (!generateDates()) return;
 
+  if (!jumpSheet_(SHEET_WORKING)) return;
+
   let process = getNameList_('安排順序');
   for (let i = 0; i < process.length; i++) {
     let array = process[i].split(',');
@@ -74,10 +76,22 @@ function regenMemberlist4() {
   regenMemberlist_('助唱(2)');
 }
 
+function jumpSheet_(sheetname) {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = spreadsheet.getSheetByName(sheetname);
+  if (sheet)
+    SpreadsheetApp.setActiveSheet(sheet);
+  else 
+    return false;
+  return true;
+}
+
 function regenMemberlist_(item, type) {
 
   if (item == null) return;
 
+  if (!jumpSheet_(SHEET_RESTORE)) return;
+  
   let ss = openSheetApp_();
   let sheet = ss.getSheetByName(SHEET_RESTORE);
 
@@ -126,8 +140,7 @@ function regenMemberlist_(item, type) {
     str = str + list[i] + '\n';
   }
 
-  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  SpreadsheetApp.setActiveSheet(spreadsheet.getSheetByName(SHEET_SETTING));
+  jumpSheet_(SHEET_SETTING);
 
   showResult(str, ((type ? type : '') + ' ' + item));
 
@@ -183,6 +196,9 @@ function handleRobotJson_(obj) {
 }
 
 function restoreSheet() {
+  
+  if (!jumpSheet_(SHEET_RESTORE)) return;
+
   cleanSheet_(SHEET_RESTORE);
   var url = URL_RESTORE;
   var options = {
@@ -352,6 +368,8 @@ function checkRecurring_(sheetname) {
 
 function generateDates() {
 
+  if (!jumpSheet_(SHEET_WORKING)) return;
+
   let sd = getSettingDate_('開始時間');//('Start Date');
   let ed = getSettingDate_('結束時間');//'End Date');
 
@@ -503,6 +521,7 @@ function putByService_(sername, sercol, type) {
 }
 
 function cleanSheet() {
+  if (!jumpSheet_(SHEET_WORKING)) return;
   cleanSheet_(SHEET_WORKING);
 }
 

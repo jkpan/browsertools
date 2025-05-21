@@ -330,6 +330,11 @@ function createService() {
 
   process.on('message', (msg) => { //println('process receive:' + JSON.stringify(msg));           
 
+    if (msg.type === 'syncCamera') {
+      sync_camera.syncFromWorker(msg);
+      return;
+    }
+
     if (msg.type === 'syncBible') {
       sync_Bible.syncFromWorker(msg);
       return;
@@ -340,11 +345,6 @@ function createService() {
     }
     if (msg.type === 'syncTally') {
       sync_tally.syncFromWorker(msg);
-      return;
-    }
-
-    if (msg.type === 'syncCamera') {
-      sync_camera.syncFromWorker(msg);
       return;
     }
 

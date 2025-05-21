@@ -25,7 +25,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            
+
             background-color: rgba(255, 0, 0, 0.5);
             z-index: 1;
         }
@@ -34,7 +34,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            
+
             z-index: 2;
         }
 
@@ -152,7 +152,7 @@
         canvas.width = video.videoWidth * 0.6;
         canvas.height = video.videoHeight * 0.6;
 
-        console.log(video.videoWidth + ', ' + video.videoHeight);
+        //console.log(video.videoWidth + ', ' + video.videoHeight);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -173,11 +173,26 @@
             if (ws == null || ws.readyState !== WebSocket.OPEN) {
                 document.getElementById('record').innerHTML = 'x';
             } else if (streamType == 1) {
-                // 獲取 canvas 數據並發送
+
+                const timestamp = BigInt(Date.now());
+                // 建立 timestamp 的 8-byte binary buffer
+                const tsBuffer = new ArrayBuffer(8);
+                new DataView(tsBuffer).setBigUint64(0, timestamp, false); // Big-endian
+
+                // 獲取 canvas 數據並發送 
                 canvas.toBlob((blob) => {
 
                     if (ws.readyState === WebSocket.OPEN) {
-                        ws.send(blob);
+
+                        // 建立一個混合 Blob：timestamp buffer + image blob
+                        const fullBlob = new Blob([tsBuffer, blob], { type: 'application/octet-stream' });
+
+                        // 將 blob 轉為 arrayBuffer 傳送
+                        fullBlob.arrayBuffer().then((buffer) => {
+                            ws.send(buffer);
+                        });
+
+                        //ws.send(blob);
                     }
 
                 }, 'image/jpeg', 0.7); // 使用 JPEG 格式，質量 70%
@@ -232,7 +247,7 @@
         return -1;
     }
 
-    
+
     if (detectDevice()) { //mobile
         if (readParam('camera') == 'user') {
             turnVideo({ video: true });
@@ -250,7 +265,7 @@
             turnVideo({ video: true });
         }
     }
-    
+
 
     connectWebSocket();
 
