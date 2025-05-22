@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+
+        body {
+            margin: 0px;
+            background-color: rgb(0, 0, 0);
+        }
+
+
+    </style>
+    <title>Song editor</title>
+</head>
+
+<body>
+    <pre style="color:#ccc" id="textall"> 
+        Waiting!
+    </pre>
+</body>
+
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+    function _ajax(json, url, cb, errorcb) {
+        console.log(json);
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(json)
+        }).then((response) => {
+            if (response.ok) {
+                return response.json(); // 解析JSON回應
+            } else {
+                throw new Error("請求失敗：" + response.status);
+            }
+        }).then((data) => {
+            // 在這裡處理解析後的JSON物件 //console.log(data);
+            cb(data);
+        }).catch((error) => {
+            // 處理錯誤
+            console.log('' + error);
+            errorcb();
+        });
+    }
+
+    var ALL_SONGS_JSON;
+
+    function createBtns() {
+
+        var div = document.getElementById('textall');
+        div.innerHTML = '';
+
+        let VOLUME = ALL_SONGS_JSON['nosong']['VOLUME']['content'];// window.opener.getSong('VOLUME');
+
+        for (let pf = 0; pf < VOLUME.length; pf++) {
+            var span = document.createElement('span');
+            span.style.color = 'rgb(0,255,0)' // apply your style
+            span.appendChild(document.createTextNode(VOLUME[pf][3]));
+            div.innerHTML += VOLUME[pf][3] + '\n';
+            div.innerHTML += '====================\n';
+            for (var i = 1; i <= VOLUME[pf][1]; i++) {
+                var song_id = VOLUME[pf][0] + i;
+                let song = ALL_SONGS_JSON[song_id];
+                if (!song) continue;
+                div.innerHTML += '[' + song_id + ']' + '\n';
+                for (var j = 0; j < song['content'].length; j++) {
+                    for (var k = 0; k < song['content'][j].length; k++) {
+                        div.innerHTML += song['content'][j][k] + '\n';
+                    }
+                    div.innerHTML += '\n';
+                }
+                div.innerHTML += '--------------------\n';
+            }
+
+            
+        }
+
+    }
+
+    //抓取預設歌庫
+    async function fetchData() {
+        try {           
+            const response = await fetch(`./usr/guest/songbase.json`); // 等待 fetch 请求完成 ./usr/[account]/songbase.json
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
+            //console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
+            //return data; // 如果需要同步效果，可以返回数据
+        } catch (error) {
+            console.error('Failed to fetch JSON:', error);
+        }
+        console.log('fetchData END');
+    }
+
+    (async function () {
+        console.log('get all songs');
+        await fetchData();
+
+        //const months = ['March', 'Jan', 'Feb', 'Dec'];
+        //ALL_SONGS_JSON.sort();
+        //console.log(ALL_SONGS_JSON);
+
+        //let keys = Object.keys(ALL_SONGS_JSON);
+        //console.log(keys.sort());
+        //keys.forEach(function (key, index) {}
+
+        createBtns();
+        console.log('get content from list');
+    })();
+
+
+</script>
