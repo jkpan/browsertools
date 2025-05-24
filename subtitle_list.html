@@ -130,15 +130,9 @@
 
       });
 
-      window.opener.SONGS.push(newsong);
-      window.opener.song = window.opener.SONGS.length - 1;
-      window.opener.phase = 0;
-      window.opener.line = 0;
-      window.opener.subtitles = window.opener.SONGS[window.opener.song];
+      window.opener.pushnewSong(newsong);     
 
-      window.opener._repaint();
-      window.opener.saveAction2Local();
-
+      /*
       let allstr = `<script id="" name="${newsong[0][0]}" type="application/json" charset="UTF-8"> {\n`;
 
       newsong.forEach((p, idx) => {
@@ -160,6 +154,7 @@
 
       allstr += '} <\/script>';
       console.log(allstr);
+      */
 
     }
   </script>

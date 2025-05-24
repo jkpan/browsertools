@@ -75,6 +75,20 @@ function getSong(jsonid) {
 }
 */
 
+function pushnewSong(newsong) {
+  SONGS.push(newsong);
+  song = SONGS.length - 1;
+  phase = 0;
+  line = 0;
+  subtitles = SONGS[song];
+  _repaint();
+  saveAction2Local();
+  if (document.getElementById('ctrl')) {
+    removeDiv();
+    createCtrlBtn();
+  }
+}
+
 function getnoSong(jsonid) {
   if (!ALL_SONGS_JSON) return [['']];
   var obj = ALL_SONGS_JSON['nosong'][jsonid];//JSON.parse(json_elm.innerHTML);
@@ -1109,7 +1123,6 @@ var ctrls = [];
 function removeDiv() {
   var ctrl = document.getElementById('ctrl');
   if (ctrl) document.body.removeChild(ctrl);
-  return;
 }
 
 function _newBtn() {
@@ -1125,6 +1138,8 @@ function _newBtn() {
 
   button.style.borderColor = 'rgb(255,255,255)';
   button.style.borderRadius = '4px';
+
+  button.style.whiteSpace = 'nowrap';//white-space:nowrap
 
   //button.style.border = 'none';
 
@@ -1253,7 +1268,43 @@ function createCtrlBtn() {
   });
   ctrls[15].hidden = true;
   ctrls[16].hidden = true;
+
+  div.insertAdjacentHTML('beforeend', '<br/><br/><hr />');
   
+  ctrls[17] = addBtn('加歌', div, () => {
+    keyboard({code:'KeyL', keyCode: 66 });
+    return false;
+  });
+
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+
+  generateSongList(div);
+  
+}
+
+function generateSongList(div) {
+
+  let songbtns = [null]; 
+    
+  for (let i=1;i<SONGS.length;i++) {
+    songbtns[i] = addBtn(SONGS[i][0][0] +' X', div, () => {
+
+      for (let j=1;j<SONGS.length;j++) {
+        div.removeChild(songbtns[j]);
+      }
+      
+      SONGS.splice(i, 1); //for (let j=0;j<SONGS.length;j++) console.log(` ${SONGS[j][0][0]}`);
+      song = 0;
+      subtitles = SONGS[song];
+      phase = 0;
+      line = 0;
+      _repaint();
+
+      generateSongList(div); 
+
+    });
+    songbtns[i].style.backgroundColor = 'rgb(0, 255, 255)';
+  }
 }
 
 var opacity = 100;

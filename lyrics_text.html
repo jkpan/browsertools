@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <pre style="color:#ccc" id="textall"> 
+    <pre style="color:#ccc;margin-left: 5%;" id="textall"> 
         Waiting!
     </pre>
 </body>
@@ -102,15 +102,6 @@
     (async function () {
         console.log('get all songs');
         await fetchData();
-
-        //const months = ['March', 'Jan', 'Feb', 'Dec'];
-        //ALL_SONGS_JSON.sort();
-        //console.log(ALL_SONGS_JSON);
-
-        //let keys = Object.keys(ALL_SONGS_JSON);
-        //console.log(keys.sort());
-        //keys.forEach(function (key, index) {}
-
         createBtns();
         console.log('get content from list');
     })();
