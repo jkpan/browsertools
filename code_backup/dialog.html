@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>輸出</title>
+  <style>
+    /* 確保頁面內容佔滿整個視窗 */
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column; /* 使用列佈局 */
+    }
+
+    /* textarea 樣式 */
+    textarea {
+      width: 100%; /* 寬度佔滿整個視窗 */
+      height: 80%; /* 高度佔視窗的 80% */
+      resize: none; /* 禁止調整大小 */
+      border: 0px solid #ccc; /* 邊框 */
+      user-select: none;
+      padding: 0px; /* 內邊距 */
+      font-size: 12px; /* 字體大小 */
+      /* font-family: Arial, sans-serif; */
+      background-color: #f9f9f9; /* 背景色 */
+      color: #333; /* 字體顏色 */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 投影效果 */
+      /* pointer-events: none; */
+    }
+
+    /* 按鈕容器 */
+    .button-container {
+      display: flex;
+      justify-content: center; /* 水平置中 */
+      align-items: center; /* 垂直置中 */
+      height: 20%; /* 區域高度佔視窗的 20% */
+    }
+
+    /* 按鈕樣式 */
+    button {
+      width: 80%; /* 按鈕寬度佔 80% */
+      height: 80%; /* 按鈕高度佔 15% */
+      /* max-height: 50px; */
+      background-color: #007bff; /* 按鈕背景色 */
+      color: white; /* 按鈕文字顏色 */
+      font-size: 18px; /* 字體大小 */
+      border: none; /* 去除邊框 */
+      border-radius: 5px; /* 圓角邊框 */
+      cursor: pointer; /* 滑鼠變為手型 */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 投影效果 */
+    }
+
+  </style>
+</head>
+<body>
+  <!-- 無法編輯的 textarea -->
+  <textarea id="textToCopy" readonly><?= textToCopy ?></textarea>
+
+  <!-- 底部按鈕 -->
+  <div class="button-container">
+    <button onclick="copyText()">複製</button>
+  </div>
+  <th>請自行貼到該貼的地方</th>
+  
+</body>
+</html>
+
+<script>
+      function copyText() {
+        const text = document.getElementById('textToCopy').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          alert('已複製到剪貼簿！');
+        }).catch(err => {
+          console.error('無法複製：', err);
+        });
+      }
+</script>
