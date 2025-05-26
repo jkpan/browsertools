@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <pre style="color:#ccc;margin-left: 5%;" id="textall"> 
+    <pre style="color:#ccc;margin-left: 5%;" id="wpre"> 
         Waiting!
     </pre>
 </body>
@@ -53,22 +53,27 @@
 
     function createBtns() {
 
-        var div = document.getElementById('textall');
-        div.innerHTML = '';
-
+        
         let VOLUME = ALL_SONGS_JSON['nosong']['VOLUME']['content'];// window.opener.getSong('VOLUME');
 
+        let count = 0;
+
         for (let pf = 0; pf < VOLUME.length; pf++) {
-            var span = document.createElement('span');
-            span.style.color = 'rgb(0,255,0)' // apply your style
-            span.appendChild(document.createTextNode(VOLUME[pf][3]));
-            div.innerHTML += VOLUME[pf][3] + '\n';
-            div.innerHTML += '====================\n';
+
             for (var i = 1; i <= VOLUME[pf][1]; i++) {
+                
                 var song_id = VOLUME[pf][0] + i;
                 let song = ALL_SONGS_JSON[song_id];
                 if (!song) continue;
+                
+                count++;
+
+                var div = document.createElement('pre');
+                div.style.color = count%2==0?'#bbb':'#0ff';
+                div.style.marginLeft = '5%';//count%2==0?'5%':'10%';
+                div.innerHTML = '';
                 div.innerHTML += '[' + song_id + ']' + '\n';
+                
                 for (var j = 0; j < song['content'].length; j++) {
                     for (var k = 0; k < song['content'][j].length; k++) {
                         div.innerHTML += song['content'][j][k] + '\n';
@@ -76,9 +81,9 @@
                     div.innerHTML += '\n';
                 }
                 div.innerHTML += '--------------------\n';
+                document.body.appendChild(div);
             }
 
-            
         }
 
     }
@@ -104,6 +109,8 @@
         await fetchData();
         createBtns();
         console.log('get content from list');
+        //document.getElementById('wpre').innerHTML = '已載入歌詞資料庫';
+        document.body.removeChild(document.getElementById('wpre'));
     })();
 
 
