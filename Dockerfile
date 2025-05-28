@@ -1,10 +1,13 @@
 FROM node:22
 
-WORKDIR /usr/tpcaog/app
+WORKDIR /usr/tpcaog/web
 
 COPY package*.json ./
 RUN npm install
 
+EXPOSE 8080
+
 COPY . .
 
-CMD ["npm", "start"]
+ENTRYPOINT ["node", "./app/_cmd_server.js"]
+CMD ["-p", "8080"]

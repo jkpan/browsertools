@@ -49,6 +49,7 @@ global.clearScreen = function () {
 }
 
 //clearScreen();
+println(`process.cwd() ${process.cwd()}`);
 println(`dir  name ${__dirname}`);
 println(`file name ${__filename}`);
 
@@ -356,7 +357,7 @@ function prepareArgSetting() {
   const args = process.argv;
 
   for (let i = 0; i < args.length; i++) {
-    if (args[i] == '-port') {
+    if (args[i] == '-port' || args[i] == '-p') {
       if (args.length >= i + 2 && !isNaN(parseInt(args[i + 1])))
         port = parseInt(args[i + 1]);
       continue;
