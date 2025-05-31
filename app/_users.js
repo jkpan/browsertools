@@ -14,7 +14,7 @@ var jwt = null;
 
 try {
   require.resolve('jsonwebtoken');
-  console.log('jsonwebtoken Module exists');
+  //console.log('jsonwebtoken Module exists');
   jwt = require('jsonwebtoken');
 } catch (err) {
   console.log('jsonwebtoken Module does not exist');

@@ -92,8 +92,6 @@
 
             //if ( event.data instanceof ArrayBuffer) console.log('Received ArrayBuffer:', event.data);
 
-
-
             if (event.data instanceof Blob) {
 
                 event.data.arrayBuffer().then((buffer) => {
@@ -101,14 +99,14 @@
                     const view = new DataView(buffer);
                     const timestamp = view.getBigUint64(0, false);
 
+                    /*
                     let ct = Date.now();//console.log(`diff: ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
                     if (ct - Number(timestamp) > 1000) {
                         console.log(`too old reject ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
                         return;
                     }
+                    */
 
-                    //console.log(`Received timestamp: ${timestamp}`);
-                    //const imageBuffer = buffer.slice(8);
                     const imageBuffer = new Blob([buffer.slice(8)]);
 
                     createImageBitmap(imageBuffer).then(imageBitmap => {

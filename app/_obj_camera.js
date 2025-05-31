@@ -3,6 +3,15 @@ const fs = require('fs');
 const urltool = require('url');
 
 const obj_clients_MAP = new Map();
+var checktimestamp = false; // 是否檢查時間戳
+
+function turnonCheckTimestamp() {
+    checktimestamp = true;
+}
+
+function turnoffCheckTimestamp() {
+    checktimestamp = false;
+}
 
 class CameraObj {
 
@@ -30,7 +39,7 @@ class CameraObj {
                 //const dateStr = new Date(Number(timestamp)).toISOString().replace(/[:.]/g, '-');
                 
                 let ct = Date.now();//console.log(`diff: ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
-                if (ct - Number(timestamp) > 1000) {
+                if (checktimestamp && ct - Number(timestamp) > 1000) {
                     console.log(`too old reject ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
                     return;
                 }
@@ -114,6 +123,8 @@ module.exports = {
     addClient2Map,
     setCamera,
     syncFromWorker,
+    turnonCheckTimestamp,
+    turnoffCheckTimestamp,
     getInfo
 };
 

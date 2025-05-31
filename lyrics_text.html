@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <pre style="color:#ccc;margin-left: 5%;" id="wpre"> 
+    <pre style="color:#ccc;margin-left: 2%;" id="wpre"> 
         Waiting!
     </pre>
 </body>
@@ -57,8 +57,11 @@
         let VOLUME = ALL_SONGS_JSON['nosong']['VOLUME']['content'];// window.opener.getSong('VOLUME');
 
         let count = 0;
+        let marginValue = 0;
 
         for (let pf = 0; pf < VOLUME.length; pf++) {
+
+            marginValue += 5;
 
             for (var i = 1; i <= VOLUME[pf][1]; i++) {
                 
@@ -70,7 +73,7 @@
 
                 var div = document.createElement('pre');
                 div.style.color = count%2==0?'#bbb':'#0bb';
-                div.style.marginLeft = '5%';//count%2==0?'5%':'10%';
+                div.style.marginLeft = marginValue + '%';//count%2==0?'5%':'10%';
                 div.innerHTML = '';
                 div.innerHTML += '[' + song_id + ']' + '\n';
                 
@@ -85,6 +88,8 @@
             }
 
         }
+
+        document.getElementById('wpre').innerHTML = 'Total: ' + count + ' songs';
 
     }
 
@@ -109,8 +114,7 @@
         await fetchData();
         createBtns();
         console.log('get content from list');
-        //document.getElementById('wpre').innerHTML = '已載入歌詞資料庫';
-        document.body.removeChild(document.getElementById('wpre'));
+        //document.body.removeChild(document.getElementById('wpre'));
     })();
 
 
