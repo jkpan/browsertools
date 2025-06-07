@@ -1975,12 +1975,12 @@ function combineKey(e) {
       phase = 0;
       line = 0;
       break;
+    /*
     case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
     case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
       //case 48: case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57:
       uisel = 0;
       if (song == 0) break;
-
       var value = e.keyCode - 48;
       var _phase = phase;
       if (phase == 0) {
@@ -1991,11 +1991,9 @@ function combineKey(e) {
       if (phase >= subtitles.length) {
         phase = _phase;
       }
-
       line = 0;
-
       break;
-
+    */
     case 'ArrowUp':
       if (canvas.hidden) break;
       if (phase >= jump) {

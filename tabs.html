@@ -363,7 +363,7 @@
 
   function savefile(idx) {
     if (username == null) return;
-    let fn = `./usr/${username}/tab_0${idx}.json`;
+    let fn = `./users/${username}/tab_0${idx}.json`;
     if (confirm(`確定要存入 #${idx} ?`))
       ajax_savejson(fn, JSON.stringify(toObj()));
   }
@@ -406,7 +406,7 @@
 
   function preload(idx) {
     if (username == null) return;
-    let url = `./usr/${username}/tab_0${idx}.json`;
+    let url = `./users/${username}/tab_0${idx}.json`;
     fetch(url).then((response) => {
       return response.json();
     }).then((json) => {
