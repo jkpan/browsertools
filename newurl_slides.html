@@ -71,6 +71,12 @@
             border: 5px dashed rgba(128, 0, 0, 0.7);
         }
 
+         .fullRange2 {
+            margin: auto;
+            width: 0%;
+            height: 0%;
+        }
+
         iframe {
             border: none;
         }
@@ -509,6 +515,16 @@
         if (idx >= items.length) return;
         current = idx;
         framePos();
+    }
+
+    function bgTransparent() {
+        if (document.body.style.backgroundColor != "transparent") {
+            document.body.style.backgroundColor = "transparent";
+            document.getElementById("rect").className = 'fullRange2';
+        } else {
+            document.body.style.backgroundColor = "#222";
+            document.getElementById("rect").className = 'fullRange';
+        }
     }
 
     function blank(doblank) {

@@ -65,3 +65,8 @@ sudo su -
 //pm2 start _cmd_server.js -- -port 8080 -cluster
 
 ssh -i "taipei_jkpan_macmini.pem" ubuntu@ec2-54-169-169-141.ap-southeast-1.compute.amazonaws.com
+
+
+todo list:
+swip opacity
+Bible j jump chaos 
