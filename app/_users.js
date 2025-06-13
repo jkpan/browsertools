@@ -1,10 +1,6 @@
-//const users = require('/users/account')
+const fs = require('fs'); //const users = { "user1" : "123", "user2" : "231", "user3" : "312" };
 
-const users = {
-  "tpcaog" : "0223210665",
-  "jkpan" : "xx"
-};
-
+var users = {}
 var doauth = false;
 
 // JWT 秘密
@@ -13,8 +9,7 @@ const SECRET_KEY = '0223210665';
 var jwt = null;
 
 try {
-  require.resolve('jsonwebtoken');
-  //console.log('jsonwebtoken Module exists');
+  require.resolve('jsonwebtoken'); //console.log('jsonwebtoken Module exists');
   jwt = require('jsonwebtoken');
 } catch (err) {
   console.log('jsonwebtoken Module does not exist');
@@ -22,6 +17,15 @@ try {
 
 function setDoAuth(_auth) {
   doauth = _auth;
+  if (doauth) {    
+    try {
+      let txt = fs.readFileSync('./users/accounts.json', 'utf8');
+      users = JSON.parse(txt); //console.log(users);
+    } catch (parseError) {
+      console.error('解析 JSON 檔案時發生錯誤:', parseError);
+    }
+  }
+  return doauth;
 }
 
 // 解析請求數據

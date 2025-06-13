@@ -32,24 +32,6 @@ include /opt/homebrew/etc/nginx/conf.d/*.conf;
 網站設定檔	/etc/nginx/conf.d/*.conf    每個網站的虛擬主機設定檔可放這裡
 node0.jkpan.com.conf
 
-server {
-    listen       80 ;
-    server_name  node0.jkpan.com;
-
-    location / {
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host  $http_host;
-        proxy_set_header X-Nginx-Proxy true;
-        proxy_http_version 1.1;
-        # Node.js的本機地址，注意端口
-        proxy_pass    http://localhost:3000;
-        # websocket 
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "Upgrade";
-    }
-}
-
 靜態網頁根目錄	/usr/share/nginx/html	預設靜態網站根目錄
 SSL 憑證（自訂）	/etc/nginx/ssl（自訂掛載）	你可以自定 SSL 憑證檔掛載到這裡
 

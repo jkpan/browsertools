@@ -11,7 +11,7 @@
     }
 
     body {
-      margin: 0px;
+      margin: 10px;
       background-color: rgb(0, 128, 0);
     }
 
@@ -74,6 +74,7 @@
 靈火繼焚燒
   </textarea>
   <button onclick="textGo()" style="font-size: 20px;">臨時加歌</button>
+  <div id="tag"> </div>
   <script type="text/javascript" charset="UTF-8">
     function textGo() {
       let value = document.getElementById("songtxt").value;
@@ -350,9 +351,16 @@
 
     for (let pf = 0; pf < VOLUME.length; pf++) {
 
+      const link = document.createElement('a');
+      link.href = '#tag_' + VOLUME[pf][3];
+      link.textContent = '[' + VOLUME[pf][3] + ']';
+      document.getElementById('tag').appendChild(link);
+      document.getElementById('tag').appendChild(document.createTextNode(' '));
+
       var span = document.createElement('span');
       span.style.color = 'rgb(0,255,0)' // apply your style
       span.appendChild(document.createTextNode(VOLUME[pf][3]));
+      span.id = 'tag_' + VOLUME[pf][3];
       div.appendChild(span);
       div.insertAdjacentHTML('beforeend', '<p></p>');
 

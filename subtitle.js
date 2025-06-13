@@ -42,11 +42,11 @@ function readParam(param) {
 //抓取預設歌庫
 async function fetchData() {
   try {
-    let jsonurl = './users/guest/songbase.json';
+    let jsonurl = './users/songbase.json';
     let result = await doChk();
     if (result.state > 0) {
       let user = result.username;
-      jsonurl = `./users/${user}/songbase.json`;
+      jsonurl = `./users/songbase.json`;
     }
     console.log('song url: ' + jsonurl);
     //const response = await fetch('./json/output.json'); // 等待 fetch 请求完成

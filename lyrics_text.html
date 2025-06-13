@@ -16,6 +16,7 @@
 </head>
 
 <body>
+    <div id="tag"> </div>
     <pre style="color:#ccc;margin-left: 2%;" id="wpre"> 
         Waiting!
     </pre>
@@ -61,6 +62,20 @@
 
         for (let pf = 0; pf < VOLUME.length; pf++) {
 
+            const link = document.createElement('a');
+            link.href = '#tag_' + VOLUME[pf][3];
+            link.textContent = '[' + VOLUME[pf][3] + ']';
+            document.getElementById('tag').appendChild(link);
+            document.getElementById('tag').appendChild(document.createTextNode(' '));
+
+            var span = document.createElement('span');
+            span.style.color = 'rgb(0,255,0)' // apply your style
+            span.appendChild(document.createTextNode(VOLUME[pf][3]));
+            span.id = 'tag_' + VOLUME[pf][3];
+            document.body.appendChild(span);
+            //document.body.insertAdjacentHTML('beforeend', '<p></p>');
+
+
             marginValue += 5;
 
             for (var i = 1; i <= VOLUME[pf][1]; i++) {
@@ -96,7 +111,7 @@
     //抓取預設歌庫
     async function fetchData() {
         try {           
-            const response = await fetch(`./users/guest/songbase.json`); // 等待 fetch 请求完成 ./users/[account]/songbase.json
+            const response = await fetch(`./users/songbase.json`); // 等待 fetch 请求完成 ./users/songbase.json
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }

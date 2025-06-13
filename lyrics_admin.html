@@ -12,7 +12,7 @@
         }
 
         body {
-            margin: 0px;
+            margin: 10px;
             background-color: rgb(0, 0, 0);
         }
 
@@ -71,19 +71,21 @@
 
 <body>
     <div style="margin: 1%;">
-    <br>
-    <label style="color: rgb(0, 255, 0);">ID: </label>
-    <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="song_id">
-    <p></p>
-    <textarea id="songtxt" rows="10"></textarea>
-    <p></p>
-    <button class="button2" style="background-color: rgb(0, 80, 0);" onclick="textGo()">加歌 / 修改</button>
-    <p></p>
-    <button class="button2" onclick="clearTxt()">清除</button>
-    <p></p>
-    <button class="button2" style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button>
+        <br>
+        <label style="color: rgb(0, 255, 0);">ID: </label>
+        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="song_id">
+        <p></p>
+        <textarea id="songtxt" rows="10"></textarea>
+        <p></p>
+        <button class="button2" style="background-color: rgb(0, 80, 0);" onclick="textGo()">加歌 / 修改</button>
+        <p></p>
+        <button class="button2" onclick="clearTxt()">清除</button>
+        <p></p>
+        <button class="button2" style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button>
     </div>
     <p></p>
+    <div id="tag"> </div>
+
     <script type="text/javascript" charset="UTF-8">
         function clearTxt() {
             document.getElementById("song_id").value = "";
@@ -284,9 +286,21 @@
         let VOLUME = ALL_SONGS_JSON['nosong']['VOLUME']['content'];// window.opener.getSong('VOLUME');
 
         for (let pf = 0; pf < VOLUME.length; pf++) {
+            
+            const link = document.createElement('a');
+            link.href = '#tag_' + VOLUME[pf][3];
+            link.textContent = '[' + VOLUME[pf][3] + ']';
+            document.getElementById('tag').appendChild(link);
+            document.getElementById('tag').appendChild(document.createTextNode(' '));
+
             var span = document.createElement('span');
             span.style.color = 'rgb(0,255,0)' // apply your style
-            span.appendChild(document.createTextNode(VOLUME[pf][3]));
+            
+            let tag = document.createTextNode(VOLUME[pf][3]);
+            //tag.id = 'tag_' + VOLUME[pf][3];
+            span.appendChild(tag);
+            span.id = 'tag_' + VOLUME[pf][3];
+
             div.appendChild(span);
             div.insertAdjacentHTML('beforeend', '<p></p>');
             for (var i = 1; i <= VOLUME[pf][1]; i++) {
@@ -338,7 +352,7 @@
             if (result.state <= 0) return;
             let user = result.username;
             
-            const response = await fetch(`./users/${user}/songbase.json`); // 等待 fetch 请求完成 ./users/[account]/songbase.json
+            const response = await fetch(`./users/songbase.json`); // 等待 fetch 请求完成 ./users/songbase.json
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }

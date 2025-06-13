@@ -258,7 +258,7 @@ function lyricsBaseAction(req, res) {
     switch (action) {
       case 'add':
         println('add start');
-        readAndAction('./users/' + user + '/' + READ_SRC, (ALL_SONGS) => {
+        readAndAction('./users/' + READ_SRC, (ALL_SONGS) => {
           println('add in');
           if (ALL_SONGS[id]) {
             result = false;
@@ -270,7 +270,7 @@ function lyricsBaseAction(req, res) {
           result = true;
           println('add save file');
           refactor(ALL_SONGS);
-          const writeStream = fs.createWriteStream('./users/' + user + '/' + WRITE_SRC);
+          const writeStream = fs.createWriteStream('./users/' + WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
@@ -284,14 +284,14 @@ function lyricsBaseAction(req, res) {
 
         break;
       case 'fix':
-        readAndAction('./users/' + user + '/' + READ_SRC, (ALL_SONGS) => {
+        readAndAction('./users/' + READ_SRC, (ALL_SONGS) => {
           if (ALL_SONGS[id]) {
             ALL_SONGS[id].content = content;
           } else {
             ALL_SONGS[id] = opObj;
           }
           refactor(ALL_SONGS);
-          const writeStream = fs.createWriteStream('./users/' + user + '/' + WRITE_SRC);
+          const writeStream = fs.createWriteStream('./users/' + WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
@@ -301,11 +301,11 @@ function lyricsBaseAction(req, res) {
         res.end(JSON.stringify({ "state": "success" }));
         break;
       case 'del':
-        readAndAction('./users/' + user + '/' + READ_SRC, (ALL_SONGS) => {
+        readAndAction('./users/' + READ_SRC, (ALL_SONGS) => {
           if (!ALL_SONGS[id]) return;
           delete ALL_SONGS[id];
           refactor(ALL_SONGS)
-          const writeStream = fs.createWriteStream('./users/' + user + '/' + WRITE_SRC);
+          const writeStream = fs.createWriteStream('./users/' + WRITE_SRC);
           formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
