@@ -1,0 +1,192 @@
+{
+	"frame_1": {
+		"src": "./dashboard.html",
+		"obj": {
+			"stateSaved": {
+				"save0": [],
+				"save1": [],
+				"save2": [],
+				"save3": [],
+				"save4": [],
+				"save5": []
+			},
+			"url_1": {
+				"posize": [
+					30,
+					2,
+					19,
+					19
+				],
+				"perspective": 1,
+				"obj": {
+					"hold": 1,
+					"url": "",
+					"loop": 1,
+					"keepratio": 1,
+					"forPlay": 0,
+					"imageBase64": ""
+				}
+			},
+			"lyrics": {
+				"posize": [
+					22,
+					25,
+					27,
+					22
+				],
+				"perspective": 1,
+				"obj": {
+					"mode": 3,
+					"fontfactor": 8.5,
+					"list": [],
+					"fontColorType": 1,
+					"transparent": 0,
+					"syncType": 5,
+					"progress": 0,
+					"imageBase64": ""
+				}
+			},
+			"Bible": {
+				"posize": [
+					1,
+					22,
+					35,
+					27
+				],
+				"perspective": 1,
+				"obj": {
+					"color": 0,
+					"hlight": 1,
+					"verticle": 0,
+					"fontfactor": 7.5,
+					"saved": [
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						]
+					],
+					"transparent": 0,
+					"printSaved": 0,
+					"fsizedist": 1,
+					"verseCount": 2,
+					"syncType": 5,
+					"imageBase64": ""
+				}
+			},
+			"B/G": "G"
+		}
+	},
+	"frame_2": {
+		"src": "./dashboard.html",
+		"obj": {
+			"stateSaved": {
+				"save0": [],
+				"save1": [],
+				"save2": [],
+				"save3": [],
+				"save4": [],
+				"save5": []
+			},
+			"Bible": {
+				"posize": [
+					18,
+					2,
+					30,
+					45
+				],
+				"perspective": 0,
+				"obj": {
+					"color": 0,
+					"hlight": 0,
+					"verticle": 1,
+					"fontfactor": 15,
+					"saved": [
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						]
+					],
+					"transparent": 0,
+					"printSaved": 0,
+					"fsizedist": 0,
+					"verseCount": 4,
+					"syncType": 5,
+					"imageBase64": ""
+				}
+			},
+			"B/G": "G"
+		}
+	},
+	"frame_3": {
+		"src": "./newurl_slides.html",
+		"obj": {}
+	},
+	"frame_4": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_5": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_6": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_7": {
+		"src": "./tools.html",
+		"obj": {}
+	}
+}

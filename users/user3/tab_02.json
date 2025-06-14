@@ -1,0 +1,241 @@
+{
+	"frame_1": {
+		"src": "./dashboard.html",
+		"obj": {
+			"stateSaved": {
+				"save0": [
+					{
+						"name": "Bible",
+						"posize": [
+							3,
+							5,
+							44,
+							28
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				],
+				"save1": [
+					{
+						"name": "Bible",
+						"posize": [
+							3,
+							5,
+							44,
+							28
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				],
+				"save2": [
+					{
+						"name": "Bible",
+						"posize": [
+							3,
+							5,
+							44,
+							28
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				],
+				"save3": [
+					{
+						"name": "Bible",
+						"posize": [
+							3,
+							5,
+							44,
+							28
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				],
+				"save4": [
+					{
+						"name": "Bible",
+						"posize": [
+							3,
+							5,
+							44,
+							28
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				],
+				"save5": [
+					{
+						"name": "Bible",
+						"posize": [
+							3,
+							5,
+							44,
+							28
+						],
+						"visible": 1,
+						"perspective": 0
+					}
+				]
+			},
+			"Bible": {
+				"posize": [
+					4,
+					4,
+					42,
+					26
+				],
+				"perspective": 0,
+				"obj": {
+					"color": 1,
+					"hlight": 1,
+					"verticle": 0,
+					"fontfactor": 10,
+					"saved": [
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						],
+						[
+							""
+						]
+					],
+					"transparent": 0,
+					"printSaved": 0,
+					"fsizedist": 1,
+					"verseCount": 3,
+					"syncType": 5,
+					"imageBase64": ""
+				}
+			},
+			"B/G": "B"
+		}
+	},
+	"frame_2": {
+		"src": "./dashboard.html",
+		"obj": {
+			"stateSaved": {
+				"save0": [],
+				"save1": [],
+				"save2": [],
+				"save3": [],
+				"save4": [],
+				"save5": []
+			},
+			"lyrics": {
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"perspective": 0,
+				"obj": {
+					"mode": 2,
+					"fontfactor": 12,
+					"list": [],
+					"fontColorType": 0,
+					"transparent": 0,
+					"syncType": 5,
+					"progress": 0,
+					"imageBase64": ""
+				}
+			},
+			"B/G": "B"
+		}
+	},
+	"frame_3": {
+		"src": "./dashboard.html",
+		"obj": {
+			"stateSaved": {
+				"save0": [],
+				"save1": [],
+				"save2": [],
+				"save3": [],
+				"save4": [],
+				"save5": []
+			},
+			"url_1": {
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"perspective": 0,
+				"obj": {
+					"hold": 1,
+					"url": "",
+					"loop": 1,
+					"keepratio": 1,
+					"forPlay": 0,
+					"imageBase64": ""
+				}
+			},
+			"B/G": "B"
+		}
+	},
+	"frame_4": {
+		"src": "./dashboard.html",
+		"obj": {
+			"stateSaved": {
+				"save0": [],
+				"save1": [],
+				"save2": [],
+				"save3": [],
+				"save4": [],
+				"save5": []
+			},
+			"swipe": {
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"perspective": 0,
+				"obj": {}
+			},
+			"B/G": "B"
+		}
+	},
+	"frame_5": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_6": {
+		"src": "./tools.html",
+		"obj": {}
+	},
+	"frame_7": {
+		"src": "./tools.html",
+		"obj": {}
+	}
+}
