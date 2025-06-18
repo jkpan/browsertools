@@ -633,6 +633,7 @@
     document.getElementById('__username').innerHTML = '';
     document.getElementById('__login').hidden = false;
     document.getElementById('__logout').hidden = true;
+    chkloginstatus();
   }
 
   function login() {
@@ -641,26 +642,54 @@
   }
 
   async function chkloginstatus() {
-    let result = await doChk();
-    handleLogin(result);
+    try {
+      console.log('chkloginstatus...');
+      let result = await doChk();
+      handleLogin(result);
+    } catch (error) {
+      handleLogin({ state: 2,
+                    username: "guest",
+                    token: null});
+    }
   }
 
   function handleLogin(resultJson) {
+    
     document.getElementById('__username').hidden = true;
     document.getElementById('__login').hidden = true;
     document.getElementById('__logout').hidden = true;
     username = null;
-    if (resultJson.state > 0) {
+    if (resultJson.state == 0) {
+      username = resultJson.username;
+      for(let i = 1;i <= 5;i++) document.getElementById('btn_save_' + i).hidden = true;
+      return;
+    } 
+    if (resultJson.state == 1) {
       username = resultJson.username;
       document.getElementById('__username').hidden = false;
       document.getElementById('__username').innerHTML = resultJson.username;
-      if (resultJson.username != 'guest')
+      if (resultJson.username == 'guest') { //全權限的guest 不需要login logout //no auth
+        document.getElementById('__logout').hidden = true;
+        document.getElementById('__login').hidden = true;
+      } else { //正常user
         document.getElementById('__logout').hidden = false;
+        document.getElementById('__login').hidden = true;
+      }
+      for(let i = 1;i <= 5;i++) {
+        document.getElementById('btn_preload_' + i).hidden = false;
+        document.getElementById('btn_save_' + i).hidden = false;
+      }
+    } else if (resultJson.state == 2) { //半權限的guest
+      username = resultJson.username;
+      document.getElementById('__username').hidden = false;
+      document.getElementById('__username').innerHTML = resultJson.username;
+      document.getElementById('__logout').hidden = true;
+      document.getElementById('__login').hidden = false;
       for(let i=1;i<=5;i++) {
         document.getElementById('btn_preload_' + i).hidden = false;
         document.getElementById('btn_save_' + i).hidden = false;
       }
-    } else {
+    } else { //auth失敗 有token 但過期 或是帳密錯誤
       document.getElementById('__login').hidden = false;
       for(let i=1;i<=5;i++) {
         document.getElementById('btn_preload_' + i).hidden = true;

@@ -186,6 +186,8 @@
     async function ajax_action(action, id, content) {
         let result = await doChk();
         if (result.state <= 0) return;
+        if (response.username == 'guest' && response.state == 2) return;
+
         let user = result.username;
 
         console.log('action:' + action +', id:' + id + ', ' + JSON.stringify(content));
@@ -350,9 +352,11 @@
 
             let result = await doChk();
             if (result.state <= 0) return;
+            if (result.username == 'guest' && result.state == 2) return;
+
             let user = result.username;
             
-            const response = await fetch(`./users/songbase.json`); // 等待 fetch 请求完成 ./users/songbase.json
+            const response = await fetch("./users/songbase.json"); // 等待 fetch 请求完成 ./users/songbase.json
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }

@@ -15,6 +15,11 @@ try {
   console.log('jsonwebtoken Module does not exist');
 }
 
+/**
+ * 設定是否啟用驗證
+ * @param {boolean} _auth - 是否啟用驗證
+ * @returns {boolean} - 返回當前的驗證狀態 
+ */
 function setDoAuth(_auth) {
   doauth = _auth;
   if (doauth) {    
@@ -45,20 +50,31 @@ function parseBody(req) {
   });
 }
 
+function resposeGuest(res, level) {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ "state": level,
+                           "username": "guest",
+                           "token": "null" }));
+}
+
 async function auth(req, res) {
+
   try {
 
-    //{"username":"jkpan"}
+    const { username, password } = await parseBody(req);
+
+    //權限全開的guest (state = 1)
     if (!doauth) { //const token = jwt.sign({ "username":"guest" }, SECRET_KEY, { expiresIn: '10h' });
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ "state": 1,
-                               "username": "guest",
-                               "token": "null"
-                             }));
+      console.log('auth resposeGuest(res, 1);');
+      resposeGuest(res, 1);
       return;
     }
-    
-    const { username, password } = await parseBody(req);
+
+    //有限制的guest (state = 2)
+    if (username === 'guest') {
+      resposeGuest(res, 2);
+      return;
+    }
 
     console.log("user : " + username + ", " + "pwd : " + password);
 
@@ -79,14 +95,14 @@ async function auth(req, res) {
       // 驗證失敗
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ 
-        "state": -1,
-        des: 'Invalid credentials' }));
+          "state": -1,
+          des: 'Login fail' }));
     }
   } catch (error) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ 
       "state": -1,
-      des: 'Server error: ' + error }));
+      des: 'Exception: ' + error }));
   }
 
 }
@@ -94,11 +110,8 @@ async function auth(req, res) {
 function chk(req, res) {
 
   if (!doauth) {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      state: 1,
-      username: "guest" //message: "Hello, guest!"
-    }));
+    console.log('chk : resposeGuest(res, 1);');
+    resposeGuest(res, 1);
     return;
   }
 
@@ -107,8 +120,9 @@ function chk(req, res) {
   //console.log("authHeader : " + authHeader);console.log("     token : " + token);
 
   if (!token) {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ state:-1, des: 'Token not provided' }));
+    //res.writeHead(200, { 'Content-Type': 'application/json' });
+    //res.end(JSON.stringify({ state:-1, des: 'Token not provided' }));
+    resposeGuest(res, 2);
     return;
   }
 
@@ -116,11 +130,14 @@ function chk(req, res) {
   jwt.verify(token, SECRET_KEY, (err, user) => {
     if (err) {
       println('err : ' + err);
+      /*
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
         state: -1,
         des: err
       }));
+      */
+      resposeGuest(res, 2);
       return;
     }
     res.writeHead(200, { 'Content-Type': 'application/json' });

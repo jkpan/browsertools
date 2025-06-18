@@ -2,6 +2,76 @@
   const HELPURL_EBDD = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//&rm=minimal';
   const HELPURL =      'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/pub?start=false&loop=false&delayms=3000';
 </script>
+<script type="text/javascript" src="login.js" charset="UTF-8"></script>
+<script>  
+
+  function closeLogin() {
+    if (_login)
+      _login.close();
+    _login = null;
+  }
+
+  
+  var _login = null;
+  var username = null;
+
+  function logout() {
+    cleanLogin();
+    document.getElementById('__username').hidden = true;
+    document.getElementById('__username').innerHTML = '';
+    document.getElementById('__login').hidden = false;
+    document.getElementById('__logout').hidden = true;
+    chkloginstatus();
+  }
+
+  function login() {
+    closeLogin();
+    _login = window.open("login.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=500,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+  }
+
+  async function chkloginstatus() {
+    try {
+      console.log('chkloginstatus...');
+      let result = await doChk();
+      handleLogin(result);
+    } catch (error) {
+      handleLogin({ state: 2,
+                    username: "guest",
+                    token: null});
+    }
+  }
+
+  function handleLogin(resultJson) {
+    //console.log('xxx : ' + JSON.stringify(resultJson));
+    document.getElementById('__username').hidden = true;
+    document.getElementById('__login').hidden = true;
+    document.getElementById('__logout').hidden = true;
+    username = null;
+    if (resultJson.state == 0) return;
+    if (resultJson.state == 1) {
+      username = resultJson.username;
+      document.getElementById('__username').hidden = false;
+      document.getElementById('__username').innerHTML = resultJson.username;
+      if (resultJson.username == 'guest') { //全權限的guest 不需要login logout //no auth
+        document.getElementById('__logout').hidden = true;
+        document.getElementById('__login').hidden = true;
+      } else { //正常user
+        document.getElementById('__logout').hidden = false;
+        document.getElementById('__login').hidden = true;
+      }
+    } else if (resultJson.state == 2) { //半權限的guest
+      username = resultJson.username;
+      document.getElementById('__username').hidden = false;
+      document.getElementById('__username').innerHTML = resultJson.username;
+      document.getElementById('__logout').hidden = true;
+      document.getElementById('__login').hidden = false;
+    } else {
+      document.getElementById('__login').hidden = false;
+    }
+
+  }
+
+</script>
 <!DOCTYPE html>
 <html>
 
@@ -60,12 +130,29 @@
       z-index: 90;
       border: none;
     }
+
+    .right-to-left {
+      
+      margin-right: 5%;
+      direction: rtl;
+      text-align: right;
+    }
+
   </style>
 </head>
 
 <body>
+  <div class="right-to-left">
+      &nbsp;
+      <label id="__username" hidden="true"></label>
+      &nbsp;
+      <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
+      &nbsp;
+      <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign out</label>
+      &nbsp;
+  </div>
   <!-- <img src="./tmp/bg01.png"> -->
-  <div class="fixed-text">台北市中心神召會</div>
+  <!-- <div class="fixed-text">台北市中心神召會</div> -->
   <hr size="8" align="left" width="33%" color="#aaaaaa">
   <div class="slides" id="slidesDiv" hidden="true">
     <iframe style="border: none;" width="100%" height="100%" id="slidesFrame"></iframe>
@@ -164,5 +251,7 @@
 
   //Bible_play      './subtitle_b.html?action=play';
   //Bible_ctrl      './subtitle_b.html?action=ctrl';
+
+  chkloginstatus();
   
 </script>

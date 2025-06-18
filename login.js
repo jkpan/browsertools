@@ -83,29 +83,36 @@ async function doLogin(username, password) {
     }
 */
 async function doChk() {
-    
     try {
         let token = localStorage.getItem('token');
-        if (token == null) token = "";
-        let response = await fetch("/loginchk", {
-            method: "POST",
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: {}
-        });
-        const data = await response.json();
-        if (response.ok) {
-            if (data.state == 1) {
-                if (data.username == 'guest')
-                    return { state: 2, username: data.username, des: "" };
-                return { state: 1, username: data.username, des: "" };
-            }
-            return {state: 0, des: ""}
+        let response;
+        if (token == null) {
+            response = await doLogin('guest', '');
+            return response;//{ state: 2, username: 'guest', des: "" }; //return response;
+        } else {
+            response = await fetch("/loginchk", {
+                method: "POST",
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: {}
+            });
+            console.log("token not null loginchk");
         }
+        console.log(response);
+        //token = "";
+        const data = await response.json();
+        return data;
+        /*
+        if (response.ok) {
+            return data;
+        }
+        return {state: 2, username:"guest", des: "fail"};
+        */
     } catch (err) {
-        return {state: -1, des: "dochk response not ok"}
+        console.error("doChk error: ", err);
+        return {state: 0, username: "guest", des: "dochk response not ok"}
     }
 }
 

@@ -136,6 +136,8 @@
                     alert(result.des);
                     document.getElementById('username').value = '';
                     document.getElementById('password').value = '';
+                    result = await doLogin("guest", "");
+                    opener.handleLogin(result);
                 }
         });
 

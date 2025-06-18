@@ -143,6 +143,8 @@ function webservice(req, res) {
   }
 
   if (req.method === 'POST' && req.url === '/login') {
+    println('------');
+    println('post /login');
     users.auth(req, res);
     return;
   }

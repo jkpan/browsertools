@@ -44,7 +44,7 @@ async function fetchData() {
   try {
     let jsonurl = './users/songbase.json';
     let result = await doChk();
-    if (result.state > 0) {
+    if (result.state >= 0) {
       let user = result.username;
       jsonurl = `./users/songbase.json`;
     }
@@ -185,9 +185,9 @@ function json2List(fileContent) {
   }
 
   sync_type = 0;  
-  doChk().then((result)=>{
-    if (result.state > 0) {
-      username = result.username;
+  doChk().then((result) => {
+    if (result.state > 0) username = result.username;
+    if (result.state == 1) {
       sync_type = jsonData.syncType;
       synctrls();
     } else {
@@ -1194,10 +1194,11 @@ function createCtrlBtn() {
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
   ctrls[5].hidden = true;
+  
   doChk().then((result) => {
     username = null;
-    if (result.state > 0) {
-      username = result.username;
+    if (result.state > 0) username = result.username;
+    if (result.state == 1) {
       ctrls[2].hidden = false;
       ctrls[3].hidden = false;
       ctrls[5].hidden = false;
@@ -1656,8 +1657,8 @@ if (readParam('mode')) {
 if (readParam('action') === 'play') {
     
   doChk().then((result) => {
-    if (result.state > 0) {
-      username = result.username;
+    if (result.state > 0) username = result.username;
+    if (result.state == 1) {
       sync_type = 5;
       synctrls();
     }
@@ -1672,8 +1673,8 @@ if (readParam('action') === 'play') {
 if (readParam('action') === 'ctrl') {
 
   doChk().then((result)=>{
-    if (result.state > 0) {
-      username = result.username;
+    if (result.state > 0) username = result.username;
+    if (result.state == 1) {
       displayProgress = 1;
       mode = 3;
       sync_type = 3;

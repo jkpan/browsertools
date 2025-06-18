@@ -76,11 +76,16 @@
         }
     }
 
+    function handleLogin(resultJson) {
+
+    }
+
     async function connectWebSocket() {
 
         let result = await doChk();
-        if (result.state <= 0) {
-            alert('請先登入');
+        if (result.state == 0) return;
+        if (result.state != 1) {
+            alert('請先登入'); 
             window.Location.href = 'login.html';
             return;
         }

@@ -1162,8 +1162,8 @@ function createCtrlBtn() {
   ctrls[5].hidden = true;
   doChk().then((result) => { //console.log('======='); //console.log(JSON.stringify(result));
     username = null;
-    if (result.state > 0) {
-      username = result.username;
+    if (result.state > 0) username = result.username;
+    if (result.state == 1) {
       ctrls[2].hidden = false;
       ctrls[3].hidden = false;
       ctrls[5].hidden = false;
@@ -2793,9 +2793,9 @@ function receiveMessage(e) {
 
   sync_type = 0;
 
-  doChk().then((result)=>{
-    if (result.state > 0) {
-      username = result.username;
+  doChk().then((result) => {
+    if (result.state > 0) username = result.username;
+    if (result.state == 1) {
       sync_type = jsonData.syncType;
       synctrls();
     } else {
@@ -3250,8 +3250,8 @@ if (readParam('action') === 'play') {
   fontsize_dist = 1;
 
   doChk().then((result)=>{
-    if (result.state > 0) {
-      username = result.username;
+    if (result.state > 0) username = result.username;
+    if (result.state == 1) {
       setMsg_play_socket();
     }
   }).catch(error => {
@@ -3269,9 +3269,9 @@ if (readParam('action') === 'play') {
   //color_selection = 0; colorSwitch();
   fontfactor += 5;
 
-  doChk().then((result)=>{
-    if (result.state > 0) {
-      username = result.username;
+  doChk().then((result) => {
+    if (result.state > 0) username = result.username;
+    if (result.state == 1) {
       setMsg_3();
     }
   }).catch(error => {
