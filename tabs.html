@@ -356,7 +356,7 @@
       content: json
     },
       '/savejson',
-      (res) => { console.log(JSON.stringify(res)); },
+      (res) => { alert('done'); console.log(JSON.stringify(res)); },
       () => { console.log('exception'); }
     );
   }
