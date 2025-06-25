@@ -49,6 +49,8 @@ global.clearScreen = function () {
 }
 
 //clearScreen();
+println('node version: ' + process.versions.node);
+println('  v8 version: ' + process.versions.v8);
 println(`process.cwd() ${process.cwd()}`);
 println(`dir  name ${__dirname}`);
 println(`file name ${__filename}`);
