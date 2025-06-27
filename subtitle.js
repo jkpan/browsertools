@@ -805,6 +805,7 @@ function combineKey(e) {
       phase = 0;
       line = 0;
       break;
+    default: return;
   }
   _repaint();
 }
@@ -833,8 +834,8 @@ function keyboard(e) {
         }
       }
       init();
-      break;
-    //case 113: //F2
+      _repaint();
+      return;
     //case 'Enter': createCtrlBtn(); return;
     case 'KeyB': //'b'
       doblank = doblank == 0 ? 1 : 0;
@@ -876,9 +877,18 @@ function keyboard(e) {
 
       }
       break;
-    case 'KeyS': displayProgress = displayProgress == 1 ? 0 : 1; break; //'s'
-    case 'KeyD': dword = dword == 0 ? 1 : 0; break; //'D'
-    case 'KeyC': fontColorType = (fontColorType + 1) % 4; break; //'c'
+    case 'KeyS': 
+      displayProgress = displayProgress == 1 ? 0 : 1; 
+      _repaint();
+      return; //'s'
+    case 'KeyD': 
+      dword = dword == 0 ? 1 : 0; 
+      _repaint();
+      return;; //'D'
+    case 'KeyC': 
+      fontColorType = (fontColorType + 1) % 4; 
+      _repaint();
+      return;//'c'
     case 'KeyZ': {
         makeTransparent = !makeTransparent;
         let div = document.getElementById("image_container");
@@ -890,16 +900,21 @@ function keyboard(e) {
           }
         }
       }
-      break; //'z'
+      _repaint();
+      return;
     //case 67: phase = subtitles.length - 1; line = 0; break; //'c' jump to coda last one phase
     case 'KeyP':
       mode = (mode + 1) % 5;
-      break; //'p' ppt mode
+      _repaint();
+      return;//'p' ppt mode
     case 'KeyH': //'h 
       helpSwitch = helpSwitch == 0 ? 1 : 0;
-      break;
+      _repaint();
+      return;
     //case 76: hideCanvas(); break; //'l'
-    case 'KeyL': openSelector(); break; //'l'
+    case 'KeyL': 
+      openSelector(); 
+      return; //'l'
     case 'ArrowUp':
       if (phase > 0) {
         phase = phase - 1;
@@ -993,8 +1008,8 @@ function keyboard(e) {
       dword = 0;
       break;
     //case 32: canvas.requestFullscreen(); break;
-    default:
-      break;
+    default: //alert('' + e.code); 
+      return;
   }
 
   _repaint();

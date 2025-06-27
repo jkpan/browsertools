@@ -185,8 +185,10 @@
     //控方上傳目前
     async function ajax_action(action, id, content) {
         let result = await doChk();
+
         if (result.state <= 0) return;
-        if (response.username == 'guest' && response.state == 2) return;
+
+        if (result.username == 'guest' && result.state == 2) return;
 
         let user = result.username;
 

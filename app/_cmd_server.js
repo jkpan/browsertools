@@ -1,15 +1,11 @@
-//const blessed = require('blessed');
 //const path = require('path');
 const http = require('http');
 const https = require('https');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os'); 
-//const socketIo = require('socket.io');
 //const sqlite3 = require('sqlite3').verbose();
 //const express = require('express');
-//const app = express();
-//const objb = require('./_obj_Bible');
 
 const sync_Bible = require('./_obj_Bible'); //('./_sync_Bible')
 const sync_lyrics = require('./_obj_lyrics'); //('./_sync_lyrics')
@@ -48,13 +44,6 @@ global.clearScreen = function () {
   process.stdout.write('\x1B[2J\x1B[0;0H');
 }
 
-//clearScreen();
-println('node version: ' + process.versions.node);
-println('  v8 version: ' + process.versions.v8);
-println(`process.cwd() ${process.cwd()}`);
-println(`dir  name ${__dirname}`);
-println(`file name ${__filename}`);
-
 try {
   require.resolve('cluster');
   println('cluster Module exists');
@@ -75,13 +64,22 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-println('cpu ' + os.cpus().length + ' cores');
-//println('total ram ' + os.totalmem());
-//println('free/total: ' +  numberWithCommas(os.freemem()) + '/' + numberWithCommas(os.totalmem()));
-println('total mem: ' + numberWithCommas(os.totalmem()));
-println(' free mem: ' + numberWithCommas(os.freemem()));
-println('    ratio: ' + Math.floor(os.freemem() / os.totalmem() * 100) + '%');
-//clearScreen();
+function print_sys_info() {
+  println();
+  println('node version: ' + process.versions.node);
+  println('  v8 version: ' + process.versions.v8);
+  println(`process.cwd() ${process.cwd()}`);
+  println(`dir  name ${__dirname}`);
+  println(`file name ${__filename}`);
+  
+  println('cpu ' + os.cpus().length + ' cores');
+  println('total mem: ' + numberWithCommas(os.totalmem()));
+  println(' free mem: ' + numberWithCommas(os.freemem()));
+  println('    ratio: ' + Math.floor(os.freemem() / os.totalmem() * 100) + '%');
+  println();
+}
+
+print_sys_info();
 
 //讀檔輸出
 function responseFile(filePath, res) {

@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:22-alpine
 
 WORKDIR /usr/tpcaog/web
 
@@ -10,7 +10,7 @@ EXPOSE 3000
 COPY . .
 
 ENTRYPOINT ["node", "./app/_cmd_server.js"]
-CMD ["-p", "3000"]
+CMD ["-p", "3000", "-auth"]
 
 # [node image]
 # docker build -t tpcaog .

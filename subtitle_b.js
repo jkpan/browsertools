@@ -1946,8 +1946,7 @@ function combineKey(e) {
         phase = _phase;
         line = _line;
       }
-      _repaint();
-      return;
+      break;
     }
     case 'PageDown': { //page down
       helpSwitch = 0;
@@ -1957,10 +1956,9 @@ function combineKey(e) {
         phase = _phase;
         line = _line;
       }
-      _repaint();
-      return;
+      break;
     }
-    case 'KeyA': sortjump(1, 5); break;
+    case 'KeyA': sortjump(1, 5);  break;
     case 'KeyS': sortjump(6, 17); break;
     case 'KeyD': sortjump(18, 22); break;
     case 'KeyF': sortjump(23, 27); break;
@@ -2002,6 +2000,7 @@ function combineKey(e) {
         phase = 0;
       }
       line = 0;
+      saveAction2Local();
       break;
     case 'ArrowDown':
       if (canvas.hidden) break;
@@ -2013,17 +2012,19 @@ function combineKey(e) {
         phase = subtitles.length - 1;
         line = 0;
       }
+      saveAction2Local();
       break;
     case 'ArrowLeft':
       line -= jump;
       if (line < 0)
         line = 0;
-
+      saveAction2Local();
       break;
     case 'ArrowRight':
       line += jump;
       if (line > subtitles[phase].length - 1)
         line = subtitles[phase].length - 1;
+      saveAction2Local();
       break;
     //case 'Space': history.back(); return;
     case 'Escape': volAnim = !volAnim; break;//'escape'
@@ -2045,12 +2046,11 @@ function combineKey(e) {
     case 'KeyU': presetVerse[7] = ['']; break;
     case 'KeyI': presetVerse[8] = ['']; break;
     case 'KeyO': presetVerse[9] = ['']; break;
-    default: break;
+    default: return;
   }
 
-  saveAction2Local();
-
   _repaint();
+
 }
 
 function setFontFactor(ff) {
@@ -2480,8 +2480,7 @@ function keyboard(e) {
     case 'Tab': 
       speakCurrent();
       return;
-    default:
-      break;
+    default: return;
   }
 
   saveAction2Local();
@@ -2821,7 +2820,6 @@ function keyupAction(e) {
   e.preventDefault();
   e.stopPropagation();
   
-
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') saveAction2Local();
 
   if (recognition && recognizing) {
