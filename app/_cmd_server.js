@@ -117,7 +117,7 @@ function savejsonfile(req, res) {
     println(jsonobj);  
   
     const writeStream = fs.createWriteStream(fn);
-    writeStream.write(JSON.stringify(jsonobj, null, "\t")); //, null, "\t");
+    writeStream.write(JSON.stringify(jsonobj, null, "  ")); //, null, "\t");
     writeStream.end(() => {
       println('檔案寫入完成!');
     });
@@ -151,17 +151,21 @@ function webservice(req, res) {
 
   switch (url) {
 
-    case '/query': sync_tally.query(req, res); return;
-    case '/command': sync_tally.command(req, res); return;
-    case '/initui': sync_tally.initui(req, res); return;
-
+    //經文
     case '/synscripture': sync_Bible.synscripture(req, res); return;
     case '/restorescripture': sync_Bible.restorescripture(req, res); return;
 
+    //歌詞
     case '/synclyrics': sync_lyrics.synclyrics(req, res); return;
     case '/actionlyrics': sync_lyrics.lyricsBaseAction(req, res); return;
-    //case '/restorelyrics': restorelyrics(req, res);    return;
+    
+    //設定存檔
     case '/savejson': savejsonfile(req, res); return;
+
+    //tally相關
+    case '/query': sync_tally.query(req, res); return;
+    case '/command': sync_tally.command(req, res); return;
+    case '/initui': sync_tally.initui(req, res); return;
     
     default:
 

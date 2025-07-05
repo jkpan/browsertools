@@ -133,6 +133,7 @@ function getInfo() {
     return info;
 }
 
+//遞迴
 function getArrayDimension(arr) {
   if (Array.isArray(arr)) {
     return 1 + Math.max(...arr.map(getArrayDimension), 0);
@@ -157,59 +158,9 @@ function refactor(ALL_SONGS) {
   //let keys = Object.keys(ALL_SONGS); keys.forEach(function (key, index) { console.log('"' + key + '"');});
 }
 
-function formatALL(fstream, ALL_SONGS) {
-  fstream.write('{\n');
-  let keys = Object.keys(ALL_SONGS);
-  let indent = '    ';
-  keys.forEach(function (key, index) {
-    let song = ALL_SONGS[key];
-    if (key === 'nosong') {
-      let jsonstr = '"' + key + '": ' + JSON.stringify(song, null, "\t");
-      fstream.write(jsonstr + ',\n\n');
-      return;
-    }
-    fstream.write(indent + '"' + key + '": {\n');
-    let content = song['content'];
-    switch (getArrayDimension(content)) {
-      case 1: {
-        let str = '[';
-        for (let k = 0; k < content.length; k++) {
-          str += '"' + content[k] + '"';
-          str += k < content.length - 1 ? ', ' : ']';
-        }
-        fstream.write(indent + indent + '"content":' + str + '\n');
-      }
-        break;
-      case 2: {
-        fstream.write(indent + indent + '"content": [\n');
-        let str = indent + indent + indent;
-        for (let i = 0; i < content.length; i++) {
-          str += '[';
-          for (let j = 0; j < content[i].length; j++) {
-
-            if (typeof content[i][j] === 'string') {
-              str += '"' + content[i][j] + '"';
-            } else {
-              str += content[i][j];
-            }
-            str += j < content[i].length - 1 ? ', ' : ']';
-
-          }
-          str += i == content.length - 1 ? '' : ',';
-          fstream.write(str + '\n');
-          str = indent + indent + indent;
-        }
-        fstream.write(indent + indent + ']\n');
-      }
-        break;
-    }
-    ptlet(` idx: ${index}/${keys.length}`);
-    if (index < keys.length - 1)
-      fstream.write(indent + '},\n');
-    else
-      fstream.write(indent + '}\n');
-  });
-  fstream.write('}\n');
+function formatdefault(fstream, ALL_SONGS) {
+  //fstream.write(JSON.stringify(ALL_SONGS, null, "\t"));
+  fstream.write(JSON.stringify(ALL_SONGS, null, " "));
 }
 
 function readAndAction(path, handle) {
@@ -271,7 +222,8 @@ function lyricsBaseAction(req, res) {
           println('add save file');
           refactor(ALL_SONGS);
           const writeStream = fs.createWriteStream('./users/' + WRITE_SRC);
-          formatALL(writeStream, ALL_SONGS);
+          formatdefault(writeStream, ALL_SONGS);
+          //formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
           });
@@ -292,7 +244,8 @@ function lyricsBaseAction(req, res) {
           }
           refactor(ALL_SONGS);
           const writeStream = fs.createWriteStream('./users/' + WRITE_SRC);
-          formatALL(writeStream, ALL_SONGS);
+          formatdefault(writeStream, ALL_SONGS);
+          //formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
           });
@@ -306,11 +259,44 @@ function lyricsBaseAction(req, res) {
           delete ALL_SONGS[id];
           refactor(ALL_SONGS)
           const writeStream = fs.createWriteStream('./users/' + WRITE_SRC);
-          formatALL(writeStream, ALL_SONGS);
+          formatdefault(writeStream, ALL_SONGS);
+          //formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
             console.log('檔案寫入完成!');
           });
         });
+        res.setHeader('Content-Type', 'application/json');// 发送响应数据
+        res.end(JSON.stringify({ "state": "success" }));
+        break;
+      case 'addCata':
+        println('addCata start');
+        readAndAction('./users/' + READ_SRC, (ALL_SONGS) => {
+          println('addCata in');
+          /*
+          for (let i=0;i<VOLUME_CONTENT_ARRAY.length;i++) {
+            if (VOLUME_CONTENT_ARRAY[i][0] == content[0]) { //åprintln('addcata exist return!');
+              res.setHeader('Content-Type', 'application/json')å; res.end(JSON.stringify({ "state": "fail" }));
+              return;              
+            }
+          }
+          */
+          let len = ALL_SONGS['nosong']['VOLUME']['content'].length;
+          ALL_SONGS['nosong']['VOLUME']['content'][len] = content;
+
+          println('addCata success');
+          result = true;
+          println('addCata save file');
+          refactor(ALL_SONGS);
+          const writeStream = fs.createWriteStream('./users/' + WRITE_SRC);
+          formatdefault(writeStream, ALL_SONGS);
+          //formatALL(writeStream, ALL_SONGS);
+          writeStream.end(() => {
+            console.log('檔案寫入完成!');
+          });
+          //res.setHeader('Content-Type', 'application/json');// 发送响应数据
+          //res.end(JSON.stringify({ "state": "success" }));
+        });
+        println('add end');
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
         break;
@@ -340,5 +326,61 @@ function songjsonformat() {
             console.log('檔案寫入完成!');
         });
     });
+}
+*/
+/*
+function formatALL(fstream, ALL_SONGS) {
+  fstream.write('{\n');
+  let keys = Object.keys(ALL_SONGS);
+  let indent = '    ';
+  keys.forEach(function (key, index) {
+    let song = ALL_SONGS[key];
+    if (key === 'nosong') {
+      let jsonstr = '"' + key + '": ' + JSON.stringify(song, null, "\t");
+      fstream.write(jsonstr + ',\n\n');
+      return;
+    }
+    fstream.write(indent + '"' + key + '": {\n');
+    let content = song['content'];
+    switch (getArrayDimension(content)) {
+      case 1: {
+        let str = '[';
+        for (let k = 0; k < content.length; k++) {
+          str += '"' + content[k] + '"';
+          str += k < content.length - 1 ? ', ' : ']';
+        }
+        fstream.write(indent + indent + '"content":' + str + '\n');
+      }
+        break;
+      case 2: {
+        fstream.write(indent + indent + '"content": [\n');
+        let str = indent + indent + indent;
+        for (let i = 0; i < content.length; i++) {
+          str += '[';
+          for (let j = 0; j < content[i].length; j++) {
+
+            if (typeof content[i][j] === 'string') {
+              str += '"' + content[i][j] + '"';
+            } else {
+              str += content[i][j];
+            }
+            str += j < content[i].length - 1 ? ', ' : ']';
+
+          }
+          str += i == content.length - 1 ? '' : ',';
+          fstream.write(str + '\n');
+          str = indent + indent + indent;
+        }
+        fstream.write(indent + indent + ']\n');
+      }
+        break;
+    }
+    ptlet(` idx: ${index}/${keys.length}`);
+    if (index < keys.length - 1)
+      fstream.write(indent + '},\n');
+    else
+      fstream.write(indent + '}\n');
+  });
+  fstream.write('}\n');
 }
 */

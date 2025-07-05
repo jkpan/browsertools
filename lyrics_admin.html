@@ -13,7 +13,7 @@
 
         body {
             margin: 10px;
-            background-color: rgb(0, 0, 0);
+            background-color: rgb(80, 80, 80);
         }
 
         .column {
@@ -70,6 +70,27 @@
 </head>
 
 <body>
+    <br>
+    <div id="tag"></div>
+    <div style="margin: 1%;">
+        <br>
+        
+        <label style="color: rgb(0, 255, 0);">前綴: </label>
+        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="prefix">
+
+        <p></p>
+
+        <label style="color: rgb(0, 255, 0);">名稱: </label>
+        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="cataname">
+
+        <p></p>
+        <button class="button2" style="background-color: rgb(0, 80, 0);" onclick="cataGo()">新增分類</button>
+        <p></p>
+        <!-- <button class="button2" style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button> -->
+    </div>
+
+    <hr size="8" align="left" width="60%" color="#aaaaaa">
+
     <div style="margin: 1%;">
         <br>
         <label style="color: rgb(0, 255, 0);">ID: </label>
@@ -84,9 +105,12 @@
         <button class="button2" style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button>
     </div>
     <p></p>
-    <div id="tag"> </div>
+    <hr size="8" align="left" width="60%" color="#aaaaaa">
 
     <script type="text/javascript" charset="UTF-8">
+
+        var cata = [];
+
         function clearTxt() {
             document.getElementById("song_id").value = "";
             document.getElementById("songtxt").value = "";
@@ -102,9 +126,42 @@
             
         }
 
+        function cataGo() {
+
+            let prefix_value = document.getElementById("prefix").value;
+            if (prefix_value.trim().length == 0) return;   
+
+            let cataname_value = document.getElementById("cataname").value;
+            cataname_value = cataname_value.trim();
+            if (cataname_value.length == 0) return;
+
+            for(let i = 0;i<cata.length;i++) {
+                if (cata[i][0] == prefix_value) {
+                    alert(prefix_value + ' exist!');
+                    return;
+                }
+            }
+
+            /* 
+            cata.forEach((volume, index) => {
+                if (volume[0] == prefix_value) {
+                    alert(prefix_value + ' exist!');
+                    return;
+                }
+            });
+            */
+
+            ajax_action('addCata', prefix_value, 
+                [   prefix_value, 
+                    1000, 
+                    false, 
+                    cataname_value  ]);
+        }
+
         function textGo() {
 
             let id_value = document.getElementById("song_id").value;
+            id_value = id_value.trim();
             if (id_value.length == 0) return;
             //if (ALL_SONGS_JSON[id_value]) return;           
 
@@ -139,6 +196,8 @@
                 preline = line;
 
             });
+
+            if (newsong.length == 0) return;
 
             if (ALL_SONGS_JSON[id_value]) {
                 if (confirm("確定要修改 '" + id_value + "' ?")) 
@@ -289,6 +348,8 @@
 
         let VOLUME = ALL_SONGS_JSON['nosong']['VOLUME']['content'];// window.opener.getSong('VOLUME');
 
+        cata = VOLUME;
+
         for (let pf = 0; pf < VOLUME.length; pf++) {
             
             const link = document.createElement('a');
@@ -324,27 +385,34 @@
             div.insertAdjacentHTML('beforeend', '<p></p>');
         }
 
-        let EVENTS = ALL_SONGS_JSON['nosong']['EVENTS']['content'];
+        try {
+            
+            let EVENTS = ALL_SONGS_JSON['nosong']['EVENTS']['content'];
 
-        for (let pf = 0; pf < EVENTS.length; pf++) {
+            for (let pf = 0; pf < EVENTS.length; pf++) {
 
-            var span = document.createElement('span');
-            span.style.color = 'rgb(0,255,0)' // apply your style
-            span.appendChild(document.createTextNode(EVENTS[pf]));
-            div.appendChild(span);
-            div.insertAdjacentHTML('beforeend', '<p></p>');
+                var span = document.createElement('span');
+                span.style.color = 'rgb(0,255,0)' // apply your style
+                span.appendChild(document.createTextNode(EVENTS[pf]));
+                div.appendChild(span);
+                div.insertAdjacentHTML('beforeend', '<p></p>');
 
-            let toolList = ALL_SONGS_JSON['nosong'][EVENTS[pf]].content;
+                let toolList = ALL_SONGS_JSON['nosong'][EVENTS[pf]].content;
 
-            for (let i = 0; i < toolList.length; i++) {
-                var btn = _songBtn(toolList[i]);
-                btn.style.background = '#777777';
-                div.appendChild(btn);
+                for (let i = 0; i < toolList.length; i++) {
+                    var btn = _songBtn(toolList[i]);
+                    btn.style.background = '#777777';
+                    div.appendChild(btn);
+                }
+
+                div.insertAdjacentHTML('beforeend', '<p></p>');
             }
 
-            div.insertAdjacentHTML('beforeend', '<p></p>');
-
+        } catch (error) {
+            console.log(error);
         }
+
+        
 
     }
 

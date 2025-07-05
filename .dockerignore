@@ -3,4 +3,5 @@ test
 ssl
 code_backup
 test
+VOLUMES
 .DS_Store
