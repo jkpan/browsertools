@@ -14,11 +14,28 @@ COPY . .
 # CMD ["-p", "3000", "-auth"]
 
 # [node image]
-# docker build -t tpcaog .
-# [node container]
-# docker run -d --name tpcaog -p 3000:3000 tpcaog
-# docker run -d --name jkpan -p 3001:3000 tpcaog
-
 # docker build -t app .
+# [node container]
+# docker run -d --name tpcaog -p 3000:3000 app
+# docker run -d --name jkpan -p 3001:3000 app
+# [docker compose]
 # docker-compose up -d
+
+# [nginx]
+# nginx
 # nginx -s stop
+
+# [docker]
+# docker ps
+# docker ps -all
+# docker rm [id]
+# docker images 
+# docker save -o [file name] [image]
+# docker load -i [file name]
+# docker build --platform=linux/amd64 -t [image name] .
+# docker rmi [image name]
+# docker run --restart=always -d -p 3001:3000 [image name]
+# 
+
+# linux
+# scp [file name] root@[ip]:[file name]

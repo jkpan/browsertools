@@ -2,11 +2,12 @@ version: "2"  # Use version 2 of the Docker Compose file format
 services:
   tpcaog:
     image: app
+    restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:
       - ./VOLUMES/tpcaog:/usr/app/web/users
-    command: ["node", "./app/_cmd_server.js",  "-p", "3000", "-auth"]
+    command: ["node", "./app/_cmd_server.js",  "-p", "3000"]
   
   jkpan:
     image: app
@@ -14,7 +15,7 @@ services:
       - "3001:3000"
     volumes:
       - ./VOLUMES/jkpan:/usr/app/web/users
-    command: ["node", "./app/_cmd_server.js",  "-p", "3000"]
+    command: ["node", "./app/_cmd_server.js",  "-p", "3000", "-auth"]
 
 
 # container_name: jkpan
