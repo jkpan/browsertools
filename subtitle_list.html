@@ -59,6 +59,8 @@
 </head>
 
 <body>
+  <button onclick="openAllTxt()" style="font-size: 20px;">全文檢索</button>
+  <p></p>
   <label style="color: rgb(0, 255, 0);"> </label>
   <textarea id="songtxt" rows="10">
 靈火繼焚燒
@@ -73,9 +75,31 @@
 靈火繼焚燒
 靈火繼焚燒
   </textarea>
-  <button onclick="textGo()" style="font-size: 20px;">臨時加歌</button>
+  <button onclick="textGo()">臨時加歌</button>
   <div id="tag"> </div>
   <script type="text/javascript" charset="UTF-8">
+
+    function pushSong(songid) {
+      console.log('pushSong: ' + songid);
+      let allsongs = window.opener.ALL_SONGS_JSON;
+      var exist = allsongs[songid];
+      console.log(exist);
+      mapping(exist['content']);
+    }
+    
+    var allSelector = null;
+    
+    function closeSelector() {
+      if (allSelector)
+        allSelector.close();
+      allSelector = null;
+    }
+
+    function openAllTxt() {
+      closeSelector();
+      allSelector = window.open("lyrics_text.html", "_blank", 'width=800, height=600, left=100, top=100');
+    }
+
     function textGo() {
       let value = document.getElementById("songtxt").value;
       value = value.trim();

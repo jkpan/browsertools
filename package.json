@@ -2,8 +2,8 @@
   "scripts": {
     "start": "node ./app/_cmd_server.js"
   },
-
   "dependencies": {
+    "formidable": "^3.5.4",
     "jsonwebtoken": "^9.0.2",
     "ws": "^8.18.2"
   }

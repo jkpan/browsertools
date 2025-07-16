@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Drag & Drop Upload</title>
+    <style>
+        #drop-zone {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #aaa;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 200px;
+            color: #aaa;
+            font-family: sans-serif;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="margin: 1%;">
+        <br>
+
+        <label style="color: rgb(0, 255, 0);">目錄名稱: </label>
+        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
+            id="folder">
+        <button class="button2" style="background-color: rgb(0, 80, 0);" onclick="folderGo()">新增分類</button>
+
+    </div>
+
+
+    <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true" onchange="selectFile(event)" />
+    <!-- <button class="drop-zone" id="drop-zone" type="submit">Drop files here</button> -->
+    <div id="drop-zone" onclick="openFile('allfile')">Drop files here</div>
+    <p id="msg" style="text-align:center;"></p>
+
+    <script>
+
+        var user;
+
+        //控方上傳目前
+        async function ajax_action(action, id) {
+            let result = await doChk();
+
+            if (result.state <= 0) return;
+
+            if (result.username == 'guest' && result.state == 2) return;
+
+            let user = result.username;
+
+            console.log('action:' + action + ', id:' + id + ', ' + JSON.stringify(content));
+            _ajax({
+                action: action,
+                id: id,
+                user: user
+            },
+                '/' + action,
+                (res) => {
+                    console.log(JSON.stringify(res));
+                    alert('done');
+                    location.reload();
+                }, () => {
+                    console.log('exception');
+                });
+        }
+
+        function folderGo() {
+
+            let folder_value = document.getElementById("folder").value;
+
+            for (let i = 0; i < cata.length; i++) {
+                if (cata[i][0] == prefix_value) {
+                    alert(prefix_value + ' exist!');
+                    return;
+                }
+            }
+
+            ajax_action('addfolder', folder_value);
+        }
+
+        function selectFile(event) {
+
+            let file = event.target.files[0];
+
+            /*
+            var fileInfo = "檔案名稱: " + file.name + "<br>" +
+                                         "檔案類型: " + file.type + "<br>" +
+                                         "檔案大小: " + file.size + " bytes";
+            alert(fileInfo);
+            */
+
+            /*
+            if (file.type.startsWith('text/html')) {
+                displayHTMLFile(file);
+                return;
+            }
+    
+            if (file.type.startsWith('image/')) {
+                displayImageFile(file);
+                return;
+            }
+            if (file.type.startsWith('video/')) {
+                displayVideoFile(file);
+                return;
+            }
+            if (file.type.startsWith('application/pdf')) {
+                displayPDFFile(file);
+                return;
+            }
+            */
+        }
+
+
+        function openFile(elmid) {
+            document.getElementById(elmid).click();
+        }
+
+        const dropZone = document.getElementById('drop-zone');
+        const msg = document.getElementById('msg');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#333';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#aaa';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#aaa';
+
+            const files = e.dataTransfer.files;
+            const formData = new FormData();
+            for (const file of files) {
+                formData.append('file', file);
+            }
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+                .then(res => res.text())
+                .then(text => msg.innerText = text)
+                .catch(err => msg.innerText = 'Upload failed.');
+        });
+
+    </script>
+</body>
+
+</html>

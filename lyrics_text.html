@@ -50,6 +50,26 @@
         });
     }
 
+    function copy(txt) {
+        //var textArea = document.getElementById("songtxt")
+        navigator.clipboard.writeText(txt).then(() => {
+          console.log("Text copied to clipboard...");
+        }).catch(err => {
+          console.log('Something went wrong, ', err);
+          textArea.select();
+          document.execCommand("copy");
+        });
+    }
+
+    function callsong(songid) {
+        if (window.opener) {
+            window.opener.pushSong(songid);
+            window.close();
+        } else {
+            copy(document.getElementById(songid).innerHTML);
+        }
+    }
+
     var ALL_SONGS_JSON;
 
     function createBtns() {
@@ -73,8 +93,7 @@
             span.appendChild(document.createTextNode(VOLUME[pf][3]));
             span.id = 'tag_' + VOLUME[pf][3];
             document.body.appendChild(span);
-            //document.body.insertAdjacentHTML('beforeend', '<p></p>');
-
+            document.body.insertAdjacentHTML('beforeend', '<p></p>');
 
             marginValue += 5;
 
@@ -86,11 +105,23 @@
                 
                 count++;
 
+                
+                let link = document.createElement('a');
+                link.textContent = '[' + song_id + ']';
+                link.style.color = count%2==0?'#bbb':'#0bb';
+                link.style.marginLeft = //marginValue + '%';
+                count%2==0?'5%':'10%';
+                link.href = `javascript:callsong('${song_id}')`;
+                document.body.appendChild(link);
+                
+
                 var div = document.createElement('pre');
                 div.style.color = count%2==0?'#bbb':'#0bb';
-                div.style.marginLeft = marginValue + '%';//count%2==0?'5%':'10%';
+                div.style.marginLeft = //marginValue + '%';
+                    count%2==0?'5%':'10%';
                 div.innerHTML = '';
-                div.innerHTML += '[' + song_id + ']' + '\n';
+                div.id = song_id;
+                //div.innerHTML += '[' + song_id + ']' + '\n';
                 
                 for (var j = 0; j < song['content'].length; j++) {
                     for (var k = 0; k < song['content'][j].length; k++) {
@@ -98,7 +129,7 @@
                     }
                     div.innerHTML += '\n';
                 }
-                div.innerHTML += '--------------------\n';
+                //div.innerHTML += '--------------------\n';
                 document.body.appendChild(div);
             }
 
