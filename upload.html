@@ -21,49 +21,90 @@
 
 <body>
 
-    <div style="margin: 1%;">
+    <!-- <div style="margin: 1%;">
         <br>
-
         <label style="color: rgb(0, 255, 0);">目錄名稱: </label>
         <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
             id="folder">
         <button class="button2" style="background-color: rgb(0, 80, 0);" onclick="folderGo()">新增分類</button>
-
-    </div>
-
+    </div> -->
 
     <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true" onchange="selectFile(event)" />
-    <!-- <button class="drop-zone" id="drop-zone" type="submit">Drop files here</button> -->
     <div id="drop-zone" onclick="openFile('allfile')">Drop files here</div>
     <p id="msg" style="text-align:center;"></p>
 
+    <div id="allfolder">
+
+    </div>
+
+    <div id="content">
+
+    </div>
+
     <script>
 
-        var user;
+        var user = 'guest';
 
-        //控方上傳目前
-        async function ajax_action(action, id) {
-            let result = await doChk();
+        function _ajax(json, url, cb, errorcb) {
+            console.log(json);
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(json)
+            }).then((response) => {
+                if (response.ok) {
+                    return response.json(); // 解析JSON回應
+                } else {
+                    throw new Error("請求失敗：" + response.status);
+                }
+            }).then((data) => {
+                // 在這裡處理解析後的JSON物件 //console.log(data);
+                cb(data);
+            }).catch((error) => {
+                // 處理錯誤
+                console.log('' + error);
+                errorcb();
+            });
+        }
 
-            if (result.state <= 0) return;
 
-            if (result.username == 'guest' && result.state == 2) return;
 
-            let user = result.username;
+        /*
+        let result = await doChk();
+        if (result.state <= 0) return;
+        if (result.username == 'guest' && result.state == 2) return;
+        let user = result.username;
+        */
+        function listFolder() {
 
-            console.log('action:' + action + ', id:' + id + ', ' + JSON.stringify(content));
+            //console.log('action:' + action + ', p1:' + p1);
             _ajax({
-                action: action,
-                id: id,
-                user: user
+                action: "listfolders",
+                p1: "",
+                user: null
             },
-                '/' + action,
+                '/filesaction',
                 (res) => {
                     console.log(JSON.stringify(res));
-                    alert('done');
-                    location.reload();
-                }, () => {
-                    console.log('exception');
+                }, (err) => {
+                    alert('list folder fail');
+                });
+
+        }
+
+        function listFiles(folder) {
+            _ajax({
+                action: "listfiles",
+                p1: folder,
+                user: null
+            },
+                '/filesaction',
+                (res) => {
+                    console.log(JSON.stringify(res));
+                }, (err) => {
+                    alert('list files fail');
                 });
         }
 
@@ -71,19 +112,26 @@
 
             let folder_value = document.getElementById("folder").value;
 
-            for (let i = 0; i < cata.length; i++) {
-                if (cata[i][0] == prefix_value) {
-                    alert(prefix_value + ' exist!');
-                    return;
-                }
-            }
+            _ajax({
+                action: "addfolder",
+                p1: folder,
+                user: null
+            },
+                '/filesaction',
+                (res) => {
+                    location.reload();
+                }, (err) => {
+                    alert('fail');
+                });
 
-            ajax_action('addfolder', folder_value);
         }
 
         function selectFile(event) {
 
-            let file = event.target.files[0];
+            //let file = event.target.files[0];
+            //uploadFiles(files)
+            let files = event.target.files;
+            uploadFiles(files)
 
             /*
             var fileInfo = "檔案名稱: " + file.name + "<br>" +
@@ -130,11 +178,7 @@
             dropZone.style.borderColor = '#aaa';
         });
 
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = '#aaa';
-
-            const files = e.dataTransfer.files;
+        function uploadFiles(files) {
             const formData = new FormData();
             for (const file of files) {
                 formData.append('file', file);
@@ -147,7 +191,21 @@
                 .then(res => res.text())
                 .then(text => msg.innerText = text)
                 .catch(err => msg.innerText = 'Upload failed.');
+
+        }
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#aaa';
+
+            const files = e.dataTransfer.files;
+            uploadFiles(files);
+
+
         });
+
+        listFolder();
+        //listFiles('20250718');
 
     </script>
 </body>
