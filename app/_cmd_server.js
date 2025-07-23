@@ -4,7 +4,7 @@ const https = require('https');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os');
-//const upload = require('./_obj_filehandle');
+const upload = require('./_obj_filehandle');
 //const sqlite3 = require('sqlite3').verbose();
 //const express = require('express');
 
@@ -168,8 +168,8 @@ function webservice(req, res) {
     case '/command': sync_tally.command(req, res); return;
     case '/initui': sync_tally.initui(req, res); return;
 
-    //case '/upload': upload.uploadFile(req, res); return;
-    //case '/filesaction': upload.handleFile(req, res); return;
+    case '/upload': upload.uploadFile(req, res); return;
+    case '/filesaction': upload.handleFile(req, res); return;
     
     default:
 
