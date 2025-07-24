@@ -66,7 +66,17 @@ class BibleObj {
         });
     }
 
+    checkremoveClient() {
+        this.clients.forEach((ws) => {
+            if (ws.readyState != WebSocket.OPEN) {
+                print(`[remove ${this.user} ${ws._socket.remoteAddress}]`);
+                this.clients.delete(ws);
+            }
+        });
+    }
+
     addClient2Map(ws) {
+        this.checkremoveClient();
         this.clients.add(ws);
         ws.on('message', (message)=> { //print('[from client: ' + message + ']');
             println(`[client ${this.user}: ${message}]`);

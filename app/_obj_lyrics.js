@@ -8,129 +8,139 @@ const obj_clients_MAP = new Map();
 
 class LyricsObj {
 
-    user = '';
-    content = {};
-    clients = new Set();
+  user = '';
+  content = {};
+  clients = new Set();
 
-    constructor(usr) {
-        this.user = usr;
-    }
+  constructor(usr) {
+    this.user = usr;
+  }
 
-    getSongObjStr() {
-        return {
-            type: "syncSong",
-            user: this.user,
-            song: this.content.song,
-            phase: this.content.phase,
-            line: this.content.line,
-            blank: this.content.song_doblank
-        };
-    }
+  getSongObjStr() {
+    return {
+      type: "syncSong",
+      user: this.user,
+      song: this.content.song,
+      phase: this.content.phase,
+      line: this.content.line,
+      blank: this.content.song_doblank
+    };
+  }
 
-    broadcast() {
-      let data = JSON.stringify(this.getSongObjStr());
-      //print(` <conn: ${clients.size}> `);
-      this.clients.forEach((ws) => {
-        if (ws.readyState === WebSocket.OPEN) {
-          print('<broadcast ' + this.user + ' ' + ws._socket.remoteAddress + '>');
-          ws.send(data);
-        } else {
-          print(`<remove ${this.user} ${ws._socket.remoteAddress}>`);
-          this.clients.delete(ws);
-        }
-      });
-    }
-    
+  broadcast() {
+    let data = JSON.stringify(this.getSongObjStr());
+    //print(` <conn: ${clients.size}> `);
+    this.clients.forEach((ws) => {
+      if (ws.readyState === WebSocket.OPEN) {
+        print('<broadcast ' + this.user + ' ' + ws._socket.remoteAddress + '>');
+        ws.send(data);
+      } else {
+        print(`<remove ${this.user} ${ws._socket.remoteAddress}>`);
+        this.clients.delete(ws);
+      }
+    });
+  }
 
-    syncData(song, phase, line, db) {
-        this.content = {
-            song: song,
-            phase: phase,
-            line: line,
-            song_doblank: db
-        };
-    }
+  syncData(song, phase, line, db) {
+    this.content = {
+      song: song,
+      phase: phase,
+      line: line,
+      song_doblank: db
+    };
+  }
 
-    addClient2Map(ws) {
-        this.clients.add(ws);
-        ws.on('message', (message) => { //print('[from client: ' + message + ']');
-            println(`<client ${this.user}: ${message}>`);
-            ws.send(JSON.stringify(this.getSongObjStr()));//'Whatsup client! -- from server');
-        });
-    }
+  checkremoveClient() {
+    this.clients.forEach((ws) => {
+      if (ws.readyState != WebSocket.OPEN) {
+        print(`<remove ${this.user} ${ws._socket.remoteAddress}>`);
+        this.clients.delete(ws);
+      }
+    });
+  }
+
+  addClient2Map(ws) {
+    this.checkremoveClient();
+    this.clients.add(ws);
+    ws.on('message', (message) => { //print('[from client: ' + message + ']');
+      println(`<client ${this.user}: ${message}>`);
+      ws.send(JSON.stringify(this.getSongObjStr()));//'Whatsup client! -- from server');
+    });
+  }
+
 
 }
 
 function synclyrics(req, res) {
-    let body = '';
-    // 接收请求的数据
-    req.on('data', (data) => {
-        body += data;
-    });
+  let body = '';
+  // 接收请求的数据
+  req.on('data', (data) => {
+    body += data;
+  });
 
-    // 请求数据接收完成后的处理
-    req.on('end', () => {
-        // 解析请求数据
-        const requestData = JSON.parse(body);
-        //println(body);
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+    // 解析请求数据
+    const requestData = JSON.parse(body);
+    //println(body);
 
-        let obj = getObj(requestData.user);
-        obj.syncData(requestData.song, requestData.phase,
-            requestData.line, requestData.blank);
+    let obj = getObj(requestData.user);
+    obj.syncData(requestData.song, requestData.phase,
+      requestData.line, requestData.blank);
 
-        try {
-            println(`<master ${requestData.user}: ${requestData.song[0][0]}, ${requestData.phase}, ${requestData.line}, ${requestData.blank}>`);
-        } catch (err) {
-            println(`<master: err ${requestData.phase}, ${requestData.line}, ${requestData.song_doblank}>`);
-        }
+    try {
+      println(`<master ${requestData.user}: ${requestData.song[0][0]}, ${requestData.phase}, ${requestData.line}, ${requestData.blank}>`);
+    } catch (err) {
+      println(`<master: err ${requestData.phase}, ${requestData.line}, ${requestData.song_doblank}>`);
+    }
 
-        res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json');
 
-        // 发送响应数据
-        res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
-        obj.broadcast();
+    // 发送响应数据
+    res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
+    obj.broadcast();
 
-        if (process.send) {
-            process.send(obj.getSongObjStr());
-        }
+    if (process.send) {
+      process.send(obj.getSongObjStr());
+    }
 
-    });
+  });
 }
 
 
 function syncFromWorker(msg) {
-    let obj = getObj(msg.user);
-    println(`<syncFromWorker ${msg.user}>`);
-    obj.syncData(msg.song, msg.phase, msg.line, msg.blank);
-    obj.broadcast();
+  let obj = getObj(msg.user);
+  println(`<syncFromWorker ${msg.user}>`);
+  obj.syncData(msg.song, msg.phase, msg.line, msg.blank);
+  obj.broadcast();
 }
 
 function addClient2Map(user, ws) {
-    let obj = getObj(user);
-    obj.addClient2Map(ws);
+  let obj = getObj(user);
+  obj.addClient2Map(ws);
 }
 
 function getObj(usr) {
-    let obj = obj_clients_MAP.get(usr);
-    if (obj) return obj;
-    obj = new LyricsObj(usr);
-    obj_clients_MAP.set(usr, obj);
-    return obj;
+  let obj = obj_clients_MAP.get(usr);
+  if (obj) return obj;
+  obj = new LyricsObj(usr);
+  obj_clients_MAP.set(usr, obj);
+  return obj;
 }
 
 function getInfo() {
-    //let info = [`[${volume}, ${chapter}, ${verse}, ${doblank}]`];
-    let info = [];
-    let i = 0;
-    obj_clients_MAP.forEach((value, key) => {
-        value.clients.forEach(function (client) {
-            if (client.readyState === WebSocket.OPEN) {
-                info[i] = `<${key}: ${client._socket.remoteAddress}>`;
-                i++;
-            }
-        });
+  //let info = [`[${volume}, ${chapter}, ${verse}, ${doblank}]`];
+  let info = [];
+  let i = 0;
+  obj_clients_MAP.forEach((value, key) => {
+    value.clients.forEach(function (client) {
+      if (client.readyState === WebSocket.OPEN) {
+        info[i] = `<${key}: ${client._socket.remoteAddress}>`;
+        i++;
+      }
     });
-    return info;
+  });
+  return info;
 }
 
 //遞迴
@@ -306,12 +316,12 @@ function lyricsBaseAction(req, res) {
 }
 
 module.exports = {
-    addClient2Map,
-    synclyrics,
-    lyricsBaseAction,
-    //songjsonformat,
-    syncFromWorker,
-    getInfo
+  addClient2Map,
+  synclyrics,
+  lyricsBaseAction,
+  //songjsonformat,
+  syncFromWorker,
+  getInfo
 };
 
 

@@ -31,13 +31,13 @@ class CameraObj {
         // 接收二進制消息
         this.camera.on('message', (message) => {
             if (message instanceof Buffer) {
-                               
+
                 const buffer = Buffer.from(message);
 
                 // 前 8 bytes 是 timestamp
                 const timestamp = buffer.readBigUInt64BE(0);
                 //const dateStr = new Date(Number(timestamp)).toISOString().replace(/[:.]/g, '-');
-                
+
                 let ct = Date.now();//console.log(`diff: ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
                 if (checktimestamp && ct - Number(timestamp) > 1000) {
                     console.log(`too old reject ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
@@ -46,7 +46,7 @@ class CameraObj {
 
                 //const imageBuffer = buffer.slice(8);
                 this.broadcast(message);
-                
+
                 if (process.send) {
                     process.send({
                         type: "syncCamera",
@@ -54,10 +54,10 @@ class CameraObj {
                         content: message
                     });
                 }
-                
+
             }
         });
-    
+
     }
 
     broadcast(msg) {
@@ -72,7 +72,17 @@ class CameraObj {
         });
     }
 
+    checkremoveClient() {
+        this.clients.forEach((ws) => {
+            if (ws.readyState != WebSocket.OPEN) {
+                this.clients.delete(ws);
+                //print(`[${this.user} ${ws._socket.remoteAddress} removed]`);
+            }
+        });
+    }
+
     addClient2Map(ws) {
+        this.checkremoveClient();
         this.clients.add(ws);
         ws.on('message', (message) => { //print('[from client: ' + message + ']');
             println(`#client ${this.user}: ${message}#`);
