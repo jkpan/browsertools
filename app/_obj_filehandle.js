@@ -82,7 +82,7 @@ function handleFile(req, res) {
         println(action + ' end');
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
-        break;
+        return;
       case 'listfolders':
         listunderfolder(uploadDir);
         break;
@@ -90,6 +90,9 @@ function handleFile(req, res) {
         listunderfolder(uploadDir + '/' + p1);
         break;
     }
+
+    res.setHeader('Content-Type', 'application/json');// 发送响应数据
+    res.end(JSON.stringify({ "state": "success" }));
 
   });
 }

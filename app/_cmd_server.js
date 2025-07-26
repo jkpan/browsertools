@@ -1,4 +1,4 @@
-//const path = require('path');
+const path = require('path');
 const http = require('http');
 const https = require('https');
 const fs = require('fs'); //const querystring = require('querystring');
@@ -91,7 +91,17 @@ function responseFile(filePath, res) {
       res.end('404 Not Found');
     } else {
       // 回傳200 OK狀態碼及HTML內容
-      res.writeHead(200, { 'Content-Type': 'text/html' });//; charset = UTF-8
+      //const fp = path.join(process.cwd(), 'public', filePath);
+      const ext = path.extname(filePath);
+      const contentType = {
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.gif': 'image/gif',
+        '.html': 'text/html',
+      }[ext] || 'application/octet-stream';
+
+      res.writeHead(200, { 'Content-Type': contentType });// 'text/html' });//; charset = UTF-8
       res.write(content);
       res.end();
       print('(file:' + filePath + ')');
@@ -130,7 +140,7 @@ function savejsonfile(req, res) {
 }
 
 function webservice(req, res) {
-
+  
   let url = req.url;
 
   //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
