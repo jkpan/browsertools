@@ -3209,7 +3209,7 @@ song = 0;
 
 jumpTo1();
 
-setMsg_none();
+setMsg_O(); //setMsg_none();
 
 //_repaint();
 
