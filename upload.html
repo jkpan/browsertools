@@ -6,40 +6,122 @@
     <title>Drag & Drop Upload</title>
     <style>
         #drop-zone {
-            width: 300px;
-            height: 200px;
-            border: 2px dashed #aaa;
+            width: 50%;
+            height: 80%;
+            border: 2px dashed #00f;
             border-radius: 10px;
             text-align: center;
-            line-height: 200px;
-            color: #aaa;
+            line-height: 30px;
+            color: #00f;
             font-family: sans-serif;
-            margin: 50px auto;
+            margin: 10px auto;
         }
+        
+        
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .folder_div {
+            box-sizing: border-box;
+            padding: 5px;
+            flex: 1;
+            overflow: auto;
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            /* 初始位置在左侧屏幕外 */
+            width: 50%;
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+            color: #fff;
+            transition: top 0.3s;
+            /* 添加过渡效果 */
+            z-index: 90;
+            border: none;
+        }
+
+        .file_div {
+            box-sizing: border-box;
+            padding: 3px;
+            flex: 1;
+            overflow: auto;
+            position: fixed;
+            top: 0%;
+            left: 50%;
+            /* 初始位置在左侧屏幕外 */
+            width: 25%;
+            height: 100%;
+            background-color: rgb(50, 50, 50);
+            color: #fff;
+            transition: top 0.3s;
+            /* 添加过渡效果 */
+            z-index: 90;
+            border: none;
+        }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top {
+      height: 20%;
+      background-color: #4CAF50;
+      text-align: center;
+      line-height: 20vh;
+      color: white;
+      font-size: 24px;
+    }
+
+    .bottom {
+      height: 80%;
+      display: flex;
+    }
+
+    .left {
+      width: 33.33%;
+      background-color: #f0f0f0;
+      text-align: center;
+      line-height: 80vh;
+      font-size: 20px;
+    }
+
+    .right {
+      width: 66.66%;
+      background-color: #ddd;
+      text-align: center;
+      line-height: 80vh;
+      font-size: 20px;
+    }
     </style>
 </head>
 
-<body>
+<body>    
 
-    <!-- <div style="margin: 1%;">
-        <br>
-        <label style="color: rgb(0, 255, 0);">目錄名稱: </label>
-        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
-            id="folder">
-        <button class="button2" style="background-color: rgb(0, 80, 0);" onclick="folderGo()">新增分類</button>
-    </div> -->
+    <!--div id="mainDiv" class="container">
+        <div id="folder" class="folder_div"></div>
+        <div id="file" class="file_div"></div>
+    </div-->
 
-    <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true" onchange="selectFile(event)" />
-    <div id="drop-zone" onclick="openFile('allfile')">Drop files here</div>
-    <p id="msg" style="text-align:center;"></p>
-
-    <div id="allfolder">
-
+    <div class="container">
+        <div class="top">
+            <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true" onchange="selectFile(event)" />
+            <div id="drop-zone" onclick="openFile('allfile')">
+                Drop files here<br>
+                <progress id="prog" value="0" max="100"></progress><br>
+                <label id="msg" style="text-align:center;"></p>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="left">左側區塊 (1/3)</div>
+            <div class="right">右側區塊 (2/3)</div>
+        </div>
     </div>
 
-    <div id="content">
-
-    </div>
 
     <script>
 
@@ -84,10 +166,10 @@
                 action: "listfolders",
                 p1: "",
                 user: null
-            },
-                '/filesaction',
+            }, '/filesaction',
                 (res) => {
                     console.log(JSON.stringify(res));
+
                 }, (err) => {
                     alert('list folder fail');
                 });
@@ -108,6 +190,7 @@
                 });
         }
 
+        /*
         function folderGo() {
 
             let folder_value = document.getElementById("folder").value;
@@ -125,13 +208,14 @@
                 });
 
         }
+        */
 
         function selectFile(event) {
 
-            //let file = event.target.files[0];
-            //uploadFiles(files)
+            //let file = event.target.files[0]; uploadFiles(files)
             let files = event.target.files;
-            uploadFiles(files)
+            uploadFiles(files);
+            //📁📂
 
             /*
             var fileInfo = "檔案名稱: " + file.name + "<br>" +
@@ -145,15 +229,17 @@
                 displayHTMLFile(file);
                 return;
             }
-    
+        
             if (file.type.startsWith('image/')) {
                 displayImageFile(file);
                 return;
             }
+            
             if (file.type.startsWith('video/')) {
                 displayVideoFile(file);
                 return;
             }
+
             if (file.type.startsWith('application/pdf')) {
                 displayPDFFile(file);
                 return;
@@ -170,14 +256,65 @@
         const msg = document.getElementById('msg');
 
         dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = '#333';
+            e.preventDefault(); //dropZone.style.borderColor = '#333';
         });
 
         dropZone.addEventListener('dragleave', () => {
-            dropZone.style.borderColor = '#aaa';
+            //dropZone.style.borderColor = '#aaa';
         });
 
+        function _upload(file) {
+            
+            document.getElementById("prog").value = 0;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload');
+
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    const percent = (e.loaded / e.total) * 100;
+                    console.log(percent.toFixed(1) + '%');
+                    msg.innerText = percent.toFixed(1) + '%';
+                    document.getElementById("prog").value = percent;
+                    //entry.querySelector('progress').value = percent;
+                    //entry.querySelector('.status').innerText = percent.toFixed(1) + '%';
+                }
+            };
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    msg.innerText = '完成';
+                    //document.getElementById("prog").value = 0;
+                } else {
+                    msg.innerText = '失敗';
+                    document.getElementById("prog").value = 0;
+                }
+            };
+
+            xhr.send(formData);
+        }
+
+        function uploadFiles(files) {
+            const formData = new FormData();
+            for (const file of files) {
+                _upload(file);
+            }
+        }
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault(); //dropZone.style.borderColor = '#aaa';
+            const files = e.dataTransfer.files;
+            uploadFiles(files);
+        });
+
+        listFolder();
+
+        //listFiles('20250718');
+
+        /*
         function uploadFiles(files) {
             const formData = new FormData();
             for (const file of files) {
@@ -191,22 +328,8 @@
                 .then(res => res.text())
                 .then(text => msg.innerText = text)
                 .catch(err => msg.innerText = 'Upload failed.');
-
         }
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = '#aaa';
-
-            const files = e.dataTransfer.files;
-            uploadFiles(files);
-
-
-        });
-
-        listFolder();
-        //listFiles('20250718');
-
+        */
     </script>
 </body>
 

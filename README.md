@@ -52,3 +52,6 @@ ssh -i "taipei_jkpan_macmini.pem" ubuntu@ec2-54-169-169-141.ap-southeast-1.compu
 todo list:
 swip opacity
 Bible j jump chaos 
+
+certbot delete --cert-name tpcaog.org.tw
+certbot certonly --nginx -d tpcaog.org.tw -d www.tpcaog.org.tw -d proj.tpcaog.org.tw

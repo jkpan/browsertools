@@ -14,9 +14,9 @@ var SONGS = EMPTY.slice();//[ [['____歌詞____'],['']] ];
 
 function getArrayDimension(arr) {
   if (Array.isArray(arr)) {
-      return 1 + Math.max(...arr.map(getArrayDimension), 0);
+    return 1 + Math.max(...arr.map(getArrayDimension), 0);
   } else {
-      return 0;
+    return 0;
   }
 }
 
@@ -77,10 +77,7 @@ function getSong(jsonid) {
 
 function pushnewSong(newsong) {
   SONGS.push(newsong);
-  song = SONGS.length - 1;
-  phase = 0;
-  line = 0;
-  subtitles = SONGS[song];
+  songswitch(SONGS.length - 1);
   _repaint();
   saveAction2Local();
   if (document.getElementById('ctrl')) {
@@ -107,9 +104,9 @@ function getSong(jsonid) {
 }
 
 function getSongsFromList(_list) {
-  
+
   if (_list) list = _list;
-  
+
   /* 
   else {
     console.log('getSong(LIST)');
@@ -121,7 +118,7 @@ function getSongsFromList(_list) {
   SONGS = EMPTY.slice();
 
   if (ALL_SONGS_JSON == null) {
-    (async function() {
+    (async function () {
       console.log('get all songs');
       await fetchData();
       console.log('get content from list');
@@ -139,13 +136,8 @@ function getSongsFromList(_list) {
     }
   }
 
-  song = 0;
-  phase = 0;
-  line = 0;
+  songswitch(0);
 
-  subtitles = SONGS[song];
-
-  _repaint();
 }
 
 /*
@@ -176,7 +168,7 @@ function json2List(fileContent) {
     makeTransparent = false;
 
   displayProgress = 0;
-  if (jsonData.progress) 
+  if (jsonData.progress)
     displayProgress = 1;
 
   if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
@@ -184,7 +176,7 @@ function json2List(fileContent) {
     showImage();
   }
 
-  sync_type = 0;  
+  sync_type = 0;
   doChk().then((result) => {
     if (result.state > 0) username = result.username;
     if (result.state == 1) {
@@ -315,8 +307,8 @@ const content_help = [[
 
 //字型顏色設定
 
-const fontFamily_array = 
-["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"]; //google fonts
+const fontFamily_array =
+  ["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"]; //google fonts
 //["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
 
 var fontFamily = fontFamily_array[0];//"Monospace"; //"Arial" "cwTeXKai" '華康瘦金體' "標楷體" "Noto Serif TC";
@@ -618,7 +610,7 @@ function printTxt(i, j, vpos) { //subtitle mode
 
 function printFullChart() {
 
-  let margin = fontsize/2;
+  let margin = fontsize / 2;
   let fsize = fontsize / 4;
   ctx.font = fsize + "px " + fontFamily;
   ctx.textAlign = 'left';
@@ -658,7 +650,7 @@ function printChart() {
   if (all == 0) return;
 
   let gap = canvas.width / all;
-  let _h = fontsize/2;
+  let _h = fontsize / 2;
   let y = canvas.height - _h * 2;
 
   let _step = 0;
@@ -722,7 +714,7 @@ function printPhase() {
 
   } else { //mode 1, 3, 4
     let _x = mode == 3 ? canvas.width * 0.95 : canvas.width * 0.05;
-    ctx.textAlign = mode == 3 ? 'right':'left';
+    ctx.textAlign = mode == 3 ? 'right' : 'left';
     for (let i = 0; i < subtitles[phase].length; i++) {
       let _y = (i + 1) * gap + fontsize / 2;
       let txt = subtitles[phase][i];
@@ -758,7 +750,7 @@ function printPhaseChart() {
 
   let gap = canvas.width / (subtitles.length - 1);
   let _gap = Math.min(canvas.width / 4, gap);
-  let _h = fontsize/2;
+  let _h = fontsize / 2;
   let y = canvas.height - _h * 2;
 
   for (let i = 1; i < subtitles.length; i++) {
@@ -800,14 +792,20 @@ function combineKey(e) {
     case 'KeyD':
       if (song == 0) break;
       SONGS.splice(song, 1);
-      song = 0;
-      subtitles = SONGS[song];
-      phase = 0;
-      line = 0;
+      songswitch(0);
       break;
     default: return;
   }
   _repaint();
+}
+
+function songswitch(value) {
+  song = value;
+  subtitles = SONGS[song];
+  phase = 0;
+  line = 0;
+  _repaint();
+  saveAction2Local();
 }
 
 function keyboard(e) {
@@ -827,9 +825,9 @@ function keyboard(e) {
 
   switch (e.code) {
     case 'KeyF':
-      for (let i=0;i<fontFamily_array.length;i++) {
+      for (let i = 0; i < fontFamily_array.length; i++) {
         if (fontFamily == fontFamily_array[i]) {
-          fontFamily = fontFamily_array[(i+1) % fontFamily_array.length];
+          fontFamily = fontFamily_array[(i + 1) % fontFamily_array.length];
           break;
         }
       }
@@ -842,64 +840,59 @@ function keyboard(e) {
       break;
     case 'PageUp':
       if (mode == 0) {
-        keyboard({code:'ArrowLeft', keyCode: 37 }); //left
+        keyboard({ code: 'ArrowLeft', keyCode: 37 }); //left
         return;
       } else { //ppt mode
         if (phase > 0) { //normal
-          keyboard({code:'ArrowUp', keyCode: 38 }); //up
+          keyboard({ code: 'ArrowUp', keyCode: 38 }); //up
           return;
         } else { // top phase jump to previous song
           if (song > 0) {
-            song--;
-            subtitles = SONGS[song];
+            songswitch(song - 1);
             phase = subtitles.length - 1;
-            line = 0;
           }
         }
       }
       break;
     case 'PageDown':
       if (mode == 0) {
-        keyboard({code:'ArrowRight', keyCode: 39 }); //right
+        keyboard({ code: 'ArrowRight', keyCode: 39 }); //right
         return;
       } else {
         if (phase < subtitles.length - 1) {
-          keyboard({code:'ArrowDown', keyCode: 40 }); //down
+          keyboard({ code: 'ArrowDown', keyCode: 40 }); //down
           return;
         } else {
           if (song < SONGS.length - 1) {
-            song++;
-            subtitles = SONGS[song];
-            phase = 0;
-            line = 0;
+            songswitch(song + 1);
           }
         }
 
       }
       break;
-    case 'KeyS': 
-      displayProgress = displayProgress == 1 ? 0 : 1; 
+    case 'KeyS':
+      displayProgress = displayProgress == 1 ? 0 : 1;
       _repaint();
       return; //'s'
-    case 'KeyD': 
-      dword = dword == 0 ? 1 : 0; 
+    case 'KeyD':
+      dword = dword == 0 ? 1 : 0;
       _repaint();
       return;; //'D'
-    case 'KeyC': 
-      fontColorType = (fontColorType + 1) % 4; 
+    case 'KeyC':
+      fontColorType = (fontColorType + 1) % 4;
       _repaint();
       return;//'c'
     case 'KeyZ': {
-        makeTransparent = !makeTransparent;
-        let div = document.getElementById("image_container");
-        if (image_base64) {
-          if (makeTransparent) {
-            div.hidden = true;
-          } else {
-            div.hidden = false;
-          }
+      makeTransparent = !makeTransparent;
+      let div = document.getElementById("image_container");
+      if (image_base64) {
+        if (makeTransparent) {
+          div.hidden = true;
+        } else {
+          div.hidden = false;
         }
       }
+    }
       _repaint();
       return;
     //case 67: phase = subtitles.length - 1; line = 0; break; //'c' jump to coda last one phase
@@ -912,8 +905,8 @@ function keyboard(e) {
       _repaint();
       return;
     //case 76: hideCanvas(); break; //'l'
-    case 'KeyL': 
-      openSelector(); 
+    case 'KeyL':
+      openSelector();
       return; //'l'
     case 'ArrowUp':
       if (phase > 0) {
@@ -955,26 +948,19 @@ function keyboard(e) {
     case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
       let value = e.keyCode - 48;
       if (value < SONGS.length) {
-        song = value;
-        subtitles = SONGS[song];
-        phase = 0;
-        line = 0;
+        songswitch(value);
       }
       break;
     case 'Minus': //'-'
       if (song > 0) {
-        song = song - 1;
-        subtitles = SONGS[song];
+        songswitch(song - 1);
         phase = 1;
-        line = 0;
       }
       break;
     case 'Equal': //'='
       if (song < SONGS.length - 1) {
-        song = song + 1;
-        subtitles = SONGS[song];
+        songswitch(song + 1);
         phase = 1;
-        line = 0;
       }
       break;
     //oqwertyui
@@ -990,7 +976,7 @@ function keyboard(e) {
     case 'KeyI': if (subtitles.length > 8) { phase = 8; line = 0; } break;
 
     case 'Escape':
-      
+
       if (document.getElementById('ctrl')) {
         removeDiv();
         break;
@@ -1029,15 +1015,15 @@ function _layer0() {
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else if (mode == 1) {    
+  } else if (mode == 1) {
     if (supportTouch) {
-      for (let x = 0;x<3;x++) {
-        for (let y = 0;y<4;y++) {
-          if ((x+y) %2 == 0) 
+      for (let x = 0; x < 3; x++) {
+        for (let y = 0; y < 4; y++) {
+          if ((x + y) % 2 == 0)
             ctx.fillStyle = COLORS_CK[1];
-          else 
+          else
             ctx.fillStyle = COLORS_CK[2];
-          ctx.fillRect(x * canvas.width/3, y * canvas.height/4, canvas.width/3, canvas.height/4);
+          ctx.fillRect(x * canvas.width / 3, y * canvas.height / 4, canvas.width / 3, canvas.height / 4);
         }
       }
     } else {
@@ -1054,7 +1040,7 @@ function _layer0() {
 }
 
 function _layer1() {
-  switch(mode) {
+  switch (mode) {
     case 0:
       if (displayProgress == 1) printChart();
       printSubtitle();
@@ -1062,9 +1048,9 @@ function _layer1() {
     case 1:
       if (displayProgress == 1) printFullChart();
       let _scale = 0.5;
-      let _gap = 0; 
+      let _gap = 0;
       ctx.transform(_scale,
-        0, 
+        0,
         0,
         _scale,
         _gap,
@@ -1083,7 +1069,7 @@ function _layer1() {
       break;
     case 3: case 4:
       if (displayProgress == 1) {
-        if (mode == 3) 
+        if (mode == 3)
           printChart();
         else
           printPhaseChart();
@@ -1096,7 +1082,7 @@ function _layer1() {
       printPhase();
       break;
   }
-  
+
   /*
     a	c	e
     b	d	f
@@ -1176,6 +1162,8 @@ function createCtrlBtn() {
     return;
   }
 
+  songbtns = [];
+
   removeDiv();
   canvas.hidden = false;
 
@@ -1193,23 +1181,23 @@ function createCtrlBtn() {
   document.body.appendChild(div);
   div.style.backgroundColor = 'rgba(0,0,0, 0.0)';
 
-  ctrls[0] = addBtn('none', div, ()=>{ sync_type = 0; synctrls(); return false; });// _newBtn();
-  
+  ctrls[0] = addBtn('none', div, () => { sync_type = 0; synctrls(); return false; });// _newBtn();
+
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[1] = addBtn('local master', div, ()=>{ sync_type = 1; synctrls(); return false; });//_newBtn();
-  ctrls[2] = addBtn('ws master', div, ()=>{ sync_type = 2; synctrls(); return false; }); //_newBtn();
-  ctrls[3] = addBtn('local & ws master', div, ()=>{ sync_type = 3; synctrls(); return false; });//_newBtn();
-  
+  ctrls[1] = addBtn('local master', div, () => { sync_type = 1; synctrls(); return false; });//_newBtn();
+  ctrls[2] = addBtn('ws master', div, () => { sync_type = 2; synctrls(); return false; }); //_newBtn();
+  ctrls[3] = addBtn('local & ws master', div, () => { sync_type = 3; synctrls(); return false; });//_newBtn();
+
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[4] = addBtn('local client', div, ()=>{ sync_type = 4; synctrls(); return false; });//_newBtn();
-  ctrls[5] = addBtn('ws client', div, ()=>{ sync_type = 5; synctrls(); return false; });//_newBtn();
-  
+  ctrls[4] = addBtn('local client', div, () => { sync_type = 4; synctrls(); return false; });//_newBtn();
+  ctrls[5] = addBtn('ws client', div, () => { sync_type = 5; synctrls(); return false; });//_newBtn();
+
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
   ctrls[5].hidden = true;
-  
+
   doChk().then((result) => {
     username = null;
     if (result.state > 0) username = result.username;
@@ -1227,19 +1215,19 @@ function createCtrlBtn() {
 
   div.insertAdjacentHTML('beforeend', '<br/><br/><hr />');
 
-  ctrls[7] = addBtn('mode', div, ()=>{ keyboard({ code: 'KeyP' }); return false; });
-  ctrls[8] = addBtn('char color', div, ()=> {  keyboard({ code: 'KeyC' }); return false; });
-  ctrls[9] = addBtn('font', div, ()=>{keyboard({ code: 'KeyF' }); return false;});
-  ctrls[10] = addBtn('show hint', div, ()=>{ keyboard({ code: 'KeyS' }); return false;});
+  ctrls[7] = addBtn('mode', div, () => { keyboard({ code: 'KeyP' }); return false; });
+  ctrls[8] = addBtn('char color', div, () => { keyboard({ code: 'KeyC' }); return false; });
+  ctrls[9] = addBtn('font', div, () => { keyboard({ code: 'KeyF' }); return false; });
+  ctrls[10] = addBtn('show hint', div, () => { keyboard({ code: 'KeyS' }); return false; });
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[11] = addBtn('font size-', div, ()=>{ 
+  ctrls[11] = addBtn('font size-', div, () => {
     setFontFactor(fontfactor + 0.5);
     _repaint();
     return false;
   });
-  ctrls[12] = addBtn('font size+', div, ()=>{  
+  ctrls[12] = addBtn('font size+', div, () => {
     setFontFactor(fontfactor - 0.5);
     _repaint();
     return false;
@@ -1247,7 +1235,7 @@ function createCtrlBtn() {
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[13] = addBtn('移除背景', div, () => { removeBackground(); return false;});//ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
+  ctrls[13] = addBtn('移除背景', div, () => { removeBackground(); return false; });//ctrls[14] = addBtn('exit', div, ()=>{ removeDiv(); return false;});
   //ctrls[14] = addBtn('背景顏色', div, () => { _colorSwitch(); return false;});
   //<input type="color" id="colorPicker" name="colorPicker" hidden="true"/>
   const colorInput = document.createElement("input");
@@ -1258,7 +1246,6 @@ function createCtrlBtn() {
   div.appendChild(colorInput);
 
   ctrls[14] = colorInput;
-
 
   // 加事件：選色時改變背景色
   colorInput.addEventListener("input", function () {
@@ -1286,40 +1273,89 @@ function createCtrlBtn() {
   ctrls[16].hidden = true;
 
   div.insertAdjacentHTML('beforeend', '<br/><br/><hr />');
-  
-  ctrls[17] = addBtn('加歌', div, () => {
-    keyboard({code:'KeyL', keyCode: 66 });
-    return false;
-  });
 
-  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  generateSongList(div, true);
 
-  generateSongList(div);
-  
 }
 
-function generateSongList(div) {
+/*
+function syntoggle() {
+  if (ctrls[sync_type].hidden) sync_type = 0;
+  for (let i = 0; i <= 5; i++) {
+    if (sync_type == i) {
+      ctrls[i].style.backgroundColor = 'rgb(255, 255, 255)';
+      ctrls[i].style.color = 'rgb(0, 0, 0)';
+    } else {
+      ctrls[i].style.backgroundColor = 'rgb(50, 50, 50)';
+      ctrls[i].style.color = 'rgb(255, 255, 255)';
+    }
+  }
+}
+*/
 
-  let songbtns = [null]; 
-    
-  for (let i=1;i<SONGS.length;i++) {
-    songbtns[i] = addBtn(SONGS[i][0][0] +' X', div, () => {
+var songbtns = [null];
 
-      for (let j=1;j<SONGS.length;j++) {
-        div.removeChild(songbtns[j]);
-      }
-      
-      SONGS.splice(i, 1); //for (let j=0;j<SONGS.length;j++) console.log(` ${SONGS[j][0][0]}`);
-      song = 0;
-      subtitles = SONGS[song];
-      phase = 0;
-      line = 0;
-      _repaint();
+function generateSongList(div, addctrl) {
 
-      generateSongList(div); 
+  if (songbtns.length > 1)
+    for (let j = 1; j < songbtns.length; j++) div.removeChild(songbtns[j]);
 
+  songbtns = [null];
+
+  if (addctrl) {
+    ctrls[17] = addBtn('加歌', div, () => {
+      keyboard({ code: 'KeyL', keyCode: 66 });
+      return false;
     });
-    songbtns[i].style.backgroundColor = 'rgb(0, 255, 255)';
+
+    ctrls[18] = addBtn('刪歌', div, () => {
+
+      if (song == 0 || song > SONGS.length - 1) return false;
+      
+      //for (let j = 1; j < SONGS.length; j++) div.removeChild(songbtns[j]);
+      if (song == 0 || song > SONGS.length - 1)
+        return false;
+      SONGS.splice(song, 1); //for (let j=0;j<SONGS.length;j++) console.log(` ${SONGS[j][0][0]}`);
+      songswitch(0);
+      generateSongList(div, false);
+
+      return false;
+    });
+
+    ctrls[19] = addBtn('前移', div, () => {
+      if (song <= 1) return false;
+      let tmp = SONGS[song - 1];
+      SONGS[song - 1] = SONGS[song];
+      SONGS[song] = tmp;
+      songswitch(song - 1);
+      generateSongList(div, false);
+      return false;
+    });
+
+    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  }
+
+
+  for (let i = 1; i < SONGS.length; i++) {
+
+    songbtns[i] = addBtn(SONGS[i][0][0], div, function () { //console.log('btn :' + this);
+      for (let i = 1; i < songbtns.length; i++) {
+        console.log('caption :' + songbtns[i]);
+        if (songbtns[i] == this) {
+          songswitch(i);
+          songbtns[i].style.backgroundColor = 'rgb(255, 255, 255)';
+          songbtns[i].style.color = 'rgb(0, 0, 0)';
+        } else {
+          songbtns[i].style.backgroundColor = 'rgb(50, 50, 50)';
+          songbtns[i].style.color = 'rgb(255, 255, 255)';
+        }
+      }
+    });
+    //songbtns[i].style.backgroundColor = 'rgb(0, 255, 255)';
+  }
+
+  if (song > 0) {
+    songbtns[song].click();
   }
 }
 
@@ -1447,10 +1483,10 @@ function initWebsocket() {
     }
   }
 
-  ws = port == 443? 
-  new WebSocket(`wss://${serverDomain}/Song/${username}`): 
-  new WebSocket(`ws://${serverDomain}:${port}/Song/${username}`);
-  
+  ws = port == 443 ?
+    new WebSocket(`wss://${serverDomain}/Song/${username}`) :
+    new WebSocket(`ws://${serverDomain}:${port}/Song/${username}`);
+
   ws.onopen = function () {
     console.log('Connected to server');
     ws.send('Hello - from 歌詞 client');
@@ -1532,13 +1568,13 @@ function receiveMessage(e) {
 
 // 監聽 message 事件
 window.addEventListener('message', receiveMessage, false);
-window.addEventListener('keyup', function(e) {
-  e.preventDefault(); 
+window.addEventListener('keyup', function (e) {
+  e.preventDefault();
   e.stopPropagation();
   keyboard(e);
 }, false);
 window.addEventListener('keydown', function (e) {
-  e.preventDefault(); 
+  e.preventDefault();
   e.stopPropagation();
   if (e.code == 'ShiftLeft') {
     keylock = true;
@@ -1600,8 +1636,8 @@ function touchstart(evt) {
   colState = 0;
   rowState = 0;
 
-  colState = 1 + Math.floor(touchPX/(canvas.width/3));
-  rowState = 1 + Math.floor(touchPY/(canvas.height/4));
+  colState = 1 + Math.floor(touchPX / (canvas.width / 3));
+  rowState = 1 + Math.floor(touchPY / (canvas.height / 4));
 
 }
 
@@ -1611,49 +1647,49 @@ function touchend(evt) { //touchend
 
   let touchPX = evt.changedTouches[0].clientX;//touches.x;
   let touchPY = evt.changedTouches[0].clientY;//touches.y;
-  
-  let _colState = 1 + Math.floor(touchPX/(canvas.width/3));
-  let _rowState = 1 + Math.floor(touchPY/(canvas.height/4));
+
+  let _colState = 1 + Math.floor(touchPX / (canvas.width / 3));
+  let _rowState = 1 + Math.floor(touchPY / (canvas.height / 4));
 
   if (_colState != colState || _rowState != rowState) return;
 
   if (rowState == 1) { //open sync options selection
-    keyboard({code:'Enter', keyCode: 13 });
+    keyboard({ code: 'Enter', keyCode: 13 });
     return;
   }
 
   if (rowState == 2) { //open sync options selection
-    keyboard({code:'KeyB', keyCode: 66 });
+    keyboard({ code: 'KeyB', keyCode: 66 });
     return;
   }
 
   if (rowState == 3 && colState == 1) { //上一首
-    keyboard({code:'Minus', keyCode: 189 });
+    keyboard({ code: 'Minus', keyCode: 189 });
     return;
   }
 
   if (rowState == 3 && colState == 3) { //下一首
-    keyboard({code:'Equal', keyCode: 187 });
+    keyboard({ code: 'Equal', keyCode: 187 });
     return;
   }
 
   if (rowState == 3 && colState == 2) { //上
-    keyboard({code:'ArrowUp', keyCode: 38 });
+    keyboard({ code: 'ArrowUp', keyCode: 38 });
     return;
   }
 
   if (rowState == 4 && colState == 2) { //下
-    keyboard({code:'ArrowDown', keyCode: 40 });
+    keyboard({ code: 'ArrowDown', keyCode: 40 });
     return;
   }
 
   if (rowState == 4 && colState == 1) { //左
-    keyboard({code:'ArrowLeft', keyCode: 37 });
+    keyboard({ code: 'ArrowLeft', keyCode: 37 });
     return;
   }
 
   if (rowState == 4 && colState == 3) { //右
-    keyboard({code:'ArrowRight', keyCode: 39 });
+    keyboard({ code: 'ArrowRight', keyCode: 39 });
     return;
   }
 
@@ -1670,7 +1706,7 @@ if (readParam('mode')) {
 }
 
 if (readParam('action') === 'play') {
-    
+
   doChk().then((result) => {
     if (result.state > 0) username = result.username;
     if (result.state == 1) {
@@ -1687,7 +1723,7 @@ if (readParam('action') === 'play') {
 
 if (readParam('action') === 'ctrl') {
 
-  doChk().then((result)=>{
+  doChk().then((result) => {
     if (result.state > 0) username = result.username;
     if (result.state == 1) {
       displayProgress = 1;

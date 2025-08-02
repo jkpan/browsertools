@@ -3,29 +3,36 @@ const fs = require('fs');
 const path = require('path');
 const { formidable } = require('formidable');
 
-function listunderfolder(folder) {
-  console.log("listunderfolder :" + folder);
+function listunderfolder(folder, res) {
+  let obj = {files:[], folders:[], state: ''};
   fs.readdir(folder, (err, items) => {
-    if (err) {
-      console.error('Error reading directory:', err);
+    println('start read path ' + folder);
+    if (err) { //console.error('Error reading directory:', err);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: '讀取資料夾失敗' }));
       return;
-    }
-
-    console.log('Files and folders in the directory:');
+    } //console.log('Files and folders in the directory:');
     items.forEach(item => {
+      println('start item loop ');
       const itemPath = path.join(folder, item);
       fs.stat(itemPath, (statErr, stats) => {
         if (statErr) {
-          console.error(`Error getting stats for ${item}:`, statErr);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: '讀取資料夾失敗' }));
           return;
         }
         if (stats.isFile()) {
           console.log(`- File: ${item}`);
+          obj['files'].push(`${item}`); 
         } else if (stats.isDirectory()) {
           console.log(`- Folder: ${item}`);
+          obj['folders'].push(`${item}`); 
         }
       });
     });
+    println('before res: ' + JSON.stringify(obj));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(obj));
   });
   console.log("listunderfolder end :" + folder);
 }
@@ -74,26 +81,21 @@ function handleFile(req, res) {
     println('action: ' + action + ', ' + p1);
 
     switch (action) {
+      case 'listfolders':
+        listunderfolder(uploadDir, res);
+        return;
+      case 'listfiles':
+        listunderfolder(uploadDir + '/' + p1);
+        return;
       case 'addfolder':
         let dir = uploadDir + '/' + p1;//'./users/uploads'//path.join('', 'uploads');
         if (!fs.existsSync(dir))
           fs.mkdirSync(dir);
-
         println(action + ' end');
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
         return;
-      case 'listfolders':
-        listunderfolder(uploadDir);
-        break;
-      case 'listfiles':
-        listunderfolder(uploadDir + '/' + p1);
-        break;
     }
-
-    res.setHeader('Content-Type', 'application/json');// 发送响应数据
-    res.end(JSON.stringify({ "state": "success" }));
-
   });
 }
 
@@ -155,18 +157,6 @@ function uploadFile(req, res) {
   println('uploadFile ...end');
 
 }
-
-/*
-// HTTP server
-const server = http.createServer((req, res) => {
-    if (req.method === 'GET' && req.url === '/') {
-        // 傳回 index.html
-        const html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'));
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        return res.end(html);
-    }
-});
-*/
 
 function getInfo() {
   return '';
