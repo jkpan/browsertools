@@ -99,6 +99,7 @@ function responseFile(filePath, res) {
         '.png': 'image/png',
         '.gif': 'image/gif',
         '.html': 'text/html',
+        '.css': 'text/css'
       }[ext] || 'application/octet-stream';
 
       res.writeHead(200, { 'Content-Type': contentType });// 'text/html' });//; charset = UTF-8

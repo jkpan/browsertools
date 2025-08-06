@@ -5,6 +5,7 @@
     <meta name="viewport"
         content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
         charset="UTF-8" />
+    <!-- <link rel="stylesheet" href="commonui.css" /> -->
     <style>
         body {
             margin: 0px;
@@ -18,13 +19,20 @@
         }
 
         button {
-            font-size: 16px;
-            background-color: rgb(0, 150, 0);
-            color: #00ff00;
-            /*margin: 2% 2%;*/
-            width: 15%;
-            border: 1px solid;
-            vertical-align: middle;
+            background-color: rgb(0, 100, 0);
+            border-color: #00ff00;
+            color: rgb(0, 255, 0);
+            border-radius: 6px;
+
+            font-size: 14px;
+            margin: 1px 1px;
+
+            text-align: center;
+            text-decoration: none;
+
+            padding: 4px;
+
+            display: inline-block;
         }
     </style>
     <title>Dash-Ctrl</title>
@@ -32,7 +40,7 @@
 
 <body>
 
-    <div id="controlWin" class="controlPart">
+    <div class="controlPart">
 
         <button onclick="stateAction(0)">S0</button>
         <button onclick="stateAction(1)">S1</button>
@@ -40,8 +48,8 @@
         <button onclick="stateAction(3)">S3</button>
         <button onclick="stateAction(4)">S4</button>
         <button onclick="stateAction(5)">S5</button>
-        <hr size="4" width="100%" color="#007000">
-        
+        <hr size="4" width="100%" color="transparent">
+
         <button onclick="switchEditable()">Edit</button>
         <button onclick="rYAdd(2)">R+</button>
         <button onclick="rYAdd(-2)">R-</button>
@@ -51,7 +59,7 @@
         <button onclick="shwa()">show</button>
         <button onclick="reloadState()">reload</button>
         <button id="start" onclick="btnonclick()">語音</button>
-        <hr size="4" width="100%" color="#007000">
+        <hr size="4" width="100%" color="transparent">
         <button onclick="controlParent('lyrics')">🎤</button>
         <button onclick="controlParent('Bible')">📖</button>
         <button onclick="controlParent('NIV')">NIV</button>
@@ -75,7 +83,11 @@
         <button onclick="controlParent('dBoard')">客制</button>
         <button onclick="controlParent('tabs')">頁籤</button>
 
-        <hr size="4" width="100%" color="#007000">
+        <hr size="4" width="100%" color="transparent">
+
+    </div>
+
+    <div id="controlWin">
 
     </div>
 
@@ -133,7 +145,7 @@
             case 'file_1': button.innerHTML = '📂1'; break;
             case 'file_2': button.innerHTML = '📂2'; break;
             case 'file_3': button.innerHTML = '📂3'; break;
-            case 'swipe' : button.innerHTML = 'swipe'; break;
+            case 'swipe': button.innerHTML = 'swipe'; break;
             case 'anim': button.innerHTML = 'anim'; break;
             case 'info': button.innerHTML = 'Info'; break;
             case 'effect': button.innerHTML = 'Effect'; break;
@@ -161,6 +173,7 @@
             cb(key);
             return false;
         };
+        button.style.width = '10%';
         div.appendChild(button);
 
     }
@@ -209,9 +222,15 @@
         if (stateArray['bgcolor']) {
             document.body.style.backgroundColor = stateArray['bgcolor'];
         }
+
         for (let key in stateArray) {
             if (key == 'bgcolor') continue;
             removeBtns(key);
+        }
+        document.getElementById('controlWin').innerHTML = "";
+
+        for (let key in stateArray) {
+            if (key == 'bgcolor') continue;
             if (stateArray[key] == -1) continue;
             createBtns(key);
             let b = document.getElementById(key);
@@ -219,20 +238,21 @@
             let b_p = document.getElementById(key + '_p');
             let b_x = document.getElementById(key + '_x');
             let b_l = document.getElementById(key + '_l');
+            document.getElementById('controlWin').insertAdjacentHTML('beforeend', '<br/><br/>');
             b.style.backgroundColor = normalColor;//"rgb(0,150,0)";
-            if (stateArray[key].charAt(1) == '1') 
+            if (stateArray[key].charAt(1) == '1')
                 b_v.style.backgroundColor = activeColor;//"black";
-            else 
+            else
                 b_v.style.backgroundColor = deactiveColor;//"transparent";
-            if (stateArray[key].charAt(2) == '1') 
+            if (stateArray[key].charAt(2) == '1')
                 b_p.style.backgroundColor = activeColor;//"black";
-            else 
+            else
                 b_p.style.backgroundColor = deactiveColor;//"transparent";
 
             if (stateArray[key].charAt(3) == '1') {
                 b_l.style.backgroundColor = activeColor;//"red";
                 b_l.textContent = '🔒';
-            } else { 
+            } else {
                 b_l.style.backgroundColor = deactiveColor;//"transparent";
                 b_l.textContent = '🔓';
             }
