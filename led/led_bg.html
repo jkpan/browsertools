@@ -1,0 +1,246 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="text/javascript" src="led.js" charset="UTF-8"></script>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Camera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        body {
+            margin: 0px;
+            height: 100%;
+            background-color: rgba(67, 67, 67, 1.0);
+        }
+
+        main {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .fullbg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="fullbg" id="image_container"></div> -->
+    <!-- <video id="videoElement" width="300" height="200" hidden="true" style="background-color: #707000; opacity: 1.0;" autoplay></video> -->
+    <div id="image_container">
+        <img src="./test/missile.gif" />';
+    </div>
+    <p></p>
+    <canvas id="canvas" width="400" height="200" ondrop="dropHandler(event)"
+        ondragover="dragOverHandler(event)"></canvas>
+</body>
+
+</html>
+
+<script>
+
+    function dropHandler(event) {
+
+        event.preventDefault();
+
+        // 檢查是否有拖拉的檔案
+        if (event.dataTransfer.items) {
+            // 使用 DataTransferItemList 物件來檢查檔案是否是圖片
+            for (var i = 0; i < event.dataTransfer.items.length; i++) {
+                if (event.dataTransfer.items[i].kind === 'file') {
+                    var file = event.dataTransfer.items[i].getAsFile();
+                    if (file.type.startsWith('image/')) {
+                        var reader = new FileReader();
+                        // 读取文件内容
+                        reader.onload = function (event) {
+                            image_base64 = event.target.result;
+                            showImage();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        let div = document.getElementById("image_container");
+                        div.innerHTML = '';
+                        image_base64 = null;
+                    }
+                }
+            }
+        }
+    }
+
+    function dragOverHandler(event) {
+        event.preventDefault();
+    }
+
+    function showImage() {
+
+        makeTransparent = true;
+
+        let div = document.getElementById("image_container");
+        div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
+
+        //_repaint();
+        init();
+
+    }
+
+    //var video = document.getElementById('videoElement');
+    const captureArea = document.getElementById('image_container');
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+    var effect_type = 0; //0:none 1:LED 2:ascii
+
+    var v_width;
+    var v_height;
+    var v_offx;
+    var v_offy;
+
+    function ledinit() {
+        side = 3;
+        dots = 5;
+        //makeRound = true;
+
+        initLED(0, 0, canvas.width/2, canvas.height/2);//initLED(v_offx, v_offy, v_width, v_height);
+        newLEDMask();
+    }
+
+    function init() {
+        console.log('init() 1');
+        canvas = document.getElementById('canvas');
+        canvas.width = window.innerWidth/3;
+        canvas.height = window.innerHeight/3;
+        //ctx = canvas.getContext('2d');
+        ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+        let vw = canvas.videoWidth;
+        let vh = canvas.videoHeight;
+        let ratio = vw / vh;
+        let _ratio = canvas.width / canvas.height;
+
+        if (ratio > _ratio) {  //camera寬 canvas 方
+            v_width = Math.floor(canvas.width);
+            v_height = Math.floor(canvas.width / ratio);//canvas.width * video.height/video.width;
+            v_offx = Math.floor((canvas.width - v_width) / 2);
+            v_offy = Math.floor((canvas.height - v_height) / 2);
+            //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+        } else {
+            v_width = Math.floor(canvas.height * ratio);
+            v_height = Math.floor(canvas.height);//canvas.width * video.height/video.width;
+            v_offx = Math.floor((canvas.width - v_width) / 2);
+            v_offy = Math.floor((canvas.height - v_height) / 2);
+            //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+        }
+
+        console.log('(' +  v_offx +', '+ v_offy +', '+ v_width+', '+ v_height + ')');
+
+        if (effect_type == 1) 
+            ledinit();
+    }
+
+    window.addEventListener('resize', function () {
+        init();
+    });
+
+    function effectGo() {
+        switch (effect_type) {
+            case 0: return;
+            case 1: ledAction4Still(canvas, ctx); return;
+        }
+    }
+
+    var imageData;
+
+    function drawFrame() {
+    
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (imageData)
+            ctx.drawImage(imageData, 0, 0, canvas.width, canvas.height);
+        effectGo();
+        console.log('drawFrame');
+
+        
+        html2canvas(captureArea).then(function(canvasData) {
+            // 清空 canvas
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // 將抓取到的圖像繪製到 canvas 上
+            //ctx.drawImage(canvasData, 0, 0, canvas.width/2, canvas.height/2);
+            //effectGo();
+            console.log('captureArea');
+            imageData = canvasData;
+        });
+        
+
+
+        //ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, v_offx, v_offy, v_width, v_height);
+        
+        requestAnimationFrame(drawFrame);
+    }
+
+    function start() {
+        requestAnimationFrame(drawFrame);
+    }
+
+    function keyboard(e) { //key up
+
+        switch (e.keyCode) {
+            case 65: //a 1..7
+                //if (dots == 7) return;
+                dots++;
+                break;
+            case 90: //z
+                if (dots == 1) return;
+                dots--;
+                break;
+
+            case 83: //s 
+                if (side == 7) return;
+                side++;
+                break;
+            case 88: //x
+                if (side == 0) return;
+                side--;
+                break;
+
+            case 68: //d
+                //if (color_reduce < 2 || color_reduce > 19) //1 2~19 20
+                if (color_reduce == 20) return;
+                color_reduce++;
+                break;
+            case 67: //c
+                if (color_reduce == 2) return;
+                color_reduce--;
+                break;
+            //case 70: //f
+            case 86: //v
+                makeRound = !makeRound;
+                break;
+            case 27: //escape
+                effect_type = 0;
+                break;
+            case 32: //space
+                effect_type = (effect_type + 1) % 2;
+                break;
+        }
+
+        init();
+
+    }
+
+    window.addEventListener('keyup', keyboard, false);
+
+    init();
+
+    start();
+
+</script>

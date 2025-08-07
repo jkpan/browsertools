@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        .container {
+            display: flex;
+            height: 100%;
+            /* 设置容器高度为视窗高度的100% */
+        }
+
+        body {
+            margin: 0px;
+            background-color: rgb(0, 0, 0);
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .column {
+            flex: 1;
+            padding: 10px;
+            border: 0px solid #ccc;
+            box-sizing: border-box;
+            overflow: auto;
+        }
+
+        .volume {
+            box-sizing: border-box;
+            padding: 5px;
+            flex: 1;
+            overflow: auto;
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            /* 初始位置在左侧屏幕外 */
+            width: 50%;
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+            color: #fff;
+            transition: top 0.3s;
+            /* 添加过渡效果 */
+            z-index: 90;
+            border: none;
+        }
+
+        .chapter {
+            box-sizing: border-box;
+            padding: 3px;
+            flex: 1;
+            overflow: auto;
+            position: fixed;
+            top: 0%;
+            left: 50%;
+            /* 初始位置在左侧屏幕外 */
+            width: 25%;
+            height: 100%;
+            background-color: rgb(50, 50, 50);
+            color: #fff;
+            transition: top 0.3s;
+            /* 添加过渡效果 */
+            z-index: 90;
+            border: none;
+        }
+
+        .verse {
+            box-sizing: border-box;
+            padding: 3px;
+            flex: 1;
+            overflow: auto;
+            position: fixed;
+            top: 0%;
+            left: 75%;
+            /* 初始位置在左侧屏幕外 */
+            width: 25%;
+            height: 100%;
+            background-color: rgb(80, 80, 80);
+            color: #fff;
+            transition: top 0.3s;
+            /* 添加过渡效果 */
+            z-index: 90;
+            border: none;
+        }
+
+        button {
+            font-size: 16px;
+            background-color: transparent;
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            width: 33%;
+            border: 1px solid;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
+
+        .btn_chapter {
+            font-size: 14px;
+            background-color: transparent;
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            width: 24%;
+            border: 1px solid;
+            vertical-align: middle;
+            border-radius: 3px;
+        }
+
+        .btn_verse {
+            font-size: 14px;
+            background-color: transparent;
+            color: #00ff00;
+            /*margin: 2% 2%;*/
+            width: 24%;
+            border: 1px solid;
+            vertical-align: middle;
+            border-radius: 3px;
+        }
+    </style>
+    <title>Bible selection</title>
+</head>
+
+<body>
+    <div id="mainDiv" class="container">
+        <div id="volume" class="volume"></div>
+        <div id="chapters" class="chapter"></div>
+        <div id="verses" class="verse"></div>
+    </div>
+</body>
+
+</html>
+
+<script type="text/javascript" charset="UTF-8">
+
+    var _song = 0;
+    var _phase = 0;
+    var _line = 0;
+
+    function _newBtn() {
+
+        var button = document.createElement('button');
+
+        //button.className = '';
+
+        return button;
+    }
+
+    function createBtnVolume() {
+
+        document.getElementById('chapters').innerHTML = '';
+        document.getElementById('verses').innerHTML = '';
+
+        let div = document.getElementById('volume');
+
+        let color_idx = 200;
+
+        for (var i = 1; i <= 66; i++) {
+            switch (i) {
+                case 6:
+                    color_idx = 0;
+                    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+                    break;
+                case 18:
+                    color_idx = 200;
+                    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+                    break;
+                case 23:
+                    color_idx = 0;
+                    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+                    break;
+                case 28:
+                    color_idx = 200;
+                    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+                    break;
+                case 40:
+                    color_idx = 255;
+                    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+                    break;
+                case 45:
+                    color_idx = 180;
+                    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+                    break;
+                case 54:
+                    color_idx = 255;
+                    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+                    break;
+                case 58:
+                    color_idx = 180;
+                    div.insertAdjacentHTML('beforeend', '<br/><br/>');
+                    break;
+            }
+
+            var button = _newBtn();
+            button.innerHTML = window.opener.SONGS[i][0][0];
+            button.id = 'vol ' + i;
+            button.onclick = function () {
+                let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+                window.opener.subtitles = window.opener.SONGS[idx];
+
+                if (document.getElementById('vol ' + _song))
+                    document.getElementById('vol ' + _song).style.background = 'transparent';
+                _song = idx;
+                _phase = 0;
+                _line = 0;
+
+                this.style.background = "rgb(255,0,0)";
+
+                window.opener.jump4external(_song, _phase, _line);
+
+                //window.opener.saveAction2Local();
+                //window.opener._repaint();
+                createBtnChapter();
+
+                return false;
+            };
+
+            if (i > 39)
+                button.style.color = 'rgb(' + color_idx + ',' +
+                    color_idx + ',' +
+                    color_idx + ')'; // setting the color to white
+            else
+                button.style.color = 'rgb(' + color_idx + ',' +
+                    255 + ',' +
+                    color_idx + ')';
+
+            div.appendChild(button);
+
+            if (i == 39) div.insertAdjacentHTML('beforeend', '<br/>');
+        }
+
+    }
+
+    function createBtnChapter() {
+
+        document.getElementById('verses').innerHTML = '';
+
+        let div = document.getElementById('chapters');
+        div.innerHTML = '';
+
+        var len = window.opener.SONGS[_song].length;
+        //window.opener.subtitles.length;
+
+        for (var i = 1; i <= len - 1; i++) {
+            let button = _newBtn();//document.createElement('button');
+            button.className = 'btn_chapter';
+            button.innerHTML = '' + i;
+            button.id = 'chp ' + i;
+            button.onclick = function () {
+
+                let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+
+                if (document.getElementById('chp ' + _phase))
+                    document.getElementById('chp ' + _phase).style.background = 'transparent';//
+
+                _phase = idx;
+                _line = 0;
+
+                this.style.background = "rgb(255,0,0)";
+                window.opener.jump4external(_song, _phase, _line);
+
+                createBtnVerse();
+                return false;
+            };
+            div.appendChild(button);
+        }
+    }
+
+    function createBtnVerse() {
+
+        let div = document.getElementById('verses');
+        div.innerHTML = '';
+
+        var len = window.opener.SONGS[_song][_phase].length;
+        //window.opener.subtitles[window.opener.phase].length;
+
+        for (var i = 1; i <= len - 1; i++) {
+            let button = _newBtn();//document.createElement('button');
+            button.className = 'btn_verse';
+            button.innerHTML = '' + i;
+            button.id = 'ver ' + i;
+            button.onclick = function () {
+                let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+
+                if (document.getElementById('ver ' + _line))
+                    document.getElementById('ver ' + _line).style.background = 'transparent';//
+
+                _line = idx;
+
+                this.style.background = "rgb(255,0,0)";
+                window.opener.jump4external(_song, _phase, _line);
+
+                return false;
+            };
+            div.appendChild(button);
+        }
+
+    }
+
+    createBtnVolume();
+
+    window.addEventListener('keyup', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.opener.keyupAction(e);
+    }, false);
+
+
+    window.addEventListener('keydown', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.opener.keydownAction(e);
+    }, false);
+
+
+</script>

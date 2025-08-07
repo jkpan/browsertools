@@ -1,0 +1,207 @@
+<script type="text/javascript" src="../login.js"></script>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Camera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        body {
+            margin: 0px;
+            height: 100%;
+            background-color: rgba(67, 67, 67, 0.0);
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        main {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="canvas" width="400" height="200"></canvas>
+
+</body>
+
+</html>
+
+<script>
+
+    var username = null;
+
+    var timeoutID = -1;
+
+    function handleLogin(resultJson) {
+
+    }
+
+    async function connectWebSocket() {
+
+        if (username == null) {
+            let result = await doChk();
+            if (result.state == 0) return;
+            if (result.state != 1) {
+                alert('請先登入');
+                window.Location.href = 'login.html';
+                return;
+            }
+            username = result.username;
+        }
+
+        let serverDomain = window.location.hostname;
+
+        let port = 80;
+        if (window.location.protocol === 'https:') {
+            port = 443;
+        } else {
+            if (window.location.port.length > 0) {
+                port = parseInt(window.location.port, 10);
+            }
+        }
+
+        ws = port == 443 ?
+            new WebSocket(`wss://${serverDomain}/Canvas/${username}`) :
+            new WebSocket(`ws://${serverDomain}:${port}/Canvas/${username}`);
+
+        ws.onopen = function () {
+            console.log('Connected to server');
+            ws.send('Hello - from Camera client');
+        };
+
+        /*
+        ws.onmessage = function (event) {
+            console.log('Received:', event.data);
+            restoreFromJson(JSON.parse(event.data));
+        };
+        */
+
+        ws.onclose = function () {
+            console.log('Connection closed');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket 錯誤:', error);
+        };
+
+        ws.onmessage = (event) => {
+            //const buffer = Buffer.from(event.data);
+
+            //if ( event.data instanceof ArrayBuffer) console.log('Received ArrayBuffer:', event.data);
+
+            if (event.data instanceof Blob) {
+
+                event.data.arrayBuffer().then((buffer) => {
+                    //const ab8 = new Uint8Array(buffer);
+                    const view = new DataView(buffer);
+                    const timestamp = view.getBigUint64(0, false);
+
+                    /*
+                    let ct = Date.now();//console.log(`diff: ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
+                    if (ct - Number(timestamp) > 1000) {
+                        console.log(`too old reject ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
+                        return;
+                    }
+                    */
+
+                    const imageBuffer = new Blob([buffer.slice(8)]);
+
+                    createImageBitmap(imageBuffer).then(imageBitmap => {
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        //canvas.width = imageBitmap.width;
+                        //canvas.height = imageBitmap.height;
+                        //window.innerWidth;
+                        //window.innerHeight;
+                        /*
+                              cw      iw         y       iw
+                            ----- = -----     ------ = ------
+                              x       ih         ch      ih
+                        */
+                        if (imageBitmap.width / imageBitmap.height > canvas.width / canvas.height) {
+                            let _h = canvas.width * imageBitmap.height / imageBitmap.width;
+                            ctx.drawImage(imageBitmap,
+                                0, 0, imageBitmap.width, imageBitmap.height,
+                                0, (canvas.height - _h) / 2, canvas.width, _h);
+                        } else {
+                            let _w = canvas.height * imageBitmap.width / imageBitmap.height;
+                            ctx.drawImage(imageBitmap,
+                                0, 0, imageBitmap.width, imageBitmap.height,
+                                (canvas.width - _w) / 2, 0, _w, canvas.height);
+                        }
+                    }).catch(error => {
+                        console.error('圖像處理錯誤:', error);
+                    });
+                });
+
+            }
+        };
+        //stopStreaming(); startStreaming();
+
+        if (timeoutID >= 0)
+            window.clearTimeout(timeoutID);
+        timeoutID = setTimeout(chkWebsocket, 5000);
+
+    }
+
+    function chkWebsocket() {
+
+        console.log(`B# ${timeoutID}`);
+
+        if (timeoutID >= 0) {
+            window.clearTimeout(timeoutID);
+            timeoutID = -1;
+        }
+
+        if (ws && ws.readyState != WebSocket.OPEN) {
+            console.log('WebSocket is not open');
+            console.log('call connectWebSocket!');
+            connectWebSocket();
+            return;
+        }
+
+        timeoutID = setTimeout(chkWebsocket, 3000);
+    }
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+    function init() {
+        canvas = document.getElementById('canvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        //ctx = canvas.getContext('2d');
+        //ctx = canvas.getContext("2d", { willReadFrequently: true });
+    }
+
+    window.addEventListener('resize', function () {
+        init();
+    });
+
+    /*
+    function drawVideoFrame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = 'rgb(200, 0, 0)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        //ctx.drawImage(video, 0, 0, canvas.width, canvas.height);        
+    }
+    */
+
+    init();
+    connectWebSocket();
+
+</script>

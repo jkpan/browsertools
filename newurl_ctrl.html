@@ -1,4 +1,3 @@
-<!-- <script type="text/javascript" src="newfile.js"></script> -->
 <!DOCTYPE html>
 <html>
 
@@ -116,12 +115,11 @@
     <button style="background-color: blue;" onclick="window.opener.goSubMoveRight()">◀️</button>
     <button style="background-color: blue;" onclick="window.opener.goAddMoveLeft()">▶️</button>
     <p></p>
-    <button onclick="urlGo('subtitle.html?action=play&mode=2', 'lyric')">歌詞</button>
-    <button onclick="urlGo('subtitle_b.html?action=play&colorsel=1&verseCount=2', 'Bible')">聖經</button>
-    <button onclick="urlGo('subtitle_niv.html?colorsel=1&verseCount=2', 'NIV')">NIV</button>
-    <!-- <button onclick="urlGo('anim.html')">Anim</button> -->
-    <button onclick="urlGo('marquee.html', 'LED')">LED</button>
-    <button onclick="urlGo('clock.html', 'clock')">時鐘</button>
+    <button onclick="urlGo('./subtitle/subtitle.html?action=play&mode=2', 'lyric')">歌詞</button>
+    <button onclick="urlGo('./subtitle/subtitle_b.html?action=play&colorsel=1&verseCount=2', 'Bible')">聖經</button>
+    <button onclick="urlGo('./subtitle/subtitle_niv.html?colorsel=1&verseCount=2', 'NIV')">NIV</button>
+    <button onclick="urlGo('./led/marquee.html', 'LED')">LED</button>
+    <button onclick="urlGo('./led/clock.html', 'clock')">時鐘</button>
     <button onclick="urlGo('dashboard.html', 'dash')">Dash</button>
     <button onclick="urlGo('tabs.html', 'tabs')">頁籤</button>
     <p></p>
@@ -205,7 +203,7 @@
             if (value.startsWith('<iframe')) {
                 value = modifyIframeAttributes(value, '100%', '100%');
             }
-
+            console.log('url : ' + value);
             window.opener.urlGo(value, loop, key);
         }
     </script>
@@ -213,8 +211,8 @@
     <hr/>
     
     <p></p>
-    <button onclick="divGo('subtitle.html?action=ctrl&mode=2', 'frame_song', 'div_song')">歌詞控制</button>
-    <button onclick="divGo('subtitle_b.html?action=ctrl&colorsel=1&verseCount=2', 'frame_Bible', 'div_Bible')">經文控制</button>
+    <button onclick="divGo('./subtitle/subtitle.html?action=ctrl&mode=2', 'frame_song', 'div_song')">歌詞控制</button>
+    <button onclick="divGo('./subtitle/subtitle_b.html?action=ctrl&colorsel=1&verseCount=2', 'frame_Bible', 'div_Bible')">經文控制</button>
     <p></p>
     <div id="div_song" hidden>
         <iframe id="frame_song" class="ctrl"></iframe>
@@ -286,7 +284,7 @@
     function animLED() {
         let value = document.getElementById("ppt_url").value;
         value = value.trim();
-        value = './led.html?anim=7&round=0';
+        value = './led/led.html?anim=7&round=0';
         document.getElementById("ppt_url").value = value;
     }
 

@@ -216,8 +216,10 @@ function webservice(req, res) {
   if (url.lastIndexOf(".html?") > 0) {
     const match = url.match(/\/([^\/?#]+\.html)(?:[?#]|$)/);
     const fileName = match ? match[1] : null;
-    println('filename: ' + fileName + '\n'); // "file.html
-    url = '/' + fileName;
+  
+    url = url.substr(0, url.lastIndexOf(fileName)) + fileName;
+
+    println('path' + url); //url = '/' + fileName;
   }
 
   const filePath = `.${url}`;

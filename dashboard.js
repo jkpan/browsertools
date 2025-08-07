@@ -1,7 +1,7 @@
 const APPS = [
   'lyrics', 'Bible', 'NIV', 'BPlay', 'iPlay',
   'url_1', 'url_2', 'url_3',
-  'file_1', 'file_2', 'file_3',
+  //'file_1', 'file_2', 'file_3',
   'swipe',
   'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'
 ];
@@ -835,7 +835,7 @@ function getElmState() {
   let stateArray = {
     lyrics: -1, Bible: -1, NIV: -1, BPlay: -1, iPlay: -1,
     url_1: -1, url_2: -1, url_3: -1,
-    file_1: -1, file_2: -1, file_3: -1,
+    //file_1: -1, file_2: -1, file_3: -1,
     swipe: -1, 
     anim: -1, info: -1, effect: -1, time: -1,
     dBoard: -1, tabs: -1
@@ -1019,35 +1019,35 @@ function _createFrame(keyname) {
       return app;
     }
     case 'lyrics': {
-      createFrame(keyname, 'subtitle.html');
+      createFrame(keyname, './subtitle/subtitle.html');
       let app = new Applet({ x: 3, y: 21, w: 22, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'Bible': {
-      createFrame(keyname, 'subtitle_b.html');
+      createFrame(keyname, './subtitle/subtitle_b.html');
       let app = new Applet({ x: 12, y: 11, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'NIV': {
-      createFrame(keyname, 'subtitle_niv.html');
+      createFrame(keyname, './subtitle/subtitle_niv.html');
       let app = new Applet({ x: 8, y: 12, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'BPlay': {
-      createFrame(keyname, 'subtitle_b_display.html');
+      createFrame(keyname, './subtitle/subtitle_b_display.html');
       let app = new Applet({ x: 15, y: 21, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'iPlay': {
-      createFrame(keyname, 'image_play.html');
+      createFrame(keyname, './tools/image_play.html');
       let app = new Applet({ x: 17, y: 14, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();
@@ -1069,6 +1069,7 @@ function _createFrame(keyname) {
       app.onTop();
       return app;
     }
+    /*
     case 'file_1':
     case 'file_2':
     case 'file_3': {
@@ -1078,29 +1079,30 @@ function _createFrame(keyname) {
       app.onTop();
       return app;
     }
+    */
     case 'anim': {
-      createFrame(keyname, 'anim.html');
+      createFrame(keyname, './led/anim.html');
       let app = new Applet({ x: 8, y: 8, w: 24, h: 24, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'info': {
-      createFrame(keyname, 'marquee_v.html');
+      createFrame(keyname, './led/marquee_v.html');
       let app = new Applet({ x: 1, y: 1, w: 5, h: 48, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'effect': {
-      createFrame(keyname, 'effect.html');
+      createFrame(keyname, './tools/effect.html');
       let app = new Applet({ x: 18, y: 2, w: 10, h: 10, keyname: keyname });
       applets.push(app);
       app.onTop();
       return app;
     }
     case 'time': {
-      createFrame(keyname, 'clock.html');
+      createFrame(keyname, './led/clock.html');
       let app = new Applet({ x: 36, y: 2, w: 13, h: 20, keyname: keyname });
       applets.push(app);
       app.onTop();

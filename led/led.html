@@ -1,0 +1,223 @@
+<script type="text/javascript" src="led.js" charset="UTF-8"></script>
+<script type="text/javascript" src="anim.js" charset="UTF-8"></script>
+<script type="text/javascript" src="ledmarquee.js" charset="UTF-8"></script>
+<script type="text/javascript" src="clock.js" charset="UTF-8"></script>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
+        charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC&family=Mochiy+Pop+One&family=Noto+Serif+TC:wght@200..900&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
+    <!--meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8"-->
+    <style>
+        body {
+            margin: 0px;
+            height: 100%;
+            background-color: rgb(104, 104, 104);
+            color: #00ff00;
+            /*cursor:none;*/
+        }
+        button {
+            font-size: 48px;
+            background-color: rgb(100, 100, 100);
+            color: #ffffff;
+            /*margin: 2% 2%;*/
+            /*width:45%;*/
+            /*border: 1px solid;*/
+            vertical-align: middle;
+        }
+
+        .slides {
+            position: fixed;
+            top: 10%;
+            left: 40%;
+            /* 初始位置在左侧屏幕外 */
+            width: 55%;
+            height: 70%;
+            background-color: rgb(0, 0, 0);
+            color: #fff;
+            transition: top 0.3s;
+            /* 添加过渡效果 */
+            z-index: 90;
+            border: none;
+        }
+
+        .leftmargin {
+            content: "";
+            position: absolute;
+            left: -20px;
+            /* 调整这个值来控制区域距离 div 左边的距离 */
+            top: 0;
+            width: 30px;
+            /* 区域的宽度 */
+            height: 100%;
+            /* 区域的高度，这里假设和内容 div 一样高 */
+            background-color: red;
+            /* 区域的背景颜色 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="canvas" width="100" height="100"></canvas>
+
+    <blockquote>
+        <div id="ui" hidden="true">
+            <!-- <div class="leftmargin" id="left" hidden="false"></div> -->
+            <hr size="8" align="left" width="33%" color="#aaaaaa">
+            <div class="slides" id="slidesDiv" hidden="true">
+                <iframe style="border: none;" width="100%" height="100%" id="slidesFrame"></iframe>
+            </div>
+            <p></p>
+            LED面板參數:
+            <button type="button" onclick="urlGo('led_url')">預覽</button>&nbsp;
+            <button type="button" onclick="copyToClickBoard('led_url')">複製網址</button>
+            <p></p>
+            <textarea style="border: none;font-size: 24px;" id="led_url" rows="10" cols="40"></textarea><br />
+            <hr size="8" align="left" width="33%" color="#aaaaaa">
+            <p></p>
+            anim=
+            <blockquote>
+                <li>0 無動畫</li>
+                <li>1 圈圈</li>
+                <li>2 星空In</li>
+                <li>3 星空Out</li>
+                <li>4 星空Inout</li>
+                <li>5 星空圈圈</li>
+                <li>6 下雪</li>
+                <li>7 煙火</li>
+                <li>8 舞台</li>
+                <li>9 時鐘</li>
+                <li>10 老電腦</li>
+            </blockquote>
+            <p></p>
+            round=
+            <blockquote>
+                <li>0 方形LED</li>
+                <li>1 圓形LED</li>
+            </blockquote>
+            <p></p>
+            color1, color2 = rgb(紅0-255, 綠0-255, 藍0-255)
+            <p></p>
+            str1 : 字串上 <br />
+            str2 : 字串下
+            <p></p>
+            mtype1, mtype2
+            <blockquote>
+                <li>1 左右</li>
+                <li>2 由右至左</li>
+            </blockquote>
+        </div>
+    </blockquote>
+</body>
+
+</html>
+
+<script type="text/javascript" src="common.js" charset="UTF-8"></script>
+<script type="text/javascript" charset="UTF-8">
+    //canvas
+    function _initData() {
+
+        let _all = Math.max(7, Math.floor(window.innerHeight / 50));
+        dots = Math.ceil(_all * 0.7);
+        side = Math.max(1, _all - dots);
+
+        //side = 3;
+        //dots = 4;
+
+        makeRound = readParam('round') == 1 ? true : false;
+
+        swing = readParam('mtype1') === '1' ? 1 : 0;
+        swing1 = readParam('mtype2') === '1' ? 1 : 0;
+
+        speed = 300;
+        color_0 = readParam('color1') != null ? readParam('color1') : "rgb(255, 255, 50)";
+
+        speed1 = 150;
+        color_1 = readParam('color2') != null ? readParam('color2') : "rgb(255, 50, 50)";
+
+        animIdx = readParam('anim') != null ? parseInt(readParam('anim')) : 7;//parseInt(sel_anim.options[sel_anim.options.selectedIndex].value, 10);
+        bgIdx = 0;
+
+        subtitle[1] = readParam('str1') != null ? [readParam('str1')] : [''];//["從歲首到年終 耶和華 你神的眼目時常看顧那地"];//[申11:12]
+        //let cons = "🎉新年快樂🎉";
+        subtitle[2] = readParam('str2') != null ? [readParam('str2')] : [''];
+
+        init();
+        initAnim();
+
+        window.scroll(0, 0);
+
+        //led.html?color1=rgb(255,80,80)&color2=rgb(80,255,80)&mtype1=1&mtype2=0&str1=2024新年快樂&str2=從歲首到年終 耶和華 你神的眼目時常看顧那地&anim=7
+    }
+
+    function getTouchPos(canvasDom, touchEvent) {
+        var rect = canvasDom.getBoundingClientRect();
+        return {
+            x: touchEvent.touches[0].clientX - rect.left,
+            y: touchEvent.touches[0].clientY - rect.top
+        };
+    }
+
+    const controlRatio = 0.2;
+
+    function touchAction(_x, _y) {
+        if (_x < canvas.width * controlRatio && _y > canvas.height * (1 - controlRatio)) { //左下
+            canvas.requestFullscreen();
+            return;
+        }
+        if (_x > canvas.width * (1 - controlRatio) && _y < canvas.height * controlRatio) { //右上
+            keepLEDGoing = keepLEDGoing == 0 ? 1 : 0;
+        }
+    }
+
+    //ui
+    const LEDURL = 'https://jkpan.github.io/browsertools/led/led.html?color1=rgb(255,80,80)&color2=rgb(80,255,80)&mtype1=1&mtype2=0&str1=字串上🎉&str2=😀字串下😎&anim=7&round=0';
+
+    function urlGo(id) {
+        let value = document.getElementById(id).value;
+        value = value.trim();
+        if (value.length == 0) return;
+        embeddedUrl(value);
+
+        //window.location.href = value;
+    }
+
+    function embeddedUrl(url) {
+        document.getElementById('slidesDiv').hidden = false;
+        let frame = document.getElementById('slidesFrame');
+        frame.src = url;
+    }
+
+    function copyToClickBoard(id) {
+        var content = document.getElementById(id).value;
+        copyToBoard(encodeURI(content));
+    }
+
+    var currentURL = window.location.href;
+    console.log(currentURL);
+    if (currentURL.endsWith('led.html')) {
+        document.getElementById("led_url").value = LEDURL;
+        document.getElementById("ui").hidden = false;
+        document.getElementById("canvas").hidden = true;
+    } else {
+        _initData();
+        window.addEventListener('resize', function () {//init();//initAnim();
+            _initData();
+        });
+        canvas.addEventListener("touchend" /*"touchstart"*/, function (evt) {
+            //evt.preventDefault();
+            var touches = getTouchPos(canvas, evt);
+            touchAction(touches.x, touches.y);
+        });
+        canvas.addEventListener('mousedown', (e) => {
+            touchAction(e.x, e.y);
+        });
+    }
+
+</script>

@@ -1,0 +1,192 @@
+<script type="text/javascript" src="../led.js" charset="UTF-8"></script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Camera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+      body {
+        margin: 0px;
+        height: 100%;
+        background-color:rgba(67, 67, 67, 0.0);
+      }
+      main {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!--video id="videoElement" src="PD_low.mp4" width="300" height="200" hidden="true" style="background-color: #707000; opacity: 1.0;" autoplay></video-->
+    <video id="videoElement" width="300" height="200" hidden="true" style="background-color: #707000; opacity: 1.0;" autoplay></video>
+    
+    <canvas id="canvas" width="400" height="200"></canvas>
+  </body>
+</html>
+    
+<script>
+
+var video = document.getElementById('videoElement');
+var canvas = document.getElementById('canvas');
+var ctx = null;
+
+var effect_type = 0; //0:none 1:LED 2:ascii
+
+var v_width;
+var v_height;
+var v_offx;
+var v_offy;
+
+function ledinit() {
+  //side = 3;
+  //dots = 5;
+  //makeRound = true;
+
+  //initLED(0, 0, canvas.width, canvas.height);
+  initLED(v_offx, v_offy, v_width, v_height);
+  newLEDMask();
+}
+
+function asciinit() {
+  initAscii(v_offx, v_offy, v_width, v_height);
+}
+
+function init() {
+  canvas = document.getElementById('canvas');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  //ctx = canvas.getContext('2d');
+  ctx = canvas.getContext("2d", {willReadFrequently:true});
+
+  let vw = video.videoWidth;
+  let vh = video.videoHeight;
+  let ratio = vw/vh;
+  let _ratio = canvas.width/canvas.height;
+
+  //alert(`(${vw}, ${vh})`);
+        
+  if (ratio > _ratio) {  //camera寬 canvas 方
+    v_width = Math.floor(canvas.width);
+    v_height = Math.floor(canvas.width/ratio);//canvas.width * video.height/video.width;
+    v_offx = Math.floor((canvas.width - v_width)/2);
+    v_offy = Math.floor((canvas.height - v_height)/2);
+    //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+  } else {
+    v_width = Math.floor(canvas.height * ratio);
+    v_height = Math.floor(canvas.height);//canvas.width * video.height/video.width;
+    v_offx = Math.floor((canvas.width - v_width)/2);
+    v_offy = Math.floor((canvas.height - v_height)/2);
+    //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+  }
+  
+  if (effect_type == 1)
+    ledinit();
+  else if (effect_type == 2) 
+    asciinit();
+}
+      
+window.addEventListener('resize', function() {
+  init();
+});
+
+function effectGo() {
+  switch(effect_type) {
+    case 0: return;
+    case 1: ledAction4Still(canvas, ctx); return;
+    case 2: asciiAction4Still(canvas, ctx); return;
+  }
+}
+
+function drawVideoFrame() {
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = 'rgb(0, 200, 0)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  ctx.drawImage(video, 0,      0,      video.videoWidth, video.videoHeight, 
+                       v_offx, v_offy, v_width,          v_height);
+  effectGo();
+  requestAnimationFrame(drawVideoFrame);
+}
+
+document.getElementById('videoElement').addEventListener('canplay', () => {
+  init();
+  requestAnimationFrame(drawVideoFrame);
+});
+
+
+// 取得視訊鏡頭畫面
+//if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)
+navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+  var videoElement = document.getElementById('videoElement');
+  videoElement.srcObject = stream;
+  
+  videoElement.setAttribute('autoplay', '');
+  videoElement.setAttribute('muted', '');
+  videoElement.setAttribute('playsinline', '')
+
+  //alert("(" + videoElement.width + ", " + videoElement.height + ")");
+}).catch(function(error) {
+  console.error('取得視訊鏡頭畫面失敗：', error);
+});
+
+
+function keyboard(e) { //key up
+
+  switch (e.keyCode) {
+    case 65: //a 1..7
+      //if (dots == 7) return;
+      dots++;
+      break;
+    case 90: //z
+      if (dots == 1) return;
+      dots--;
+      break;
+    
+    case 83: //s 
+      if (side == 7) return;
+      side++;
+      break;
+    case 88: //x
+      if (side == 0) return;
+      side--;
+      break;
+
+    case 68: //d
+      //if (color_reduce < 2 || color_reduce > 19) //1 2~19 20
+      if (color_reduce == 20) return;
+      color_reduce++;
+      break;
+    case 67: //c
+      if (color_reduce == 2) return;
+      color_reduce--;
+      break;
+    //case 70: //f
+    case 86: //v
+      makeRound = !makeRound;
+      break;
+    case 27: //escape
+      effect_type = 0; 
+      break;
+    case 32: //space
+      effect_type = (effect_type + 1)%3;
+      break; 
+  }
+
+  init();
+
+  //if (effect_type == 1) ledinit();
+  //if (effect_type == 1) asciinit();
+  
+}
+ 
+window.addEventListener('keyup', keyboard, false);
+
+</script>
+
