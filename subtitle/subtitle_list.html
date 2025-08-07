@@ -432,8 +432,12 @@
 
   }
 
+  async function fetchData() {
+    await window.opener.fetchData();
+    createBtns();
+  }
 
-  createBtns();
+  fetchData();
 
   /*
   window.addEventListener('keyup', function (e) {
