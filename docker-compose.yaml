@@ -10,14 +10,14 @@ services:
     command: ["node", "./app/_cmd_server.js",  "-p", "3000"]
   
   # ------------------
-  #jkpan:
-  #  image: app
-  #  restart: unless-stopped
-  #  ports:
-  #    - "3001:3000"
-  #  volumes:
-  #    - ../VOLUMES/jkpan:/usr/app/web/users
-  #  command: ["node", "./app/_cmd_server.js",  "-p", "3000", "-auth"]
+  jkpan:
+    image: app
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - ../VOLUMES/jkpan:/usr/app/web/users
+    command: ["node", "./app/_cmd_server.js",  "-p", "3000", "-auth"]
   # ------------------
   
 
