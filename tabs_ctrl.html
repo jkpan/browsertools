@@ -2,40 +2,21 @@
 <html>
     <head>
       <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
-      <style>
-      body {
-        margin: 0px;
-        height: 100%;
-        width: 100%;
-        background-color: rgb(0, 128, 0);
-      }
-      ::-webkit-scrollbar {
-        display: none;
-      }
-      button {
-            font-size: 16px;
-            background-color: rgb(0, 150, 0);
-            color: #00ff00;
-            /*margin: 2% 2%;*/
-            width: 95%;
-            border: 2px solid;
-            vertical-align: middle;
-          }
-      </style>
+      <link rel="stylesheet" href="ui_green.css" />
       <title>Tabs-Ctrl</title>
     </head>
     <body>
                   
         <div id="controlWin" class="controlPart">
-            <button id="f1" onclick="controlParent(1)">1</button>
-            <button id="f2" onclick="controlParent(2)">2</button>
-            <button id="f3" onclick="controlParent(3)">3</button>
-            <button id="f4" onclick="controlParent(4)">4</button>
-            <button id="f5" onclick="controlParent(5)">5</button>
-            <button id="f6" onclick="controlParent(6)">6</button>
-            <button id="f7" onclick="controlParent(7)">7</button>
-            <button onclick="reload()">reload</button>
-            <button onclick="closeWin()">close</button>
+            <button style="width:48px;" id="f1" onclick="controlParent(1)">1</button>
+            <button style="width:48px;" id="f2" onclick="controlParent(2)">2</button>
+            <button style="width:48px;" id="f3" onclick="controlParent(3)">3</button>
+            <button style="width:48px;" id="f4" onclick="controlParent(4)">4</button>
+            <button style="width:48px;" id="f5" onclick="controlParent(5)">5</button>
+            <button style="width:48px;" id="f6" onclick="controlParent(6)">6</button>
+            <button style="width:48px;" id="f7" onclick="controlParent(7)">7</button>
+            <button style="width:48px;" onclick="reload()">reload</button>
+            <button style="width:48px;" onclick="closeWin()">close</button>
         </div>
       
     </body>
@@ -71,30 +52,5 @@ function reload() {
 }
 
 reload();
-
-/*
-window.onbeforeunload = function(evt) {
-  window.opener.closeCtrlEvent();
-  return true;
-}
-*/
-//window.addEventListener('beforeunload', (event) => {});
-
-/*
-function doFocus() {
-
-    document.getElementById('f1').blur();
-    document.getElementById('f2').blur();
-    document.getElementById('f3').blur();
-    document.getElementById('f4').blur();
-    document.getElementById('slide1').blur();
-    document.getElementById('slide2').blur();
-    document.getElementById('slide3').blur();
-    window.blur();
-    
-    window.opener.focus();
-    elm.focus();
-}
-*/
 
 </script>

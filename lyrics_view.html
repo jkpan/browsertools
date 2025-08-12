@@ -3,45 +3,8 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="stylesheet" href="ui_green.css" />
     <style>
-        .container {
-            display: flex;
-            height: 100vh;
-            /* 设置容器高度为视窗高度的100% */
-        }
-
-        body {
-            margin: 0px;
-            background-color: rgb(0, 0, 0);
-        }
-
-        .column {
-            flex: 1;
-            padding: 10px;
-            border: 0px solid #ccc;
-            box-sizing: border-box;
-            overflow: auto;
-        }
-
-        button {
-            font-size: 14px;
-            background-color: transparent;
-            color: #00ff00;
-            /*margin: 2% 2%;*/
-            /*width: 33%;*/
-            /*border: 1px solid;*/
-            vertical-align: middle;
-        }
-
-        .button2 {
-            font-size: 14px;
-            background-color: transparent;
-            color: #00ff00;
-            /*margin: 2% 2%;*/
-            width: 20%;
-            /*border: 1px solid;*/
-            vertical-align: middle;
-        }
 
         textarea {
             border: 2px solid rgb(0, 128, 0);
@@ -70,7 +33,7 @@
 
 <body>
     <div style="margin: 1%;">
-    <button class="button2" style="background-color: rgb(0, 80, 0);" onclick="copy()">複製內容</button>
+    <button style="background-color: rgb(0, 80, 0);" onclick="copy()">複製內容</button>
     <p></p>
     <textarea id="songtxt" rows="10"></textarea>
     <p></p>

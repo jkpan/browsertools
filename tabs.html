@@ -15,12 +15,23 @@
   <meta name="viewport"
     content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
     charset="UTF-8" />
+  <link rel="stylesheet" href="ui_green.css" />
   <style>
     body {
       margin: 0px;
       height: 100%;
       width: 100%;
       background-color: black;
+    }
+
+    .menuButton {
+      background-color: transparent;
+      border-color: #00ff00;
+      color: rgb(0, 255, 0);
+      border-radius: 4px;
+      opacity: 0.33;
+      position: fixed;
+      z-index: 100;
     }
 
     ::-webkit-scrollbar {
@@ -56,62 +67,6 @@
       overflow-x: hidden;
     }
 
-    .button {
-      background-color: rgb(0, 180, 0);
-      border-color: rgb(0, 180, 0);
-      color: rgb(0, 255, 0);
-      border-radius: 8px;
-
-      font-size: 16px;
-      margin: 2px 2px;
-
-      width: 28px;
-      height: 40%;
-
-      text-align: center;
-      padding: 4px;
-    }
-
-    .okbutton {
-      background-color: rgb(0, 100, 0);
-      border-color: #00ff00;
-      color: rgb(0, 255, 0);
-      border-radius: 8px;
-
-      font-size: 14px;
-      margin: 1px 1px;
-
-      width: 48px;
-      height: 40%;
-
-      text-align: center;
-      text-decoration: none;
-
-      padding: 4px;
-
-      display: inline-block;
-    }
-
-    .cancelbutton {
-      background-color: rgb(0, 144, 0);
-      border-color: #00ff00;
-      color: rgb(0, 255, 0);
-      border-radius: 8px;
-
-      font-size: 15px;
-      margin: 1px 1px;
-
-      width: 48px;
-      height: 40%;
-
-      text-align: center;
-      text-decoration: none;
-
-      padding: 4px;
-
-      display: inline-block;
-    }
-
     .sideMenu {
 
       display: grid;
@@ -124,7 +79,7 @@
       left: 0px;
       /* 初始位置在左侧屏幕外 */
       width: 100%;
-      height: 100px;
+      height: 80px;
       background-color: rgb(0, 90, 0);
       color: #fff;
 
@@ -145,16 +100,6 @@
       grid-row: 2 / 10;
       direction: rtl;
       text-align: right;
-    }
-
-    .menuButton {
-      background-color: transparent;
-      border-color: #008000;
-      color: rgb(0, 255, 0);
-      border-radius: 4px;
-      opacity: 0.33;
-      position: fixed;
-      z-index: 91;
     }
 
     label {
@@ -206,36 +151,40 @@
       &nbsp;
       &nbsp;
       &nbsp;
-      <button id="btn_1" class="button" onclick="switchFunction(1)">1</button>
-      <button id="btn_2" class="button" onclick="switchFunction(2)">2</button>
-      <button id="btn_3" class="button" onclick="switchFunction(3)">3</button>
-      <button id="btn_4" class="button" onclick="switchFunction(4)">4</button>
-      <button id="btn_5" class="button" onclick="switchFunction(5)">5</button>
-      <button id="btn_6" class="button" onclick="switchFunction(6)">6</button>
-      <button id="btn_7" class="button" onclick="switchFunction(7)">7</button>
+      <label style="color: #00ee00;">|</label>
+      <button id="btn_1" onclick="switchFunction(1)">1</button>
+      <button id="btn_2" onclick="switchFunction(2)">2</button>
+      <button id="btn_3" onclick="switchFunction(3)">3</button>
+      <button id="btn_4" onclick="switchFunction(4)">4</button>
+      <button id="btn_5" onclick="switchFunction(5)">5</button>
+      <button id="btn_6" onclick="switchFunction(6)">6</button>
+      <button id="btn_7" onclick="switchFunction(7)">7</button>
       <br>
       &nbsp;
       &nbsp;
       &nbsp;
       &nbsp;
-      <button class="okbutton" onclick="reloadFrame()">R</button>
-      <button class="okbutton" onclick="openCtrl()">C</button>
+      <label style="color: #00ee00;">|</label>
+      <button onclick="reloadFrame()">R</button>
+      <button onclick="openCtrl()">C</button>
       <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
-      &nbsp;
-      <button id="btn_preload_1" class="button" onclick="preload(1)">#1</button>
-      <button id="btn_preload_2" class="button" onclick="preload(2)">#2</button>
-      <button id="btn_preload_3" class="button" onclick="preload(3)">#3</button>
-      <button id="btn_preload_4" class="button" onclick="preload(4)">#4</button>
-      <button id="btn_preload_5" class="button" onclick="preload(5)">#5</button>
-      <button class="cancelbutton" onclick="loadJson()">#</button>
-      <button class="cancelbutton" onclick="downloadExpJson()">exp</button>
-      <button id="btn_save_1" class="button" onclick="savefile(1)">1^</button>
-      <button id="btn_save_2" class="button" onclick="savefile(2)">2^</button>
-      <button id="btn_save_3" class="button" onclick="savefile(3)">3^</button>
-      <button id="btn_save_4" class="button" onclick="savefile(4)">4^</button>
-      <button id="btn_save_5" class="button" onclick="savefile(5)">5^</button>
-      &nbsp;
-      <label id="closebar" style="color: #00ee00;" onclick="sideClick()">x</label>
+      <label style="color: #00ee00;">|</label>
+      <button class="button2" id="btn_preload_1" onclick="preload(1)">#1</button>
+      <button class="button2" id="btn_preload_2" onclick="preload(2)">#2</button>
+      <button class="button2" id="btn_preload_3" onclick="preload(3)">#3</button>
+      <button class="button2" id="btn_preload_4" onclick="preload(4)">#4</button>
+      <button class="button2" id="btn_preload_5" onclick="preload(5)">#5</button>
+      <label style="color: #00ee00;">|</label>
+      <button onclick="loadJson()">#</button>
+      <button onclick="downloadExpJson()">exp</button>
+      <label style="color: #00ee00;">|</label>
+      <button class="button2" id="btn_save_1" onclick="savefile(1)">1^</button>
+      <button class="button2" id="btn_save_2" onclick="savefile(2)">2^</button>
+      <button class="button2" id="btn_save_3" onclick="savefile(3)">3^</button>
+      <button class="button2" id="btn_save_4" onclick="savefile(4)">4^</button>
+      <button class="button2" id="btn_save_5" onclick="savefile(5)">5^</button>
+      <label style="color: #00ee00;">|</label>
+      <button style="opacity: 0.33;" onclick="sideClick()">x</button>
     </div>
     <div class="right-to-left">
       &nbsp;
@@ -647,23 +596,25 @@
       let result = await doChk();
       handleLogin(result);
     } catch (error) {
-      handleLogin({ state: 2,
-                    username: "guest",
-                    token: null});
+      handleLogin({
+        state: 2,
+        username: "guest",
+        token: null
+      });
     }
   }
 
   function handleLogin(resultJson) {
-    
+
     document.getElementById('__username').hidden = true;
     document.getElementById('__login').hidden = true;
     document.getElementById('__logout').hidden = true;
     username = null;
     if (resultJson.state == 0) {
       username = resultJson.username;
-      for(let i = 1;i <= 5;i++) document.getElementById('btn_save_' + i).hidden = true;
+      for (let i = 1; i <= 5; i++) document.getElementById('btn_save_' + i).hidden = true;
       return;
-    } 
+    }
     if (resultJson.state == 1) {
       username = resultJson.username;
       document.getElementById('__username').hidden = false;
@@ -675,7 +626,7 @@
         document.getElementById('__logout').hidden = false;
         document.getElementById('__login').hidden = true;
       }
-      for(let i = 1;i <= 5;i++) {
+      for (let i = 1; i <= 5; i++) {
         document.getElementById('btn_preload_' + i).hidden = false;
         document.getElementById('btn_save_' + i).hidden = false;
       }
@@ -685,13 +636,13 @@
       document.getElementById('__username').innerHTML = resultJson.username;
       document.getElementById('__logout').hidden = true;
       document.getElementById('__login').hidden = false;
-      for(let i=1;i<=5;i++) {
+      for (let i = 1; i <= 5; i++) {
         document.getElementById('btn_preload_' + i).hidden = false;
         document.getElementById('btn_save_' + i).hidden = false;
       }
     } else { //auth失敗 有token 但過期 或是帳密錯誤
       document.getElementById('__login').hidden = false;
-      for(let i=1;i<=5;i++) {
+      for (let i = 1; i <= 5; i++) {
         document.getElementById('btn_preload_' + i).hidden = true;
         document.getElementById('btn_save_' + i).hidden = true;
       }
@@ -708,6 +659,6 @@
       preload('./' + value);
   }
   */
-  
+
 
 </script>

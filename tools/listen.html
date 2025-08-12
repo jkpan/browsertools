@@ -1,4 +1,4 @@
-<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="../common.js"></script>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -165,7 +165,7 @@
         link.textContent = `${VOLNAME[vol]} ${chp} ${vss}`;
         // 设置链接的 href 属性来调用函数
         // 这里使用 JavaScript: 伪协议来调用函数
-        let parameter = `http://54.169.169.141/synscripture_get?vlm=${vol}&chp=${chp}&ver=${vss}&blank=0`;
+        let parameter = `https://proj.tpcaog.org.tw/synscripture_get?vlm=${vol}&chp=${chp}&ver=${vss}&blank=0`;
         link.href = `javascript:embeddedUrl('${parameter}')`;
         linkContainer.appendChild(link);
         linkContainer.appendChild(document.createElement('br'));

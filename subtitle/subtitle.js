@@ -1133,14 +1133,14 @@ function _newBtn() {
   button.style.width = '128px'; // setting the width to 200px
   button.style.height = '32px'; // setting the height to 200px
 
-  button.style.background = 'rgb(250,250,50)'; // setting the background color to teal
-  button.style.color = 'rgb(5,5,5)';//color_pointer[1];// 'green'; // setting the color to white
-  button.style.fontSize = '14px'; // setting the font size to 20px
+  //button.style.background = 'rgb(250,250,50)'; // setting the background color to teal
+  //button.style.color = 'rgb(5,5,5)';//color_pointer[1];// 'green'; // setting the color to white
+  //button.style.fontSize = '14px'; // setting the font size to 20px
 
-  button.style.borderColor = 'rgb(255,255,255)';
-  button.style.borderRadius = '4px';
+  //button.style.borderColor = 'rgb(255,255,255)';
+  //button.style.borderRadius = '4px';
 
-  button.style.whiteSpace = 'nowrap';//white-space:nowrap
+  //button.style.whiteSpace = 'nowrap';//white-space:nowrap
 
   //button.style.border = 'none';
 
