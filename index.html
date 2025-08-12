@@ -210,7 +210,7 @@
   <!--a href="">LED參數範例</a><p></p-->
   <!--a href="javascript:embeddedUrl(LEDURL)">LED參數範例</a><p></p-->
   <p></p>
-  <a id="icom" hidden="true" href="./_cmd_client.html" style="background-color: black;">text intercom (nodejs)</a>
+  <!-- <a id="icom" hidden="true" href="./_cmd_client.html" style="background-color: black;">text intercom (nodejs)</a> -->
   <p></p>
   <a href="javascript:embeddedUrl(HELPURL_EBDD)">說明投影片(ebdd)</a>
   <p></p>
@@ -245,7 +245,8 @@
   if (readParam('server') === 'nodejs') {
     //document.getElementById("bplay").hidden = false; //document.getElementById("bctrl").hidden = false;
     //document.getElementById("nivsync").hidden = false;
-    document.getElementById("icom").hidden = false;
+    if (document.getElementById("icom"))
+      document.getElementById("icom").hidden = false;
     document.getElementById("lyrics_admin").hidden = false;
   }
 

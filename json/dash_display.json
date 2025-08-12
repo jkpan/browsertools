@@ -1,0 +1,51 @@
+{
+    "info": {
+      "posize": [1, 1, 5, 48],
+      "perspective": 0,
+      "obj": {
+        "trigger": 1,
+        "des": "😎中文跑馬燈"
+      }
+    },
+    "url_2": {
+      "posize": [6, 25, 22, 22],
+      "perspective": 0,
+      "obj": {
+        "trigger": 1,
+        "url": "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=true&loop=true&delayms=3000&rm=minimal"
+      }
+    },
+    "BPlay": {
+      "posize": [30, 3, 19, 45],
+      "perspective": 0,
+      "obj": {
+        "verticle": 1,
+        "fontfactor": 14.5,
+        "saved": [
+          [""],
+          ["詩篇", 1, 0, "詩篇", 1, 6, "https://jkpan.github.io/browsertools/tmp/bg01.png"],
+          ["詩篇", 23, 0, "詩篇", 23, 6, "https://jkpan.github.io/browsertools/tmp/bg02.png"],
+          ["傳道書", 1, 0, "傳道書", 1, 18, "https://jkpan.github.io/browsertools/tmp/bg01.png"],
+          [""],
+          [""],
+          [""],
+          [""],
+          [""],
+          [""]
+        ],
+        "fsizedist": 0,
+        "fontColorType": 1
+      }
+    },
+    "file_1": {
+      "posize": [6, 3, 22, 21],
+      "perspective": 0,
+      "obj": {}
+    },
+    "time": {
+        "posize": [25, 1, 9, 16],
+        "perspective": 0
+    },
+    "B/G": "B"
+  }
+  
