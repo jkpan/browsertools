@@ -2,9 +2,50 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { formidable } = require('formidable');
+const { syncBuiltinESMExports } = require('module');
 
+function syncListunderfolder(folder, res) {
+
+  let obj = { files: [], folders: [], state: 0, des: ''};
+  try {  
+    // 使用同步方法
+    const files = fs.readdirSync(folder);
+    console.log('資料夾內容:');
+    files.forEach(file => {
+
+      const itemPath = path.join(folder, file);
+      const stats = fs.statSync(itemPath);
+      if (file.startsWith('.')) return;
+      if (stats.isFile()) {
+        console.log(`- File: ${file}`);
+        obj['files'].push(`${file}`);
+      } else if (stats.isDirectory()) {
+        console.log(`- Folder: ${file}`);
+        obj['folders'].push(`${file}`);
+      }
+
+    });
+    
+    obj['state'] = 1;
+    println('before res: ' + JSON.stringify(obj));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(obj));
+
+  } catch (err) {
+    console.error('讀取資料夾錯誤:', err);
+    if (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      obj['state'] = -1;
+      obj['des'] = '讀取資料夾失敗';
+      res.end(JSON.stringify(obj));
+    }
+  }
+
+}
+
+/*
 function listunderfolder(folder, res) {
-  let obj = {files:[], folders:[], state: ''};
+  let obj = { files: [], folders: [], state: '' };
   fs.readdir(folder, (err, items) => {
     println('start read path ' + folder);
     if (err) { //console.error('Error reading directory:', err);
@@ -23,10 +64,10 @@ function listunderfolder(folder, res) {
         }
         if (stats.isFile()) {
           console.log(`- File: ${item}`);
-          obj['files'].push(`${item}`); 
+          obj['files'].push(`${item}`);
         } else if (stats.isDirectory()) {
           console.log(`- Folder: ${item}`);
-          obj['folders'].push(`${item}`); 
+          obj['folders'].push(`${item}`);
         }
       });
     });
@@ -36,6 +77,7 @@ function listunderfolder(folder, res) {
   });
   console.log("listunderfolder end :" + folder);
 }
+*/
 
 function getToday() {
   const now = new Date();
@@ -82,10 +124,10 @@ function handleFile(req, res) {
 
     switch (action) {
       case 'listfolders':
-        listunderfolder(uploadDir, res);
+        syncListunderfolder(uploadDir, res);//listunderfolder(uploadDir, res);
         return;
       case 'listfiles':
-        listunderfolder(uploadDir + '/' + p1);
+        syncListunderfolder(uploadDir + '/' + p1);
         return;
       case 'addfolder':
         let dir = uploadDir + '/' + p1;//'./users/uploads'//path.join('', 'uploads');

@@ -16,8 +16,8 @@
             font-family: sans-serif;
             margin: 10px auto;
         }
-        
-        
+
+
         .container {
             height: 100vh;
             display: flex;
@@ -62,45 +62,45 @@
             border: none;
         }
 
-    .container {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .top {
-      height: 20%;
-      background-color: #4CAF50;
-      text-align: center;
-      line-height: 20vh;
-      color: white;
-      font-size: 24px;
-    }
+        .top {
+            height: 20%;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 20vh;
+            color: white;
+            font-size: 24px;
+        }
 
-    .bottom {
-      height: 80%;
-      display: flex;
-    }
+        .bottom {
+            height: 80%;
+            display: flex;
+        }
 
-    .left {
-      width: 33.33%;
-      background-color: #f0f0f0;
-      text-align: center;
-      line-height: 80vh;
-      font-size: 20px;
-    }
+        .left {
+            width: 33.33%;
+            background-color: #f0f0f0;
+            text-align: center;
+            line-height: 80vh;
+            font-size: 20px;
+        }
 
-    .right {
-      width: 66.66%;
-      background-color: #ddd;
-      text-align: center;
-      line-height: 80vh;
-      font-size: 20px;
-    }
+        .right {
+            width: 66.66%;
+            background-color: #ddd;
+            text-align: center;
+            line-height: 80vh;
+            font-size: 20px;
+        }
     </style>
 </head>
 
-<body>    
+<body>
 
     <!--div id="mainDiv" class="container">
         <div id="folder" class="folder_div"></div>
@@ -109,7 +109,8 @@
 
     <div class="container">
         <div class="top">
-            <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true" onchange="selectFile(event)" />
+            <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true"
+                onchange="selectFile(event)" />
             <div id="drop-zone" onclick="openFile('allfile')">
                 Drop files here<br>
                 <progress id="prog" value="0" max="100"></progress><br>
@@ -117,8 +118,8 @@
             </div>
         </div>
         <div class="bottom">
-            <div class="left">左側區塊 (1/3)</div>
-            <div class="right">右側區塊 (2/3)</div>
+            <div id="divfolder" class="left"></div>
+            <div id="divfiles" class="right"></div>
         </div>
     </div>
 
@@ -151,6 +152,32 @@
             });
         }
 
+        function createButton(caption, onClick) { //{ text, imgSrc, onClick, title }) {
+
+            const btn = document.createElement('button');
+            btn.innerHTML = '📁' + caption;//idtxt + '<br/>' + attr
+            //btn.type = 'button';
+            //btn.className = 'icon-btn';
+            //btn.caption = caption;//title || text; // hover 提示
+            //btn.setAttribute('aria-label', title || text);
+
+            /*
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.alt = ''; // 裝飾性圖片，避免重複朗讀
+            img.width = 20;   // 你可調整大小
+            img.height = 20;
+
+            const span = document.createElement('span');
+            span.textContent = text;
+
+            btn.append(img, span);
+            */
+
+            btn.addEventListener('click', onClick);
+
+            return btn;
+        }
 
 
         /*
@@ -167,9 +194,14 @@
                 p1: "",
                 user: null
             }, '/filesaction',
-                (res) => {
-                    console.log(JSON.stringify(res));
-
+                (obj) => {
+                    console.log(JSON.stringify(obj));
+                    let div = document.getElementById('divfolder');
+                    obj['folders'].forEach(element => {
+                        let b = createButton(element, (e)=>{alert('open ' + element);});
+                        div.appendChild(b);
+                        div.insertAdjacentHTML('beforeend', '<br>');
+                    });
                 }, (err) => {
                     alert('list folder fail');
                 });
@@ -264,7 +296,7 @@
         });
 
         function _upload(file) {
-            
+
             document.getElementById("prog").value = 0;
 
             const formData = new FormData();
