@@ -4,15 +4,29 @@ const path = require('path');
 const { formidable } = require('formidable');
 const { syncBuiltinESMExports } = require('module');
 
+// 建立 uploads 資料夾
+const uploadDir = './users/uploads'//path.join('', 'uploads');
+
 function syncListunderfolder(folder, res) {
 
-  let obj = { files: [], folders: [], state: 0, des: ''};
-  try {  
+  let obj = { 
+              files: [], 
+              folders: [],
+              folder: "", 
+              state: 0, 
+              des: ""
+            };
+  try {
+    obj.folder = folder; 
+    if (folder == null) 
+      folder = uploadDir;
+    else 
+      folder = uploadDir + '/' + folder;
+    
     // 使用同步方法
     const files = fs.readdirSync(folder);
     console.log('資料夾內容:');
     files.forEach(file => {
-
       const itemPath = path.join(folder, file);
       const stats = fs.statSync(itemPath);
       if (file.startsWith('.')) return;
@@ -23,7 +37,6 @@ function syncListunderfolder(folder, res) {
         console.log(`- Folder: ${file}`);
         obj['folders'].push(`${file}`);
       }
-
     });
     
     obj['state'] = 1;
@@ -90,8 +103,6 @@ function getToday() {
   return formattedDate;
 }
 
-// 建立 uploads 資料夾
-const uploadDir = './users/uploads'//path.join('', 'uploads');
 if (!fs.existsSync(uploadDir))
   fs.mkdirSync(uploadDir);
 
@@ -124,10 +135,10 @@ function handleFile(req, res) {
 
     switch (action) {
       case 'listfolders':
-        syncListunderfolder(uploadDir, res);//listunderfolder(uploadDir, res);
+        syncListunderfolder(null, res);//listunderfolder(uploadDir, res);
         return;
       case 'listfiles':
-        syncListunderfolder(uploadDir + '/' + p1);
+        syncListunderfolder(p1, res);
         return;
       case 'addfolder':
         let dir = uploadDir + '/' + p1;//'./users/uploads'//path.join('', 'uploads');

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Drag & Drop Upload</title>
+    <link rel="stylesheet" href="ui_green.css" />
     <style>
         #drop-zone {
             width: 50%;
@@ -17,50 +18,6 @@
             margin: 10px auto;
         }
 
-
-        .container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .folder_div {
-            box-sizing: border-box;
-            padding: 5px;
-            flex: 1;
-            overflow: auto;
-            position: fixed;
-            top: 0%;
-            left: 0%;
-            /* 初始位置在左侧屏幕外 */
-            width: 50%;
-            height: 100%;
-            background-color: rgb(0, 0, 0);
-            color: #fff;
-            transition: top 0.3s;
-            /* 添加过渡效果 */
-            z-index: 90;
-            border: none;
-        }
-
-        .file_div {
-            box-sizing: border-box;
-            padding: 3px;
-            flex: 1;
-            overflow: auto;
-            position: fixed;
-            top: 0%;
-            left: 50%;
-            /* 初始位置在左侧屏幕外 */
-            width: 25%;
-            height: 100%;
-            background-color: rgb(50, 50, 50);
-            color: #fff;
-            transition: top 0.3s;
-            /* 添加过渡效果 */
-            z-index: 90;
-            border: none;
-        }
 
         .container {
             height: 100vh;
@@ -85,27 +42,31 @@
         .left {
             width: 33.33%;
             background-color: #f0f0f0;
-            text-align: center;
-            line-height: 80vh;
-            font-size: 20px;
+            /* text-align: center; */
+            /* line-height: 80vh; */
+            font-size: 32px;
+
+            box-sizing: border-box;
+            /* padding: 5px; */
+            flex: 1;
+            overflow: auto;
+            /* position: fixed; */
         }
 
         .right {
             width: 66.66%;
             background-color: #ddd;
-            text-align: center;
-            line-height: 80vh;
-            font-size: 20px;
+            /*text-align: center;*/
+            /*line-height: 80vh;*/
+            /* font-size: 20px; */
+            /* box-sizing: border-box; */
+            /* flex: 1; */
+            overflow: auto;          
         }
     </style>
 </head>
 
 <body>
-
-    <!--div id="mainDiv" class="container">
-        <div id="folder" class="folder_div"></div>
-        <div id="file" class="file_div"></div>
-    </div-->
 
     <div class="container">
         <div class="top">
@@ -155,7 +116,16 @@
         function createButton(caption, onClick) { //{ text, imgSrc, onClick, title }) {
 
             const btn = document.createElement('button');
-            btn.innerHTML = '📁' + caption;//idtxt + '<br/>' + attr
+            btn.innerHTML = '📁 ' + caption;
+            btn.style.width = '40%';
+
+
+            //btn.style.width = '172px'; // setting the width to 200px
+            //btn.style.height = '25px'; // setting the height to 200px
+            //button.style.background = 'teal'; // setting the background color to teal
+            //button.style.color = 'white'; // setting the color to white
+            btn.style.fontSize = '24px';
+
             //btn.type = 'button';
             //btn.className = 'icon-btn';
             //btn.caption = caption;//title || text; // hover 提示
@@ -179,6 +149,18 @@
             return btn;
         }
 
+        function createImage(src, width, height) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.width = width;   // 固定寬度
+            img.height = height; // 固定高度
+
+            // 讓圖片在固定框內保持比例
+            img.style.objectFit = 'contain';  // 或 'cover'
+            img.style.backgroundColor = 'transparent';//'#eee'; // 可選，方便看邊界
+            img.style.border = '2px';
+            return img;
+        }
 
         /*
         let result = await doChk();
@@ -197,8 +179,14 @@
                 (obj) => {
                     console.log(JSON.stringify(obj));
                     let div = document.getElementById('divfolder');
-                    obj['folders'].forEach(element => {
-                        let b = createButton(element, (e)=>{alert('open ' + element);});
+                    let array = obj['folders'];
+                    array.sort();
+                    array.reverse();
+                    array.forEach(element => {
+                        let b = createButton(element, (e) => { 
+                            //alert('open ' + element);
+                            listFiles(element);
+                        });
                         div.appendChild(b);
                         div.insertAdjacentHTML('beforeend', '<br>');
                     });
@@ -213,10 +201,19 @@
                 action: "listfiles",
                 p1: folder,
                 user: null
-            },
-                '/filesaction',
-                (res) => {
-                    console.log(JSON.stringify(res));
+            }, '/filesaction',
+                (obj) => {
+                    console.log(JSON.stringify(obj));
+                    let div = document.getElementById('divfiles');
+                    div.innerHTML = "";
+                    let array = obj['files'];
+                    array.sort();
+                    array.reverse();
+                    array.forEach(element => {
+                        let img = createImage('./users/uploads/' + obj.folder + '/' + element, 80, 80);
+                        div.appendChild(img);
+                        div.insertAdjacentHTML('beforeend', '<br>');
+                    });
                 }, (err) => {
                     alert('list files fail');
                 });
