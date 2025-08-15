@@ -17,7 +17,8 @@ function syncListunderfolder(folder, res) {
               des: ""
             };
   try {
-    obj.folder = folder; 
+    obj.folder = folder;
+    obj.des = "";
     if (folder == null) 
       folder = uploadDir;
     else 
@@ -91,6 +92,23 @@ function listunderfolder(folder, res) {
   console.log("listunderfolder end :" + folder);
 }
 */
+
+function getCurrent() {
+  
+  const now = new Date();
+  // Example: YYYY-MM-DD
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  const mileseconds = String(now.getMilliseconds()).padStart(3, '0');
+
+  const formattedDate = `${year}${month}${day}-${hours}${minutes}${seconds}.${mileseconds}`;
+  console.log(formattedDate);
+  return formattedDate;
+}
 
 function getToday() {
   const now = new Date();
@@ -188,7 +206,9 @@ function uploadFile(req, res) {
 
     const promises = uploaded.map(file => {
       const oldPath = file.filepath;
-      const newPath = path.join(dir, file.originalFilename || 'upload_' + Date.now());
+      //const newPath = path.join(dir, file.originalFilename || 'upload_' + Date.now());
+      const ext = path.extname(file.originalFilename);
+      const newPath = path.join(dir, 'upload_' + getCurrent() + ext);
       println('uploaded.ma ...' + oldPath + ' ... ' + newPath);
       return fs.promises.rename(oldPath, newPath);
     });
