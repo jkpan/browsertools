@@ -153,7 +153,7 @@
   </div>
   <!-- <img src="./tmp/bg01.png"> -->
   <!-- <div class="fixed-text">台北市中心神召會</div> -->
-  <div>✝︎</div>
+  <!-- <div>✝︎</div> -->
   <hr size="8" align="left" width="33%" color="#aaaaaa">
   <div class="slides" id="slidesDiv" hidden="true">
     <iframe style="border: none;" width="100%" height="100%" id="slidesFrame"></iframe>
@@ -193,13 +193,17 @@
       <p></p>
       <a href="./led/marquee_v.html">LED新聞跑馬燈</a>
       <p></p>
-      <a href="./tools/camera.html">Camera</a>
-      <p></p>
-      <a href="./tools/camera_mobile.html">Camera: main</a>
-      <p></p>
-      <a href="./tools/camera_mobile.html?camera=user">Camera: selfie</a>
-      <p></p>
       <a href="./tools/camera_receive.html">Camera: receive</a>
+      <p></p>
+      <blockquote>
+        <a href="./tools/camera_mobile.html">Camera: main</a>
+        <p></p>
+        <a href="./tools/camera_mobile.html?camera=user">Camera: selfie</a>
+        <p></p>
+      </blockquote>
+      <p></p>
+      <a href="./tools/camera.html">Camera led</a>
+      <p></p>
     </blockquote>
   </blockquote>
   <button onclick="location.href='./newurl_slides.html'">簡易投影即時內容</button>
@@ -226,6 +230,7 @@
   <p></p>
   <a href="https://sites.google.com/site/instantfunmobile/">阿榮娛樂</a>
   <p></p>
+  <hr size="8" align="left" width="33%" color="#aaaaaa">
 </body>
 
 </html>
@@ -236,12 +241,14 @@
   function getHelp() {
     return HELPURL;
   }
+
   function embeddedUrl(url) {
     document.getElementById('slidesDiv').hidden = false;
     let frame = document.getElementById('slidesFrame');
     frame.src = url;
   }
 
+  /*
   if (readParam('server') === 'nodejs') {
     //document.getElementById("bplay").hidden = false; //document.getElementById("bctrl").hidden = false;
     //document.getElementById("nivsync").hidden = false;
@@ -249,6 +256,7 @@
       document.getElementById("icom").hidden = false;
     document.getElementById("lyrics_admin").hidden = false;
   }
+  */
 
   //Bible_play      './subtitle_b.html?action=play';
   //Bible_ctrl      './subtitle_b.html?action=ctrl';

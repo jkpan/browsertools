@@ -1,5 +1,7 @@
 FROM node:22-alpine
 
+ENV TZ="Asia/Taipei"
+
 WORKDIR /usr/app/web
 
 COPY package*.json ./

@@ -2222,7 +2222,8 @@ function keyboard(e) {
         }
       }
       init();
-      break;
+      _repaint();
+      return;
     case 'KeyZ': {
         makeTransparent = !makeTransparent;
         let div = document.getElementById("image_container");

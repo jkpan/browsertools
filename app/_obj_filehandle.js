@@ -103,6 +103,7 @@ function getToday() {
   return formattedDate;
 }
 
+
 if (!fs.existsSync(uploadDir))
   fs.mkdirSync(uploadDir);
 
