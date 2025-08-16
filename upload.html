@@ -150,6 +150,10 @@
         }
 
         function createImage(src, width, height) {
+            //let queryValue = "John Doe & Co.";
+            //console.log('src:' + src);
+            //src = encodeURIComponent(src);
+            //console.log('after src:' + src);
             const img = document.createElement('img');
             img.src = src;
             img.width = width;   // 固定寬度
@@ -210,12 +214,15 @@
                     array.sort();
                     array.reverse();
                     array.forEach(element => {
+                        //let src = encodeURIComponent(element);
+                        //let encodedString = URLEncoder.encode(element, "UTF-8");
+                        console.log('::: '+ element);
                         let img = createImage('./users/uploads/' + obj.folder + '/' + element, 80, 80);
                         div.appendChild(img);
                         div.insertAdjacentHTML('beforeend', '<br>');
                     });
                 }, (err) => {
-                    alert('list files fail');
+                    alert('list files fail: ' + err);
                 });
         }
 

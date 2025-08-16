@@ -84,6 +84,9 @@ print_sys_info();
 
 //讀檔輸出
 function responseFile(filePath, res) {
+  
+  filePath = decodeURIComponent(filePath); //println('xxx filePath : ' + filePath);
+
   fs.readFile(filePath, (err, content) => {
     if (err) {
       // 若檔案不存在，回傳404 Not Found狀態碼
@@ -92,6 +95,7 @@ function responseFile(filePath, res) {
     } else {
       // 回傳200 OK狀態碼及HTML內容
       //const fp = path.join(process.cwd(), 'public', filePath);
+  
       const ext = path.extname(filePath);
       const contentType = {
         '.jpg': 'image/jpeg',
@@ -223,6 +227,9 @@ function webservice(req, res) {
   }
 
   const filePath = `.${url}`;
+  println('====');
+  println('filePath: ' + filePath);
+  println('====');
   responseFile(filePath, res);
 }
 

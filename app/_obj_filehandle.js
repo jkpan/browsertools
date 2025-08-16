@@ -206,9 +206,9 @@ function uploadFile(req, res) {
 
     const promises = uploaded.map(file => {
       const oldPath = file.filepath;
-      //const newPath = path.join(dir, file.originalFilename || 'upload_' + Date.now());
-      const ext = path.extname(file.originalFilename);
-      const newPath = path.join(dir, 'upload_' + getCurrent() + ext);
+      const newPath = path.join(dir, file.originalFilename || 'upload_' + Date.now());
+      //const ext = path.extname(file.originalFilename);
+      //const newPath = path.join(dir, 'upload_' + getCurrent() + ext);
       println('uploaded.ma ...' + oldPath + ' ... ' + newPath);
       return fs.promises.rename(oldPath, newPath);
     });
