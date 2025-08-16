@@ -1,9 +1,9 @@
 <script type="text/javascript" charset="UTF-8">
   const HELPURL_EBDD = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false';//&rm=minimal';
-  const HELPURL =      'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/pub?start=false&loop=false&delayms=3000';
+  const HELPURL = 'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/pub?start=false&loop=false&delayms=3000';
 </script>
 <script type="text/javascript" src="login.js" charset="UTF-8"></script>
-<script>  
+<script>
 
   function closeLogin() {
     if (_login)
@@ -11,7 +11,7 @@
     _login = null;
   }
 
-  
+
   var _login = null;
   var username = null;
 
@@ -35,19 +35,33 @@
       let result = await doChk();
       handleLogin(result);
     } catch (error) {
-      handleLogin({ state: 2,
-                    username: "guest",
-                    token: null});
+      handleLogin({
+        state: 0,
+        username: "guest",
+        token: null
+      });
     }
   }
 
+  function hideSome(doHide) {
+    document.getElementById('lyrics_admin').hidden = doHide;
+    document.getElementById('camera_receive').hidden = doHide;
+    document.getElementById('camera_main').hidden = doHide;
+    document.getElementById('camera_self').hidden = doHide;
+    document.getElementById('upload').hidden = doHide;
+  }
+
   function handleLogin(resultJson) {
+    hideSome(false);
     //console.log('xxx : ' + JSON.stringify(resultJson));
     document.getElementById('__username').hidden = true;
     document.getElementById('__login').hidden = true;
     document.getElementById('__logout').hidden = true;
     username = null;
-    if (resultJson.state == 0) return;
+    if (resultJson.state == 0) {
+      hideSome(true);
+      return;
+    }
     if (resultJson.state == 1) {
       username = resultJson.username;
       document.getElementById('__username').hidden = false;
@@ -65,8 +79,10 @@
       document.getElementById('__username').innerHTML = resultJson.username;
       document.getElementById('__logout').hidden = true;
       document.getElementById('__login').hidden = false;
+      hideSome(true);
     } else {
       document.getElementById('__login').hidden = false;
+      hideSome(true);
     }
 
   }
@@ -132,24 +148,23 @@
     }
 
     .right-to-left {
-      
+
       margin-right: 5%;
       direction: rtl;
       text-align: right;
     }
-
   </style>
 </head>
 
 <body>
   <div class="right-to-left">
-      &nbsp;
-      <label id="__username" hidden="true"></label>
-      &nbsp;
-      <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
-      &nbsp;
-      <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign out</label>
-      &nbsp;
+    &nbsp;
+    <label id="__username" hidden="true"></label>
+    &nbsp;
+    <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
+    &nbsp;
+    <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign out</label>
+    &nbsp;
   </div>
   <!-- <img src="./tmp/bg01.png"> -->
   <!-- <div class="fixed-text">台北市中心神召會</div> -->
@@ -168,18 +183,18 @@
     <blockquote>
       <a href="./subtitle/subtitle_b.html">聖經字幕工具</a>
       <p></p>
-      <blockquote>
-        <a id="bplay" hidden="true" href="./Bible_play" style="background-color: black;">幫你翻聖經 (nodejs)</a>
-        <p></p>
-        <!-- a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a>
+      <!-- <blockquote> -->
+      <!-- <a id="bplay" hidden="true" href="./Bible_play" style="background-color: black;">幫你翻聖經 (nodejs)</a> -->
+      <!-- <p></p> -->
+      <!-- a id="bctrl" hidden="true" href="./Bible_ctrl" style="background-color: black;">幫你翻聖經控方 </a>
         <p></p-->
-      </blockquote>
+      <!-- </blockquote> -->
       <a href="./subtitle/subtitle_niv.html">Bible niv </a>
-      <p></p>
-      <blockquote>
-        <a id="nivsync" hidden="true" href="./Bible_play_niv">幫你翻聖經NIV (nodejs)</a>
-        <p></p>
-      </blockquote>
+      <!-- <p></p> -->
+      <!-- <blockquote> -->
+      <!-- <a id="nivsync" hidden="true" href="./Bible_play_niv">幫你翻聖經NIV (nodejs)</a> -->
+      <!-- <p></p> -->
+      <!-- </blockquote> -->
       <a href="./subtitle/subtitle.html">詩歌字幕工具</a>
       <p></p>
       <blockquote>
@@ -187,18 +202,18 @@
         <p></p>
         <a href="./subtitle/lyrics_text.html">所有的歌文字格式</a>
       </blockquote>
-      <a href="./tools/effect.html">綜藝效果</a>
+      <!-- <a href="./tools/effect.html">綜藝效果</a> -->
       <p></p>
       <a href="./led/clock.html">小時鐘</a>
       <p></p>
-      <a href="./led/marquee_v.html">LED新聞跑馬燈</a>
-      <p></p>
-      <a href="./tools/camera_receive.html">Camera: receive</a>
+      <!-- <a href="./led/marquee_v.html">LED新聞跑馬燈</a> -->
+      <!-- <p></p> -->
+      <a id="camera_receive" href="./tools/camera_receive.html">Camera: receive</a>
       <p></p>
       <blockquote>
-        <a href="./tools/camera_mobile.html">Camera: main</a>
+        <a id="camera_main" href="./tools/camera_mobile.html">Camera: main</a>
         <p></p>
-        <a href="./tools/camera_mobile.html?camera=user">Camera: selfie</a>
+        <a id="camera_self" href="./tools/camera_mobile.html?camera=user">Camera: selfie</a>
         <p></p>
       </blockquote>
       <p></p>
@@ -222,18 +237,18 @@
   <p></p>
   <a href="./led/led.html">LED URL</a>
   <p></p>
-  <a href="./index_others.html">其他工具</a> 
+  <a href="./index_others.html">其他工具</a>
   <p></p>
-  <a href="./upload.html">Upload</a>
+  <a id="upload" href="./upload.html">Upload</a>
   <p></p>
   <!-- <a href="./dash.html?json=demo/dash_gif.json">TV Demo 2</a> -->
   <p></p>
   <a href="https://sites.google.com/site/instantfunmobile/">阿榮娛樂</a>
   <p></p>
   <hr size="8" align="left" width="33%" color="#aaaaaa">
-  <img src="./users/uploads/20250816/2025-07-0410.37.08.png"></img>
+  <!-- <img src="./users/uploads/20250816/2025-07-0410.37.08.png"></img> -->
   <!-- <img src="./users/uploads/20250816/截圖 2025-08-11 10.39.27.png"></img> -->
-  <img src="./users/uploads/20250816/%E6%88%AA%E5%9C%96%202025-08-11%2010.39.27.png"></img>
+  <!-- <img src="./users/uploads/20250816/%E6%88%AA%E5%9C%96%202025-08-11%2010.39.27.png"></img> -->
 </body>
 
 </html>
@@ -265,5 +280,5 @@
   //Bible_ctrl      './subtitle_b.html?action=ctrl';
 
   chkloginstatus();
-  
+
 </script>

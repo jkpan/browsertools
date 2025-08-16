@@ -33,7 +33,7 @@ global.print = function (msg) {
 global.println = function (msg) { //console.trace();
   if (msg)
     process.stdout.write(`\n(${process.pid}) ${msg}`);
-  else 
+  else
     process.stdout.write('\n');
 }
 
@@ -72,7 +72,7 @@ function print_sys_info() {
   println(`process.cwd() ${process.cwd()}`);
   println(`dir  name ${__dirname}`);
   println(`file name ${__filename}`);
-  
+
   println('cpu ' + os.cpus().length + ' cores');
   println('total mem: ' + numberWithCommas(os.totalmem()));
   println(' free mem: ' + numberWithCommas(os.freemem()));
@@ -84,8 +84,8 @@ print_sys_info();
 
 //讀檔輸出
 function responseFile(filePath, res) {
-  
-  filePath = decodeURIComponent(filePath); //println('xxx filePath : ' + filePath);
+
+  filePath = decodeURIComponent(filePath);
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
@@ -95,7 +95,6 @@ function responseFile(filePath, res) {
     } else {
       // 回傳200 OK狀態碼及HTML內容
       //const fp = path.join(process.cwd(), 'public', filePath);
-  
       const ext = path.extname(filePath);
       const contentType = {
         '.jpg': 'image/jpeg',
@@ -130,14 +129,14 @@ function savejsonfile(req, res) {
     let fn = requestData.filename;
     let content = requestData.content; //str
     let jsonobj = JSON.parse(content); //obj
-    println(jsonobj);  
-  
+    println(jsonobj);
+
     const writeStream = fs.createWriteStream(fn);
     writeStream.write(JSON.stringify(jsonobj, null, "  ")); //, null, "\t");
     writeStream.end(() => {
       println('檔案寫入完成!');
     });
-    
+
     res.setHeader('Content-Type', 'application/json');// 发送响应数据
     res.end(JSON.stringify({ "state": "success" }));
 
@@ -145,7 +144,7 @@ function savejsonfile(req, res) {
 }
 
 function webservice(req, res) {
-  
+
   let url = req.url;
 
   //let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -174,7 +173,7 @@ function webservice(req, res) {
     //歌詞
     case '/synclyrics': sync_lyrics.synclyrics(req, res); return;
     case '/actionlyrics': sync_lyrics.lyricsBaseAction(req, res); return;
-    
+
     //設定存檔
     case '/savejson': savejsonfile(req, res); return;
 
@@ -185,7 +184,7 @@ function webservice(req, res) {
 
     case '/upload': upload.uploadFile(req, res); return;
     case '/filesaction': upload.handleFile(req, res); return;
-    
+
     default:
 
       if (req.url.startsWith('/cmd')) {
@@ -202,12 +201,21 @@ function webservice(req, res) {
       }
       break;
   }
-  
+
   if (url.startsWith('/synscripture_get')) {
     sync_Bible.synscripture_get(url, res);
     return;
   }
 
+  if (url === '/') {
+    const redirect = '/index.html';
+    // 执行重定向
+    res.writeHead(302, { Location: redirect });
+    res.end();
+    return;
+  }
+
+  /*
   if (url === '/' || url === '/index.html') {
     const redirect = '/index.html?server=nodejs';
     // 执行重定向
@@ -215,28 +223,26 @@ function webservice(req, res) {
     res.end();
     return;
   }
+  */
 
   // 使用正規表達式提取檔名
   if (url.lastIndexOf(".html?") > 0) {
     const match = url.match(/\/([^\/?#]+\.html)(?:[?#]|$)/);
     const fileName = match ? match[1] : null;
-  
+
     url = url.substr(0, url.lastIndexOf(fileName)) + fileName;
 
     println('path' + url); //url = '/' + fileName;
   }
 
   const filePath = `.${url}`;
-  println('====');
-  println('filePath: ' + filePath);
-  println('====');
   responseFile(filePath, res);
 }
 
 function startService() {
 
-  const server = httpsEnable?
-    https.createServer(httpsOptions, webservice):
+  const server = httpsEnable ?
+    https.createServer(httpsOptions, webservice) :
     http.createServer(webservice);
 
   const networkInterfaces = os.networkInterfaces();
@@ -303,10 +309,10 @@ function printInfo() {
   let info_l = sync_lyrics.getInfo();
   info_b.forEach(function (_info) {
     println(_info);
-  }); 
+  });
   info_l.forEach(function (_info) {
     println(_info);
-  }); 
+  });
 }
 
 function tuiPrepare() {
@@ -318,18 +324,18 @@ function tuiPrepare() {
       clearScreen();
       process.exit();
     }
-  
+
     // 更新光標位置
     //console.log('// ' +key.toLowerCase());
     switch (key.toLowerCase()) {
-      case 'c': 
+      case 'c':
         clearScreen();
         printInfo();
         break;
       //case '\n':  println(); break;
       //default: println(); break;
     }
-  
+
   });
 }
 

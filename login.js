@@ -86,10 +86,10 @@ async function doChk() {
     try {
         let token = localStorage.getItem('token');
         let response;
-        if (token == null) {
+        if (token == null) { //沒有就登入guest 
             response = await doLogin('guest', '');
             return response;//{ state: 2, username: 'guest', des: "" }; //return response;
-        } else {
+        } else { //有就做登入檢查
             response = await fetch("/loginchk", {
                 method: "POST",
                 headers: {
@@ -110,7 +110,7 @@ async function doChk() {
         }
         return {state: 2, username:"guest", des: "fail"};
         */
-    } catch (err) {
+    } catch (err) { //nodejs不通就state = 0
         console.error("doChk error: ", err);
         return {state: 0, username: "guest", des: "dochk response not ok"}
     }

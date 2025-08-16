@@ -9,21 +9,21 @@ const uploadDir = './users/uploads'//path.join('', 'uploads');
 
 function syncListunderfolder(folder, res) {
 
-  let obj = { 
-              files: [], 
-              folders: [],
-              folder: "", 
-              state: 0, 
-              des: ""
-            };
+  let obj = {
+    files: [],
+    folders: [],
+    folder: "",
+    state: 0,
+    des: ""
+  };
   try {
     obj.folder = folder;
     obj.des = "";
-    if (folder == null) 
+    if (folder == null)
       folder = uploadDir;
-    else 
+    else
       folder = uploadDir + '/' + folder;
-    
+
     // 使用同步方法
     const files = fs.readdirSync(folder);
     console.log('資料夾內容:');
@@ -32,16 +32,13 @@ function syncListunderfolder(folder, res) {
       const stats = fs.statSync(itemPath);
       if (file.startsWith('.')) return;
       if (stats.isFile()) {
-        console.log(`- File: ${file}`);
         obj['files'].push(`${file}`);
       } else if (stats.isDirectory()) {
-        console.log(`- Folder: ${file}`);
         obj['folders'].push(`${file}`);
       }
     });
-    
+
     obj['state'] = 1;
-    println('before res: ' + JSON.stringify(obj));
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(obj));
 
@@ -94,7 +91,7 @@ function listunderfolder(folder, res) {
 */
 
 function getCurrent() {
-  
+
   const now = new Date();
   // Example: YYYY-MM-DD
   const year = now.getFullYear();

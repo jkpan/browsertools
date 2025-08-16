@@ -22,7 +22,7 @@ try {
  */
 function setDoAuth(_auth) {
   doauth = _auth;
-  if (doauth) {    
+  if (doauth) {
     try {
       let txt = fs.readFileSync('./users/accounts.json', 'utf8');
       users = JSON.parse(txt); //console.log(users);
@@ -52,9 +52,11 @@ function parseBody(req) {
 
 function resposeGuest(res, level) {
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ "state": level,
-                           "username": "guest",
-                           "token": "null" }));
+  res.end(JSON.stringify({
+    "state": level,
+    "username": "guest",
+    "token": "null"
+  }));
 }
 
 async function auth(req, res) {
@@ -65,13 +67,14 @@ async function auth(req, res) {
 
     //權限全開的guest (state = 1)
     if (!doauth) { //const token = jwt.sign({ "username":"guest" }, SECRET_KEY, { expiresIn: '10h' });
-      console.log('auth resposeGuest(res, 1);');
+      println('auth : no auth {guest all state 1}');
       resposeGuest(res, 1);
       return;
     }
 
     //有限制的guest (state = 2)
     if (username === 'guest') {
+      println('auth : auth but guest {guest helf state 2}');
       resposeGuest(res, 2);
       return;
     }
@@ -80,29 +83,33 @@ async function auth(req, res) {
 
     // 驗證用戶
     if (users[username] && users[username] === password) {
-      console.log("user passwd success");
+      println('auth : auth success {user all state 1}');
       // 成功登入，生成 JWT
       const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
-      
+
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ 
+      res.end(JSON.stringify({
         "state": 1,
         "username": username,
-        "token": token 
+        "token": token
       }));
     } else {
-      console.log("user passwd fail");
+      //console.log("user passwd fail");
+      println('auth : auth fail {login fail state -1}');
       // 驗證失敗
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ 
-          "state": -1,
-          des: 'Login fail' }));
+      res.end(JSON.stringify({
+        "state": -1,
+        des: 'Login fail'
+      }));
     }
   } catch (error) {
+    println('auth : system fail { system fail state 0}');
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ 
-      "state": -1,
-      des: 'Exception: ' + error }));
+    res.end(JSON.stringify({
+      "state": 0,
+      des: 'Exception: ' + error
+    }));
   }
 
 }
@@ -110,7 +117,7 @@ async function auth(req, res) {
 function chk(req, res) {
 
   if (!doauth) {
-    console.log('chk : resposeGuest(res, 1);');
+    println('chk : no auth {guest all state 1}');
     resposeGuest(res, 1);
     return;
   }
@@ -120,6 +127,7 @@ function chk(req, res) {
   //console.log("authHeader : " + authHeader);console.log("     token : " + token);
 
   if (!token) {
+    println('chk : auth but token fail {guest helf state 2}');
     //res.writeHead(200, { 'Content-Type': 'application/json' });
     //res.end(JSON.stringify({ state:-1, des: 'Token not provided' }));
     resposeGuest(res, 2);
@@ -137,12 +145,14 @@ function chk(req, res) {
         des: err
       }));
       */
+      println('chk : auth but login fail {guest helf state 2}');
       resposeGuest(res, 2);
       return;
     }
+    println('chk : auth success {user all state 1}');
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
-      state: 1, 
+      state: 1,
       username: `${user.username}`, //message: `Hello, ${user.username}!`
       des: "auth success"
     }));
@@ -151,10 +161,12 @@ function chk(req, res) {
 }
 
 function adduser(username, password) {
-  if (username.toLowerCase() == 'guest') return { state:-1, des:"name exist"};
-  return { state:1, 
-           username: username, 
-           des:"name exist"};
+  if (username.toLowerCase() == 'guest') return { state: -1, des: "name exist" };
+  return {
+    state: 1,
+    username: username,
+    des: "name exist"
+  };
 }
 
 module.exports = {
