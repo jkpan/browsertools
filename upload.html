@@ -40,11 +40,11 @@
         }
 
         .left {
-            width: 33.33%;
-            background-color: #f0f0f0;
+            width: 20%;
+            background-color: #707070;
             /* text-align: center; */
             /* line-height: 80vh; */
-            font-size: 32px;
+            font-size: 24px;
 
             box-sizing: border-box;
             /* padding: 5px; */
@@ -54,8 +54,8 @@
         }
 
         .right {
-            width: 66.66%;
-            background-color: #ddd;
+            width: 80%;
+            background-color: #909090;
             /*text-align: center;*/
             /*line-height: 80vh;*/
             /* font-size: 20px; */
@@ -117,7 +117,7 @@
 
             const btn = document.createElement('button');
             btn.innerHTML = '📁 ' + caption;
-            btn.style.width = '40%';
+            btn.style.width = '90%';
 
 
             //btn.style.width = '172px'; // setting the width to 200px
@@ -149,20 +149,28 @@
             return btn;
         }
 
-        function createImage(src, width, height) {
+        function createImage(src, width, height, fn) {
             //let queryValue = "John Doe & Co.";
             //console.log('src:' + src);
             //src = encodeURIComponent(src);
             //console.log('after src:' + src);
             const img = document.createElement('img');
             img.src = src;
-            img.width = width;   // 固定寬度
-            img.height = height; // 固定高度
+            img.title = fn;
+            img.style.width = "30%";//width;   // 固定寬度
+            img.style.height = "30%";//height; // 固定高度
 
             // 讓圖片在固定框內保持比例
             img.style.objectFit = 'contain';  // 或 'cover'
-            img.style.backgroundColor = 'transparent';//'#eee'; // 可選，方便看邊界
-            img.style.border = '2px';
+            img.style.backgroundColor = '#000000';
+            img.style.border = '2px solid red';
+            img.style.cursor = "pointer"; // 滑鼠移過去變成手型
+            //img.style.borderColor = "#ffff00";
+
+            img.addEventListener("click", () => {
+                window.open(src, "_blank", "width=800,height=600"); 
+            });
+
             return img;
         }
 
@@ -217,9 +225,9 @@
                         //let src = encodeURIComponent(element);
                         //let encodedString = URLEncoder.encode(element, "UTF-8");
                         console.log('::: '+ element);
-                        let img = createImage('./users/uploads/' + obj.folder + '/' + element, 80, 80);
+                        let img = createImage('./users/uploads/' + obj.folder + '/' + element, "30%", "30%", element);
                         div.appendChild(img);
-                        div.insertAdjacentHTML('beforeend', '<br>');
+                        //div.insertAdjacentHTML('beforeend', '<br>');
                     });
                 }, (err) => {
                     alert('list files fail: ' + err);
