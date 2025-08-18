@@ -112,7 +112,7 @@ async function doChk() {
         */
     } catch (err) { //nodejs不通就state = 0
         console.error("doChk error: ", err);
-        return {state: 0, username: "guest", des: "dochk response not ok"}
+        return {state: 0, username: "guest", des: "dochk response not ok"};
     }
 }
 

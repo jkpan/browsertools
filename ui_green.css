@@ -19,7 +19,7 @@ button {
 
     padding: 4px;
 
-    display: inline-block;
+    /* display: inline-block; */
 }
 
 .button2 {
@@ -38,5 +38,5 @@ button {
 
     padding: 4px;
 
-    display: inline-block;
+    /* display: inline-block; */
 }

@@ -610,9 +610,10 @@
     document.getElementById('__login').hidden = true;
     document.getElementById('__logout').hidden = true;
     username = null;
+    //resultJson = {state:0, username:"guest", des:"dochk response not ok"};
     if (resultJson.state == 0) {
       username = resultJson.username;
-      for (let i = 1; i <= 5; i++) document.getElementById('btn_save_' + i).hidden = true;
+      for (let i = 1; i <= 5; i++) document.getElementById('btn_save_' + i).hidden = "true";
       return;
     }
     if (resultJson.state == 1) {

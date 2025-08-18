@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+        <link rel="stylesheet" href="ui_green.css" />
         <style>
         body {
           margin: 10px;
@@ -13,23 +14,13 @@
         a {
             color: #00ff00;
         }
-        button {
-            font-size: 16px;
-            background-color: rgb(0, 150, 0);
-            color: #00ff00;
-            /*margin: 2% 2%;*/
-            /*width:45%;*/
-            /*border: 2px green;*/
-            vertical-align: middle;
-          }
+        
         </style>
     </head>
 <body>
 <br/>
 <hr size="8" align="left" width="33%" color="#007000">
 <p></p>
-<br>
-<br>
 <br>
 <!--button onclick="location.href='./dashboard.html'">Dashboard客製綠幕</button-->
 <button onclick="runUrl2Parent('./dashboard.html')">Dashboard客製綠幕</button><p></p>
@@ -38,11 +29,12 @@
   <a href="javascript:runUrl2Parent('./subtitle/subtitle_b.html')">聖經字幕工具</a><p></p>
   <a href="javascript:runUrl2Parent('./subtitle/subtitle_niv.html')">Bible niv</a><p></p>
   <a href="javascript:runUrl2Parent('./newurl.html')">線上本機內容</a><p></p>
-  <a href="javascript:runUrl2Parent('./newurl_slides.html')">多個即時內容</a><p></p>
   <a href="javascript:runUrl2Parent('./tools/effect.html')">綜藝效果</a><p></p>
   <a href="javascript:runUrl2Parent('./led/clock.html')">小時鐘</a><p></p>
-  <a href="javascript:runUrl2Parent('./led/marquee_v.html')">LED新聞跑馬燈</a><p></p>
-  <a href="javascript:runUrl2Parent('./tools/camera.html')">Camera</a><p></p>
+  <a href="javascript:runUrl2Parent('./led/marquee.html')">LED跑馬燈</a><p></p>
+  <a href="javascript:runUrl2Parent('./tools/camera_receive.html')">Camera: receive</a><p></p>
+  <a href="javascript:runUrl2Parent('./tools/camera.html')">Camera led effect</a>
+
   </blockquote>
 <p></p>
   <button onclick="location.href='./newurl_slides.html'">多個即時內容(簡易投影)</button>

@@ -9,7 +9,7 @@
         body {
             margin: 0px;
             height: 100%;
-            background-color: rgba(67, 67, 67, 0.0);
+            background-color: rgba(67, 67, 67, 1.0);
             user-select: none;
             -webkit-touch-callout: none;
         }
@@ -170,6 +170,11 @@
         }
 
         timeoutID = setTimeout(chkWebsocket, 3000);
+    }
+
+    function toObj() {
+        let obj = {};
+        return obj;
     }
 
     var canvas = document.getElementById('canvas');

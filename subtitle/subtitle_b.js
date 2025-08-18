@@ -1415,6 +1415,7 @@ function isEnglishCharacter(char) {
 }
 
 function islastChar(str) {
+  if (!str) return false;
   return isEnglishCharacter(str[str.length - 1]);
 }
 

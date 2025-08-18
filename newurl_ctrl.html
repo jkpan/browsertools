@@ -5,6 +5,7 @@
     <meta name="viewport"
         content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
         charset="UTF-8" />
+    <link rel="stylesheet" href="ui_green.css" />
     <style>
         body {
             color: rgb(0, 255, 0);
@@ -40,26 +41,6 @@
             box-shadow: 0 0 8px 0 rgb(0, 255, 0);
             background: rgb(0, 150, 0);
             color: rgb(0, 255, 0);
-        }
-
-        button {
-            font-size: 14px;
-            background-color: rgb(0, 150, 0);
-            color: #00ff00;
-            /*margin: 2% 2%;*/
-            width: auto;
-            height: 36px;
-            /*border: 1px solid;*/
-            vertical-align: middle;
-        }
-
-        .okbutton {
-            font-size: 16px;
-            background-color: rgb(0, 150, 0);
-            color: #00ff00;
-            width: 25%;
-            height: 32px;
-            vertical-align: middle;
         }
 
         input[type=file] {
@@ -103,7 +84,7 @@
 
 <body>
     
-    <button class="okbutton" style="background-color: red;" type="button"
+    <button style="background-color: red;" type="button"
         onclick="window.opener.clean()">Remove</button>
     &nbsp;
     <button style="background-color: blue;" id="aBtn" onclick="setSlideAnim()">a2</button>
@@ -146,7 +127,7 @@
     嵌入Google簡報, Canva簡報, Youtube影片...
     <textarea id="ppt_url" name="mytext" rows="5"></textarea>
     <P></P>
-    <button class="okbutton" type="button" onclick="urlGo()">OK</button>
+    <button type="button" onclick="urlGo()">OK</button>
     <P></P>
     <ul>
         <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a>

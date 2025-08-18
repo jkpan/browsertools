@@ -2,8 +2,8 @@ const APPS = [
   'lyrics', 'Bible', 'NIV', 'BPlay', 'iPlay',
   'url_1', 'url_2', 'url_3',
   //'file_1', 'file_2', 'file_3',
-  'swipe',
-  'anim', 'info', 'effect', 'time', 'dBoard', 'tabs'
+  'anim', 'info', 'effect', 'time', 'camrece', 
+  'swipe', 'dBoard', 'tabs'
 ];
 
 const GRID_W = 48;
@@ -835,10 +835,9 @@ function getElmState() {
   let stateArray = {
     lyrics: -1, Bible: -1, NIV: -1, BPlay: -1, iPlay: -1,
     url_1: -1, url_2: -1, url_3: -1,
-    //file_1: -1, file_2: -1, file_3: -1,
-    swipe: -1, 
-    anim: -1, info: -1, effect: -1, time: -1,
-    dBoard: -1, tabs: -1
+    //file_1: -1, file_2: -1, file_3: -1, 
+    anim: -1, info: -1, effect: -1, time: -1, camrece: -1,
+    swipe:-1, dBoard: -1, tabs: -1
   };
   
   let div = document.getElementById("mainDiv");
@@ -1067,6 +1066,13 @@ function _createFrame(keyname) {
       let app = new Applet({ x: 6, y: 1, w: 15, h: 24, keyname: keyname });
       applets.push(app);
       app.onTop();
+      return app;
+    }
+    case 'camrece': {
+      createFrame(keyname, './tools/camera_receive.html');
+      let app = new Applet({ x: 6, y: 1, w: 15, h: 24, keyname: keyname });
+      applets.push(app);
+      app.onTop();      
       return app;
     }
     /*

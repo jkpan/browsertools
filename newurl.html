@@ -3,15 +3,17 @@
 <html>
 <head>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
+<link rel="stylesheet" href="ui_green.css" />
 <style>
+
 body {
   color: rgb(0,255,0);
   margin: 0% 0%;
   height: 100%;
   width: 100%;
   background-color: rgb(0, 128, 0);
-  /* transparent; border: 2px solid rgb(0, 255, 0);*/
 }
+
 .wrapper {
   
   display: grid;
@@ -85,14 +87,7 @@ textarea:focus {
   background: rgb(0, 150, 0);
   color: rgb(0, 255, 0);    
 }
-.okbutton {
-  font-size: 24px;
-  background-color: rgb(0, 150, 0);
-  color: #00ff00;
-  margin: 2% 2%;
-  width: 50%;
-  vertical-align: middle;
-}
+
 input[type=file] {
   border:2px solid;
   border-color: rgb(0, 255, 0);
@@ -265,8 +260,8 @@ a {
               }
             </script>
           <br/>
-          <button class="okbutton" type="button" onclick="urlGo()">OK</button>
-          <!--button class="okbutton" type="button" onclick="iframeGo()">OK (embedded whole iframe)</button-->
+          <button onclick="urlGo()"> OK </button>
+          <!--button type="button" onclick="iframeGo()">OK (embedded whole iframe)</button-->
           <br/>
           <ul>
             <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a></li>
