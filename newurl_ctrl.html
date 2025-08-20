@@ -15,6 +15,7 @@
             margin: 5%;
             /* transparent; border: 2px solid rgb(0, 255, 0);*/
         }
+
         ::-webkit-scrollbar {
             display: none;
         }
@@ -78,14 +79,12 @@
             align-items: center;
             cursor: pointer;
         }
-
     </style>
 </head>
 
 <body>
-    
-    <button style="background-color: red;" type="button"
-        onclick="window.opener.clean()">Remove</button>
+
+    <button style="background-color: red;" type="button" onclick="window.opener.clean()">Remove</button>
     &nbsp;
     <button style="background-color: blue;" id="aBtn" onclick="setSlideAnim()">a2</button>
     &nbsp;
@@ -101,11 +100,13 @@
     <button onclick="urlGo('./subtitle/subtitle_niv.html?colorsel=1&verseCount=2', 'NIV')">NIV</button>
     <button onclick="urlGo('./led/marquee.html', 'LED')">LED</button>
     <button onclick="urlGo('./led/clock.html', 'clock')">時鐘</button>
+    <button onclick="urlGo('./tools/camera_receive.html', 'camrece')">Camera</button>
     <button onclick="urlGo('dashboard.html', 'dash')">Dash</button>
     <button onclick="urlGo('tabs.html', 'tabs')">頁籤</button>
+    <button onclick="openLib()">圖庫</button>
     <p></p>
-    
-    <hr/>
+
+    <hr />
 
     <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
         onclick="openFile('allfile')">
@@ -189,11 +190,12 @@
         }
     </script>
 
-    <hr/>
-    
+    <hr />
+
     <p></p>
     <button onclick="divGo('./subtitle/subtitle.html?action=ctrl&mode=2', 'frame_song', 'div_song')">歌詞控制</button>
-    <button onclick="divGo('./subtitle/subtitle_b.html?action=ctrl&colorsel=1&verseCount=2', 'frame_Bible', 'div_Bible')">經文控制</button>
+    <button
+        onclick="divGo('./subtitle/subtitle_b.html?action=ctrl&colorsel=1&verseCount=2', 'frame_Bible', 'div_Bible')">經文控制</button>
     <p></p>
     <div id="div_song" hidden>
         <iframe id="frame_song" class="ctrl"></iframe>
@@ -389,6 +391,22 @@
         event.preventDefault();
     }
 
+    function pushFromUpload(content) {//alert(content);
+        document.getElementById("ppt_url").value = content;
+    }
+
+    var liber = null;
+    function openLib() {
+        closeLiber();
+        liber = window.open("../upload.html", "_blank", 'width=800, height=600, left=100, top=100');
+    }
+
+    function closeLiber() {
+        if (liber)
+            liber.close();
+        liber = null;
+    }
+
     //window.addEventListener('beforeunload', function (e) { window.opener.clean(); });
     window.addEventListener('keyup', (e) => {
         //e.preventDefault();
@@ -414,6 +432,7 @@
     }, false);
 
     window.addEventListener("beforeunload", function (event) {
+        closeLiber();
         if (!isSafariBrowser())
             window.opener.openCtrl_reborn();
     });

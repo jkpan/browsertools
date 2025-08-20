@@ -173,7 +173,7 @@ function json2List(fileContent) {
 
   if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
     image_base64 = jsonData.imageBase64;
-    showImage();
+    showImage(image_base64);
   }
 
   sync_type = 0;
@@ -224,7 +224,7 @@ function dropHandler(event) {
           // 读取文件内容
           reader.onload = function (event) {
             image_base64 = event.target.result;
-            showImage();
+            showImage(image_base64);
           };
           reader.readAsDataURL(file);
         } else {
@@ -248,16 +248,21 @@ function removeBackground() {
   _repaint();
 }
 
-function showImage() {
+function showImage(content) {
 
   makeTransparent = false;
 
   let div = document.getElementById("image_container");
   div.hidden = false;
-  div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
+  div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + content + '" />';
 
   _repaint();
 
+}
+
+function pushFromUpload(content) {
+  image_base64 = content;
+  showImage(content);
 }
 
 //Complete Html Page
@@ -501,6 +506,19 @@ function closeSelector() {
     selector.close();
   selector = null;
 }
+
+var liber = null;
+function openLib() {
+  closeLiber();
+  liber = window.open("../upload.html", "_blank", 'width=800, height=600, left=100, top=100');
+}
+
+function closeLiber() {
+  if (liber)
+    liber.close();
+  liber = null;
+}
+
 
 function drawIdxHint(x, y) {
   ctx.lineWidth = 1;
@@ -1272,6 +1290,12 @@ function createCtrlBtn() {
   ctrls[15].hidden = true;
   ctrls[16].hidden = true;
 
+  ctrls[20] = addBtn('圖庫', div, () => {
+    openLib();
+    return false;
+  });
+
+
   div.insertAdjacentHTML('beforeend', '<br/><br/><hr />');
 
   generateSongList(div, true);
@@ -1586,6 +1610,7 @@ window.addEventListener('resize', function () {
 });
 window.addEventListener('beforeunload', function (e) {
   closeSelector();
+  closeLiber();
 });
 /* 網頁切換別處切回來重繪 */
 document.addEventListener('visibilitychange', function () {

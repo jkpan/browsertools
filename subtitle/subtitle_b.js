@@ -35,7 +35,7 @@ function dropHandler(event) {
           // 读取文件内容
           reader.onload = function (event) {
             image_base64 = event.target.result;
-            showImage();
+            showImage(image_base64);
           };
           reader.readAsDataURL(file);
         } else {
@@ -59,16 +59,12 @@ function removeBackground() {
   _repaint();
 }
 
-function showImage() {
-
+function showImage(content) {
   makeTransparent = false;
-
   let div = document.getElementById("image_container");
   div.hidden = false;
-  div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + image_base64 + '" />';
-
+  div.innerHTML = '<img class="centered" width="100%" height="100%" src="' + content + '" />';
   _repaint();
-
 }
 
 //import '/common.js';
@@ -1223,13 +1219,7 @@ function createCtrlBtn() {
     removeBackground();
     return false;
   });
-  div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[18] = addBtn('自動閱讀', div, ()=>{ startReading(); removeDiv(); return false;});
-  ctrls[19] = addBtn('停止閱讀', div, ()=>{ stopReading(); removeDiv(); return false;});
-  
-  div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  //ctrls[20] = addBtn('跳出', div, ()=>{ removeDiv(); return false;});
   const colorInput = document.createElement("input");
   colorInput.type = "color";
   colorInput.hidden = false;
@@ -1237,34 +1227,44 @@ function createCtrlBtn() {
   // 加到 body 中
   div.appendChild(colorInput);
 
-  ctrls[20] = colorInput;
-
+  ctrls[18] = colorInput;
 
   // 加事件：選色時改變背景色
   colorInput.addEventListener("input", function () {
-    ctrls[21].hidden = false;
-    ctrls[22].hidden = false;
+    ctrls[19].hidden = false;
+    ctrls[20].hidden = false;
     removeBackground();
     makeTransparent = true;
     document.body.style.backgroundColor = colorInput.value;
     console.log(colorInput.value);
   });
 
-  ctrls[21] = addBtn('不透明度-', div, () => {
+  ctrls[19] = addBtn('不透明度-', div, () => {
     opacity--;
     if (opacity < 0) opacity = 0;
     bgopacity();
     return false;
   });
-  ctrls[22] = addBtn('不透明度+', div, () => {
+  ctrls[20] = addBtn('不透明度+', div, () => {
     opacity++;
     if (opacity > 100) opacity = 100;
     bgopacity();
     return false;
   });
-  ctrls[21].hidden = true;
-  ctrls[22].hidden = true;
+  ctrls[19].hidden = true;
+  ctrls[20].hidden = true;
 
+  div.insertAdjacentHTML('beforeend', '<br/><br/>');
+  ctrls[21] = addBtn('自動閱讀', div, ()=>{ startReading(); removeDiv(); return false;});
+  ctrls[22] = addBtn('停止閱讀', div, ()=>{ stopReading(); removeDiv(); return false;});
+
+  ctrls[23] = addBtn('圖庫', div, ()=>{ openLib(); return false;});
+
+}
+
+function pushFromUpload(content) {
+  image_base64 = content;
+  showImage(content);
 }
 
 var opacity = 100;
@@ -2735,7 +2735,6 @@ function userhelp() {
 }
 
 var _openWin = null;
-
 function openCtrl() {
   closeCtrl();
   _openWin = window.open("subtitle_b_ctrl.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=500,height=400,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
@@ -2745,6 +2744,18 @@ function closeCtrl() {
   if (_openWin)
     _openWin.close();
   _openWin = null;
+}
+
+var liber = null;
+function openLib() {
+  closeLiber();
+  liber = window.open("../upload.html", "_blank", 'width=800, height=600, left=100, top=100');
+}
+
+function closeLiber() {
+  if (liber)
+    liber.close();
+  liber = null;
 }
 
 //canvas init
@@ -2789,7 +2800,7 @@ function receiveMessage(e) {
 
   if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
     image_base64 = jsonData.imageBase64;
-    showImage();
+    showImage(image_base64);
   }
 
   sync_type = 0;
@@ -2865,6 +2876,7 @@ window.addEventListener('resize', function () {
 
 window.addEventListener('beforeunload', function (e) {
   closeCtrl();
+  closeLiber();
 });
 
 // 滑鼠滾輪...
