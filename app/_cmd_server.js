@@ -102,7 +102,9 @@ function responseFile(filePath, res) {
         '.png': 'image/png',
         '.gif': 'image/gif',
         '.html': 'text/html',
-        '.css': 'text/css'
+        '.css': 'text/css',
+        '.pdf': 'application/pdf',
+        '.mp4': 'video/mp4'
       }[ext] || 'application/octet-stream';
 
       res.writeHead(200, { 'Content-Type': contentType });// 'text/html' });//; charset = UTF-8

@@ -176,10 +176,11 @@
 
             let src = path + '/' + fn;
             btn.addEventListener('click', (e) => {
+                const fullUrl = new URL(src, window.location.origin).href;
                 try {
-                    window.opener.pushFromUpload(src);
+                    window.opener.pushFromUpload(fullUrl);
                 } catch (e) {
-                    window.open(src, "_blank", "width=800,height=600");
+                    window.open(fullUrl, "_blank", "width=800,height=600");
                 }
             });
             return btn;
@@ -213,6 +214,7 @@
                         div.appendChild(b);
                         div.insertAdjacentHTML('beforeend', '<br>');
                     });
+                    listFiles(array[0]);
                 }, (err) => {
                     alert('list folder fail');
                 });
@@ -241,6 +243,7 @@
                             div.appendChild(img);
                         } else {
                             let img = createFileButton('./users/uploads/' + obj.folder, element);
+                            img.style.verticalAlign = 'top';
                             div.appendChild(img);
                         }
                         //div.insertAdjacentHTML('beforeend', '<br>');
@@ -347,6 +350,7 @@
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     msg.innerText = '完成';
+                    listFolder();
                     //document.getElementById("prog").value = 0;
                 } else {
                     msg.innerText = '失敗';
