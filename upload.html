@@ -31,7 +31,7 @@
             text-align: center;
             line-height: 20vh;
             color: white;
-            font-size: 24px;
+            font-size: 20px;
         }
 
         .bottom {
@@ -67,15 +67,17 @@
 </head>
 
 <body>
-
     <div class="container">
         <div class="top">
+            
             <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true"
                 onchange="selectFile(event)" />
-            <div id="drop-zone" onclick="openFile('allfile')">
-                Drop files here<br>
+
+            <div id="drop-zone">
+                <button onclick="openFile('allfile')">選檔案</button><br>
                 <progress id="prog" value="0" max="100"></progress><br>
-                <label id="msg" style="text-align:center;"></p>
+                <label id="msg" style="text-align:center;">拉檔案到這裡</label><br>
+                <button onclick="listFolder()">Reload</button>
             </div>
         </div>
         <div class="bottom">
@@ -118,7 +120,7 @@
             const btn = document.createElement('button');
             btn.innerHTML = '📁 ' + caption;
             btn.style.width = '90%';
-            btn.style.fontSize = '24px';
+            btn.style.fontSize = '20px';
 
             btn.addEventListener('click', onClick);
 
@@ -192,8 +194,7 @@
         if (result.username == 'guest' && result.state == 2) return;
         let user = result.username;
         */
-        function listFolder() {
-
+        function listFolder(e) {
             //console.log('action:' + action + ', p1:' + p1);
             _ajax({
                 action: "listfolders",
@@ -203,6 +204,7 @@
                 (obj) => {
                     console.log(JSON.stringify(obj));
                     let div = document.getElementById('divfolder');
+                    div.innerHTML = "";
                     let array = obj['folders'];
                     array.sort();
                     array.reverse();
