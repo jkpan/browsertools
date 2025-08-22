@@ -1,11 +1,15 @@
-
 <!DOCTYPE html>
-<script type="text/javascript" src="login.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../login.js" charset="UTF-8"></script>
 <html lang="en">
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <link rel="stylesheet" href="ui_green.css" />
+    <link rel="stylesheet" href="../ui_green.css" />
     <style>
+        body {
+            margin: 10px;
+        }
+
         textarea {
             border: 2px solid rgb(0, 128, 0);
             border-radius: 2px;
@@ -36,14 +40,16 @@
     <div id="tag"></div>
     <div style="margin: 1%;">
         <br>
-        
+
         <label style="color: rgb(0, 255, 0);">前綴: </label>
-        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="prefix">
+        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
+            id="prefix">
 
         <p></p>
 
         <label style="color: rgb(0, 255, 0);">名稱: </label>
-        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="cataname">
+        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
+            id="cataname">
 
         <p></p>
         <button style="background-color: rgb(0, 80, 0);" onclick="cataGo()">新增分類</button>
@@ -51,23 +57,26 @@
         <!-- <button style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button> -->
     </div>
 
-    <hr size="8" align="left" width="60%" color="#aaaaaa">
-
+    <hr size="4" align="left" width="60%" color="#00aa00">
+    <button onclick="openAllTxt()" style="font-size: 20px;">全文檢索</button>
+    <p></p>
     <div style="margin: 1%;">
         <br>
         <label style="color: rgb(0, 255, 0);">ID: </label>
-        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);" id="song_id">
+        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
+            id="song_id">
         <p></p>
         <textarea id="songtxt" rows="10"></textarea>
+        <button id="addsong" onclick="textGo(true)">臨時加歌</button>
         <p></p>
-        <button style="background-color: rgb(0, 80, 0);" onclick="textGo()">加歌 / 修改</button>
+        <button style="background-color: rgb(0, 80, 0);" onclick="textGo(false)">加歌 / 修改</button>
         <p></p>
         <button onclick="clearTxt()">清除</button>
         <p></p>
         <button style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button>
     </div>
     <p></p>
-    <hr size="8" align="left" width="60%" color="#aaaaaa">
+    <hr size="4" align="left" width="60%" color="#00aa00">
 
     <script type="text/javascript" charset="UTF-8">
 
@@ -85,19 +94,19 @@
                 if (confirm("確定要刪除 '" + id_value + "' ?"))
                     ajax_action('del', id_value, []);
             }
-            
+
         }
 
         function cataGo() {
 
             let prefix_value = document.getElementById("prefix").value;
-            if (prefix_value.trim().length == 0) return;   
+            if (prefix_value.trim().length == 0) return;
 
             let cataname_value = document.getElementById("cataname").value;
             cataname_value = cataname_value.trim();
             if (cataname_value.length == 0) return;
 
-            for(let i = 0;i<cata.length;i++) {
+            for (let i = 0; i < cata.length; i++) {
                 if (cata[i][0] == prefix_value) {
                     alert(prefix_value + ' exist!');
                     return;
@@ -113,14 +122,14 @@
             });
             */
 
-            ajax_action('addCata', prefix_value, 
-                [   prefix_value, 
-                    1000, 
-                    false, 
-                    cataname_value  ]);
+            ajax_action('addCata', prefix_value,
+                [prefix_value,
+                    1000,
+                    false,
+                    cataname_value]);
         }
 
-        function textGo() {
+        function textGo(forsubtitle) {
 
             let id_value = document.getElementById("song_id").value;
             id_value = id_value.trim();
@@ -161,16 +170,20 @@
 
             if (newsong.length == 0) return;
 
+            if (forsubtitle) {
+                window.opener.pushnewSong(newsong);
+                return;
+            }
+
             if (ALL_SONGS_JSON[id_value]) {
-                if (confirm("確定要修改 '" + id_value + "' ?")) 
-                   ajax_action('fix', id_value, newsong);
+                if (confirm("確定要修改 '" + id_value + "' ?"))
+                    ajax_action('fix', id_value, newsong);
             } else {
-                if (confirm("確定要新增 '" + id_value + "' ?")) 
+                if (confirm("確定要新增 '" + id_value + "' ?"))
                     ajax_action('add', id_value, newsong);
-            } 
-                
-            
-        }
+            }
+        }      
+
     </script>
     <br />
 </body>
@@ -178,6 +191,32 @@
 </html>
 
 <script type="text/javascript" charset="UTF-8">
+
+    var allSelector = null;
+
+    function closeSelector() {
+        if (allSelector)
+            allSelector.close();
+        allSelector = null;
+    }
+
+    function openAllTxt() {
+        closeSelector();
+        allSelector = window.open("lyrics_text.html", "_blank", 'width=800, height=600, left=100, top=100');
+    }
+
+    function pushSong(songid) {
+        clickSong(songid);
+        /*
+        console.log('pushSong: ' + songid);
+        let allsongs = ALL_SONGS_JSON;//window.opener.ALL_SONGS_JSON;
+        var exist = allsongs[songid];
+        console.log(exist);
+        if (exist) {
+            mapping(exist['content']);
+        }
+        */
+    }
 
     function _ajax(json, url, cb, errorcb) {
         console.log(json);
@@ -213,7 +252,7 @@
 
         let user = result.username;
 
-        console.log('action:' + action +', id:' + id + ', ' + JSON.stringify(content));
+        console.log('action:' + action + ', id:' + id + ', ' + JSON.stringify(content));
         _ajax({
             action: action,
             id: id,
@@ -229,9 +268,6 @@
                 console.log('exception');
             });
     }
-
-
-
 
     var ALL_SONGS_JSON;
 
@@ -273,6 +309,10 @@
 
         button.onclick = function () {
 
+            clickSong(idtxt);
+            return false;
+
+            /*
             let array = ALL_SONGS_JSON[idtxt].content;
             if (!array) return false;
 
@@ -283,9 +323,34 @@
             window.scrollTo(0, 0);
 
             return false;
+            */
         };
         return button;
     }
+
+    function clickSong(idtxt) {
+        let array = ALL_SONGS_JSON[idtxt].content;
+            if (!array) return false;
+
+            let field = document.getElementById("song_id");
+            field.value = idtxt;
+            mapping(array);
+
+            window.scrollTo(0, 0);
+    }
+
+    /*
+    function pushSong(songid) {
+        console.log('pushSong: ' + songid);
+        let allsongs = ALL_SONGS_JSON;//window.opener.ALL_SONGS_JSON;
+        var exist = allsongs[songid];
+        console.log(exist);
+        if (exist) {
+
+            mapping(exist['content']);
+        }
+    }
+    */
 
     function _songBtn(id) {
         let allsongs = ALL_SONGS_JSON;
@@ -313,7 +378,7 @@
         cata = VOLUME;
 
         for (let pf = 0; pf < VOLUME.length; pf++) {
-            
+
             const link = document.createElement('a');
             link.href = '#tag_' + VOLUME[pf][3];
             link.textContent = '[' + VOLUME[pf][3] + ']';
@@ -322,7 +387,7 @@
 
             var span = document.createElement('span');
             span.style.color = 'rgb(0,255,0)' // apply your style
-            
+
             let tag = document.createTextNode(VOLUME[pf][3]);
             //tag.id = 'tag_' + VOLUME[pf][3];
             span.appendChild(tag);
@@ -348,7 +413,7 @@
         }
 
         try {
-            
+
             let EVENTS = ALL_SONGS_JSON['nosong']['EVENTS']['content'];
 
             for (let pf = 0; pf < EVENTS.length; pf++) {
@@ -374,7 +439,7 @@
             console.log(error);
         }
 
-        
+
 
     }
 
@@ -387,8 +452,8 @@
             if (result.username == 'guest' && result.state == 2) return;
 
             let user = result.username;
-            
-            const response = await fetch("./users/songbase.json"); // 等待 fetch 请求完成 ./users/songbase.json
+
+            const response = await fetch("../users/songbase.json"); // 等待 fetch 请求完成 ./users/songbase.json
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }
@@ -402,19 +467,14 @@
     }
 
     (async function () {
-        console.log('get all songs');
         await fetchData();
-
-        //const months = ['March', 'Jan', 'Feb', 'Dec'];
-        //ALL_SONGS_JSON.sort();
-        //console.log(ALL_SONGS_JSON);
-
-        //let keys = Object.keys(ALL_SONGS_JSON);
-        //console.log(keys.sort());
-        //keys.forEach(function (key, index) {}
-
         createBtns();
         console.log('get content from list');
+        if (window.opener) {
+            document.getElementById('addsong').hidden = false;
+        } else {
+            document.getElementById('addsong').hidden = true;
+        }
     })();
 
 

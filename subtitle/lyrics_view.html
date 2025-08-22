@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <link rel="stylesheet" href="ui_green.css" />
+    <link rel="stylesheet" href="../ui_green.css" />
     <style>
 
         textarea {
@@ -222,7 +222,7 @@
     async function fetchData() {
         try {
             
-            const response = await fetch(`./users/songbase.json`); // 等待 fetch 请求完成 ./users/songbase.json
+            const response = await fetch(`../users/songbase.json`); // 等待 fetch 请求完成 ./users/songbase.json
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
             }

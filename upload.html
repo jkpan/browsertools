@@ -216,7 +216,9 @@
                         div.appendChild(b);
                         div.insertAdjacentHTML('beforeend', '<br>');
                     });
-                    listFiles(array[0]);
+                    
+                    if (array.length > 0) listFiles(array[0]);
+                    
                 }, (err) => {
                     alert('list folder fail');
                 });
