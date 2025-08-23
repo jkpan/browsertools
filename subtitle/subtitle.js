@@ -1150,7 +1150,7 @@ function _newBtn() {
   var button = document.createElement('button');
 
   button.style.width = '128px'; // setting the width to 200px
-  button.style.height = '32px'; // setting the height to 200px
+  button.style.height = 'auto';//'32px'; // setting the height to 200px
 
   //button.style.background = 'rgb(250,250,50)'; // setting the background color to teal
   //button.style.color = 'rgb(5,5,5)';//color_pointer[1];// 'green'; // setting the color to white
@@ -1200,18 +1200,18 @@ function createCtrlBtn() {
   document.body.appendChild(div);
   div.style.backgroundColor = 'rgba(0,0,0, 0.0)';
 
-  ctrls[0] = addBtn('none', div, () => { sync_type = 0; synctrls(); return false; });// _newBtn();
+  ctrls[0] = addBtn('單機使用', div, () => { sync_type = 0; synctrls(); return false; });// _newBtn();
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[1] = addBtn('local master', div, () => { sync_type = 1; synctrls(); return false; });//_newBtn();
-  ctrls[2] = addBtn('ws master', div, () => { sync_type = 2; synctrls(); return false; }); //_newBtn();
-  ctrls[3] = addBtn('local & ws master', div, () => { sync_type = 3; synctrls(); return false; });//_newBtn();
+  ctrls[1] = addBtn('控制本機', div, () => { sync_type = 1; synctrls(); return false; });//_newBtn();
+  ctrls[2] = addBtn('控制遠端', div, () => { sync_type = 2; synctrls(); return false; }); //_newBtn();
+  ctrls[3] = addBtn('控制本機和遠端', div, () => { sync_type = 3; synctrls(); return false; });//_newBtn();
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[4] = addBtn('local client', div, () => { sync_type = 4; synctrls(); return false; });//_newBtn();
-  ctrls[5] = addBtn('ws client', div, () => { sync_type = 5; synctrls(); return false; });//_newBtn();
+  ctrls[4] = addBtn('從本機同步', div, () => { sync_type = 4; synctrls(); return false; });//_newBtn();
+  ctrls[5] = addBtn('從伺服器同步', div, () => { sync_type = 5; synctrls(); return false; });//_newBtn();
 
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
@@ -1224,7 +1224,7 @@ function createCtrlBtn() {
       ctrls[2].hidden = false;
       ctrls[3].hidden = false;
       ctrls[5].hidden = false;
-      ctrls[5].innerHTML = `'${username}' ws client`;
+      ctrls[5].innerHTML = `${ctrls[5].innerHTML}${username}`;
     }
     syntoggle();
   }).catch(error => {

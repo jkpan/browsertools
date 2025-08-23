@@ -19,6 +19,18 @@ button {
 
     padding: 4px;
 
+
+    /* white-space: normal;      */
+    /* 允許換行 */
+    /* word-wrap: break-word;    */
+    /* 過長單字換行 */
+    /* padding: 0.5em 1em;       */
+    /* 保持上下左右內距 */
+    /* line-height: 1.4;         */
+    /* 讓多行時間距好看 */
+    /* height: auto;             */
+    /* 高度自動隨內容 */
+
     /* display: inline-block; */
 }
 
