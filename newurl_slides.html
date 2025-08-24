@@ -381,7 +381,7 @@
             //vdo.setAttribute("controls", "controls");
 
         } else {
-            if (value.startsWith('http')) { //純url...
+            if (!value.startsWith('<')) { //純url...//不能用http判斷 因為上面用相對路徑
                 if (isImageFile(value)) { //圖片
                     const img = document.createElement('img');
                     img.src = value;
