@@ -63,13 +63,31 @@
             /* flex: 1; */
             overflow: auto;
         }
+
+        .toggle-group button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: 2px solid #444;
+            cursor: pointer;
+            border-radius: 6px;
+
+            background: #007000;
+            color: #00aa00;
+            border-color: #00aa00;
+        }
+
+        .toggle-group .active {
+            background: #007000;
+            color: #00ff00;
+            border-color: #00ff00;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="top">
-            
+
             <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true"
                 onchange="selectFile(event)" />
 
@@ -81,7 +99,10 @@
             </div>
         </div>
         <div class="bottom">
-            <div id="divfolder" class="left"></div>
+            <div id="divfolder" class="left">
+                <div id="togglediv" class="toggle-group">
+                </div>
+            </div>
             <div id="divfiles" class="right"></div>
         </div>
     </div>
@@ -90,6 +111,7 @@
     <script>
 
         var user = 'guest';
+        var folders = [];
 
         function _ajax(json, url, cb, errorcb) {
             console.log(json);
@@ -148,6 +170,7 @@
             img.title = fn;
             img.style.width = "30%";//width;   // 固定寬度
             img.style.height = "30%";//height; // 固定高度
+            img.style.borderRadius = '6px';
 
             // 讓圖片在固定框內保持比例
             img.style.objectFit = 'contain';  // 或 'cover'
@@ -156,7 +179,9 @@
             img.style.cursor = "pointer"; // 滑鼠移過去變成手型
             //img.style.borderColor = "#ffff00";
 
-            img.addEventListener("click", () => {
+            //img.addEventListener("click", () => { window.open(img.src, "_blank", "width=800,height=600");});
+
+            img.addEventListener("dblclick", () => {
                 try {
                     window.opener.pushFromUpload(img.src);
                 } catch (e) {
@@ -173,11 +198,12 @@
             btn.innerHTML = '📄 ' + fn;
             btn.style.width = '30%';
             btn.style.height = '30%';
+            btn.style.border = '2px solid';
 
             btn.style.fontSize = '14px';
 
             let src = path + '/' + fn;
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('dblclick', (e) => {
                 const fullUrl = new URL(src, window.location.origin).href;
                 try {
                     window.opener.pushFromUpload(fullUrl);
@@ -203,22 +229,25 @@
             }, '/filesaction',
                 (obj) => {
                     console.log(JSON.stringify(obj));
-                    let div = document.getElementById('divfolder');
+                    let div = document.getElementById('togglediv');//'divfolder');
                     div.innerHTML = "";
                     let array = obj['folders'];
                     array.sort();
                     array.reverse();
+                    let firstB = null;
                     array.forEach(element => {
-                        let b = createButton(element, (e) => {
-                            //alert('open ' + element);
+                        let b = createButton(element, function(e) {
                             listFiles(element);
+                            const group = document.querySelector(".toggle-group");
+                            group.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+                            e.target.classList.add("active");
                         });
                         div.appendChild(b);
                         div.insertAdjacentHTML('beforeend', '<br>');
+                        if (!firstB) firstB = b;
                     });
-                    
-                    if (array.length > 0) listFiles(array[0]);
-                    
+                    firstB.click(); //if (array.length > 0) listFiles(array[0]);
+
                 }, (err) => {
                     alert('list folder fail');
                 });

@@ -82,36 +82,89 @@ function print_sys_info() {
 
 print_sys_info();
 
+function handleVideo(videoPath, req, res) {
+  fs.stat(videoPath, (err, stats) => {
+      if (err) {
+        console.error(err);
+        res.writeHead(404);
+        res.end("File not found");
+        return;
+      }
+      
+      let range = req.headers.range;
+      if (!range) {
+        // 如果沒有 Range header，就回傳整個檔案
+        println('沒有 Range header');
+        res.writeHead(200, {
+          'Content-Type': 'video/mp4',
+          'Content-Length': stats.size,
+        });
+        fs.createReadStream(videoPath).pipe(res);
+        println('回傳整個檔案');
+        return;
+      }
+    
+
+      // 解析 Range header
+      const positions = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(positions[0], 10);
+      const end = positions[1] ? parseInt(positions[1], 10) : stats.size - 1;
+
+      const chunkSize = (end - start) + 1;
+
+      //println('Range header: ' + positions + ', ' + start + ', ' + end);
+
+      res.writeHead(206, {
+        'Content-Range': `bytes ${start}-${end}/${stats.size}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': chunkSize,
+        'Content-Type': 'video/mp4',
+      });
+
+      fs.createReadStream(videoPath, { start, end }).pipe(res);
+    });
+}
 //讀檔輸出
-function responseFile(filePath, res) {
+function responseFile(filePath, req, res) {
 
   filePath = decodeURIComponent(filePath);
+
+  const ext = path.extname(filePath);
+
+  const contentType = {
+      '.jpg':
+       'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.gif': 'image/gif',
+      '.html': 'text/html',
+      '.css': 'text/css',
+      '.pdf': 'application/pdf',
+      '.mp4': 'video/mp4',
+      '.mov': 'video/quicktime'
+  }[ext] || 'application/octet-stream';
+
+  if (contentType.startsWith('video')) {
+      println(filePath + ':' + contentType);
+      handleVideo(filePath, req, res);
+      return;
+  }
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
       // 若檔案不存在，回傳404 Not Found狀態碼
       res.writeHead(404);
       res.end('404 Not Found');
-    } else {
-      // 回傳200 OK狀態碼及HTML內容
-      //const fp = path.join(process.cwd(), 'public', filePath);
-      const ext = path.extname(filePath);
-      const contentType = {
-        '.jpg': 'image/jpeg',
-        '.jpeg': 'image/jpeg',
-        '.png': 'image/png',
-        '.gif': 'image/gif',
-        '.html': 'text/html',
-        '.css': 'text/css',
-        '.pdf': 'application/pdf',
-        '.mp4': 'video/mp4'
-      }[ext] || 'application/octet-stream';
-
-      res.writeHead(200, { 'Content-Type': contentType });// 'text/html' });//; charset = UTF-8
-      res.write(content);
-      res.end();
-      print('(file:' + filePath + ')');
+      return;
     }
+    // 回傳200 OK狀態碼及HTML內容
+    //const fp = path.join(process.cwd(), 'public', filePath);
+    
+    res.writeHead(200, { 'Content-Type': contentType });// 'text/html' });//; charset = UTF-8
+    res.write(content);
+    res.end();
+    print('(file:' + filePath + ')');
+
   });
 }
 
@@ -238,7 +291,8 @@ function webservice(req, res) {
   }
 
   const filePath = `.${url}`;
-  responseFile(filePath, res);
+  responseFile(filePath, req, res);
+
 }
 
 function startService() {

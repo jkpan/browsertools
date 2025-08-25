@@ -25,8 +25,7 @@ function syncListunderfolder(folder, res) {
       folder = uploadDir + '/' + folder;
 
     // 使用同步方法
-    const files = fs.readdirSync(folder);
-    console.log('資料夾內容:');
+    const files = fs.readdirSync(folder); 
     files.forEach(file => {
       const itemPath = path.join(folder, file);
       const stats = fs.statSync(itemPath);
