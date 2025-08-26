@@ -124,6 +124,7 @@ function handleVideo(videoPath, req, res) {
       fs.createReadStream(videoPath, { start, end }).pipe(res);
     });
 }
+
 //讀檔輸出
 function responseFile(filePath, req, res) {
 
@@ -132,16 +133,15 @@ function responseFile(filePath, req, res) {
   const ext = path.extname(filePath);
 
   const contentType = {
-      '.jpg':
-       'image/jpeg',
+      '.jpg' : 'image/jpeg',
       '.jpeg': 'image/jpeg',
-      '.png': 'image/png',
-      '.gif': 'image/gif',
+      '.png' : 'image/png',
+      '.gif' : 'image/gif',
       '.html': 'text/html',
-      '.css': 'text/css',
-      '.pdf': 'application/pdf',
-      '.mp4': 'video/mp4',
-      '.mov': 'video/quicktime'
+      '.css' : 'text/css',
+      '.pdf' : 'application/pdf',
+      '.mp4' : 'video/mp4',
+      '.mov' : 'video/quicktime'
   }[ext] || 'application/octet-stream';
 
   if (contentType.startsWith('video')) {
@@ -237,6 +237,7 @@ function webservice(req, res) {
     case '/command': sync_tally.command(req, res); return;
     case '/initui': sync_tally.initui(req, res); return;
 
+    //上傳檔案相關
     case '/upload': upload.uploadFile(req, res); return;
     case '/filesaction': upload.handleFile(req, res); return;
 

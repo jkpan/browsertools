@@ -25,7 +25,7 @@ function syncListunderfolder(folder, res) {
       folder = uploadDir + '/' + folder;
 
     // 使用同步方法
-    const files = fs.readdirSync(folder); 
+    const files = fs.readdirSync(folder);
     files.forEach(file => {
       const itemPath = path.join(folder, file);
       const stats = fs.statSync(itemPath);
@@ -155,7 +155,24 @@ function handleFile(req, res) {
       case 'listfiles':
         syncListunderfolder(p1, res);
         return;
-      case 'addfolder':
+      case 'delfile': {
+        try {
+          const u = new URL(p1);
+          let file = '.' + u.pathname;//'./users/uploads'//path.join('', 'uploads');
+          file = decodeURIComponent(file); //if (fs.existsSync(file)) fs.remove(file);
+          fs.unlinkSync(file);
+          println(file + ' deleted successfully');
+          res.setHeader('Content-Type', 'application/json');// 发送响应数据
+          res.end(JSON.stringify({ "state": 1 }));
+        } catch (err) {
+          res.setHeader('Content-Type', 'application/json');// 发送响应数据
+          res.end(JSON.stringify({ "state": -1 }));
+        }
+
+      }
+        return;
+      /*
+      case 'addfolder': {
         let dir = uploadDir + '/' + p1;//'./users/uploads'//path.join('', 'uploads');
         if (!fs.existsSync(dir))
           fs.mkdirSync(dir);
@@ -163,6 +180,8 @@ function handleFile(req, res) {
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
         return;
+      }
+      */
     }
   });
 }

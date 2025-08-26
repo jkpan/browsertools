@@ -3,44 +3,60 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Drag & Drop Upload</title>
+    <title>上傳要用的檔案</title>
     <link rel="stylesheet" href="ui_green.css" />
     <style>
+        .wrapper {
+            display: grid;
+            gap: 0px;
+
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+            width: 100%;
+            height: 100vh;
+        }
+
         #drop-zone {
-            width: 50%;
+            width: 80%;
             height: 80%;
-            border: 2px dashed #00f;
+            border: 2px dashed #ffffff;
             border-radius: 10px;
             text-align: center;
             line-height: 30px;
-            color: #00f;
+            color: #ffffff;
             font-family: sans-serif;
             margin: 10px auto;
         }
 
-
-        .container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .top {
-            height: 20%;
-            background-color: #4CAF50;
+        .topleft {
+            grid-column: 1 / 30;
+            grid-row: 1 / 12;
+            background-color: #008000;
             text-align: center;
             line-height: 20vh;
             color: white;
             font-size: 20px;
         }
 
-        .bottom {
-            height: 80%;
-            display: flex;
+        .topright {
+            grid-column: 30 / 49;
+            grid-row: 1 / 12;
+            margin: 0px;
+            border: 2px solid;
+            background-color: #005000;
+            text-align: center;
+            color: #006000;
+            font-size: 20px;
+
+
+
+            /* line-height: 20vh; */
         }
 
         .left {
-            width: 20%;
+            grid-column: 1 / 15;
+            grid-row: 12 / 49;
             background-color: #707070;
             /* text-align: center; */
             /* line-height: 80vh; */
@@ -49,27 +65,34 @@
             box-sizing: border-box;
             /* padding: 5px; */
             flex: 1;
-            overflow: auto;
+            overflow-y: auto;
             /* position: fixed; */
         }
 
         .right {
-            width: 80%;
+            grid-column: 15 / 49;
+            grid-row: 12 / 49;
             background-color: #909090;
+            overflow-y: auto;
             /*text-align: center;*/
             /*line-height: 80vh;*/
             /* font-size: 20px; */
             /* box-sizing: border-box; */
             /* flex: 1; */
-            overflow: auto;
+            /* overflow: auto; */
+        }
+
+        .toggle-group {
+            /* margin-bottom: 5px; */
+            background-color: transparent;
         }
 
         .toggle-group button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: 2px solid #444;
-            cursor: pointer;
-            border-radius: 6px;
+            padding: 10px 10px;
+            /* margin: 5px; */
+            border: 2px solid;
+            /* cursor: pointer; */
+            /* border-radius: 6px; */
 
             background: #007000;
             color: #00aa00;
@@ -85,25 +108,34 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="top">
+    <div class="wrapper">
+        <div class="topleft">
 
             <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true"
                 onchange="selectFile(event)" />
 
-            <div id="drop-zone">
-                <button onclick="openFile('allfile')">選檔案</button><br>
-                <progress id="prog" value="0" max="100"></progress><br>
+            <div id="drop-zone" onclick="openFile('allfile')">
                 <label id="msg" style="text-align:center;">拉檔案到這裡</label><br>
-                <button onclick="listFolder()">Reload</button>
+                <progress id="prog" value="0" max="100"></progress><br>
+                <label id="filename" style="text-align:center;"></label><br>
             </div>
         </div>
-        <div class="bottom">
-            <div id="divfolder" class="left">
-                <div id="togglediv" class="toggle-group">
-                </div>
+
+        <div class="topright">
+            <!-- <button onclick="openFile('allfile')">選檔案</button><br> -->
+            <button onclick="listFolder()" id="reload">重新載入</button>
+            <button onclick="download()">檔案下載</button>
+            <button onclick="deleteFile()" style="background-color: #ff0000;">刪除</button>
+        </div>
+
+
+        <div id="divfolder" class="left">
+            <div id="togglediv" class="toggle-group" data-group="1">
             </div>
-            <div id="divfiles" class="right"></div>
+        </div>
+        <div id="divfiles" class="right">
+            <div id="togglediv2" class="toggle-group" data-group="2">
+            </div>
         </div>
     </div>
 
@@ -112,6 +144,37 @@
 
         var user = 'guest';
         var folders = [];
+        var activeFile = '';
+        var activeFolder = '';
+
+        function deleteFile() {
+            if (activeFile.trim().length == 0) return;
+            _ajax({
+                action: "delfile",
+                p1: activeFile,
+                user: null
+            },
+                '/filesaction',
+                (res) => {
+                    //document.getElementById('reload').click();// location.reload();
+                    if (activeFolder.trim().length == 0) return;
+                    listFiles(activeFolder);
+                }, (err) => {
+                    alert('fail');
+                });
+        }
+
+        function download() {
+            if (activeFile.trim().length == 0) return;
+            const url = activeFile;//"https://example.com/files/demo.pdf";
+            // 建立一個隱藏的 <a> 來觸發下載
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = ""; // 這裡可以指定檔名，例如 "myfile.pdf"
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
 
         function _ajax(json, url, cb, errorcb) {
             console.log(json);
@@ -161,6 +224,10 @@
         }
 
         function createImage(path, fn) {
+            const btn = document.createElement('button');
+            btn.style.width = '30%';
+            btn.style.height = '30%';
+            // btn.style.border = '2px solid';
             //let queryValue = "John Doe & Co.";
             //console.log('src:' + src);
             //src = encodeURIComponent(src);
@@ -168,20 +235,20 @@
             const img = document.createElement('img');
             img.src = path + '/' + fn;
             img.title = fn;
-            img.style.width = "30%";//width;   // 固定寬度
-            img.style.height = "30%";//height; // 固定高度
-            img.style.borderRadius = '6px';
+            img.style.width = "100%";//width;   // 固定寬度
+            img.style.height = "100%";//height; // 固定高度
 
             // 讓圖片在固定框內保持比例
             img.style.objectFit = 'contain';  // 或 'cover'
-            img.style.backgroundColor = '#000000';
-            img.style.border = '2px solid red';
-            img.style.cursor = "pointer"; // 滑鼠移過去變成手型
+            //img.style.backgroundColor = '#000000';
+            //img.style.cursor = "pointer"; // 滑鼠移過去變成手型
             //img.style.borderColor = "#ffff00";
+            //img.parent = btn;
 
             //img.addEventListener("click", () => { window.open(img.src, "_blank", "width=800,height=600");});
 
-            img.addEventListener("dblclick", () => {
+            btn.appendChild(img);
+            btn.addEventListener("dblclick", (e) => {
                 try {
                     window.opener.pushFromUpload(img.src);
                 } catch (e) {
@@ -189,7 +256,21 @@
                 }
             });
 
-            return img;
+
+            btn.addEventListener("click", (e) => {
+                activeFile = img.src;
+            });
+
+            /*
+            img.addEventListener("click", (e) => {
+                const group = document.querySelector(".toggle-group2");
+                group.querySelectorAll("button").forEach(btn => btn.classList.remove("active2"));
+                //alert(e.target.parentNode);
+                e.target.parentNode.classList.add("active2");
+            });
+            */
+
+            return btn;
         }
 
         function createFileButton(path, fn) { //{ text, imgSrc, onClick, title }) {
@@ -198,7 +279,7 @@
             btn.innerHTML = '📄 ' + fn;
             btn.style.width = '30%';
             btn.style.height = '30%';
-            btn.style.border = '2px solid';
+            // btn.style.border = '2px solid';
 
             btn.style.fontSize = '14px';
 
@@ -211,6 +292,13 @@
                     window.open(fullUrl, "_blank", "width=800,height=600");
                 }
             });
+
+
+            btn.addEventListener("click", (e) => {
+                const fullUrl = new URL(src, window.location.origin).href;
+                activeFile = fullUrl;
+            });
+
             return btn;
         }
 
@@ -236,17 +324,21 @@
                     array.reverse();
                     let firstB = null;
                     array.forEach(element => {
-                        let b = createButton(element, function(e) {
+
+                        let b = createButton(element, function (e) {
                             listFiles(element);
-                            const group = document.querySelector(".toggle-group");
-                            group.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
-                            e.target.classList.add("active");
+                            activeFile = '';
+                            activeFolder = element;
+                            //const group = document.querySelector(".toggle-group");
+                            //group.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+                            //e.target.classList.add("active");
                         });
                         div.appendChild(b);
                         div.insertAdjacentHTML('beforeend', '<br>');
                         if (!firstB) firstB = b;
                     });
-                    firstB.click(); //if (array.length > 0) listFiles(array[0]);
+                    firstB.click();
+                    //if (array.length > 0) listFiles(array[0]);
 
                 }, (err) => {
                     alert('list folder fail');
@@ -262,7 +354,7 @@
             }, '/filesaction',
                 (obj) => {
                     console.log(JSON.stringify(obj));
-                    let div = document.getElementById('divfiles');
+                    let div = document.getElementById('togglediv2');
                     div.innerHTML = "";
                     let array = obj['files'];
                     array.sort();
@@ -272,12 +364,12 @@
                         //let encodedString = URLEncoder.encode(element, "UTF-8");
                         //console.log('::: ' + element);
                         if (isImageFile(element)) {
-                            let img = createImage('./users/uploads/' + obj.folder, element);
-                            div.appendChild(img);
+                            let btn = createImage('./users/uploads/' + obj.folder, element);
+                            div.appendChild(btn);
                         } else {
-                            let img = createFileButton('./users/uploads/' + obj.folder, element);
-                            img.style.verticalAlign = 'top';
-                            div.appendChild(img);
+                            let btn = createFileButton('./users/uploads/' + obj.folder, element);
+                            //btn.style.verticalAlign = 'top';
+                            div.appendChild(btn);
                         }
                         //div.insertAdjacentHTML('beforeend', '<br>');
                     });
@@ -408,6 +500,26 @@
         });
 
         listFolder();
+
+        document.querySelectorAll(".toggle-group").forEach(group => {
+            group.addEventListener("click", (e) => {
+                //console.log('--------------------' + e.target.tagName);
+                if (e.target.tagName === "BUTTON") {
+                    // 清除該組所有 active
+                    group.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+                    // 設定目前點擊的 active
+                    e.target.classList.add("active");
+                    //console.log('BUTTON e.target.src:' + e.target.src);
+                } else if (e.target.tagName === "IMG") {
+                    group.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+                    // 設定目前點擊的 active
+                    e.target.parentNode.classList.add("active");
+                    //console.log('e.target.src:' + e.target.src);
+                }
+
+            });
+        });
+
 
         //listFiles('20250718');
 
