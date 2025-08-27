@@ -36,7 +36,7 @@
             text-align: center;
             line-height: 20vh;
             color: white;
-            font-size: 20px;
+            font-size: 10px;
         }
 
         .topright {
@@ -46,7 +46,7 @@
             border: 2px solid;
             background-color: #005000;
             text-align: center;
-            color: #006000;
+            color: #ffffff;
             font-size: 20px;
 
 
@@ -115,17 +115,21 @@
                 onchange="selectFile(event)" />
 
             <div id="drop-zone" onclick="openFile('allfile')">
-                <label id="msg" style="text-align:center;">拉檔案到這裡</label><br>
+                <label style="text-align:center;">拉檔案到這裡</label><br>
                 <progress id="prog" value="0" max="100"></progress><br>
-                <label id="filename" style="text-align:center;"></label><br>
+                <label id="msg" style="text-align:center;">--</label><br>
+                <label id="filename" style="text-align:center;">--</label><br>
             </div>
         </div>
 
         <div class="topright">
             <!-- <button onclick="openFile('allfile')">選檔案</button><br> -->
+            <p></p>
             <button onclick="listFolder()" id="reload">重新載入</button>
             <button onclick="download()">檔案下載</button>
             <button onclick="deleteFile()" style="background-color: #ff0000;">刪除</button>
+            <p></p>
+            <label id="selfile" style="text-align:center;font-size: 8px;word-wrap: break-word">--</label><br>
         </div>
 
 
@@ -141,6 +145,11 @@
 
 
     <script>
+
+        const dropZone = document.getElementById('drop-zone');
+        const msg = document.getElementById('msg');
+        const filename = document.getElementById('filename');
+        const selfile = document.getElementById('selfile');
 
         var user = 'guest';
         var folders = [];
@@ -259,6 +268,7 @@
 
             btn.addEventListener("click", (e) => {
                 activeFile = img.src;
+                selfile.innerHTML = decodeURIComponent(new URL(activeFile).pathname);
             });
 
             /*
@@ -297,6 +307,7 @@
             btn.addEventListener("click", (e) => {
                 const fullUrl = new URL(src, window.location.origin).href;
                 activeFile = fullUrl;
+                selfile.innerHTML = decodeURIComponent(new URL(activeFile).pathname);
             });
 
             return btn;
@@ -328,6 +339,7 @@
                         let b = createButton(element, function (e) {
                             listFiles(element);
                             activeFile = '';
+                            selfile.innerHTML = decodeURIComponent(new URL(activeFile).pathname);
                             activeFolder = element;
                             //const group = document.querySelector(".toggle-group");
                             //group.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
@@ -440,9 +452,6 @@
             document.getElementById(elmid).click();
         }
 
-        const dropZone = document.getElementById('drop-zone');
-        const msg = document.getElementById('msg');
-
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault(); //dropZone.style.borderColor = '#333';
         });
@@ -457,6 +466,8 @@
 
             const formData = new FormData();
             formData.append('file', file);
+
+            filename.innerText = file.name;
 
             const xhr = new XMLHttpRequest();
             xhr.open('POST', '/upload');
@@ -481,6 +492,7 @@
                     msg.innerText = '失敗';
                     document.getElementById("prog").value = 0;
                 }
+                filename.innerText = '';
             };
 
             xhr.send(formData);
