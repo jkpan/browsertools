@@ -818,11 +818,12 @@ function combineKey(e) {
   _repaint();
 }
 
-function songswitch(value) {
+function songswitch(value, woaction) {
   song = value;
   subtitles = SONGS[song];
   phase = 0;
   line = 0;
+  if (woaction) return;
   _repaint();
   saveAction2Local();
 }
@@ -972,13 +973,13 @@ function keyboard(e) {
       break;
     case 'Minus': //'-'
       if (song > 0) {
-        songswitch(song - 1);
+        songswitch(song - 1, true);
         phase = 1;
       }
       break;
     case 'Equal': //'='
       if (song < SONGS.length - 1) {
-        songswitch(song + 1);
+        songswitch(song + 1, true);
         phase = 1;
       }
       break;
