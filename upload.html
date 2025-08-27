@@ -36,7 +36,7 @@
             text-align: center;
             line-height: 20vh;
             color: white;
-            font-size: 10px;
+            font-size: 16px;
         }
 
         .topright {
@@ -46,11 +46,8 @@
             border: 2px solid;
             background-color: #005000;
             text-align: center;
-            color: #ffffff;
-            font-size: 20px;
-
-
-
+            color: #007000;
+            font-size: 12px;
             /* line-height: 20vh; */
         }
 
@@ -129,7 +126,7 @@
             <button onclick="download()">檔案下載</button>
             <button onclick="deleteFile()" style="background-color: #ff0000;">刪除</button>
             <p></p>
-            <label id="selfile" style="text-align:center;font-size: 8px;word-wrap: break-word">--</label><br>
+            <label id="selfile" style="color:#ffffff;text-align:center;font-size: 12px;word-wrap: break-word">--</label><br>
         </div>
 
 
@@ -268,7 +265,7 @@
 
             btn.addEventListener("click", (e) => {
                 activeFile = img.src;
-                selfile.innerHTML = decodeURIComponent(new URL(activeFile).pathname);
+                selfile.innerText = decodeURIComponent(new URL(activeFile).pathname);
             });
 
             /*
@@ -339,7 +336,7 @@
                         let b = createButton(element, function (e) {
                             listFiles(element);
                             activeFile = '';
-                            selfile.innerHTML = decodeURIComponent(new URL(activeFile).pathname);
+                            selfile.innerText = activeFile;
                             activeFolder = element;
                             //const group = document.querySelector(".toggle-group");
                             //group.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
@@ -359,6 +356,7 @@
         }
 
         function listFiles(folder) {
+            selfile.innerText = '';
             _ajax({
                 action: "listfiles",
                 p1: folder,
