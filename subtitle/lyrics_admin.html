@@ -131,11 +131,6 @@
 
         function textGo(forsubtitle) {
 
-            let id_value = document.getElementById("song_id").value;
-            id_value = id_value.trim();
-            if (id_value.length == 0) return;
-            //if (ALL_SONGS_JSON[id_value]) return;           
-
             let value = document.getElementById("songtxt").value;
             value = value.trim();
             if (value.length == 0) return;
@@ -175,6 +170,10 @@
                 return;
             }
 
+            let id_value = document.getElementById("song_id").value;
+            id_value = id_value.trim();
+            if (id_value.length == 0) return;
+            
             if (ALL_SONGS_JSON[id_value]) {
                 if (confirm("確定要修改 '" + id_value + "' ?"))
                     ajax_action('fix', id_value, newsong);
