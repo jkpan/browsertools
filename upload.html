@@ -265,7 +265,8 @@
 
             btn.addEventListener("click", (e) => {
                 activeFile = img.src;
-                selfile.innerText = decodeURIComponent(new URL(activeFile).pathname);
+                setfilelabel(img.src);
+                //selfile.innerText = decodeURIComponent(new URL(activeFile).pathname);
             });
 
             /*
@@ -278,6 +279,15 @@
             */
 
             return btn;
+        }
+
+        function setfilelabel(src) {
+            const fullUrl = new URL(src, window.location.origin).href;
+            activeFile = fullUrl;
+            const array = activeFile.split("/");
+            let filename = array[array.length - 1];
+            //selfile.innerHTML = decodeURIComponent(new URL(activeFile).pathname);
+            selfile.innerHTML = decodeURIComponent(filename) + '<br>' + activeFile;
         }
 
         function createFileButton(path, fn) { //{ text, imgSrc, onClick, title }) {
@@ -302,9 +312,7 @@
 
 
             btn.addEventListener("click", (e) => {
-                const fullUrl = new URL(src, window.location.origin).href;
-                activeFile = fullUrl;
-                selfile.innerHTML = decodeURIComponent(new URL(activeFile).pathname);
+                setfilelabel(src);
             });
 
             return btn;

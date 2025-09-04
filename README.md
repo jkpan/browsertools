@@ -140,3 +140,15 @@ sudo systemctl status certbot.timer
 /etc/nginx/nginx.conf
 client_max_body_size 100m; 允许上传最大100MB 的文件. 
 
+crontab -e
+# m h  dom mon dow   command
+10 0 * * * /home/tpcaog/app/backup.sh
+
+sudo crontab -e
+# m h  dom mon dow   command
+20 0 * * * /home/tpcaog/app/upload_clean.sh 7 /home/tpcaog/app/VOLUMES/tpcaog/uploads
+
+summary
+Bible 顏色模式 直式 選單 同步 圖片背景 透空背景
+歌詞 模式 選單 同步 圖片背景 透空背景
+

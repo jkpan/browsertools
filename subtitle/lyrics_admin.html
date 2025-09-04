@@ -9,28 +9,6 @@
         body {
             margin: 10px;
         }
-
-        textarea {
-            border: 2px solid rgb(0, 128, 0);
-            border-radius: 2px;
-            border-color: rgb(0, 255, 0);
-            margin: 0%;
-            outline: none;
-            padding: 0px;
-            box-sizing: border-box;
-            background: rgb(50, 50, 50);
-            color: rgb(0, 255, 0);
-            width: 50%;
-            font-size: 20px;
-        }
-
-        textarea:focus {
-            border: 2px solid;
-            border-color: rgb(0, 255, 0);
-            box-shadow: 0 0 8px 0 rgb(0, 255, 0);
-            background: rgb(70, 70, 70);
-            color: rgb(0, 255, 0);
-        }
     </style>
     <title>Song editor</title>
 </head>
@@ -38,19 +16,16 @@
 <body>
     <br>
     <div id="tag"></div>
+    <p></p>
+    <button id="setedit" style="background-color: rgb(0, 80, 0);" onclick="setEditable()" hidden="true">編輯資料庫</button>
     <div id="prefixdiv" style="margin: 1%;">
         <br>
 
         <label style="color: rgb(0, 255, 0);">前綴: </label>
-        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
-            id="prefix">
-
+        <input type="text" id="prefix">
         <p></p>
-
         <label style="color: rgb(0, 255, 0);">名稱: </label>
-        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
-            id="cataname">
-
+        <input type="text" id="cataname">
         <p></p>
         <button style="background-color: rgb(0, 80, 0);" onclick="cataGo()">新增分類</button>
         <p></p>
@@ -83,6 +58,12 @@
     <script type="text/javascript" charset="UTF-8">
 
         var cata = [];
+
+        function setEditable() {
+            document.getElementById("setedit").hidden = true;
+            document.getElementById("prefixdiv").hidden = false;
+            document.getElementById("editdiv").hidden = false;
+        }
 
         function clearTxt() {
             document.getElementById("song_id").value = "";
@@ -479,6 +460,7 @@
             document.getElementById('addsong').hidden = false;
             document.getElementById("prefixdiv").hidden = true;
             document.getElementById("editdiv").hidden = true;
+            document.getElementById("setedit").hidden = false;
         } else {
             document.getElementById('addsong').hidden = true;
         }
