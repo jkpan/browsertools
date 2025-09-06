@@ -30,17 +30,29 @@
         }
 
         .topleft {
-            grid-column: 1 / 30;
+            grid-column: 1 / 18;
             grid-row: 1 / 12;
-            background-color: #008000;
+            background-color: #00aa00;
             text-align: center;
             line-height: 20vh;
             color: white;
             font-size: 16px;
         }
 
+        .topcenter {
+            grid-column: 18 / 36;
+            grid-row: 1 / 12;
+            margin: 5px;
+            border: 0px solid;
+            background-color: #008000;
+            text-align: left;
+            color: #007000;
+            font-size: 12px;
+            /* line-height: 20vh; */
+        }
+
         .topright {
-            grid-column: 30 / 49;
+            grid-column: 36 / 49;
             grid-row: 1 / 12;
             margin: 0px;
             border: 2px solid;
@@ -119,6 +131,16 @@
             </div>
         </div>
 
+        <div class="topcenter">
+            <label style="color: rgb(0, 255, 0);">說明</label>
+            <input type="text" id="des">
+            <p></p>
+            <textarea id="urltxt" rows="3"></textarea>
+            <p></p>
+            <button onclick="newurl()">新增URL</button>
+            <p></p>
+        </div>
+
         <div class="topright">
             <!-- <button onclick="openFile('allfile')">選檔案</button><br> -->
             <p></p>
@@ -126,7 +148,8 @@
             <button onclick="download()">檔案下載</button>
             <button onclick="deleteFile()" style="background-color: #ff0000;">刪除</button>
             <p></p>
-            <label id="selfile" style="color:#ffffff;text-align:center;font-size: 12px;word-wrap: break-word">--</label><br>
+            <label id="selfile"
+                style="color:#ffffff;text-align:center;font-size: 12px;word-wrap: break-word">--</label><br>
         </div>
 
 
@@ -152,6 +175,50 @@
         var folders = [];
         var activeFile = '';
         var activeFolder = '';
+
+        async function readtxt(url) {
+            try {
+                // 這裡換成你的文字檔 URL
+                //const url = 'https://example.com/data.txt';
+
+                const response = await fetch(url);
+                if (!response.ok)
+                    throw new Error('網路錯誤 ' + response.status);
+
+                const text = await response.text(); // 把內容讀成純文字
+                
+                //document.getElementById('output').textContent = text;
+
+                if (window.opener) {
+                    window.opener.pushFromUpload(text);
+                    window.close();
+                } else {
+                    alert(text);
+                }
+            } catch (err) {
+                alert('Error: ' + err);
+            }
+        }
+
+        function newurl() {
+            let des = document.getElementById('des').value;
+            let url = document.getElementById('urltxt').value;
+            if (des.trim().length == 0 || url.trim().length == 0) return;
+            _ajax({
+                action: "addurl",
+                p1: des,
+                p2: url,
+                user: null
+            },
+                '/filesaction',
+                (res) => {
+                    //document.getElementById('reload').click();// location.reload();
+                    if (activeFolder.trim().length == 0) return;
+                    listFiles(activeFolder);
+                }, (err) => {
+                    alert('fail');
+                });
+        }
 
         function deleteFile() {
             if (activeFile.trim().length == 0) return;
@@ -257,6 +324,7 @@
             btn.addEventListener("dblclick", (e) => {
                 try {
                     window.opener.pushFromUpload(img.src);
+                    window.close();
                 } catch (e) {
                     window.open(img.src, "_blank", "width=800,height=600");
                 }
@@ -303,8 +371,13 @@
             let src = path + '/' + fn;
             btn.addEventListener('dblclick', (e) => {
                 const fullUrl = new URL(src, window.location.origin).href;
+                if (src.endsWith('.url.txt')) {
+                    readtxt(fullUrl);
+                    return;
+                }
                 try {
                     window.opener.pushFromUpload(fullUrl);
+                    window.close();
                 } catch (e) {
                     window.open(fullUrl, "_blank", "width=800,height=600");
                 }

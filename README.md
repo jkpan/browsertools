@@ -149,6 +149,6 @@ sudo crontab -e
 20 0 * * * /home/tpcaog/app/upload_clean.sh 7 /home/tpcaog/app/VOLUMES/tpcaog/uploads
 
 summary
-Bible 顏色模式 直式 選單 同步 圖片背景 透空背景
-歌詞 模式 選單 同步 圖片背景 透空背景
+[Bible] 顏色模式 直式 選單 同步模式 圖片背景 透空背景
+[歌詞] 模式 選單 編輯 同步模式 圖片背景 透空背景
 

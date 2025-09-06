@@ -1,431 +1,452 @@
 <script type="text/javascript" src="newfile.js"></script>
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" charset="UTF-8"/>
-<link rel="stylesheet" href="ui_green.css" />
-<style>
+  <meta name="viewport"
+    content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
+    charset="UTF-8" />
+  <link rel="stylesheet" href="ui_green.css" />
+  <style>
+    body {
+      color: rgb(0, 255, 0);
+      margin: 0% 0%;
+      height: 100%;
+      width: 100%;
+      background-color: rgb(0, 128, 0);
+    }
 
-body {
-  color: rgb(0,255,0);
-  margin: 0% 0%;
-  height: 100%;
-  width: 100%;
-  background-color: rgb(0, 128, 0);
-}
+    .wrapper {
 
-.wrapper {
-  
-  display: grid;
-  gap: 0px;
-    
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows:    1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      display: grid;
+      gap: 0px;
 
-  width: 100%;
-  height: 100vh;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
-}
-.full {    
-  grid-column: 1 / 25;
-  grid-row: 1 / 25;
-  user-select: none;
-  border: none;
-}
-.reload {
+      width: 100%;
+      height: 100vh;
 
-  grid-column: 24 / 25;
-  grid-row: 22 / 23;
-  border: none;
-  opacity: 25%;
+    }
 
-  font-size: 24px;
-  background-color: rgb(0, 150, 0);
-  color: #00ff00;
-  
-  vertical-align: middle;
+    .full {
+      grid-column: 1 / 25;
+      grid-row: 1 / 25;
+      user-select: none;
+      border: none;
+    }
 
-}
-.reloadP {
+    .reload {
 
-grid-column: 24 / 25;
-grid-row: 23 / 24;
-border: none;
-opacity: 25%;
+      grid-column: 24 / 25;
+      grid-row: 22 / 23;
+      border: none;
+      opacity: 25%;
 
-font-size: 24px;
-background-color: rgb(0, 150, 0);
-color: #00ff00;
+      font-size: 24px;
+      background-color: rgb(0, 150, 0);
+      color: #00ff00;
 
-vertical-align: middle;
+      vertical-align: middle;
 
-}
-.ui {
-    grid-column: 2 / 24;
-    grid-row: 2 / 24;
-}
+    }
 
-::-webkit-scrollbar {
-  display: none;
-}
+    .reloadP {
 
-textarea {
-  
-  background: rgb(0, 150, 0);
-  color: rgb(0, 255, 0);
-  width: 96%;
-}
+      grid-column: 24 / 25;
+      grid-row: 23 / 24;
+      border: none;
+      opacity: 25%;
 
-textarea:focus {
-  border:2px solid;
-  border-color: rgb(0, 255, 0);
-  box-shadow: 0 0 8px 0 rgb(0, 255, 0);
-  background: rgb(0, 150, 0);
-  color: rgb(0, 255, 0);    
-}
+      font-size: 24px;
+      background-color: rgb(0, 150, 0);
+      color: #00ff00;
 
-input[type=file] {
-  border:2px solid;
-  border-color: rgb(0, 255, 0);
-  box-shadow: 0 0 8px 0 rgb(0, 255, 0);
-  background: rgb(0, 150, 0);
-  background-color: rgb(0, 150, 0);
-  color: rgb(0, 255, 0);
-}
+      vertical-align: middle;
 
-a {
-  color: #00ff00;
-}
+    }
 
-.drop-area {
-        width: 360px;
-        height: 200px;
-        border: 2px dashed #0f0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-} 
+    .ui {
+      grid-column: 2 / 24;
+      grid-row: 2 / 24;
+    }
 
-.chk {
-  accent-color: rgb(0,255,0);
-}
+    ::-webkit-scrollbar {
+      display: none;
+    }
 
-.img_ratio {
+    textarea {
+
+      background: rgb(0, 150, 0);
+      color: rgb(0, 255, 0);
+      width: 96%;
+    }
+
+    textarea:focus {
+      border: 2px solid;
+      border-color: rgb(0, 255, 0);
+      box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+      background: rgb(0, 150, 0);
+      color: rgb(0, 255, 0);
+    }
+
+    input[type=file] {
+      border: 2px solid;
+      border-color: rgb(0, 255, 0);
+      box-shadow: 0 0 8px 0 rgb(0, 255, 0);
+      background: rgb(0, 150, 0);
+      background-color: rgb(0, 150, 0);
+      color: rgb(0, 255, 0);
+    }
+
+    a {
+      color: #00ff00;
+    }
+
+    .drop-area {
+      width: 360px;
+      height: 200px;
+      border: 2px dashed #0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .chk {
+      accent-color: rgb(0, 255, 0);
+    }
+
+    .img_ratio {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-      position: absolute; /* 設定絕對定位 */
-      top: 50%;           /* 垂直置中 */
-      left: 50%;          /* 水平置中 */
-      transform: translate(-50%, -50%); /* 修正到圖片的中心 */
+      position: absolute;
+      /* 設定絕對定位 */
+      top: 50%;
+      /* 垂直置中 */
+      left: 50%;
+      /* 水平置中 */
+      transform: translate(-50%, -50%);
+      /* 修正到圖片的中心 */
 
-}
+    }
 
-.img_full {
+    .img_full {
       max-width: 100%;
       max-height: 100%;
-}
-
-</style>
+    }
+  </style>
 </head>
-    <body>
 
-      <!--hr size="8" width="100%" color="#00ff00"/-->    
-      
-      <div class="wrapper">
+<body>
 
-        <iframe width="100%" height="100%" hidden="true" id="web" class="full"></iframe>
-        <div class="full" id="webdiv" width="100%" height="100%" hidden="true"></div>
-        
-        <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls autoplay></video></video>
-        <div class="full" id="image_container" hidden="true"></div>
+  <!--hr size="8" width="100%" color="#00ff00"/-->
 
-        <button class="reload" hidden="true" id="reload" type="button" onclick="reload()">R</button>
-        <button class="reloadP" hidden="true" id="reloadPage" type="button" onclick="reloadPage()">&lt;</button>
+  <div class="wrapper">
 
-        <div class="ui" id="ui">
-          嵌入Google簡報, Canva簡報, Youtube影片...
-          <textarea id="ppt_url" name="mytext" rows="5"></textarea>
-            <script type="text/javascript" charset="UTF-8">
-              var value = "";
-              function appendToIframeSrc(inputString, appendString) {
-                return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
-                  // 修改 src 的內容
-                  const newSrc = srcValue + appendString;
-                  // 替換 src 屬性
-                  return match.replace(srcValue, newSrc);
-                });
-              }
+    <iframe width="100%" height="100%" hidden="true" id="web" class="full"></iframe>
+    <div class="full" id="webdiv" width="100%" height="100%" hidden="true"></div>
 
-              function modifyIframeAttributes(inputString, newWidth, newHeight) {
-                return inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
-                  // 更新 width 屬性
-                  iframeTag = iframeTag.replace(/width\s*=\s*["'].*?["']/i, `width="${newWidth}"`);
-                  // 更新 height 屬性
-                  iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
-        
-                  /*
-                  // 如果沒有 width 或 height，則添加
-                  if (!/width\s*=\s*["'].*?["']/i.test(iframeTag)) {
-                    iframeTag = iframeTag.replace(/^<iframe/i, `<iframe width="${newWidth}"`);
-                  }
-                  if (!/height\s*=\s*["'].*?["']/i.test(iframeTag)) {
-                    iframeTag = iframeTag.replace(/^<iframe/i, `<iframe height="${newHeight}"`);
-                  }
-                  */
+    <video class="full" id="vsrc" width="100%" height="100%" hidden="true" controls autoplay></video></video>
+    <div class="full" id="image_container" hidden="true"></div>
 
-                  return iframeTag;
-                });
-              }
+    <button class="reload" hidden="true" id="reload" type="button" onclick="reload()">R</button>
+    <button class="reloadP" hidden="true" id="reloadPage" type="button" onclick="reloadPage()">&lt;</button>
+
+    <div class="ui" id="ui">
+      嵌入Google簡報, Canva簡報, Youtube影片...
+      <textarea id="ppt_url" name="mytext" rows="5"></textarea>
+      <script type="text/javascript" charset="UTF-8">
+        var value = "";
+        function appendToIframeSrc(inputString, appendString) {
+          return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
+            // 修改 src 的內容
+            const newSrc = srcValue + appendString;
+            // 替換 src 屬性
+            return match.replace(srcValue, newSrc);
+          });
+        }
+
+        /*
+        function modifyIframeAttributes(inputString, newWidth, newHeight) {
+          return inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
+            // 更新 width 屬性
+            iframeTag = iframeTag.replace(/width\s*=\s*["'].*?["']/i, `width="${newWidth}"`);
+            // 更新 height 屬性
+            iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
+
+            return iframeTag;
+          });
+        }
+        */
+        function modifyIframeAttributes(inputString, newWidth, newHeight) {
+          let newstring = inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
+            // 更新 width 屬性
+            iframeTag = iframeTag.replace(/width\s*=\s*["'].*?["']/i, `width="${newWidth}"`);
+            // 更新 height 屬性
+            iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
+            return iframeTag;
+          });
+          if (newstring.indexOf(`width=${newWidth}`) < 0 ||
+            newstring.indexOf(`height=${newHeight}`) < 0) {
+            newstring = inputString.replace(
+              '<iframe',
+              `<iframe width="${newWidth}" height="${newHeight}" `
+            );
+          }
+          return newstring;
+        }
 
 
-              //document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal";
-              //document.getElementById("ppt_url").select();
-              function urlGo() {
+        //document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false&rm=minimal";
+        //document.getElementById("ppt_url").select();
+        function urlGo() {
 
-                value = document.getElementById("ppt_url").value;
-                value = value.trim();
-                if (value.length == 0) return;
-          
-                document.getElementById("ui").hidden = true;
-                
-                document.querySelector('body').style.background = 'transparent';
-                
-                if (value.endsWith('.mp4') || value.endsWith('.mov')) {
-                  let vdo = document.getElementById("vsrc");
-                  vdo.src = value;
-                  vdo.hidden = false;
+          value = document.getElementById("ppt_url").value;
+          value = value.trim();
+          if (value.length == 0) return;
 
-                  //vdo.setAttribute("controls", "controls");
-                  
-                  if (document.getElementById("loopchk").checked) {
-                    vdo.setAttribute("loop", "loop");
-                  }
+          document.getElementById("ui").hidden = true;
 
-                  if (forPlay)
-                    vdo.autoplay = true;
+          document.querySelector('body').style.background = 'transparent';
 
-                  if (forPlay) 
-                    document.getElementById("reload").hidden = true;
-                  else
-                    document.getElementById("reload").hidden = false;
-                  return;
+          if (value.endsWith('.mp4') || value.endsWith('.mov')) {
+            let vdo = document.getElementById("vsrc");
+            vdo.src = value;
+            vdo.hidden = false;
 
-                }
-                
-                if (value.startsWith('<iframe')) {
-                  value = modifyIframeAttributes(value, '100%', '100%');
-                  document.getElementById("webdiv").hidden = false;
-                  document.getElementById("webdiv").innerHTML = value;
-                } else if (!value.startsWith('<')) {
-                  document.getElementById("web").src = value;
-                  document.getElementById("web").hidden = false;
-                } else {
-                  document.getElementById("webdiv").hidden = false;
-                  document.getElementById("webdiv").innerHTML = value;
-                }
+            //vdo.setAttribute("controls", "controls");
 
-                //window.location.href = value;
-                if (forPlay) 
-                    document.getElementById("reload").hidden = true;
-                else
-                    document.getElementById("reload").hidden = false;
+            if (document.getElementById("loopchk").checked) {
+              vdo.setAttribute("loop", "loop");
+            }
 
-                if (forPlay) 
-                    document.getElementById("reloadPage").hidden = true;
-                else
-                    document.getElementById("reloadPage").hidden = false;
+            if (forPlay)
+              vdo.autoplay = true;
 
-              }
+            if (forPlay)
+              document.getElementById("reload").hidden = true;
+            else
+              document.getElementById("reload").hidden = false;
+            return;
 
-                           
-              function reload() {
-                
-                //let value = document.getElementById("ppt_url").value;
-                //value = value.trim();
-                if (value.length > 0) {
-                  if (value.startsWith('<iframe')) {
-                    document.getElementById("webdiv").innerHTML = value;
-                    return;
-                  }
-                }
+          }
 
-                let d = document.getElementById("web");
-                document.getElementById("web").src = d.src;
-              }
-            </script>
-          <br/>
-          <button onclick="urlGo()"> OK </button>
-          <!--button type="button" onclick="iframeGo()">OK (embedded whole iframe)</button-->
-          <br/>
-          <ul>
-            <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a></li>
-            <li>Google簡報要打開speaker notes按's'</li>
-            <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
-            <!--
+          if (value.startsWith('<iframe')) {
+            value = modifyIframeAttributes(value, '100%', '100%');
+            document.getElementById("webdiv").hidden = false;
+            document.getElementById("webdiv").innerHTML = value;
+          } else if (!value.startsWith('<')) {
+            document.getElementById("web").src = value;
+            document.getElementById("web").hidden = false;
+          } else {
+            document.getElementById("webdiv").hidden = false;
+            document.getElementById("webdiv").innerHTML = value;
+          }
+
+          //window.location.href = value;
+          if (forPlay)
+            document.getElementById("reload").hidden = true;
+          else
+            document.getElementById("reload").hidden = false;
+
+          if (forPlay)
+            document.getElementById("reloadPage").hidden = true;
+          else
+            document.getElementById("reloadPage").hidden = false;
+
+        }
+
+
+        function reload() {
+
+          //let value = document.getElementById("ppt_url").value;
+          //value = value.trim();
+          if (value.length > 0) {
+            if (value.startsWith('<iframe')) {
+              document.getElementById("webdiv").innerHTML = value;
+              return;
+            }
+          }
+
+          let d = document.getElementById("web");
+          document.getElementById("web").src = d.src;
+        }
+      </script>
+      <br />
+      <button onclick="urlGo()"> OK </button>
+      <!--button type="button" onclick="iframeGo()">OK (embedded whole iframe)</button-->
+      <br />
+      <ul>
+        <li><a href="javascript:googleSlidesRemoveBar()">Google簡報若不要出現下方功能bar, '嵌入'用的url後方要加上'&rm=minimal'</a></li>
+        <li>Google簡報要打開speaker notes按's'</li>
+        <li>Canva簡報, 檢查'嵌入'用的url後方有無"view?embed", 沒有就自己加上</li>
+        <!--
             <li><a href="javascript:animLED()">LED動畫</a></li>
             0:無動畫 1:圈圈 2:星空In 3:星空Out 4:星空Inout 5:星空圈圈 6:下雪 7:煙火 8:舞台 9:時鐘 10:老電腦
             -->
-          </ul>
-            
-          <hr size="4" width="100%" color="#00ff00"/>
-          <input class="chk" type="checkbox" id="loopchk" checked>
-          <label>Loop(影片)</label>
-          <input class="chk" type="checkbox" id="keepratio" checked>
-          <label>維持比例(圖片)</label>
-          <hr size="4" width="100%" color="#00ff00"/>
-          <P></P>
-            <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" onclick="openFile('allfile')">
-              <p>
-                <ul>
-                  <li>PDF</li>
-                  <li>圖片</li>
-                  <li>影片</li>
-                </ul>
-              </p>
-            </div>
-            <input id="allfile" type="file" hidden="true" onchange="selectFile(event)"/>
-        </div>
+      </ul>
+
+      <hr size="4" width="100%" color="#00ff00" />
+      <input class="chk" type="checkbox" id="loopchk" checked>
+      <label>Loop(影片)</label>
+      <input class="chk" type="checkbox" id="keepratio" checked>
+      <label>維持比例(圖片)</label>
+      <hr size="4" width="100%" color="#00ff00" />
+      <P></P>
+      <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
+        onclick="openFile('allfile')">
+        <p>
+        <ul>
+          <li>PDF</li>
+          <li>圖片</li>
+          <li>影片</li>
+        </ul>
+        </p>
       </div>
-    </body>
+      <input id="allfile" type="file" hidden="true" onchange="selectFile(event)" />
+    </div>
+  </div>
+</body>
+
 </html>
-  
+
 <script type="text/javascript" charset="UTF-8">
 
-function googleSlidesRemoveBar() {
-  let value = document.getElementById("ppt_url").value;
-  value = value.trim();
-  if (value.length == 0) return;
+  function googleSlidesRemoveBar() {
+    let value = document.getElementById("ppt_url").value;
+    value = value.trim();
+    if (value.length == 0) return;
 
-  if (value.startsWith('<iframe')) {
-    let modifiedString = appendToIframeSrc(value, '&rm=minimal');
-    document.getElementById("ppt_url").value = modifiedString;
-  } else {
-    value += '&rm=minimal';
+    if (value.startsWith('<iframe')) {
+      let modifiedString = appendToIframeSrc(value, '&rm=minimal');
+      document.getElementById("ppt_url").value = modifiedString;
+    } else {
+      value += '&rm=minimal';
+      document.getElementById("ppt_url").value = value;
+    }
+
+
+  }
+
+  function animLED() {
+    let value = document.getElementById("ppt_url").value;
+    value = value.trim();
+    value = './led/led.html?anim=7&round=0';
     document.getElementById("ppt_url").value = value;
   }
 
+  /*
+    url: 
+    trigger:
+   */
+  window.addEventListener('message', (e) => {
 
-}
+    if (e.data && e.data.trim().length < 2) return;
 
-function animLED() {
-  let value = document.getElementById("ppt_url").value;
-  value = value.trim();
-  value = './led/led.html?anim=7&round=0';
-  document.getElementById("ppt_url").value = value;
-}
+    const jsonData = JSON.parse(e.data);
 
-/*
-  url: 
-  trigger:
- */
-window.addEventListener('message', (e) => {
+    forPlay = 0;
+    if (jsonData.forPlay)
+      forPlay = 1;
 
-  if (e.data && e.data.trim().length < 2) return;
+    let loopbox = document.getElementById("loopchk");
+    if (loopbox && jsonData.loop) {
+      loopbox.checked = true;
+    } else {
+      loopbox.checked = false;
+    }
 
-  const jsonData = JSON.parse(e.data);
+    if (jsonData.keepratio) {
+      document.getElementById("keepratio").checked = true;
+    } else {
+      document.getElementById("keepratio").checked = false;
+    }
 
-  forPlay = 0;
-  if (jsonData.forPlay) 
-    forPlay = 1;
+    if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
+      image_base64 = jsonData.imageBase64;
+      showImage();
+      return;
+    }
 
-  let loopbox = document.getElementById("loopchk");
-  if (loopbox && jsonData.loop) {
-    loopbox.checked = true;
-  } else {
-    loopbox.checked = false;
+    if (!jsonData.url) return;
+    if (jsonData.url.trim().length == 0) return;
+    document.getElementById("ppt_url").value = jsonData.url.trim();
+    //if (jsonData.trigger) 
+    //setTimeout(urlGo, 1000);
+    if (!jsonData.hold)
+      urlGo();
+
+  }, false);
+
+  function getRootUrl() {
+    let all = window.location.href; //console.log(all);
+    let root = all.substr(0, all.length - '/newurl.html'.length); //console.log('root:' + root);
+    return root;
   }
 
-  if (jsonData.keepratio) {
-    document.getElementById("keepratio").checked = true;
-  } else {
-    document.getElementById("keepratio").checked = false;
+  function relativeUrl(url) {
+    let root = getRootUrl();
+    //let domain = window.location.origin;
+    if (url.startsWith(root)) {
+      let str = url.substr(root.length, url.length - root.length);
+      return '.' + str;
+    }
+    return url;
   }
 
-  if (jsonData.imageBase64 && jsonData.imageBase64.length > 0) {
-    image_base64 = jsonData.imageBase64;
-    showImage();
-    return;
-  }
+  function toObj() {
+    let _url = "";
+    let obj = {};
+    if (!document.getElementById("web").hidden) { //已經連上
+      _url = relativeUrl(document.getElementById("web").src);
+    } else {
+      _url = relativeUrl(document.getElementById("ppt_url").value.trim());
+    }
+    //url還在欄位
+    obj = {
+      "hold": 1,
+      "url": _url
+    };
 
-  if (!jsonData.url) return;
-  if (jsonData.url.trim().length == 0) return;
-  document.getElementById("ppt_url").value = jsonData.url.trim();
-  //if (jsonData.trigger) 
-  //setTimeout(urlGo, 1000);
-  if (!jsonData.hold) 
-    urlGo();
-
-}, false);
-
-function getRootUrl() {
-  let all = window.location.href; //console.log(all);
-  let root = all.substr(0, all.length - '/newurl.html'.length); //console.log('root:' + root);
-  return root;
-}
-
-function relativeUrl(url) {
-  let root = getRootUrl();
-  //let domain = window.location.origin;
-  if (url.startsWith(root)) {
-    let str = url.substr(root.length, url.length - root.length);
-    return '.' + str;
-  }
-  return url;
-}
-
-function toObj() {
-  let _url = "";
-  let obj = {};
-  if (!document.getElementById("web").hidden) { //已經連上
-    _url = relativeUrl(document.getElementById("web").src);
-  } else {
-    _url = relativeUrl(document.getElementById("ppt_url").value.trim());
-  }
-  //url還在欄位
-  obj = {
-    "hold": 1, 
-    "url": _url 
-  };
-    
     let loopbox = document.getElementById("loopchk");
     if (loopbox && loopbox.checked) {
       obj['loop'] = 1;
     }
 
-    let keep = isKeepRatio()?1:0;
+    let keep = isKeepRatio() ? 1 : 0;
     obj['keepratio'] = keep;
     obj['forPlay'] = forPlay;
-    
+
     obj['imageBase64'] = "";
-    if (image_base64 && image_base64.length > 0) { 
+    if (image_base64 && image_base64.length > 0) {
       obj['imageBase64'] = image_base64;
     }
 
     return obj;
-}
-/*
-https://www.canva.com/design/DAGDmWJPwa8/RhddFXE0m2vLq6mRPc783A/edit?utm_content=DAGDmWJPwa8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
-https://www.canva.com/design/DAGDmWJPwa8/RhddFXE0m2vLq6mRPc783A/view?embed
-https://www.canva.com/design/DAGPY2UjdkI/0I5uArnGuDBGL2cGPYjTUQ/view?embed&utm_content=DAGPY2UjdkI&utm_campaign=designshare&utm_medium=link&utm_source=editor#8
-https://www.canva.com/design/DAGPY2UjdkI/0I5uArnGuDBGL2cGPYjTUQ/view?embed&utm_content=DAGPY2UjdkI&utm_campaign=designshare&utm_medium=link&utm_source=editor#8
-
-edit:
-https://www.canva.com/design/DAFY964Fw6Q/h7INsnBvo-q1ZBllt6OeCg/edit?utm_content=DAFY964Fw6Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
-play:
-https://www.canva.com/design/DAFY964Fw6Q/Q3H7T_HsNl7OQVQMtVutAw/view?utm_content=DAFY964Fw6Q&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
-embedded:
-
-黃玉馨 設計的 <a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFY964Fw6Q&#x2F;view?utm_content=DAFY964Fw6Q&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">莊稼多工人少</a>
-=>
-https://www.canva.com/design/DAFY964Fw6Q/view?embed
-embedded:
-https://www.canva.com/design/DAFY964Fw6Q/view
-+?embed
-=
-https://www.canva.com/design/DAFY964Fw6Q/view?embed
-*/
+  }
+  /*
+  https://www.canva.com/design/DAGDmWJPwa8/RhddFXE0m2vLq6mRPc783A/edit?utm_content=DAGDmWJPwa8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+  https://www.canva.com/design/DAGDmWJPwa8/RhddFXE0m2vLq6mRPc783A/view?embed
+  https://www.canva.com/design/DAGPY2UjdkI/0I5uArnGuDBGL2cGPYjTUQ/view?embed&utm_content=DAGPY2UjdkI&utm_campaign=designshare&utm_medium=link&utm_source=editor#8
+  https://www.canva.com/design/DAGPY2UjdkI/0I5uArnGuDBGL2cGPYjTUQ/view?embed&utm_content=DAGPY2UjdkI&utm_campaign=designshare&utm_medium=link&utm_source=editor#8
+  
+  edit:
+  https://www.canva.com/design/DAFY964Fw6Q/h7INsnBvo-q1ZBllt6OeCg/edit?utm_content=DAFY964Fw6Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+  play:
+  https://www.canva.com/design/DAFY964Fw6Q/Q3H7T_HsNl7OQVQMtVutAw/view?utm_content=DAFY964Fw6Q&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink
+  embedded:
+  
+  黃玉馨 設計的 <a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFY964Fw6Q&#x2F;view?utm_content=DAFY964Fw6Q&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">莊稼多工人少</a>
+  =>
+  https://www.canva.com/design/DAFY964Fw6Q/view?embed
+  embedded:
+  https://www.canva.com/design/DAFY964Fw6Q/view
+  +?embed
+  =
+  https://www.canva.com/design/DAFY964Fw6Q/view?embed
+  */
 
 </script>
 

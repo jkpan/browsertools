@@ -37,6 +37,12 @@
      1000,
      false,
      "程序"
+    ],
+    [
+     "獻詩",
+     1000,
+     false,
+     "獻詩"
     ]
    ]
   },
@@ -22547,6 +22553,30 @@
    ]
   ]
  },
+ "其他183": {
+  "content": [
+   [
+    "祂名是全能"
+   ],
+   [
+    "祂名是全能 全能的上帝",
+    "主啊 我敬拜你",
+    "一切祂都能 萬事都可能",
+    "宇宙萬物主宰"
+   ],
+   [
+    "當我感到沒有能力",
+    "沒有人我可尋覓",
+    "你的愛使我堅固",
+    "你的名給我歸屬"
+   ],
+   [
+    "耶和華全能主",
+    "必然成就",
+    "必然成就這事"
+   ]
+  ]
+ },
  "程序1": {
   "content": [
    [
@@ -22596,6 +22626,83 @@
     "我信聖徒相通 我信罪得赦免",
     "我信身體復活 我信永生",
     "阿們"
+   ]
+  ]
+ },
+ "獻詩1": {
+  "content": [
+   [
+    "Holy Forever"
+   ],
+   [
+    "A thousand generations falling down in worship",
+    "To sing the song of ages to the Lamb",
+    "And all who've gone before us and all who will believe",
+    "Will sing the song of ages to the Lamb"
+   ],
+   [
+    "Your name is the highest",
+    "Your name is the greatest",
+    "Your name stands above them all",
+    "All thrones and dominions",
+    "All powers and positions",
+    "Your name stands above them all"
+   ],
+   [
+    "And the angels cry holy",
+    "All creation cries holy",
+    "You are lifted high holy",
+    "Holy forever"
+   ],
+   [
+    "If you've been forgiven and if you've been redeemed",
+    "Sing the song forever to the Lamb",
+    "If you walk in freedom and if you bear His name",
+    "Sing the song forever to the Lamb",
+    "We'll sing the song forever and amen"
+   ],
+   [
+    "And the angels cry holy",
+    "All creation cries holy",
+    "You are lifted high holy",
+    "Holy forever"
+   ],
+   [
+    "Hear Your people sing holy",
+    "To the King of kings holy",
+    "You will always be holy",
+    "Holy forever"
+   ],
+   [
+    "Your name is the highest",
+    "Your name is the greatest",
+    "Your name stands above them all",
+    "All thrones and dominions",
+    "All powers and positions",
+    "Your name stands above them all"
+   ],
+   [
+    "Jesus",
+    "Your name is the highest",
+    "Your name is the greatest",
+    "Your name stands above them all",
+    "All thrones and dominions",
+    "All powers and positions",
+    "Your name stands above them all"
+   ],
+   [
+    "And the angels cry holy",
+    "All creation cries holy",
+    "You are lifted high holy",
+    "Holy forever"
+   ],
+   [
+    "Hear Your people sing holy",
+    "To the King of kings holy",
+    "You will always be holy",
+    "Holy forever",
+    "You will always be holy",
+    "Holy forever"
    ]
   ]
  }

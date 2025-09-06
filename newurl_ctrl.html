@@ -105,6 +105,7 @@
     <input type="checkbox" id="keepratio" checked>
     <label>維持比例(圖片)</label>
     <P></P>
+    <!-- <a href="#tag_url"></a>; -->
     嵌入Google簡報, Canva簡報, Youtube影片...
     <textarea id="ppt_url" name="mytext" rows="5"></textarea>
     <P></P>
@@ -135,13 +136,21 @@
         }
 
         function modifyIframeAttributes(inputString, newWidth, newHeight) {
-            return inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
+            let newstring = inputString.replace(/<iframe[^>]*>/i, (iframeTag) => {
                 // 更新 width 屬性
                 iframeTag = iframeTag.replace(/width\s*=\s*["'].*?["']/i, `width="${newWidth}"`);
                 // 更新 height 屬性
                 iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
                 return iframeTag;
             });
+            if (newstring.indexOf(`width=${newWidth}`) < 0 || 
+                newstring.indexOf(`height=${newHeight}`) < 0) {
+                    newstring = inputString.replace(
+                    '<iframe', 
+                    `<iframe width="${newWidth}" height="${newHeight}" `
+                );
+            }
+            return newstring;
         }
 
         function urlGo(url, key) {
@@ -373,7 +382,12 @@
 
     function pushFromUpload(content) {//alert(content);
         document.getElementById("ppt_url").value = content;
-        urlGo();
+        window.focus();
+        const targetElement = document.getElementById('ppt_url');
+        if (targetElement) { // Check if the element exists before attempting to scroll
+            targetElement.scrollIntoView();
+        }
+        //urlGo();
     }
 
     var liber = null;

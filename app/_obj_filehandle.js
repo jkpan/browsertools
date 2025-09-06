@@ -156,6 +156,27 @@ function handleFile(req, res) {
       case 'listfiles':
         syncListunderfolder(p1, res);
         return;
+      case 'addurl':
+        try {
+          let dir = makeTodayFolder();
+          let p2 = requestData.p2;
+          const newPath = path.join(dir, p1 + '.url.txt');
+          println('[addurl] ' + p2 + " [save to] " + newPath);
+          fs.writeFile(newPath, p2, 'utf8', (err) => {
+            if (err) {
+              res.setHeader('Content-Type', 'application/json');// 发送响应数据
+              res.end(JSON.stringify({ "state": -1 }));
+              println('寫入錯誤', err);
+              return 
+            }
+            res.setHeader('Content-Type', 'application/json');// 发送响应数据
+            res.end(JSON.stringify({ "state": 1 }));
+          });
+        } catch (err) {
+          res.setHeader('Content-Type', 'application/json');// 发送响应数据
+          res.end(JSON.stringify({ "state": -1 }));
+        }
+        return;
       case 'delfile': {
         try {
           const u = new URL(p1);
@@ -187,6 +208,15 @@ function handleFile(req, res) {
   });
 }
 
+function makeTodayFolder() {
+  let today = getToday();
+  // 建立 uploads 資料夾
+  let dir = uploadDir + '/' + today;//'./users/uploads'//path.join('', 'uploads');
+  if (!fs.existsSync(dir))
+    fs.mkdirSync(dir);
+  return dir;
+}
+
 function uploadFile(req, res) {
 
   if (req.method != 'POST') {
@@ -203,11 +233,7 @@ function uploadFile(req, res) {
 
   println('uploadFile ...');
 
-  let today = getToday();
-  // 建立 uploads 資料夾
-  let dir = uploadDir + '/' + today;//'./users/uploads'//path.join('', 'uploads');
-  if (!fs.existsSync(dir))
-    fs.mkdirSync(dir);
+  let dir = makeTodayFolder();
 
   form.parse(req, (err, fields, files) => {
 

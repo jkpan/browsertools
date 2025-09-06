@@ -791,10 +791,10 @@ function printPhaseChart() {
 
 function setFontFactor(ff) {
   fontfactor = ff;
-  if (fontfactor > 20)
-    fontfactor = 20;
-  if (fontfactor < 3)
-    fontfactor = 3;
+  if (fontfactor > 40)
+    fontfactor = 40;
+  if (fontfactor < 1)
+    fontfactor = 1;
   init();
 }
 
