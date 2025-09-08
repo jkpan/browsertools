@@ -135,8 +135,7 @@
             <label style="color: rgb(0, 255, 0);">說明</label>
             <input type="text" id="des">
             <p></p>
-            <textarea id="urltxt" rows="3"></textarea>
-            <p></p>
+            <textarea id="urltxt" style="font-size: 16px" rows="3"></textarea>
             <button onclick="newurl()">新增URL</button>
             <p></p>
         </div>
@@ -562,7 +561,7 @@
                 }
             };
 
-            xhr.onload = function () {
+            xhr.onload = function (e) {
                 if (xhr.status === 200) {
                     msg.innerText = '完成';
                     listFolder();
@@ -570,6 +569,7 @@
                 } else {
                     msg.innerText = '失敗';
                     document.getElementById("prog").value = 0;
+                    alert('e:' + e);
                 }
                 filename.innerText = '';
             };

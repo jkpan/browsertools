@@ -1263,8 +1263,10 @@ function createCtrlBtn() {
 }
 
 function pushFromUpload(content) {
-  image_base64 = content;
-  showImage(content);
+  if (content.startsWith('http') || content.startsWith('data:')) {
+    image_base64 = content;
+    showImage(content);
+  }
 }
 
 var opacity = 100;

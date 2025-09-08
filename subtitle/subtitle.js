@@ -261,8 +261,10 @@ function showImage(content) {
 }
 
 function pushFromUpload(content) {
-  image_base64 = content;
-  showImage(content);
+  if (content.startsWith('http') || content.startsWith('data:')) {
+    image_base64 = content;
+    showImage(content);
+  }
 }
 
 //Complete Html Page

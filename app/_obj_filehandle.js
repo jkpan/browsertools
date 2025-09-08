@@ -166,7 +166,7 @@ function handleFile(req, res) {
             if (err) {
               res.setHeader('Content-Type', 'application/json');// 发送响应数据
               res.end(JSON.stringify({ "state": -1 }));
-              println('寫入錯誤', err);
+              println('#上傳# ' + err);
               return 
             }
             res.setHeader('Content-Type', 'application/json');// 发送响应数据
@@ -183,7 +183,7 @@ function handleFile(req, res) {
           let file = '.' + u.pathname;//'./users/uploads'//path.join('', 'uploads');
           file = decodeURIComponent(file); //if (fs.existsSync(file)) fs.remove(file);
           fs.unlinkSync(file);
-          println(file + ' deleted successfully');
+          println('#上傳# ' + file + ' deleted successfully');
           res.setHeader('Content-Type', 'application/json');// 发送响应数据
           res.end(JSON.stringify({ "state": 1 }));
         } catch (err) {
@@ -222,6 +222,7 @@ function uploadFile(req, res) {
   if (req.method != 'POST') {
     res.writeHead(404);
     res.end('Not Found');
+    println('#上傳# ' + " not 'POST'");
     return;
   }
 
@@ -229,18 +230,23 @@ function uploadFile(req, res) {
     uploadDir: uploadDir,
     keepExtensions: true,
     multiples: true,
+    maxFileSize: 2000 * 1024 * 1024 // 2000MB
+    //maxFields: 1000,
+    //maxFieldsSize: 20,971,520,
+    //maxFileSize: 209715200,
   });
 
-  println('uploadFile ...');
+  println('#上傳# uploadFile ...');
 
   let dir = makeTodayFolder();
 
   form.parse(req, (err, fields, files) => {
 
-    println('form.parse ...');
+    println('#上傳# form.parse ...');
 
     if (err) {
       res.writeHead(500);
+      println('#上傳# ' + err);
       return res.end('Upload failed.');
     }
 
@@ -251,26 +257,26 @@ function uploadFile(req, res) {
       const newPath = path.join(dir, file.originalFilename || 'upload_' + Date.now());
       //const ext = path.extname(file.originalFilename);
       //const newPath = path.join(dir, 'upload_' + getCurrent() + ext);
-      println('uploaded.ma ...' + oldPath + ' ... ' + newPath);
+      println('#上傳# ' + oldPath + ' ... ' + newPath);
       return fs.promises.rename(oldPath, newPath);
     });
 
     Promise.all(promises)
       .then(() => {
         res.writeHead(200);
-        println('Upload successful.');
+        println('#上傳# Upload successful.');
         res.end('Upload successful.');
       })
-      .catch(() => {
+      .catch((err) => {
         res.writeHead(500);
-        println('Error saving file.');
-        res.end('Error saving file.');
+        println('#上傳# ' + err);
+        res.end('#上傳# ' + err);
       });
 
-    println('form.parse ... end.');
+    println('#上傳# ... end.');
   });
 
-  println('uploadFile ...end');
+  println('#上傳# ...end');
 
 }
 
