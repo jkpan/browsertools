@@ -213,7 +213,8 @@
                 (res) => {
                     //document.getElementById('reload').click();// location.reload();
                     if (activeFolder.trim().length == 0) return;
-                    listFiles(activeFolder);
+                    //listFiles(activeFolder);
+                    listFolder();
                 }, (err) => {
                     alert('fail');
                 });
@@ -396,7 +397,7 @@
         if (result.username == 'guest' && result.state == 2) return;
         let user = result.username;
         */
-        function listFolder(e) {
+        function listFolder() {
             //console.log('action:' + action + ', p1:' + p1);
             _ajax({
                 action: "listfolders",

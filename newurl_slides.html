@@ -71,7 +71,7 @@
             border: 5px dashed rgba(128, 0, 0, 0.7);
         }
 
-         .fullRange2 {
+        .fullRange2 {
             margin: auto;
             width: 0%;
             height: 0%;
@@ -346,14 +346,14 @@
     }
 
     function isImageFile(filename) {
-            // 定義常見的圖片副檔名
-            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+        // 定義常見的圖片副檔名
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
 
-            // 轉小寫來避免大小寫問題
-            const lower = filename.toLowerCase();
+        // 轉小寫來避免大小寫問題
+        const lower = filename.toLowerCase();
 
-            // 用 some() 來判斷是否符合其中一個副檔名
-            return imageExtensions.some(ext => lower.endsWith(ext));
+        // 用 some() 來判斷是否符合其中一個副檔名
+        return imageExtensions.some(ext => lower.endsWith(ext));
     }
 
     function urlGo(value, loop, key) {
@@ -378,41 +378,40 @@
 
             add2Item(div);
 
+            return;
             //vdo.setAttribute("controls", "controls");
-
-        } else {
-            if (!value.startsWith('<')) { //純url...//不能用http判斷 因為上面用相對路徑
-                if (isImageFile(value)) { //圖片
-                    const img = document.createElement('img');
-                    img.src = value;
-                    img.style.width = "100%";//width;   // 固定寬度
-                    img.style.height = "100%";//height; // 固定高度
-
-                    // 讓圖片在固定框內保持比例
-                    img.style.objectFit = 'contain';  // 或 'cover'
-                    img.style.backgroundColor = '#000000';
-                    //img.style.border = '2px solid red';
-                    div.appendChild(img); 
-                    add2Item(div);
-                    
-                } else { //非圖片  
-                    const iframe = document.createElement('iframe');
-                    iframe.setAttribute("width", "100%");
-                    iframe.setAttribute("height", "100%");
-                    iframe.src = value;
-                    //iframe.style.objectFit = 'contain';
-                    //iframe.allow = 'fullscreen';
-                    div.appendChild(iframe); 
-                    add2Item(div);
-                }
-                
-            } else {
-                div.innerHTML = value;
-                add2Item(div);
-            }
 
         }
 
+        if (!value.startsWith('<iframe')) { //純url...//不能用http判斷 因為上面用相對路徑
+            if (isImageFile(value)) { //圖片
+                const img = document.createElement('img');
+                img.src = value;
+                img.style.width = "100%";//width;   // 固定寬度
+                img.style.height = "100%";//height; // 固定高度
+
+                // 讓圖片在固定框內保持比例
+                img.style.objectFit = 'contain';  // 或 'cover'
+                img.style.backgroundColor = '#000000';
+                //img.style.border = '2px solid red';
+                div.appendChild(img);
+                add2Item(div);
+
+            } else { //非圖片  
+                const iframe = document.createElement('iframe');
+                iframe.setAttribute("width", "100%");
+                iframe.setAttribute("height", "100%");
+                iframe.src = value;
+                //iframe.style.objectFit = 'contain';
+                //iframe.allow = 'fullscreen';
+                div.appendChild(iframe);
+                add2Item(div);
+            }
+
+        } else {
+            div.innerHTML = value;
+            add2Item(div);
+        }
         //window.location.href = value;
     }
 
