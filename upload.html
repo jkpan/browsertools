@@ -214,6 +214,8 @@
                     //document.getElementById('reload').click();// location.reload();
                     if (activeFolder.trim().length == 0) return;
                     //listFiles(activeFolder);
+                    document.getElementById('des').value = '';
+                    document.getElementById('urltxt').value = '';
                     listFolder();
                 }, (err) => {
                     alert('fail');
