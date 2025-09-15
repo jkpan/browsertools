@@ -33,7 +33,7 @@ function syncListunderfolder(folder, res) {
       if (stats.isFile()) {
         obj['files'].push(`${file}`);
       } else if (stats.isDirectory()) {
-        if (file.length != 8) return; //modify later
+        //if (file.length != 8) return; //modify later
         obj['folders'].push(`${file}`);
       }
     });
