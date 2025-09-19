@@ -1,3 +1,4 @@
+<script type="text/javascript" src="login.js" charset="UTF-8"></script>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -117,7 +118,7 @@
 </head>
 
 <body>
-    <div class="wrapper">
+    <div class="wrapper" id="alldiv">
         <div class="topleft">
 
             <input id="allfile" type="file" name="file" accept="image/*,video/*" hidden="true"
@@ -145,7 +146,7 @@
             <p></p>
             <button onclick="listFolder()" id="reload">重新載入</button>
             <button onclick="download()">檔案下載</button>
-            <button onclick="deleteFile()" style="background-color: #ff0000;">刪除</button>
+            <button onclick="deleteFile()" style="background-color: #ff0000;" id="delbtn">刪除</button>
             <p></p>
             <label id="selfile"
                 style="color:#ffffff;text-align:center;font-size: 12px;word-wrap: break-word">--</label><br>
@@ -185,7 +186,7 @@
                     throw new Error('網路錯誤 ' + response.status);
 
                 const text = await response.text(); // 把內容讀成純文字
-                
+
                 //document.getElementById('output').textContent = text;
 
                 if (window.opener) {
@@ -223,7 +224,8 @@
         }
 
         function deleteFile() {
-            if (activeFile.trim().length == 0) return;
+            if (!activeFolder || activeFolder.trim().length != 8) return;
+            if (!activeFile || activeFile.trim().length == 0) return;
             _ajax({
                 action: "delfile",
                 p1: activeFile,
@@ -633,6 +635,35 @@
                 .catch(err => msg.innerText = 'Upload failed.');
         }
         */
+
+        function handleLogin(resultJson) {
+            if (resultJson.state == 0) { //不支援cgi
+                document.getElementById('alldiv').hidden = true;
+                return;
+            }
+            if (resultJson.state == 2) { //半權限
+                document.getElementById('delbtn').hidden = true;
+            } else { //state == 1 //全權限
+
+            }
+        }
+
+        async function chkloginstatus() {
+            try {
+                console.log('chkloginstatus...');
+                let result = await doChk();
+                handleLogin(result);
+            } catch (error) {
+                handleLogin({
+                    state: 0,
+                    username: "guest",
+                    token: null
+                });
+            }
+        }
+
+        chkloginstatus();
+
     </script>
 </body>
 

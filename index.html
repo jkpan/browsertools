@@ -5,15 +5,14 @@
 <script type="text/javascript" src="login.js" charset="UTF-8"></script>
 <script>
 
+  var _login = null;
+  var username = null;
+
   function closeLogin() {
     if (_login)
       _login.close();
     _login = null;
   }
-
-
-  var _login = null;
-  var username = null;
 
   function logout() {
     cleanLogin();
@@ -146,9 +145,9 @@
     &nbsp;
     <label id="__username" style="color:#0f0;" hidden="true"></label>
     &nbsp;
-    <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
+    <label id="__login" style="border: 1px solid #0f0;color: #00ff00;" hidden="true" onclick="login()">Sign in</label>
     &nbsp;
-    <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign out</label>
+    <label id="__logout" style="border: 1px solid #0f0;color: #00ff00" hidden="true" onclick="logout()">Sign out</label>
     &nbsp;
   </div>
   <!-- <img src="./tmp/bg01.png"> -->
