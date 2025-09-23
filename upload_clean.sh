@@ -1,11 +1,12 @@
 #!/bin/bash
-# 用法: ./cleanup.sh 7   → 刪除 7 天前的目錄
+# 用法: ./upload_clean.sh 7   → 刪除 7 天前的目錄
 
 # N 天前
 DAYS_AGO=${1:-31}   # 預設 7 天
 
-echo "處理 $2"
+echo "處理 $2 $DAYS_AGO 天前的檔案"
 cd $2
+
 
 # 算出日期 (格式 YYYYMMDD)
 TARGET_DATE=$(date --date="$DAYS_AGO days ago" +"%Y%m%d")

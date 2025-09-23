@@ -199,10 +199,6 @@ class Verseobj {
     this.substrings = [];
     this.substrings = getTxtArray(txt, this.wratio);
 
-    //Verseobj.hilight_height = this.targetRect;
-
-    //if (animElapse > 0) console.log( '('+progress +') ' + animElapse+': ' + (fs - this.fs));
-
     if (fontsize_dist == 1) //if (color_selection == 0) 
       return this.level == 0 ?
         this.substrings.length * fs + fs * 0.5 :
@@ -232,18 +228,15 @@ class Verseobj {
       //draw chapter verse
       if (this.chapter > 0 && this.verse > 0) {
         let fs = this.targetFs * 0.5;
-        ctx.font = fs + "px " + fontFamily;//FONT_SML;
+        ctx.font = fs + "px " + fontFamily;
         if ((animElapse % 100) >= animTotal * 0.95 || animElapse == -1) {
-          _drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
+          _drawSdwtxt(' ' + abbr[this.volume], 0, 0);
           _drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
         } else {
-          //_drawSdwtxt(' ' + abbr[this.volume], 0, 0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
-          //_drawSdwtxt(this.frontxt, 0, this.targetFs * 0.6);
-          _drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);//ctx.font = (0.9 * fs) + "px " + fontFamily;//FONT_SML;
+          _drawtxt(' ' + abbr[this.volume], 0, 0, 1.0);
           _drawtxt(this.frontxt, 0, this.targetFs * 0.6, 1.0);
         }
       }
-      //ctx.resetTransform();
       ctx.restore();
     }
 
@@ -257,26 +250,16 @@ class Verseobj {
     if (this.level == 0) {
       let y = this.fs * 0.25;
       for (let i = 0; i < this.substrings.length; i++) {
-        if (islastChar(this.substrings[i]) && i + 1 < this.substrings.length && is0Char(this.substrings[i + 1])) {
-          if ((animElapse % 100) >= animTotal * 0.95 || animElapse == -1)
-            _drawSdwtxt(this.substrings[i] + '-', x, y);
-          else
-            _drawtxt(this.substrings[i] + '-', x, y, 1.0);
-        } else {
           if ((animElapse % 100) >= animTotal * 0.95 || animElapse == -1)
             _drawSdwtxt(this.substrings[i], x, y);
           else
             _drawtxt(this.substrings[i], x, y, 1.0);
-        }
         y += this.fs;
       }
     } else {
       let y = this.fs * 0.25;
       for (let i = 0; i < this.substrings.length; i++) {
-        if (islastChar(this.substrings[i]) && i + 1 < this.substrings.length && is0Char(this.substrings[i + 1]))
-          _drawtxt(this.substrings[i] + '-', x, y, this.opacity);
-        else
-          _drawtxt(this.substrings[i], x, y, this.opacity);
+        _drawtxt(this.substrings[i], x, y, this.opacity);
         y += this.fs;
       }
       if (color_selection > 0) {
@@ -1394,6 +1377,8 @@ function getTxtArray(txt, wRatio) {
       ratio = Math.ceil(txt.length * ratio) - 1; //字數
       let txt_0 = txt.substr(0, ratio);
       txt = txt.substr(ratio, txt.length - txt_0.length);
+      //如果這個行最後一個字是英文 下一行的頭是英文
+      if (islastChar(txt_0) && is0Char(txt)) txt_0 += '-';
       substrings[idx] = txt_0;
       idx++;
       if (idx > 20) break;
