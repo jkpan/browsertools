@@ -137,7 +137,7 @@ class Verseobj {
     } else if (progress == -2) {
       fs = this.targetFs;
     } else {
-      
+
       if ((animElapse % 100) >= animTotal) {
         //animElapse = animElapse >= 100 ? 100 + animTotal : animTotal;
         progress = 1.0;
@@ -149,7 +149,7 @@ class Verseobj {
         fs = this.fs;
         this.transY += (this.targetTransY - this.transY) / (animTotal - animElapse % 100);
       }
-      
+
       /*
       let _p = (animElapse % 100) == animTotal ? 1.0 : progress * animFactor;
       this.fs = this.fs + (this.targetFs - this.fs) * _p;
@@ -250,10 +250,10 @@ class Verseobj {
     if (this.level == 0) {
       let y = this.fs * 0.25;
       for (let i = 0; i < this.substrings.length; i++) {
-          if ((animElapse % 100) >= animTotal * 0.95 || animElapse == -1)
-            _drawSdwtxt(this.substrings[i], x, y);
-          else
-            _drawtxt(this.substrings[i], x, y, 1.0);
+        if ((animElapse % 100) >= animTotal * 0.95 || animElapse == -1)
+          _drawSdwtxt(this.substrings[i], x, y);
+        else
+          _drawtxt(this.substrings[i], x, y, 1.0);
         y += this.fs;
       }
     } else {
@@ -375,10 +375,10 @@ function render_vertical(progress) {
   if (v_vertical.volume != song ||
     v_vertical.chapter != phase ||
     v_vertical.verse != line) {
-      v_vertical.initial(song, phase, line);
+    v_vertical.initial(song, phase, line);
   }
   v_vertical.draw(progress);
-  
+
   /*
   for (let i = 0; i < queue.length; i++) {
     let obj = queue[i];
@@ -618,16 +618,19 @@ var abbr = chineseAbbr;
 var fullname = chineseFullname;
 
 var doLanguageSwitch = false;
+var languageSwitch = 0; //0: Chinese和合本 1:NIV
 
 function switchLang() {
   if (!doLanguageSwitch) return;
   if (abbr == chineseAbbr) {
     abbr = engAbbr;
     fullname = engFullname;
+    languageSwitch = 1;
     switchVoice2English();
   } else {
     abbr = chineseAbbr;
     fullname = chineseFullname;
+    languageSwitch = 0;
     switchVoice2Chinese();
   }
   for (let i = 1; i < abbr.length; i++) SONGS[i] = getSong(abbr[i]);
@@ -752,9 +755,9 @@ function initWebsocket() {
     }
   }
 
-  ws = port == 443? 
-  new WebSocket(`wss://${serverDomain}/Bible/${username}`): 
-  new WebSocket(`ws://${serverDomain}:${port}/Bible/${username}`);
+  ws = port == 443 ?
+    new WebSocket(`wss://${serverDomain}/Bible/${username}`) :
+    new WebSocket(`ws://${serverDomain}:${port}/Bible/${username}`);
   //console.log('ws://' + serverDomain + ':' + port + '/Bible' + (username == 'guest'?'':'/' + username));
   ws.onopen = function () {
     console.log('Connected to server');
@@ -856,7 +859,7 @@ function ajax_restore() {
   if (username == null) return;
   _ajax({
     "action": "restore",
-    "user" : username
+    "user": username
   },
     '/restorescripture',
     (res) => {//console.log(JSON.stringify(res));
@@ -943,7 +946,7 @@ function restoreAnim(volume, chapter, verse, _doblank) {
     return;
   }
 
-  if (volume == song && chapter == phase && verse == line) 
+  if (volume == song && chapter == phase && verse == line)
     return;
 
   song = volume;
@@ -1099,14 +1102,14 @@ function addBtn(caption, parent, _onclick) {
 }
 
 function createCtrlBtn() {
-  
-  if(document.getElementById('ctrl')) {
+
+  if (document.getElementById('ctrl')) {
     removeDiv();
     return;
   }
 
   removeDiv();
-  
+
   canvas.hidden = false;
 
   let div = document.createElement('div');
@@ -1123,19 +1126,19 @@ function createCtrlBtn() {
   document.body.appendChild(div);
   div.style.backgroundColor = 'rgba(0,0,0, 0.0)';
 
-  ctrls[0] = addBtn('單機使用', div, ()=> { setMsg_none(); return false; });
+  ctrls[0] = addBtn('單機使用', div, () => { setMsg_none(); return false; });
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[1] = addBtn('控制本機', div, ()=> { setMsg_O(); return false; });
-  ctrls[2] = addBtn('控制遠端', div, ()=>{  setMsg_ctrl(); return false; });
-  ctrls[3] = addBtn('控制本機和遠端', div, ()=>{ setMsg_3(); return false; });
+  ctrls[1] = addBtn('控制本機', div, () => { setMsg_O(); return false; });
+  ctrls[2] = addBtn('控制遠端', div, () => { setMsg_ctrl(); return false; });
+  ctrls[3] = addBtn('控制本機和遠端', div, () => { setMsg_3(); return false; });
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[4] = addBtn('從本機同步', div, ()=>{ setMsg_X(); return false; });
-  ctrls[5] = addBtn('從伺服器同步', div, ()=>{ setMsg_play_socket(); return false; });
-  
+  ctrls[4] = addBtn('從本機同步', div, () => { setMsg_X(); return false; });
+  ctrls[5] = addBtn('從伺服器同步', div, () => { setMsg_play_socket(); return false; });
+
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
   ctrls[5].hidden = true;
@@ -1167,38 +1170,38 @@ function createCtrlBtn() {
 
   div.insertAdjacentHTML('beforeend', '<br/><br/><hr />');
 
-  ctrls[7] = addBtn('mode', div, ()=>{ keyboard({ code: 'KeyA' }); return false; });
-  ctrls[8] = addBtn('vertical', div, ()=>{ keyboard({ code: 'KeyV' }); return false; });
-  ctrls[9] = addBtn('char color', div, ()=> {  keyboard({ code: 'KeyC' }); return false; });
-  ctrls[10] = addBtn('font', div, ()=>{keyboard({ code: 'KeyF' }); return false;});
-  ctrls[11] = addBtn('show saved', div, ()=>{ keyboard({ code: 'KeyS' }); return false;});
-  ctrls[12] = addBtn('Line dist.', div, ()=>{ keyboard({ code: 'KeyD' }); return false;});
-  
+  ctrls[7] = addBtn('mode', div, () => { keyboard({ code: 'KeyA' }); return false; });
+  ctrls[8] = addBtn('vertical', div, () => { keyboard({ code: 'KeyV' }); return false; });
+  ctrls[9] = addBtn('char color', div, () => { keyboard({ code: 'KeyC' }); return false; });
+  ctrls[10] = addBtn('font', div, () => { keyboard({ code: 'KeyF' }); return false; });
+  ctrls[11] = addBtn('show saved', div, () => { keyboard({ code: 'KeyS' }); return false; });
+  ctrls[12] = addBtn('Line dist.', div, () => { keyboard({ code: 'KeyD' }); return false; });
+
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
 
-  ctrls[13] = addBtn('font size-', div, ()=>{ 
+  ctrls[13] = addBtn('font size-', div, () => {
     helpSwitch = 0;
     downsizeFS();
     _repaint();
     return false;
   });
-  ctrls[14] = addBtn('font size+', div, ()=>{  
+  ctrls[14] = addBtn('font size+', div, () => {
     helpSwitch = 0;
     enlargeFS();
     _repaint();
     return false;
   });
-  
-  ctrls[15] = addBtn('Line-', div, ()=>{  
+
+  ctrls[15] = addBtn('Line-', div, () => {
     subLineCount();
     return false;
   });
-  ctrls[16] = addBtn('Line+', div, ()=>{ 
+  ctrls[16] = addBtn('Line+', div, () => {
     addLineCount();
     return false;
   });
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[17] = addBtn('移除背景', div, ()=>{ 
+  ctrls[17] = addBtn('移除背景', div, () => {
     removeBackground();
     return false;
   });
@@ -1238,10 +1241,10 @@ function createCtrlBtn() {
   ctrls[20].hidden = true;
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
-  ctrls[21] = addBtn('自動閱讀', div, ()=>{ startReading(); removeDiv(); return false;});
-  ctrls[22] = addBtn('停止閱讀', div, ()=>{ stopReading(); removeDiv(); return false;});
+  ctrls[21] = addBtn('自動閱讀', div, () => { startReading(); removeDiv(); return false; });
+  ctrls[22] = addBtn('停止閱讀', div, () => { stopReading(); removeDiv(); return false; });
 
-  ctrls[23] = addBtn('圖庫', div, ()=>{ openLib(); return false;});
+  ctrls[23] = addBtn('圖庫', div, () => { openLib(); return false; });
 
 }
 
@@ -1306,10 +1309,10 @@ function removeDiv() {
 
   //var buttons = document.getElementById('btns');
   //if (buttons) document.body.removeChild(buttons);
-  
+
   var txt = document.getElementById('chapter');
   if (txt) document.body.removeChild(txt);
-  
+
   var ctrl = document.getElementById('ctrl');
   if (ctrl) document.body.removeChild(ctrl);
 
@@ -1367,7 +1370,7 @@ function drawHlight(yy, hh) {
   }
 }
 
-function getTxtArray(txt, wRatio) {
+function txtArrayforChinese(txt, wRatio) {
   let substrings = [];
   let idx = 0;
   let mwidth = canvas.width * wRatio - fontsize / 2;
@@ -1377,8 +1380,7 @@ function getTxtArray(txt, wRatio) {
       ratio = Math.ceil(txt.length * ratio) - 1; //字數
       let txt_0 = txt.substr(0, ratio);
       txt = txt.substr(ratio, txt.length - txt_0.length);
-      //如果這個行最後一個字是英文 下一行的頭是英文
-      if (islastChar(txt_0) && is0Char(txt)) txt_0 += '-';
+      // x 如果這個行最後一個字是英文 下一行的頭是英文 if (islastChar(txt_0) && is0Char(txt)) txt_0 += '-';
       substrings[idx] = txt_0;
       idx++;
       if (idx > 20) break;
@@ -1387,8 +1389,45 @@ function getTxtArray(txt, wRatio) {
       break;
     }
   } while (true);
+  return substrings;
+}
+
+function txtArrayforEnglish(txt, wRatio) {
+  let substrings = [];
+  let idx = 0;
+  let mwidth = canvas.width * wRatio - fontsize / 2;
+  const words = txt.split(" ");
+  let line = '';
+  let tmp = '';
+  for (let i = 0; i < words.length; i++) {
+    if (line.length == 0) { //一定要有一項
+      line += words[i] + ' ';
+      continue;
+    } else {
+      let _line = line + words[i] + ' ';
+      if (ctx.measureText(_line).width < mwidth) {
+        line = _line;// + ' ';
+        continue;
+      } else {
+        substrings.push(line.trim());
+        line = '';
+        i--;
+        continue;
+      }
+    }
+  }
+
+  substrings.push(line.trim());
 
   return substrings;
+}
+
+function getTxtArray(txt, wRatio) {
+  if (languageSwitch == 0) {
+    return txtArrayforChinese(txt, wRatio);
+  } else {
+    return txtArrayforEnglish(txt, wRatio);
+  }
 }
 
 /*
@@ -1401,6 +1440,7 @@ function isEnglishCharacter(char) {
   return /^[A-Za-z]$/.test(char);
 }
 
+/*
 function islastChar(str) {
   if (!str) return false;
   return isEnglishCharacter(str[str.length - 1]);
@@ -1409,6 +1449,7 @@ function islastChar(str) {
 function is0Char(str) {
   return isEnglishCharacter(str[0]);
 }
+*/
 
 function blankend_update() {
 
@@ -1447,7 +1488,7 @@ function blank_update(elapse) {
 }
 
 function estimateElapse() {
-  if ((animElapse % 100) > animTotal) 
+  if ((animElapse % 100) > animTotal)
     return 1.0;
   return (animElapse % 100) / animTotal;
 }
@@ -1463,7 +1504,7 @@ function estimateTotal(t) {
   preT = t;
 
   if (animElapse > 5 && animElapse < 12) {
-    if (diff > 10) { 
+    if (diff > 10) {
       animTotal = 24; //animFactor = 0.33;
     } else {
       animTotal = 48; //animFactor = 0.15;
@@ -1473,7 +1514,7 @@ function estimateTotal(t) {
 
 function verse_update(t) {
 
-  estimateTotal(t); 
+  estimateTotal(t);
 
   switch (display_mode) {
     case 0:
@@ -1585,7 +1626,7 @@ function operateQuene(queueType, doanim) {
     } else {
       animElapse = 0;
     }
-   
+
   } else {
     //render(-1);
     _repaint();
@@ -1679,8 +1720,8 @@ function _render(progress) {
     HL_H_progress = HL_H_target;
   } else if (progress >= 0) {
     //console.log(animTotal +' - ' + animElapse + '=' + (animTotal - animElapse%100));
-    HL_offset_progress += (HL_offset_target - HL_offset_progress) / Math.max(1.0, (animTotal - animElapse%100));
-    HL_H_progress += (HL_H_target - HL_H_progress) / Math.max(1.0, (animTotal - animElapse%100));
+    HL_offset_progress += (HL_offset_target - HL_offset_progress) / Math.max(1.0, (animTotal - animElapse % 100));
+    HL_H_progress += (HL_H_target - HL_H_progress) / Math.max(1.0, (animTotal - animElapse % 100));
     //HL_offset_progress += (HL_offset_target - HL_offset_progress) * progress/3.0;
     //HL_H_progress += (HL_H_target - HL_H_progress) * progress/3.0;
   }
@@ -1946,7 +1987,7 @@ function combineKey(e) {
       }
       break;
     }
-    case 'KeyA': sortjump(1, 5);  break;
+    case 'KeyA': sortjump(1, 5); break;
     case 'KeyS': sortjump(6, 17); break;
     case 'KeyD': sortjump(18, 22); break;
     case 'KeyF': sortjump(23, 27); break;
@@ -2213,16 +2254,16 @@ function keyboard(e) {
       _repaint();
       return;
     case 'KeyZ': {
-        makeTransparent = !makeTransparent;
-        let div = document.getElementById("image_container");
-        if (image_base64) {
-          if (makeTransparent) {
-            div.hidden = true;
-          } else {
-            div.hidden = false;
-          }
+      makeTransparent = !makeTransparent;
+      let div = document.getElementById("image_container");
+      if (image_base64) {
+        if (makeTransparent) {
+          div.hidden = true;
+        } else {
+          div.hidden = false;
         }
       }
+    }
       break; //'z'
     case 'KeyN': switchLang(); break; //n
     //case 'Enter': createCtrlBtn(); return;//enter
@@ -2270,8 +2311,8 @@ function keyboard(e) {
     case 'KeyL': openCtrl(); break;//l
     case 'KeyD': fontsize_dist = fontsize_dist == 0 ? 1 : 0; break;//d
     case 'KeyS': printSaved = !printSaved; break;
-    case 'KeyV': 
-      display_mode = (display_mode + 1)%2;
+    case 'KeyV':
+      display_mode = (display_mode + 1) % 2;
       if (display_mode == 1) {
         animElapse = 0;
         window.requestAnimationFrame(verse_update);
@@ -2451,22 +2492,22 @@ function keyboard(e) {
       break;
     //case 32: return; //canvas.requestFullscreen(); break;
     case 'Escape':
-        jumpTo1();
-        mode = 0;
-        removeDiv();
-        canvas.hidden = false;
-        doblank = 0;
-        helpSwitch = 0;
-        uisel = 0;
-        stopReading();
-        break;
+      jumpTo1();
+      mode = 0;
+      removeDiv();
+      canvas.hidden = false;
+      doblank = 0;
+      helpSwitch = 0;
+      uisel = 0;
+      stopReading();
+      break;
     case 'KeyJ':
       if (sync_type == 1)
         restoreActionFromLocal();
       else if (sync_type > 1 && sync_type != 6)
         ajax_restore();
       return;
-    case 'Tab': 
+    case 'Tab':
       speakCurrent();
       return;
     default: return;
@@ -2669,7 +2710,7 @@ function _layerBg() {
   ui_block(0, canvas.height / 2, canvas.width / 3, canvas.height / 2, 0.33);
   ui_block(canvas.width * 2 / 3, canvas.height / 2, canvas.width / 3, canvas.height / 2, 0.33);
   ui_block(canvas.width / 3, canvas.height / 2, canvas.width / 3, canvas.height / 4, 0.20);
-  
+
 }
 
 function _repaint() {
@@ -2682,11 +2723,11 @@ function _repaint() {
   }
 
   trans_start();
-  
+
   _layer0();
-  
+
   printMain(phase, line);//_layer1();//_layer2();
-  
+
   _layerui();
 
   trans_end();
@@ -2766,7 +2807,7 @@ function receiveMessage(e) {
 
   if (jsonData.fontfactor) setFontFactor(jsonData.fontfactor);
   if (jsonData.fontColorType) fontColorType = jsonData.fontColorType;
-  
+
   if (jsonData.saved && jsonData.saved.length > 0) {
     for (let i = 0; i < jsonData.saved.length; i++) {
       if (i >= 10) return;
@@ -2816,10 +2857,10 @@ window.addEventListener('message', receiveMessage, false);
  */
 var keylock = 0;
 function keyupAction(e) {
-  
+
   e.preventDefault();
   e.stopPropagation();
-  
+
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') saveAction2Local();
 
   if (recognition && recognizing) {
@@ -2833,10 +2874,10 @@ function keyupAction(e) {
 window.addEventListener('keyup', keyupAction, false);
 
 function keydownAction(e) {
-  
+
   e.preventDefault();
   e.stopPropagation();
-  
+
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = 1;
     _repaint();
@@ -3248,7 +3289,7 @@ if (readParam('action') === 'play') {
   fontfactor += 3;
   fontsize_dist = 1;
 
-  doChk().then((result)=>{
+  doChk().then((result) => {
     if (result.state > 0) username = result.username;
     if (result.state == 1) {
       setMsg_play_socket();
