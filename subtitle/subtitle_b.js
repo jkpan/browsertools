@@ -468,7 +468,7 @@ const COLORS_white = ["rgb(255, 255, 255)", "rgb(180, 180, 180)", "rgb(120, 128,
 /////
 var hlightStyle_green = 'rgba(0, 70, 0, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
 var hlightStyle_black = 'rgba(150, 150, 150, 0.7)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
-var hlightStyle_white = 'rgba(0, 0, 0, 0.4)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
+var hlightStyle_white = 'rgba(0, 0, 0, 0.2)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
 var hlightStyle_none = 'rgba(0, 0, 0, 0.1)';//"rgb(255, 255, 255, 0.5)";//"rgb(0, 0, 0, 0.5)"; 
 ////
 
@@ -1403,17 +1403,14 @@ function txtArrayforEnglish(txt, wRatio) {
     if (line.length == 0) { //一定要有一項
       line += words[i] + ' ';
       continue;
+    }
+    let _line = line + words[i] + ' ';
+    if (ctx.measureText(_line).width < mwidth) {
+      line = _line;
     } else {
-      let _line = line + words[i] + ' ';
-      if (ctx.measureText(_line).width < mwidth) {
-        line = _line;// + ' ';
-        continue;
-      } else {
-        substrings.push(line.trim());
-        line = '';
-        i--;
-        continue;
-      }
+      substrings.push(line.trim());
+      line = '';
+      i--;
     }
   }
 
@@ -1429,27 +1426,6 @@ function getTxtArray(txt, wRatio) {
     return txtArrayforEnglish(txt, wRatio);
   }
 }
-
-/*
-function isEnglishCharacter(char) {
-  return !!char.match(/[A-Za-z]/);
-}
-*/
-
-function isEnglishCharacter(char) {
-  return /^[A-Za-z]$/.test(char);
-}
-
-/*
-function islastChar(str) {
-  if (!str) return false;
-  return isEnglishCharacter(str[str.length - 1]);
-}
-
-function is0Char(str) {
-  return isEnglishCharacter(str[0]);
-}
-*/
 
 function blankend_update() {
 
@@ -3322,5 +3298,3 @@ if (readParam('action') === 'play') {
   _repaint();
 
 }
-
-

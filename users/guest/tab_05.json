@@ -1,7 +1,125 @@
 {
   "frame_1": {
-    "src": "./tools.html",
-    "obj": {}
+    "src": "./dashboard.html",
+    "obj": {
+      "stateSaved": {
+        "save0": [],
+        "save1": [],
+        "save2": [],
+        "save3": [],
+        "save4": [],
+        "save5": []
+      },
+      "NIV": {
+        "posize": [
+          3,
+          1,
+          44,
+          24
+        ],
+        "perspective": 0,
+        "obj": {
+          "color": 2,
+          "hlight": 2,
+          "verticle": 0,
+          "fontfactor": 10.5,
+          "fontColorType": 3,
+          "saved": [
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ]
+          ],
+          "transparent": 0,
+          "printSaved": 0,
+          "fsizedist": 1,
+          "verseCount": 2,
+          "syncType": 5,
+          "imageBase64": ""
+        }
+      },
+      "Bible": {
+        "posize": [
+          3,
+          25,
+          44,
+          24
+        ],
+        "perspective": 0,
+        "obj": {
+          "color": 1,
+          "hlight": 1,
+          "verticle": 0,
+          "fontfactor": 8,
+          "fontColorType": 1,
+          "saved": [
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ],
+            [
+              ""
+            ]
+          ],
+          "transparent": 0,
+          "printSaved": 0,
+          "fsizedist": 1,
+          "verseCount": 2,
+          "syncType": 3,
+          "imageBase64": ""
+        }
+      },
+      "B/G": "B"
+    }
   },
   "frame_2": {
     "src": "./tools.html",
