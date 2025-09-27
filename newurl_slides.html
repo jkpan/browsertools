@@ -356,7 +356,7 @@
         return imageExtensions.some(ext => lower.endsWith(ext));
     }
 
-    function urlGo(value, loop, key) {
+    function urlGo(value, loop, key, keepratio) {
 
         value = value.trim();
         if (value.length == 0) return;
@@ -389,9 +389,14 @@
                 img.src = value;
                 img.style.width = "100%";//width;   // 固定寬度
                 img.style.height = "100%";//height; // 固定高度
-
+                
+                if (keepratio) {
+                    img.style.objectFit = 'contain';  // 或 'cover'
+                } else {
+                    img.style.objectFit = 'fill';
+                }
                 // 讓圖片在固定框內保持比例
-                img.style.objectFit = 'contain';  // 或 'cover'
+                
                 img.style.backgroundColor = '#000000';
                 //img.style.border = '2px solid red';
                 div.appendChild(img);

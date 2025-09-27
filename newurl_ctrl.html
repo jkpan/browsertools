@@ -174,8 +174,8 @@
             if (value.startsWith('<iframe')) {
                 value = modifyIframeAttributes(value, '100%', '100%');
             }
-            console.log('url : ' + value);
-            window.opener.urlGo(value, loop, key);
+            console.log('url : ' + value + '  ' + isKeepRatio());
+            window.opener.urlGo(value, loop, key, isKeepRatio());
         }
     </script>
 
