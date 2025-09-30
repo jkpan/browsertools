@@ -508,6 +508,7 @@ function colorSwitch_hlight() {
 
 function colorSwitch() {
   console.log('color_selection : ' + color_selection);
+  ctx.globalAlpha = 1.0;
   switch (color_selection) {
     case 0:
       //bgcolor_pointer = 'rgba(0,0,0,0)';
@@ -934,8 +935,9 @@ function restoreAnim(volume, chapter, verse, _doblank) {
   */
 
   keylock = false;
-  if (_doblank != doblank) keyboard({ code: 'KeyB', keyCode: 66 });
-
+  if (_doblank != doblank) 
+    keyboard({ code: 'KeyB', keyCode: 66 });
+  
   if (volume == song && chapter == getPreChapter(phase, line) && verse == getPreVerse(phase, line)) {
     keyboard({ code: 'ArrowLeft', keyCode: 37 }); //left
     return;
@@ -1431,14 +1433,20 @@ function blankend_update() {
 
   render(-1);
 
-  ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - estimateElapse()) + ')'; //opacity 1.0 ~ 0
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (!makeTransparent) {
+    ctx.fillStyle = 'rgba(0,128,0,' + (1.0 - estimateElapse()) + ')'; //opacity 1.0 ~ 0
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  if (doblank == 1) return;
 
   if ((animElapse % 100) < animTotal) {
     animElapse++;
+    if (makeTransparent) ctx.globalAlpha = animElapse % 100/animTotal;
     window.requestAnimationFrame(blankend_update);
   } else {
     animElapse = -1;
+    ctx.globalAlpha = 1.0;
     _repaint();
   }
 
@@ -1450,14 +1458,20 @@ function blank_update(elapse) {
 
   if (animElapse < 100) return;
 
-  ctx.fillStyle = 'rgba(0,128,0,' + estimateElapse() + ')';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (!makeTransparent) {
+    ctx.fillStyle = 'rgba(0,128,0,' + estimateElapse() + ')';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  if (doblank == 0) return;
 
   if ((animElapse % 100) < animTotal) {
     animElapse++;
+    if (makeTransparent) ctx.globalAlpha = (animTotal - animElapse % 100)/animTotal;
     window.requestAnimationFrame(blank_update);
   } else {
     animElapse = -1;
+    if (makeTransparent) ctx.globalAlpha = 0.0;
     _repaint();
   }
 
@@ -2231,6 +2245,7 @@ function keyboard(e) {
       return;
     case 'KeyZ': {
       makeTransparent = !makeTransparent;
+      if (!makeTransparent) ctx.globalAlpha = 1.0;
       let div = document.getElementById("image_container");
       if (image_base64) {
         if (makeTransparent) {
@@ -2247,11 +2262,10 @@ function keyboard(e) {
     case 'KeyB': //'b'
       doblank = doblank == 0 ? 1 : 0;
       if (color_selection == 0) {
-
-        if (animElapse > 0) {
-          animElapse = -1;
-          break;
-        }
+        //if (animElapse > 0) {
+        //  animElapse = -1;
+        //  break;
+        //}
 
         //do animation
         if (doblank == 1) {
@@ -2476,6 +2490,7 @@ function keyboard(e) {
       helpSwitch = 0;
       uisel = 0;
       stopReading();
+      ctx.globalAlpha = 1.0;
       break;
     case 'KeyJ':
       if (sync_type == 1)
@@ -2796,6 +2811,7 @@ function receiveMessage(e) {
   } else {
     makeTransparent = false;
   }
+
   if (jsonData.fsizedist) {
     fontsize_dist = 1;
   } else {
@@ -3239,6 +3255,8 @@ window.addEventListener("beforeunload", function () {
 
 voiceChkActive();
 
+color_selection = 1;
+colorSwitch();
 
 if (readParam('volume')) {
   let volume = readParam('volume');//parseInt(array[0]);//array[0];

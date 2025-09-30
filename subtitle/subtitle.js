@@ -1133,6 +1133,9 @@ function _layer2() {
 }
 
 function _repaint() { //if (!funcInterval) saveAction2Local();
+  ctx.globalAlpha = 1.0;
+  if (makeTransparent && doblank == 1 && mode != 2) ctx.globalAlpha = 0.0;
+  console.log(mode);
   _layer0();
   _layer1();
   _layer2();
