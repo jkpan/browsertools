@@ -5,6 +5,17 @@
       "stateSaved": {
         "save0": [
           {
+            "name": "camrece",
+            "posize": [
+              1,
+              1,
+              48,
+              48
+            ],
+            "visible": 0,
+            "perspective": 0
+          },
+          {
             "name": "url_1",
             "posize": [
               34,
@@ -12,7 +23,7 @@
               14,
               14
             ],
-            "visible": 1,
+            "visible": 0,
             "perspective": 0
           },
           {
@@ -112,6 +123,16 @@
         "save4": [],
         "save5": []
       },
+      "camrece": {
+        "posize": [
+          1,
+          1,
+          48,
+          48
+        ],
+        "perspective": 0,
+        "obj": {}
+      },
       "url_1": {
         "posize": [
           34,
@@ -142,7 +163,7 @@
           "fontfactor": 9,
           "list": [],
           "fontColorType": 1,
-          "transparent": 0,
+          "transparent": 1,
           "syncType": 5,
           "progress": 0,
           "imageBase64": ""
@@ -152,7 +173,7 @@
         "posize": [
           1,
           22,
-          37,
+          36,
           27
         ],
         "perspective": 1,
@@ -194,7 +215,7 @@
               ""
             ]
           ],
-          "transparent": 0,
+          "transparent": 1,
           "printSaved": 0,
           "fsizedist": 1,
           "verseCount": 2,

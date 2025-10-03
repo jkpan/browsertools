@@ -322,7 +322,7 @@
 
     }
 
-    function displayVideoFile(file, loop) {
+    function displayVideoFile(file, loop, ctrl) {
 
         hideBtn();
 
@@ -334,7 +334,12 @@
         const video = document.createElement('video');
         video.src = videoURL;
         video.hidden = false;
-        video.setAttribute("controls", "controls");
+        if (ctrl) {
+            video.controls = true; //video.setAttribute("controls", "controls");
+        } else {
+            video.controls = false;
+            video.autoplay = true;
+        }
         //video.setAttribute("autoplay", "autoplay");
         video.setAttribute("width", "100%");
         video.setAttribute("height", "100%");
@@ -356,7 +361,7 @@
         return imageExtensions.some(ext => lower.endsWith(ext));
     }
 
-    function urlGo(value, loop, key, keepratio) {
+    function urlGo(value, loop, key, keepratio, ctrl) {
 
         value = value.trim();
         if (value.length == 0) return;
@@ -371,7 +376,12 @@
             let vdo = document.createElement('video');
             vdo.className = "full";
             vdo.src = value;
-            vdo.controls = true;
+            if (ctrl) {
+                vdo.controls = true;
+            } else {
+                vdo.controls = false;
+                vdo.autoplay = true;
+            }
             vdo.hidden = false;
             div.appendChild(vdo);
             if (loop) vdo.setAttribute("loop", "loop");

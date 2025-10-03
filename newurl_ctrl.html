@@ -102,6 +102,8 @@
     <input id="allfile" type="file" hidden="true" onchange="selectFile(event)" />
     <input type="checkbox" id="loopchk" checked>
     <label>Loop(影片)</label>
+    <input type="checkbox" id="showctrl" checked>
+    <label>顯示控制項</label>
     <input type="checkbox" id="keepratio" checked>
     <label>維持比例(圖片)</label>
     <P></P>
@@ -170,12 +172,14 @@
             value = value.trim();
             if (value.length == 0) return;
             let loop = document.getElementById("loopchk").checked;
+            let ctrl = document.getElementById("showctrl").checked;
+            
 
             if (value.startsWith('<iframe')) {
                 value = modifyIframeAttributes(value, '100%', '100%');
             }
             console.log('url : ' + value + '  ' + isKeepRatio());
-            window.opener.urlGo(value, loop, key, isKeepRatio());
+            window.opener.urlGo(value, loop, key, isKeepRatio(), ctrl);
         }
     </script>
 
@@ -336,7 +340,8 @@
 
     function displayVideoFile(file) {
         let loop = document.getElementById("loopchk").checked;
-        window.opener.displayVideoFile(file, loop);
+        let ctrl = document.getElementById("showctrl").checked;
+        window.opener.displayVideoFile(file, loop, ctrl);
     }
 
     //window.addEventListener('message', (e) => {}, false);
