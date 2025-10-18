@@ -1704,6 +1704,11 @@ function _render(progress) {
 
     }
   /////
+  if (progress < 0 && color_selection == 0 && makeTransparent && doblank == 1) {
+    //ctx.globalAlpha = 0;
+    console.log('make alpha = 0 : ' + progress);
+  }
+
 
   if (progress < 0) {
     HL_offset_progress = HL_offset_target;
@@ -2712,6 +2717,9 @@ function _repaint() {
     _layerui();
     return;
   }
+
+  if (color_selection == 0 && doblank == 1 && makeTransparent) 
+    ctx.globalAlpha = 0;
 
   trans_start();
 
