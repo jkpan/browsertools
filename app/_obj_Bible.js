@@ -10,17 +10,20 @@ class BibleObj {
     ver = 1;
     blank = 1;
     user = '';
+    magicword = '';
+
     clients = new Set();
 
     constructor(usr) {
         this.user = usr;
     }
 
-    syncData(vol, chp, ver, db) {
+    syncData(vol, chp, ver, db, magic) {
         this.vlm = vol;
         this.chp = chp;
         this.ver = ver;
         this.blank = db;
+        this.magicword = magic;
     }
 
     getBibleObjStr() {
@@ -30,7 +33,8 @@ class BibleObj {
             chp: this.chp,
             ver: this.ver,
             blank: this.blank,
-            user: this.user
+            user: this.user,
+            magic: this.magicword
         };
     }
 
@@ -41,7 +45,7 @@ class BibleObj {
         this.syncData(parseInt(requestData.vlm),
             parseInt(requestData.chp),
             parseInt(requestData.ver),
-            parseInt(requestData.blank));
+            parseInt(requestData.blank), requestData.magic);
 
         res.writeHead(200, { 'Content-Type': 'text/plain' });
 
@@ -117,7 +121,7 @@ function restorescripture(req, res) {
 function syncFromWorker(msg) {
     let obj = getObj(msg.user);
     println(`[syncFromWorker ${msg.user}]`);
-    obj.syncData(msg.vlm, msg.chp, msg.ver, msg.blank);
+    obj.syncData(msg.vlm, msg.chp, msg.ver, msg.blank, msg.magic);
     obj.broadcast();
 }
 
@@ -140,7 +144,7 @@ function synscripture(req, res) {
         const requestData = JSON.parse(body);
 
         let obj = getObj(requestData.user);
-        obj.syncData(requestData.vlm, requestData.chp, requestData.ver, requestData.blank);
+        obj.syncData(requestData.vlm, requestData.chp, requestData.ver, requestData.blank, requestData.magic);
         res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
 
         println(`[synscripture ${requestData.user}: ${obj.vlm}, ${obj.chp}, ${obj.ver}, ${obj.blank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');

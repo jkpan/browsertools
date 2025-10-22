@@ -11,6 +11,7 @@ class LyricsObj {
   user = '';
   content = {};
   clients = new Set();
+  magicword = '';
 
   constructor(usr) {
     this.user = usr;
@@ -23,7 +24,8 @@ class LyricsObj {
       song: this.content.song,
       phase: this.content.phase,
       line: this.content.line,
-      blank: this.content.song_doblank
+      blank: this.content.song_doblank,
+      magic: this.magicword
     };
   }
 
@@ -41,7 +43,8 @@ class LyricsObj {
     });
   }
 
-  syncData(song, phase, line, db) {
+  syncData(song, phase, line, db, magic) {
+    this.magicword = magic;
     this.content = {
       song: song,
       phase: phase,
@@ -85,8 +88,8 @@ function synclyrics(req, res) {
     //println(body);
 
     let obj = getObj(requestData.user);
-    obj.syncData(requestData.song, requestData.phase,
-      requestData.line, requestData.blank);
+    obj.syncData(requestData.song, requestData.phase, requestData.line, requestData.blank, 
+      requestData.magic);
 
     try {
       println(`<master ${requestData.user}: ${requestData.song[0][0]}, ${requestData.phase}, ${requestData.line}, ${requestData.blank}>`);
@@ -111,7 +114,7 @@ function synclyrics(req, res) {
 function syncFromWorker(msg) {
   let obj = getObj(msg.user);
   println(`<syncFromWorker ${msg.user}>`);
-  obj.syncData(msg.song, msg.phase, msg.line, msg.blank);
+  obj.syncData(msg.song, msg.phase, msg.line, msg.blank, msg.magic);
   obj.broadcast();
 }
 

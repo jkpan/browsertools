@@ -803,6 +803,8 @@ function _ajax(json, url, cb, errorcb) {
   });
 }
 
+var magicword = '';
+
 function ajax_sync() {
   /*
   //'http://54.169.169.141/synscripture_get',
@@ -835,7 +837,8 @@ function ajax_sync() {
     chp: phase,
     ver: line,
     blank: doblank,
-    user: username
+    user: username,
+    magic: magicword
   },
     '/synscripture',
     //'http://192.168.0.16/synscripture',
@@ -848,11 +851,11 @@ function ajax_sync() {
 }
 
 function restoreFromJson(res) {
+  if (res.magic != magicword) return;
   let volume = res.vlm;
   let chapter = res.chp;
   let verse = res.ver;
   let _doblank = res.blank;
-
   restoreAnim(volume, chapter, verse, _doblank);
 }
 
@@ -1121,13 +1124,12 @@ function createCtrlBtn() {
   div.style.top = "0";
   div.style.left = "0";
   div.style.width = "96%";
-  div.style.height = "96%";
+  div.style.height = "96% ";
   div.style.margin = "2% 2% 2% 2%";
-
   div.id = 'ctrl';
-  document.body.appendChild(div);
   div.style.backgroundColor = 'rgba(0,0,0, 0.0)';
-
+  document.body.appendChild(div);
+    
   ctrls[0] = addBtn('單機使用', div, () => { setMsg_none(); return false; });
 
   div.insertAdjacentHTML('beforeend', '<br/><br/>');
@@ -1140,6 +1142,23 @@ function createCtrlBtn() {
 
   ctrls[4] = addBtn('從本機同步', div, () => { setMsg_X(); return false; });
   ctrls[5] = addBtn('從伺服器同步', div, () => { setMsg_play_socket(); return false; });
+
+  //div.insertAdjacentHTML('beforeend', '通關密語');
+  const magic = document.createElement('input');
+  // Set its type to "text"
+  magic.type = 'text';
+  magic.style.width = '150px';
+
+  // Optionally, set other attributes like id, name, placeholder, etc.
+  magic.id = 'magic';
+  magic.value = magicword;
+  magic.placeholder = 'Secret Word';
+  //Append the new text field to the container;
+  magic.addEventListener('input', (event) => { 
+    //console.log('Input value changed:', event.target.value);
+    magicword = event.target.value;
+  });
+  div.appendChild(magic);
 
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
@@ -2858,6 +2877,11 @@ window.addEventListener('message', receiveMessage, false);
 var keylock = 0;
 function keyupAction(e) {
 
+  if (e.target.tagName === 'INPUT' 
+      //|| e.target.tagName === 'TEXTAREA' 
+      //|| e.target.isContentEditable
+    ) return;
+
   e.preventDefault();
   e.stopPropagation();
 
@@ -2874,6 +2898,11 @@ function keyupAction(e) {
 window.addEventListener('keyup', keyupAction, false);
 
 function keydownAction(e) {
+
+  if (e.target.tagName === 'INPUT' 
+      //|| e.target.tagName === 'TEXTAREA' 
+      //|| e.target.isContentEditable
+    ) return;
 
   e.preventDefault();
   e.stopPropagation();

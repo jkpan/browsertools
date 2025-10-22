@@ -404,6 +404,7 @@ function ajax_restore() {
 }
 */
 
+var magicword = '';
 //控方上傳目前
 function ajax_sync() {
 
@@ -414,7 +415,8 @@ function ajax_sync() {
     phase: phase,
     line: line,
     blank: doblank,
-    user: username
+    user: username,
+    magic: magicword
   },
     '/synclyrics',
     (res) => {
@@ -1219,6 +1221,23 @@ function createCtrlBtn() {
   ctrls[4] = addBtn('從本機同步', div, () => { sync_type = 4; synctrls(); return false; });//_newBtn();
   ctrls[5] = addBtn('從伺服器同步', div, () => { sync_type = 5; synctrls(); return false; });//_newBtn();
 
+  //div.insertAdjacentHTML('beforeend', '通關密語');
+  const magic = document.createElement('input');
+  // Set its type to "text"
+  magic.type = 'text';
+  magic.style.width = '150px';
+
+  // Optionally, set other attributes like id, name, placeholder, etc.
+  magic.id = 'magic';
+  magic.value = magicword;
+  magic.placeholder = 'Secret Word';
+  //Append the new text field to the container;
+  magic.addEventListener('input', (event) => { 
+    //console.log('Input value changed:', event.target.value);
+    magicword = event.target.value;
+  });
+  div.appendChild(magic);
+
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
   ctrls[5].hidden = true;
@@ -1452,8 +1471,8 @@ function synctrls() {
 
 function restoreFromJson(obj) {
   if (!obj) return;
+  if (obj.magic !== magicword) return;
   subtitles = obj.song;
-
   phase = obj.phase;
   line = obj.line;
   doblank = obj.blank;
@@ -1600,11 +1619,13 @@ function receiveMessage(e) {
 // 監聽 message 事件
 window.addEventListener('message', receiveMessage, false);
 window.addEventListener('keyup', function (e) {
+  if (e.target.tagName === 'INPUT') return;
   e.preventDefault();
   e.stopPropagation();
   keyboard(e);
 }, false);
 window.addEventListener('keydown', function (e) {
+  if (e.target.tagName === 'INPUT') return;
   e.preventDefault();
   e.stopPropagation();
   if (e.code == 'ShiftLeft') {
