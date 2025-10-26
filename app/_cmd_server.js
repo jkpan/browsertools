@@ -130,7 +130,7 @@ function responseFile(filePath, req, res) {
 
   filePath = decodeURIComponent(filePath);
 
-  const ext = path.extname(filePath);
+  const ext = path.extname(filePath).toLowerCase();
 
   const contentType = {
       '.jpg' : 'image/jpeg',
