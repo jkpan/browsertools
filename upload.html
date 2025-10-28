@@ -277,18 +277,6 @@
             });
         }
 
-        function createButton(caption, onClick) { //{ text, imgSrc, onClick, title }) {
-
-            const btn = document.createElement('button');
-            btn.innerHTML = '📁 ' + caption;
-            btn.style.width = '90%';
-            btn.style.fontSize = '20px';
-
-            btn.addEventListener('click', onClick);
-
-            return btn;
-        }
-
         function isImageFile(filename) {
             // 定義常見的圖片副檔名
             const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
@@ -300,15 +288,30 @@
             return imageExtensions.some(ext => lower.endsWith(ext));
         }
 
-        function createImage(path, fn) {
+        //日期按鈕
+        function createFolderButton(caption, onClick) {
+
+            const btn = document.createElement('button');
+            btn.innerHTML = '📁 ' + caption;
+            btn.style.width = '90%';
+            btn.style.fontSize = '20px';
+
+            btn.addEventListener('click', onClick);
+
+            return btn;
+        }
+
+        function createBigButton() {
             const btn = document.createElement('button');
             btn.style.width = '30%';
             btn.style.height = '30%';
-            // btn.style.border = '2px solid';
-            //let queryValue = "John Doe & Co.";
-            //console.log('src:' + src);
-            //src = encodeURIComponent(src);
-            //console.log('after src:' + src);
+            btn.style.fontSize = '20px';
+            btn.style.verticalAlign = 'top'; //btn.style.alignItems = 'center';
+            return btn;
+        }
+
+        function createImage(path, fn) {
+            const btn = createBigButton(); // btn.style.border = '2px solid';
             const img = document.createElement('img');
             img.src = path + '/' + fn;
             img.title = fn;
@@ -364,14 +367,9 @@
 
         function createFileButton(path, fn) { //{ text, imgSrc, onClick, title }) {
 
-            const btn = document.createElement('button');
+            const btn = createBigButton();
             btn.innerHTML = '📄 ' + fn;
-            btn.style.width = '30%';
-            btn.style.height = '30%';
             // btn.style.border = '2px solid';
-
-            btn.style.fontSize = '14px';
-
             let src = path + '/' + fn;
             btn.addEventListener('dblclick', (e) => {
                 const fullUrl = new URL(src, window.location.origin).href;
@@ -418,7 +416,7 @@
                     let firstB = null;
                     array.forEach(element => {
                         //if (element.length != 8) return;
-                        let b = createButton(element, function (e) {
+                        let b = createFolderButton(element, function (e) {
                             listFiles(element);
                             activeFile = '';
                             selfile.innerText = activeFile;

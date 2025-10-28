@@ -226,8 +226,11 @@
     }
 
     function setSlideAnim() {
-
         animType = (animType + 1) % 5;
+        _setSlideAnim();
+    }
+
+    function _setSlideAnim() {
 
         var b = document.getElementById('aBtn');
         let caption = b.textContent;
@@ -436,5 +439,8 @@
         if (!isSafariBrowser())
             window.opener.openCtrl_reborn();
     });
+
+    animType = window.opener.getSlideAnim();
+    _setSlideAnim();
 
 </script>

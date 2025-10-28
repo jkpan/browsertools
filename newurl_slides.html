@@ -146,8 +146,6 @@
         parent.appendChild(_div);
         items.push(_div);
 
-
-
         switch (animType) {
             case 0:
                 _div.style.top = '0px';
@@ -162,7 +160,7 @@
                 _div.style.opacity = 0.0;
                 _div.style.transform = "rotate(0deg)";
                 _div.style.transition = '';
-                _div.style.transition = 'all 0.5s';
+                _div.style.transition = 'opacity 0.5s';
                 break;
             case 2:
                 _div.style.top = '0px';
@@ -450,6 +448,10 @@
     }
     */
 
+    function getSlideAnim() {
+        return animType;
+    }
+
     function setSlideAnim(animidx) {
 
         animType = animidx;
@@ -505,11 +507,13 @@
                         div.style.opacity = 1.0;
                         //setTimeout(function () {  div.style.left = "0px";  }, 510);
                     } else {
-                        div.style.opacity = 0;
+                        //div.style.left = "0px";
+                        div.style.left = window.innerWidth + "px";
                         div.style.top = "0px";
-                        setTimeout(function () {
-                            div.style.left = window.innerWidth + "px";
-                        }, 500);
+                        div.style.opacity = 0.0;
+                        //setTimeout(function () {
+                            //div.style.left = window.innerWidth + "px";
+                        //}, 500);
                     }
                 }
                 break;
