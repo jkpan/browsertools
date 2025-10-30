@@ -154,11 +154,13 @@
 <script>
 
   // 读取名为 "param" 的参数
-  if (readParam('app') === '中英文聖經') {
+  if (readParam('app') === '投影中英文聖經') {
+    preload('./json/dash_ce_Bible_proj.json', handleCb);
+  } else if (readParam('app') === '中英文聖經') {
     if (detectDevice())
-      preload('./json/dash_ce_Bible_m.json', handleCb);
+      preload('./json/dash_ce_Bible_local_m.json', handleCb);
     else
-      preload('./json/dash_ce_Bible.json', handleCb);
+      preload('./json/dash_ce_Bible_local.json', handleCb);
   } else if (readParam('app') === '中文聖經') {
     preload('./json/dash_c_Bible.json', handleCb);
   } else if (readParam('app') === '英文聖經') {

@@ -404,7 +404,7 @@ function ajax_restore() {
 }
 */
 
-var magicword = '';
+var filterword = '';
 //控方上傳目前
 function ajax_sync() {
 
@@ -416,7 +416,7 @@ function ajax_sync() {
     line: line,
     blank: doblank,
     user: username,
-    magic: magicword
+    filter: filterword
   },
     '/synclyrics',
     (res) => {
@@ -1222,21 +1222,20 @@ function createCtrlBtn() {
   ctrls[5] = addBtn('從伺服器同步', div, () => { sync_type = 5; synctrls(); return false; });//_newBtn();
 
   //div.insertAdjacentHTML('beforeend', '通關密語');
-  const magic = document.createElement('input');
+  const filter = document.createElement('input');
   // Set its type to "text"
-  magic.type = 'text';
-  magic.style.width = '150px';
+  filter.type = 'text';
+  filter.style.width = '150px';
 
   // Optionally, set other attributes like id, name, placeholder, etc.
-  magic.id = 'magic';
-  magic.value = magicword;
-  magic.placeholder = 'Secret Word';
+  filter.value = filterword;
+  filter.placeholder = 'filter';
   //Append the new text field to the container;
-  magic.addEventListener('input', (event) => { 
+  filter.addEventListener('input', (event) => { 
     //console.log('Input value changed:', event.target.value);
-    magicword = event.target.value;
+    filterword = event.target.value;
   });
-  div.appendChild(magic);
+  div.appendChild(filter);
 
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;
@@ -1471,7 +1470,7 @@ function synctrls() {
 
 function restoreFromJson(obj) {
   if (!obj) return;
-  if (obj.magic !== magicword) return;
+  if (obj.filter !== filterword) return;
   subtitles = obj.song;
   phase = obj.phase;
   line = obj.line;

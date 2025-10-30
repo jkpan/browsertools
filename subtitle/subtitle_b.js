@@ -803,7 +803,7 @@ function _ajax(json, url, cb, errorcb) {
   });
 }
 
-var magicword = '';
+var filterword = '';
 
 function ajax_sync() {
   /*
@@ -838,7 +838,7 @@ function ajax_sync() {
     ver: line,
     blank: doblank,
     user: username,
-    magic: magicword
+    filter: filterword
   },
     '/synscripture',
     //'http://192.168.0.16/synscripture',
@@ -851,7 +851,7 @@ function ajax_sync() {
 }
 
 function restoreFromJson(res) {
-  if (res.magic != magicword) return;
+  if (res.filter != filterword) return;
   let volume = res.vlm;
   let chapter = res.chp;
   let verse = res.ver;
@@ -1144,21 +1144,20 @@ function createCtrlBtn() {
   ctrls[5] = addBtn('從伺服器同步', div, () => { setMsg_play_socket(); return false; });
 
   //div.insertAdjacentHTML('beforeend', '通關密語');
-  const magic = document.createElement('input');
+  const filter = document.createElement('input');
   // Set its type to "text"
-  magic.type = 'text';
-  magic.style.width = '150px';
+  filter.type = 'text';
+  filter.style.width = '150px';
 
   // Optionally, set other attributes like id, name, placeholder, etc.
-  magic.id = 'magic';
-  magic.value = magicword;
-  magic.placeholder = 'Secret Word';
+  filter.value = filterword;
+  filter.placeholder = 'filter';
   //Append the new text field to the container;
-  magic.addEventListener('input', (event) => { 
+  filter.addEventListener('input', (event) => { 
     //console.log('Input value changed:', event.target.value);
-    magicword = event.target.value;
+    filterword = event.target.value;
   });
-  div.appendChild(magic);
+  div.appendChild(filter);
 
   ctrls[2].hidden = true;
   ctrls[3].hidden = true;

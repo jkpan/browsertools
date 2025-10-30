@@ -10,7 +10,7 @@ class BibleObj {
     ver = 1;
     blank = 1;
     user = '';
-    magicword = '';
+    filterword = '';
 
     clients = new Set();
 
@@ -18,12 +18,12 @@ class BibleObj {
         this.user = usr;
     }
 
-    syncData(vol, chp, ver, db, magic) {
+    syncData(vol, chp, ver, db, filter) {
         this.vlm = vol;
         this.chp = chp;
         this.ver = ver;
         this.blank = db;
-        this.magicword = magic;
+        this.filterword = filter;
     }
 
     getBibleObjStr() {
@@ -34,7 +34,7 @@ class BibleObj {
             ver: this.ver,
             blank: this.blank,
             user: this.user,
-            magic: this.magicword
+            filter: this.filterword
         };
     }
 
@@ -45,7 +45,7 @@ class BibleObj {
         this.syncData(parseInt(requestData.vlm),
             parseInt(requestData.chp),
             parseInt(requestData.ver),
-            parseInt(requestData.blank), requestData.magic);
+            parseInt(requestData.blank), requestData.filter);
 
         res.writeHead(200, { 'Content-Type': 'text/plain' });
 
@@ -121,7 +121,7 @@ function restorescripture(req, res) {
 function syncFromWorker(msg) {
     let obj = getObj(msg.user);
     println(`[syncFromWorker ${msg.user}]`);
-    obj.syncData(msg.vlm, msg.chp, msg.ver, msg.blank, msg.magic);
+    obj.syncData(msg.vlm, msg.chp, msg.ver, msg.blank, msg.filter);
     obj.broadcast();
 }
 
@@ -144,7 +144,7 @@ function synscripture(req, res) {
         const requestData = JSON.parse(body);
 
         let obj = getObj(requestData.user);
-        obj.syncData(requestData.vlm, requestData.chp, requestData.ver, requestData.blank, requestData.magic);
+        obj.syncData(requestData.vlm, requestData.chp, requestData.ver, requestData.blank, requestData.filter);
         res.end(JSON.stringify({ "state": "success" }));//res.end(JSON.stringify(queryResult));
 
         println(`[synscripture ${requestData.user}: ${obj.vlm}, ${obj.chp}, ${obj.ver}, ${obj.blank}]`);//[Bible:' + volume +', '+ chapter + ', ' + verse + ',' + doblank + ']');
