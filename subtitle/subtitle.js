@@ -22,11 +22,6 @@ function getArrayDimension(arr) {
 
 function readParam(param) {
 
-  // 获取当前页面的URL
-  //var currentURL = window.location.href;
-  //console.log('url: ' + currentURL);
-  //console.log(':' + window.location.origin);
-
   // 通过URLSearchParams对象解析URL参数
   var urlParams = new URLSearchParams(window.location.search);
 
@@ -55,31 +50,34 @@ async function fetchData() {
       throw new Error('Network response was not ok ' + response.statusText);
     }
     ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
-    //console.log(JSON.stringify(ALL_SONGS_JSON)); // 处理数据
-    //return data; // 如果需要同步效果，可以返回数据
+    
   } catch (error) {
     console.error('Failed to fetch JSON:', error);
   }
   console.log('fetchData END');
 }
 
-/*
-function getSong(jsonid) {
-  var json_elm = document.getElementById(jsonid);
-  if (json_elm) {
-    var obj = JSON.parse(json_elm.innerHTML);
-    if (obj.content)
-      return obj.content;
-  }
-  return [['']];
-}
-*/
-
 function pushnewSong(newsong) {
-  SONGS.push(newsong);
-  songswitch(SONGS.length - 1);
-  _repaint();
-  saveAction2Local();
+
+  let handled = false;
+
+  for (let i=1;i<SONGS.length;i++) {
+    if (SONGS[i][0][0] == newsong[0][0]) {
+      if (confirm("蓋掉'" + SONGS[i][0][0] + "'? (取消會加進最後)")) {
+        SONGS[i] = newsong;
+        song = i;
+        songswitch(song);
+        handled = true; //console.log('蓋掉！');
+      }
+      break;
+    }
+  }
+
+  if (!handled) {
+    SONGS.push(newsong);
+    songswitch(SONGS.length - 1); //console.log('加到最後！');
+  }
+  
   if (document.getElementById('ctrl')) {
     removeDiv();
     createCtrlBtn();
@@ -106,14 +104,6 @@ function getSong(jsonid) {
 function getSongsFromList(_list) {
 
   if (_list) list = _list;
-
-  /* 
-  else {
-    console.log('getSong(LIST)');
-    list = getSong('LIST');
-    console.log('getSong(LIST) done');
-  }
-  */
 
   SONGS = EMPTY.slice();
 
@@ -510,6 +500,13 @@ function closeSelector() {
   if (selector)
     selector.close();
   selector = null;
+}
+
+function getCurrentSong() {
+  if (song != 0) 
+    return subtitles;
+  else 
+    return null;
 }
 
 var liber = null;

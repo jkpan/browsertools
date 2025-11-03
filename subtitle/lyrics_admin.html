@@ -37,19 +37,18 @@
     <p></p>
     <div style="margin: 1%;">
         <br>
-        <label style="color: rgb(0, 255, 0);">ID: </label>
-        <input type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);"
-            id="song_id">
+        <label id="song_id_label" style="color: rgb(0, 255, 0);">ID: </label>
+        <input id="song_id" type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);">
         <p></p>
         <textarea id="songtxt" rows="10"></textarea>
-        ||<button id="addsong" style="background-color: magenta;" onclick="textGo(true)">臨時加歌</button>||
+        ||<button id="addsong" style="background-color: magenta;" onclick="add2List()">歌單新增/修改</button>||
         <p></p>
         <div id="editdiv">
-        <button style="background-color: rgb(0, 80, 0);" onclick="textGo(false)">加歌 / 修改</button>
-        <p></p>
-        <button onclick="clearTxt()">清除</button>
-        <p></p>
-        <button style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button>
+            <button style="background-color: rgb(0, 80, 0);" onclick="textGo()">加歌 / 修改</button>
+            <p></p>
+            <button onclick="clearTxt()">清除</button>
+            <p></p>
+            <button style="width: 10%;color: white;background-color: red;" onclick="delGo()">刪除</button>
         </div>
     </div>
     <p></p>
@@ -63,6 +62,9 @@
             document.getElementById("setedit").hidden = true;
             document.getElementById("prefixdiv").hidden = false;
             document.getElementById("editdiv").hidden = false;
+
+            document.getElementById("song_id_label").hidden = false;
+            document.getElementById("song_id").hidden = false;
         }
 
         function clearTxt() {
@@ -112,8 +114,8 @@
                     cataname_value]);
         }
 
-        function textGo(forsubtitle) {
-
+        function parseText() {
+            
             let value = document.getElementById("songtxt").value;
             value = value.trim();
             if (value.length == 0) return;
@@ -146,12 +148,22 @@
 
             });
 
-            if (newsong.length == 0) return;
+            if (newsong.length == 0) return null;
 
-            if (forsubtitle) {
-                window.opener.pushnewSong(newsong);
-                return;
-            }
+            return newsong;
+
+        }
+
+        function add2List() {
+            let newsong = parseText();
+            if  (newsong == null) return;
+            window.opener.pushnewSong(newsong);
+        }
+
+        function textGo() {
+
+            let newsong = parseText();
+            if  (newsong == null) return;
 
             let id_value = document.getElementById("song_id").value;
             id_value = id_value.trim();
@@ -164,7 +176,7 @@
                 if (confirm("確定要新增 '" + id_value + "' ?"))
                     ajax_action('add', id_value, newsong);
             }
-        }      
+        }
 
     </script>
     <br />
@@ -312,13 +324,13 @@
 
     function clickSong(idtxt) {
         let array = ALL_SONGS_JSON[idtxt].content;
-            if (!array) return false;
+        if (!array) return false;
 
-            let field = document.getElementById("song_id");
-            field.value = idtxt;
-            mapping(array);
+        let field = document.getElementById("song_id");
+        field.value = idtxt;
+        mapping(array);
 
-            window.scrollTo(0, 0);
+        window.scrollTo(0, 0);
     }
 
     /*
@@ -457,14 +469,23 @@
         createBtns();
         console.log('get content from list');
         if (window.opener) {
+
+            console.log('window.opener exist!');
+
             document.getElementById('addsong').hidden = false;
             document.getElementById("prefixdiv").hidden = true;
             document.getElementById("editdiv").hidden = true;
             document.getElementById("setedit").hidden = false;
+
+            document.getElementById("song_id_label").hidden = true;
+            document.getElementById("song_id").hidden = true;//style.visibility = 'hidden';
+
+            const current = window.opener.getCurrentSong();
+            if (current) mapping(current);
+
         } else {
             document.getElementById('addsong').hidden = true;
         }
     })();
-
 
 </script>
