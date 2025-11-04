@@ -57,27 +57,28 @@ async function fetchData() {
   console.log('fetchData END');
 }
 
-function pushnewSong(newsong) {
-
-  let handled = false;
-
+//for lyrics_admin using
+function checkSongName(newsong) {
   for (let i=1;i<SONGS.length;i++) {
     if (SONGS[i][0][0] == newsong[0][0]) {
-      if (confirm("蓋掉'" + SONGS[i][0][0] + "'? (取消會加進最後)")) {
-        SONGS[i] = newsong;
-        song = i;
-        songswitch(song);
-        handled = true; //console.log('蓋掉！');
-      }
-      break;
+      return i;
     }
   }
+  return 0;
+}
 
-  if (!handled) {
+//for lyrics_admin using
+function add2List(newsong, idx) {
+
+  if (idx == 0) {
     SONGS.push(newsong);
-    songswitch(SONGS.length - 1); //console.log('加到最後！');
+    songswitch(SONGS.length - 1);
+  } else {
+    SONGS[idx] = newsong;
+    song = idx;
+    songswitch(song);
   }
-  
+
   if (document.getElementById('ctrl')) {
     removeDiv();
     createCtrlBtn();

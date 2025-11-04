@@ -157,7 +157,17 @@
         function add2List() {
             let newsong = parseText();
             if  (newsong == null) return;
-            window.opener.pushnewSong(newsong);
+
+            let idx = window.opener.checkSongName(newsong);
+
+            if (idx > 0) {
+                if (!confirm("蓋掉'" + newsong[0][0] + "'? (取消會加進最後)")) {
+                    idx = 0;
+                }
+            }
+
+            window.opener.add2List(newsong, idx);
+            
         }
 
         function textGo() {
