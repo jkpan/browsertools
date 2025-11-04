@@ -50,7 +50,7 @@ async function fetchData() {
       throw new Error('Network response was not ok ' + response.statusText);
     }
     ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
-    
+
   } catch (error) {
     console.error('Failed to fetch JSON:', error);
   }
@@ -59,7 +59,7 @@ async function fetchData() {
 
 //for lyrics_admin using
 function checkSongName(newsong) {
-  for (let i=1;i<SONGS.length;i++) {
+  for (let i = 1; i < SONGS.length; i++) {
     if (SONGS[i][0][0] == newsong[0][0]) {
       return i;
     }
@@ -504,9 +504,9 @@ function closeSelector() {
 }
 
 function getCurrentSong() {
-  if (song != 0) 
+  if (song != 0)
     return subtitles;
-  else 
+  else
     return null;
 }
 
@@ -976,13 +976,15 @@ function keyboard(e) {
     case 'Minus': //'-'
       if (song > 0) {
         songswitch(song - 1, true);
-        phase = 1;
+        if (subtitles.length > 1)
+          phase = 1;
       }
       break;
     case 'Equal': //'='
       if (song < SONGS.length - 1) {
         songswitch(song + 1, true);
-        phase = 1;
+        if (subtitles.length > 1)
+          phase = 1;
       }
       break;
     //oqwertyui
@@ -1229,7 +1231,7 @@ function createCtrlBtn() {
   filter.value = filterword;
   filter.placeholder = 'filter';
   //Append the new text field to the container;
-  filter.addEventListener('input', (event) => { 
+  filter.addEventListener('input', (event) => {
     //console.log('Input value changed:', event.target.value);
     filterword = event.target.value;
   });
@@ -1358,7 +1360,7 @@ function generateSongList(div, addctrl) {
     ctrls[18] = addBtn('刪歌', div, () => {
 
       if (song == 0 || song > SONGS.length - 1) return false;
-      
+
       //for (let j = 1; j < SONGS.length; j++) div.removeChild(songbtns[j]);
       if (song == 0 || song > SONGS.length - 1)
         return false;

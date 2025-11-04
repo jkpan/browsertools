@@ -115,7 +115,7 @@
         }
 
         function parseText() {
-            
+
             let value = document.getElementById("songtxt").value;
             value = value.trim();
             if (value.length == 0) return;
@@ -156,7 +156,7 @@
 
         function add2List() {
             let newsong = parseText();
-            if  (newsong == null) return;
+            if (newsong == null) return;
 
             let idx = window.opener.checkSongName(newsong);
 
@@ -167,13 +167,13 @@
             }
 
             window.opener.add2List(newsong, idx);
-            
+
         }
 
         function textGo() {
 
             let newsong = parseText();
-            if  (newsong == null) return;
+            if (newsong == null) return;
 
             let id_value = document.getElementById("song_id").value;
             id_value = id_value.trim();
