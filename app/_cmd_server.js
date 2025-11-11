@@ -5,6 +5,8 @@ const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os');
 const upload = require('./_obj_filehandle');
+const uploadSheet = require('./_sheetmusic');
+
 //const sqlite3 = require('sqlite3').verbose();
 //const express = require('express');
 
@@ -240,6 +242,10 @@ function webservice(req, res) {
     //上傳檔案相關
     case '/upload': upload.uploadFile(req, res); return;
     case '/filesaction': upload.handleFile(req, res); return;
+
+    //上傳譜相關
+    case '/uploadsheet': uploadSheet.uploadFile(req, res); return;
+    case '/sheetaction': uploadSheet.handleFile(req, res); return;
 
     default:
 

@@ -71,7 +71,6 @@ class LyricsObj {
     });
   }
 
-
 }
 
 function synclyrics(req, res) {
@@ -182,7 +181,7 @@ function readAndAction(path, handle) {
     let ALL_SONGS = JSON.parse(txt);
     handle(ALL_SONGS);
   } catch (parseError) {
-    console.error('解析 JSON 檔案時發生錯誤:', parseError);
+    console.error('<解析 JSON 檔案時發生錯誤>:', parseError);
   }
 }
 
@@ -220,29 +219,26 @@ function lyricsBaseAction(req, res) {
 
     switch (action) {
       case 'add':
-        println('add start');
+        println('<add song start>');
         readAndAction('./users/' + READ_SRC, (ALL_SONGS) => {
-          println('add in');
+          println('<add in>');
           if (ALL_SONGS[id]) {
             result = false;
-            println('add exist return!');
+            println('<add exist return!>');
             return;
           }
           ALL_SONGS[id] = opObj;
-          println('add success');
           result = true;
-          println('add save file');
           refactor(ALL_SONGS);
           const writeStream = fs.createWriteStream('./users/' + WRITE_SRC);
           formatdefault(writeStream, ALL_SONGS);
           //formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
-            console.log('檔案寫入完成!');
+            println('<檔案寫入完成!>');
           });
           //res.setHeader('Content-Type', 'application/json');// 发送响应数据
           //res.end(JSON.stringify({ "state": "success" }));
         });
-        println('add end');
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
 
@@ -259,7 +255,7 @@ function lyricsBaseAction(req, res) {
           formatdefault(writeStream, ALL_SONGS);
           //formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
-            console.log('檔案寫入完成!');
+            println('<檔案寫入完成!>');
           });
         });
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
@@ -274,16 +270,15 @@ function lyricsBaseAction(req, res) {
           formatdefault(writeStream, ALL_SONGS);
           //formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
-            console.log('檔案寫入完成!');
+            println('<檔案寫入完成!>');
           });
         });
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
         break;
       case 'addCata':
-        println('addCata start');
+        println('<addCata start>');
         readAndAction('./users/' + READ_SRC, (ALL_SONGS) => {
-          println('addCata in');
           /*
           for (let i=0;i<VOLUME_CONTENT_ARRAY.length;i++) {
             if (VOLUME_CONTENT_ARRAY[i][0] == content[0]) { //åprintln('addcata exist return!');
@@ -303,12 +298,11 @@ function lyricsBaseAction(req, res) {
           formatdefault(writeStream, ALL_SONGS);
           //formatALL(writeStream, ALL_SONGS);
           writeStream.end(() => {
-            console.log('檔案寫入完成!');
+            println('<檔案寫入完成!>');
           });
           //res.setHeader('Content-Type', 'application/json');// 发送响应数据
           //res.end(JSON.stringify({ "state": "success" }));
         });
-        println('add end');
         res.setHeader('Content-Type', 'application/json');// 发送响应数据
         res.end(JSON.stringify({ "state": "success" }));
         break;

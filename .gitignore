@@ -3,4 +3,5 @@ test/
 ssl/
 VOLUMES/
 users/uploads/
+users/sheetmusic/
 .DS_Store

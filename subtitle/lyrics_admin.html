@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <script type="text/javascript" src="../login.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../common.js" charset="UTF-8"></script>
 <html lang="en">
 
 <head>
@@ -8,6 +9,56 @@
     <style>
         body {
             margin: 10px;
+        }
+
+        .uploadzone {
+            width: 90%;
+            /*border: 2px dashed #ffffff;*/
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 30px;
+            color: #ffffff;
+            margin: 10px;
+
+            display: none;
+            /* display: flex;*/
+            /* 啟用 Flexbox 佈局 */
+            /* flex-wrap: nowrap; 讓子元素在一行內排列，不換行 */
+            /* 或者使用 flex-wrap: wrap; 讓子元素可以自動換行 */
+            gap: 10px;
+            /* 設定子元素之間的間距 */
+
+        }
+
+        .drop-zone {
+            position: relative;
+            width: 72px;
+            height: 100px;
+            border: 2px dashed #ffffff;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 30px;
+            color: #ffffff;
+            font-family: sans-serif;
+            margin: 10px;
+        }
+
+        .imgbtn {
+            width: 100px;
+            height: 100px
+        }
+
+        .top-right-button {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            background-color: red;
+            border: none;
+            padding: 2px 2px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
         }
     </style>
     <title>Song editor</title>
@@ -35,10 +86,279 @@
     <hr size="4" align="left" width="60%" color="#00aa00">
     <button onclick="openAllTxt()" style="font-size: 20px;">全文檢索</button>
     <p></p>
+
+    <div id="upload" class="uploadzone">
+        <input id="allfile" type="file" name="file" accept="image/*" hidden="true" onchange="selectFile(event)" />
+        <!-- <div class="drop-zone" id="drop-zone-1" onclick="openFile('allfile', 1)"></div> -->
+    </div>
+
+    <script>
+
+        const MAXSHEET = 5;
+        var sel_song_id = null;
+
+        const sheetDiv = document.getElementById('upload');
+        var currentidx = 0;
+
+        function sheetActive(active) {
+            if (active)
+                sheetDiv.style.display = 'flex';
+            else
+                sheetDiv.style.display = 'none';
+        }
+
+        function isSheetActive() {
+            return !(sheetDiv.style.display == 'none');
+        }
+
+        function cleanSheetZone() {
+            for (let i = 1; i <= MAXSHEET; i++) {
+                let div = document.getElementById('drop-zone-' + i);
+                div.innerHTML = '+';
+            }
+        }
+
+        function createSheetZone() {
+            for (let i = 1; i <= MAXSHEET; i++) {
+                let div = document.createElement('div');
+                div.id = 'drop-zone-' + i;
+                div.className = 'drop-zone';
+
+                //div.onclick = `openFile('allfile', ${i})`;
+
+                div.addEventListener("click", (e) => {
+                    openFile('allfile', i);
+                });
+
+                div.addEventListener('drop', (e) => {
+                    currentidx = i;
+                    e.preventDefault();
+                    const files = e.dataTransfer.files;
+                    uploadFiles(files);
+                });
+                div.addEventListener('dragover', (e) => { e.preventDefault(); });
+                div.addEventListener('dragleave', () => { });
+
+                sheetDiv.appendChild(div);
+            }
+
+        }
+
+        function openFile(elmid, idx) {
+            let songid = document.getElementById("song_id").value;
+            if (songid.trim().length == 0) {
+                alert('id?');
+                return;
+            }
+            currentidx = idx;
+            if (document.getElementById('drop-zone-' + idx).innerHTML.trim() === '+') {
+                document.getElementById(elmid).click();
+            }
+        }
+
+        function selectFile(event) { //let file = event.target.files[0]; uploadFiles(files)
+            let files = event.target.files;
+            uploadFiles(files);
+        }
+
+        function _upload(file, songid, songname) {
+
+            //document.getElementById("prog").value = 0;
+
+            const ext = getImageExt(file.name);
+
+            const formData = new FormData();
+            formData.append('file', file, songid + '__' + currentidx + '__' + songname + ext);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/uploadsheet');
+
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    const percent = (e.loaded / e.total) * 100;
+                    //msg.innerText = percent.toFixed(1) + '%';
+                    document.getElementById('drop-zone-' + currentidx).innerHTML = percent.toFixed(1) + '%';
+                }
+            };
+
+            xhr.onload = function (e) {
+                if (xhr.status === 200) {
+                    document.getElementById('drop-zone-' + currentidx).innerHTML = '完成';
+                    //alert('listSongSheet!');
+                    listSongSheet();
+                    //msg.innerText = '完成';
+                    //list
+                    //document.getElementById("prog").value = 0;
+                } else {
+                    document.getElementById('drop-zone-' + currentidx).innerHTML = '失敗';
+                    //msg.innerText = '失敗';
+                    //document.getElementById("prog").value = 0;
+                    alert('e:' + e);
+                }
+                //filename.innerText = '';
+            };
+
+            xhr.send(formData);
+        }
+
+        function uploadFiles(files) {
+            let songid = document.getElementById("song_id").value;
+            if (songid.trim().length == 0) {
+                alert('id?');
+                return;
+            }
+            let songname = getNameFromAll(songid);
+            if (!songname) {
+                let newsong = parseText();
+                if (newsong.length == 0) {
+                    alert('name?');
+                    return;
+                }
+                songname = newsong[0][0];
+            }
+
+            const formData = new FormData();
+            for (const file of files) {
+                _upload(file, songid, songname);
+            }
+        }
+
+        function deleteFile(prefix) {
+            _ajax({
+                action: "delfile",
+                p1: prefix,
+                user: null
+            },
+                '/sheetaction',
+                (res) => {
+                    //document.getElementById('reload').click();// location.reload();
+                    //if (activeFolder.trim().length == 0) return;
+                    //listFiles(activeFolder);
+                    listSongSheet();
+                }, (err) => {
+                    alert('del fail');
+                });
+        }
+
+        function listSongSheet() {
+            cleanSheetZone();
+            sheetActive(true);
+            sel_song_id = null;
+            let songid = document.getElementById("song_id").value;
+            if (songid.trim().length == 0) {
+                alert('id?');
+                return;
+            }
+            sel_song_id = songid.trim();
+            _ajax({
+                action: "listbysongid",
+                p1: songid,
+                user: null
+            }, '/sheetaction',
+                (obj) => {
+                    console.log(JSON.stringify(obj));
+                    cleanSheetZone();
+                    //div.innerHTML = "";
+                    let array = obj['files'];
+                    array.sort(); //array.reverse();
+                    array.forEach(element => {
+                        //let src = encodeURIComponent(element);
+                        //let encodedString = URLEncoder.encode(element, "UTF-8");
+                        try {
+                            let array = element.split('__');
+                            let idx = parseInt(array[1]);//array[0];
+                            let div = document.getElementById('drop-zone-' + idx);
+                            div.innerHTML = '';
+                            if (isImageFile(element)) {
+                                let img = createImage('.' + obj.folder, element);
+                                div.appendChild(img);
+                                div.appendChild(createDelButton(idx));
+                            }
+                        } catch (err) {
+                            alert(err);
+                            return;
+                        }
+                    });
+                },
+                (err) => {
+                    alert('list files fail: ' + err);
+                });
+        }
+
+        function createDelButton(idx) {
+            const btn = document.createElement('button');
+            btn.className = 'top-right-button';
+            btn.innerText = 'x';
+            btn.style.width = '20%';
+            btn.style.height = '20%';
+
+            btn.addEventListener("click", (e) => {
+                if (sel_song_id == null) return;
+                if (confirm("確定要刪除?"))
+                    deleteFile(sel_song_id + '__' + idx + '__');
+            });
+            return btn;
+        }
+
+        function createImage(path, fn) {
+
+            //const btn = createBigButton(); // btn.style.border = '2px solid';
+            const img = document.createElement('img');
+
+            const uniqueParam = Date.now(); // Using a timestamp for uniqueness
+            // Set the image source with the unique query parameter
+            //img.src = 'path/to/your/image.png?' + uniqueParam;
+
+            img.src = path + '/' + fn;// + '?t=' + uniqueParam;
+            img.title = fn;
+            img.style.width = "100%";//width;   // 固定寬度
+            img.style.height = "100%";//height; // 固定高度
+
+            // 讓圖片在固定框內保持比例
+            img.style.objectFit = 'contain';  // 或 'cover'
+            
+            img.addEventListener("click", (e) => {
+                try {
+                    window.opener.pushFromUpload(img.src);
+                    window.close();
+                    e.stopPropagation();
+                } catch (e) {
+                    window.open(img.src, "_blank", "width=800,height=600");
+                }
+            });
+
+            return img;
+        }
+
+
+        /*
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            uploadFiles(files);
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault(); //dropZone.style.borderColor = '#333';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            //dropZone.style.borderColor = '#aaa';
+        });
+        */
+
+        createSheetZone();
+        cleanSheetZone();
+        sheetActive(false);
+
+    </script>
+
+    <p></p>
+
     <div style="margin: 1%;">
-        <br>
         <label id="song_id_label" style="color: rgb(0, 255, 0);">ID: </label>
-        <input id="song_id" type="text" style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);">
+        <input id="song_id" type="text"
+            style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);">
         <p></p>
         <textarea id="songtxt" rows="10"></textarea>
         ||<button id="addsong" style="background-color: magenta;" onclick="add2List()">歌單新增/修改</button>||
@@ -188,6 +508,10 @@
             }
         }
 
+        document.getElementById('song_id').addEventListener('input', (event) => {
+            if (isSheetActive()) sheetActive(false);
+        });
+
     </script>
     <br />
 </body>
@@ -211,15 +535,6 @@
 
     function pushSong(songid) {
         clickSong(songid);
-        /*
-        console.log('pushSong: ' + songid);
-        let allsongs = ALL_SONGS_JSON;//window.opener.ALL_SONGS_JSON;
-        var exist = allsongs[songid];
-        console.log(exist);
-        if (exist) {
-            mapping(exist['content']);
-        }
-        */
     }
 
     function _ajax(json, url, cb, errorcb) {
@@ -332,8 +647,21 @@
         return button;
     }
 
-    function clickSong(idtxt) {
+    function getNameFromAll(idtxt) {
+        let array = getSongFromAll(idtxt);
+        if (!array) return null;
+        if (array.length == 0) return null;
+        return array[0][0];
+    }
+
+    function getSongFromAll(idtxt) {
         let array = ALL_SONGS_JSON[idtxt].content;
+        if (!array) return null;
+        return array;
+    }
+
+    function clickSong(idtxt) {
+        let array = getSongFromAll(idtxt);// ALL_SONGS_JSON[idtxt].content;
         if (!array) return false;
 
         let field = document.getElementById("song_id");
@@ -341,6 +669,8 @@
         mapping(array);
 
         window.scrollTo(0, 0);
+
+        listSongSheet();
     }
 
     /*

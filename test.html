@@ -1,136 +1,52 @@
-<!-- <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe> -->
-<!doctype html>
-<html lang="zh-TW">
+<!DOCTYPE html>
+<html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Google Slides 嵌入 + 前後頁控制（兩種做法）</title>
-  <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;display:flex;flex-direction:column;align-items:center;padding:18px;gap:12px}
-    .player{width:100%;max-width:1000px;height:600px;border:1px solid #ddd;border-radius:8px;overflow:hidden;position:relative;background:#111}
-    iframe{width:100%;height:100%;border:0}
-    .controls{display:flex;gap:8px}
-    button{padding:8px 14px;border-radius:8px;border:1px solid #ccc;background:#fff;cursor:pointer}
-    .note{max-width:1000px;color:#444;font-size:14px}
-    /* image viewer */
-    .img-viewer img{width:100%;height:100%;object-fit:contain;background:#fff}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圖片右上角按鈕範例</title>
+<style>
+  .container {
+    position: relative;      /* 讓內部元素可以絕對定位 */
+    width: 300px;            /* div 寬度，可自行調整 */
+    height: 200px;           /* div 高度，可自行調整 */
+    border: 1px solid #ccc;  /* 方便看到範圍 */
+    overflow: hidden;
+  }
+
+  .container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;       /* 讓圖片等比例填滿區塊 */
+  }
+
+  .top-right-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .top-right-btn:hover {
+    background-color: rgba(255, 255, 255, 1);
+  }
+</style>
 </head>
 <body>
-  <h2>方案 A：嵌入 Google Slides（受限於跨域）</h2>
-  <!-- <div class="note">
-    <p>
-      把你的 Google Slides 在左側 "檔案 → 發佈到網路上" 或 "檔案 → 共用 → 取得連結"，取得可嵌入的網址，然後貼到下方欄位。
-    </p>
-    <p>
-      注意：當你把 Slides 用 Google 提供的 <code>&lt;iframe&gt;</code> embed 時，瀏覽器的跨來源政策（cross-origin）會阻止父頁面直接操控 iframe 內的簡報（例如模擬鍵盤、呼叫內部 API）。因此「按上一頁/下一頁」按鈕如果要操作原始 Google Slides 的真實播放介面，通常無法用 JS 從父頁面直接控制。
-    </p>
-    <p>
-      下面提供一個<strong>嘗試性</strong>的做法──把 iframe 換成「preview」網址並嘗試用 slide 參數跳到指定頁；這在某些情況下可行，但並非官方保證。更穩定的做法請見 <strong>方案 B</strong>（匯出每張投影片成圖片後以自己可控的 viewer 顯示）。
-    </p>
-  </div>  -->
 
-  <div style="display:flex;gap:8px;max-width:1000px;width:100%">
-    <input 
-    id="embedUrl" 
-    type="text" 
-    placeholder="貼上 Google Slides 的 embed 或 preview URL" 
-    style="flex:1;padding:8px;border-radius:6px;border:1px solid #ccc" 
-    value=""/>
-    <button id="loadEmbed">載入</button>
-  </div>
+<div class="container">
+  <img src="https://picsum.photos/300/200" alt="範例圖片">
+  <button class="top-right-btn" onclick="alert('按鈕被點擊!')">按鈕</button>
+</div>
 
-  <div class="player" id="slidesDiv">
-    <iframe id="slidesFrame" src="about:blank" allowfullscreen></iframe>
-  </div>
-  <div class="controls">
-    <button id="prev">上一頁</button>
-    <button id="next">下一頁</button>
-    <button id="first">第一頁</button>
-    <button id="last">最後一頁</button>
-  </div>
+<div class="container">
+  <img src="https://picsum.photos/300/200" alt="範例圖片">
+  <button class="top-right-btn" onclick="alert('按鈕被點擊!')">按鈕</button>
+</div>
 
-  <hr style="width:100%;max-width:1000px;margin:18px 0"/>
-
-
-  <script>
-    // ------------------- 方案 A：嘗試用 preview URL 改變 slide -------------------
-    // 說明：這個方法不保證對所有簡報都有效，實際效果會依 Google 的 embed/preview 行為改變。
-    const frame = document.getElementById('slidesFrame');
-    const embedUrlInput = document.getElementById('embedUrl');
-
-    let currentSlide = 1;
-    let maxSlideGuess = 50; // 如果你知道頁數可以調小
-
-    var testurl = 'https://docs.google.com/presentation/d/e/2PACX-1vQAvbb6_YSXOugjNZUbm7-Fgmt4xgQWtJXh9HZTLPT37Fv1_Uh0sn_yPF0PhRSl0w/pubembed?start=false&loop=false&delayms=3000&rm=minimal';
-    //'https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/pubembed?start=false&loop=false&delayms=3000&rm=minimal';
-    //#slide=9';
-    document.getElementById('embedUrl').value = testurl;
-
-    function donext() {
-        currentSlide++;
-        frame.src = testurl + '#slide=' + currentSlide;
-        //buildPreviewUrl(raw, currentSlide);
-    }
-
-    function dopre() {
-        currentSlide--;
-        if (currentSlide < 1) currentSlide = 1;
-        frame.src = testurl + '#slide=' + currentSlide;
-    }
-
-    function buildPreviewUrl(base, slideNumber){
-      // 常見 preview 用法：.../presentation/d/ID/preview?slide=id.pN
-      // 或者 embed 的形式：.../embed?start=false&loop=false&delayms=3000
-      // 我們嘗試把 base 轉成 preview 並加上 slide 參數。
-      try{
-        const u = new URL(base);
-        // 如果 path 包含 '/embed' 我們切換成 '/preview'
-        let path = u.pathname;
-        if(path.endsWith('/embed')){
-          path = path.replace('/embed','/preview');
-        }
-        // 將網址改為 preview 形式
-        u.pathname = path;
-        u.searchParams.set('slide', 'id.p' + slideNumber);
-        // 確保 start=false（不要自動播放）
-        u.searchParams.set('start','false');
-        return u.toString();
-      }catch(e){
-        return base; // 如果解析失敗就回傳原始
-      }
-    }
-
-    
-    document.getElementById('loadEmbed').addEventListener('click', ()=>{
-      const raw = embedUrlInput.value.trim();
-      if(!raw) return alert('請貼上 Google Slides 的 embed 或 preview URL');
-      currentSlide = 1;
-      frame.src = buildPreviewUrl(raw, currentSlide);
-    });
-    
-
-    
-    document.getElementById('next').addEventListener('click', ()=>{
-      //donext();
-      //currentSlide++;
-      //frame.src = buildPreviewUrl(frame.src || embedUrlInput.value.trim(), currentSlide);
-
-      document.getElementById('slidesFrame').click();
-      document.getElementById('slidesDiv').click();
-    });
-
-    //frame.addEventListener('click', () => { alert('iframe 被點擊了！');});
-        
-    document.getElementById('prev').addEventListener('click', ()=>{
-      dopre();
-      //if(currentSlide>1) currentSlide--;
-      //frame.src = buildPreviewUrl(frame.src || embedUrlInput.value.trim(), currentSlide);
-    });
-    document.getElementById('first').addEventListener('click', ()=>{ currentSlide=1; frame.src = buildPreviewUrl(frame.src || embedUrlInput.value.trim(), currentSlide); });
-    document.getElementById('last').addEventListener('click', ()=>{ currentSlide = maxSlideGuess; frame.src = buildPreviewUrl(frame.src || embedUrlInput.value.trim(), currentSlide); });
-    
-    
-  </script>
 </body>
 </html>

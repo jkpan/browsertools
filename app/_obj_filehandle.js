@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { formidable } = require('formidable');
-const { syncBuiltinESMExports } = require('module');
+//const { syncBuiltinESMExports } = require('module');
 
 // 建立 uploads 資料夾
 const uploadDir = './users/uploads'//path.join('', 'uploads');
@@ -177,7 +177,7 @@ function handleFile(req, res) {
           res.end(JSON.stringify({ "state": -1 }));
         }
         return;
-      case 'delfile': {
+      case 'delfile': 
         try {
           const u = new URL(p1);
           let file = '.' + u.pathname;//'./users/uploads'//path.join('', 'uploads');
@@ -190,8 +190,6 @@ function handleFile(req, res) {
           res.setHeader('Content-Type', 'application/json');// 发送响应数据
           res.end(JSON.stringify({ "state": -1 }));
         }
-
-      }
         return;
       /*
       case 'addfolder': {

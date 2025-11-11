@@ -132,3 +132,44 @@ function createBGHiddenFile() {
 function isEnglishCharacter(char) {
   return /^[A-Za-z]$/.test(char);
 }
+
+function isImageFile(filename) {
+  // 定義常見的圖片副檔名
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+
+  // 轉小寫來避免大小寫問題
+  const lower = filename.toLowerCase();
+
+  // 用 some() 來判斷是否符合其中一個副檔名
+  return imageExtensions.some(ext => lower.endsWith(ext));
+}
+
+function getImageExt(filename) {
+  const lower = filename.toLowerCase();
+  // 定義常見的圖片副檔名
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+  for (let i = 0; i < imageExtensions.length; i++) {
+    if (lower.endsWith(imageExtensions[i])) {
+      return imageExtensions[i];
+    }
+  }
+  return null;
+
+  /*
+  const extension = {
+      '.jpg' : 'jpg',
+      '.jpeg': 'jpeg',
+      '.png' : 'png',
+      '.gif' : 'gif',
+      '.bmp' : 'bmp'
+  }[ext];
+  */
+  // 轉小寫來避免大小寫問題
+  /*
+  const lower = filename.toLowerCase();
+  if (imageExtensions.some(ext => lower.endsWith(ext))) {
+    return true;
+  }
+  return false;
+  */
+}

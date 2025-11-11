@@ -54,6 +54,7 @@
             width: 90%;
             height: 200px;
             border: 2px dashed #0f0;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -88,7 +89,7 @@
     <button onclick="openLib()" style="background-color: #000000;">圖庫</button>
     <p></p>
 
-    <hr />
+    <hr align="left" style="width:90%"/>
 
     <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
         onclick="openFile('allfile')">
@@ -185,7 +186,7 @@
         }
     </script>
 
-    <hr />
+    <hr align="left" style="width:90%"/>
 
     <p></p>
     <button onclick="divGo('./subtitle/subtitle.html?action=ctrl&mode=2', 'frame_song', 'div_song')">歌詞控制</button>
