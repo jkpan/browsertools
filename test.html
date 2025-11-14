@@ -1,52 +1,329 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>圖片右上角按鈕範例</title>
-<style>
-  .container {
-    position: relative;      /* 讓內部元素可以絕對定位 */
-    width: 300px;            /* div 寬度，可自行調整 */
-    height: 200px;           /* div 高度，可自行調整 */
-    border: 1px solid #ccc;  /* 方便看到範圍 */
-    overflow: hidden;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>全螢幕橫向滑動圖片</title>
+  <style>
+    :root {
+      --transition: 300ms;
+      --bg: #000;
+    }
+    html,body {
+      height:100%;
+      margin:0;
+      background:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      touch-action: pan-y;
+      overflow:hidden; /* 防止 page 捲動 */
+    }
 
-  .container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;       /* 讓圖片等比例填滿區塊 */
-  }
+    /* 容器：寬度 = 圖片數量 * 100vw，高度100vh */
+    .carousel {
+      height:100vh;
+      width:100%;
+      display:flex;
+      flex-direction:row;
+      transition: transform var(--transition) ease;
+      will-change: transform;
+      user-select:none;
+      -webkit-user-drag: none;
+    }
 
-  .top-right-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-  }
+    /* 每張 slide 佔滿 viewport */
+    .slide {
+      width:100vw;
+      height:100vh;
+      flex: 0 0 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: #111;
+      position:relative;
+      overflow:hidden;
+    }
 
-  .top-right-btn:hover {
-    background-color: rgba(255, 255, 255, 1);
-  }
-</style>
+    /* 圖片：覆滿但保持比例 */
+    .slide img {
+      max-width:100%;
+      max-height:100%;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      display:block;
+      pointer-events:none;
+      -webkit-user-drag: none;
+    }
+
+    /* 控制按鈕 */
+    .nav-btn {
+      position:fixed;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:50;
+      background:rgba(0,0,0,0.4);
+      border:1px solid rgba(255,255,255,0.08);
+      color:#fff;
+      width:48px;
+      height:48px;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      backdrop-filter: blur(4px);
+    }
+    .nav-btn:active { transform: translateY(-50%) scale(0.98); }
+    .nav-btn[aria-hidden="true"] { display:none; }
+    .prev { left:12px; }
+    .next { right:12px; }
+
+    /* 頁碼顯示 */
+    .dots {
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      display:flex;
+      gap:8px;
+      z-index:60;
+    }
+    .dot {
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background: rgba(255,255,255,0.35);
+    }
+    .dot.active { background: #fff; width:18px; border-radius:999px; transition:width 160ms; }
+
+    /* 簡單的可見焦點樣式（accessibility） */
+    .nav-btn:focus { outline:2px solid rgba(255,255,255,0.25); }
+
+    /* 手機：把按鈕改小 */
+    @media (max-width:600px) {
+      .nav-btn { width:40px; height:40px; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-  <img src="https://picsum.photos/300/200" alt="範例圖片">
-  <button class="top-right-btn" onclick="alert('按鈕被點擊!')">按鈕</button>
-</div>
+  <!-- 外層視窗（用來包含 carousel 以便未來可擴充） -->
+  <div id="viewport" style="height:100vh; width:100vw; overflow:hidden; position:relative;">
+    <!-- carousel 會用 transform: translateX(-index * 100vw) 切換 -->
+    <div id="carousel" class="carousel" aria-live="polite"></div>
 
-<div class="container">
-  <img src="https://picsum.photos/300/200" alt="範例圖片">
-  <button class="top-right-btn" onclick="alert('按鈕被點擊!')">按鈕</button>
-</div>
+    <!-- 前後按鈕（支援鍵盤與可點擊） -->
+    <button id="prevBtn" class="nav-btn prev" aria-label="上一張 (向右滑)" title="上一張">❮</button>
+    <button id="nextBtn" class="nav-btn next" aria-label="下一張 (向左滑)" title="下一張">❯</button>
 
+    <!-- 頁碼 -->
+    <div id="dots" class="dots" aria-hidden="false"></div>
+  </div>
+
+  <script>
+    function initial(images) {
+    //(function(){
+      // --- 修改這裡：把圖片路徑換成你的圖片 ---
+      // ------------------------------------------------
+
+      const carousel = document.getElementById('carousel');
+      const dotsContainer = document.getElementById('dots');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+
+      let index = 0;
+      const total = images.length;
+      let isDragging = false;
+      let startX = 0;
+      let currentTranslate = 0;
+      let animationFrameId = null;
+      const threshold = 50; // 判定為滑動的最小距離（px）
+
+      // 建立 slides 與 dots
+      images.forEach((src, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'slide';
+        slide.setAttribute('role','group');
+        slide.setAttribute('aria-roledescription','slide');
+        slide.setAttribute('aria-label', `${i+1} / ${total}`);
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `圖片 ${i+1}`;
+        slide.appendChild(img);
+        carousel.appendChild(slide);
+
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i===0 ? ' active' : '');
+        dot.dataset.idx = i;
+        dot.title = `${i+1}/${total}`;
+        dot.style.cursor = 'pointer';
+        dot.addEventListener('click', ()=> goToIndex(i));
+        dotsContainer.appendChild(dot);
+      });
+
+      // 初始狀態
+      update();
+
+      // --- 事件：按鈕 ---
+      prevBtn.addEventListener('click', prev);
+      nextBtn.addEventListener('click', next);
+
+      // --- 鍵盤支持 ---
+      window.addEventListener('keydown', (e)=>{
+        if (e.key === 'ArrowLeft') prev();
+        if (e.key === 'ArrowRight') next();
+      });
+
+      // --- 滑鼠拖曳 ---
+      carousel.addEventListener('mousedown', startDrag);
+      window.addEventListener('mouseup', endDrag);
+      window.addEventListener('mousemove', onDrag);
+
+      // --- 觸控手勢 ---
+      carousel.addEventListener('touchstart', startDrag, {passive:true});
+      window.addEventListener('touchend', endDrag);
+      window.addEventListener('touchmove', onDrag, {passive:false});
+
+      // 防止圖片在拖曳時選取
+      carousel.addEventListener('dragstart', (e)=> e.preventDefault());
+
+      // 當視窗大小改變，確保 translate 對齊
+      window.addEventListener('resize', () => {
+        setTranslate(-index * window.innerWidth);
+      });
+
+      function startDrag(evt) {
+        isDragging = true;
+        startX = getClientX(evt);
+        currentTranslate = -index * window.innerWidth;
+        carousel.style.transition = 'none';
+      }
+
+      function onDrag(evt) {
+        if (!isDragging) return;
+        const x = getClientX(evt);
+        const dx = x - startX;
+        // 阻止垂直滾動在觸控時（如果滑動偏水平）
+        if (evt.type.startsWith('touch')) {
+          // 如果水平方向明顯比垂直更大，阻止預設（防止頁面滾動）
+          const touch = evt.touches ? evt.touches[0] : null;
+          // passive: false used on touchmove listener to allow preventDefault
+          evt.preventDefault();
+        }
+        const translate = currentTranslate + dx;
+        setTranslate(translate);
+      }
+
+      function endDrag(evt) {
+        if (!isDragging) return;
+        isDragging = false;
+        carousel.style.transition = ''; // 恢復 transition
+        const endX = getClientX(evt) || startX; // 若 mouseup 沒有位置，fallback
+        const moved = endX - startX;
+        if (moved < -threshold) {
+          next();
+        } else if (moved > threshold) {
+          prev();
+        } else {
+          // 少量移動：回到當前 index
+          update();
+        }
+      }
+
+      function getClientX(evt) {
+        if (!evt) return null;
+        if (evt.type && evt.type.startsWith('touch')) {
+          const t = (evt.touches && evt.touches[0]) || (evt.changedTouches && evt.changedTouches[0]);
+          return t ? t.clientX : null;
+        }
+        // mouse event may be on window (mouseup) and not have clientX; try evt.clientX
+        return evt.clientX ?? (evt.changedTouches ? (evt.changedTouches[0] && evt.changedTouches[0].clientX) : null);
+      }
+
+      function setTranslate(x) {
+        // 限制左右邊界（阻尼效果）
+        const maxTranslate = 0;
+        const minTranslate = - (total - 1) * window.innerWidth;
+        // small resistance when over-scrolling
+        if (x > maxTranslate + 100) x = maxTranslate + 100;
+        if (x < minTranslate - 100) x = minTranslate - 100;
+        carousel.style.transform = `translateX(${x}px)`;
+      }
+
+      function update() {
+        const x = -index * window.innerWidth;
+        carousel.style.transition = `transform var(--transition) ease`;
+        setTranslate(x);
+        updateDots();
+        updateNavButtons();
+        // 設定 aria-live 的描述可選擇性增加（目前 carousel container 為 polite）
+      }
+
+      function updateDots() {
+        const dots = dotsContainer.children;
+        for (let i=0;i<dots.length;i++){
+          dots[i].classList.toggle('active', i === index);
+        }
+      }
+
+      function updateNavButtons() {
+        // 可選：在頭尾隱藏按鈕
+        prevBtn.setAttribute('aria-hidden', index === 0 ? 'true' : 'false');
+        nextBtn.setAttribute('aria-hidden', index === total - 1 ? 'true' : 'false');
+      }
+
+      function prev() {
+        if (index > 0) index--;
+        update();
+      }
+      function next() {
+        if (index < total - 1) index++;
+        update();
+      }
+      function goToIndex(i) {
+        index = Math.max(0, Math.min(total-1, i));
+        update();
+      }
+
+      // optional: 讓左右滑動也可用 wheel（水平滾輪）
+      let wheelTimeout;
+      window.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return; // 忽略垂直滾輪
+        if (e.deltaX > 10) next();
+        else if (e.deltaX < -10) prev();
+        // 防止連續觸發過快，短暫節流
+        clearTimeout(wheelTimeout);
+        wheelTimeout = setTimeout(()=>{}, 100);
+      }, {passive: true});
+
+      // 自動調整圖片載入錯誤替代或 lazy loading
+      Array.from(document.querySelectorAll('.slide img')).forEach(img=>{
+        img.loading = 'lazy';
+        img.addEventListener('error', ()=> {
+          img.style.display = 'none';
+          const fallback = document.createElement('div');
+          fallback.style.color = '#888';
+          fallback.style.fontSize = '18px';
+          fallback.textContent = '無法載入圖片';
+          img.parentElement.appendChild(fallback);
+        });
+      });
+    }
+  //)();
+
+    /*
+    const images = [
+        "https://picsum.photos/id/1018/1920/1080",
+        "https://picsum.photos/id/1025/1920/1080",
+        "https://picsum.photos/id/1035/1920/1080",
+        "https://picsum.photos/id/1043/1920/1080"
+      ];
+      */
+     let _images = window.opener.getSheetArray();
+
+    initial(_images);
+
+  </script>
 </body>
 </html>

@@ -86,6 +86,7 @@
     <p></p>
 
     <div id="upload" class="uploadzone">
+        <button onclick="downloadFile()">下载</button>
         <input id="allfile" type="file" name="file" accept="image/*" hidden="true" onchange="selectFile(event)" />
         <!-- <div class="drop-zone" id="drop-zone-1" onclick="openFile('allfile', 1)"></div> -->
     </div>
@@ -97,6 +98,47 @@
 
         const sheetDiv = document.getElementById('upload');
         var currentidx = 0;
+        var sheetArray = null;
+
+        async function downloadURL(url, filename) {
+            try {
+                const resp = await fetch(url, { mode: 'cors' }); // 可能會因 CORS 被拒
+                if (!resp.ok) throw new Error('fetch fail: ' + resp.status);
+                const blob = await resp.blob();
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(a.href);
+            } catch (e) {
+                console.error('下載失敗', url, e);
+                // 若 fetch 失敗，嘗試用 img.src 作為備援（可能開新分頁）
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.click();
+                a.remove();
+            }
+        }
+
+        function downloadFile() {
+            //const imgs = document.querySelectorAll('img.to-download');
+            for (let i=1;i<=MAXSHEET;i++) {
+                let img = document.getElementById('img_' + i);
+                if (!img) continue;
+                const src = img.src;
+                const ext = (src.split('.').pop().split(/\#|\?/)[0]) || 'jpg';
+                const name = `image-${i}.${ext}`;
+                // 等待每個下載啟動（可並行，但會造成大量同時下載）
+                downloadURL(src, name);
+            }
+        }
+
+        function getSheetArray() {
+            return sheetArray;
+        }
 
         function getUrl() {
             //window.location.href;
@@ -255,6 +297,7 @@
         function listSongSheet() {
             cleanSheetZone();
             sheetActive(true);
+            sheetArray = [];
             sel_song_id = null;
             let songid = document.getElementById("song_id").value;
             if (songid.trim().length == 0) {
@@ -283,6 +326,8 @@
                             div.innerHTML = '';
                             if (isImageFile(element)) {
                                 let img = createImage('.' + obj.folder, element);
+                                img.id = 'img_' + idx;
+                                sheetArray.push(img.src);
                                 div.appendChild(img);
                                 div.appendChild(createDelButton(idx));
                             }
@@ -320,7 +365,6 @@
             const uniqueParam = Date.now(); // Using a timestamp for uniqueness
             // Set the image source with the unique query parameter
             //img.src = 'path/to/your/image.png?' + uniqueParam;
-
             img.src = path + '/' + fn;// + '?t=' + uniqueParam;
             img.title = fn;
             img.style.width = "100%";//width;   // 固定寬度
@@ -330,14 +374,15 @@
             img.style.objectFit = 'contain';  // 或 'cover'
 
             img.addEventListener("click", (e) => {
-                try {
-                    window.opener.pushFromUpload(img.src);
-                    window.close();
-                    e.stopPropagation();
-                } catch (e) {
-                    window.open(img.src, "_blank", "width=800,height=600");
-                }
+                //console.log(fn + ' ===== ' + encodeURI(fn));
+                //let array = fn.split('__');
+                //let idx = parseInt(array[1]);//array[0];
+
+                window.open("./lyrics_sheet_slide.html?idx=" + encodeURI(fn), "_blank");
+                //window.open(img.src, "_blank", "width=800,height=600");
             });
+
+            //img.addEventListener("dblclick", (e) => {  alert('dblclick'); });
 
             return img;
         }
