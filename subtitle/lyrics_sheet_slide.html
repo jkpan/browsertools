@@ -19,7 +19,7 @@
             background: var(--bg);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            touch-action: pan-y;
+            touch-action: pan-x pinch-zoom;
             overflow: hidden;
             /* 防止 page 捲動 */
         }
@@ -195,6 +195,30 @@
                 dotsContainer.appendChild(dot);
             });
 
+            /*    */
+            const ximg = document.querySelectorAll("img");
+            let count = 0;
+
+            function allDone() {
+                console.log("全部圖載入完成！");
+            }
+
+            function check() {
+                count++;
+                if (count === images.length) allDone();
+            }
+
+            ximg.forEach(img => {
+                if (img.complete) {
+                    count++;
+                    if (count === ximg.length) allDone();
+                } else {
+                    img.addEventListener("load", check);
+                    img.addEventListener("error", check);
+                }
+            });
+            /*    */
+
             if (readParam('idx')) {
                 let idx = readParam('idx');
                 for (let i = 0; i < images.length; i++) {
@@ -229,7 +253,10 @@
             window.addEventListener('touchmove', onDrag, { passive: false });
 
             // 防止圖片在拖曳時選取
-            carousel.addEventListener('dragstart', (e) => e.preventDefault());
+            carousel.addEventListener('dragstart', (e) => {
+                //try {     if (t.touches.length > 1) return;     } catch(err) {}
+                e.preventDefault();
+            });
 
             // 當視窗大小改變，確保 translate 對齊
             window.addEventListener('resize', () => {
@@ -237,6 +264,9 @@
             });
 
             function startDrag(evt) {
+                try {
+                    if (evt.touches.length > 1) return;
+                } catch (err) { }
                 isDragging = true;
                 startX = getClientX(evt);
                 currentTranslate = -index * window.innerWidth;
@@ -244,6 +274,9 @@
             }
 
             function onDrag(evt) {
+                try {
+                    if (evt.touches.length > 1) return;
+                } catch (err) { }
                 if (!isDragging) return;
                 const x = getClientX(evt);
                 const dx = x - startX;
@@ -259,11 +292,21 @@
             }
 
             function endDrag(evt) {
+                //consol.log("denDrag + " +if (evt.touches.length > 1)
+                try { 
+                    if (evt.touches.length > 1) {
+                        update();
+                        return;
+                    }
+                } catch (err) { 
+
+                }
                 if (!isDragging) return;
                 isDragging = false;
                 carousel.style.transition = ''; // 恢復 transition
                 const endX = getClientX(evt) || startX; // 若 mouseup 沒有位置，fallback
                 const moved = endX - startX;
+                
                 if (moved < -threshold) {
                     next();
                 } else if (moved > threshold) {
@@ -272,6 +315,7 @@
                     // 少量移動：回到當前 index
                     update();
                 }
+                
             }
 
             function getClientX(evt) {
