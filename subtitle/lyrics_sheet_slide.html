@@ -1,99 +1,117 @@
-<!doctype html>
+<!DOCTYPE html>
 <script type="text/javascript" src="../common.js" charset="UTF-8"></script>
-<html lang="zh-Hant">
+<html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-    <title>Slide</title>
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
+        charset="UTF-8" />
     <style>
-        :root {
-            --transition: 300ms;
-            --bg: #000;
-        }
-
-        html,
         body {
+            margin: 0% 0%;
             height: 100%;
-            margin: 0;
-            background: var(--bg);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            touch-action: pan-x pinch-zoom;
-            overflow: hidden;
-            /* 防止 page 捲動 */
-        }
-
-        /* 容器：寬度 = 圖片數量 * 100vw，高度100vh */
-        .carousel {
-            height: 100vh;
             width: 100%;
-            display: flex;
-            flex-direction: row;
-            transition: transform var(--transition) ease;
-            will-change: transform;
-            user-select: none;
-            -webkit-user-drag: none;
+            border: none;
+            background-color: #222;
         }
 
-        /* 每張 slide 佔滿 viewport */
-        .slide {
-            width: 100vw;
-            height: 100vh;
-            flex: 0 0 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #111;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* 圖片：覆滿但保持比例 */
-        .slide img {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            display: block;
-            pointer-events: none;
-            -webkit-user-drag: none;
-        }
-
-        /* 控制按鈕 */
-        .nav-btn {
+        .wrapper {
             position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            color: rgba(255, 255, 255, 0.5);
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
+            gap: 0px;
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+
+        .full {
+            user-select: none;
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .transDiv {
+
+            width: 100%;
+            height: 100%;
+            border: none;
+
+            position: absolute;
+            left: 0;
+            top: 0;
+
             display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            /* backdrop-filter: blur(4px); */
+
+            border-radius: 20px;
+
+            /* 过渡动画 */
+            /* transition: all 0.5s; */
+            /* transform-origin: 0% 0%; */
+            /* transform: rotate(0deg); */
+
+            overflow-y: hidden;
+            overflow-x: hidden;
         }
 
-        .nav-btn:active {
-            transform: translateY(-50%) scale(0.98);
+        .fullRange {
+            margin: auto;
+            width: 94%;
+            height: 94%;
+
+            position: absolute;
+            top: 3%;
+            left: 3%;
+            right: 3%;
+            bottom: 3%;
+
+            user-select: none;
+
+            border-radius: 15px;
+            border: 5px dashed rgba(128, 0, 0, 0.7);
         }
 
-        .nav-btn[aria-hidden="true"] {
+        .fullRange2 {
+            margin: auto;
+            width: 0%;
+            height: 0%;
+        }
+
+        iframe {
+            border: none;
+        }
+
+        ::-webkit-scrollbar {
             display: none;
         }
 
-        .prev {
-            left: 12px;
+        .img_ratio {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+
+            position: absolute;
+            /* 設定絕對定位 */
+            top: 50%;
+            /* 垂直置中 */
+            left: 50%;
+            /* 水平置中 */
+            transform: translate(-50%, -50%);
+            /* 修正到圖片的中心 */
+
         }
 
-        .next {
-            right: 12px;
+        .img_full {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        button {
+            font-size: 24px;
+            background-color: transparent;
+            color: #00ff00;
+            margin: 1% 1%;
+            border: 2px solid;
+            vertical-align: middle;
         }
 
         /* 頁碼顯示 */
@@ -121,294 +139,270 @@
             border-radius: 999px;
             transition: width 160ms;
         }
-
-        /* 簡單的可見焦點樣式（accessibility） */
-        .nav-btn:focus {
-            outline: 2px solid rgba(255, 255, 255, 0.25);
-        }
-
-        /* 手機：把按鈕改小 */
-        @media (max-width:600px) {
-            .nav-btn {
-                width: 40px;
-                height: 40px;
-            }
-        }
     </style>
 </head>
 
 <body>
-
-    <!-- 外層視窗（用來包含 carousel 以便未來可擴充） -->
-    <div id="viewport" style="height:100vh; width:100vw; overflow:hidden; position:relative;">
-        <!-- carousel 會用 transform: translateX(-index * 100vw) 切換 -->
-        <div id="carousel" class="carousel" aria-live="polite"></div>
-
-        <!-- 前後按鈕（支援鍵盤與可點擊） -->
-        <button id="prevBtn" class="nav-btn prev" aria-label="上一張 (向右滑)" title="上一張">❮</button>
-        <button id="nextBtn" class="nav-btn next" aria-label="下一張 (向左滑)" title="下一張">❯</button>
-
-        <!-- 頁碼 -->
-        <div id="dots" class="dots" aria-hidden="false"></div>
-    </div>
-
-    <script>
-
-        //function initial(images) {
-        (function () {
-            let images = window.opener.getSheetArray();
-            // --- 修改這裡：把圖片路徑換成你的圖片 ---
-            // ------------------------------------------------
-
-            const carousel = document.getElementById('carousel');
-            const dotsContainer = document.getElementById('dots');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-
-            let index = 0;
-            const total = images.length;
-            let isDragging = false;
-            let startX = 0;
-            let currentTranslate = 0;
-            let animationFrameId = null;
-            const threshold = 50; // 判定為滑動的最小距離（px）
-
-            // 建立 slides 與 dots
-            images.forEach((src, i) => {
-                const slide = document.createElement('div');
-                slide.className = 'slide';
-                slide.setAttribute('role', 'group');
-                slide.setAttribute('aria-roledescription', 'slide');
-                slide.setAttribute('aria-label', `${i + 1} / ${total}`);
-                const img = document.createElement('img');
-                img.src = src;
-                img.alt = `圖片 ${i + 1}`;
-                slide.appendChild(img);
-                carousel.appendChild(slide);
-
-                const dot = document.createElement('div');
-                dot.className = 'dot' + (i === 0 ? ' active' : '');
-                dot.dataset.idx = i;
-                dot.title = `${i + 1}/${total}`;
-                dot.style.cursor = 'pointer';
-                dot.addEventListener('click', () => goToIndex(i));
-                dotsContainer.appendChild(dot);
-            });
-
-            /*    */
-            const ximg = document.querySelectorAll("img");
-            let count = 0;
-
-            function allDone() {
-                console.log("全部圖載入完成！");
-            }
-
-            function check() {
-                count++;
-                if (count === images.length) allDone();
-            }
-
-            ximg.forEach(img => {
-                if (img.complete) {
-                    count++;
-                    if (count === ximg.length) allDone();
-                } else {
-                    img.addEventListener("load", check);
-                    img.addEventListener("error", check);
-                }
-            });
-            /*    */
-
-            if (readParam('idx')) {
-                let idx = readParam('idx');
-                for (let i = 0; i < images.length; i++) {
-                    if (decodeURI(images[i]).indexOf(idx) != -1) {
-                        index = i;
-                        break;
-                    }
-                }
-            }
-
-            // 初始狀態
-            update();
-
-            // --- 事件：按鈕 ---
-            prevBtn.addEventListener('click', prev);
-            nextBtn.addEventListener('click', next);
-
-            // --- 鍵盤支持 ---
-            window.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') prev();
-                if (e.key === 'ArrowRight') next();
-            });
-
-            // --- 滑鼠拖曳 ---
-            carousel.addEventListener('mousedown', startDrag);
-            window.addEventListener('mouseup', endDrag);
-            window.addEventListener('mousemove', onDrag);
-
-            // --- 觸控手勢 ---
-            carousel.addEventListener('touchstart', startDrag, { passive: true });
-            window.addEventListener('touchend', endDrag);
-            window.addEventListener('touchmove', onDrag, { passive: false });
-
-            // 防止圖片在拖曳時選取
-            carousel.addEventListener('dragstart', (e) => {
-                //try {     if (t.touches.length > 1) return;     } catch(err) {}
-                e.preventDefault();
-            });
-
-            // 當視窗大小改變，確保 translate 對齊
-            window.addEventListener('resize', () => {
-                setTranslate(-index * window.innerWidth);
-            });
-
-            function startDrag(evt) {
-                try {
-                    if (evt.touches.length > 1) return;
-                } catch (err) { }
-                isDragging = true;
-                startX = getClientX(evt);
-                currentTranslate = -index * window.innerWidth;
-                carousel.style.transition = 'none';
-            }
-
-            function onDrag(evt) {
-                try {
-                    if (evt.touches.length > 1) return;
-                } catch (err) { }
-                if (!isDragging) return;
-                const x = getClientX(evt);
-                const dx = x - startX;
-                // 阻止垂直滾動在觸控時（如果滑動偏水平）
-                if (evt.type.startsWith('touch')) {
-                    // 如果水平方向明顯比垂直更大，阻止預設（防止頁面滾動）
-                    const touch = evt.touches ? evt.touches[0] : null;
-                    // passive: false used on touchmove listener to allow preventDefault
-                    evt.preventDefault();
-                }
-                const translate = currentTranslate + dx;
-                setTranslate(translate);
-            }
-
-            function endDrag(evt) {
-                //consol.log("denDrag + " +if (evt.touches.length > 1)
-                try { 
-                    if (evt.touches.length > 1) {
-                        update();
-                        return;
-                    }
-                } catch (err) { 
-
-                }
-                if (!isDragging) return;
-                isDragging = false;
-                carousel.style.transition = ''; // 恢復 transition
-                const endX = getClientX(evt) || startX; // 若 mouseup 沒有位置，fallback
-                const moved = endX - startX;
-                
-                if (moved < -threshold) {
-                    next();
-                } else if (moved > threshold) {
-                    prev();
-                } else {
-                    // 少量移動：回到當前 index
-                    update();
-                }
-                
-            }
-
-            function getClientX(evt) {
-                if (!evt) return null;
-                if (evt.type && evt.type.startsWith('touch')) {
-                    const t = (evt.touches && evt.touches[0]) || (evt.changedTouches && evt.changedTouches[0]);
-                    return t ? t.clientX : null;
-                }
-                // mouse event may be on window (mouseup) and not have clientX; try evt.clientX
-                return evt.clientX ?? (evt.changedTouches ? (evt.changedTouches[0] && evt.changedTouches[0].clientX) : null);
-            }
-
-            function setTranslate(x) {
-                // 限制左右邊界（阻尼效果）
-                const maxTranslate = 0;
-                const minTranslate = - (total - 1) * window.innerWidth;
-                // small resistance when over-scrolling
-                if (x > maxTranslate + 100) x = maxTranslate + 100;
-                if (x < minTranslate - 100) x = minTranslate - 100;
-                carousel.style.transform = `translateX(${x}px)`;
-            }
-
-            function update() {
-                const x = -index * window.innerWidth;
-                carousel.style.transition = `transform var(--transition) ease`;
-                setTranslate(x);
-                updateDots();
-                updateNavButtons();
-                // 設定 aria-live 的描述可選擇性增加（目前 carousel container 為 polite）
-            }
-
-            function updateDots() {
-                const dots = dotsContainer.children;
-                for (let i = 0; i < dots.length; i++) {
-                    dots[i].classList.toggle('active', i === index);
-                }
-            }
-
-            function updateNavButtons() {
-                // 可選：在頭尾隱藏按鈕
-                prevBtn.setAttribute('aria-hidden', index === 0 ? 'true' : 'false');
-                nextBtn.setAttribute('aria-hidden', index === total - 1 ? 'true' : 'false');
-            }
-
-            function prev() {
-                if (index > 0) index--;
-                update();
-            }
-            function next() {
-                if (index < total - 1) index++;
-                update();
-            }
-            function goToIndex(i) {
-                index = Math.max(0, Math.min(total - 1, i));
-                update();
-            }
-
-            // optional: 讓左右滑動也可用 wheel（水平滾輪）
-            let wheelTimeout;
-            window.addEventListener('wheel', (e) => {
-                if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return; // 忽略垂直滾輪
-                if (e.deltaX > 10) next();
-                else if (e.deltaX < -10) prev();
-                // 防止連續觸發過快，短暫節流
-                clearTimeout(wheelTimeout);
-                wheelTimeout = setTimeout(() => { }, 100);
-            }, { passive: true });
-
-            // 自動調整圖片載入錯誤替代或 lazy loading
-            Array.from(document.querySelectorAll('.slide img')).forEach(img => {
-                img.loading = 'lazy';
-                img.addEventListener('error', () => {
-                    img.style.display = 'none';
-                    const fallback = document.createElement('div');
-                    fallback.style.color = '#888';
-                    fallback.style.fontSize = '18px';
-                    fallback.textContent = '無法載入圖片';
-                    img.parentElement.appendChild(fallback);
-                });
-            });
-        })();
-
-        /*
-        const images = [
-            "https://picsum.photos/id/1018/1920/1080",
-            "https://picsum.photos/id/1025/1920/1080",
-            "https://picsum.photos/id/1035/1920/1080",
-            "https://picsum.photos/id/1043/1920/1080"
-          ];
-          */
-
-
-    </script>
+    <div id="container" class="wrapper"></div>
+    <div id="dots" class="dots" aria-hidden="false"></div>
 </body>
 
 </html>
+
+<script>
+
+    const items = [];
+    var current = -1;
+    var animType = 2;
+    const dotsContainer = document.getElementById('dots');
+
+    function add2Item(_div) {
+
+        //_div.style.transition = 'none';
+
+        let parent = document.getElementById('container');
+        parent.appendChild(_div);
+        items.push(_div);
+
+        _div.style.top = '0px';
+        _div.style.left = (items.length - 1 - current) * window.innerWidth + "px";
+        _div.style.opacity = 1.0;
+        _div.style.transform = "rotate(0deg)";
+        _div.style.transition = 'all 0.25s';
+
+        current = items.length - 1;
+
+        framePos();
+
+        /*
+        setTimeout(() => {
+            current = items.length - 1;
+            framePos();
+        }, 100);
+        */
+
+    }
+
+    function newDiv() {
+        const _div = document.createElement('div');
+        _div.className = 'transDiv';
+        return _div;
+    }
+
+    function reload() {
+        let d = document.getElementById("web");
+        document.getElementById("web").src = d.src;
+    }
+
+    function showImage(keepratio) {
+        let img = new Image();
+        img.src = image_base64;
+        img.onload = function () {
+            var width = img.width;
+            var height = img.height;//window.location.href = imageUrl; return;
+            let div = newDiv();
+            div.hidden = false;
+            if (keepratio) {
+                div.innerHTML = '<img class="img_ratio" width="100%" height="100%" src="' + image_base64 + '" />';
+            } else {
+                div.innerHTML = '<img class="img_full" width="100%" height="100%" src="' + image_base64 + '" />';
+            }
+
+            add2Item(div);
+        };
+    }
+
+    function displayImageFile(file, keepratio) {
+
+        hideBtn();
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            image_base64 = event.target.result;
+            showImage(keepratio);
+        };
+        reader.readAsDataURL(file);
+
+    }
+
+    function isImageFile(filename) {
+        // 定義常見的圖片副檔名
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+
+        // 轉小寫來避免大小寫問題
+        const lower = filename.toLowerCase();
+
+        // 用 some() 來判斷是否符合其中一個副檔名
+        return imageExtensions.some(ext => lower.endsWith(ext));
+    }
+
+    function urlGo(value, /*loop, key,*/ keepratio /*, ctrl*/) {
+
+        value = value.trim();
+        if (value.length == 0) return;
+
+        let div = newDiv();
+
+        div.hidden = false;
+
+        const img = document.createElement('img');
+        img.src = value;
+        img.style.width = "100%";//width;   // 固定寬度
+        img.style.height = "100%";//height; // 固定高度
+
+        if (keepratio) {
+            img.style.objectFit = 'contain';  // 或 'cover'
+        } else {
+            img.style.objectFit = 'fill';
+        }
+        // 讓圖片在固定框內保持比例
+
+        img.style.backgroundColor = '#000000';
+        //img.style.border = '2px solid red';
+        div.appendChild(img);
+        add2Item(div);
+
+    }
+
+    function getSlideAnim() {
+        return animType;
+    }
+
+    function jump(key) {
+        for (let i = 0; i < items.length; i++) {
+            let div = items[i]; //let div = document.getElementById('content_' + i);
+            let title = div.getAttribute('title');
+            if (title && title == key) {
+                current = i;
+                framePos();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function updateDots() {
+        const dots = dotsContainer.children;
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].classList.toggle('active', i === current);
+        }
+    }
+
+    function framePos() {
+        for (let i = 0; i < items.length; i++) {
+            let div = items[i]; //let div = document.getElementById('content_' + i);
+            div.style.opacity = 1.0;
+            div.style.left = (i - current) * window.innerWidth + "px";
+            div.style.top = "0px";
+            //div.style.transform = "rotate(0deg)";
+        }
+        updateDots();
+    }
+
+
+    function goAddMoveLeft() {
+        current++;
+        if (current >= items.length)
+            current = items.length - 1;
+        framePos();
+    }
+
+    function goSubMoveRight() {
+        current--;
+        if (current < 0)
+            current = 0;
+        framePos();
+    }
+
+    window.addEventListener('resize', function () {
+        framePos();
+    });
+
+    var keepratio = 0;
+    var image_base64 = null;
+
+    function toObj() {
+        return {};
+    }
+
+    function jump2(idx) {
+        if (idx >= items.length) return;
+        current = idx;
+        framePos();
+    }
+
+    var startX;
+    var total;
+
+    function goToIndex(i) {
+        let idx = Math.max(0, Math.min(total - 1, i));
+        jump2(idx);
+    }
+
+    function init() {
+        let images = window.opener.getSheetArray();
+        total = images.length;
+        images.forEach((src, i) => {
+            urlGo(src, true);
+
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.dataset.idx = i;
+            dot.title = `${i + 1}/${images.length}`;
+            dot.style.cursor = 'pointer';
+            dot.addEventListener('click', () => goToIndex(i));
+            dotsContainer.appendChild(dot);
+
+        });
+        if (readParam('idx')) {
+            let idx = readParam('idx');
+            for (let i = 0; i < images.length; i++) {
+                if (decodeURI(images[i]).indexOf(idx) != -1) {
+                    jump2(i);
+                    //setTimeout(() => {  }, 100 * images.length + 100);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    function getClientX(evt) {
+        if (!evt) return null;
+        if (evt.type && evt.type.startsWith('touch')) {
+            const t = (evt.touches && evt.touches[0]) || (evt.changedTouches && evt.changedTouches[0]);
+            return t ? t.clientX : null;
+        }
+        // mouse event may be on window (mouseup) and not have clientX; try evt.clientX
+        return evt.clientX ?? (evt.changedTouches ? (evt.changedTouches[0] && evt.changedTouches[0].clientX) : null);
+    }
+
+    function simpleTouch(evt) {
+        if (startX > window.innerWidth / 2 && getClientX(evt) > window.innerWidth / 2) {
+            goAddMoveLeft();
+            return;
+        }
+        if (startX < window.innerWidth / 2 && getClientX(evt) < window.innerWidth / 2) {
+            goSubMoveRight();
+            return;
+        }
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') goSubMoveRight();
+        if (e.key === 'ArrowRight') goAddMoveLeft();
+    });
+
+    window.addEventListener('mousedown', (evt) => {
+        startX = getClientX(evt);
+        console.log('mousedown ' + startX);
+    });
+
+    window.addEventListener('mouseup', (evt) => {
+        simpleTouch(evt);
+        console.log('mouseup ');
+    });
+
+    init();
+
+</script>
