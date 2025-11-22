@@ -155,6 +155,8 @@
     var current = -1;
     var animType = 2;
     const dotsContainer = document.getElementById('dots');
+    var startX;
+    var total;
 
     function add2Item(_div) {
 
@@ -192,37 +194,6 @@
     function reload() {
         let d = document.getElementById("web");
         document.getElementById("web").src = d.src;
-    }
-
-    function showImage(keepratio) {
-        let img = new Image();
-        img.src = image_base64;
-        img.onload = function () {
-            var width = img.width;
-            var height = img.height;//window.location.href = imageUrl; return;
-            let div = newDiv();
-            div.hidden = false;
-            if (keepratio) {
-                div.innerHTML = '<img class="img_ratio" width="100%" height="100%" src="' + image_base64 + '" />';
-            } else {
-                div.innerHTML = '<img class="img_full" width="100%" height="100%" src="' + image_base64 + '" />';
-            }
-
-            add2Item(div);
-        };
-    }
-
-    function displayImageFile(file, keepratio) {
-
-        hideBtn();
-
-        var reader = new FileReader();
-        reader.onload = function (event) {
-            image_base64 = event.target.result;
-            showImage(keepratio);
-        };
-        reader.readAsDataURL(file);
-
     }
 
     function isImageFile(filename) {
@@ -264,23 +235,6 @@
 
     }
 
-    function getSlideAnim() {
-        return animType;
-    }
-
-    function jump(key) {
-        for (let i = 0; i < items.length; i++) {
-            let div = items[i]; //let div = document.getElementById('content_' + i);
-            let title = div.getAttribute('title');
-            if (title && title == key) {
-                current = i;
-                framePos();
-                return true;
-            }
-        }
-        return false;
-    }
-
     function updateDots() {
         const dots = dotsContainer.children;
         for (let i = 0; i < dots.length; i++) {
@@ -318,21 +272,11 @@
         framePos();
     });
 
-    var keepratio = 0;
-    var image_base64 = null;
-
-    function toObj() {
-        return {};
-    }
-
     function jump2(idx) {
         if (idx >= items.length) return;
         current = idx;
         framePos();
     }
-
-    var startX;
-    var total;
 
     function goToIndex(i) {
         let idx = Math.max(0, Math.min(total - 1, i));
