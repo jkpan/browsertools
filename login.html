@@ -130,14 +130,19 @@
                if (result.state == 1) {
                     let token = result.token;
                     newLogin(username, token);
-                    opener.handleLogin(result);
+                    //window.opener.handleLogin(result);
+                    try {
+                        window.opener.reactFromPopLogin();
+                    } catch(err) {}
                     window.close();
                 } else {
                     alert(result.des);
                     document.getElementById('username').value = '';
                     document.getElementById('password').value = '';
                     result = await doLogin("guest", "");
-                    opener.handleLogin(result);
+                    try {
+                        window.opener.reactFromPopLogin();
+                    } catch(err) {} //window.opener.handleLogin(result);
                 }
         });
 

@@ -17,7 +17,6 @@
     charset="UTF-8" />
   <link rel="stylesheet" href="ui_green.css" />
   <style>
-    
     .menuButton {
       background-color: transparent;
       border-color: #00ff00;
@@ -157,25 +156,32 @@
       &nbsp;
       &nbsp;
       &nbsp;
-      &nbsp;
       <label style="color: #00ee00;">|</label>
       <button onclick="reloadFrame()">R</button>
       <button onclick="openCtrl()">C</button>
-      <button id="aBtn" class="okbutton" onclick="setSlideAnim()">a1</button>
+      <button id="aBtn" onclick="setSlideAnim()">a1</button>
       <label style="color: #00ee00;">|</label>
       <button class="button2" id="btn_preload_1" onclick="preload(1)">#1</button>
       <button class="button2" id="btn_preload_2" onclick="preload(2)">#2</button>
       <button class="button2" id="btn_preload_3" onclick="preload(3)">#3</button>
       <button class="button2" id="btn_preload_4" onclick="preload(4)">#4</button>
       <button class="button2" id="btn_preload_5" onclick="preload(5)">#5</button>
-      <button onclick="loadJson()">#</button>
-      <button onclick="downloadExpJson()">exp</button>
-      <button class="button2" id="btn_save_1" onclick="savefile(1)">1^</button>
-      <button class="button2" id="btn_save_2" onclick="savefile(2)">2^</button>
-      <button class="button2" id="btn_save_3" onclick="savefile(3)">3^</button>
-      <button class="button2" id="btn_save_4" onclick="savefile(4)">4^</button>
-      <button class="button2" id="btn_save_5" onclick="savefile(5)">5^</button>
+      <button onclick="loadJson()">#file</button>
+      <button onclick="downloadExpJson()">#export</button>
       <label style="color: #00ee00;">|</label>
+      <button id="saveBtn" class="button2" onclick="savefileByname()" hidden="true">save</button>
+      <label style="color: #00ee00;">-</label>
+      <label id="preload_name"></label>
+      <label style="color: #00ee00;">-</label>
+      <button class="button2" id="saveasBtn" onclick="saveAsAction()" style="width:auto">save as</button>
+
+      <button class="button2" id="btn_save_1" onclick="savefile(1)" hidden>1^</button>
+      <button class="button2" id="btn_save_2" onclick="savefile(2)" hidden>2^</button>
+      <button class="button2" id="btn_save_3" onclick="savefile(3)" hidden>3^</button>
+      <button class="button2" id="btn_save_4" onclick="savefile(4)" hidden>4^</button>
+      <button class="button2" id="btn_save_5" onclick="savefile(5)" hidden>5^</button>
+
+
       <button style="opacity: 0.33;" onclick="sideClick()">x</button>
     </div>
     <div class="right-to-left">
@@ -302,6 +308,35 @@
     );
   }
 
+  function saveAsAction() {
+    //document.getElementById('saveasBtn').hidden = true;
+    for (let i=1;i<=5;i++) {
+      let _id = 'btn_save_' + i;
+      if (document.getElementById(_id)) 
+        document.getElementById(_id).hidden = false;
+    }
+    setTimeout(function () {
+      //document.getElementById('saveasBtn').hidden = false;
+      for (let i=1;i<=5;i++) {
+        let _id = 'btn_save_' + i;
+        if (document.getElementById(_id)) 
+          document.getElementById(_id).hidden = true;
+      }
+    }, 5000);
+  }
+
+  function savefileByname() {
+    if (username == null) return
+    let _idx = document.getElementById('preload_name').innerHTML;
+    if (_idx.trim().length == 0) {
+      saveAsAction();
+      return;
+    }
+    let fn = `./users/${username}/tab_0${_idx.trim()}.json`;
+    //if (confirm(`確定要存入 #${_idx.trim()} ?`))
+    ajax_savejson(fn, JSON.stringify(toObj()));
+  }
+
   function savefile(idx) {
     if (username == null) return;
     let fn = `./users/${username}/tab_0${idx}.json`;
@@ -347,6 +382,8 @@
 
   function preload(idx) {
     if (username == null) return;
+    document.getElementById('preload_name').innerHTML = '' + idx;
+    if (document.getElementById('saveBtn')) document.getElementById('saveBtn').hidden = false;
     let url = `./users/${username}/tab_0${idx}.json`;
     fetch(url).then((response) => {
       return response.json();
@@ -603,12 +640,14 @@
     document.getElementById('__logout').hidden = true;
     username = null;
     //resultJson = {state:0, username:"guest", des:"dochk response not ok"};
-    if (resultJson.state == 0) {
+    if (resultJson.state == 0) { //git hub 純網頁 沒有server能力
       username = resultJson.username;
-      for (let i = 1; i <= 5; i++) document.getElementById('btn_save_' + i).hidden = "true";
+      document.getElementById('saveBtn').remove();
+      document.getElementById('saveasBtn').remove();
+      for (let i = 1; i <= 5; i++) document.getElementById('btn_save_' + i).remove();//hidden = "true";
       return;
     }
-    if (resultJson.state == 1) {
+    if (resultJson.state == 1) { //權限全開 anth
       username = resultJson.username;
       document.getElementById('__username').hidden = false;
       document.getElementById('__username').innerHTML = resultJson.username;
@@ -621,9 +660,9 @@
       }
       for (let i = 1; i <= 5; i++) {
         document.getElementById('btn_preload_' + i).hidden = false;
-        document.getElementById('btn_save_' + i).hidden = false;
+        //document.getElementById('btn_save_' + i).hidden = false;
       }
-    } else if (resultJson.state == 2) { //半權限的guest
+    } else if (resultJson.state == 2) { //半權限的guest auth
       username = resultJson.username;
       document.getElementById('__username').hidden = false;
       document.getElementById('__username').innerHTML = resultJson.username;
@@ -631,19 +670,27 @@
       document.getElementById('__login').hidden = false;
       for (let i = 1; i <= 5; i++) {
         document.getElementById('btn_preload_' + i).hidden = false;
-        document.getElementById('btn_save_' + i).hidden = false;
+        //document.getElementById('btn_save_' + i).hidden = false;
       }
     } else { //auth失敗 有token 但過期 或是帳密錯誤
       document.getElementById('__login').hidden = false;
+      document.getElementById('saveBtn').remove();
+      document.getElementById('saveasBtn').remove();
       for (let i = 1; i <= 5; i++) {
-        document.getElementById('btn_preload_' + i).hidden = true;
-        document.getElementById('btn_save_' + i).hidden = true;
+        document.getElementById('btn_preload_' + i).hidden = false;
+        document.getElementById('btn_save_' + i).remove();
       }
     }
 
   }
 
+  function reactFromPopLogin() {
+    window.location.reload();
+  }
+
   chkloginstatus();
+
+
 
   /*
   if (readParam('json')) {
