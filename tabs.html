@@ -316,7 +316,6 @@
         document.getElementById(_id).hidden = false;
     }
     setTimeout(function () {
-      //document.getElementById('saveasBtn').hidden = false;
       for (let i=1;i<=5;i++) {
         let _id = 'btn_save_' + i;
         if (document.getElementById(_id)) 
@@ -332,16 +331,19 @@
       saveAsAction();
       return;
     }
-    let fn = `./users/${username}/tab_0${_idx.trim()}.json`;
-    //if (confirm(`確定要存入 #${_idx.trim()} ?`))
+    let fn = `./users/${username}/tab_0${_idx.trim()}.json`; //if (confirm(`確定要存入 #${_idx.trim()} ?`))
     ajax_savejson(fn, JSON.stringify(toObj()));
   }
 
   function savefile(idx) {
     if (username == null) return;
     let fn = `./users/${username}/tab_0${idx}.json`;
-    if (confirm(`確定要存入 #${idx} ?`))
+    if (confirm(`確定要存入 #${idx} ?`)) {
       ajax_savejson(fn, JSON.stringify(toObj()));
+      document.getElementById('preload_name').innerHTML = '' + idx;
+      if (document.getElementById('saveBtn'))
+        document.getElementById('saveBtn').hidden = false;
+    }
   }
 
   /*
