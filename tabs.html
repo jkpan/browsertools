@@ -690,17 +690,13 @@
     window.location.reload();
   }
 
-  chkloginstatus();
-
-
-
-  /*
-  if (readParam('json')) {
-    let value = readParam('json');
+  (async function() {
+    await chkloginstatus();
+    if (readParam('preload')) {
+    let value = readParam('preload');
     if (value)
-      preload('./' + value);
-  }
-  */
-
+      preload(parseInt(value));
+    }
+  })();
 
 </script>
