@@ -135,7 +135,7 @@ function isEnglishCharacter(char) {
 
 function isImageFile(filename) {
   // 定義常見的圖片副檔名
-  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];//, '.webp', '.svg'];
 
   // 轉小寫來避免大小寫問題
   const lower = filename.toLowerCase();

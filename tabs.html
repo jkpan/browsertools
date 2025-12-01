@@ -693,9 +693,9 @@
   (async function() {
     await chkloginstatus();
     if (readParam('preload')) {
-    let value = readParam('preload');
-    if (value)
-      preload(parseInt(value));
+      let value = readParam('preload');
+      if (value)
+        preload(parseInt(value));
     }
   })();
 
