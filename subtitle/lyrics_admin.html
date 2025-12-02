@@ -69,9 +69,8 @@
     <div id="tag"></div>
     <p></p>
     <button id="setedit" style="background-color: rgb(0, 80, 0);" onclick="setEditable()" hidden="true">編輯資料庫</button>
-    <div id="prefixdiv" style="margin: 1%;">
+    <div id="prefixdiv" style="margin: 1%;" hidden="true">
         <br>
-
         <label style="color: rgb(0, 255, 0);">前綴: </label>
         <input type="text" id="prefix">
         <p></p>
@@ -99,6 +98,7 @@
         const sheetDiv = document.getElementById('upload');
         var currentidx = 0;
         var sheetArray = null;
+        var doUpload = false;
 
         async function downloadURL(url, filename) {
             try {
@@ -125,25 +125,12 @@
 
         function downloadFile() {
             //const imgs = document.querySelectorAll('img.to-download');
-            let i = 1;
-            sheetArray.forEach(element => {
+            sheetArray.forEach((element, idx) => {
                 const src = element;
                 const ext = (src.split('.').pop().split(/\#|\?/)[0]);// || 'jpg';
-                const name = `sheet-${i}.${ext}`;
-                i++;
+                const name = `sheet-${idx}.${ext}`;
                 downloadURL(src, name);
             });
-            /*
-            for (let i = 1; i <= MAXSHEET; i++) {
-                let img = document.getElementById('img_' + i);
-                if (!img) continue;
-                const src = img.src;
-                const ext = (src.split('.').pop().split(/\#|\?/)[0]) || 'jpg';
-                const name = `image-${i}.${ext}`;
-                // 等待每個下載啟動（可並行，但會造成大量同時下載）
-                downloadURL(src, name);
-            }
-            */
         }
 
         function getSheetArray() {
@@ -178,7 +165,8 @@
         function cleanSheetZone() {
             for (let i = 1; i <= MAXSHEET; i++) {
                 let div = document.getElementById('drop-zone-' + i);
-                div.innerHTML = '+';
+                if (doUpload)
+                    div.innerHTML = '+';
                 div.style.backgroundColor = 'transparent';
             }
         }
@@ -191,18 +179,20 @@
 
                 //div.onclick = `openFile('allfile', ${i})`;
 
-                div.addEventListener("click", (e) => {
-                    openFile('allfile', i);
-                });
+                if (doUpload) {
+                    div.addEventListener("click", (e) => {
+                        openFile('allfile', i);
+                    });
+                    div.addEventListener('drop', (e) => {
+                        currentidx = i;
+                        e.preventDefault();
+                        const files = e.dataTransfer.files;
+                        uploadFiles(files);
+                    });
+                    div.addEventListener('dragover', (e) => { e.preventDefault(); });
+                    div.addEventListener('dragleave', () => { });
+                }
 
-                div.addEventListener('drop', (e) => {
-                    currentidx = i;
-                    e.preventDefault();
-                    const files = e.dataTransfer.files;
-                    uploadFiles(files);
-                });
-                div.addEventListener('dragover', (e) => { e.preventDefault(); });
-                div.addEventListener('dragleave', () => { });
 
                 sheetDiv.appendChild(div);
             }
@@ -348,14 +338,15 @@
                                 let img = createImage('.' + obj.folder, element);//img.id = 'img_' + idx;
                                 sheetArray.push(img.src);
                                 div.appendChild(img);
-                                div.appendChild(createDelButton(idx));
+                                if (doUpload)
+                                    div.appendChild(createDelButton(idx));
                             } else if (element.toLowerCase().endsWith('.pdf')) {
                                 let src = '.' + obj.folder + '/' + element;
                                 let img = createPDFBtn(element);//('.' + obj.folder, element);img.id = 'img_' + idx;
                                 sheetArray.push(src);
                                 div.appendChild(img);
-                                div.appendChild(createDelButton(idx));
-
+                                if (doUpload)
+                                    div.appendChild(createDelButton(idx));
                             }
                         } catch (err) {
                             alert(err);
@@ -433,40 +424,23 @@
         }
 
 
-        /*
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const files = e.dataTransfer.files;
-            uploadFiles(files);
-        });
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault(); //dropZone.style.borderColor = '#333';
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            //dropZone.style.borderColor = '#aaa';
-        });
-        */
-
-        createSheetZone();
-        cleanSheetZone();
-        sheetActive(false);
 
     </script>
 
     <p></p>
 
     <div style="margin: 1%;">
-        <label id="song_id_label" style="color: rgb(0, 255, 0);">ID: </label>
-        <input id="song_id" type="text"
-            style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);">
+        <div id="song_id_div" hidden="true">
+            <label style="color: rgb(0, 255, 0);">ID: </label>
+            <input id="song_id" type="text"
+                style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);">
+        </div>
         <a href="javascript:getUrl()">copy url</a>
         <p></p>
         <textarea id="songtxt" rows="10"></textarea>
-        ||<button id="addsong" style="background-color: magenta;" onclick="add2List()">歌單新增/修改</button>||
+        ||<button id="addsong" style="background-color: magenta;" onclick="add2List()" hidden="true">歌單新增/修改</button>||
         <p></p>
-        <div id="editdiv">
+        <div id="editdiv" hidden="true">
             <button style="background-color: rgb(0, 80, 0);" onclick="textGo()">加歌 / 修改</button>
             <p></p>
             <button onclick="clearTxt()">清除</button>
@@ -486,8 +460,7 @@
             document.getElementById("prefixdiv").hidden = false;
             document.getElementById("editdiv").hidden = false;
 
-            document.getElementById("song_id_label").hidden = false;
-            document.getElementById("song_id").hidden = false;
+            document.getElementById("song_id_div").hidden = false; //document.getElementById("song_id").hidden = false;
         }
 
         function clearTxt() {
@@ -668,9 +641,15 @@
     async function ajax_action(action, id, content) {
         let result = await doChk();
 
-        if (result.state <= 0) return;
+        if (result.state <= 0) {
+            alert('需要登入');
+            return;
+        }
 
-        if (result.username == 'guest' && result.state == 2) return;
+        if (result.username == 'guest' && result.state == 2) {
+            alert(esult.username + ' 權限不足');
+            return;
+        }
 
         let user = result.username;
 
@@ -886,16 +865,6 @@
     async function fetchData() {
         try {
 
-            let result = await doChk();
-            if (result.state <= 0 || (result.username == 'guest' && result.state == 2)) {
-                document.getElementById("prefixdiv").hidden = true;
-                document.getElementById("editdiv").hidden = true;
-            }
-            //if (result.state <= 0) return;
-            //if (result.username == 'guest' && result.state == 2) return;
-
-            let user = result.username;
-
             const response = await fetch("../users/songbase.json"); // 等待 fetch 请求完成 ./users/songbase.json
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -910,8 +879,42 @@
     }
 
     (async function () {
+
+        let result = await doChk();
+        let user = result.username;
+
+        if (readParam('action') == 'edit') { //編輯模式
+            if (result.state <= 0 || (result.username == 'guest' && result.state == 2)) { //權限不足
+
+            } else { //全部權限
+                doUpload = true;
+                document.getElementById("prefixdiv").hidden = false;
+                document.getElementById("song_id_div").hidden = false;
+                document.getElementById("editdiv").hidden = false;
+            }
+        }
+
+        if (window.opener) {
+            document.getElementById('addsong').hidden = false;
+            const current = window.opener.getCurrentSong();
+            if (current) mapping(current);
+        }
+
         await fetchData();
         createBtns();
+
+        createSheetZone();
+        cleanSheetZone();
+        sheetActive(false);
+
+        if (readParam('sid')) {
+            let sid = readParam('sid');
+            clickSong(sid);
+        }
+
+
+
+        /*
         console.log('get content from list');
         if (window.opener) {
 
@@ -925,16 +928,18 @@
             document.getElementById("song_id_label").hidden = true;
             document.getElementById("song_id").hidden = true;//style.visibility = 'hidden';
 
-            const current = window.opener.getCurrentSong();
-            if (current) mapping(current);
-
         } else {
-            if (readParam('sid')) {
-                let sid = readParam('sid');
-                clickSong(sid);
-            }
-            document.getElementById('addsong').hidden = true;
+            
+            
         }
+        */
+
     })();
+
+
+    //"addsong" 歌單新增/修改
+    //"editdiv" 
+
+
 
 </script>
