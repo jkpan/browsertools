@@ -165,6 +165,7 @@
         function cleanSheetZone() {
             for (let i = 1; i <= MAXSHEET; i++) {
                 let div = document.getElementById('drop-zone-' + i);
+                div.innerHTML = '';
                 if (doUpload)
                     div.innerHTML = '+';
                 div.style.backgroundColor = 'transparent';

@@ -494,6 +494,7 @@ function openSelector() {
   closeSelector();
   //selector = window.open("subtitle_list.html", '_blank');//.focus();
   //selector = window.open("subtitle_list.html", "_blank", 'width=800, height=600, left=100, top=100');
+  //selector = window.open("lyrics_admin.html?action=edit", "_blank", 'width=800, height=600, left=100, top=100');
   selector = window.open("lyrics_admin.html", "_blank", 'width=800, height=600, left=100, top=100');
 }
 

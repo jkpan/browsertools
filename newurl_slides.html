@@ -265,6 +265,7 @@
             _div.appendChild(iframe);
 
             add2Item(_div);
+            _div.setAttribute('des', 'file-html');
 
         };
         reader.readAsDataURL(file);
@@ -287,6 +288,7 @@
         _div.appendChild(iframe);
 
         add2Item(_div);
+        _div.setAttribute('des', 'file-pdf');
     }
 
     function showImage(keepratio) {
@@ -304,6 +306,7 @@
             }
 
             add2Item(div);
+            div.setAttribute('des', 'file-image');
         };
     }
 
@@ -346,6 +349,8 @@
         div.appendChild(video);
 
         add2Item(div);
+
+        div.setAttribute('des', 'file-video');
     }
 
     function isImageFile(filename) {
@@ -367,7 +372,11 @@
         hideBtn();
 
         let div = newDiv();
-        if (key) div.setAttribute('title', key);
+        if (key) {
+            div.setAttribute('title', key);
+            div.setAttribute('des', key);
+        }
+
         div.hidden = false;
 
         if (value.endsWith('.mp4') || value.endsWith('.mov')) {
@@ -385,6 +394,8 @@
             if (loop) vdo.setAttribute("loop", "loop");
 
             add2Item(div);
+
+            div.setAttribute('des', 'url-video');
 
             return;
             //vdo.setAttribute("controls", "controls");
@@ -409,6 +420,7 @@
                 //img.style.border = '2px solid red';
                 div.appendChild(img);
                 add2Item(div);
+                div.setAttribute('des', 'url-image');
 
             } else { //非圖片  
                 const iframe = document.createElement('iframe');
@@ -419,11 +431,13 @@
                 //iframe.allow = 'fullscreen';
                 div.appendChild(iframe);
                 add2Item(div);
+                div.setAttribute('des', 'url-');
             }
 
         } else {
             div.innerHTML = value;
             add2Item(div);
+            div.setAttribute('des', 'url-');
         }
         //window.location.href = value;
     }
@@ -602,6 +616,10 @@
             //div.hidden = true; 
             if (doblank) div.style.opacity = 0.0;
         }
+    }
+
+    function getState() {
+        return [items, current];
     }
 
     //openCtrl();

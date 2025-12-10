@@ -60,12 +60,28 @@
             align-items: center;
             cursor: pointer;
         }
+
+
+        .dots {
+            position: absolute;
+            top: 0%;
+            /* 距離視窗頂部 10% */
+            left: 0;
+            /* 依需求可調整 */
+            background-color: darkgrey;
+            width: 100%;
+            height: 50px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 
 <body>
 
-    <button style="background-color: red;" type="button" onclick="window.opener.clean()">Remove</button>
+    <div id="dots" class="dots"></div>
+    <br>
+    <br>
+    <button style="background-color: red;" type="button" onclick="clean()">Remove</button>
     &nbsp;
     <button style="background-color: blue;" id="aBtn" onclick="setSlideAnim()">a2</button>
     &nbsp;
@@ -89,7 +105,7 @@
     <button onclick="openLib()" style="background-color: #000000;">圖庫</button>
     <p></p>
 
-    <hr align="left" style="width:90%"/>
+    <hr align="left" style="width:90%" />
 
     <div class="drop-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)"
         onclick="openFile('allfile')">
@@ -129,6 +145,77 @@
 
     <script type="text/javascript" charset="UTF-8">
 
+        const dotsContainer = document.getElementById('dots');
+
+        function updateDots() {
+            let s_array = window.opener.getState();
+            let items = s_array[0];
+            let current = s_array[1];
+            dotsContainer.innerHTML = '';
+
+            for (let i = 0; i < items.length; i++) {
+
+                let des = items[i].getAttribute('title');
+                if (!des)
+                    des = items[i].getAttribute('des');
+                let dot = addDots(des, i);
+                if (i == current) {
+                    //dot.style.color = '#f00';
+                    dot.style.fontSize = '24px';
+                    dot.style.border = '2px solid #f00';
+                }
+            }
+
+        }
+
+        function addDots(des, idx) {
+
+            let caption = '';
+            if (des.startsWith('file-')) {
+                caption = '📂';
+            } else if (des.startsWith('url-')) {
+                caption = '🌐';
+            } else if (des.startsWith('lyric')) {
+                caption = '🎤';
+            } else if (des.startsWith('Bible')) {
+                caption = '📖';
+            } else if (des.startsWith('NIV')) {
+                caption = '英📖';
+            } else if (des.startsWith('CEBible')) {
+                caption = '📖📖';
+            } else if (des.startsWith('LED')) {
+                caption = '📱';
+            } else if (des.startsWith('clock')) {
+                caption = '🕗';
+            } else if (des.startsWith('dash')) {
+                caption = '🎛️';
+            } else if (des.startsWith('tabs')) {
+                caption = '🗂️';
+            } else if (des.startsWith('camrece')) {
+                caption = '📷';
+            }
+
+            const dot = document.createElement('label');
+
+            dot.innerHTML = caption;
+            dot.style.marginLeft = '10px';
+            dot.style.fontSize = '20px';
+            dot.style.border = '1px solid #000';
+            dot.style.borderRadius = '4px';
+            //dot.className = 'dot';// + (i === 0 ? ' active' : '');
+            //dot.dataset.idx = i;
+            //dot.title = `${i + 1}/${images.length}`;
+            //dot.style.border = '2px';
+            dot.addEventListener('click', (evt) => {
+                //console.log('label click ' + evt.target);
+                window.opener.jump2(idx);
+                updateDots();
+            });
+            dotsContainer.appendChild(dot);
+            return dot;
+        }
+
+
         document.getElementById("ppt_url").value = "https://docs.google.com/presentation/d/e/2PACX-1vTACMqqdWpFOdQYp1x518Gl7Oy_AQdSHFsSewEcVFOF9LkxKO6d7SCTJl5mkgqPg291kcSEI9vPNq4b/embed?start=false&loop=false";
 
         function appendToIframeSrc(inputString, appendString) {
@@ -148,10 +235,10 @@
                 iframeTag = iframeTag.replace(/height\s*=\s*["'].*?["']/i, `height="${newHeight}"`);
                 return iframeTag;
             });
-            if (newstring.indexOf(`width=${newWidth}`) < 0 || 
+            if (newstring.indexOf(`width=${newWidth}`) < 0 ||
                 newstring.indexOf(`height=${newHeight}`) < 0) {
-                    newstring = inputString.replace(
-                    '<iframe', 
+                newstring = inputString.replace(
+                    '<iframe',
                     `<iframe width="${newWidth}" height="${newHeight}" `
                 );
             }
@@ -162,6 +249,7 @@
 
             if (key) {
                 if (window.opener.jump(key)) {
+                    updateDots();
                     return;
                 }
             }
@@ -176,17 +264,27 @@
             if (value.length == 0) return;
             let loop = document.getElementById("loopchk").checked;
             let ctrl = document.getElementById("showctrl").checked;
-            
+
 
             if (value.startsWith('<iframe')) {
                 value = modifyIframeAttributes(value, '100%', '100%');
             }
             console.log('url : ' + value + '  ' + isKeepRatio());
             window.opener.urlGo(value, loop, key, isKeepRatio(), ctrl);
+
+
+
+            setTimeout(() => {
+                updateDots();
+            }, 1000);
+
+
+
         }
+
     </script>
 
-    <hr align="left" style="width:90%"/>
+    <hr align="left" style="width:90%" />
 
     <p></p>
     <button onclick="divGo('./subtitle/subtitle.html?action=ctrl&mode=2', 'frame_song', 'div_song')">歌詞控制</button>
@@ -214,7 +312,6 @@
         } else {
             document.getElementById(div).hidden = true;
         }
-
     }
 
     var animType = 2;
@@ -298,34 +395,25 @@
         return isChecked;
     }
 
-    function selectFile(event) {
-        let file = event.target.files[0];
-
-        /*
-        var fileInfo = "檔案名稱: " + file.name + "<br>" +
-                                     "檔案類型: " + file.type + "<br>" +
-                                     "檔案大小: " + file.size + " bytes";
-        alert(fileInfo);
-        */
-
+    function handleFile(file) {
         if (file.type.startsWith('text/html')) {
             displayHTMLFile(file);
-            return;
-        }
-
-        if (file.type.startsWith('image/')) {
+        } else if (file.type.startsWith('image/')) {
             displayImageFile(file);
-            return;
-        }
-        if (file.type.startsWith('video/')) {
+        } else if (file.type.startsWith('video/')) {
             displayVideoFile(file);
-            return;
-        }
-        if (file.type.startsWith('application/pdf')) {
+        } else if (file.type.startsWith('application/pdf')) {
             displayPDFFile(file);
-            return;
         }
 
+        setTimeout(() => {
+            updateDots();
+        }, 500);
+
+    }
+    function selectFile(event) {
+        let file = event.target.files[0];
+        handleFile(file);
     }
 
     function openFile(elmid) {
@@ -362,26 +450,7 @@
             for (var i = 0; i < event.dataTransfer.items.length; i++) {
                 if (event.dataTransfer.items[i].kind === 'file') {
                     var file = event.dataTransfer.items[i].getAsFile();
-                    if (file.type.startsWith('text/html')) {
-                        displayHTMLFile(file);
-                        return;
-                    }
-                    if (file.type.startsWith('image/')) {
-                        // 顯示圖片
-                        displayImageFile(file);
-                        return;
-                    }
-                    if (file.type === 'application/pdf') {
-                        // 顯示PDF
-                        //displayPDF(file);
-                        displayPDFFile(file);
-                        return;
-                    }
-                    if (event.dataTransfer.items[i].type.indexOf("video") !== -1) {
-                        //var file = event.dataTransfer.items[i].getAsFile();
-                        displayVideoFile(file);
-                        return;
-                    }
+                    handleFile(file);
                 }
             }
         }
@@ -411,6 +480,11 @@
         if (liber)
             liber.close();
         liber = null;
+    }
+
+    function clean() {
+        window.opener.clean();
+        updateDots();
     }
 
     //window.addEventListener('beforeunload', function (e) { window.opener.clean(); });
@@ -445,5 +519,6 @@
 
     animType = window.opener.getSlideAnim();
     _setSlideAnim();
+    updateDots();
 
 </script>
