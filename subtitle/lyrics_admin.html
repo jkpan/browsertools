@@ -137,6 +137,11 @@
             return sheetArray;
         }
 
+        function copyText() {
+            let value = document.getElementById("songtxt").value;
+            copyToBoard(value);
+        }
+
         function getUrl() {
             //window.location.href;
             //window.location.origin
@@ -437,6 +442,7 @@
                 style="font-size: 20px; border: 2px solid rgb(0, 128, 0);background-color: rgb(0,255,0);">
         </div>
         <a href="javascript:getUrl()">copy url</a>
+        <a href="javascript:copyText()">copy text</a>
         <p></p>
         <textarea id="songtxt" rows="10"></textarea>
         ||<button id="addsong" style="background-color: magenta;" onclick="add2List()" hidden="true">歌單新增/修改</button>||
@@ -754,6 +760,8 @@
         mapping(array);
 
         window.scrollTo(0, 0);
+        document.getElementById('songtxt').scrollTop = 0;
+        document.getElementById('songtxt').scrollLeft = 0;
 
         listSongSheet();
     }

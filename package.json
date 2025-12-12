@@ -5,6 +5,7 @@
   "dependencies": {
     "formidable": "^3.5.4",
     "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1",
     "ws": "^8.18.2"
   }
 }

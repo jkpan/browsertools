@@ -1,0 +1,314 @@
+<script type="text/javascript" src="../login.js"></script>
+<script type="text/javascript" src="../common.js" charset="UTF-8"></script>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Camera</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <style>
+        body {
+            margin: 0px;
+            height: 100%;
+            background-color: rgba(67, 67, 67, 0.0);
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        main {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        .box1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            background-color: rgba(255, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .box2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            z-index: 2;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <video class="box1" id="videoElement" width="300" height="200" autoplay muted playsinline></video>
+
+    <canvas class="box2" id="canvas" width="400" height="200"></canvas>
+    <p></p>
+    <button class="box2" id="record" style="font-size: 32;" onclick="startstop()">x</button>
+
+</body>
+
+</html>
+
+<script>
+
+    const framecounttodo = 8;
+    var username = 'guest';
+    var sendCounter = 0;
+    var streamType = 0;
+
+    function startstop() {
+        if (document.getElementById('record').innerHTML === 'x') {
+            connectWebSocket();
+            return;
+        }
+        streamType = streamType == 1 ? 0 : 1;
+        if (streamType == 1) {
+            document.getElementById('record').innerHTML = '🔴';
+        } else {
+            document.getElementById('record').innerHTML = '🔘';
+        }
+    }
+
+    function handleLogin(resultJson) {
+
+    }
+
+    function reactFromPopLogin() {
+        window.location.reload();
+    }
+
+    async function connectWebSocket() {
+
+        let result = await doChk();
+        if (result.state == 0) return;
+        if (result.state != 1) {
+            //alert('請先登入'); 
+            window.Location.href = 'login.html';
+            return;
+        }
+        username = result.username;
+
+        streamType = 0;
+        document.getElementById('record').innerHTML = 'x';
+
+        let serverDomain = window.location.hostname;
+
+        let port = 80;
+        if (window.location.protocol === 'https:') {
+            port = 443;
+        } else {
+            if (window.location.port.length > 0) {
+                port = parseInt(window.location.port, 10);
+            }
+        }
+
+        ws = port == 443 ?
+            new WebSocket(`wss://${serverDomain}/Camera/${username}`) :
+            new WebSocket(`ws://${serverDomain}:${port}/Camera/${username}`);
+
+        ws.onopen = function () {
+            console.log('Connected to server');
+            ws.send('Hello - from Camera client');
+            streamType = 0;
+            document.getElementById('record').innerHTML = '🔘';
+        };
+
+        ws.onmessage = function (event) {
+            console.log('Received:', event.data);
+            restoreFromJson(JSON.parse(event.data));
+        };
+
+        ws.onclose = function () {
+            console.log('Connection closed');
+            streamType = 0;
+            document.getElementById('record').innerHTML = 'x';
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket 錯誤:', error);
+            streamType = 0;
+            document.getElementById('record').innerHTML = 'x';
+        };
+
+    }
+
+    var video = document.getElementById('videoElement');
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext("2d", { willReadFrequently: true });//null;
+
+    var v_width;
+    var v_height;
+    var v_offx;
+    var v_offy;
+
+    function init() {
+
+    }
+
+    function drawVideoFrame() {
+
+        video.width = video.videoWidth * 0.6;
+        video.height = video.videoHeight * 0.6;
+
+
+        canvas.width = video.videoWidth * 0.6;
+        canvas.height = video.videoHeight * 0.6;
+
+        //console.log(video.videoWidth + ', ' + video.videoHeight);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (streamType == 0) {
+            ctx.fillStyle = 'rgb(0, 200, 0)';
+        } else {
+            ctx.fillStyle = 'rgb(200, 0, 0)';
+        }
+
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight,
+            0, 0, canvas.width, canvas.height);
+
+
+        sendCounter = (sendCounter + 1) % framecounttodo;
+        if (sendCounter == 0) {
+            if (ws == null || ws.readyState !== WebSocket.OPEN) {
+                document.getElementById('record').innerHTML = 'x';
+            } else if (streamType == 1) {
+
+                const timestamp = BigInt(Date.now());
+                // 建立 timestamp 的 8-byte binary buffer
+                const tsBuffer = new ArrayBuffer(8);
+                new DataView(tsBuffer).setBigUint64(0, timestamp, false); // Big-endian
+
+                // 獲取 canvas 數據並發送 
+                canvas.toBlob((blob) => {
+
+                    if (ws.readyState === WebSocket.OPEN) {
+
+                        // 建立一個混合 Blob：timestamp buffer + image blob
+                        const fullBlob = new Blob([tsBuffer, blob], { type: 'application/octet-stream' });
+
+                        // 將 blob 轉為 arrayBuffer 傳送
+                        fullBlob.arrayBuffer().then((buffer) => {
+                            ws.send(buffer);
+                        });
+
+                        //ws.send(blob);
+                    }
+
+                }, 'image/jpeg', 0.8); // 使用 JPEG 格式，質量 80%
+            }
+
+        }
+
+        requestAnimationFrame(drawVideoFrame);
+    }
+
+    document.getElementById('videoElement').addEventListener('canplay', () => {
+        init();
+        requestAnimationFrame(drawVideoFrame);
+    });
+
+    function turnVideo(constraints) {
+        // 取得視訊鏡頭畫面
+        //if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices)
+        navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+            var videoElement = document.getElementById('videoElement');
+            videoElement.srcObject = stream;
+
+            //videoElement.setAttribute('autoplay', '');
+            //videoElement.setAttribute('muted', '');
+            //videoElement.setAttribute('playsinline', '');
+
+            //alert("(" + videoElement.width + ", " + videoElement.height + ")");
+
+        }).catch(function (error) {
+            alert('取得視訊鏡頭畫面失敗');
+            console.error('取得視訊鏡頭畫面失敗：', error);
+        });
+    }
+
+    function getProfile(cameraFacing) {
+        const constraints = {
+            video: {
+                facingMode: {
+                    exact: cameraFacing
+                }
+            }
+        }
+        return constraints
+    }
+
+    function isSafariBrowser() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) //safari的ua只有'safari'
+            return 1;
+        if (ua.indexOf('chrome') !== -1) //chrome 的 ua 'safari' 'chrome' 都有
+            return 0;
+        return -1;
+    }
+
+
+    if (detectDevice()) { //mobile
+        if (readParam('camera') == 'user') {
+            turnVideo({ video: true });
+        } else {
+            turnVideo(getProfile('environment'));
+        }
+    } else { //pc ipad would be here
+        if (isSafariBrowser() == 1) {
+            if (readParam('camera') == 'user') {
+                turnVideo({ video: true });
+            } else {
+                turnVideo(getProfile('environment'));
+            }
+        } else {
+            turnVideo({ video: true });
+        }
+    }
+
+
+    connectWebSocket();
+
+</script>
+
+<!--script>
+    //canvas = document.getElementById('canvas');
+        //canvas.width = window.innerWidth;
+        //canvas.height = window.innerHeight;
+        //ctx = canvas.getContext('2d');
+        //ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+        //let vw = video.videoWidth;
+        //let vh = video.videoHeight;
+
+        //canvas.width = video.videoWidth/2;
+        //canvas.height = video.videoHeight/2;
+
+        //let ratio = vw / vh;
+        //let _ratio = canvas.width / canvas.height;
+
+        /*
+        if (ratio > _ratio) {  //camera寬 canvas 方
+            v_width = Math.floor(canvas.width);
+            v_height = Math.floor(canvas.width / ratio);//canvas.width * video.height/video.width;
+            v_offx = Math.floor((canvas.width - v_width) / 2);
+            v_offy = Math.floor((canvas.height - v_height) / 2);
+            //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+        } else {
+            v_width = Math.floor(canvas.height * ratio);
+            v_height = Math.floor(canvas.height);//canvas.width * video.height/video.width;
+            v_offx = Math.floor((canvas.width - v_width) / 2);
+            v_offy = Math.floor((canvas.height - v_height) / 2);
+            //ctx.drawImage(video, 0, 0, vw, vh, (canvas.width-cw)/2, (canvas.height-ch)/2, cw, ch);
+        }
+        */
+</script-->
