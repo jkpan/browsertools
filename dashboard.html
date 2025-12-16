@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<script type="text/javascript" src="common.js" charset="UTF-8"></script>
+<script type="text/javascript" src="login.js" charset="UTF-8"></script>
 <html>
 
 <head>
@@ -61,7 +63,7 @@
       vertical-align: middle;
       border-color: #00ee00;
       border-radius: 4px;
-      height: 90%;
+      /* height: 90%; */
     }
 
     .menuButton {
@@ -80,7 +82,7 @@
       left: 0px;
       /* 初始位置在左侧屏幕外 */
       width: 100%;
-      height: 50px;
+      height: 100px;
       background-color: rgb(0, 90, 0);
       color: #fff;
 
@@ -92,6 +94,15 @@
       align-items: center;
       /* 垂直方向上居中 */
     }
+
+
+    .right-to-left {
+      margin-right: 5%;
+      /* margin-top: 95%; */
+      direction: rtl;
+      text-align: right;
+    }
+
   </style>
   <title>dashboard</title>
 </head>
@@ -112,25 +123,20 @@
       &nbsp;
       &nbsp;
       &nbsp;
-      <button id="editbtn" onclick="switchEditMode()">Edit<br />mode</button>
+      <button id="editbtn" onclick="switchEditMode()">E.M.</button>
       <label style="color: #00ee00;">|</label>
       <button onclick="spot2iframe('lyrics')">歌詞</button>
       <button onclick="spot2iframe('Bible')">聖經</button>
-      <button onclick="spot2iframe('NIV')">NIV</button>
+      <!-- <button onclick="spot2iframe('NIV')">NIV</button> -->
       <!-- <button onclick="spot2iframe('BPlay')">聖經輪播</button> -->
       <!-- <button onclick="spot2iframe('iPlay')">照片輪播</button> -->
       <button onclick="spot2iframe('url_1')">URL 1</button>
-      <!-- <button onclick="spot2iframe('url_2')">URL 2</button> -->
-      <!-- <button onclick="spot2iframe('url_3')">URL 3</button> -->
-      <!-- <button onclick="spot2iframe('file_1')">檔案1</button> -->
-      <!-- <button onclick="spot2iframe('file_2')">檔案2</button> -->
-      <!-- <button onclick="spot2iframe('file_3')">檔案3</button> -->
       <button onclick="spot2iframe('swipe')">swipe</button>
-      <button onclick="spot2iframe('anim')">動畫</button>
-      <button onclick="spot2iframe('info')">Info</button>
-      <button onclick="spot2iframe('effect')">Effect</button>
-      <button onclick="spot2iframe('time')">Time</button>
-      <button onclick="spot2iframe('camrece')">cam</button>
+      <!-- <button onclick="spot2iframe('anim')">動畫</button> -->
+      <!-- <button onclick="spot2iframe('info')">Info</button> -->
+      <!-- <button onclick="spot2iframe('effect')">Effect</button> -->
+      <!-- <button onclick="spot2iframe('time')">Time</button> -->
+      <!-- <button onclick="spot2iframe('camrece')">cam</button> -->
       <!-- <label style="color: #00ee00;">|</label> -->
       <!-- <button onclick="spot2iframe('dBoard')">客制</button> -->
       <!-- <button onclick="spot2iframe('tabs')">頁籤</button> -->
@@ -172,8 +178,8 @@
       <button onclick="openCtrl()">Ctrl</button>
       <!-- <button class="btn" id="oxBtn" onclick="sendOX()">o</button> -->
       <label style="color: #00ee00;">|</label>
-      <button class="button2" onclick="openProfile()">#</button>
-      <button class="button2" onclick="downloadExpJson()">exp</button>
+      <!-- <button class="button2" onclick="openProfile()">#</button> -->
+      <!-- <button class="button2" onclick="downloadExpJson()">exp</button> -->
       <input type="file" id="profile" accept=".json" hidden="true" onchange="selectProfile(event)" />
       <label style="color: #00ee00;">|</label>
       <button onclick="stateAction(0)">S0</button>
@@ -184,23 +190,46 @@
       <button onclick="stateAction(5)">S5</button>
       <label style="color: #00ee00;">|</label>
       <button style="opacity: 0.33;border-color: #00ff00;color: rgb(0, 255, 0);" onclick="sideClick()">x</button>
+
+      <!-- <div class="right-to-left"> -->
+        &nbsp;
+        <label id="__username" hidden="true"></label>
+        &nbsp;
+        <label id="__login" style="border: 1px solid #0f0;" hidden="true" onclick="login()">Sign in</label>
+        &nbsp;
+        <label id="__logout" style="border: 1px solid #0f0;" hidden="true" onclick="logout()">Sign out</label>
+        &nbsp;
+      <!-- </div> -->
+
+      <br>
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <label style="color: #00ee00;">|</label>
+      <button class="button2" id="btn_preload_1" onclick="preloadSaved(1)">#1</button>
+      <button class="button2" id="btn_preload_2" onclick="preloadSaved(2)">#2</button>
+      <button class="button2" id="btn_preload_3" onclick="preloadSaved(3)">#3</button>
+      <button class="button2" id="btn_preload_4" onclick="preloadSaved(4)">#4</button>
+      <button class="button2" id="btn_preload_5" onclick="preloadSaved(5)">#5</button>
+      <button onclick="openProfile()">#file</button>
+      <button onclick="downloadExpJson()">#export</button>
+      <label style="color: #00ee00;">|</label>
+      <button id="saveBtn" class="button2" onclick="savefileByname()" hidden="true">save</button>
+      <label style="color: #00ee00;">-</label>
+      <label id="preload_name"></label>
+      <label style="color: #00ee00;">-</label>
+      <button class="button2" id="saveasBtn" onclick="saveAsAction()" style="width:auto">save as</button>
+
+      <button class="button2" id="btn_save_1" onclick="savefile(1)" hidden>1^</button>
+      <button class="button2" id="btn_save_2" onclick="savefile(2)" hidden>2^</button>
+      <button class="button2" id="btn_save_3" onclick="savefile(3)" hidden>3^</button>
+      <button class="button2" id="btn_save_4" onclick="savefile(4)" hidden>4^</button>
+      <button class="button2" id="btn_save_5" onclick="savefile(5)" hidden>5^</button>
     </div>
     <script>
-      let sideMenu = document.getElementById('sideMenu');
-      sideMenu.style.top = (window.innerHeight - 50) + 'px';
-
-      function sideClick() {
-        let sideMenu = document.getElementById('sideMenu');
-        if (sideMenu.style.top === (window.innerHeight - 50) + 'px') {
-          closeSideMenu();
-        } else {
-          openSideMenu();
-        }
-      }
-
-      //let mbtn = document.getElementById("menubtn");
-      //mbtn.addEventListener('mouseenter', e => {sideClick();});
-
+      //document.getElementById('sideMenu').style.top = (window.innerHeight - MENUSIZE) + 'px';
     </script>
 
 
@@ -210,3 +239,4 @@
 
 </html>
 <script type="text/javascript" src="dashboard.js" charset="UTF-8"></script>
+<script type="text/javascript" src="dashboard_io.js" charset="UTF-8"></script>

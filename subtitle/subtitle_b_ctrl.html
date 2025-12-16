@@ -194,7 +194,7 @@
             button.innerHTML = window.opener.SONGS[i][0][0];
             button.id = 'vol ' + i;
             button.onclick = function () {
-                let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+                let idx = parseInt(this.id.substring(4, this.id.length), 10);
                 window.opener.subtitles = window.opener.SONGS[idx];
 
                 if (document.getElementById('vol ' + _song))
@@ -247,7 +247,7 @@
             button.id = 'chp ' + i;
             button.onclick = function () {
 
-                let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+                let idx = parseInt(this.id.substring(4, this.id.length), 10);
 
                 if (document.getElementById('chp ' + _phase))
                     document.getElementById('chp ' + _phase).style.background = 'transparent';//
@@ -279,7 +279,7 @@
             button.innerHTML = '' + i;
             button.id = 'ver ' + i;
             button.onclick = function () {
-                let idx = parseInt(this.id.substr(4, this.id.length - 4), 10);
+                let idx = parseInt(this.id.substring(4, this.id.length), 10);
 
                 if (document.getElementById('ver ' + _line))
                     document.getElementById('ver ' + _line).style.background = 'transparent';//

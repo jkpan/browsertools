@@ -1,0 +1,459 @@
+{
+	"stateSaved": {
+		"save0": [
+			{
+				"name": "swipe",
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "info",
+				"posize": [
+					1,
+					1,
+					6,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "url_1",
+				"posize": [
+					33,
+					33,
+					15,
+					15
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "Bible",
+				"posize": [
+					6,
+					2,
+					42,
+					30
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "lyrics",
+				"posize": [
+					17,
+					33,
+					15,
+					15
+				],
+				"visible": 1,
+				"perspective": 0
+			}
+		],
+		"save1": [
+			{
+				"name": "swipe",
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "url_1",
+				"posize": [
+					21,
+					12,
+					27,
+					27
+				],
+				"visible": 0,
+				"perspective": 1
+			},
+			{
+				"name": "Bible",
+				"posize": [
+					31,
+					16,
+					18,
+					18
+				],
+				"visible": 0,
+				"perspective": 1
+			},
+			{
+				"name": "lyrics",
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "info",
+				"posize": [
+					1,
+					1,
+					6,
+					48
+				],
+				"visible": 0,
+				"perspective": 0
+			}
+		],
+		"save2": [
+			{
+				"name": "swipe",
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "info",
+				"posize": [
+					1,
+					1,
+					6,
+					48
+				],
+				"visible": 0,
+				"perspective": 0
+			},
+			{
+				"name": "Bible",
+				"posize": [
+					23,
+					12,
+					26,
+					26
+				],
+				"visible": 1,
+				"perspective": 1
+			},
+			{
+				"name": "lyrics",
+				"posize": [
+					1,
+					12,
+					24,
+					26
+				],
+				"visible": 1,
+				"perspective": 1
+			},
+			{
+				"name": "url_1",
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			}
+		],
+		"save3": [
+			{
+				"name": "swipe",
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "info",
+				"posize": [
+					1,
+					1,
+					6,
+					48
+				],
+				"visible": 0,
+				"perspective": 0
+			},
+			{
+				"name": "lyrics",
+				"posize": [
+					1,
+					16,
+					16,
+					18
+				],
+				"visible": 0,
+				"perspective": 1
+			},
+			{
+				"name": "url_1",
+				"posize": [
+					3,
+					12,
+					26,
+					26
+				],
+				"visible": 0,
+				"perspective": 1
+			},
+			{
+				"name": "Bible",
+				"posize": [
+					5,
+					7,
+					40,
+					36
+				],
+				"visible": 1,
+				"perspective": 0
+			}
+		],
+		"save4": [
+			{
+				"name": "swipe",
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "info",
+				"posize": [
+					1,
+					1,
+					6,
+					48
+				],
+				"visible": 0,
+				"perspective": 0
+			},
+			{
+				"name": "lyrics",
+				"posize": [
+					1,
+					16,
+					18,
+					18
+				],
+				"visible": 0,
+				"perspective": 1
+			},
+			{
+				"name": "url_1",
+				"posize": [
+					31,
+					33,
+					15,
+					15
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "Bible",
+				"posize": [
+					4,
+					3,
+					42,
+					29
+				],
+				"visible": 1,
+				"perspective": 0
+			}
+		],
+		"save5": [
+			{
+				"name": "swipe",
+				"posize": [
+					1,
+					1,
+					48,
+					48
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "lyrics",
+				"posize": [
+					2,
+					33,
+					15,
+					15
+				],
+				"visible": 0,
+				"perspective": 0
+			},
+			{
+				"name": "info",
+				"posize": [
+					1,
+					1,
+					6,
+					48
+				],
+				"visible": 0,
+				"perspective": 0
+			},
+			{
+				"name": "url_1",
+				"posize": [
+					25,
+					10,
+					24,
+					30
+				],
+				"visible": 1,
+				"perspective": 0
+			},
+			{
+				"name": "Bible",
+				"posize": [
+					1,
+					8,
+					35,
+					34
+				],
+				"visible": 1,
+				"perspective": 1
+			}
+		]
+	},
+	"swipe": {
+		"posize": [
+			1,
+			1,
+			48,
+			48
+		],
+		"perspective": 0,
+		"obj": {}
+	},
+	"info": {
+		"posize": [
+			1,
+			1,
+			6,
+			48
+		],
+		"perspective": 0,
+		"obj": {
+			"des": "🎸或坐或站 自由敬拜🙂"
+		}
+	},
+	"url_1": {
+		"posize": [
+			33,
+			33,
+			15,
+			15
+		],
+		"perspective": 0,
+		"obj": {
+			"hold": 1,
+			"url": "",
+			"loop": 1,
+			"keepratio": 1,
+			"forPlay": 0,
+			"imageBase64": ""
+		}
+	},
+	"Bible": {
+		"posize": [
+			6,
+			2,
+			42,
+			30
+		],
+		"perspective": 0,
+		"obj": {
+			"color": 1,
+			"hlight": 3,
+			"verticle": 0,
+			"fontfactor": 9.5,
+			"fontColorType": 1,
+			"saved": [
+				[
+					""
+				],
+				[
+					""
+				],
+				[
+					""
+				],
+				[
+					""
+				],
+				[
+					""
+				],
+				[
+					""
+				],
+				[
+					""
+				],
+				[
+					""
+				],
+				[
+					""
+				],
+				[
+					""
+				]
+			],
+			"transparent": 1,
+			"printSaved": 0,
+			"fsizedist": 1,
+			"verseCount": 2,
+			"syncType": 5,
+			"imageBase64": ""
+		}
+	},
+	"lyrics": {
+		"posize": [
+			17,
+			33,
+			15,
+			15
+		],
+		"perspective": 0,
+		"obj": {
+			"mode": 2,
+			"fontfactor": 9.5,
+			"list": [],
+			"fontColorType": 1,
+			"transparent": 1,
+			"syncType": 5,
+			"progress": 0,
+			"imageBase64": ""
+		}
+	},
+	"B/G": "B"
+}

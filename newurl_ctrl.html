@@ -89,8 +89,8 @@
     <button style="background-color: blue;" onclick="window.opener.blank(false)">show</button>
     <button style="background-color: blue;" onclick="window.opener.bgTransparent()">透明</button>
     &nbsp;
-    <button style="background-color: blue;" onclick="window.opener.goSubMoveRight()">◀️</button>
-    <button style="background-color: blue;" onclick="window.opener.goAddMoveLeft()">▶️</button>
+    <button style="background-color: blue;" onclick="window.opener.goSubMoveRight();updateDots();">◀️</button>
+    <button style="background-color: blue;" onclick="window.opener.goAddMoveLeft();updateDots();">▶️</button>
     <p></p>
     <button onclick="urlGo('./subtitle/subtitle.html?action=play&mode=2', 'lyric')">歌詞</button>
     <button onclick="urlGo('./subtitle/subtitle_b.html?action=play&colorsel=1&verseCount=2', 'Bible')">聖經</button>
@@ -100,8 +100,10 @@
     <button onclick="urlGo('./led/marquee.html', 'LED')">LED</button>
     <button onclick="urlGo('./led/clock.html', 'clock')">時鐘</button>
     <button onclick="urlGo('./tools/camera_receive.html', 'camrece')">Camera</button>
-    <button onclick="urlGo('dashboard.html', 'dash')">Dash</button>
-    <button onclick="urlGo('tabs.html', 'tabs')">頁籤</button>
+    <button onclick="urlGo('dashboard.html', 'dash1')">Dash 1</button>
+    <button onclick="urlGo('dashboard.html', 'dash2')">Dash 2</button>
+    <button onclick="urlGo('dashboard.html', 'dash3')">Dash 3</button>
+    <!-- <button onclick="urlGo('tabs.html', 'tabs')">頁籤</button> -->
     <button onclick="openLib()" style="background-color: #000000;">圖庫</button>
     <p></p>
 
@@ -187,8 +189,12 @@
                 caption = '📱';
             } else if (des.startsWith('clock')) {
                 caption = '🕗';
-            } else if (des.startsWith('dash')) {
-                caption = '🎛️';
+            } else if (des.startsWith('dash1')) {
+                caption = '🎛️1';
+            } else if (des.startsWith('dash2')) {
+                caption = '🎛️2';
+            } else if (des.startsWith('dash3')) {
+                caption = '🎛️3';
             } else if (des.startsWith('tabs')) {
                 caption = '🗂️';
             } else if (des.startsWith('camrece')) {
@@ -369,7 +375,7 @@
 
     function getRootUrl() {
         let all = window.location.href; //console.log(all);
-        let root = all.substr(0, all.length - '/newurl.html'.length); //console.log('root:' + root);
+        let root = all.substring(0, all.indexOf('/newurl_ctrl.html')); //console.log('root:' + root);
         return root;
     }
 
@@ -377,7 +383,7 @@
         let root = getRootUrl();
         //let domain = window.location.origin;
         if (url.startsWith(root)) {
-            let str = url.substr(root.length, url.length - root.length);
+            let str = url.substring(root.length, url.length);
             return '.' + str;
         }
         return url;
@@ -509,6 +515,7 @@
                 window.opener.jump2(value);
                 break;
         }
+        updateDots();
     }, false);
 
     window.addEventListener("beforeunload", function (event) {

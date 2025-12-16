@@ -1,0 +1,75 @@
+{
+  "stateSaved": {
+    "save0": [],
+    "save1": [],
+    "save2": [],
+    "save3": [],
+    "save4": [],
+    "save5": []
+  },
+  "swipe": {
+    "posize": [
+      2,
+      3,
+      26,
+      26
+    ],
+    "perspective": 0,
+    "obj": {}
+  },
+  "Bible": {
+    "posize": [
+      29,
+      2,
+      19,
+      46
+    ],
+    "perspective": 0,
+    "obj": {
+      "color": 1,
+      "hlight": 1,
+      "verticle": 0,
+      "fontfactor": 14,
+      "fontColorType": 1,
+      "saved": [
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ]
+      ],
+      "transparent": 0,
+      "printSaved": 0,
+      "fsizedist": 0,
+      "verseCount": 4,
+      "syncType": 5,
+      "imageBase64": ""
+    }
+  },
+  "B/G": "B"
+}

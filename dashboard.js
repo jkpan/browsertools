@@ -2,7 +2,7 @@ const APPS = [
   'lyrics', 'Bible', 'NIV', 'BPlay', 'iPlay',
   'url_1', 'url_2', 'url_3',
   //'file_1', 'file_2', 'file_3',
-  'anim', 'info', 'effect', 'time', 'camrece', 
+  'anim', 'info', 'effect', 'time', 'camrece',
   'swipe', 'dBoard', 'tabs'
 ];
 
@@ -11,6 +11,7 @@ const GRID_H = 48;
 const PPPX = "perspective(1000px)";
 var PRY_MAX = 20;
 const PRY_OPA = 1.0;
+const MENUSIZE = 100;
 
 var stateSaved = {
   "save0": [],
@@ -271,7 +272,7 @@ class Applet {
     }
 
     this.ry = this.ry == this.t_rotateY ? this.ry : this.ry > this.t_rotateY ? this.ry - 1 : this.ry + 1;
-    if (Math.abs(this.ry - this.t_rotateY) <= 0.1) 
+    if (Math.abs(this.ry - this.t_rotateY) <= 0.1)
       this.ry = this.t_rotateY;
 
     this.settle();//
@@ -837,9 +838,9 @@ function getElmState() {
     url_1: -1, url_2: -1, url_3: -1,
     //file_1: -1, file_2: -1, file_3: -1, 
     anim: -1, info: -1, effect: -1, time: -1, camrece: -1,
-    swipe:-1, dBoard: -1, tabs: -1
+    swipe: -1, dBoard: -1, tabs: -1
   };
-  
+
   let div = document.getElementById("mainDiv");
   stateArray['bgcolor'] = div.style.backgroundColor;
 
@@ -876,8 +877,8 @@ function openCtrl() {
   return;
   if (standalong) {
     _openWin = window.open(
-      "dashboard_control.html", 
-      "", 
+      "dashboard_control.html",
+      "",
       "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=300,height=320,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
   } else {
     _openWin = window.open("dashboard_control.html", "");
@@ -1053,8 +1054,8 @@ function _createFrame(keyname) {
       return app;
     }
     case 'url_1':
-    case 'url_2': 
-    case 'url_3' : {
+    case 'url_2':
+    case 'url_3': {
       createFrame(keyname, 'newurl.html');
       let app = new Applet({ x: 10, y: 5, w: 15, h: 24, keyname: keyname });
       applets.push(app);
@@ -1072,7 +1073,7 @@ function _createFrame(keyname) {
       createFrame(keyname, './tools/camera_receive.html');
       let app = new Applet({ x: 6, y: 1, w: 15, h: 24, keyname: keyname });
       applets.push(app);
-      app.onTop();      
+      app.onTop();
       return app;
     }
     /*
@@ -1303,13 +1304,30 @@ function showCtrlPane(show) {
 function openSideMenu() {
   let sideMenu = document.getElementById('sideMenu');
   if (sideMenu)
-    sideMenu.style.top = (window.innerHeight - 50) + 'px';
+    sideMenu.style.top = (window.innerHeight - MENUSIZE) + 'px';
 }
+
 function closeSideMenu() {
   let sideMenu = document.getElementById('sideMenu');
   if (sideMenu)
-    sideMenu.style.top = (window.innerHeight + 50) + 'px';
+    sideMenu.style.top = (window.innerHeight + MENUSIZE) + 'px';
 }
+
+function sideClick() {
+  let sideMenu = document.getElementById('sideMenu');
+  if (sideMenu.style.top === (window.innerHeight - MENUSIZE) + 'px') {
+    closeSideMenu();
+  } else {
+    openSideMenu();
+  }
+}
+
+
+function reactFromPopLogin() {
+  window.location.reload();
+}
+
+
 
 window.addEventListener('beforeunload', function (e) {
   closeCtrl();

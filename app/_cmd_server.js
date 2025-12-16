@@ -165,7 +165,7 @@ function responseFile(filePath, req, res) {
     res.writeHead(200, { 'Content-Type': contentType });// 'text/html' });//; charset = UTF-8
     res.write(content);
     res.end();
-    print('(file:' + filePath + ')');
+    print('(file:' + filePath + ')');// ... ' + content);
 
   });
 }

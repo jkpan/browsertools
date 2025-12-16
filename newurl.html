@@ -428,7 +428,7 @@
 
   function getRootUrl() {
     let all = window.location.href; //console.log(all);
-    let root = all.substr(0, all.length - '/newurl.html'.length); //console.log('root:' + root);
+    let root = all.substring(0, all.indexOf('/newurl.html')); //console.log('root:' + root);
     return root;
   }
 
@@ -436,7 +436,7 @@
     let root = getRootUrl();
     //let domain = window.location.origin;
     if (url.startsWith(root)) {
-      let str = url.substr(root.length, url.length - root.length);
+      let str = url.substring(root.length, url.length);
       return '.' + str;
     }
     return url;
