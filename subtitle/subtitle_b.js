@@ -2868,6 +2868,11 @@ function receiveMessage(e) {
   _repaint();
 }
 
+function releaseApp() {
+  closeCtrl();
+  closeLiber();
+}
+
 window.addEventListener('message', receiveMessage, false);
 
 /*
@@ -2931,8 +2936,7 @@ window.addEventListener('resize', function () {
 });
 
 window.addEventListener('beforeunload', function (e) {
-  closeCtrl();
-  closeLiber();
+  releaseApp();
 });
 
 // 滑鼠滾輪...

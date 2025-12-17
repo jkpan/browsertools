@@ -1681,7 +1681,7 @@ window.addEventListener('keyup', keyupAction, false);
 
 function keydownAction(e) {
 
-  if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+  if (e.code == 'ShiftLeft') { //if (e.keyCode == 16) {// || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     keylock = 1;
     _repaint();
     return;

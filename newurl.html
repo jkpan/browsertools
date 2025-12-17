@@ -179,6 +179,10 @@
           liber = null;
         }
 
+        function releaseApp() {
+          closeLiber();
+        }
+
         function appendToIframeSrc(inputString, appendString) {
           return inputString.replace(/<iframe[^>]*\s+src=["']([^"']*)["']/i, (match, srcValue) => {
             // 修改 src 的內容

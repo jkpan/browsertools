@@ -467,6 +467,11 @@
     _openWin = null;
   }
 
+  function releaseApp() {
+    closeCtrl();
+    closeLogin();
+  }
+
   var action = '';
   var tab;
   var funcInterval;
@@ -604,8 +609,7 @@
   });
 
   window.addEventListener('beforeunload', function (e) {
-    closeCtrl();
-    closeLogin();
+    releaseApp();
   });
 
   resetFrame();

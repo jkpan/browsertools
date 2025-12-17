@@ -1599,6 +1599,11 @@ function toObj() {
   return obj;
 }
 
+function releaseApp() {
+  closeSelector();
+  closeLiber();
+}
+
 //generate HTML
 createCanvas(); //createBGHiddenFile();
 createListHiddenFile();
@@ -1635,8 +1640,7 @@ window.addEventListener('resize', function () {
   _repaint();
 });
 window.addEventListener('beforeunload', function (e) {
-  closeSelector();
-  closeLiber();
+  releaseApp();
 });
 /* 網頁切換別處切回來重繪 */
 document.addEventListener('visibilitychange', function () {

@@ -218,11 +218,19 @@
         _openWin = null;
     }
 
+    function releaseApp() {
+        closeCtrl();
+    }
+
     function clean() {
 
         if (items.length == 0) return;
 
         let parent = document.getElementById('container');
+        try {
+            const childIframe = items[current].querySelector('iframe');
+            childIframe.contentWindow.releaseApp();
+        } catch(err) {}
         parent.removeChild(items[current]);
         let ori_len = items.length;
         items.splice(current, 1);
@@ -423,12 +431,15 @@
                 div.setAttribute('des', 'url-image');
 
             } else { //非圖片  
+                
                 const iframe = document.createElement('iframe');
                 iframe.setAttribute("width", "100%");
                 iframe.setAttribute("height", "100%");
                 iframe.src = value;
+                
                 //iframe.style.objectFit = 'contain';
                 //iframe.allow = 'fullscreen';
+                
                 div.appendChild(iframe);
                 add2Item(div);
                 div.setAttribute('des', 'url-');
@@ -575,7 +586,7 @@
     }
 
     window.addEventListener('beforeunload', function (e) {
-        closeCtrl();
+        releaseApp();
     });
 
     window.addEventListener('resize', function () {

@@ -99,8 +99,6 @@ function preloadSaved(idx) {
   if (username == null) return;
 
   let url = buildFname('' + idx);//`./users/${username}/dash_0${idx}.json`;
-  //alert(url);
-
 
   fetch(url).then((response) => {
     if (!response.ok) {

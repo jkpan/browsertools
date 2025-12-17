@@ -535,6 +535,9 @@ class Applet {
   }
 
   removeSelf() {
+    try {
+      this.elm.contentWindow.releaseApp();
+    } catch(err) {}
     this.elm.remove();
   }
 
@@ -671,7 +674,7 @@ window.addEventListener('keyup', e => {
 window.addEventListener('keydown', (e) => {
   e.preventDefault();
   e.stopPropagation();
-  if (e.keyCode == 16) { // || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
+  if (e.code == 'ShiftLeft') { //if (e.keyCode == 16) { // || e.keyCode == 17 || e.keyCode == 18 || e.keyCode == 91) {
     switchEditMode();
   }
 }, false);
@@ -721,6 +724,12 @@ function preload(url, doneCb) {
 }
 
 /*
+  function reloadFrame() {
+    let src = document.getElementById('frame_' + tab).getAttribute('src');//console.log('tab:' + tab + ': ' + src);
+    document.getElementById('frame_' + tab).setAttribute('src', src);
+}
+  */
+/*
   B/G: B b G g
   ctrl: 1
     perspective: 1, 0
@@ -736,6 +745,8 @@ function handleProfile(fileContent) {
 
   applets = [];
   _repaint();
+
+  //window.location.reload();
 
   if (jsonData['B/G']) {
     let div = document.getElementById("mainDiv");
@@ -889,6 +900,10 @@ function closeCtrl() {
   if (_openWin)
     _openWin.close();
   _openWin = null;
+}
+
+function releaseApp() {
+  closeCtrl();
 }
 
 function colorSwitch() {
@@ -1327,10 +1342,8 @@ function reactFromPopLogin() {
   window.location.reload();
 }
 
-
-
 window.addEventListener('beforeunload', function (e) {
-  closeCtrl();
+  releaseApp();
 });
 
 function registerCanvasEvent() {
