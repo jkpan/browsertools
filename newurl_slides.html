@@ -18,7 +18,7 @@
             position: fixed;
             gap: 0px;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             border: none;
         }
 
@@ -56,14 +56,14 @@
 
         .fullRange {
             margin: auto;
-            width: 94%;
-            height: 94%;
+            width: 98%;
+            height: 98%;
 
             position: absolute;
-            top: 3%;
-            left: 3%;
-            right: 3%;
-            bottom: 3%;
+            top: 0%;
+            left: 0%;
+            right: 0%;
+            bottom: 0%;
 
             user-select: none;
 
@@ -617,15 +617,18 @@
     }
 
     function blank(doblank) {
+        /*
         if (!doblank) {
             framePos();
             return;
         }
-        console.log('blank::' + doblank);
+        */
         for (let i = 0; i < items.length; i++) {
             let div = items[i]; //let div = document.getElementById('content_' + i);
-            //div.hidden = true; 
-            if (doblank) div.style.opacity = 0.0;
+            if (doblank) 
+                div.style.opacity = 0.0;
+            else
+                div.style.opacity = 1.0;
         }
     }
 
