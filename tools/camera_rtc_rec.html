@@ -2,33 +2,20 @@
 <html>
 
 <body>
-    <h3>Canvas Sender</h3>
-    <canvas id="c" width="400" height="300"></canvas>
+    <h3>Canvas Receiver</h3>
+    <video id="v" autoplay playsinline></video>
 
     <script>
-        const canvas = document.getElementById("c");
-        const ctx = canvas.getContext("2d");
+        const video = document.getElementById("v");
 
-        // 繪製動畫
-        let x = 0;
-        setInterval(() => {
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, 400, 300);
-            ctx.fillStyle = "lime";
-            ctx.fillRect(x, 120, 50, 50);
-            x = (x + 5) % 400;
-        }, 33);
-
-        // Canvas → MediaStream
-        const stream = canvas.captureStream(30);
-
-        // WebRTC
         const pc = new RTCPeerConnection({
             iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
         });
 
-        stream.getTracks().forEach(t => pc.addTrack(t, stream));
-
+        pc.ontrack = e => {
+            console.log('ontrack');
+            video.srcObject = e.streams[0];
+        };
 
         let serverDomain = window.location.hostname;
         let port = 80;
@@ -40,13 +27,12 @@
             }
         }
 
+        // WebSocket signaling
         const ws = port == 443 ?
             new WebSocket(`wss://${serverDomain}/Webrtc`) :
             new WebSocket(`ws://${serverDomain}:${port}/Webrtc`);
 
-        // WebSocket signaling
-        //const ws = //new WebSocket("ws://localhost:8080");
-        //new WebSocket(`ws://localhost/Webrtc`);
+
 
         pc.onicecandidate = e => {
             console.log('onicecandidate');
@@ -56,20 +42,23 @@
         };
 
         ws.onmessage = async e => {
+
             console.log('onmessage');
+
             const msg = JSON.parse(e.data);
+
             if (msg.sdp) {
                 await pc.setRemoteDescription(msg.sdp);
+                if (msg.sdp.type === "offer") {
+                    const answer = await pc.createAnswer();
+                    await pc.setLocalDescription(answer);
+                    ws.send(JSON.stringify({ sdp: pc.localDescription }));
+                }
             }
+
             if (msg.ice) {
                 await pc.addIceCandidate(msg.ice);
             }
-        };
-
-        ws.onopen = async () => {
-            const offer = await pc.createOffer();
-            await pc.setLocalDescription(offer);
-            ws.send(JSON.stringify({ sdp: pc.localDescription }));
         };
     </script>
 </body>
