@@ -970,10 +970,8 @@ function keyboard(e) {
     case 'Digit0': case 'Digit1': case 'Digit2': case 'Digit3': case 'Digit4':
     case 'Digit5': case 'Digit6': case 'Digit7': case 'Digit8': case 'Digit9':
       let value = e.keyCode - 48;
-      if (value < SONGS.length) {
-        songswitch(value);
-      }
-      break;
+      if (value < SONGS.length) songswitch(value);
+      return;
     case 'Minus': //'-'
       if (song > 0) {
         songswitch(song - 1, true);
