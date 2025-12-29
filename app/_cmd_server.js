@@ -248,6 +248,8 @@ function webservice(req, res) {
     case '/uploadsheet': uploadSheet.uploadFile(req, res); return;
     case '/sheetaction': uploadSheet.handleFile(req, res); return;
 
+    case '/seasontable': getUrlContent('https://abeliu.idv.tw/getservicejson.php', req, res); return;
+
     default:
 
       if (req.url.startsWith('/cmd')) {
@@ -302,6 +304,32 @@ function webservice(req, res) {
   responseFile(filePath, req, res);
 
 }
+
+async function getUrlContent(url, req, res) {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Get the content as plain text
+    const content = await response.text();
+
+    console.log(content);
+
+    res.setHeader('Content-Type', 'application/json');// 发送响应数据
+    res.end(content);//JSON.stringify({ "state": "success" }));
+
+    // If the content is JSON, you can use .json() instead
+    // const data = await response.json();
+    // console.log(data);
+
+  } catch (error) {
+    console.error("Could not fetch URL:", error);
+  }
+}
+
 
 function startService() {
 
