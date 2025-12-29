@@ -316,8 +316,6 @@ async function getUrlContent(url, req, res) {
     // Get the content as plain text
     const content = await response.text();
 
-    console.log(content);
-
     res.setHeader('Content-Type', 'application/json');// 发送响应数据
     res.end(content);//JSON.stringify({ "state": "success" }));
 
