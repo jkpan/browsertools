@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>JSON to Table</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 16px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+  <h2>本季服事表</h2>
+  <div id="table-container">Loading...</div>
+
+  <script>
+
+    const URL_RESTORE = "https://abeliu.idv.tw/getservicejson.php";
+    let url = URL_RESTORE; //"https://example.com/api/data"; // ← 換成你的 API './seasontable.json';//
+
+    fetch(url)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("HTTP error " + res.status);
+        }
+        return res.json();
+      })
+      .then(data => {
+        renderTable(data);
+      })
+      .catch(err => {
+        //renderTable(json);
+        document.getElementById("table-container").textContent = "資料載入失敗：" + err.message;
+      });
+
+    function renderTable(data) {
+      let items = 
+        [   
+            "",
+            "聚會",
+		    "領會",
+		    "領詩",
+		    "助唱(1)",
+		    "助唱(2)",
+		    "Piano",
+		    "Drums",
+		    "Bass",
+		    "Guitar",
+		    "音控",
+		    "PPT",
+		    "直播",
+		    "獻詩",
+		    "總招待" 
+        ];
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+
+      const headerRow = document.createElement("tr");
+
+      items.forEach(key => {
+        const th = document.createElement("th");
+        th.textContent = key;
+        th.style.backgroundColor = '#bbb';
+        th.style.textAlign = 'center';
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+
+      var dates = Object.keys(data);
+
+      let idx = 0;
+        dates.forEach(function (date) {
+            console.log(date);
+            let obj = data[date];
+            const row = document.createElement("tr");
+            tbody.appendChild(row);
+            idx++;
+            row.style.backgroundColor = idx%2 == 0?'#eee':'#fff';
+            const datecell = document.createElement("td");
+            datecell.style.textAlign = 'center';
+            datecell.textContent = date;
+            row.appendChild(datecell);
+            for (let i=1;i<items.length;i++) {
+                const cell = document.createElement("td");
+                let content = data[date][items[i]];
+                cell.style.textAlign = 'center';
+                cell.textContent = content;
+                row.appendChild(cell);
+            }
+        });
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+
+      const container = document.getElementById("table-container");
+      container.innerHTML = "";
+      container.appendChild(table);
+
+    }
+  </script>
+</body>
+</html>
