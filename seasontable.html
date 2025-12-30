@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<script type="text/javascript" src="common.js" charset="UTF-8"></script>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
@@ -25,8 +26,10 @@
 
   <script>
 
-    const URL_RESTORE = "https://abeliu.idv.tw/getservicejson.php";
-    let url = '/seasontable';//URL_RESTORE; //"https://example.com/api/data"; // ← 換成你的 API './seasontable.json';//
+    let name = readParam('name'); 
+    
+    //const URL_RESTORE = "https://abeliu.idv.tw/getservicejson.php";
+    let url = '/seasontable';//'./seasontable.json';//'/seasontable';
 
     fetch(url)
       .then(res => {
@@ -94,6 +97,13 @@
             for (let i=1;i<items.length;i++) {
                 const cell = document.createElement("td");
                 let content = data[date][items[i]];
+                if (content == name) {
+                    cell.style.color = '#f00';
+                    cell.style.fontWeight = 'bold';
+                } else {
+                    cell.style.color = '#000'
+                    cell.style.fontWeight = 'normal';
+                }
                 cell.style.textAlign = 'center';
                 cell.textContent = content;
                 row.appendChild(cell);

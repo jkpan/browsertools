@@ -17,6 +17,8 @@ const sync_camera_signal = require('./_obj_camera_signal');
 const sync_tally = require('./_tally');
 const users = require('./_users');
 
+const URL_SEASONTABLE = 'https://abeliu.idv.tw/getservicejson.php';
+
 var WebSocket = null; //require('ws'); 
 var Cluster = null;
 
@@ -248,7 +250,7 @@ function webservice(req, res) {
     case '/uploadsheet': uploadSheet.uploadFile(req, res); return;
     case '/sheetaction': uploadSheet.handleFile(req, res); return;
 
-    case '/seasontable': getUrlContent('https://abeliu.idv.tw/getservicejson.php', req, res); return;
+    case '/seasontable': getUrlContent(URL_SEASONTABLE, req, res); return;
 
     default:
 
