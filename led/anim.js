@@ -344,7 +344,7 @@ function newParticle_firework_particle() {
       this.A = 1.0;//0.5 + Math.random()/2.0;
 
       //this.radius = 6 + 4 * (1- range/_range);// + Math.random() * 50;      
-      this.radius = Math.min(c.width, c.height) * 0.01;//(c.height / 72) + (c.height / 84) * (1 - range / _range);// + Math.random() * 50;
+      this.radius = (c.width + c.height)/2 * 0.01;//(c.height / 72) + (c.height / 84) * (1 - range / _range);// + Math.random() * 50;
       this.elapse = _elapse;
       this.t = 0;
 
@@ -638,7 +638,7 @@ function newParticle_firework_rocket() {
       _ctx.fillStyle = 'rgba(' + this.R + ',' + this.G + ',' + this.B + ', 1.0)';
       _ctx.beginPath();
 
-      let r = Math.min(c.width, c.height) * 0.005;
+      let r = (c.width, c.height)/2 * 0.005;
 
       for (let i = 0; i < this.tail.length; i++) {
         _ctx.arc(this.tail[i][0], this.tail[i][1], r + i, 0, 2 * Math.PI, true);
