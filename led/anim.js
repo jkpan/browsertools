@@ -298,11 +298,15 @@ function newParticle_firework_particle() {
       return _t * _t * _t;
     },
     easeout: function (_t) {
-      return -_t * _t + 2 * _t;
+      return 1 - Math.pow(1 - _t, 3);//-_t * _t + 2 * _t;
     },
-    easeinout: function (_t) {
+    easeinout: function (x) {
       //console.log('sin('+ _t * Math.PI+(') = '+Math.sin(_t * Math.PI)));
-      return Math.sin(_t * Math.PI);
+      //return x < 0.5
+      //  ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2
+      //: (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
+      return -Math.pow(2 * x - 1, 2) + 1;//Math.sin(_t * Math.PI);
+      //return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
     },
     release: function () { },
     colorDis: function (idx) {
@@ -321,10 +325,12 @@ function newParticle_firework_particle() {
     },
     initial: function (c, _x, _y, _range, _elapse, idx) {
 
-      let r0 = Math.random();
-      while (Math.random() > r0 / 2.0) r0 = Math.random();
-      let range = r0 * _range;
+      //let r0 = Math.random();
+      //while (Math.random() > r0 / 2.0) r0 = Math.random();
+      //let range = r0 * _range;
 
+      let range = _range * (0.5 + Math.random() * 0.5)
+       
       let dir = Math.random() * 360 * Math.PI / 180;
 
       this.x_stt = _x;// + (short * 0.05 + range) * Math.cos(dir);
@@ -338,7 +344,7 @@ function newParticle_firework_particle() {
       this.A = 1.0;//0.5 + Math.random()/2.0;
 
       //this.radius = 6 + 4 * (1- range/_range);// + Math.random() * 50;      
-      this.radius = (c.height / 72) + (c.height / 84) * (1 - range / _range);// + Math.random() * 50;
+      this.radius = Math.min(c.width, c.height) * 0.01;//(c.height / 72) + (c.height / 84) * (1 - range / _range);// + Math.random() * 50;
       this.elapse = _elapse;
       this.t = 0;
 
@@ -386,7 +392,8 @@ function newParticle_firework() {
       this.t = 0;
 
       if (this.particles.length < 1) {
-        for (var i = 0; i < 80; i++) {
+        let amount = 60 + Math.random() * 30;
+        for (var i = 0; i < amount; i++) {
           this.particles[i] = newParticle_firework_particle();
         }
       }
@@ -413,6 +420,300 @@ function newParticle_firework() {
       if (this.t > this.elapse) {
         this.initial(c);
       }
+    }
+  }
+  return p;
+}
+
+class Vector {
+
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  // Add another vector
+  add(otherVector) {
+    this.x += otherVector.x;
+    this.y += otherVector.y;
+    //return new Vector(this.x + otherVector.x, this.y + otherVector.y);
+  }
+
+  // Subtract another vector
+  sub(otherVector) {
+    this.x -= otherVector.x;
+    this.y -= otherVector.y;
+  }
+
+  // Scale by a scalar value
+  scale(scalar) {
+    this.x *= scalar;
+    this.y *= scalar;
+  }
+
+  getScaleV(scalar) {
+    return new Vector(this.x * scalar, this.y * scalar);
+  }
+
+  // Calculate length (magnitude)
+  getLength() {
+    return Math.hypot(this.x, this.y);
+  }
+
+  // Normalize (get unit vector)
+  getNormalize() {
+    const len = this.getLength();
+    if (len > 0) {
+      return new Vector(this.x / len, this.y / len);
+    }
+    return new Vector(0, 0);
+  }
+
+  normalize() {
+    const len = this.getLength();
+    if (length > 0) {
+      this.x /= len;
+      this.y /= len;
+    } else {
+      this.x = 0;
+      this.y = 0;
+    }
+  }
+
+  // Calculate dot product
+  dot(otherVector) {
+    return this.x * otherVector.x + this.y * otherVector.y;
+  }
+
+  getAngleFromPoiont(t) {
+    let v = new Vector(t.x - this.x, t.y - this.y);
+    let len = v.getLength();//sqrt(v.x * v.x + v.y * v.y);
+    if (len < 0.001) len = 0.001;
+    let cosvalue = v.x / len;//sqrt(v.x * v.x + v.y * v.y);
+    //if (isnan(cosvalue))  return 0;
+    if (cosvalue < -1) {
+      cosvalue = -1;
+    } else if (cosvalue > 1) {
+      cosvalue = 1;
+    }
+    let d = R2D(Math.acos(cosvalue));
+    if (v.y < 0) d = 360 - d;
+    //log("%f : %f", d, R2D(v.angle(Vec2(1, 0), v)));
+    return d;
+  }
+}
+
+function D2R(degrees) {
+  return degrees * (Math.PI / 180);
+}
+
+function R2D(radien) {
+  return radien * (180 / Math.PI);
+}
+
+function getUnitVectorFromAngle(_angle) {
+  let x = Math.cos(D2R(_angle));
+  return new Vector(x, (_angle < 180 ? 1 : -1) * Math.sqrt(1 - x * x));
+}
+
+function convertPos(c, pos) {
+  return [pos.x, c.height - pos.y];
+}
+
+function getAngleDiff(a1, a2) {
+
+  let diff = Math.abs(a2 - a1);
+
+  if (a1 < a2) {
+    if (diff > 180) {
+      //diff = 360 - diff;
+      //return -diff;
+      return diff - 360;
+    } else {
+      return diff;
+    }
+  } else {
+    if (diff > 180) {
+      //diff = 360 - diff;
+      //return diff;
+      return 360 - diff;
+    } else {
+      return -diff;
+    }
+  }
+
+}
+
+function angleNormalized(_a) {
+  if (_a < 0) {
+    return _a + 360;
+  } else if (_a >= 360) {
+    return _a - 360;
+  }
+  return _a;
+}
+
+const TURN_LIM = 60.0;
+
+function newParticle_firework_rocket() {
+  let p = {
+    R: 0,
+    G: 0,
+    B: 0,
+    pos: null,
+    target: null,
+    angle: 90,
+    vector: null,
+    accelerate: 0,
+    particles: [],
+    t: 0,
+    elapse: 0,
+    idx: 0,
+    tail: [],
+    initial: function (c) {
+
+      this.pos = new Vector(c.width * (0.4 + Math.random() * 0.2),
+                            -c.height * (Math.random() * 0.1));
+      this.target = new Vector(c.width * (0.2 + Math.random() * 0.6),
+                               c.height * (0.3 + Math.random() * 0.7));
+
+      let len = new Vector(this.target.x - this.pos.x, this.target.y - this.pos.y).getLength();
+
+      this.vector = len * (0.8 + Math.random() * 0.4);
+      this.angle = 90;
+      this.accelerate = -len * (0.4 + Math.random() * 0.4);
+      //this.vector = getUnitVectorFromAngle(90 + (-10 + Math.random() * 20));
+      //this.vector.scale(c.height * (0.8 + Math.random() * 0.4));
+
+      this.particles = [];
+      this.idx = Math.floor(Math.random() * 6);
+      this.colorDis(this.idx);
+      let convert = convertPos(c, this.pos);
+      for (let i = 0; i < 10; i++) {
+        this.tail[i] = convert;
+      }
+
+    },
+    colorDis: function (idx) {
+      let r0 = 100 * Math.random();
+      let r1 = 100 * Math.random();
+      let rc0 = 255;// + 55 * Math.random();
+      let rc1 = 255;// + 55 * Math.random();
+      switch (idx) {
+        case 0: this.R = rc0; this.G = r0; this.B = r1; break;
+        case 1: this.R = r0; this.G = rc0; this.B = r1; break;
+        case 2: this.R = r0; this.G = r1; this.B = rc0; break;
+        case 3: this.R = r0; this.G = rc0; this.B = rc1; break;
+        case 4: this.R = rc0; this.G = r0; this.B = rc1; break;
+        case 5: this.R = rc0; this.G = rc1; this.B = r0; break;
+      }
+    },
+    partical_initial: function (c) {
+
+      let range = Math.max(c.width, c.height) * (0.1 + Math.random() * 0.1);
+
+      this.elapse = 0.9 + Math.random() * 3.0;
+      this.t = 0;
+
+      if (this.particles.length < 1) {
+        let amount = 60 + Math.random() * 30;
+        for (var i = 0; i < amount; i++) {
+          this.particles[i] = newParticle_firework_particle();
+        }
+      }
+
+      //let idx = Math.floor(Math.random() * 6);
+
+      let _pos = convertPos(c, this.pos);
+      for (var i = 0; i < this.particles.length; i++) {
+        this.particles[i].initial(c, _pos[0], _pos[1], range, this.elapse, this.idx);
+      }
+
+    },
+    release: function () {
+      this.particles.length = 0;
+      this.particles = [];
+    },
+    draw: function (c, _ctx) {
+      _ctx.fillStyle = 'rgba(' + this.R + ',' + this.G + ',' + this.B + ', 1.0)';
+      _ctx.beginPath();
+
+      let r = Math.min(c.width, c.height) * 0.005;
+
+      for (let i = 0; i < this.tail.length; i++) {
+        _ctx.arc(this.tail[i][0], this.tail[i][1], r + i, 0, 2 * Math.PI, true);
+      }
+      //_ctx.arc(_pos[0], _pos[1], 20, 0, 2 * Math.PI, true);
+
+      _ctx.fill();
+      _ctx.closePath();
+
+    },
+    update: function (c, _ctx, dt) {
+
+      let _dt = dt / 1000.0;
+
+      //console.log(this.vector.getLength() + ', ' + this.accelerate);
+
+      if (this.particles.length == 0) {
+        //if (this.vector.getLength() > 4) {
+
+        let pre = new Vector(this.pos.x, this.pos.y);
+
+        let dir = getUnitVectorFromAngle(this.angle);
+        dir.scale(this.vector * _dt);
+        this.pos.add(dir);//this.vector.getScaleV(_dt));
+        this.vector += this.accelerate * _dt;
+
+        let ta = this.pos.getAngleFromPoiont(this.target);
+        ta = angleNormalized(ta);
+        let diff = getAngleDiff(this.angle, ta);
+        diff = Math.abs(diff) > TURN_LIM ? diff / Math.abs(diff) * TURN_LIM : diff;
+        this.angle += diff * _dt;
+        this.angle = angleNormalized(this.angle);
+
+        let _pos = convertPos(c, this.pos);
+        let _target = convertPos(c, this.target);
+
+        this.tail.push(_pos);
+        this.tail.shift();
+
+        this.draw(c, _ctx);
+
+        /*
+        _ctx.fillRect(_target[0] - 5, _target[1] - 5, 10, 10);
+        _ctx.font = "20px Monospace";
+        _ctx.fillText('' + this.angle , 10, c.height/2);
+        _ctx.fillText('' + ta , 10, c.height/2 + 20);
+        _ctx.fillText('' + diff , 10, c.height/2 + 40);
+        */
+
+        pre.sub(this.pos);
+        if (pre.getLength() < 2) {
+          //if (this.vector.getLength() < 4) {
+          //this.vector = new Vector(0, 0);
+          this.partical_initial(c);
+        }
+
+        return;
+      }
+
+      if (this.tail.length > 0) {
+        //if (this.tail.length > 0)
+        this.draw(c, _ctx);
+        this.tail.shift();
+      }
+
+      this.t += _dt;
+
+      for (var i = 0; i < this.particles.length; i++) {
+        this.particles[i].update(c, _ctx, dt);
+      }
+
+      if (this.t > this.elapse) {
+        this.initial(c);
+      }
+
     }
   }
   return p;

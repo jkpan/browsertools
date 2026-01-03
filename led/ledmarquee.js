@@ -331,8 +331,8 @@ function initAnim() {
         }
         break;
       case 7:
-        for (var i = 0;i<3;i++) {
-          particlesAnim[i] = newParticle_firework();
+        for (var i = 0;i<5;i++) {
+          particlesAnim[i] = newParticle_firework_rocket();
           particlesAnim[i].initial(canvas);
         }
         break;
