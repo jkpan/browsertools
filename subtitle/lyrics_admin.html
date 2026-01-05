@@ -393,7 +393,9 @@
             button.style.textAlign = 'center';
 
             button.onclick = function () {
-                window.open("./lyrics_sheet_slide.html?idx=" + encodeURI(fn), "_blank");
+                
+                window.open("./lyrics_sheet_slide.html?" + "songid=" + sel_song_id  + "&idx=" + encodeURI(fn), "_blank");
+                //window.open("./lyrics_sheet_slide.html?idx=" + encodeURI(fn), "_blank");
                 return false;
             };
             return button;
@@ -420,7 +422,8 @@
                 //let array = fn.split('__');
                 //let idx = parseInt(array[1]);//array[0];
 
-                window.open("./lyrics_sheet_slide.html?idx=" + encodeURI(fn), "_blank");
+                //window.open("./lyrics_sheet_slide.html?&idx=" + encodeURI(fn), "_blank");
+                window.open("./lyrics_sheet_slide.html?" + "songid=" + sel_song_id + "&idx=" + encodeURI(fn), "_blank");
                 //window.open(img.src, "_blank", "width=800,height=600");
             });
 
@@ -716,22 +719,8 @@
         button.style.fontSize = '14px'; // setting the font size to 20px
 
         button.onclick = function () {
-
             clickSong(idtxt);
             return false;
-
-            /*
-            let array = ALL_SONGS_JSON[idtxt].content;
-            if (!array) return false;
-
-            let field = document.getElementById("song_id");
-            field.value = idtxt;
-            mapping(array);
-
-            window.scrollTo(0, 0);
-
-            return false;
-            */
         };
         return button;
     }
@@ -800,7 +789,7 @@
         div.id = 'btns';
         document.body.appendChild(div);
 
-        let VOLUME = ALL_SONGS_JSON['nosong']['VOLUME']['content'];// window.opener.getSong('VOLUME');
+        let VOLUME = ALL_SONGS_JSON['nosong']['VOLUME']['content'];
 
         cata = VOLUME;
 
@@ -825,7 +814,7 @@
             for (var i = 1; i <= VOLUME[pf][1]; i++) {
                 var btn = _songBtn(VOLUME[pf][0] + i);
                 if (pf % 2 == 0) {
-                    btn.style.background = '#005500';//window.opener.COLORS_CK[0]; // setting the background color to teal
+                    btn.style.background = '#005500';
                 } else {
                     btn.style.background = '#333333';
                 }
@@ -921,34 +910,6 @@
             clickSong(sid);
         }
 
-
-
-        /*
-        console.log('get content from list');
-        if (window.opener) {
-
-            console.log('window.opener exist!');
-
-            document.getElementById('addsong').hidden = false;
-            document.getElementById("prefixdiv").hidden = true;
-            document.getElementById("editdiv").hidden = true;
-            document.getElementById("setedit").hidden = false;
-
-            document.getElementById("song_id_label").hidden = true;
-            document.getElementById("song_id").hidden = true;//style.visibility = 'hidden';
-
-        } else {
-            
-            
-        }
-        */
-
     })();
-
-
-    //"addsong" 歌單新增/修改
-    //"editdiv" 
-
-
 
 </script>

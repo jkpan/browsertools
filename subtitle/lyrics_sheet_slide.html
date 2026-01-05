@@ -295,34 +295,6 @@
         jump2(idx);
     }
 
-    function init() {
-        let images = window.opener.getSheetArray();
-        total = images.length;
-        images.forEach((src, i) => {
-            urlGo(src, true);
-
-            const dot = document.createElement('div');
-            dot.className = 'dot' + (i === 0 ? ' active' : '');
-            dot.dataset.idx = i;
-            dot.title = `${i + 1}/${images.length}`;
-            dot.style.cursor = 'pointer';
-            dot.addEventListener('click', () => goToIndex(i));
-            dotsContainer.appendChild(dot);
-
-        });
-        if (readParam('idx')) {
-            let idx = readParam('idx');
-            for (let i = 0; i < images.length; i++) {
-                if (decodeURI(images[i]).indexOf(idx) != -1) {
-                    jump2(i);
-                    //setTimeout(() => {  }, 100 * images.length + 100);
-                    break;
-                }
-            }
-        }
-
-    }
-
     function getClientX(evt) {
         if (!evt) return null;
         if (evt.type && evt.type.startsWith('touch')) {
@@ -359,6 +331,128 @@
         console.log('mouseup ');
     });
 
-    init();
+    function init(images) {
+        if (!images) {
+            images = window.opener.getSheetArray();
+            total = images.length;
+        }
+        
+        total = images.length;
+
+        images.forEach((src, i) => {
+            urlGo(src, true);
+            console.log(' ---- ---- src : ' + src);
+            const dot = document.createElement('div');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.dataset.idx = i;
+            dot.title = `${i + 1}/${images.length}`;
+            dot.style.cursor = 'pointer';
+            dot.addEventListener('click', () => goToIndex(i));
+            dotsContainer.appendChild(dot);
+
+        });
+        if (readParam('idx')) {
+            let idx = readParam('idx');
+            for (let i = 0; i < images.length; i++) {
+                if (decodeURI(images[i]).indexOf(idx) != -1) {
+                    jump2(i);
+                    //setTimeout(() => {  }, 100 * images.length + 100);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    function _ajax(json, url, cb, errorcb) {
+        console.log(json);
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(json)
+        }).then((response) => {
+            if (response.ok) {
+                return response.json(); // 解析JSON回應
+            } else {
+                throw new Error("請求失敗：" + response.status);
+            }
+        }).then((data) => {
+            // 在這裡處理解析後的JSON物件 //console.log(data);
+            cb(data);
+        }).catch((error) => {
+            // 處理錯誤
+            console.log('' + error);
+            errorcb();
+        });
+    }
+
+    function getSongList(songid) {
+        _ajax({
+                action: "listbysongid",
+                p1: songid,
+                user: null
+            }, '/sheetaction',
+                (obj) => {
+                    let array = obj['files'];
+                    array.sort(); //array.reverse();
+                    for (let i=0;i<array.length;i++) {
+                        array[i] = '.' + obj.folder + '/' + array[i];
+                    }
+
+                    
+                    array.forEach(element => {
+                        console.log('-------');
+                        console.log(element);
+                        console.log('=======');
+                    });
+                    
+
+                    init(array);
+
+                    /*
+                    array.forEach(element => {
+
+                        //let src = encodeURIComponent(element);
+                        //let encodedString = URLEncoder.encode(element, "UTF-8");
+                        try {
+                            let array = element.split('__');
+                            let idx = parseInt(array[1]);//array[0];
+                            let div = document.getElementById('drop-zone-' + idx);
+                            div.innerHTML = '';
+                            div.style.backgroundColor = 'transparent';
+                            if (isImageFile(element)) {
+                                let img = createImage('.' + obj.folder, element);//img.id = 'img_' + idx;
+                                sheetArray.push(img.src);
+                                div.appendChild(img);
+                                if (doUpload)
+                                    div.appendChild(createDelButton(idx));
+                            } else if (element.toLowerCase().endsWith('.pdf')) {
+                                let src = '.' + obj.folder + '/' + element;
+                                let img = createPDFBtn(element);//('.' + obj.folder, element);img.id = 'img_' + idx;
+                                sheetArray.push(src);
+                                div.appendChild(img);
+                                if (doUpload)
+                                    div.appendChild(createDelButton(idx));
+                            }
+                        } catch (err) {
+                            alert(err);
+                            return;
+                        }
+                    });
+                    */
+                },
+                (err) => {
+                    alert('list files fail: ' + err);
+                });
+    }
+
+    if (readParam('songid') && readParam('songid').length > 0) {
+        getSongList(readParam('songid'));
+    } else {
+        init();
+    }
+
 
 </script>
