@@ -19,7 +19,7 @@
             position: fixed;
             gap: 0px;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             border: none;
         }
 
@@ -322,13 +322,11 @@
     });
 
     window.addEventListener('mousedown', (evt) => {
-        startX = getClientX(evt);
-        console.log('mousedown ' + startX);
+        startX = getClientX(evt); //console.log('mousedown ' + startX);
     });
 
     window.addEventListener('mouseup', (evt) => {
-        simpleTouch(evt);
-        console.log('mouseup ');
+        simpleTouch(evt); //console.log('mouseup ');
     });
 
     function init(images) {
@@ -341,7 +339,7 @@
 
         images.forEach((src, i) => {
             urlGo(src, true);
-            console.log(' ---- ---- src : ' + src);
+            //console.log(' ---- ---- src : ' + src);
             const dot = document.createElement('div');
             dot.className = 'dot' + (i === 0 ? ' active' : '');
             dot.dataset.idx = i;
@@ -400,14 +398,6 @@
                     for (let i=0;i<array.length;i++) {
                         array[i] = '.' + obj.folder + '/' + array[i];
                     }
-
-                    
-                    array.forEach(element => {
-                        console.log('-------');
-                        console.log(element);
-                        console.log('=======');
-                    });
-                    
 
                     init(array);
 
