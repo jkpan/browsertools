@@ -1,217 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes" />
-<title>可縮放的橫向圖片檢視器</title>
-
 <style>
-  html, body {
-    margin: 0;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-  }
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* body 不捲動 */
+}
 
-  /* 整個橫向滑動區；只接單指橫向滑動換圖 */
-  #carousel {
-    height: 100%;
-    display: flex;
-    transition: transform 0.3s ease;
-    touch-action: pan-y; /* 保留 pinching 及上下滾動，不干擾縮放 */
-    will-change: transform;
-  }
+/* 上方固定列 */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 1000;
+}
 
-  .slide {
-    position: relative;
-    flex: 0 0 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background: #000;
-  }
-
-  /* 可縮放 ▸ transform: scale */
-  .zoom-container {
-    width: 100%;
-    height: 100%;
-    touch-action: none; /* 此區域接管縮放與拖動 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .zoom-img {
-    max-width: 100%;
-    max-height: 100%;
-    user-select: none;
-    -webkit-user-drag: none;
-    touch-action: none;
-    transform-origin: center center;
-  }
+/* 可捲動內容區 */
+.content {
+  position: absolute;
+  top: 60px;        /* 等於 header 高度 */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* 手機順滑 */
+  background: #f5f5f5;
+}
+.item {
+  padding: 16px;
+  border-bottom: 1px solid #ccc;
+}
 </style>
 </head>
 
 <body>
+  <div class="header">
+    固定在最上方的 Header
+  </div>
 
-<div id="carousel">
-  <div class="slide"><div class="zoom-container"><img class="zoom-img" src="https://picsum.photos/id/1011/1920/1080"></div></div>
-  <div class="slide"><div class="zoom-container"><img class="zoom-img" src="https://picsum.photos/id/1015/1920/1080"></div></div>
-  <div class="slide"><div class="zoom-container"><img class="zoom-img" src="https://picsum.photos/id/1018/1920/1080"></div></div>
-</div>
-
-<script>
-/* -------------------------------
-   變數
--------------------------------- */
-const carousel = document.getElementById("carousel");
-const slides = document.querySelectorAll(".slide");
-let index = 0;
-let startX = 0;
-let isDragging = false;
-
-let scale = 1;
-let currentX = 0;
-let currentY = 0;
-let lastX = 0;
-let lastY = 0;
-
-let startDistance = 0;
-
-/* -------------------------------
-  工具：距離計算
--------------------------------- */
-function getDistance(t1, t2) {
-  const dx = t2.clientX - t1.clientX;
-  const dy = t2.clientY - t1.clientY;
-  return Math.sqrt(dx*dx + dy*dy);
-}
-
-/* -------------------------------
-  更新輪播位置
--------------------------------- */
-function updateCarousel() {
-  carousel.style.transform = `translateX(-${index * window.innerWidth}px)`;
-}
-
-/* -------------------------------
-  事件：Touch Start
--------------------------------- */
-carousel.addEventListener("touchstart", (e) => {
-  const slide = slides[index].querySelector(".zoom-img");
-
-  if (e.touches.length === 1) {
-    // 單指：準備左右滑動
-    isDragging = true;
-    startX = e.touches[0].clientX;
-    carousel.style.transition = "none";
-
-    lastX = currentX;
-    lastY = currentY;
-
-  } else if (e.touches.length === 2) {
-    // 雙指：縮放
-    e.preventDefault();
-    isDragging = false;
-    startDistance = getDistance(e.touches[0], e.touches[1]);
-  }
-});
-
-/* -------------------------------
-  事件：Touch Move
--------------------------------- */
-carousel.addEventListener("touchmove", (e) => {
-  const slide = slides[index].querySelector(".zoom-img");
-
-  // ⭐ 多指 → 縮放模式
-  if (e.touches.length === 2) {
-    e.preventDefault();
-
-    const newDist = getDistance(e.touches[0], e.touches[1]);
-    const delta = newDist / startDistance;
-
-    scale = Math.min(Math.max(1, scale * delta), 5); // 限制 1 ~ 5 倍
-    startDistance = newDist;
-
-    slide.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
-    return;
-  }
-
-  // ⭐ 單指：若圖片已放大 → 拖動，不換圖
-  if (scale > 1) {
-    e.preventDefault();
-    const dx = e.touches[0].clientX - startX;
-    const dy = e.touches[0].clientY - (startY || e.touches[0].clientY);
-
-    currentX = lastX + dx / scale;
-    currentY = lastY + dy / scale;
-
-    slide.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
-    return;
-  }
-
-  // ⭐ 單指 + scale=1 → 左右換圖
-  if (isDragging) {
-    const dx = e.touches[0].clientX - startX;
-    carousel.style.transform = `translateX(${-index * window.innerWidth + dx}px)`;
-  }
-});
-
-/* -------------------------------
-  事件：Touch End
--------------------------------- */
-carousel.addEventListener("touchend", (e) => {
-  const slide = slides[index].querySelector(".zoom-img");
-
-  // 若有縮放 → 不切換圖片
-  if (scale > 1) return;
-
-  if (!isDragging) return;
-  isDragging = false;
-
-  carousel.style.transition = "0.3s ease";
-
-  const endX = e.changedTouches[0].clientX;
-  const moved = endX - startX;
-
-  if (moved < -50 && index < slides.length - 1) index++;
-  if (moved > 50 && index > 0) index--;
-
-  updateCarousel();
-});
-
-/* --------------------------------
-  雙擊還原 or 放大
--------------------------------- */
-slides.forEach((slide, i) => {
-  let lastTap = 0;
-
-  slide.addEventListener("touchend", (e) => {
-    const now = Date.now();
-    if (now - lastTap < 300) {
-      // double tap
-      const img = slide.querySelector(".zoom-img");
-
-      if (scale === 1) {
-        scale = 2;
-      } else {
-        scale = 1;
-        currentX = currentY = 0;
-      }
-
-      img.style.transition = "0.3s ease";
-      img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
-
-      setTimeout(() => img.style.transition = "", 300);
-    }
-    lastTap = now;
-  });
-});
-
-/* -------------------------------
-  初始化對齊
--------------------------------- */
-updateCarousel();
-</script>
-
+  <div class="content">
+    <!-- 模擬長內容 -->
+    <div class="item">內容 1</div>
+    <div class="item">內容 2</div>
+    <div class="item">內容 3</div>
+    <div class="item">內容 4</div>
+    <div class="item">內容 5</div>
+    <div class="item">內容 6</div>
+    <div class="item">內容 7</div>
+    <div class="item">內容 8</div>
+    <div class="item">內容 9</div>
+    <div class="item">內容 10</div>
+    <div class="item">內容 11</div>
+    <div class="item">內容 12</div>
+  </div>
 </body>
 </html>
