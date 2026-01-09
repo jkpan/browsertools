@@ -471,7 +471,7 @@ class Vector {
 
   normalize() {
     const len = this.getLength();
-    if (length > 0) {
+    if (len > 0) {
       this.x /= len;
       this.y /= len;
     } else {
