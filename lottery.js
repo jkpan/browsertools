@@ -1,46 +1,6 @@
 var memberimgs = [];
 var members = [
-    '',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
-    'James',
-    'Amy',
+    ''
 ];
 
 class Vector {
@@ -183,6 +143,10 @@ function angleNormalized(_a) {
 }
 
 const radius = 20;
+
+function setMembers(mems) {
+    members = mems;
+}
 
 class Ball {
 
@@ -398,6 +362,18 @@ class Ball {
 
     }
 
+    /*
+    attract(ax, ay, c ,dt) {
+        let _dt = dt / 1000.0;
+        let v = new Vector(ax - this.pos.x, ay - this.pos.y);
+        let len = v.getLength();
+        if (len < radius) {
+                this.dir.add(v.normalize().scale(radius).scale(_dt));
+                this.pos.add(this.dir.getScaleV(_dt));
+        }
+    }
+    */
+
 }
 
 var canvas;
@@ -408,18 +384,21 @@ var particles = [];
 var dofan = false;
 var gate = 0;
 
-function stop() {
+function stopRunning() {
     keepGoing = false;
     gate = 0;
+    particles = [];
+    memberimgs = [];
+    members = [];
+    setTimeout(function () {
+        init();
+    }, 500);
 }
 function start() {
     gate = 0;
     keepGoing = false;
     dofan = false
     initAnim();
-    setTimeout(function () {
-        keepGoing = true;
-    }, 1000);
     setTimeout(function () {
         openFan();
     }, 2000);
@@ -530,13 +509,18 @@ function drawHole(dt) {
         let minirange = -1;
         for (let i = 1; i < particles.length; i++) {
             if (particles[i].action != 0) continue;
-            let len = new Vector(hole_target_pos.x - particles[i].pos.x, hole_target_pos.y - particles[i].pos.y).getLength();
+            let _v = new Vector(hole_target_pos.x - particles[i].pos.x, hole_target_pos.y - particles[i].pos.y);
+            let len = _v.getLength();
             if (minirange < 0 || len < minirange) {
                 minirange = len;
                 mini = i;
             }
+            if (len < radius) {
+                particles[i].dir.add(_v.normalize().scale(radius * dt/1000.0));
+            }
+                
         }
-        if (minirange < 5) {
+        if (minirange < radius/2) {
             gate = 3;
             particles[mini].action = 1;
             particles[mini].target = new Vector(hole_target_pos.x, hole_target_pos.y);
@@ -544,9 +528,20 @@ function drawHole(dt) {
                 particles[mini].target = new Vector(hole_target_pos.x, canvas.height * 2);
             }, 2000);
             setTimeout(() => {
+                setWinner(mini);
                 gate = 0;
             }, 3000);
+            return;
         }
+
+        /*
+        for (let i = 1; i < particles.length; i++) {
+            if (particles[i].action != 0) continue;
+            particles[i].attract(hole_target_pos.x, hole_target_pos.y, canvas ,dt);
+        }
+        */
+        
+
         return;
     }
 
@@ -608,6 +603,8 @@ function anim_update(elapse) {
 }
 
 function initAnim() {
+
+    //alert('initAnim');
 
     hole_pos = new Vector(canvas.width / 2, canvas.height / 2);
     hole_target_pos = new Vector(canvas.width / 2, canvas.height / 2);
