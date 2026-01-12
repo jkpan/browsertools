@@ -1002,10 +1002,14 @@
                     minirange = len;
                     mini = i;
                 }
-                if (len < radius) {
-                    particles[i].dir.add(_v.normalize().scale(radius * dt / 1000.0));
+                if (len < radius * 3) { //有碰到
+                    particles[i].dir.add(_v.normalize().scale(radius * 3 * dt / 1000.0));
                 }
 
+            }
+            if (mini == -1) {
+                gate = 0;
+                return;
             }
             if (minirange < radius / 2) {
                 gate = 3;
