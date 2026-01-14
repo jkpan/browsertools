@@ -170,6 +170,7 @@ function anim_update(elapse) {
   ctx.fillRect(0, 0, c.width, c.height);
 
   let dt = elapse - pre;
+  if (dt > 500) dt = 16;
   pre = elapse;
 
   //if (Math.random() < 0.05) console.log('dt: ' + dt);

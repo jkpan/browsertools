@@ -327,6 +327,7 @@ function anim_update(elapse) {
   }
 
   let dt = elapse - pre;
+  if (dt > 500) dt = 16;
   pre = elapse;
 
   if (keepLEDGoing == 1) {    

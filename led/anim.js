@@ -577,6 +577,7 @@ function newParticle_firework_rocket() {
       this.target = new Vector(c.width * (0.2 + Math.random() * 0.6),
                                c.height * (0.3 + Math.random() * 0.7));
 
+
       let len = new Vector(this.target.x - this.pos.x, this.target.y - this.pos.y).getLength();
 
       this.vector = len * (0.8 + Math.random() * 0.4);
@@ -653,9 +654,8 @@ function newParticle_firework_rocket() {
 
       let _dt = dt / 1000.0;
 
-      //console.log(this.vector.getLength() + ', ' + this.accelerate);
-
       if (this.particles.length == 0) {
+
         //if (this.vector.getLength() > 4) {
 
         let pre = new Vector(this.pos.x, this.pos.y);
@@ -689,9 +689,8 @@ function newParticle_firework_rocket() {
         */
 
         pre.sub(this.pos);
+
         if (pre.getLength() < 2) {
-          //if (this.vector.getLength() < 4) {
-          //this.vector = new Vector(0, 0);
           this.partical_initial(c);
         }
 
@@ -877,8 +876,6 @@ function newParticle_skylight() {
     },
     update: function (c, _ctx, dt) {
 
-      if (dt > 1000) dt = 16;
-
       this.t += dt / 1000.0;
       let ein = this.t / this.elapse;
       let x = this.x_stt + (this.x_end - this.x_stt) * ein;
@@ -991,10 +988,6 @@ function newParticle_sunrise() {
 
     },
     update: function (c, _ctx, dt) {
-
-
-
-      if (dt > 1000) dt = 16;
 
       this.t += dt / 1000.0;
       let ein = this.easein(this.t / this.elapse);

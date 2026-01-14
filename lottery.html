@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>抽獎程式</title>
+    <title>拈鬮Go</title>
     <style>
         :root {
             --bg1: #0b1020;
@@ -94,16 +94,6 @@
             box-shadow: 0 0 0 4px rgba(122, 162, 255, .12);
         }
 
-        /* canvas{
-      width:100%;
-      height:520px;
-      display:block;
-      background:
-        radial-gradient(900px 360px at 50% 10%, rgba(122,162,255,.18), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-      border-radius:14px;
-      border:1px solid #253066;
-    } */
         .side {
             padding: 14px;
             display: flex;
@@ -283,13 +273,13 @@
         <div class="card side">
             <div class="section">
                 <h3>名單</h3>
-                <textarea
-                    id="namesInput">王小明, 陳美玲, 林志豪, 張雅婷, 李冠廷, 黃詩涵, 吳家豪, 蔡欣怡, 劉柏宏, 楊子萱, 鄭文凱, 謝宜庭, 周佩穎, 曾子翔, 蘇怡君</textarea>
-                <textarea id="candidate" hidden="true" readonly></textarea>
+                <textarea id="inputArea">
+王小明, 陳美玲, 林志豪, 張雅婷, 李冠廷, 黃詩涵, 吳家豪, 蔡欣怡, 劉柏宏, 楊子萱, 鄭文凱, 謝宜庭, 周佩穎, 曾子翔, 蘇怡君</textarea>
+                <textarea id="listArea" hidden="true" readonly></textarea>
                 <!-- <ol id="candidate" hidden="true"></ol> -->
                 <div class="footer-note" style="margin-top:8px;">
-                    <button class="primary" id="parseBtn" onclick="parseNames()">輸入名單</button>
-                    <button class="primary" id="editBtn" onclick="editNames()" hidden="true">編輯名單</button>
+                    <button class="primary" id="toParseBtn" onclick="parseNames()">輸入名單</button>
+                    <button class="primary" id="toEditBtn" onclick="editNames()" hidden="true">編輯名單</button>
                 </div>
             </div>
 
@@ -323,10 +313,73 @@
 </html>
 <script>
 
-    const winnersList = document.getElementById("winnersList");
+    function elmOff(_id) {
+        document.getElementById(_id).hidden = true;
+    }
 
-    const candidateList = document.getElementById("candidate");
-    const namesInput = document.getElementById("namesInput");
+    function elmOn(_id) {
+        document.getElementById(_id).hidden = false;
+    }
+
+    function elmDisable(_id) {
+        document.getElementById(_id).disabled = true;
+    }
+
+    function elmEnable(_id) {
+        document.getElementById(_id).disabled = false;
+    }
+
+    function _mode(mode) {
+
+        //<textarea id="inputArea">
+        //<textarea id="listArea" hidden="true" readonly></textarea>
+        //<button class="primary" id="toParseBtn" onclick="parseNames()">輸入名單</button>
+        //<button class="primary" id="toEditBtn" onclick="editNames()" hidden="true">編輯名單</button>
+        
+        //<div class="section" id="control" hidden="true">
+            //<button class="primary" id="btnStart" onclick="readyGo()">開始</button>
+            //<button class="primary" id="btnEnd" onclick="theEnd()">結束</button>
+            //<button class="primary" id="btnCatch" hidden="true" onclick="openGate()">抽獎</button>
+
+        //<ol id="winnersList" class="winners"></ol>
+
+        switch(mode) {
+            case 'end_ready_mode':
+            case 'edit_mode':
+                elmOn('inputArea');
+                elmOn('toParseBtn');
+                elmOff('listArea');
+                elmOff('toEditBtn');
+
+                elmOff('control');                
+                break;
+            case 'editdone_mode':
+                elmOff('inputArea');
+                elmOff('toParseBtn');
+                elmOn('listArea');
+                elmOn('toEditBtn');
+                elmEnable('toEditBtn');
+
+                elmOn('control');
+                    //elmOn('btnStart');
+                    elmEnable('btnStart');
+                    elmOff('btnEnd');
+                    elmOff('btnCatch');
+                break;
+            case 'running_mode':
+                //elmOn('btnStart');
+                elmDisable('toEditBtn');
+                elmDisable('btnStart');
+                elmOn('btnEnd');
+                elmOn('btnCatch');
+                break;
+            //case 'end_ready_mode': break;
+        }
+    }
+
+    const winnersList = document.getElementById("winnersList");
+    const listArea = document.getElementById("listArea");
+    const inputArea = document.getElementById("inputArea");
     let all_list = [''];
     let winners_list = [];
 
@@ -342,25 +395,26 @@
     }
 
     function theEnd() {
-        all_list = [''];
-        winners_list = [];
-        editNames();
         stopRunning();
+        all_list = [''];
+        //winners_list = [];
+        _mode('edit_mode');
+        //editNames();
+        //stopRunning();
     }
 
     function readyGo() {
         winnersList.innerHTML = "";
+        winners_list = [];
+        _mode('running_mode');
         setMembers(all_list);
         setTimeout(() => {
             start();
-            document.getElementById('btnStart').disabled = true;
-            document.getElementById('btnEnd').hidden = false;
-            document.getElementById('btnCatch').hidden = false;
-        }, 500);
+        }, 200);
     }
 
     function parseNames() {
-        const raw = namesInput.value
+        const raw = inputArea.value
             //.split(/\r?\n/)
             .split(',')
             .map(s => s.trim())
@@ -373,115 +427,16 @@
         for (let i = 1; i < all_list.length; i++) {
             txt += (i) + '. ' + all_list[i] + '\n';
         }
-        candidateList.value = txt;
-        namesInput.hidden = true;
-        candidateList.hidden = false;
+        listArea.value = txt;
 
-        document.getElementById("parseBtn").hidden = true;
-        document.getElementById("editBtn").hidden = false;
-        if (all_list.length > 0) {
-            document.getElementById("control").hidden = false;
-            document.getElementById('btnStart').disabled = false;
-        }
+        if (all_list.length > 0) 
+            _mode('editdone_mode');
+
     }
 
     function editNames() {
-        candidateList.hidden = true;
-        namesInput.hidden = false;
-
-        document.getElementById("parseBtn").hidden = false;
-        document.getElementById("editBtn").hidden = true;
-        document.getElementById("control").hidden = true;
-
-        document.getElementById('btnEnd').hidden = true;
-        document.getElementById('btnCatch').hidden = true;
+        _mode('edit_mode');
     }
-
-    function parseText() {
-
-        let value = document.getElementById("namesInput").value;
-        value = value.trim();
-        if (value.length == 0) return;
-        let lines = value.split('\n');
-
-        let newsong = [['']];
-        let phaseidx = 0;
-        let lineidx = 0;
-        let preline = '';
-
-        // 逐行处理内容
-        lines.forEach((line, index) => {
-
-            line = line.trim();
-
-            if (line.length == 0) {
-                if (preline == '') return;
-                phaseidx++;
-                lineidx = 0;
-                if (index < lines.length - 1) {//不是最後一行
-                    newsong[phaseidx] = [''];
-                }
-                preline = '';
-                return;
-            }
-
-            newsong[phaseidx][lineidx] = line;
-            lineidx++;
-            preline = line;
-
-        });
-
-        if (newsong.length == 0) return null;
-
-        return newsong;
-
-    }
-    /*
-    // =========================
-    // 0) 預設名單
-    // =========================
-    const DEFAULT_NAMES = [
-      "王小明","陳美玲","林志豪","張雅婷","李冠廷",
-      "黃詩涵","吳家豪","蔡欣怡","劉柏宏","楊子萱",
-      "鄭文凱","謝宜庭","周佩穎","曾子翔","蘇怡君"
-    ];
- 
-    // =========================
-    // 6) 名單解析 + 去重
-    // =========================
-    function parseNamesDedup(){
-      const raw = namesInput.value
-        .split(/\r?\n/)
-        .map(s => s.trim())
-        .filter(Boolean);
- 
-      const seen = new Set();
-      const out = [];
-      for(const n of raw){
-        if(seen.has(n)) continue;
-        seen.add(n);
-        out.push(n);
-      }
-      return out;
-    }
- 
-    // =========================
-    // 9) 結果 UI
-    // =========================
-    function clearWinnersUI(count){
-      winnersList.innerHTML = "";
-      for(let k=1;k<=count;k++){
-        const li = document.createElement("li");
-        li.className = "winnerItem";
-        li.innerHTML = `
-          <div class="rank">第 ${k} 名</div>
-          <div class="name">（待掉出）</div>
-          <div class="meta"></div>
-        `;
-        winnersList.appendChild(li);
-      }
-    }
-    */
 
 </script>
 <script>
@@ -602,16 +557,12 @@
 
         if (a1 < a2) {
             if (diff > 180) {
-                //diff = 360 - diff;
-                //return -diff;
                 return diff - 360;
             } else {
                 return diff;
             }
         } else {
             if (diff > 180) {
-                //diff = 360 - diff;
-                //return diff;
                 return 360 - diff;
             } else {
                 return -diff;
@@ -654,9 +605,9 @@
             this.idx = _idx;
             this.name = members[this.idx];
 
-            this.pos = new Vector(c.width / 2 + c.width * (-0.4 + Math.random() * 0.8),
-                c.height / 2 + c.height * (-0.4 + Math.random() * 0.8));
-            this.dir = new Vector(0, 0);
+            this.pos = new Vector(c.width / 2, c.height / 2);
+            //new Vector(c.width / 2 + c.width * (-0.4 + Math.random() * 0.8), c.height / 2 + c.height * (-0.4 + Math.random() * 0.8));
+            this.dir = getUnitVectorFromAngle(Math.random() * 360).scale(c.width * (0.5 + 0.5 * Math.random()));// new Vector(0, 0);
         }
         draw(c, _ctx) {
 
@@ -714,9 +665,8 @@
         }
 
         wind(c, _dt) {
-            if (!dofan) return;
-            //if (Math.random() * 10 < 7) return;
 
+            if (!dofan) return;
 
             {
                 let wv = new Vector(this.pos.x - c.width / 2, this.pos.y - 0);
@@ -778,47 +728,6 @@
                 }
             }
 
-            /*
-            {
-                let wv = new Vector(this.pos.x - 0, this.pos.y - 0);
-                let diff = getAngleDiff(90, wv.getAngle());
-                if (Math.abs(diff) < 30) {
-                    let weight = (100 - Math.abs(diff)) / 90.0;//Math.pow((100 - Math.abs(diff))/90.0, 2);
-                    wv.normalize().scale(1.0 * (c.height - this.pos.y) * weight);
-                    this.dir.add(wv.scale(_dt));
-                }
-            }
-    
-            {
-                let wv = new Vector(this.pos.x - c.width, this.pos.y - 0);
-                let diff = getAngleDiff(90, wv.getAngle());
-                if (Math.abs(diff) < 30) {
-                    let weight = (100 - Math.abs(diff)) / 90.0;//Math.pow((100 - Math.abs(diff))/90.0, 2);
-                    wv.normalize().scale(1.0 * (c.height - this.pos.y) * weight);
-                    this.dir.add(wv.scale(_dt));
-                }
-    
-            }
-    
-            if (Math.random() < 0.2) {
-                let wv = new Vector(this.pos.x - 0, this.pos.y - c.height);
-                let diff = getAngleDiff(0, wv.getAngle());
-    
-                let weight = (100 - Math.abs(diff)) / 90.0;//Math.pow((100 - Math.abs(diff))/90.0, 2);
-                wv.normalize().scale(2.0 * (c.width - this.pos.x) * weight);
-                this.dir.add(wv.scale(_dt));
-            }
-    
-            if (Math.random() < 0.2) {
-                let wv = new Vector(this.pos.x - c.width, this.pos.y - c.height);
-                let diff = getAngleDiff(180, wv.getAngle());
-    
-                let weight = (100 - Math.abs(diff)) / 90.0;//Math.pow((100 - Math.abs(diff))/90.0, 2);
-                wv.normalize().scale(2.0 * (this.pos.x) * weight);
-                this.dir.add(wv.scale(_dt));
-            }
-            */
-
         }
 
         update(c, _ctx, dt) {
@@ -849,18 +758,6 @@
 
         }
 
-        /*
-        attract(ax, ay, c ,dt) {
-            let _dt = dt / 1000.0;
-            let v = new Vector(ax - this.pos.x, ay - this.pos.y);
-            let len = v.getLength();
-            if (len < radius) {
-                    this.dir.add(v.normalize().scale(radius).scale(_dt));
-                    this.pos.add(this.dir.getScaleV(_dt));
-            }
-        }
-        */
-
     }
 
     var canvas;
@@ -888,7 +785,7 @@
         initAnim();
         setTimeout(function () {
             openFan();
-        }, 2000);
+        }, 3000);
     }
     function openFan() {
         dofan = true;
@@ -912,7 +809,7 @@
         //ctx.fillStyle = 'red';
         //ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'white';
-        ctx.fillText('Ready to go', canvas.width / 2, canvas.height / 2);
+        ctx.fillText('拈鬮Go', canvas.width / 2, canvas.height / 2);
 
         drawBox();
 
@@ -928,14 +825,6 @@
         ctx.roundRect(0, 0, canvas.width, canvas.height, 10);
         ctx.stroke();
         ctx.closePath();
-
-        //ctx.roundRect(0, 0, canvas.width, canvas.height, 8);
-
-        //ctx.strokeRect(0, 0, canvas.width, canvas.height);
-
-        //ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-        //ctx.scale(1, -1);
-        //ctx.fillText('5' , 15, 25);
 
     }
 
@@ -966,7 +855,7 @@
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
                 break;
             case 1: //ready
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.fillStyle = 'rgba(200, 0, 0, 0.5)';//'rgba(255, 255, 255, 0.5)';
                 break;
             case 2: //search
                 if (Math.random() > 0.5)
@@ -1025,14 +914,6 @@
                 return;
             }
 
-            /*
-            for (let i = 1; i < particles.length; i++) {
-                if (particles[i].action != 0) continue;
-                particles[i].attract(hole_target_pos.x, hole_target_pos.y, canvas ,dt);
-            }
-            */
-
-
             return;
         }
 
@@ -1049,7 +930,7 @@
     function anim_update(elapse) {
 
         let dt = elapse - pre;
-        if (dt > 1000) dt = 16.0;
+        if (dt > 500) dt = 16.0;
         pre = elapse;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1119,17 +1000,6 @@
         }
 
     }
-
-    //initAnim();
-
-    /*
-    window.onload = function () {
-        var canvas = document.getElementById("myCanvas");
-        var ctx = canvas.getContext("2d");
-        var img = document.getElementById("scream");
-        ctx.drawImage(img, 10, 10);
-    };
-    */
 
     function generateBall(txt) {
 
@@ -1213,10 +1083,6 @@
         tempCtx.stroke();
         tempCtx.closePath();
 
-        //tempCtx.fillStyle = 'black';
-        //tempCtx.fillRect(0, 0, fw, fh);
-        //tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-
         tempCtx.textAlign = "center";
 
         tempCtx.fillStyle = 'rgba(255,255,255, 1.0)';
@@ -1228,12 +1094,7 @@
         const dataURL = tempCanvas.toDataURL(); // Creates a PNG image data URL by default
         // Create a new Image object and set its source to the data URL
         const img = new Image();
-        /*
-        img.onload = function() {
-          // Once the image is loaded, draw it onto the destination canvas
-          destCtx.drawImage(img, 0, 0);
-        };
-        */
+
         img.src = dataURL;
         return img;
 

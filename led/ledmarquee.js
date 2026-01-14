@@ -1,11 +1,11 @@
-var subtitle = [ [''], 
-                 [''],
-                 ['']];
-    
+var subtitle = [[''],
+[''],
+['']];
+
 var fsize = 128;
 
-const fontFamily_array = 
-["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"]; //google fonts
+const fontFamily_array =
+  ["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"]; //google fonts
 //["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
 var fontFamily = fontFamily_array[0];
 
@@ -39,10 +39,10 @@ var backEffect;
 
 function initCanvas() {
   canvas = document.getElementById("canvas");
-  canvas.width  = window.innerWidth;// Width;
+  canvas.width = window.innerWidth;// Width;
   canvas.height = window.innerHeight;//window.outerHeight;
   //ctx = canvas.getContext("2d");
-  ctx = canvas.getContext("2d", {willReadFrequently:true});
+  ctx = canvas.getContext("2d", { willReadFrequently: true });
 }
 
 function init() {
@@ -57,147 +57,148 @@ function init() {
 
 
 function newParticle_swingtxt(_txt, xx, yy) {
-    let p = {
-            x: xx,
-            y: yy,
-          txt: _txt,
-         step: 0,
-          len:0,
-        color:'#ffffff',
-        speed:4.0,
-      release: function() {
-        this.txt = '';
-      },
-      sinoutin: function(t) { // 0-1  15 * sinoutin(recoil_t * 1.0/8.0);
-        if (t < 0.5) return 2 * t;
-        return  -2 * t + 2;//Math.sin(t * Math.PI);//- (t-1) * (t-1) +1 ;
-      },
-      stepValue: function(peroidSec, range, dt) { //(float &_step, float peroidSec, float range, float dt) {
-        this.step += dt/peroidSec;
-        if (this.step > 1.0) {
-          this.step = 0.0;
-        }
-        return this.sinoutin(this.step) * range;
-      },
-      initial: function (c) {
-        this.step = 0;
-        var _ctx = c.getContext("2d");
-        _ctx.font = FONT;// + "px 標楷體";
-        this.len = _ctx.measureText(this.txt).width;
-        return this.len;
-      },
-  
-      update: function (c, _ctx, dt) {
-         
-        if (dt > 1000) dt = 16;
-        
-        dt *= 0.001;
-
-        let t = 2 * Math.abs(c.width - this.len)/this.speed;
-
-        this.x = (c.width - this.len) - this.stepValue(t, (c.width - this.len), dt);
-
-        //this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
-  
-        _ctx.textAlign = "left";
-        _ctx.font = FONT;// + "px 標楷體";
-        
-        _ctx.strokeStyle = this.color;//'white';
-        _ctx.lineWidth = 4;
-          
-        _ctx.fillStyle = this.color;//'white';
-
-        _ctx.strokeText(this.txt, this.x, this.y);
-        _ctx.fillText(this.txt, this.x, this.y);
-  
+  let p = {
+    x: xx,
+    y: yy,
+    txt: _txt,
+    step: 0,
+    len: 0,
+    color: '#ffffff',
+    speed: 4.0,
+    release: function () {
+      this.txt = '';
+    },
+    sinoutin: function (t) { // 0-1  15 * sinoutin(recoil_t * 1.0/8.0);
+      if (t < 0.5) return 2 * t;
+      return -2 * t + 2;//Math.sin(t * Math.PI);//- (t-1) * (t-1) +1 ;
+    },
+    stepValue: function (peroidSec, range, dt) { //(float &_step, float peroidSec, float range, float dt) {
+      this.step += dt / peroidSec;
+      if (this.step > 1.0) {
+        this.step = 0.0;
       }
+      return this.sinoutin(this.step) * range;
+    },
+    initial: function (c) {
+      this.step = 0;
+      var _ctx = c.getContext("2d");
+      _ctx.font = FONT;// + "px 標楷體";
+      this.len = _ctx.measureText(this.txt).width;
+      return this.len;
+    },
+
+    update: function (c, _ctx, dt) {
+
+      if (dt > 1000) dt = 16;
+
+      dt *= 0.001;
+
+      let t = 2 * Math.abs(c.width - this.len) / this.speed;
+
+      this.x = (c.width - this.len) - this.stepValue(t, (c.width - this.len), dt);
+
+      //this.x -= dt * 0.001 * speed;//dt * 0.001 * (dots + side) * 2;
+
+      _ctx.textAlign = "left";
+      _ctx.font = FONT;// + "px 標楷體";
+
+      _ctx.strokeStyle = this.color;//'white';
+      _ctx.lineWidth = 4;
+
+      _ctx.fillStyle = this.color;//'white';
+
+      _ctx.strokeText(this.txt, this.x, this.y);
+      _ctx.fillText(this.txt, this.x, this.y);
+
     }
-    return p;
+  }
+  return p;
 }
 
 function newParticle_txt(_txt, xx, yy) {
-    let p = {
-            x: xx,
-            y: yy,
-          txt: _txt,
-        color:'#ffffff',
-        speed:160,
-      release: function() {
-        this.txt = '';
-      },
-      initial: function (c) {
-        //this.release();
-        //this.txt = subtitle[this.p][this.idx];
-        var _ctx = c.getContext("2d");
-        _ctx.font = FONT;// + "px 標楷體";
-        return _ctx.measureText(this.txt).width;
-      },
-  
-      update: function (c, _ctx, dt) {
-         
-        if (dt > 1000) dt = 16;
-  
-        this.x -= dt * 0.001 * this.speed;//dt * 0.001 * (dots + side) * 2;
-         
-        if (this.x < -_ctx.measureText(this.txt).width + 10) {
-          this.x = c.width;
-          return;
-        }
-          
-        _ctx.textAlign = "left";
-        _ctx.font = FONT;// + "px 標楷體";
-        
-        _ctx.strokeStyle = this.color;//color_0;//'white';
-        _ctx.lineWidth = 4;
-          
-        _ctx.fillStyle = this.color;//color_0;//'white';
+  let p = {
+    x: xx,
+    y: yy,
+    txt: _txt,
+    color: '#ffffff',
+    speed: 160,
+    release: function () {
+      this.txt = '';
+    },
+    initial: function (c) {
+      //this.release();
+      //this.txt = subtitle[this.p][this.idx];
+      var _ctx = c.getContext("2d");
+      _ctx.font = FONT;// + "px 標楷體";
+      return _ctx.measureText(this.txt).width;
+    },
 
-        _ctx.strokeText(this.txt, this.x, this.y);
-        _ctx.fillText(this.txt, this.x, this.y);
-  
+    update: function (c, _ctx, dt) {
+
+      if (dt > 1000) dt = 16;
+
+      this.x -= dt * 0.001 * this.speed;//dt * 0.001 * (dots + side) * 2;
+
+      if (this.x < -_ctx.measureText(this.txt).width + 10) {
+        this.x = c.width;
+        return;
       }
+
+      _ctx.textAlign = "left";
+      _ctx.font = FONT;// + "px 標楷體";
+
+      _ctx.strokeStyle = this.color;//color_0;//'white';
+      _ctx.lineWidth = 4;
+
+      _ctx.fillStyle = this.color;//color_0;//'white';
+
+      _ctx.strokeText(this.txt, this.x, this.y);
+      _ctx.fillText(this.txt, this.x, this.y);
+
     }
-    return p;
+  }
+  return p;
 }
-  
+
 function anim_update(elapse) {
-  
-    //ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-    let dt = elapse - pre;
-    pre = elapse;
-  
-    /*
-    if (keepGoing != 1) {
-      initAnim();
-      return;
-    }
-    */
 
-    if (backEffect) 
-      backEffect.update(canvas, ctx, dt);
+  //ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    
-    for (var i = 0;i<particlesAnim.length;i++) {
-      particlesAnim[i].update(canvas, ctx, dt);
-    }
-    
-    for (var i = 0;i<particles.length;i++) {
-      particles[i].update(canvas, ctx, dt);
-    }
-     
-    if (keepLEDGoing == 1) {
-      //led.js
-      ledAction4Still(canvas, ctx);
-    }
-    
-    if (keepGoing == 1) {
-      window.requestAnimationFrame(anim_update); //console.log("requestAnimationFrame update " + elapse);
-    }
-  
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  let dt = elapse - pre;
+  if (dt > 500) dt = 16;
+  pre = elapse;
+
+  /*
+  if (keepGoing != 1) {
+    initAnim();
+    return;
+  }
+  */
+
+  if (backEffect)
+    backEffect.update(canvas, ctx, dt);
+
+
+  for (var i = 0; i < particlesAnim.length; i++) {
+    particlesAnim[i].update(canvas, ctx, dt);
+  }
+
+  for (var i = 0; i < particles.length; i++) {
+    particles[i].update(canvas, ctx, dt);
+  }
+
+  if (keepLEDGoing == 1) {
+    //led.js
+    ledAction4Still(canvas, ctx);
+  }
+
+  if (keepGoing == 1) {
+    window.requestAnimationFrame(anim_update); //console.log("requestAnimationFrame update " + elapse);
+  }
+
 }
 
 /*
@@ -216,164 +217,158 @@ async function restartAnim() {
   }
 }
 */
-  
+
 function initAnim() {
-  
-    //keepGoing = 0;
-    //if (subtitle.length == 1) return;
 
-    var c = document.getElementById("canvas");
-    var ctx = c.getContext("2d");
-  
-    //console.log(c.width + ', ' + c.height);
-    
-    if (particles.length >= 1) {
-      for (var i = 0;i<particles.length;i++) {
-        particles[i].release();
-      }
+  if (!canvas) {
+    canvas = document.getElementById("canvas");
+    ctx = canvas.getContext("2d");
+  }
+
+  if (particles.length >= 1) {
+    for (var i = 0; i < particles.length; i++) {
+      particles[i].release();
     }
+  }
 
-    particles.length = 0;
-    particles = [];
-  
-    //for (let _i = 1;_i<subtitle.length;_i++) {}
-    //let yy = c.height/4.0 + fsize/2;
-    
-    fsize = canvas.height/3;
-    FONT = fsize + "px " + fontFamily;
-    let xx = c.width;
+  particles.length = 0;
+  particles = [];
 
-    //var total = subtitle[1].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
-    if (subtitle[2][0].length > 0) {
-      if (swing == 0) {
-        particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height - fsize/5);//();
-        particles[0].speed = speed;
-      } else {
-        particles[0] = newParticle_swingtxt(subtitle[1][0], xx, 0.5 * c.height - fsize/5);//();
-        particles[0].speed = speed;//7 - speed/100.0;
-      }
-      particles[0].initial(c);
-      particles[0].color = color_0;
+  fsize = canvas.height / 3;
+  FONT = fsize + "px " + fontFamily;
+  let xx = canvas.width;
 
-      if (swing1 == 0) {
-        particles[1] = newParticle_txt(subtitle[2][0], xx, 0.5 * c.height + fsize);//();
-        particles[1].speed = speed1;
-      } else {
-        particles[1] = newParticle_swingtxt(subtitle[2][0], xx, 0.5 * c.height + fsize);//();
-        particles[1].speed = speed1;//7 - speed1/100.0;
-      }
-      particles[1].initial(c);
-      particles[1].color = color_1;
-
+  //var total = subtitle[1].length;//Math.min(35, 15 + 5 * Math.floor(c.width/500));//console.log('total:'+total);
+  if (subtitle[2][0].length > 0) {
+    if (swing == 0) {
+      particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * canvas.height - fsize / 5);//();
+      particles[0].speed = speed;
     } else {
-      fsize = canvas.height/2;
-      FONT = fsize + "px " + fontFamily;
-      if (swing == 0) {
-        particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * c.height + fsize/3);//();
-        particles[0].speed = speed;
-      } else {
-        particles[0] = newParticle_swingtxt(subtitle[1][0], xx, 0.5 * c.height + fsize/3);//();
-        particles[0].speed = speed;//7 - speed/100.0;;
-      }
-
-      particles[0].initial(c);
-      particles[0].color = color_0;
+      particles[0] = newParticle_swingtxt(subtitle[1][0], xx, 0.5 * canvas.height - fsize / 5);//();
+      particles[0].speed = speed;//7 - speed/100.0;
     }
-    
-    if (particlesAnim.length >= 1) {
-      for (var i = 0;i<particlesAnim.length;i++) {
-        particlesAnim[i].release();
-      }
+    particles[0].initial(c);
+    particles[0].color = color_0;
+
+    if (swing1 == 0) {
+      particles[1] = newParticle_txt(subtitle[2][0], xx, 0.5 * canvas.height + fsize);//();
+      particles[1].speed = speed1;
+    } else {
+      particles[1] = newParticle_swingtxt(subtitle[2][0], xx, 0.5 * canvas.height + fsize);//();
+      particles[1].speed = speed1;//7 - speed1/100.0;
+    }
+    particles[1].initial(c);
+    particles[1].color = color_1;
+
+  } else {
+    fsize = canvas.height / 2;
+    FONT = fsize + "px " + fontFamily;
+    if (swing == 0) {
+      particles[0] = newParticle_txt(subtitle[1][0], xx, 0.5 * canvas.height + fsize / 3);//();
+      particles[0].speed = speed;
+    } else {
+      particles[0] = newParticle_swingtxt(subtitle[1][0], xx, 0.5 * canvas.height + fsize / 3);//();
+      particles[0].speed = speed;//7 - speed/100.0;;
     }
 
-    particlesAnim.length = 0;
-    particlesAnim = [];
+    particles[0].initial(canvas);
+    particles[0].color = color_0;
+  }
 
-    switch (animIdx) {
-      case 0:break;
-      case 1:
-        for (var i = 0;i<150;i++) {
-          particlesAnim[i] = newParticle_casual();
-          particlesAnim[i].initial(canvas);
-        }
-        break;
-      case 2:
-        for (var i = 0;i<150;i++) {
+  if (particlesAnim.length >= 1) {
+    for (var i = 0; i < particlesAnim.length; i++) {
+      particlesAnim[i].release();
+    }
+  }
+
+  particlesAnim.length = 0;
+  particlesAnim = [];
+
+  switch (animIdx) {
+    case 0: break;
+    case 1:
+      for (var i = 0; i < 150; i++) {
+        particlesAnim[i] = newParticle_casual();
+        particlesAnim[i].initial(canvas);
+      }
+      break;
+    case 2:
+      for (var i = 0; i < 150; i++) {
+        particlesAnim[i] = newParticle_in();
+        particlesAnim[i].initial(canvas);
+      }
+      break;
+    case 3:
+      for (var i = 0; i < 150; i++) {
+        particlesAnim[i] = newParticle_out();
+        particlesAnim[i].initial(canvas);
+      }
+      break;
+    case 4:
+      for (var i = 0; i < 150; i++) {
+        if (Math.random() > 0.5)
           particlesAnim[i] = newParticle_in();
-          particlesAnim[i].initial(canvas);
-        }
-        break;
-      case 3:
-        for (var i = 0;i<150;i++) {
+        else
           particlesAnim[i] = newParticle_out();
-          particlesAnim[i].initial(canvas);
-        }
-        break;
-      case 4:
-        for (var i = 0;i<150;i++) {
-          if (Math.random() > 0.5)  
-            particlesAnim[i] = newParticle_in();
-          else 
-            particlesAnim[i] = newParticle_out();
-          particlesAnim[i].initial(canvas);
-        }
-        break;
-      case 5:
-        for (var i = 0;i<150;i++) {
-          particlesAnim[i] = newParticle_ring();
-          particlesAnim[i].initial(canvas);
-        }
-        break;
-      case 6:
-        for (var i = 0;i<150;i++) {
-          particlesAnim[i] = newParticle_snow();
-          particlesAnim[i].initial(canvas);
-        }
-        break;
-      case 7:
-        for (var i = 0;i<5;i++) {
-          particlesAnim[i] = newParticle_firework_rocket();
-          particlesAnim[i].initial(canvas);
-        }
-        break;
-      case 8: 
-        particlesAnim[0] = new SpotLightObj(1);
-        particlesAnim[1] = new SpotLightObj(2);
-        particlesAnim[2] = new SpotLightObj(3);
-        particlesAnim[3] = new SpotLightObj(4);
-        particlesAnim[4] = new SpotLightObj(5);
-        break;
-      case 9:
-        particlesAnim[0] = new ClockObj();// newClock();
-        particlesAnim[0].initial(canvas);
-        particlesAnim[0].setDarkmask();
-        break;
-      case 10:
-        particlesAnim[0] = newParticle_led();
-        particlesAnim[0].initial(canvas);
-        break;
-        
-    }
+        particlesAnim[i].initial(canvas);
+      }
+      break;
+    case 5:
+      for (var i = 0; i < 150; i++) {
+        particlesAnim[i] = newParticle_ring();
+        particlesAnim[i].initial(canvas);
+      }
+      break;
+    case 6:
+      for (var i = 0; i < 150; i++) {
+        particlesAnim[i] = newParticle_snow();
+        particlesAnim[i].initial(canvas);
+      }
+      break;
+    case 7:
+      for (var i = 0; i < 5; i++) {
+        particlesAnim[i] = newParticle_firework_rocket();
+        particlesAnim[i].initial(canvas);
+      }
+      break;
+    case 8:
+      particlesAnim[0] = new SpotLightObj(1);
+      particlesAnim[1] = new SpotLightObj(2);
+      particlesAnim[2] = new SpotLightObj(3);
+      particlesAnim[3] = new SpotLightObj(4);
+      particlesAnim[4] = new SpotLightObj(5);
+      break;
+    case 9:
+      particlesAnim[0] = new ClockObj();// newClock();
+      particlesAnim[0].initial(canvas);
+      particlesAnim[0].setDarkmask();
+      break;
+    case 10:
+      particlesAnim[0] = newParticle_led();
+      particlesAnim[0].initial(canvas);
+      break;
 
-    if (backEffect) backEffect.release();
-    backEffect = null;
+  }
 
-    //bgIdx = 1;
-    switch(bgIdx) {
-      case 0:
-        break;
-      case 1:
-        backEffect = newFlashBG(color_b, speed_backflash);
-        backEffect.initial(canvas);
-        break;
-      default:
-        break;
-    }
+  if (backEffect) backEffect.release();
+  backEffect = null;
 
-    if (keepGoing == 1) return;
+  //bgIdx = 1;
+  switch (bgIdx) {
+    case 0:
+      break;
+    case 1:
+      backEffect = newFlashBG(color_b, speed_backflash);
+      backEffect.initial(canvas);
+      break;
+    default:
+      break;
+  }
 
-    keepGoing = 1;
-    window.requestAnimationFrame(anim_update);
-  
+  if (keepGoing == 1) return;
+
+  keepGoing = 1;
+  window.requestAnimationFrame(anim_update);
+
 }
 
