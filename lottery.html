@@ -386,7 +386,7 @@
     function setWinner(idx) {
         winners_list.push(idx + '. ' + all_list[idx]);
         winnersList.innerHTML = "";
-        for (let k = 0; k < winners_list.length; k++) {
+        for (let k = winners_list.length - 1; k >= 0; k--) {
             const li = document.createElement("li");
             li.className = "winnerItem";
             li.innerHTML = winners_list[k];
@@ -396,9 +396,9 @@
 
     function theEnd() {
         stopRunning();
-        all_list = [''];
+        //all_list = [''];
         //winners_list = [];
-        _mode('edit_mode');
+        _mode('editdone_mode');
         //editNames();
         //stopRunning();
     }
@@ -441,9 +441,7 @@
 </script>
 <script>
     var memberimgs = [];
-    var members = [
-        ''
-    ];
+    var members = [''];
 
     class Vector {
 
@@ -742,15 +740,16 @@
                     this.wall(c, _dt);
 
                     if (this.dir.getLength() > c.height * 1.2)
-                        this.dir.normalize().scale(c.height);  //console.log('exceed');
+                        this.dir.normalize().scale(c.height);
 
-                    this.pos.add(this.dir.getScaleV(_dt));//this.vector.getScaleV(_dt));
+                    this.pos.add(this.dir.getScaleV(_dt));
+
                     break;
                 case 1:
                     if (this.target == null) break;
-                    this.pos.x = this.pos.x + (this.target.x - this.pos.x) * _dt;
-                    this.pos.y = this.pos.y + (this.target.y - this.pos.y) * _dt;
-                    this.bscale += (1.8 - this.bscale) * _dt;
+                    this.pos.x += (this.target.x - this.pos.x) * _dt;
+                    this.pos.y += (this.target.y - this.pos.y) * _dt;
+                    this.bscale += (1.8 - this.bscale) * _dt * 4;
                     break;
             }
 
@@ -832,7 +831,12 @@
     var hole_target_pos = new Vector(0, 0);
 
     function openGate() {
-        if (gate > 0) return;
+        //if (gate > 0) return;
+        if (gate == 1) return;
+        if (gate == 3) return;
+        
+        //if (gate == 2) {}
+
         gate = 1;
         prepareGate();
         setTimeout(function () {
@@ -891,7 +895,7 @@
                     minirange = len;
                     mini = i;
                 }
-                if (len < radius * 3) { //有碰到
+                if (len < radius * 4) { //有碰到
                     particles[i].dir.add(_v.normalize().scale(radius * 3 * dt / 1000.0));
                 }
 
@@ -900,7 +904,7 @@
                 gate = 0;
                 return;
             }
-            if (minirange < radius / 2) {
+            if (minirange < radius / 1.5) {
                 gate = 3;
                 particles[mini].action = 1;
                 particles[mini].target = new Vector(hole_target_pos.x, hole_target_pos.y);
@@ -941,8 +945,8 @@
         //ctx.scale(1, -1);        
         //ctx.translate(0, -canvas.height);
         //console.log(ctx.getTransform());
-
         //let _scale = 0.5;
+
         const gap = 30;
 
         ctx.transform(
@@ -1005,6 +1009,7 @@
 
         const fsize = 20;
 
+        const img_scale = 1.1;
         //txt = txt.substring(0, 1);
 
         let _font = fsize + "px Arial";
@@ -1017,8 +1022,8 @@
         //let fh = radius * 2;//fontsize * 1.2;
 
         // set the temp canvas size == the canvas size
-        tempCanvas.width = radius * 2;
-        tempCanvas.height = radius * 2;
+        tempCanvas.width = img_scale * radius * 2;
+        tempCanvas.height = img_scale * radius * 2;
 
 
         //tempCtx = tempCanvas.getContext("2d");
@@ -1036,7 +1041,7 @@
             tempCanvas.height
         );
 
-        let r = Math.floor(Math.random() * 10); //console.log(r);
+        let r = Math.floor(Math.random() * 10);
         switch (r) {
             case 0:
                 tempCtx.fillStyle = 'rgba(100,100,100, 1.0)';
@@ -1045,22 +1050,22 @@
                 tempCtx.fillStyle = 'rgba(255,0,0, 1.0)';
                 break;
             case 2:
-                tempCtx.fillStyle = 'rgba(0,200,0, 1.0)';
+                tempCtx.fillStyle = 'rgba(0,180,0, 1.0)';
                 break;
             case 3:
                 tempCtx.fillStyle = 'rgba(0,0,255, 1.0)';
                 break;
             case 4:
-                tempCtx.fillStyle = 'rgba(200,200,0, 1.0)';
+                tempCtx.fillStyle = 'rgba(150,150,0, 1.0)';
                 break;
             case 5:
-                tempCtx.fillStyle = 'rgba(0,200,200, 1.0)';
+                tempCtx.fillStyle = 'rgba(0,150,150, 1.0)';
                 break;
             case 6:
-                tempCtx.fillStyle = 'rgba(200,0,200, 1.0)';
+                tempCtx.fillStyle = 'rgba(180,0,180, 1.0)';
                 break;
             case 7:
-                tempCtx.fillStyle = 'rgba(100,200,50, 1.0)';
+                tempCtx.fillStyle = 'rgba(80,180,50, 1.0)';
                 break;
             case 8:
                 tempCtx.fillStyle = 'rgba(200,100,50, 1.0)';
@@ -1074,12 +1079,12 @@
         tempCtx.lineWidth = 2;
 
         tempCtx.beginPath();
-        tempCtx.arc(tempCanvas.width / 2, tempCanvas.height / 2, radius - 1, 0, 2 * Math.PI, true);
+        tempCtx.arc(tempCanvas.width / 2, tempCanvas.height / 2, img_scale * radius - 1, 0, 2 * Math.PI, true);
         tempCtx.fill();
         tempCtx.closePath();
 
         tempCtx.beginPath();
-        tempCtx.arc(tempCanvas.width / 2, tempCanvas.height / 2, radius - 2, 0, 2 * Math.PI, true);
+        tempCtx.arc(tempCanvas.width / 2, tempCanvas.height / 2, img_scale * radius - 2, 0, 2 * Math.PI, true);
         tempCtx.stroke();
         tempCtx.closePath();
 
