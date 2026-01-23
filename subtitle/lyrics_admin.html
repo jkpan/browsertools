@@ -60,6 +60,29 @@
             cursor: pointer;
             font-size: 14px;
         }
+
+        .toggle-group {
+            /* margin-bottom: 5px; */
+            background-color: transparent;
+        }
+
+        .toggle-group button {
+            padding: 10px 10px;
+            /* margin: 5px; */
+            border: 2px solid;
+            /* cursor: pointer; */
+            /* border-radius: 6px; */
+
+            background: #007000;
+            color: #00aa00;
+            border-color: #00aa00;
+        }
+
+        .toggle-group .active {
+            background: red;
+            color: #00ff00;
+            border-color: #00ff00;
+        }
     </style>
     <title>Song editor</title>
 </head>
@@ -393,8 +416,8 @@
             button.style.textAlign = 'center';
 
             button.onclick = function () {
-                
-                window.open("./lyrics_sheet_slide.html?" + "songid=" + sel_song_id  + "&idx=" + encodeURI(fn), "_blank");
+
+                window.open("./lyrics_sheet_slide.html?" + "songid=" + sel_song_id + "&idx=" + encodeURI(fn), "_blank");
                 //window.open("./lyrics_sheet_slide.html?idx=" + encodeURI(fn), "_blank");
                 return false;
             };
@@ -418,10 +441,6 @@
             img.style.objectFit = 'contain';  // 或 'cover'
 
             img.addEventListener("click", (e) => {
-                //console.log(fn + ' ===== ' + encodeURI(fn));
-                //let array = fn.split('__');
-                //let idx = parseInt(array[1]);//array[0];
-
                 //window.open("./lyrics_sheet_slide.html?&idx=" + encodeURI(fn), "_blank");
                 window.open("./lyrics_sheet_slide.html?" + "songid=" + sel_song_id + "&idx=" + encodeURI(fn), "_blank");
                 //window.open(img.src, "_blank", "width=800,height=600");
@@ -460,8 +479,108 @@
     </div>
     <p></p>
     <hr size="4" align="left" width="60%" color="#00aa00">
-
+    <div>
+        <div id="togglediv" class="toggle-group" data-group="1"></div>
+        <!-- <button onclick="cleanKey()">調號搜尋</button> -->
+        <!-- <div id="togglediv2" class="toggle-group" data-group="2"></div> -->
+    </div>
+    <hr size="4" align="left" width="60%" color="#00aa00">
     <script type="text/javascript" charset="UTF-8">
+
+        const keys = ['C', 'G', 'D', 'A', 'E', 'B', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F'];
+        var condition_key = null;
+
+        function keysearch() {
+
+        }
+
+        function cleanKey() {
+            document.querySelectorAll(".toggle-group").forEach(group => {
+                group.querySelectorAll("button").forEach(btn => {
+                    btn.classList.remove("active"); //console.log('id : ' + btn.id);
+                });
+            });
+            condition_key = null;
+        }
+
+
+        function createKeyBtn(_command, _des) {
+            var button = document.createElement('button');
+            button.innerText = '' + _des;  //button.id = 'btn' + _command;
+            button.onclick = _command;
+            return button;
+        }
+
+        function createOptions() {
+            let div = document.getElementById('togglediv');
+            for (let i = 0; i < keys.length; i++) {
+                let b = createKeyBtn(() => {
+                    clickKey(keys[i]);
+                }, keys[i]);
+                b.id = 'key_' + keys[i];
+                div.appendChild(b);
+            }
+        }
+
+        createOptions();
+
+        document.querySelectorAll(".toggle-group").forEach(group => {
+            group.addEventListener("click", (e) => {
+                if (e.target.tagName === "BUTTON") {
+                    group.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+                    e.target.classList.add("active");
+                }
+            });
+        });
+
+        var condition_key = null; //var condition_meter = null;
+
+        function clickKey(key) {
+            condition_key = key;
+            processAllBtn4key();
+        }
+
+        function processAllBtn4key() {
+
+            const parentDiv = document.getElementById('btns');
+            const allButtons = parentDiv.querySelectorAll('button');
+            allButtons.forEach(button => {                
+                if (!button.songid) return;
+                button.style.background = button.oribgcolor;
+                let song = ALL_SONGS_JSON[button.songid]["content"];
+                if (!song[0]) return;
+                if (!song[0][1]) return;
+                
+                let info = song[0][1].trim().split(' ');
+                if (info.length < 1) return;
+                
+                for (let i = 0;i<info.length;i++) {
+                    if (info[i] == condition_key) {
+                        button.style.backgroundColor = 'red';
+                        break;
+                    }
+                }
+                
+            });
+
+        }
+
+        function strClick(str) {
+            cleanKey();
+            let array = str.trim().split(' ');
+            if (array.length < 1) return;
+            for (let i = 0; i < keys.length; i++) {
+                array.forEach(item => {
+                    if (item === keys[i]) {
+                        let btn = document.getElementById('key_' + keys[i]);
+                        btn.classList.add("active");
+                        //btn.click();
+                    }
+                });
+            }
+            //setTimeout(() => {}, 200);
+        }
+
 
         var cata = [];
 
@@ -690,7 +809,6 @@
         //button.style.background = 'teal'; // setting the background color to teal
         //button.style.color = 'white'; // setting the color to white
         button.style.fontSize = '14px'; // setting the font size to 20px
-        //document.body.appendChild(button);
         return button;
     }
 
@@ -705,12 +823,14 @@
             txt += '\n';
         });
         area.value = txt;
+        //if (array[0] && array[0][1]) strClick(array[0][1]);
     }
 
     function _createBtn(idtxt, attr) {
         var button = document.createElement('button');
         button.innerHTML = idtxt + '<br/>' + attr;// + ' ' + getSong(idtxt)[0][0];
         button.id = 'btn' + idtxt;
+        button.songid = idtxt;
 
         button.style.width = '172px'; // setting the width to 200px
         button.style.height = '64px'; // setting the height to 200px
@@ -818,6 +938,7 @@
                 } else {
                     btn.style.background = '#333333';
                 }
+                btn.oribgcolor = btn.style.background;
                 if (btn.innerHTML.length > 0 || VOLUME[pf][2]) {
                     //console.log('btn.innerHTML.length : ' + btn.innerHTML.length);
                     //console.log('VOLUME[pf][2] : ' + VOLUME[pf][2]);
