@@ -546,6 +546,7 @@
             const allButtons = parentDiv.querySelectorAll('button');
             allButtons.forEach(button => {                
                 if (!button.songid) return;
+                if (!button.oribgcolor) return;
                 button.style.background = button.oribgcolor;
                 let song = ALL_SONGS_JSON[button.songid]["content"];
                 if (!song[0]) return;
