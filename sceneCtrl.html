@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX POST JSON 範例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body style="background-color: darkgray;">
+
+    <h2>Dashboard</h2>
+
+    <input id="filter_dash" type="text"></input>
+    <br>
+
+    <button onclick="sendRequest('S0')">S0</button>
+    <button onclick="sendRequest('S1')">S1</button>
+    <button onclick="sendRequest('S2')">S2</button>
+
+    <button onclick="sendRequest('S3')">S3</button>
+    <button onclick="sendRequest('S4')">S4</button>
+    <button onclick="sendRequest('S5')">S5</button>
+
+    <hr>
+
+    <h2>Wipe</h2>
+
+    <input id="filter_wipe" type="text"></input>
+    <br>
+
+    <button onclick="sendRequest('1')">1</button>
+    <button onclick="sendRequest('2')">2</button>
+    <button onclick="sendRequest('3')">3</button>
+
+    <button onclick="sendRequest('4')">4</button>
+    <button onclick="sendRequest('5')">5</button>
+    <button onclick="sendRequest('6')">6</button>
+
+    <button onclick="sendRequest('7')">7</button>
+    <button onclick="sendRequest('8')">8</button>
+    <button onclick="sendRequest('9')">9</button>
+
+    <div id="result">Server 回應會顯示在這裡</div>
+
+    <script>
+        async function sendRequest(action) {
+
+            let filter_dash = document.getElementById('filter_dash').value;
+            let filter_wipe = document.getElementById('filter_wipe').value;
+
+            let filter = action.startsWith('S') ? filter_dash : filter_wipe;
+
+            const payload = {
+                action: action,
+                filter: filter,
+                timestamp: Date.now()
+            };
+
+            try {
+                const response = await fetch('/sceneState', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error('HTTP error ' + response.status);
+                }
+
+                const data = await response.json();
+
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+
+            } catch (err) {
+                document.getElementById('result').textContent = '錯誤: ' + err.message;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
+
+<!--script>
+
+
+</script-->

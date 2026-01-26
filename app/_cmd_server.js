@@ -4,8 +4,6 @@ const https = require('https');
 const fs = require('fs'); //const querystring = require('querystring');
 const urltool = require('url');
 const os = require('os');
-const upload = require('./_obj_filehandle');
-const uploadSheet = require('./_sheetmusic');
 
 //const sqlite3 = require('sqlite3').verbose();
 //const express = require('express');
@@ -16,6 +14,10 @@ const sync_camera = require('./_obj_camera'); //('./_sync_camera')
 const sync_camera_signal = require('./_obj_camera_signal');
 const sync_tally = require('./_tally');
 const users = require('./_users');
+
+const upload = require('./_obj_filehandle');
+const uploadSheet = require('./_sheetmusic');
+const sceneState = require('./_obj_state');
 
 const URL_SEASONTABLE = 'https://abeliu.idv.tw/getservicejson.php';
 
@@ -89,45 +91,45 @@ print_sys_info();
 
 function handleVideo(videoPath, req, res) {
   fs.stat(videoPath, (err, stats) => {
-      if (err) {
-        console.error(err);
-        res.writeHead(404);
-        res.end("File not found");
-        return;
-      }
-      
-      let range = req.headers.range;
-      if (!range) {
-        // 如果沒有 Range header，就回傳整個檔案
-        println('沒有 Range header');
-        res.writeHead(200, {
-          'Content-Type': 'video/mp4',
-          'Content-Length': stats.size,
-        });
-        fs.createReadStream(videoPath).pipe(res);
-        println('回傳整個檔案');
-        return;
-      }
-    
+    if (err) {
+      console.error(err);
+      res.writeHead(404);
+      res.end("File not found");
+      return;
+    }
 
-      // 解析 Range header
-      const positions = range.replace(/bytes=/, "").split("-");
-      const start = parseInt(positions[0], 10);
-      const end = positions[1] ? parseInt(positions[1], 10) : stats.size - 1;
-
-      const chunkSize = (end - start) + 1;
-
-      //println('Range header: ' + positions + ', ' + start + ', ' + end);
-
-      res.writeHead(206, {
-        'Content-Range': `bytes ${start}-${end}/${stats.size}`,
-        'Accept-Ranges': 'bytes',
-        'Content-Length': chunkSize,
+    let range = req.headers.range;
+    if (!range) {
+      // 如果沒有 Range header，就回傳整個檔案
+      println('沒有 Range header');
+      res.writeHead(200, {
         'Content-Type': 'video/mp4',
+        'Content-Length': stats.size,
       });
+      fs.createReadStream(videoPath).pipe(res);
+      println('回傳整個檔案');
+      return;
+    }
 
-      fs.createReadStream(videoPath, { start, end }).pipe(res);
+
+    // 解析 Range header
+    const positions = range.replace(/bytes=/, "").split("-");
+    const start = parseInt(positions[0], 10);
+    const end = positions[1] ? parseInt(positions[1], 10) : stats.size - 1;
+
+    const chunkSize = (end - start) + 1;
+
+    //println('Range header: ' + positions + ', ' + start + ', ' + end);
+
+    res.writeHead(206, {
+      'Content-Range': `bytes ${start}-${end}/${stats.size}`,
+      'Accept-Ranges': 'bytes',
+      'Content-Length': chunkSize,
+      'Content-Type': 'video/mp4',
     });
+
+    fs.createReadStream(videoPath, { start, end }).pipe(res);
+  });
 }
 
 //讀檔輸出
@@ -138,21 +140,21 @@ function responseFile(filePath, req, res) {
   const ext = path.extname(filePath).toLowerCase();
 
   const contentType = {
-      '.jpg' : 'image/jpeg',
-      '.jpeg': 'image/jpeg',
-      '.png' : 'image/png',
-      '.gif' : 'image/gif',
-      '.html': 'text/html',
-      '.css' : 'text/css',
-      '.pdf' : 'application/pdf',
-      '.mp4' : 'video/mp4',
-      '.mov' : 'video/quicktime'
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.gif': 'image/gif',
+    '.html': 'text/html',
+    '.css': 'text/css',
+    '.pdf': 'application/pdf',
+    '.mp4': 'video/mp4',
+    '.mov': 'video/quicktime'
   }[ext] || 'application/octet-stream';
 
   if (contentType.startsWith('video')) {
-      println(filePath + ':' + contentType);
-      handleVideo(filePath, req, res);
-      return;
+    println(filePath + ':' + contentType);
+    handleVideo(filePath, req, res);
+    return;
   }
 
   fs.readFile(filePath, (err, content) => {
@@ -164,7 +166,7 @@ function responseFile(filePath, req, res) {
     }
     // 回傳200 OK狀態碼及HTML內容
     //const fp = path.join(process.cwd(), 'public', filePath);
-    
+
     res.writeHead(200, { 'Content-Type': contentType });// 'text/html' });//; charset = UTF-8
     res.write(content);
     res.end();
@@ -211,15 +213,13 @@ function webservice(req, res) {
   //res.send(`Your IP address is: ${ip}`);
 
   if (req.method === 'POST' && req.url === '/loginchk') {
-    println('------');
-    println('post /loginchk');
+    println('----- post /loginchk');
     users.chk(req, res);
     return;
   }
 
   if (req.method === 'POST' && req.url === '/login') {
-    println('------');
-    println('post /login');
+    println('------ post /login');
     users.auth(req, res);
     return;
   }
@@ -250,7 +250,11 @@ function webservice(req, res) {
     case '/uploadsheet': uploadSheet.uploadFile(req, res); return;
     case '/sheetaction': uploadSheet.handleFile(req, res); return;
 
+    //本季服事表
     case '/seasontable': getUrlContent(URL_SEASONTABLE, req, res); return;
+
+    //場景切換
+    case '/sceneState': sceneState.sceneAction(req, res); return;
 
     default:
 
@@ -370,18 +374,18 @@ function startService() {
           sync_lyrics.addClient2Map(user, ws);
       }
 
-    
+
       if (url.startsWith('/Camera')) {
         let user = url.substring('/Camera/'.length);
         if (user && user.length >= 1)
           sync_camera.setCamera(user, ws);
       }
-    
+
       if (url.startsWith('/Webrtc')) {
         console.log('webrtc: ' + url);
         //let user = url.substring('/Webrtc'.length);
         sync_camera_signal.setCamera(ws);
-          
+
       }
 
       if (url.startsWith('/Canvas')) {

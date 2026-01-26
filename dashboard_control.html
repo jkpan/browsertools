@@ -13,6 +13,12 @@
 
 <body>
 
+    <br>
+    <input id="filter_wipe" type="text"></input>
+    <button id="timerbtn" style="background-color: green;" type="button" onclick="startStopTimer()">start/stop
+        timer</button>
+    <br>
+
     <div class="controlPart">
 
         <button onclick="stateAction(0)">S0</button>
@@ -543,5 +549,86 @@
     }
 
     // 語音辨識相關 ... END
+
+</script>
+
+<script>
+
+    var timeoutID = -1;
+    var dotimer = false;
+
+    async function sendRequest() {
+
+        let action = 'GETDASH';
+
+        let filter = document.getElementById('filter_wipe').value.trim();
+        if (filter.length == 0) {
+            dotimer = true;
+            startStopTimer();
+            return;
+        }
+
+        const payload = {
+            action: action,
+            filter: filter,
+            timestamp: Date.now()
+        };
+
+        try {
+            const response = await fetch('/sceneState', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error('HTTP error ' + response.status);
+            }
+
+            const data = await response.json();
+
+            if (!data.action) return;
+
+            switch (data.action) {
+                case 'S0': stateAction(0); break;
+                case 'S1': stateAction(1); break;
+                case 'S2': stateAction(2); break;
+                case 'S3': stateAction(3); break;
+                case 'S4': stateAction(4); break;
+                case 'S5': stateAction(5); break;
+            }
+
+        } catch (err) {
+            document.getElementById('result').textContent = '錯誤: ' + err.message;
+        }
+    }
+
+    function crTimeout() {
+        if (timeoutID >= 0)
+            window.clearTimeout(timeoutID);
+    }
+
+    function startStopTimer() {
+        if (!dotimer) {
+            dotimer = true;
+            document.getElementById('filter_wipe').disabled = true;
+            document.getElementById('timerbtn').style.backgroundColor = "red";
+            _startTimer();
+        } else {
+            dotimer = false;
+            document.getElementById('filter_wipe').disabled = false;
+            document.getElementById('timerbtn').style.backgroundColor = "green";
+        }
+    }
+
+    function _startTimer() {
+        crTimeout();
+        sendRequest();
+        if (dotimer) {
+            timeoutID = setTimeout(_startTimer, 2000);
+        }
+    }
 
 </script>

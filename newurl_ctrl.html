@@ -79,8 +79,13 @@
 <body>
 
     <div id="dots" class="dots"></div>
+
     <br>
+    <input id="filter_wipe" type="text"></input>
+    <button id="timerbtn" style="background-color: green;" type="button" onclick="startStopTimer()">start/stop timer</button>
+    <!-- <button style="background-color: maroon;" type="button" onclick="stopTimer()">stop timer</button> -->
     <br>
+
     <button style="background-color: red;" type="button" onclick="clean()">Remove</button>
     &nbsp;
     <button style="background-color: blue;" id="aBtn" onclick="setSlideAnim()">a2</button>
@@ -494,8 +499,7 @@
         updateDots();
     }
 
-    //window.addEventListener('beforeunload', function (e) { window.opener.clean(); });
-    window.addEventListener('keyup', (e) => {
+    function key_up(e) {
         //e.preventDefault();
         //e.stopPropagation();
         //console.log("key up : " +  e.code);
@@ -517,6 +521,11 @@
                 break;
         }
         updateDots();
+    }
+
+    //window.addEventListener('beforeunload', function (e) { window.opener.clean(); });
+    window.addEventListener('keyup', (e) => {
+        key_up(e);
     }, false);
 
     window.addEventListener("beforeunload", function (event) {
@@ -528,5 +537,91 @@
     animType = window.opener.getSlideAnim();
     _setSlideAnim();
     updateDots();
+
+</script>
+
+<script>
+
+    var timeoutID = -1;
+    var dotimer = false;
+
+    async function sendRequest() {
+
+        let action = 'GETWIPE';
+
+        let filter = document.getElementById('filter_wipe').value.trim();
+        if (filter.length == 0) {
+            dotimer = true;
+            startStopTimer();
+            return;
+        }            
+
+        const payload = {
+            action: action,
+            filter: filter,
+            timestamp: Date.now()
+        };
+
+        try {
+            const response = await fetch('/sceneState', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error('HTTP error ' + response.status);
+            }
+
+            const data = await response.json();
+
+            if (!data.action) return;
+            
+            //key_up({ code: 'Digit1' });
+            //document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            switch (data.action) {
+                case '1': key_up({ code: 'Digit1', keyCode: 49 }); break;
+                case '2': key_up({ code: 'Digit2', keyCode: 50 }); break;
+                case '3': key_up({ code: 'Digit3', keyCode: 51 }); break;
+                case '4': key_up({ code: 'Digit4', keyCode: 52 }); break;
+                case '5': key_up({ code: 'Digit5', keyCode: 53 }); break;
+                case '6': key_up({ code: 'Digit6', keyCode: 54 }); break;
+                case '7': key_up({ code: 'Digit7', keyCode: 55 }); break;
+                case '8': key_up({ code: 'Digit8', keyCode: 56 }); break;
+                case '9': key_up({ code: 'Digit9', keyCode: 57 }); break;
+            }
+
+        } catch (err) {
+            document.getElementById('result').textContent = '錯誤: ' + err.message;
+        }
+    }
+
+    function crTimeout() {
+        if (timeoutID >= 0)
+            window.clearTimeout(timeoutID);
+    }
+
+    function startStopTimer() {
+        if (!dotimer) {
+            dotimer = true;
+            document.getElementById('filter_wipe').disabled = true;
+            document.getElementById('timerbtn').style.backgroundColor = "red";
+            _startTimer();
+        } else {
+            dotimer = false;
+            document.getElementById('filter_wipe').disabled = false;
+            document.getElementById('timerbtn').style.backgroundColor = "green";
+        }
+    }
+
+    function _startTimer() {
+        crTimeout();
+        sendRequest();
+        if (dotimer) {
+            timeoutID = setTimeout(_startTimer, 2000);
+        }
+    }
 
 </script>
