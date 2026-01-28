@@ -3,18 +3,37 @@
 <html>
 
 <head>
-    <meta name="viewport"
-        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
-        charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" -->
+    charset="UTF-8" />
     <style>
-        html, body {
-            /* position: fixed; */
+        html,
+        body {
             margin: 0;
-            background-color: #222;
-            /* width: 100%; */
-
+            padding: 0;
             height: 100%;
+            /* 頁面不捲動 */
             overflow: hidden;
+            /* position: fixed; */
+            background-color: #222;
+        }
+
+        /* 頁碼顯示 */
+        .dots {
+            position: fixed;
+            /* 固定定位 */
+            top: 0;
+            /* 距離視窗頂部 0 像素 */
+            left: 0;
+            /* transform: translateX(-50%); */
+            /* 距離視窗左側 0 像素 (可選) */
+            width: 100%;
+            height: 50px;
+            /* 寬度佔滿 (可選) */
+            z-index: 60;
+            display: flex;
+            gap: 10px;
+            background-color: transparent;
         }
 
         .content {
@@ -25,24 +44,10 @@
             width: 100%;
             height: 100%;
             border: none;
+            overflow-y: auto;
         }
 
-        /* 頁碼顯示 */
-        .dots {
-            position: fixed;
-            /* 固定定位 */
-            top: 0;
-            /* 距離視窗頂部 0 像素 */
-            left: 50%;
-            transform: translateX(-50%);
-            /* 距離視窗左側 0 像素 (可選) */
-            width: 100%;
-            height: 50px;
-            /* 寬度佔滿 (可選) */
-            z-index: 60;
-            display: flex;
-            gap: 10px;
-        }
+
 
         .dot {
             width: 25px;
@@ -74,7 +79,7 @@
             border-radius: 20px;
 
             transition: all 0.5s;
-            
+
             /* 过渡动画 */
             /* transform-origin: 0% 0%; */
             /* transform: rotate(0deg); */
@@ -82,13 +87,12 @@
             overflow-y: hidden;
             overflow-x: hidden;
         }
-
     </style>
 </head>
 
 <body>
 
-    <div id="dots" class="dots" aria-hidden="false"></div>
+    <div id="dots" class="dots"></div>
     <div id="container" class="content"></div>
 
 </body>
