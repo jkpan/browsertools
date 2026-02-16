@@ -247,7 +247,7 @@ function initAnim() {
       particles[0] = newParticle_swingtxt(subtitle[1][0], xx, 0.5 * canvas.height - fsize / 5);//();
       particles[0].speed = speed;//7 - speed/100.0;
     }
-    particles[0].initial(c);
+    particles[0].initial(canvas);
     particles[0].color = color_0;
 
     if (swing1 == 0) {
@@ -257,7 +257,7 @@ function initAnim() {
       particles[1] = newParticle_swingtxt(subtitle[2][0], xx, 0.5 * canvas.height + fsize);//();
       particles[1].speed = speed1;//7 - speed1/100.0;
     }
-    particles[1].initial(c);
+    particles[1].initial(canvas);
     particles[1].color = color_1;
 
   } else {
