@@ -574,15 +574,15 @@ function newParticle_firework_rocket() {
 
       this.pos = new Vector(c.width * (0.4 + Math.random() * 0.2),
                             -c.height * (Math.random() * 0.1));
-      this.target = new Vector(c.width * (0.2 + Math.random() * 0.6),
-                               c.height * (0.3 + Math.random() * 0.7));
+      this.target = new Vector(c.width * (0.1 + Math.random() * 0.8),
+                               c.height * (0.2 + Math.random() * 0.8));
 
 
       let len = new Vector(this.target.x - this.pos.x, this.target.y - this.pos.y).getLength();
 
       this.vector = len * (0.8 + Math.random() * 0.4);
       this.angle = 90;
-      this.accelerate = -len * (0.4 + Math.random() * 0.4);
+      this.accelerate = -len * (0.35 + Math.random() * 0.4);
       //this.vector = getUnitVectorFromAngle(90 + (-10 + Math.random() * 20));
       //this.vector.scale(c.height * (0.8 + Math.random() * 0.4));
 
