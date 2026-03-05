@@ -39,7 +39,7 @@ class CameraObj {
                 //const dateStr = new Date(Number(timestamp)).toISOString().replace(/[:.]/g, '-');
 
                 let ct = Date.now();//console.log(`diff: ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
-                if (/*checktimestamp &&*/ ct - Number(timestamp) > 60000) {
+                if (/*checktimestamp &&*/ ct - Number(timestamp) > 30000) {
                     //console.log(`too old reject ${ct} - ${timestamp} = ${ct - Number(timestamp)}`);
                     return;
                 }
