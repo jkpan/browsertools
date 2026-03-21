@@ -226,6 +226,8 @@
         function deleteFile() {
             if (!activeFolder || activeFolder.trim().length != 8) return;
             if (!activeFile || activeFile.trim().length == 0) return;
+            if (!confirm("確定要刪除?")) return;
+            
             _ajax({
                 action: "delfile",
                 p1: activeFile,
