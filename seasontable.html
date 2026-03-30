@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <script type="text/javascript" src="common.js" charset="UTF-8"></script>
 <html lang="zh-Hant">
+
 <head>
   <meta charset="UTF-8" />
   <title>本季服事表</title>
@@ -10,60 +11,83 @@
       width: 100%;
       margin-top: 16px;
     }
-    th, td {
+
+    th,
+    td {
       border: 1px solid #ccc;
       padding: 8px;
       text-align: left;
     }
+
     th {
       background-color: #f5f5f5;
     }
   </style>
 </head>
+
 <body>
   <h2>本季服事表</h2>
   <div id="table-container">Loading...</div>
 
   <script>
 
-    let name = readParam('name'); 
-    
-    //const URL_RESTORE = "https://abeliu.idv.tw/getservicejson.php";
-    let url = '/seasontable';//'./seasontable.json';//'/seasontable';
+    const url = '/seasontable';//'./seasontable.json';//'/seasontable';
 
-    fetch(url)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error("HTTP error " + res.status);
-        }
-        return res.json();
-      })
-      .then(data => {
-        renderTable(data);
-      })
-      .catch(err => {
-        //renderTable(json);
-        document.getElementById("table-container").textContent = "資料載入失敗：" + err.message;
-      });
+    var name = null;
+    var json = null;
+
+    function urlAction(_name) {
+
+      if (_name == null)
+        name = readParam('name'); //const URL_RESTORE = "https://abeliu.idv.tw/getservicejson.php";
+      else 
+        name = _name;
+
+      fetch(url)
+        .then(res => {
+          if (!res.ok) {
+            throw new Error("HTTP error " + res.status);
+          }
+          return res.json();
+        })
+        .then(data => {
+          json = data;
+          renderTable(data);
+        })
+        .catch(err => {
+          //renderTable(json);
+          document.getElementById("table-container").textContent = "資料載入失敗：" + err.message;
+        });
+    }
+
+
+    function clickname(_name) {
+      name = _name;
+      if (json != null) {
+        renderTable(json);
+      } else {
+        urlAction(name);
+      }
+    }
 
     function renderTable(data) {
-      let items = 
-        [   
-            "",
-            "聚會",
-		    "領會",
-		    "領詩",
-		    "助唱(1)",
-		    "助唱(2)",
-		    "Piano",
-		    "Drums",
-		    "Bass",
-		    "Guitar",
-		    "音控",
-		    "PPT",
-		    "直播",
-		    "獻詩",
-		    "總招待" 
+      let items =
+        [
+          "日期",
+          "聚會",
+          "領會",
+          "領詩",
+          "助唱(1)",
+          "助唱(2)",
+          "Piano",
+          "Drums",
+          "Bass",
+          "Guitar",
+          "音控",
+          "PPT",
+          "直播",
+          "獻詩",
+          "總招待"
         ];
 
       const table = document.createElement("table");
@@ -84,31 +108,35 @@
       var dates = Object.keys(data);
 
       let idx = 0;
-        dates.forEach(function (date) {
-            let obj = data[date];
-            const row = document.createElement("tr");
-            tbody.appendChild(row);
-            idx++;
-            row.style.backgroundColor = idx%2 == 0?'#eee':'#fff';
-            const datecell = document.createElement("td");
-            datecell.style.textAlign = 'center';
-            datecell.textContent = date;
-            row.appendChild(datecell);
-            for (let i=1;i<items.length;i++) {
-                const cell = document.createElement("td");
-                let content = data[date][items[i]];
-                if (content == name) {
-                    cell.style.color = '#f00';
-                    cell.style.fontWeight = 'bold';
-                } else {
-                    cell.style.color = '#000'
-                    cell.style.fontWeight = 'normal';
-                }
-                cell.style.textAlign = 'center';
-                cell.textContent = content;
-                row.appendChild(cell);
-            }
-        });
+      dates.forEach(function (date) {
+        let obj = data[date];
+        const row = document.createElement("tr");
+        tbody.appendChild(row);
+        idx++;
+        row.style.backgroundColor = idx % 2 == 0 ? '#eee' : '#fff';
+        const datecell = document.createElement("td");
+        datecell.style.textAlign = 'center';
+        datecell.textContent = date;
+        row.appendChild(datecell);
+        for (let i = 1; i < items.length; i++) {
+          const cell = document.createElement("td");
+          let content = data[date][items[i]];
+          if (content == name) {
+            cell.style.color = '#e0e';
+            cell.style.fontWeight = 'bold';
+          } else {
+            cell.style.color = '#000'
+            cell.style.fontWeight = 'normal';
+          }
+          cell.style.textAlign = 'center';
+          cell.textContent = content;
+          cell.addEventListener('click', function() {
+            //alert("The clicked cell contains: " + this.innerHTML);
+            clickname(content);
+          });
+          row.appendChild(cell);
+        }
+      });
 
       table.appendChild(thead);
       table.appendChild(tbody);
@@ -118,6 +146,10 @@
       container.appendChild(table);
 
     }
+
+    urlAction(null);
+
   </script>
 </body>
+
 </html>
