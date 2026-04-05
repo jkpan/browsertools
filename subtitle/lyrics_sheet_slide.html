@@ -368,7 +368,14 @@
         }, '/sheetaction',
             (obj) => {
                 let array = obj['files'];
-                array.sort(); //array.reverse();
+                array.sort((a, b) => {
+                    const getNum = (str) => {
+                        const match = str.match(/__([0-9]+)__/);
+                        return match ? parseInt(match[1], 10) : 0;
+                    };
+                    return getNum(a) > getNum(b) ? 1 : -1;
+                });
+                //array.sort(); //array.reverse();
                 for (let i = 0; i < array.length; i++) {
                     array[i] = '.' + obj.folder + '/' + array[i];
                 }

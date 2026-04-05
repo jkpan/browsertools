@@ -11,7 +11,7 @@ const os = require('os');
 const sync_Bible = require('./_obj_Bible'); //('./_sync_Bible')
 const sync_lyrics = require('./_obj_lyrics'); //('./_sync_lyrics')
 const sync_camera = require('./_obj_camera'); //('./_sync_camera')
-const sync_camera_signal = require('./_obj_camera_signal');
+//const sync_camera_signal = require('./_obj_camera_signal');
 const sync_tally = require('./_tally');
 const users = require('./_users');
 
@@ -381,12 +381,13 @@ function startService() {
           sync_camera.setCamera(user, ws);
       }
 
+      /*
       if (url.startsWith('/Webrtc')) {
         console.log('webrtc: ' + url);
         //let user = url.substring('/Webrtc'.length);
         sync_camera_signal.setCamera(ws);
-
       }
+      */
 
       if (url.startsWith('/Canvas')) {
         let user = url.substring('/Canvas/'.length);
