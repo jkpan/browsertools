@@ -2,41 +2,59 @@
 
 set -e  # 任一錯誤就停止
 
-setFromMac2Arm() {
+echo "ref:"
+echo "mac:  /Users/jkpan/dev/github/voles"
+echo "arm:  /root/app/VOLUMES"
+echo "imac: /jkpan/app/VOLUMES"
 
-    # ===== 參數設定 =====
-    REMOTE_USER="root"
-    REMOTE_HOST="192.168.0.91"
-    REMOTE_DIR="/root/app/VOLUMES"
-    REMOTE_TARGET="tpcaog"
-    REMOTE_TAR="tpcaog.tar"
+# ===== 參數設定 =====
+REMOTE_USER="tpcaog"
+REMOTE_HOST="tpcaog.org.tw"
+REMOTE_DIR="/home/tpcaog/app/VOLUMES"
+REMOTE_TARGET="tpcaog"
+REMOTE_TAR="tpcaog.tar"
 
-    LOCAL_DIR="/Users/jkpan/dev/github/voles"
-    LOCAL_ORI="tpcaog"
-    LOCAL_FILE="tpcaog.tar"
+LOCAL_DIR=$1
+LOCAL_ORI="tpcaog"
+LOCAL_FILE="tpcaog.tar"
 
-}
 
-setFromArm2Prod() {
-    # ===== 參數設定 =====
-    REMOTE_USER="tpcaog"
-    REMOTE_HOST="tpcaog.org.tw"
-    REMOTE_DIR="/home/tpcaog/app/VOLUMES"
-    REMOTE_TARGET="tpcaog"
-    REMOTE_TAR="tpcaog.tar"
+# setFromMac() {
 
-    LOCAL_DIR="/root/app/VOLUMES"
-    LOCAL_ORI="tpcaog"
-    LOCAL_FILE="tpcaog.tar"
-}
+#     # ===== 參數設定 =====
+#     # REMOTE_USER="root"
+#     # REMOTE_HOST="192.168.0.91"
+#     # REMOTE_DIR="/root/app/VOLUMES"
+#     # REMOTE_TARGET="tpcaog"
+#     # REMOTE_TAR="tpcaog.tar"
 
-if [ "$1" = "prod" ]; then
-  setFromArm2Prod
-elif [ "$1" = "mac" ]; then
-  setFromMac2Arm
-else
-  exit 1
-fi
+#     LOCAL_DIR="/Users/jkpan/dev/github/voles"
+#     LOCAL_ORI="tpcaog"
+#     LOCAL_FILE="tpcaog.tar"
+
+# }
+
+# setFromArm() {
+#     # ===== 參數設定 =====
+#     REMOTE_USER="tpcaog"
+#     REMOTE_HOST="tpcaog.org.tw"
+#     REMOTE_DIR="/home/tpcaog/app/VOLUMES"
+#     REMOTE_TARGET="tpcaog"
+#     REMOTE_TAR="tpcaog.tar"
+
+#     LOCAL_DIR="/root/app/VOLUMES"
+#     LOCAL_ORI="tpcaog"
+#     LOCAL_FILE="tpcaog.tar"
+# }
+
+# if [ "$1" = "prod" ]; then
+#   setFromArm2Prod
+# elif [ "$1" = "mac" ]; then
+#   setFromMac2Arm
+# else
+#   exit 1
+# fi
+
 
 # ===== 建立本地資料夾 =====
 # mkdir -p "$LOCAL_DIR"
