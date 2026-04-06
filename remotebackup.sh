@@ -68,7 +68,8 @@ echo "== Step 4: 解壓縮 =="
 
 rm -rf ${LOCAL_ORI}
 
-tar xzf ${LOCAL_FILE}
+tar xvf ${LOCAL_FILE}
+
 # -C ${LOCAL_DIR}
 
 echo "== Step 5: 刪除本地檔案 =="
