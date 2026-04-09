@@ -5,7 +5,7 @@ set -e  # 任一錯誤就停止
 echo "input working directory: "
 echo "mac:  /Users/jkpan/dev/github/voles"
 echo "arm:  /root/app/VOLUMES"
-echo "imac: /home/jkpan/app/VOLUMES"
+echo "imac: /home/jkpan/dev/VOLUMES"
 
 # ===== 參數設定 =====
 REMOTE_USER="tpcaog"
