@@ -67,10 +67,24 @@ function checkSongName(newsong) {
   return 0;
 }
 
+function printSongs() {
+  console.log('song count:' + SONGS.length);
+  for (let t = 0; t < SONGS.length; t++) {
+    subtitles = SONGS[t];
+    for (let i = 0; i < subtitles.length; i++) {
+      for (let j = 0; j < subtitles[i].length; j++) {
+        console.log(subtitles[i][j]);
+      }
+      console.log("===== phase =====");
+    }
+    console.log("===== song =====");
+  }
+}
+
 //for lyrics_admin using
 function add2List(newsong, idx) {
-
-  if (idx == 0) {
+  
+  if (idx == 0) { 
     SONGS.push(newsong);
     songswitch(SONGS.length - 1);
   } else {
@@ -109,12 +123,14 @@ function getSongsFromList(_list) {
   SONGS = EMPTY.slice();
 
   if (ALL_SONGS_JSON == null) {
-    (async function () {
-      console.log('get all songs');
-      await fetchData();
-      console.log('get content from list');
-      getSongsFromList(_list);
-    })();
+    if (!window.opener) {
+      (async function () {
+        console.log('get all songs');
+        await fetchData();
+        console.log('get content from list');
+        getSongsFromList(_list);
+      })();
+    }
     return;
   }
 
@@ -1028,12 +1044,19 @@ function keyboard(e) {
 }
 
 var makeTransparent = false;
+var drawBg2Canvas = null;
 
 function _layer0() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (makeTransparent || image_base64) return;
+  if (makeTransparent) return;
+
+  if (image_base64) {
+    if (drawBg2Canvas)
+      ctx.drawImage(drawBg2Canvas, 0, 0, canvas.width, canvas.height);
+    return
+  }
 
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
@@ -1791,3 +1814,4 @@ if (readParam('action') === 'ctrl') {
   _repaint();
 
 }
+

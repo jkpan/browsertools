@@ -106,6 +106,9 @@
     <hr size="4" align="left" width="60%" color="#00aa00">
     <button onclick="openAllTxt()" style="font-size: 20px;">全文檢索</button>
     <p></p>
+    <button onclick="open4GenPPT()" style="font-size: 20px;">產生PTT</button>
+    <p></p>
+
 
     <div id="upload" class="uploadzone">
         <button onclick="downloadFile()">下载</button>
@@ -691,9 +694,22 @@
                     idx = 0;
                 }
             }
-
             window.opener.add2List(newsong, idx);
+        }
 
+        function open4GenPPT() {
+            let newsong = parseText();
+            if (newsong == null) {
+                alert('空的');
+                return;
+            }
+            window.open("subtitle.html?action=ppt", "_blank", 'width=1000, height=625, left=0, top=0');
+        }
+
+        function add2PPtGen() {
+            let newsong = parseText();
+            if (newsong == null) return;
+            return newsong;
         }
 
         function textGo() {
