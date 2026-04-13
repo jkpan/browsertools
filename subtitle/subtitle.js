@@ -1,5 +1,5 @@
 var list = [];
-var ALL_SONGS_JSON;
+//var ALL_SONGS_JSON;
 
 const EMPTY = [
   [
@@ -34,29 +34,6 @@ function readParam(param) {
   return parameterValue;
 }
 
-//抓取預設歌庫
-async function fetchData() {
-  try {
-    let jsonurl = '../users/songbase.json';
-    let result = await doChk();
-    if (result.state >= 0) {
-      let user = result.username;
-      jsonurl = '../users/songbase.json';
-    }
-    console.log('song url: ' + jsonurl);
-    //const response = await fetch('./json/output.json'); // 等待 fetch 请求完成
-    const response = await fetch(jsonurl);//'./json/songbase.json'); // 等待 fetch 请求完成
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
-    ALL_SONGS_JSON = await response.json(); // 等待 JSON 解析完成
-
-  } catch (error) {
-    console.error('Failed to fetch JSON:', error);
-  }
-  console.log('fetchData END');
-}
-
 //for lyrics_admin using
 function checkSongName(newsong) {
   for (let i = 1; i < SONGS.length; i++) {
@@ -83,8 +60,8 @@ function printSongs() {
 
 //for lyrics_admin using
 function add2List(newsong, idx) {
-  
-  if (idx == 0) { 
+
+  if (idx == 0) {
     SONGS.push(newsong);
     songswitch(SONGS.length - 1);
   } else {
@@ -99,48 +76,14 @@ function add2List(newsong, idx) {
   }
 }
 
-function getnoSong(jsonid) {
-  if (!ALL_SONGS_JSON) return [['']];
-  var obj = ALL_SONGS_JSON['nosong'][jsonid];//JSON.parse(json_elm.innerHTML);
-  if (obj && obj["content"])
-    return obj['content'];
-  return [['']];
-}
-
-//從json取得一首歌
-function getSong(jsonid) {
-  if (!ALL_SONGS_JSON) return [['']];
-  var obj = ALL_SONGS_JSON[jsonid];//JSON.parse(json_elm.innerHTML);
-  if (obj && obj["content"])
-    return obj['content'];
-  return [['']];
-}
-
 function getSongsFromList(_list) {
 
   if (_list) list = _list;
 
   SONGS = EMPTY.slice();
 
-  if (ALL_SONGS_JSON == null) {
-    if (!window.opener) {
-      (async function () {
-        console.log('get all songs');
-        await fetchData();
-        console.log('get content from list');
-        getSongsFromList(_list);
-      })();
-    }
-    return;
-  }
-
   for (let i = 0; i < list.length; i++) { //SONGS[i+1] = getSong(list[i]);
-    if (typeof list[i] === 'string') {
-      console.log('getSong(list[i]) ' + list[i]);
-      SONGS[i + 1] = getSong(list[i]);
-    } else {
       SONGS[i + 1] = list[i];
-    }
   }
 
   songswitch(0);
@@ -158,12 +101,9 @@ function json2List(fileContent) {
 
   const jsonData = JSON.parse(fileContent);
   // 進行 JSON 資料的處理
-
-  if (jsonData.list && jsonData.list.length > 0) {
-    if (ALL_SONGS_JSON)
-      getSongsFromList(jsonData.list);
-    else
-      list = jsonData.list;
+  
+  if (jsonData.list && jsonData.list.length > 0) { //list = jsonData.list;
+    getSongsFromList(jsonData.list);
   }
 
   if (jsonData.mode) mode = jsonData.mode;
@@ -216,6 +156,15 @@ function loadListFromJson(event) {
   }
 }
 
+function getJsonObj(file) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const contents = e.target.result;
+    json2List(contents);
+  };
+  reader.readAsText(file);
+}
+
 function dropHandler(event) {
 
   event.preventDefault();
@@ -236,6 +185,10 @@ function dropHandler(event) {
           reader.readAsDataURL(file);
         } else {
           removeBackground();
+          if (file.type === 'application/json') {
+            getJsonObj(file);
+          }
+
         }
       }
     }
@@ -1340,6 +1293,14 @@ function createCtrlBtn() {
     return false;
   });
 
+  ctrls[21] = addBtn('下載PPT', div, () => {
+    generatePPT();
+  });
+
+  ctrls[22] = addBtn('下載Json', div, () => {
+    generateJson();
+  });
+
 
   div.insertAdjacentHTML('beforeend', '<br/><br/><hr />');
 
@@ -1632,7 +1593,7 @@ createListHiddenFile();
 
 init();
 
-
+songswitch(0);
 
 var keylock = false;
 
@@ -1668,20 +1629,6 @@ document.addEventListener('visibilitychange', function () {
   _repaint();
 });
 
-getSongsFromList();
-
-/*
-var xhr = new XMLHttpRequest();
-xhr.open('GET', 'data.json', true);
-xhr.onload = function() {
-  if (xhr.status === 200) {
-    var data = JSON.parse(xhr.responseText);
-    // 在页面中显示数据
-    document.getElementById('data').innerHTML = JSON.stringify(data);
-  }
-};
-xhr.send();
-*/
 
 let supportTouch = false;
 if ('ontouchstart' in window || navigator.maxTouchPoints) {
