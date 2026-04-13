@@ -52,7 +52,7 @@
 <body>
   <div class="fullbg" id="image_container"></div>
   <button class="ctrlButton" style="top:10px;right:10px;" onclick="createCtrlBtn()">-</button>
-  <button class="ctrlButton" style="top:10px;left:10px;" onclick="generatePPT()">=</button>
+  <button id="pptButton" hidden="true" class="ctrlButton" style="opacity: 1.0;top:10px;left:10px;font-size: 20px;background: #b74b2e;color:white;border-color: white;" onclick="generatePPT()">下載PPT</button>
 </body>
 
 </html>
@@ -140,18 +140,27 @@
     fontColorType = 1;
     _repaint();
 
+    window.addEventListener("beforeunload", function (event) {
+      window.opener.subtitleClose();
+    });
+
+    document.getElementById("pptButton").hidden = false;
+    
+    /*
     setTimeout(function () {
       let array = window.opener.add2PPtGen();
       add2List(array, 0);
       _repaint();
-    }, 500);  
+    }, 500);
+    */
 
-
+    /*
     setTimeout(function () {
       if (confirm("馬上產生PPT?")) {
         generatePPT();
       }
     }, 1000);
+    */
 
   }
 

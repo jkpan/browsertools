@@ -106,8 +106,6 @@
     <hr size="4" align="left" width="60%" color="#00aa00">
     <button onclick="openAllTxt()" style="font-size: 20px;">全文檢索</button>
     <p></p>
-    <button onclick="open4GenPPT()" style="font-size: 20px;">產生PTT</button>
-    <p></p>
 
 
     <div id="upload" class="uploadzone">
@@ -470,7 +468,8 @@
         <a href="javascript:copyText()">copy text</a>
         <p></p>
         <textarea id="songtxt" rows="10"></textarea>
-        ||<button id="addsong" style="background-color: magenta;" onclick="add2List()" hidden="true">歌單新增/修改</button>||
+        ||<button id="pptbtn" onclick="open4GenPPT()" style="font-size: 20px;background: #b74b2e;color:white;border-color: white;">加入PTT</button>
+          <button id="addsong" style="background-color: magenta;" onclick="add2List()" hidden="true">歌單新增/修改</button>||
         <p></p>
         <div id="editdiv" hidden="true">
             <button style="background-color: rgb(0, 80, 0);" onclick="textGo()">加歌 / 修改</button>
@@ -697,13 +696,48 @@
             window.opener.add2List(newsong, idx);
         }
 
+        var subtitleWindow = null;
+
         function open4GenPPT() {
             let newsong = parseText();
             if (newsong == null) {
                 alert('空的');
                 return;
             }
-            window.open("subtitle.html?action=ppt", "_blank", 'width=1000, height=625, left=0, top=0');
+            if (subtitleWindow) {
+
+                let idx = subtitleWindow.checkSongName(newsong);
+
+                if (idx > 0) {
+                    if (!confirm("蓋掉'" + newsong[0][0] + "'? (取消會加進最後)")) {
+                        idx = 0;
+                    }
+                }
+                subtitleWindow.add2List(newsong, idx); 
+                return;
+            }
+            subtitleWindow = window.open("subtitle.html?action=ppt", "_blank", 'width=1000, height=625, left=0, top=0');
+            //subtitleWindow.add2List(newsong, 0);
+            subtitleWindow.onload = function() {
+                subtitleWindow.add2List(newsong, 0); 
+            };
+
+            /*
+            subtitleWindow.addEventListener("beforeunload", function (event) {
+                subtitleWindow = null;
+                alert('subtitle close');
+            });
+            */
+
+        }
+
+        function subtitleClose() {
+            try {
+                subtitleWindow.close();
+            } catch (error) {
+                console.log(error);
+            }
+            subtitleWindow = null;
         }
 
         function add2PPtGen() {
@@ -1031,6 +1065,7 @@
         }
 
         if (window.opener) {
+            document.getElementById('pptbtn').hidden = true;
             document.getElementById('addsong').hidden = false;
             const current = window.opener.getCurrentSong();
             if (current) mapping(current);
