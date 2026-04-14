@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<script type="text/javascript" src="common.js" charset="UTF-8"></script>
+<!-- <script type="text/javascript" src="common.js" charset="UTF-8"></script> -->
+<script type="text/javascript" src="../utilities.js"></script>
 <html lang="zh-Hant">
 
 <head>
@@ -37,13 +38,26 @@
     var name = null;
     var json = null;
 
-    function urlAction(_name) {
+    
+    function action(_name) {
 
       if (_name == null)
         name = readParam('name'); //const URL_RESTORE = "https://abeliu.idv.tw/getservicejson.php";
       else 
         name = _name;
 
+      urlAction(url, 
+        (data)=>{
+          json = data;
+          renderTable(data);
+        }, 
+        (err)=>{
+          //renderTable(json);
+          document.getElementById("table-container").textContent = "資料載入失敗：" + err.message;
+        }
+      );
+
+      /*
       fetch(url)
         .then(res => {
           if (!res.ok) {
@@ -59,7 +73,9 @@
           //renderTable(json);
           document.getElementById("table-container").textContent = "資料載入失敗：" + err.message;
         });
+        */
     }
+    
 
 
     function clickname(_name) {
@@ -67,7 +83,7 @@
       if (json != null) {
         renderTable(json);
       } else {
-        urlAction(name);
+        action(name);
       }
     }
 
@@ -148,7 +164,7 @@
 
     }
 
-    urlAction(null);
+    action(null);
 
   </script>
 </body>

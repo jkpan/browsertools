@@ -20,20 +20,6 @@ function getArrayDimension(arr) {
   }
 }
 
-function readParam(param) {
-
-  // 通过URLSearchParams对象解析URL参数
-  var urlParams = new URLSearchParams(window.location.search);
-
-  // 获取特定参数的值
-  var parameterValue = urlParams.get(param);//'参数名');
-
-  // 输出参数值到控制台
-  console.log(param + ' 参数值为: ' + parameterValue);
-
-  return parameterValue;
-}
-
 //for lyrics_admin using
 function checkSongName(newsong) {
   for (let i = 1; i < SONGS.length; i++) {
@@ -188,7 +174,6 @@ function dropHandler(event) {
           if (file.type === 'application/json') {
             getJsonObj(file);
           }
-
         }
       }
     }
@@ -221,7 +206,18 @@ function showImage(content) {
 }
 
 function pushFromUpload(content) {
+  if (content.startsWith('http') && content.endsWith('.json')) {
+    urlAction(content ,
+      (data)=>{
+        json2List(JSON.stringify(data));
+      },
+      (err)=>{
+        alert('error!');
+      });
+    return;
+  }
   if (content.startsWith('http') || content.startsWith('data:')) {
+    //alert(content);
     image_base64 = content;
     showImage(content);
   }
@@ -1288,7 +1284,7 @@ function createCtrlBtn() {
   ctrls[15].hidden = true;
   ctrls[16].hidden = true;
 
-  ctrls[20] = addBtn('圖庫', div, () => {
+  ctrls[20] = addBtn('檔案庫', div, () => {
     openLib();
     return false;
   });

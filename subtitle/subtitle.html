@@ -61,6 +61,7 @@
 </body>
 
 </html>
+<script type="text/javascript" src="../utilities.js"></script>
 <script type="text/javascript" src="../led/led.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../login.js"></script>
 <script type="text/javascript" src="subtitle.js"></script>
@@ -89,6 +90,9 @@
       //drawBg2Canvas.onload = function () {  ctx.drawImage(img, 0, 0); };
       drawBg2Canvas.src = image_base64;
     }
+
+    mode = 2;
+    _repaint();
 
     for (let t = 1; t < SONGS.length; t++) {
       songswitch(t, false);
@@ -162,7 +166,9 @@
     document.getElementById("pptButton").hidden = false;
     document.getElementById("jsonButton").hidden = false;
 
-    /*
+  }
+
+  /*
     setTimeout(function () {
       let array = window.opener.add2PPtGen();
       add2List(array, 0);
@@ -177,7 +183,5 @@
       }
     }, 1000);
     */
-
-  }
 
 </script>
