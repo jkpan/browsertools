@@ -83,73 +83,122 @@
     downloadLink.click();
   }
 
+  async function _genPPT() {
+
+    let images = [];
+
+    let total = 100;
+
+    for (let t = 1; t < SONGS.length; t++) {
+      setTimeout(() => {
+        songswitch(t, false);
+        console.log('switch to song : ' + song);
+      }, total);
+      total += 100;
+      for (let i = 0; i < SONGS[t].length; i++) {
+        setTimeout(() => {
+          images.push(createImage());
+          console.log("#####");
+          for (let l = 0; l < SONGS[t][phase].length; l++) console.log(SONGS[t][phase][l]);         
+          keyboard({ code: 'ArrowDown', keyCode: 40 });
+        }, total);
+        total += 100;
+        //for (let j = 0; j < subtitles[phase].length; j++) console.log(subtitles[phase][j]);
+        //console.log("===== phase =====");
+      }
+      console.log("===== song =====");
+    }
+
+    total += 100;
+
+    setTimeout(() => {
+      const pptx = new PptxGenJS();
+
+      images.forEach((img) => {
+        let slide = pptx.addSlide();
+        slide.addImage({
+          data: img,
+          x: 0,
+          y: 0,
+          w: "100%",
+          h: "100%"
+        });
+      });
+
+      pptx.writeFile("songs.pptx");
+
+      drawBg2Canvas = null;
+      _repaint();
+
+    }, total);
+
+
+  }
+
   async function generatePPT() {
 
     if (image_base64) {
-      drawBg2Canvas = new Image();
-      //drawBg2Canvas.onload = function () {  ctx.drawImage(img, 0, 0); };
+      drawBg2Canvas = new Image(); //drawBg2Canvas.onload = function () {  ctx.drawImage(img, 0, 0); };
       drawBg2Canvas.src = image_base64;
     }
 
     mode = 2;
+    displayProgress = 0;
     _repaint();
 
+    let total = 0;
+    
     for (let t = 1; t < SONGS.length; t++) {
-      songswitch(t, false);
-      for (let i = 0; i < subtitles.length; i++) {
-        keyboard({ code: 'ArrowDown', keyCode: 40 });
+      setTimeout(() => {
+        songswitch(t, false);
+      }, total);
+      total += 50;
+      for (let i = 0; i < SONGS[t].length; i++) {
+        setTimeout(() => {
+          keyboard({ code: 'ArrowDown', keyCode: 40 });
+        }, total);
+        total += 50;
       }
     }
-
-    let images = [];
-
-    for (let t = 1; t < SONGS.length; t++) {
-      songswitch(t, false);
-      for (let i = 0; i < subtitles.length; i++) {
-        for (let j = 0; j < subtitles[phase].length; j++) {
-          console.log(subtitles[phase][j]);
-        }
-        console.log("===== phase =====");
-        images.push(createImage());
-        keyboard({ code: 'ArrowDown', keyCode: 40 });
-      }
-      console.log("===== song =====");
-    }
-
-    const pptx = new PptxGenJS();
-
-    images.forEach((img) => {
-      let slide = pptx.addSlide();
-      slide.addImage({
-        data: img,
-        x: 0,
-        y: 0,
-        w: "100%",
-        h: "100%"
-      });
-    });
-
-    // 下載
-    pptx.writeFile("songs.pptx");
-
-    drawBg2Canvas = null;
-    _repaint();
 
     /*
-    console.log(':' + SONGS.length);
     for (let t = 0; t < SONGS.length; t++) {
-      subtitles = SONGS[t];
-      for (let i = 0; i < subtitles.length; i++) {
-        for (let j = 0; j < subtitles[i].length; j++) {
-          console.log(subtitles[i][j]);
-        }
-        console.log("===== phase =====");
+      setTimeout(() => {
+        songswitch(t, false);
+      }, total);
+      let lc = 0;
+      for (let i = 0; i < SONGS[t].length; i++) lc += SONGS[t][i].length;
+      for (let i = 0; i < lc; i++) {
+        total += 50;
+        setTimeout(() => {
+          keyboard({ code: 'ArrowRight', keyCode: 39 });
+        }, total);
       }
-      console.log("===== song =====");
+      total += 50;
     }
     */
 
-    return;
+    total += 50;
+
+    console.log('total: ' + total);
+
+    setTimeout(() => {
+      _genPPT();
+    }, total);
+
+    /*
+    for(let count = 0;count<5;count++)
+    for (let t = 0; t < SONGS.length; t++) {
+      songswitch(t, false);
+      let lc = 0;
+      for (let i = 0; i < subtitles.length; i++) lc += subtitles[i].length;
+      for (let i = 0; i < lc; i++) {
+        console.log(subtitles[phase][line]);
+        keyboard({ code: 'ArrowRight', keyCode: 39 });
+      }
+    }
+    */
+   
   }
 
   if (readParam('action') === 'ppt') {
@@ -176,12 +225,12 @@
     }, 500);
     */
 
-    /*
-    setTimeout(function () {
-      if (confirm("馬上產生PPT?")) {
-        generatePPT();
-      }
-    }, 1000);
-    */
+  /*
+  setTimeout(function () {
+    if (confirm("馬上產生PPT?")) {
+      generatePPT();
+    }
+  }, 1000);
+  */
 
 </script>
