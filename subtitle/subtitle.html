@@ -75,7 +75,9 @@
       style="opacity: 1.0;top:310px;left:10px;font-size: 20px;background: #b74b2e;color:white;border-color: white;"
       onclick="generateJson()">下載Json</button>
     <input id="bgfile" type="file" name="file" hidden="true" accept="image/*" onchange="selectFile(event)" />
-
+    <label class="ctrlButton" style="opacity: 1.0;top:360px;left:10px;font-size: 20px;background-color: black;color: white;">
+      選歌1,2,3,... 方向鍵上下切段落
+    </label>
   </div>
 </body>
 
@@ -199,7 +201,12 @@
     displayProgress = 0;
     _repaint();
 
-    _genPPT();
+    let elapse = await reloadFont();
+    
+    setTimeout(()=>{
+      _genPPT();
+    }, elapse + 50);
+
 
   }
 
