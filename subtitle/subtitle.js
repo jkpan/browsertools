@@ -766,6 +766,23 @@ function setFontFactor(ff) {
   init();
 }
 
+async function reloadFont() {
+    let total = 0;
+    for (let t = 1; t < SONGS.length; t++) {
+      setTimeout(() => {
+        songswitch(t, false);
+      }, total);
+      total += 50;
+      for (let i = 0; i < SONGS[t].length; i++) {
+        setTimeout(() => {
+          keyboard({ code: 'ArrowDown', keyCode: 40 });
+        }, total);
+        total += 50;
+      }
+    }
+    return total;
+}
+
 function combineKey(e) {
 
   switch (e.code) {
@@ -820,7 +837,7 @@ function keyboard(e) {
         }
       }
       init();
-      _repaint();
+      reloadFont();
       return;
     //case 'Enter': createCtrlBtn(); return;
     case 'KeyB': //'b'
