@@ -198,17 +198,40 @@
     total += 100;
 
     setTimeout(() => {
+      
       const pptx = new PptxGenJS();
+      //pptx.layout = 'LAYOUT_16x9';//LAYOUT_16x10 LAYOUT_4x3
+
+      let x_off = 0;
+      let y_off = 0;
+      let w_ = "100%";
+      let h_ = "100%";
+
+      if (canvas.width/canvas.height > 16.0/9.0) { //圖片比投影片寬
+        x_off = 0;
+        w_ = "100%";
+        h_ = 100 * (canvas.height/canvas.width)/(9.0/16.0);// +"%";
+        y_off = (100 - h_)/2 + '%';
+        h_ = h_ + '%';
+      } else {
+        y_off = 0;
+        w_ = 100 * (canvas.width/canvas.height)/(16.0/9.0);// +"%";
+        h_ = "100%";
+        x_off = (100 - w_)/2 + '%'
+        w_ = w_ + '%';
+      }
 
       images.forEach((img) => {
-        let slide = pptx.addSlide();
+        let slide = pptx.addSlide();//console.log(img);
         slide.addImage({
           data: img,
-          x: 0,
-          y: 0,
-          w: "100%",
-          h: "100%"
+          x: x_off,
+          y: y_off,
+          w: w_,
+          h: h_
         });
+        //slide.backhround
+        slide.background = { color: "000000", transparency: 50 };
       });
 
       pptx.writeFile("songs.pptx");
