@@ -767,6 +767,7 @@ function setFontFactor(ff) {
 }
 
 async function reloadFont() {
+    if (SONGS.length <= 1) { _repaint(); return 0;}
     let total = 0;
     for (let t = 1; t < SONGS.length; t++) {
       setTimeout(() => {
