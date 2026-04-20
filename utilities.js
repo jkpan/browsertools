@@ -33,6 +33,28 @@ function isImageFile(filename) {
     return imageExtensions.some(ext => lower.endsWith(ext));
 }
 
+function isPDFFile(filename) {
+    // 定義常見的圖片副檔名
+    const pdfExtensions = ['.pdf'];//, '.webp', '.svg'];
+
+    // 轉小寫來避免大小寫問題
+    const lower = filename.toLowerCase();
+
+    // 用 some() 來判斷是否符合其中一個副檔名
+    return pdfExtensions.some(ext => lower.endsWith(ext));
+}
+
+function isVideoFile(filename) {
+    // 定義常見的圖片副檔名
+    const videoExtensions = ['.mp4', '.mpeg', '.mov'];//, '.webp', '.svg'];
+
+    // 轉小寫來避免大小寫問題
+    const lower = filename.toLowerCase();
+
+    // 用 some() 來判斷是否符合其中一個副檔名
+    return videoExtensions.some(ext => lower.endsWith(ext));
+}
+
 function getImageExt(filename) {
     const lower = filename.toLowerCase();
     // 定義常見的圖片副檔名

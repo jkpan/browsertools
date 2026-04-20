@@ -131,7 +131,7 @@
 </body>
 
 </html>
-
+<script type="text/javascript" src="utilities.js"></script>
 <script>
 
     const items = [];
@@ -362,17 +362,6 @@
         div.setAttribute('des', 'file-video');
     }
 
-    function isImageFile(filename) {
-        // 定義常見的圖片副檔名
-        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
-
-        // 轉小寫來避免大小寫問題
-        const lower = filename.toLowerCase();
-
-        // 用 some() 來判斷是否符合其中一個副檔名
-        return imageExtensions.some(ext => lower.endsWith(ext));
-    }
-
     function urlGo(value, loop, key, keepratio, ctrl) {
 
         value = value.trim();
@@ -444,6 +433,8 @@
                 div.appendChild(iframe);
                 add2Item(div);
                 div.setAttribute('des', 'url-');
+                if (value.endsWith('.pdf'))
+                    div.setAttribute('des', 'url-pdf');
             }
 
         } else {
@@ -453,26 +444,6 @@
         }
         //window.location.href = value;
     }
-
-    /*
-    async function getPDFBase64(pdfUrl) {
-        const response = await fetch(pdfUrl);
-        const blob = await response.blob();
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result); // data:application/pdf;base64,...
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
-    }
-
-    async function getPDFObjectURL(pdfUrl) {
-        const response = await fetch(pdfUrl);
-        const blob = await response.blob();
-        const objectURL = URL.createObjectURL(blob);
-        return objectURL;
-    }
-    */
 
     function getSlideAnim() {
         return animType;
@@ -638,5 +609,25 @@
     }
 
     //openCtrl();
+
+    /*
+    async function getPDFBase64(pdfUrl) {
+        const response = await fetch(pdfUrl);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result); // data:application/pdf;base64,...
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    async function getPDFObjectURL(pdfUrl) {
+        const response = await fetch(pdfUrl);
+        const blob = await response.blob();
+        const objectURL = URL.createObjectURL(blob);
+        return objectURL;
+    }
+    */
 
 </script>

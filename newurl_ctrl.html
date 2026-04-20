@@ -151,6 +151,8 @@
         -->
     </ul>
 
+    <script type="text/javascript" src="utilities.js"></script>
+
     <script type="text/javascript" charset="UTF-8">
 
         const dotsContainer = document.getElementById('dots');
@@ -179,10 +181,19 @@
         function addDots(des, idx) {
 
             let caption = '';
-            if (des.startsWith('file-')) {
-                caption = '📂';
-            } else if (des.startsWith('url-')) {
-                caption = '🌐';
+            if (des.startsWith('file-') || des.startsWith('url-')) {
+                if (des.startsWith('file-'))
+                    caption = '📂';
+                else if (des.startsWith('url-'))
+                    caption = '🌐';
+
+                if (des.endsWith('video')) 
+                    caption = '🎞️';
+                else if (des.endsWith('image')) 
+                    caption = '🖼️';
+                else if (des.endsWith('pdf')) 
+                    caption = '🅿︎';
+                
             } else if (des.startsWith('lyric')) {
                 caption = '🎤';
             } else if (des.startsWith('Bible')) {
