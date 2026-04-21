@@ -279,6 +279,11 @@
 
   }
 
+  function dimensionValue() {
+    let ratio = canvas.width/canvas.height;
+    document.getElementById("dimension").innerHTML = canvas.width + '/' + canvas.height + ' = ' + ratio.toFixed(2);
+  }
+
   if (readParam('action') === 'ppt') {
 
     mode = 2;
@@ -295,9 +300,10 @@
     document.getElementById('busy').style.display = "none";
 
     window.addEventListener('resize', function () {
-      let ratio = canvas.width/canvas.height;
-      document.getElementById("dimension").innerHTML = canvas.width + '/' + canvas.height + ' = ' + ratio.toFixed(2);
+      dimensionValue();
     });
+
+    dimensionValue();
     
   } else {
     document.getElementById('busy').remove();
