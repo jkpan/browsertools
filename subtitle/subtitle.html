@@ -106,6 +106,7 @@
     <label class="ctrlButton" style="opacity: 1.0;top:360px;left:10px;font-size: 20px;background-color: black;color: white;">
       切歌1,2,3,... <br>方向鍵上下切段落
     </label>
+    <label id="dimension" class="ctrlButton" style="opacity: 1.0;top:10px;right:10px;font-size: 20px;background-color: black;color: white;"></label>
   </div>
   <div class="loading-screen" id="busy">
     <div class="spinner"></div>
@@ -292,6 +293,11 @@
     document.getElementById("ctrlBtn").remove();
     document.getElementById("smlctrl").hidden = false;
     document.getElementById('busy').style.display = "none";
+
+    window.addEventListener('resize', function () {
+      let ratio = canvas.width/canvas.height;
+      document.getElementById("dimension").innerHTML = canvas.width + '/' + canvas.height + ' = ' + ratio.toFixed(2);
+    });
     
   } else {
     document.getElementById('busy').remove();
