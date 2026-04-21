@@ -223,6 +223,16 @@
 
       images.forEach((img) => {
         let slide = pptx.addSlide();//console.log(img);
+        slide.background = { color: "000000" };//, transparency: 50 };
+        if (image_base64) {
+          slide.addImage({
+            data: image_base64,
+            x: x_off,
+            y: y_off,
+            w: w_,
+            h: h_
+          });
+        }
         slide.addImage({
           data: img,
           x: x_off,
@@ -230,14 +240,12 @@
           w: w_,
           h: h_
         });
-        //slide.backhround
-        slide.background = { color: "000000", transparency: 50 };
       });
 
       pptx.writeFile("songs.pptx");
 
-      drawBg2Canvas = null;
-      _repaint();
+      //drawBg2Canvas = null;
+      //_repaint();
 
       document.getElementById('busy').style.display = "none";
 
@@ -251,10 +259,12 @@
     //document.getElementById('busy').hidden = false;
     document.getElementById('busy').style.display = "flex";
 
+    /*
     if (image_base64) {
       drawBg2Canvas = new Image(); //drawBg2Canvas.onload = function () {  ctx.drawImage(img, 0, 0); };
       drawBg2Canvas.src = image_base64;
     }
+    */
 
     mode = 2;
     displayProgress = 0;
@@ -287,38 +297,5 @@
     document.getElementById('busy').remove();
     document.getElementById("smlctrl").remove();
   }
-
-  /*
-    setTimeout(function () {
-      let array = window.opener.add2PPtGen();
-      add2List(array, 0);
-      _repaint();
-    }, 500);
-    */
-
-  /*
-  setTimeout(function () {
-    if (confirm("馬上產生PPT?")) {
-      generatePPT();
-    }
-  }, 1000);
-  */
-
-  /*
-    for (let t = 0; t < SONGS.length; t++) {
-      setTimeout(() => {
-        songswitch(t, false);
-      }, total);
-      let lc = 0;
-      for (let i = 0; i < SONGS[t].length; i++) lc += SONGS[t][i].length;
-      for (let i = 0; i < lc; i++) {
-        total += 50;
-        setTimeout(() => {
-          keyboard({ code: 'ArrowRight', keyCode: 39 });
-        }, total);
-      }
-      total += 50;
-    }
-  */
 
 </script>

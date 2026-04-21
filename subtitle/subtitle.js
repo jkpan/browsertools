@@ -1011,7 +1011,6 @@ function keyboard(e) {
 }
 
 var makeTransparent = false;
-var drawBg2Canvas = null;
 
 function _layer0() {
 
@@ -1019,11 +1018,8 @@ function _layer0() {
 
   if (makeTransparent) return;
 
-  if (image_base64) {
-    if (drawBg2Canvas)
-      ctx.drawImage(drawBg2Canvas, 0, 0, canvas.width, canvas.height);
-    return
-  }
+  if (image_base64) return
+  
 
   if (mode == 0) {
     ctx.fillStyle = COLORS_CK[1];//'green';
