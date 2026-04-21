@@ -915,18 +915,21 @@ function keyboard(e) {
       openSelector();
       return; //'l'
     case 'ArrowUp':
+      if (!subtitles) return;
       if (phase > 0) {
         phase = phase - 1;
       }
       line = 0;
       break;
     case 'ArrowDown':
+      if (!subtitles) return;
       if (phase < subtitles.length - 1) {
         phase = phase + 1;
         line = 0;
       }
       break;
     case 'ArrowLeft':
+      if (!subtitles) return;
       line = line - 1;
       if (line < 0) {
         phase = phase - 1;
@@ -939,6 +942,7 @@ function keyboard(e) {
       }
       break;
     case 'ArrowRight':
+      if (!subtitles) return;
       line = line + 1;
       if (line >= subtitles[phase].length) {
         phase = phase + 1;
@@ -1461,12 +1465,23 @@ function synctrls() {
 
 function restoreFromJson(obj) {
   if (!obj) return;
-  if (obj.filter !== filterword) return;
+  if (sync_type != 4 && obj.filter !== filterword) return;
+  
+  if (phase == obj.phase && 
+      line == obj.line && 
+      doblank == obj.blank && obj.song && subtitles && 
+      subtitles[0][0] === obj.song[0][0]) {
+    return;
+  }
+
   subtitles = obj.song;
   phase = obj.phase;
   line = obj.line;
   doblank = obj.blank;
+
   _repaint();
+
+
 }
 
 /*
