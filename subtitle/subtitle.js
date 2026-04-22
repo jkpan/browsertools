@@ -1,5 +1,4 @@
-var list = [];
-//var ALL_SONGS_JSON;
+//var list = []; //var ALL_SONGS_JSON;
 
 const EMPTY = [
   [
@@ -30,20 +29,6 @@ function checkSongName(newsong) {
   return 0;
 }
 
-function printSongs() {
-  console.log('song count:' + SONGS.length);
-  for (let t = 0; t < SONGS.length; t++) {
-    subtitles = SONGS[t];
-    for (let i = 0; i < subtitles.length; i++) {
-      for (let j = 0; j < subtitles[i].length; j++) {
-        console.log(subtitles[i][j]);
-      }
-      console.log("===== phase =====");
-    }
-    console.log("===== song =====");
-  }
-}
-
 //for lyrics_admin using
 function add2List(newsong, idx) {
 
@@ -62,20 +47,6 @@ function add2List(newsong, idx) {
   }
 }
 
-function getSongsFromList(_list) {
-
-  if (_list) list = _list;
-
-  SONGS = EMPTY.slice();
-
-  for (let i = 0; i < list.length; i++) { //SONGS[i+1] = getSong(list[i]);
-      SONGS[i + 1] = list[i];
-  }
-
-  songswitch(0);
-
-}
-
 /*
   list : (list)
   mode : (mode)
@@ -88,8 +59,10 @@ function json2List(fileContent) {
   const jsonData = JSON.parse(fileContent);
   // 進行 JSON 資料的處理
   
-  if (jsonData.list && jsonData.list.length > 0) { //list = jsonData.list;
-    getSongsFromList(jsonData.list);
+  if (jsonData.list && jsonData.list.length > 0) { //list = jsonData.list; getSongsFromList(jsonData.list);
+    SONGS = EMPTY.slice();
+    for (let i = 0; i < jsonData.list.length; i++) SONGS[i + 1] = jsonData.list[i];
+    songswitch(0);
   }
 
   if (jsonData.mode) mode = jsonData.mode;
@@ -1184,11 +1157,12 @@ function createCtrlBtn() {
   let div = document.createElement('div');
   div.appendChild(document.createElement("br"));
 
-  div.style.position = "fixed";
+  div.style.position = "fixed"; //relative
   div.style.top = "0";
   div.style.left = "0";
   div.style.width = "96%";
   div.style.height = "96%";
+  div.style.overflowY = "auto";
   div.style.margin = "2% 2% 2% 2%";
 
   div.id = 'ctrl';
@@ -1786,4 +1760,3 @@ if (readParam('action') === 'ctrl') {
   _repaint();
 
 }
-

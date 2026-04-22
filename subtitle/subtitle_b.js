@@ -1125,6 +1125,7 @@ function createCtrlBtn() {
   div.style.left = "0";
   div.style.width = "96%";
   div.style.height = "96% ";
+  div.style.overflowY = "auto";
   div.style.margin = "2% 2% 2% 2%";
   div.id = 'ctrl';
   div.style.backgroundColor = 'rgba(0,0,0, 0.0)';
