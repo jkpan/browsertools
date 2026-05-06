@@ -250,6 +250,9 @@ function webservice(req, res) {
     case '/uploadsheet': uploadSheet.uploadFile(req, res); return;
     case '/sheetaction': uploadSheet.handleFile(req, res); return;
 
+    //使用者
+    case '/useraction': users.userAction(req, res); return;
+
     //本季服事表
     case '/seasontable': getUrlContent(URL_SEASONTABLE, req, res); return;
 

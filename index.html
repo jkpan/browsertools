@@ -16,11 +16,7 @@
 
   function logout() {
     cleanLogin();
-    document.getElementById('__username').hidden = true;
-    document.getElementById('__username').innerHTML = '';
-    document.getElementById('__login').hidden = false;
-    document.getElementById('__logout').hidden = true;
-    chkloginstatus();
+    reactFromPopLogin();
   }
 
   function login() {
@@ -31,7 +27,7 @@
   async function chkloginstatus() {
     try {
       console.log('chkloginstatus...');
-      let result = await doChk();
+      let result = await doChk(); //console.log('chkloginstatus... ' + JSON.stringify(result));
       handleLogin(result);
     } catch (error) {
       handleLogin({

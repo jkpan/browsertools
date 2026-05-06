@@ -40,9 +40,27 @@
 
     var timeoutID = -1;
 
+    async function chkloginstatus() {
+        try {
+            console.log('chkloginstatus...');
+            let result = await doChk(); //console.log('chkloginstatus... ' + JSON.stringify(result));
+            handleLogin(result);
+        } catch (error) {
+            handleLogin({
+                state: 0,
+                username: "guest",
+                token: null
+            });
+        }
+    }
+
     function handleLogin(resultJson) {
 
+        username = resultJson.username;
+
     }
+
+    chkloginstatus();
 
     function reactFromPopLogin() {
         window.location.reload();

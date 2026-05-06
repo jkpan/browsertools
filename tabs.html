@@ -620,11 +620,7 @@
 
   function logout() {
     cleanLogin();
-    document.getElementById('__username').hidden = true;
-    document.getElementById('__username').innerHTML = '';
-    document.getElementById('__login').hidden = false;
-    document.getElementById('__logout').hidden = true;
-    chkloginstatus();
+    reactFromPopLogin();
   }
 
   function login() {

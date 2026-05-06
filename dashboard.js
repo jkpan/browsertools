@@ -717,8 +717,7 @@ function preload(url, doneCb) {
     handleProfile(JSON.stringify(json));
     if (doneCb) doneCb('done');
   }).catch((error) => {
-    alert('Error' + error);
-    console.log(`Error: ${error}`);
+    alert('Error: file not exist or invalid json'); //console.log(`Error: ${error}`);
     if (doneCb) doneCb('error');
   });
 }

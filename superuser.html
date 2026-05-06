@@ -1,0 +1,186 @@
+<script type="text/javascript" src="login.js" charset="UTF-8"></script>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<script type="text/javascript" src="utilities.js" charset="UTF-8"></script>
+<script type="text/javascript" src="login.js" charset="UTF-8"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>新增使用者</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="stylesheet" href="ui_green.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            /* justify-content: center; */
+            /* align-items: center; */
+            height: 100vh;
+            background-color: #00aa00;
+        }
+
+        .container {
+            top: 10%;
+            background: #fff;
+            padding: 10%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* width: 300px; */
+            background-color: #00dd00;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 80%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .right-to-left {
+            margin-right: 5%;
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="right-to-left">
+        &nbsp;
+        <label id="__username" style="color:#0f0;" hidden="true"></label>
+        &nbsp;
+        <label id="__login" style="border: 1px solid #0f0;color: #00ff00;" hidden="true" onclick="login()">Sign
+            in</label>
+        &nbsp;
+        <label id="__logout" style="border: 1px solid #0f0;color: #00ff00" hidden="true" onclick="logout()">Sign
+            out</label>
+        &nbsp;
+    </div>
+
+    <div id="panel" class="container">
+        <h2>新增使用者</h2>
+
+        <label>帳號：</label>
+        <br>
+        <input type="text" name="username" required>
+        <br>
+        <label>密碼：</label>
+        <br>
+        <input type="password" name="password" required>
+        <br>
+        <button onclick="addUser()">註冊</button>
+
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+    var _login = null;
+    var username = null;
+
+    function closeLogin() {
+        if (_login)
+            _login.close();
+        _login = null;
+    }
+
+    function logout() {
+        cleanLogin();
+        reactFromPopLogin();
+    }
+
+    function login() {
+        closeLogin();
+        _login = window.open("../login.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=500,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+    }
+
+    async function chkloginstatus() {
+        try {
+            console.log('chkloginstatus...');
+            let result = await doChk(); //console.log('chkloginstatus... ' + JSON.stringify(result));
+            handleLogin(result);
+        } catch (error) {
+            handleLogin({
+                state: 0,
+                username: "guest",
+                token: null
+            });
+        }
+    }
+
+    function handleLogin(resultJson) {
+
+        document.getElementById('__username').hidden = true;
+        document.getElementById('__login').hidden = true;
+        document.getElementById('__logout').hidden = true;
+        username = null;
+
+        if (resultJson.state == 1) {
+            username = resultJson.username;
+            document.getElementById('__username').hidden = false;
+            document.getElementById('__username').innerHTML = resultJson.username;
+            if (resultJson.username == 'guest') { //全權限的guest 不需要login logout //no auth
+                document.getElementById('__logout').hidden = true;
+                document.getElementById('__login').hidden = true;
+            } else { //正常user
+                document.getElementById('__logout').hidden = false;
+                document.getElementById('__login').hidden = true;
+            }
+        } else if (resultJson.state == 2) { //半權限的guest
+            username = resultJson.username;
+            document.getElementById('__username').hidden = false;
+            document.getElementById('__username').innerHTML = resultJson.username;
+            document.getElementById('__logout').hidden = true;
+            document.getElementById('__login').hidden = false;
+
+        } else {
+            document.getElementById('__login').hidden = false;
+        }
+
+        if (resultJson.state != 1 || username != 'superuser') {
+            document.getElementById('panel').remove(); //hideSome(true);
+            return;
+        }
+
+    }
+
+    function reactFromPopLogin() {
+        window.location.reload();
+    }
+
+    chkloginstatus();
+
+    function addUser() {
+        let username = document.getElementsByName('username')[0].value;
+        let password = document.getElementsByName('password')[0].value;
+        if (username.length == 0 || password.length == 0) {
+            alert('請輸入帳號和密碼');
+            return;
+        }
+        
+        _ajax({
+            action: "adduser",
+            p1: password,
+            user: username
+        },
+            '/useraction',
+            (res) => {
+                alert(res.state);
+                reactFromPopLogin();
+            }, (err) => {
+                alert('add user fail: ' + err);
+            });
+    }
+</script>

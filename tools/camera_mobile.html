@@ -41,10 +41,29 @@
         ::-webkit-scrollbar {
             display: none;
         }
+        .right-to-left {
+            margin-right: 5%;
+            direction: rtl;
+            text-align: right;
+        }
     </style>
 </head>
 
 <body>
+
+    <!--div class="right-to-left">
+        &nbsp;
+        <label id="__username" style="color:#0f0;" hidden="true"></label>
+        &nbsp;
+        <label id="__login" style="border: 1px solid #0f0;color: #00ff00;" hidden="true" onclick="login()">Sign
+            in</label>
+        &nbsp;
+        <label id="__logout" style="border: 1px solid #0f0;color: #00ff00" hidden="true" onclick="logout()">Sign
+            out</label>
+        &nbsp;
+    </div-->
+    
+
 
     <video class="box1" id="videoElement" width="300" height="200" autoplay muted playsinline></video>
 
@@ -63,6 +82,29 @@
     var sendCounter = 0;
     var streamType = 0;
 
+    async function chkloginstatus() {
+        try {
+            console.log('chkloginstatus...');
+            let result = await doChk(); //console.log('chkloginstatus... ' + JSON.stringify(result));
+            handleLogin(result);
+        } catch (error) {
+            alert(error);
+            handleLogin({
+                state: 0,
+                username: "guest",
+                token: null
+            });
+        }
+    }
+
+    
+    function handleLogin(resultJson) {
+        username = resultJson.username;
+    }
+    
+
+    chkloginstatus();
+
     function startstop() {
         if (document.getElementById('record').innerHTML === 'x') {
             connectWebSocket();
@@ -76,9 +118,6 @@
         }
     }
 
-    function handleLogin(resultJson) {
-
-    }
 
     function reactFromPopLogin() {
         window.location.reload();

@@ -355,27 +355,6 @@ function ajax_sync() {
     });
 }
 
-function _ajax(json, url, cb, errorcb) {
-  console.log(json);
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(json)
-  }).then((response) => {
-    if (response.ok) {
-      return response.json(); // 解析JSON回應
-    } else {
-      throw new Error("請求失敗：" + response.status);
-    }
-  }).then((data) => {
-    cb(data);
-  }).catch((error) => {
-    errorcb(error);
-  });
-}
-
 var funcInterval;
 
 /*

@@ -79,6 +79,12 @@ async function auth(req, res) {
       return;
     }
 
+    if (username === 'upload' || username === 'sheetmusic') {
+      println('auth : auth but guest {guest helf state 2}');
+      resposeGuest(res, 2);
+      return;
+    }
+
     console.log("user : " + username + ", " + "pwd : " + password);
 
     // 驗證用戶
@@ -160,18 +166,75 @@ function chk(req, res) {
 
 }
 
-function adduser(username, password) {
-  if (username.toLowerCase() == 'guest') return { state: -1, des: "name exist" };
-  return {
-    state: 1,
-    username: username,
-    des: "name exist"
-  };
+//songs base manipulation
+function userAction(req, res) {
+  let body = '';
+  // 接收请求的数据
+  req.on('data', (data) => {
+    body += data;
+  });
+
+  // 请求数据接收完成后的处理
+  req.on('end', () => {
+    // 解析请求数据
+    const requestData = JSON.parse(body);
+
+    println(body);
+
+    let action = requestData.action;
+    let p1 = requestData.p1;
+    let user = requestData.user;
+
+    if (user == null) {
+      res.setHeader('Content-Type', 'application/json');// 发送响应数据
+      res.end(JSON.stringify({ "state": "fail: user not provided" }));
+      return;
+    };
+
+    if (users[user] != null) {
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ "state": "fail: user already exists" }));
+      return;
+    }
+
+    if (p1 == null || p1.trim().length == 0) {
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ "state": "fail: password not provided" }));
+      return;
+    }
+
+    switch (action) {
+      case 'adduser':
+
+        println('* add user start');
+        users[user] = p1;
+
+        //await fs.writeFile('./users/accounts.json', JSON.stringify(users, null, 2));
+        fs.writeFile('./users/accounts.json', JSON.stringify(users, null, 2), (err) => {
+          if (err) throw err;
+          console.log('* user 寫入完成');
+          res.setHeader('Content-Type', 'application/json');// 发送响应数据
+          res.end(JSON.stringify({ "state": "success" }));
+
+          let dir = './users/' + user;
+          if (!fs.existsSync(dir))
+            fs.mkdirSync(dir);
+
+          setDoAuth(doauth);
+        });       
+
+        break;
+
+    }
+
+  });
 }
+
 
 module.exports = {
   auth,
   chk,
-  adduser,
-  setDoAuth
+  //adduser,
+  setDoAuth,
+  userAction
 };

@@ -110,7 +110,7 @@ function preloadSaved(idx) {
     document.getElementById('preload_name').innerHTML = '' + idx;
     if (document.getElementById('saveBtn')) document.getElementById('saveBtn').hidden = false;
   }).catch((error) => {
-    alert('Error ' + error);
+    alert('Error: file not exist or invalid json'); //
     console.log(`Error: ${error}`);
   });
 }
@@ -118,11 +118,7 @@ function preloadSaved(idx) {
 
 function logout() {
   cleanLogin();
-  document.getElementById('__username').hidden = true;
-  document.getElementById('__username').innerHTML = '';
-  document.getElementById('__login').hidden = false;
-  document.getElementById('__logout').hidden = true;
-  chkloginstatus();
+  window.location.reload();
 }
 
 function login() {

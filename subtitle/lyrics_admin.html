@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <script type="text/javascript" src="../login.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../common.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../utilities.js" charset="UTF-8"></script>
 <html lang="en">
 
 <head>
@@ -83,11 +84,28 @@
             color: #00ff00;
             border-color: #00ff00;
         }
+
+        .right-to-left {
+            margin-right: 5%;
+            direction: rtl;
+            text-align: right;
+        }
     </style>
     <title>Song editor</title>
 </head>
 
 <body>
+    <div class="right-to-left">
+        &nbsp;
+        <label id="__username" style="color:#0f0;" hidden="true"></label>
+        &nbsp;
+        <label id="__login" style="border: 1px solid #0f0;color: #00ff00;" hidden="true" onclick="login()">Sign
+            in</label>
+        &nbsp;
+        <label id="__logout" style="border: 1px solid #0f0;color: #00ff00" hidden="true" onclick="logout()">Sign
+            out</label>
+        &nbsp;
+    </div>
     <br>
     <div id="tag"></div>
     <p></p>
@@ -113,13 +131,12 @@
         <input id="allfile" type="file" name="file" accept="image/*" hidden="true" onchange="selectFile(event)" />
         <!-- <div class="drop-zone" id="drop-zone-1" onclick="openFile('allfile', 1)"></div> -->
     </div>
-
     <script>
 
         const MAXSHEET = 15;
         var sel_song_id = null;
 
-        const sheetDiv = document.getElementById('upload');
+        var sheetDiv = null;//document.getElementById('upload')?document.getElementById('upload'):null;
         var currentidx = 0;
         var sheetArray = null;
         var doUpload = false;
@@ -180,7 +197,13 @@
             //alert(url);
         }
 
+        function chkUploadZone() {
+            sheetDiv = document.getElementById('upload')?document.getElementById('upload'):null;
+            return sheetDiv != null;
+        }
+
         function sheetActive(active) {
+            if (!chkUploadZone()) return false;
             if (active)
                 sheetDiv.style.display = 'flex';
             else
@@ -188,10 +211,12 @@
         }
 
         function isSheetActive() {
+            if (!chkUploadZone()) return false;
             return !(sheetDiv.style.display == 'none');
         }
 
         function cleanSheetZone() {
+            if (!chkUploadZone()) return;
             for (let i = 1; i <= MAXSHEET; i++) {
                 let div = document.getElementById('drop-zone-' + i);
                 div.innerHTML = '';
@@ -202,6 +227,7 @@
         }
 
         function createSheetZone() {
+            if (!chkUploadZone()) return;
             for (let i = 1; i <= MAXSHEET; i++) {
                 let div = document.createElement('div');
                 div.id = 'drop-zone-' + i;
@@ -222,8 +248,6 @@
                     div.addEventListener('dragover', (e) => { e.preventDefault(); });
                     div.addEventListener('dragleave', () => { });
                 }
-
-
                 sheetDiv.appendChild(div);
             }
 
@@ -334,6 +358,7 @@
         }
 
         function listSongSheet() {
+            if (!chkUploadZone()) return;
             cleanSheetZone();
             sheetActive(true);
             sheetArray = [];
@@ -468,8 +493,9 @@
         <a href="javascript:copyText()">copy text</a>
         <p></p>
         <textarea id="songtxt" rows="10"></textarea>
-        ||<button id="pptbtn" onclick="open4GenPPT()" style="font-size: 20px;background: #b74b2e;color:white;border-color: white;">輸出PPT, Json</button>
-          <button id="addsong" style="background-color: magenta;" onclick="add2List()" hidden="true">歌單新增/修改</button>||
+        ||<button id="pptbtn" onclick="open4GenPPT()"
+            style="font-size: 20px;background: #b74b2e;color:white;border-color: white;">輸出PPT, Json</button>
+        <button id="addsong" style="background-color: magenta;" onclick="add2List()" hidden="true">歌單新增/修改</button>||
         <p></p>
         <div id="editdiv" hidden="true">
             <button style="background-color: rgb(0, 80, 0);" onclick="textGo()">加歌 / 修改</button>
@@ -487,6 +513,93 @@
         <!-- <div id="togglediv2" class="toggle-group" data-group="2"></div> -->
     </div>
     <hr size="4" align="left" width="60%" color="#00aa00">
+
+
+    <script>
+        var _login = null;
+        var username = null;
+
+        function closeLogin() {
+            if (_login)
+                _login.close();
+            _login = null;
+        }
+
+        function logout() {
+            cleanLogin();
+            reactFromPopLogin();
+        }
+
+        function login() {
+            closeLogin();
+            _login = window.open("../login.html", "", "popup=no,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=500,top=" + (screen.height - 400) + ",left=" + (screen.width - 840));
+        }
+
+        async function chkloginstatus() {
+            try {
+                console.log('chkloginstatus...');
+                let result = await doChk(); //console.log('chkloginstatus... ' + JSON.stringify(result));
+                handleLogin(result);
+            } catch (error) {
+                handleLogin({
+                    state: 0,
+                    username: "guest",
+                    token: null
+                });
+            }
+        }
+
+        function handleLogin(resultJson) {
+
+            document.getElementById('__username').hidden = true;
+            document.getElementById('__login').hidden = true;
+            document.getElementById('__logout').hidden = true;
+            username = null;
+
+            if (resultJson.state == 0) {
+                document.getElementById("upload").remove();
+                document.getElementById("editdiv").remove();
+                sheetDiv = null;
+                return;
+            }
+
+            if (resultJson.state == 1) {
+                username = resultJson.username;
+                document.getElementById('__username').hidden = false;
+                document.getElementById('__username').innerHTML = resultJson.username;
+                if (resultJson.username == 'guest') { //全權限的guest 不需要login logout //no auth
+                    document.getElementById('__logout').hidden = true;
+                    document.getElementById('__login').hidden = true;
+                } else { //正常user
+                    document.getElementById('__logout').hidden = false;
+                    document.getElementById('__login').hidden = true;
+                }
+            } else if (resultJson.state == 2) { //半權限的guest
+                username = resultJson.username;
+                document.getElementById('__username').hidden = false;
+                document.getElementById('__username').innerHTML = resultJson.username;
+                document.getElementById('__logout').hidden = true;
+                document.getElementById('__login').hidden = false;
+                
+                document.getElementById("upload").remove();
+                document.getElementById("editdiv").remove();
+                sheetDiv = null;
+
+            } else {
+                document.getElementById('__login').hidden = false; //hideSome(true);
+            }
+
+        }
+
+        function reactFromPopLogin() {
+            window.location.reload();
+        }
+
+        chkloginstatus();
+    </script>
+
+
+
     <script type="text/javascript" charset="UTF-8">
 
         const keys = ['C', 'G', 'D', 'A', 'E', 'B', 'Gb', 'Db', 'Ab', 'Eb', 'Bb', 'F'];
@@ -546,24 +659,24 @@
 
             const parentDiv = document.getElementById('btns');
             const allButtons = parentDiv.querySelectorAll('button');
-            allButtons.forEach(button => {                
+            allButtons.forEach(button => {
                 if (!button.songid) return;
                 if (!button.oribgcolor) return;
                 button.style.background = button.oribgcolor;
                 let song = ALL_SONGS_JSON[button.songid]["content"];
                 if (!song[0]) return;
                 if (!song[0][1]) return;
-                
+
                 let info = song[0][1].trim().split(' ');
                 if (info.length < 1) return;
-                
-                for (let i = 0;i<info.length;i++) {
+
+                for (let i = 0; i < info.length; i++) {
                     if (info[i] == condition_key) {
                         button.style.backgroundColor = 'red';
                         break;
                     }
                 }
-                
+
             });
 
         }
@@ -713,13 +826,13 @@
                         idx = 0;
                     }
                 }
-                subtitleWindow.add2List(newsong, idx); 
+                subtitleWindow.add2List(newsong, idx);
                 return;
             }
             subtitleWindow = window.open("subtitle.html?action=ppt", "_blank", 'width=1000, height=565, left=0, top=0');
             //subtitleWindow.add2List(newsong, 0);
-            subtitleWindow.onload = function() {
-                subtitleWindow.add2List(newsong, 0); 
+            subtitleWindow.onload = function () {
+                subtitleWindow.add2List(newsong, 0);
             };
 
             /*
@@ -791,30 +904,6 @@
 
     function pushSong(songid) {
         clickSong(songid);
-    }
-
-    function _ajax(json, url, cb, errorcb) {
-        console.log(json);
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(json)
-        }).then((response) => {
-            if (response.ok) {
-                return response.json(); // 解析JSON回應
-            } else {
-                throw new Error("請求失敗：" + response.status);
-            }
-        }).then((data) => {
-            // 在這裡處理解析後的JSON物件 //console.log(data);
-            cb(data);
-        }).catch((error) => {
-            // 處理錯誤
-            console.log('' + error);
-            errorcb();
-        });
     }
 
     //控方上傳目前
