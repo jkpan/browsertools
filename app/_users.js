@@ -91,7 +91,7 @@ async function auth(req, res) {
     if (users[username] && users[username] === password) {
       println('auth : auth success {user all state 1}');
       // 成功登入，生成 JWT
-      const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '3d' });
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
