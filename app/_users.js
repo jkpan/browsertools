@@ -79,14 +79,8 @@ async function auth(req, res) {
       return;
     }
 
-    if (username === 'upload' || username === 'sheetmusic') {
-      println('auth : auth but guest {guest helf state 2}');
-      resposeGuest(res, 2);
-      return;
-    }
-
-    console.log("user : " + username + ", " + "pwd : " + password);
-
+    //console.log("user : " + username + ", " + "pwd : " + password);
+  
     // 驗證用戶
     if (users[username] && users[username] === password) {
       println('auth : auth success {user all state 1}');
@@ -194,6 +188,12 @@ function userAction(req, res) {
     if (users[user] != null) {
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({ "state": "fail: user already exists" }));
+      return;
+    }
+
+    if (user.toLowerCase() == 'guest' || user.toLowerCase() === 'uploads' || user.toLowerCase() === 'sheetmusic') {
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ "state": "fail: invalid user name" }));
       return;
     }
 

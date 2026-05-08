@@ -399,7 +399,7 @@
       if (document.getElementById('saveBtn')) document.getElementById('saveBtn').hidden = false;
       
     }).catch((error) => {
-      alert('Error' + error);
+      alert('Error: file not exist or invalid json');
       console.log(`Error: ${error}`);
     });
   }
