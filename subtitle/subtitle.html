@@ -263,10 +263,8 @@
 
       pptx.writeFile("songs.pptx");
 
-      //drawBg2Canvas = null;
-      //_repaint();
 
-      document.getElementById('busy').style.display = "none";
+      if (document.getElementById('busy')) document.getElementById('busy').style.display = "none";
 
     }, total);
 
@@ -275,8 +273,8 @@
 
   async function generatePPT() {
 
-    //document.getElementById('busy').hidden = false;
-    document.getElementById('busy').style.display = "flex";
+    if (document.getElementById('busy')) document.getElementById('busy').style.display = "flex";
+    
 
     /*
     if (image_base64) {
