@@ -240,6 +240,35 @@
         w_ = w_ + '%';
       }
 
+      /*
+      let slides = [];
+      for (let i = 0; i < images.length; i++) {
+        //images[i].substring(0, 30));
+        let slide = pptx.addSlide();//console.log(img);
+        slide.background = { color: "000000" };//, transparency: 50 };
+        if (image_base64) {
+          slide.addImage({
+            data: image_base64,
+            x: x_off,
+            y: y_off,
+            w: w_,
+            h: h_
+          });
+        }
+        slides[i] = slide;
+      }
+
+      for (let i = 0; i < images.length; i++) {
+        slides[i].addImage({
+          data: images[i],
+          x: x_off,
+          y: y_off,
+          w: w_,
+          h: h_
+        });
+      }
+      */
+
       images.forEach((img) => {
         let slide = pptx.addSlide();//console.log(img);
         slide.background = { color: "000000" };//, transparency: 50 };
