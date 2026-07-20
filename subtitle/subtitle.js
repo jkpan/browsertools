@@ -1420,9 +1420,11 @@ function restoreFromJson(obj) {
   if (!obj) return;
   if (sync_type != 4 && obj.filter !== filterword) return;
   
+  if (!obj.song) return;
+
   if (phase == obj.phase && 
       line == obj.line && 
-      doblank == obj.blank && obj.song && subtitles && 
+      doblank == obj.blank && subtitles && 
       subtitles[0][0] === obj.song[0][0]) {
     return;
   }
@@ -1739,3 +1741,11 @@ if (readParam('action') === 'ctrl') {
   _repaint();
 
 }
+
+function debugtimeout() {
+  console.log("==== subtitles ==== " + subtitles);
+  setTimeout(() => {
+        debugtimeout();
+      }, 3000);
+}
+
