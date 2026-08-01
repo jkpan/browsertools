@@ -7,7 +7,7 @@ var fsize = 128;
 const fontFamily_array =
   ["Monospace", "LXGW WenKai Mono TC", "Noto Serif TC", "Shippori Antique B1", "Mochiy Pop One"]; //google fonts
 //["報隸-繁", "行楷-繁", "宋體-繁", "黑體-繁"]; //mac system fonts
-var fontFamily = fontFamily_array[0];
+var fontFamily = fontFamily_array[1];
 
 var FONT = fsize + "px " + fontFamily;//標楷體";//黑體-繁";//宋體-繁";
 
