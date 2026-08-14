@@ -657,7 +657,6 @@
         }
 
         function processAllBtn4key() {
-
             const parentDiv = document.getElementById('btns');
             const allButtons = parentDiv.querySelectorAll('button');
             allButtons.forEach(button => {
@@ -667,9 +666,13 @@
                 let song = ALL_SONGS_JSON[button.songid]["content"];
                 if (!song[0]) return;
                 if (!song[0][1]) return;
-
+                
                 let info = song[0][1].trim().split(' ');
+                
                 if (info.length < 1) return;
+                if (!info.some(x => keys.includes(x))) return;
+                
+                button.style.backgroundColor = 'blue';
 
                 for (let i = 0; i < info.length; i++) {
                     if (info[i] == condition_key) {
