@@ -1,5 +1,5 @@
 const APPS = [
-  'lyrics', 'Bible', 'NIV', 'BPlay', 'iPlay',
+  'lyrics', 'Bible', 'NIV', 'BJP', 'BPlay', 'iPlay', 
   'url_1', 'url_2', 'url_3',
   //'file_1', 'file_2', 'file_3',
   'anim', 'info', 'effect', 'time', 'camrece',
@@ -844,7 +844,7 @@ function toObj() {
 
 function getElmState() {
   let stateArray = {
-    lyrics: -1, Bible: -1, NIV: -1, BPlay: -1, iPlay: -1,
+    lyrics: -1, Bible: -1, NIV: -1, BJP:-1, BPlay: -1, iPlay: -1,
     url_1: -1, url_2: -1, url_3: -1,
     //file_1: -1, file_2: -1, file_3: -1, 
     anim: -1, info: -1, effect: -1, time: -1, camrece: -1,
@@ -1048,6 +1048,13 @@ function _createFrame(keyname) {
     }
     case 'NIV': {
       createFrame(keyname, './subtitle/subtitle_niv.html');
+      let app = new Applet({ x: 8, y: 12, w: 24, h: 27, keyname: keyname });
+      applets.push(app);
+      app.onTop();
+      return app;
+    }
+    case 'BJP': {
+      createFrame(keyname, './subtitle/subtitle_jp.html');
       let app = new Applet({ x: 8, y: 12, w: 24, h: 27, keyname: keyname });
       applets.push(app);
       app.onTop();

@@ -156,6 +156,8 @@
   // 读取名为 "param" 的参数
   if (readParam('app') === '投影中英文聖經') {
     preload('./json/dash_ce_Bible_proj.json', handleCb);
+  } else if (readParam('app') === '投影中日文聖經') {
+    preload('./json/dash_cj_Bible_proj.json', handleCb);
   } else if (readParam('app') === '中英文聖經') {
     if (detectDevice())
       preload('./json/dash_ce_Bible_local_m.json', handleCb);
