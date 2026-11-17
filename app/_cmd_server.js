@@ -19,7 +19,7 @@ const upload = require('./_obj_filehandle');
 const uploadSheet = require('./_sheetmusic');
 const sceneState = require('./_obj_state');
 
-const URL_SEASONTABLE = 'https://abeliu.idv.tw/getservicejson.php';
+const URL_SEASONTABLE = 'https://tpcbot.abeliu.idv.tw/api/service-table'; //'https://abeliu.idv.tw/getservicejson.php';
 
 var WebSocket = null; //require('ws'); 
 var Cluster = null;
